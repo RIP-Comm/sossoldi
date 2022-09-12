@@ -1,4 +1,8 @@
+// Modify this file to adjust theme settings and other global settings.
+
 import 'package:flutter/material.dart';
+import 'package:sossoldi/Pages/home_page.dart';
+import 'package:sossoldi/widgets/actionBar.dart';
 
 void main() {
   runApp(const Launcher());
@@ -15,38 +19,7 @@ class Launcher extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomePage(title: 'Sossoldi'),
-    );
-  }
-}
-
-class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              widget.title,
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
+      home: HomePage(),
     );
   }
 }
