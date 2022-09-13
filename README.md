@@ -1,2 +1,2 @@
 # sossoldi
-Wealth management
+Wealth management app made with Flutter.

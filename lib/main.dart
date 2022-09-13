@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:sossoldi/Pages/home_page.dart';
-import 'package:sossoldi/widgets/actionBar.dart';
+import 'package:sossoldi/Pages/structure.dart';
 
 void main() {
   runApp(const Launcher());
@@ -19,7 +19,7 @@ class Launcher extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomePage(),
+      home: const Structure(),
     );
   }
 }
