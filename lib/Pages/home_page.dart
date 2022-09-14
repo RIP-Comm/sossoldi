@@ -13,23 +13,22 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              // Replace Center() and put the ListView here
-              child: Center(
-                child: Text(
-                  "Sossoldi",
-                  style: Theme.of(context).textTheme.headline4,
+        
+        body:Center(
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                    // Replace Center() and put the ListView here
+                child: Center(
+                  child: Text(
+                    "Sossoldi",
+                       style: Theme.of(context).textTheme.headline4,
+                  ),
                 ),
               ),
-            ),
-            ActionBar()
-          ],
-        ),
-      ),
+            ],
+          )
+        )
     );
   }
 }

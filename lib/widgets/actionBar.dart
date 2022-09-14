@@ -1,6 +1,3 @@
-// From this widget, the user can access all the main pages of the app by pressing on the IconButtons.
-// Modify this file if you want another page to be rendered when an icon is tapped.
-
 import 'package:flutter/material.dart';
 import 'package:sossoldi/Pages/home_page.dart';
 import 'package:sossoldi/Pages/planning_budget_page.dart';
