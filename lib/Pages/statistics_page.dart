@@ -1,6 +1,8 @@
 // Satistics page.
 
 import 'package:flutter/material.dart';
+import 'package:sossoldi/widgets/customAppBar.dart';
+import 'package:sossoldi/widgets/actionBar.dart';
 
 class StatsPage extends StatefulWidget {
   @override
