@@ -29,10 +29,29 @@ class Launcher extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Sossoldi',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+          accentColor: Color.fromRGBO(217, 217, 217, 1),
+          textTheme: const TextTheme(
+            displayMedium: TextStyle(
+                fontSize: 20.0,
+                color: Colors.black,
+                fontFamily: 'SF Pro Text',
+                fontWeight: FontWeight.bold),
+            titleMedium: TextStyle(
+                fontSize: 32.0,
+                fontFamily: 'SF Pro Text',
+                fontWeight: FontWeight.bold),
+            titleSmall: TextStyle(fontSize: 18.0, fontFamily: 'SF Pro Text'),
+            headlineMedium:
+                TextStyle(fontSize: 10.0, fontFamily: 'SF Pro Text'),
+            headlineSmall: TextStyle(fontSize: 8.0, fontFamily: 'SF Pro Text'),
+            labelMedium: TextStyle(
+                fontSize: 16.0,
+                fontFamily: 'SF Pro Text',
+                fontWeight: FontWeight.bold),
+            labelSmall: TextStyle(fontSize: 12.0, fontFamily: 'SF Pro Text'),
+          )),
       home: const Structure(),
     );
   }

@@ -51,7 +51,10 @@ dependencies:
 
   # Display todos in grid
   flutter_staggered_grid_view: ^0.4.0-nullsafety.3
-  
+
+  # Package used for Data Visualization
+  fl_chart: ^0.55.2
+  percent_indicator: ^4.2.2
 
 dev_dependencies:
   flutter_test:
@@ -78,6 +81,10 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  fonts:
+    - family: SF Pro Text
+      fonts:
+        - asset: fonts/SFProText.ttf
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
