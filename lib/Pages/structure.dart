@@ -12,8 +12,7 @@ import 'package:sossoldi/pages/statistics_page.dart';
 import 'package:sossoldi/database/sossoldi_database.dart';
 import 'package:sossoldi/model/example.dart';
 
-// Example
-import 'package:sossoldi/pages/example/example_home_page.dart';
+
 
 class Structure extends StatefulWidget {
   const Structure({super.key});
@@ -27,7 +26,6 @@ class _StructureState extends State<Structure> {
 
   // We could add this List in the app's state, so it isn't intialized every time.
   final List<Widget> _pages = <Widget>[
-    //HomePageExample(),
     HomePage(),
     PlanningPage(),
     const Text("Add"),
