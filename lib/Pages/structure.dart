@@ -27,7 +27,7 @@ class _StructureState extends State<Structure> {
 
   // We could add this List in the app's state, so it isn't intialized every time.
   final List<Widget> _pages = <Widget>[
-    HomePageExample(),
+    //HomePageExample(),
     HomePage(),
     PlanningPage(),
     const Text("Add"),
