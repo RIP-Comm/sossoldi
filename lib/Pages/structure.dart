@@ -39,7 +39,16 @@ class _StructureState extends State<Structure> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Sossoldi"),
+          backgroundColor: const Color.fromRGBO(204, 204, 204, 1),
+          centerTitle: true,
+          title: Text(
+            "DASHBOARD",
+            style: Theme.of(context).textTheme.displayMedium,
+          ),
+          leading: IconButton(
+              icon: const Icon(Icons.search),
+              tooltip: 'Search',
+              onPressed: () {}),
           actions: [
             IconButton(
               onPressed: () {
@@ -59,40 +68,53 @@ class _StructureState extends State<Structure> {
         body: Center(
           child: _pages.elementAt(_selectedIndex),
         ),
+
         bottomNavigationBar: BottomNavigationBar(
+
           type: BottomNavigationBarType.fixed,
           selectedItemColor: Colors.white,
-          backgroundColor: Colors.blue,
+          backgroundColor: const Color.fromRGBO(204, 204, 204, 1),
           currentIndex: _selectedIndex,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
+          //showSelectedLabels: false,
+          //showUnselectedLabels: false,
           onTap: _onItemTapped,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
                 icon: Icon(Icons.business_center), label: "Home"),
             BottomNavigationBarItem(
-                icon: Icon(Icons.attach_money), label: "Budget"),
-            BottomNavigationBarItem(icon: Icon(Icons.add), label: "Add"),
+                icon: Icon(Icons.attach_money), label: "Transaction"),
+            BottomNavigationBarItem(icon: Text(""), label: ""),
             BottomNavigationBarItem(
-                icon: Icon(Icons.arrow_back), label: "Movements"),
+                icon: Icon(Icons.arrow_back), label: "Planning"),
             BottomNavigationBarItem(
-                icon: Icon(Icons.bar_chart), label: "Statistics"),
+                icon: Icon(Icons.bar_chart), label: "Graphs"),
           ],
-        ));
+        ),
+      floatingActionButton: FloatingActionButton(
+        elevation: 0,
+        highlightElevation: 0,
+        backgroundColor: const Color.fromRGBO(179, 179, 179, 1),
+        child: Icon(Icons.add, size: 55, color: const Color.fromRGBO(93, 93, 93, 1),),
+        onPressed: () {
+          Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (context, animation1, animation2) => const AddPage(),
+                transitionDuration: Duration.zero,
+                reverseTransitionDuration: Duration.zero,
+              ));
+        },
+      ),
+      floatingActionButtonLocation:
+      FloatingActionButtonLocation.miniCenterDocked,
+
+    );
   }
 
   void _onItemTapped(int index) {
     setState(() {
       if (index != 2) {
         _selectedIndex = index;
-      } else {
-        Navigator.push(
-            context,
-            PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => const AddPage(),
-              transitionDuration: Duration.zero,
-              reverseTransitionDuration: Duration.zero,
-            ));
       }
     });
   }
