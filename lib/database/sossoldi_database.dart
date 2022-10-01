@@ -41,7 +41,8 @@ class ExampleDatabase {
     // If you want to create a new table you must duplicate the code below
     // by changing the name and the fields.
     // (and obviously create a new model for your table)
-    await database.execute('''
+    await database.execute(
+        '''
       CREATE TABLE $tableExample(
         ${ExampleFields.id} $integerPrimaryKeyAutoincrement,
         ${ExampleFields.isImportant} $booleanNotNull,
