@@ -1,10 +1,3 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:sossoldi/model/transaction.dart';
@@ -18,7 +11,7 @@ void main() {
         amount: 100,
         type: Type.income,
         idBankAccount: 0,
-        idBudget: "Casa",
+        idBudget: "Home",
         idCategory: 0,
         createdAt: DateTime.utc(2022),
         updatedAt: DateTime.utc(2022));
@@ -45,7 +38,7 @@ void main() {
       TransactionFields.type: Type.income.index,
       TransactionFields.note: "Note",
       TransactionFields.idBankAccount: 0,
-      TransactionFields.idBudget: "Casa",
+      TransactionFields.idBudget: "Home",
       TransactionFields.idCategory: 0,
       BaseEntityFields.createdAt: DateTime.utc(2022).toIso8601String(),
       BaseEntityFields.updatedAt: DateTime.utc(2022).toIso8601String(),
@@ -74,10 +67,13 @@ void main() {
         amount: 100,
         type: Type.income,
         idBankAccount: 0,
-        idBudget: "Casa",
-        idCategory: 0);
+        idBudget: "Home",
+        idCategory: 0,
+        createdAt: DateTime.utc(2022),
+        updatedAt: DateTime.utc(2022));
 
     Map<String, Object?> json = t.toJson();
+
     assert(t.id == json[BaseEntityFields.id]);
     assert(t.date.toUtc().toIso8601String() == json[TransactionFields.date]);
     assert(t.amount == json[TransactionFields.amount]);
