@@ -8,13 +8,14 @@ class RecurringTransactionFields extends BaseEntityFields {
   static String from = 'from';
   static String to = 'to';
   static String payDay = 'payDay';
-  // static String nameCategory = 'nameCategory'; // FK
+  static String nameCategory = 'nameCategory'; // FK
 
   static final List<String?> allFields = [
     BaseEntityFields.id,
     from,
     to,
     payDay,
+    nameCategory,
     BaseEntityFields.createdAt,
     BaseEntityFields.updatedAt
   ];
@@ -24,12 +25,14 @@ class RecurringTransaction extends BaseEntity {
   final DateTime from;
   final DateTime to;
   final int payDay;
+  final String? nameCategory;
 
   const RecurringTransaction(
       {int? id,
       required this.from,
       required this.to,
       required this.payDay,
+      this.nameCategory,
       DateTime? createdAt,
       DateTime? updatedAt})
       : super(id: id, createdAt: createdAt, updatedAt: updatedAt);
