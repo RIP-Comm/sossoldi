@@ -8,7 +8,7 @@ class RecurringTransactionFields extends BaseEntityFields {
   static String from = 'from';
   static String to = 'to';
   static String payDay = 'payDay';
-  static String nameCategory = 'nameCategory'; // FK
+  // static String nameCategory = 'nameCategory'; // FK
 
   static final List<String?> allFields = [
     BaseEntityFields.id,
@@ -23,7 +23,7 @@ class RecurringTransactionFields extends BaseEntityFields {
 class RecurringTransaction extends BaseEntity {
   final DateTime from;
   final DateTime to;
-  final Uint8 payDay;
+  final int payDay;
 
   const RecurringTransaction(
       {int? id,
@@ -38,7 +38,7 @@ class RecurringTransaction extends BaseEntity {
           {int? id,
           DateTime? from,
           DateTime? to,
-          Uint8? payDay,
+          int? payDay,
           DateTime? createdAt,
           DateTime? updatedAt}) =>
       RecurringTransaction(
@@ -54,7 +54,7 @@ class RecurringTransaction extends BaseEntity {
           id: json[BaseEntityFields.id] as int?,
           from: DateTime.parse(json[RecurringTransactionFields.from] as String),
           to: DateTime.parse(json[RecurringTransactionFields.to] as String),
-          payDay: json[RecurringTransactionFields.payDay] as Uint8,
+          payDay: json[RecurringTransactionFields.payDay] as int,
           createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
           updatedAt:
               DateTime.parse(json[BaseEntityFields.updatedAt] as String));
