@@ -1,5 +1,5 @@
 abstract class BaseEntityFields {
-  static String id = '_id';
+  static String id = 'id';
   static String createdAt = 'createdAt';
   static String updatedAt = 'updatedAt';
 

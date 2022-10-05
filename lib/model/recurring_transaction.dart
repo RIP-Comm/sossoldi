@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:sossoldi/model/base_entity.dart';
 
 const String recurringTransaction = 'recurringTransaction';
@@ -8,14 +6,14 @@ class RecurringTransactionFields extends BaseEntityFields {
   static String from = 'from';
   static String to = 'to';
   static String payDay = 'payDay';
-  static String nameCategory = 'nameCategory'; // FK
+  static String idCategoryRecurring = 'idCategoryRecurring'; // FK
 
   static final List<String?> allFields = [
     BaseEntityFields.id,
     from,
     to,
     payDay,
-    nameCategory,
+    idCategoryRecurring,
     BaseEntityFields.createdAt,
     BaseEntityFields.updatedAt
   ];
@@ -25,14 +23,14 @@ class RecurringTransaction extends BaseEntity {
   final DateTime from;
   final DateTime to;
   final int payDay;
-  final String? nameCategory;
+  final int? idCategoryRecurring;
 
   const RecurringTransaction(
       {int? id,
       required this.from,
       required this.to,
       required this.payDay,
-      this.nameCategory,
+      this.idCategoryRecurring,
       DateTime? createdAt,
       DateTime? updatedAt})
       : super(id: id, createdAt: createdAt, updatedAt: updatedAt);
@@ -42,6 +40,7 @@ class RecurringTransaction extends BaseEntity {
           DateTime? from,
           DateTime? to,
           int? payDay,
+          int? idCategoryRecurring,
           DateTime? createdAt,
           DateTime? updatedAt}) =>
       RecurringTransaction(
@@ -49,6 +48,7 @@ class RecurringTransaction extends BaseEntity {
           from: from ?? this.from,
           to: to ?? this.to,
           payDay: payDay ?? this.payDay,
+          idCategoryRecurring: idCategoryRecurring ?? this.idCategoryRecurring,
           createdAt: createdAt ?? this.createdAt,
           updatedAt: updatedAt ?? this.updatedAt);
 
@@ -58,6 +58,8 @@ class RecurringTransaction extends BaseEntity {
           from: DateTime.parse(json[RecurringTransactionFields.from] as String),
           to: DateTime.parse(json[RecurringTransactionFields.to] as String),
           payDay: json[RecurringTransactionFields.payDay] as int,
+          idCategoryRecurring:
+              json[RecurringTransactionFields.idCategoryRecurring] as int?,
           createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
           updatedAt:
               DateTime.parse(json[BaseEntityFields.updatedAt] as String));
@@ -67,6 +69,7 @@ class RecurringTransaction extends BaseEntity {
         RecurringTransactionFields.from: from.toIso8601String(),
         RecurringTransactionFields.to: to.toIso8601String(),
         RecurringTransactionFields.payDay: payDay,
+        RecurringTransactionFields.idCategoryRecurring: idCategoryRecurring,
         BaseEntityFields.createdAt: createdAt?.toIso8601String(),
         BaseEntityFields.updatedAt: updatedAt?.toIso8601String(),
       };

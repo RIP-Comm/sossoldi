@@ -4,12 +4,12 @@ const String categoryTransaction = 'categoryTransaction';
 
 class CategoryTransactionFields extends BaseEntityFields {
   static String name = 'name';
-  static String symbol = 'symbol'; // Short name
+  static String symbol = 'symbol';
   static String note = 'note';
 
   static final List<String?> allFields = [
     BaseEntityFields.id,
-    name, // PK
+    name,
     symbol,
     note,
     BaseEntityFields.createdAt,
