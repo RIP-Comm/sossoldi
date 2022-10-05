@@ -8,6 +8,7 @@ class RecurringTransactionFields extends BaseEntityFields {
   static String from = 'from';
   static String to = 'to';
   static String payDay = 'payDay';
+  static String nameCategory = 'nameCategory'; // FK
 
   static final List<String?> allFields = [
     BaseEntityFields.id,
@@ -19,12 +20,12 @@ class RecurringTransactionFields extends BaseEntityFields {
   ];
 }
 
-class Transaction extends BaseEntity {
+class RecurringTransaction extends BaseEntity {
   final DateTime from;
   final DateTime to;
   final Uint8 payDay;
 
-  const Transaction(
+  const RecurringTransaction(
       {int? id,
       required this.from,
       required this.to,
@@ -33,14 +34,14 @@ class Transaction extends BaseEntity {
       DateTime? updatedAt})
       : super(id: id, createdAt: createdAt, updatedAt: updatedAt);
 
-  Transaction copy(
+  RecurringTransaction copy(
           {int? id,
           DateTime? from,
           DateTime? to,
           Uint8? payDay,
           DateTime? createdAt,
           DateTime? updatedAt}) =>
-      Transaction(
+      RecurringTransaction(
           id: id ?? this.id,
           from: from ?? this.from,
           to: to ?? this.to,
@@ -48,13 +49,15 @@ class Transaction extends BaseEntity {
           createdAt: createdAt ?? this.createdAt,
           updatedAt: updatedAt ?? this.updatedAt);
 
-  static Transaction fromJson(Map<String, Object?> json) => Transaction(
-      id: json[BaseEntityFields.id] as int?,
-      from: DateTime.parse(json[RecurringTransactionFields.from] as String),
-      to: DateTime.parse(json[RecurringTransactionFields.to] as String),
-      payDay: json[RecurringTransactionFields.payDay] as Uint8,
-      createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
-      updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String));
+  static RecurringTransaction fromJson(Map<String, Object?> json) =>
+      RecurringTransaction(
+          id: json[BaseEntityFields.id] as int?,
+          from: DateTime.parse(json[RecurringTransactionFields.from] as String),
+          to: DateTime.parse(json[RecurringTransactionFields.to] as String),
+          payDay: json[RecurringTransactionFields.payDay] as Uint8,
+          createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
+          updatedAt:
+              DateTime.parse(json[BaseEntityFields.updatedAt] as String));
 
   Map<String, Object?> toJson() => {
         BaseEntityFields.id: id,

@@ -1,17 +1,17 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:sossoldi/model/category.dart';
+import 'package:sossoldi/model/category_transaction.dart';
 import 'package:sossoldi/model/base_entity.dart';
 
 void main() {
   test('Test Copy Category', () {
-    Category c = Category(
+    CategoryTransaction c = CategoryTransaction(
         id: 2,
         name: "name",
         createdAt: DateTime.utc(2022),
         updatedAt: DateTime.utc(2022));
 
-    Category cCopy = c.copy(id: 10);
+    CategoryTransaction cCopy = c.copy(id: 10);
 
     assert(cCopy.id == 10);
     assert(cCopy.name == c.name);
@@ -22,15 +22,15 @@ void main() {
   test("Test fromJson Category", () {
     Map<String, Object?> json = {
       BaseEntityFields.id: 0,
-      CategoryFields.name: "Home",
+      CategoryTransactionFields.name: "Home",
       BaseEntityFields.createdAt: DateTime.utc(2022).toIso8601String(),
       BaseEntityFields.updatedAt: DateTime.utc(2022).toIso8601String(),
     };
 
-    Category c = Category.fromJson(json);
+    CategoryTransaction c = CategoryTransaction.fromJson(json);
 
     assert(c.id == json[BaseEntityFields.id]);
-    assert(c.name == json[CategoryFields.name]);
+    assert(c.name == json[CategoryTransactionFields.name]);
     assert(c.createdAt?.toUtc().toIso8601String() ==
         json[BaseEntityFields.createdAt]);
     assert(c.updatedAt?.toUtc().toIso8601String() ==
@@ -38,7 +38,7 @@ void main() {
   });
 
   test("Test toJson Category", () {
-    Category c = Category(
+    CategoryTransaction c = CategoryTransaction(
         id: 2,
         name: "Home",
         createdAt: DateTime.utc(2022),
@@ -47,7 +47,7 @@ void main() {
     Map<String, Object?> json = c.toJson();
 
     assert(c.id == json[BaseEntityFields.id]);
-    assert(c.name == json[CategoryFields.name]);
+    assert(c.name == json[CategoryTransactionFields.name]);
     assert(c.createdAt?.toUtc().toIso8601String() ==
         json[BaseEntityFields.createdAt]);
     assert(c.updatedAt?.toUtc().toIso8601String() ==
