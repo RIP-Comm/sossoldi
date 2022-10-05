@@ -4,7 +4,7 @@ import 'package:sossoldi/model/category_transaction.dart';
 import 'package:sossoldi/model/base_entity.dart';
 
 void main() {
-  test('Test Copy Category', () {
+  test('Test Copy Category Transaction', () {
     CategoryTransaction c = CategoryTransaction(
         id: 2,
         name: "name",
@@ -19,7 +19,7 @@ void main() {
     assert(cCopy.updatedAt == c.updatedAt);
   });
 
-  test("Test fromJson Category", () {
+  test("Test fromJson Category Transaction", () {
     Map<String, Object?> json = {
       BaseEntityFields.id: 0,
       CategoryTransactionFields.name: "Home",
@@ -37,7 +37,7 @@ void main() {
         json[BaseEntityFields.updatedAt]);
   });
 
-  test("Test toJson Category", () {
+  test("Test toJson Category Transaction", () {
     CategoryTransaction c = CategoryTransaction(
         id: 2,
         name: "Home",

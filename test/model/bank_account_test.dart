@@ -24,7 +24,7 @@ void main() {
   test("Test fromJson BankAccount", () {
     Map<String, Object?> json = {
       BaseEntityFields.id: 0,
-      BankAccountFields.name: "Home",
+      BankAccountFields.name: "name",
       BankAccountFields.value: 100,
       BaseEntityFields.createdAt: DateTime.utc(2022).toIso8601String(),
       BaseEntityFields.updatedAt: DateTime.utc(2022).toIso8601String(),
@@ -44,7 +44,7 @@ void main() {
   test("Test toJson BankAccount", () {
     BankAccount b = BankAccount(
         id: 2,
-        name: "Home",
+        name: "name",
         value: 100,
         createdAt: DateTime.utc(2022),
         updatedAt: DateTime.utc(2022));
