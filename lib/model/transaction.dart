@@ -7,9 +7,9 @@ class TransactionFields extends BaseEntityFields {
   static String amount = 'amount';
   static String type = 'type';
   static String note = 'note';
-  static String idBankAccount = 'idBankAccount'; // FK
-  static String idBudget = 'idBudget'; // FK
-  static String idCategory = 'idCategory'; // FK
+  static String nameBankAccount = 'nameBankAccount'; // FK
+  static String nameBudget = 'nameBudget'; // FK
+  static String nameCategory = 'nameCategory'; // FK
 
   static final List<String?> allFields = [
     BaseEntityFields.id,
@@ -17,9 +17,9 @@ class TransactionFields extends BaseEntityFields {
     amount,
     type,
     note,
-    idBankAccount,
-    idBudget,
-    idCategory,
+    nameBankAccount,
+    nameBudget,
+    nameCategory,
     BaseEntityFields.createdAt,
     BaseEntityFields.updatedAt
   ];
@@ -32,9 +32,9 @@ class Transaction extends BaseEntity {
   final int amount;
   final Type type;
   final String? note;
-  final int idBankAccount;
-  final String idBudget;
-  final int idCategory;
+  final int nameBankAccount;
+  final String nameBudget;
+  final int nameCategory;
 
   const Transaction(
       {int? id,
@@ -42,9 +42,9 @@ class Transaction extends BaseEntity {
       required this.amount,
       required this.type,
       this.note,
-      required this.idBankAccount,
-      required this.idBudget,
-      required this.idCategory,
+      required this.nameBankAccount,
+      required this.nameBudget,
+      required this.nameCategory,
       DateTime? createdAt,
       DateTime? updatedAt})
       : super(id: id, createdAt: createdAt, updatedAt: updatedAt);
@@ -55,9 +55,9 @@ class Transaction extends BaseEntity {
           int? amount,
           Type? type,
           String? note,
-          int? idBankAccount,
-          String? idBudget,
-          int? idCategory,
+          int? nameBankAccount,
+          String? nameBudget,
+          int? nameCategory,
           DateTime? createdAt,
           DateTime? updatedAt}) =>
       Transaction(
@@ -66,9 +66,9 @@ class Transaction extends BaseEntity {
           amount: amount ?? this.amount,
           type: type ?? this.type,
           note: note ?? this.note,
-          idBankAccount: idBankAccount ?? this.idBankAccount,
-          idBudget: idBudget ?? this.idBudget,
-          idCategory: idCategory ?? this.idCategory,
+          nameBankAccount: nameBankAccount ?? this.nameBankAccount,
+          nameBudget: nameBudget ?? this.nameBudget,
+          nameCategory: nameCategory ?? this.nameCategory,
           createdAt: createdAt ?? this.createdAt,
           updatedAt: updatedAt ?? this.updatedAt);
 
@@ -78,9 +78,9 @@ class Transaction extends BaseEntity {
       amount: json[TransactionFields.amount] as int,
       type: Type.values[json[TransactionFields.type] as int],
       note: json[TransactionFields.note] as String,
-      idBankAccount: json[TransactionFields.idBankAccount] as int,
-      idBudget: json[TransactionFields.idBudget] as String,
-      idCategory: json[TransactionFields.idCategory] as int,
+      nameBankAccount: json[TransactionFields.nameBankAccount] as int,
+      nameBudget: json[TransactionFields.nameBudget] as String,
+      nameCategory: json[TransactionFields.nameCategory] as int,
       createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
       updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String));
 
@@ -90,9 +90,9 @@ class Transaction extends BaseEntity {
         TransactionFields.amount: amount,
         TransactionFields.type: type.index,
         TransactionFields.note: note,
-        TransactionFields.idBankAccount: idBankAccount,
-        TransactionFields.idBudget: idBudget,
-        TransactionFields.idCategory: idCategory,
+        TransactionFields.nameBankAccount: nameBankAccount,
+        TransactionFields.nameBudget: nameBudget,
+        TransactionFields.nameCategory: nameCategory,
         BaseEntityFields.createdAt: createdAt?.toIso8601String(),
         BaseEntityFields.updatedAt: updatedAt?.toIso8601String(),
       };
