@@ -8,7 +8,7 @@ class BankAccountFields extends BaseEntityFields {
 
   static final List<String?> allFields = [
     BaseEntityFields.id,
-    name, // PK
+    name,
     value,
     BaseEntityFields.createdAt,
     BaseEntityFields.updatedAt

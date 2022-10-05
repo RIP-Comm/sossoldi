@@ -7,9 +7,10 @@ class TransactionFields extends BaseEntityFields {
   static String amount = 'amount';
   static String type = 'type';
   static String note = 'note';
-  static String nameBankAccount = 'nameBankAccount'; // FK
-  static String nameBudget = 'nameBudget'; // FK
-  static String nameCategory = 'nameCategory'; // FK
+  static String idBankAccount = 'idBankAccount'; // FK
+  static String idBudget = 'idBudget'; // FK
+  static String idCategory = 'idCategory'; // FK
+  static String idRecurringTransaction = 'idRecurringTransaction'; // FK
 
   static final List<String?> allFields = [
     BaseEntityFields.id,
@@ -17,9 +18,10 @@ class TransactionFields extends BaseEntityFields {
     amount,
     type,
     note,
-    nameBankAccount,
-    nameBudget,
-    nameCategory,
+    idBankAccount,
+    idBudget,
+    idCategory,
+    idRecurringTransaction,
     BaseEntityFields.createdAt,
     BaseEntityFields.updatedAt
   ];
@@ -29,12 +31,13 @@ enum Type { income, expense, transfer }
 
 class Transaction extends BaseEntity {
   final DateTime date;
-  final int amount;
+  final num amount;
   final Type type;
   final String? note;
-  final int nameBankAccount;
-  final String nameBudget;
-  final int nameCategory;
+  final int idBankAccount;
+  final int idBudget;
+  final int idCategory;
+  final int? idRecurringTransaction;
 
   const Transaction(
       {int? id,
@@ -42,9 +45,10 @@ class Transaction extends BaseEntity {
       required this.amount,
       required this.type,
       this.note,
-      required this.nameBankAccount,
-      required this.nameBudget,
-      required this.nameCategory,
+      required this.idBankAccount,
+      required this.idBudget,
+      required this.idCategory,
+      this.idRecurringTransaction,
       DateTime? createdAt,
       DateTime? updatedAt})
       : super(id: id, createdAt: createdAt, updatedAt: updatedAt);
@@ -55,9 +59,10 @@ class Transaction extends BaseEntity {
           int? amount,
           Type? type,
           String? note,
-          int? nameBankAccount,
-          String? nameBudget,
-          int? nameCategory,
+          int? idBankAccount,
+          int? idBudget,
+          int? idCategory,
+          int? idRecurringTransaction,
           DateTime? createdAt,
           DateTime? updatedAt}) =>
       Transaction(
@@ -66,21 +71,24 @@ class Transaction extends BaseEntity {
           amount: amount ?? this.amount,
           type: type ?? this.type,
           note: note ?? this.note,
-          nameBankAccount: nameBankAccount ?? this.nameBankAccount,
-          nameBudget: nameBudget ?? this.nameBudget,
-          nameCategory: nameCategory ?? this.nameCategory,
+          idBankAccount: idBankAccount ?? this.idBankAccount,
+          idBudget: idBudget ?? this.idBudget,
+          idCategory: idCategory ?? this.idCategory,
+          idRecurringTransaction:
+              idRecurringTransaction ?? this.idRecurringTransaction,
           createdAt: createdAt ?? this.createdAt,
           updatedAt: updatedAt ?? this.updatedAt);
 
   static Transaction fromJson(Map<String, Object?> json) => Transaction(
       id: json[BaseEntityFields.id] as int?,
       date: DateTime.parse(json[TransactionFields.date] as String),
-      amount: json[TransactionFields.amount] as int,
+      amount: json[TransactionFields.amount] as num,
       type: Type.values[json[TransactionFields.type] as int],
       note: json[TransactionFields.note] as String,
-      nameBankAccount: json[TransactionFields.nameBankAccount] as int,
-      nameBudget: json[TransactionFields.nameBudget] as String,
-      nameCategory: json[TransactionFields.nameCategory] as int,
+      idBankAccount: json[TransactionFields.idBankAccount] as int,
+      idBudget: json[TransactionFields.idBudget] as int,
+      idCategory: json[TransactionFields.idCategory] as int,
+      idRecurringTransaction: json[TransactionFields.idCategory] as int?,
       createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
       updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String));
 
@@ -90,9 +98,10 @@ class Transaction extends BaseEntity {
         TransactionFields.amount: amount,
         TransactionFields.type: type.index,
         TransactionFields.note: note,
-        TransactionFields.nameBankAccount: nameBankAccount,
-        TransactionFields.nameBudget: nameBudget,
-        TransactionFields.nameCategory: nameCategory,
+        TransactionFields.idBankAccount: idBankAccount,
+        TransactionFields.idBudget: idBudget,
+        TransactionFields.idCategory: idCategory,
+        TransactionFields.idRecurringTransaction: idRecurringTransaction,
         BaseEntityFields.createdAt: createdAt?.toIso8601String(),
         BaseEntityFields.updatedAt: updatedAt?.toIso8601String(),
       };

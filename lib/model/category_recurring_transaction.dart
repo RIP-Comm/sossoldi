@@ -9,7 +9,7 @@ class CategoryRecurringTransactionFields extends BaseEntityFields {
 
   static final List<String?> allFields = [
     BaseEntityFields.id,
-    name, // PK
+    name,
     symbol,
     note,
     BaseEntityFields.createdAt,
