@@ -24,7 +24,7 @@ void main() {
   test("Test fromJson Budget", () {
     Map<String, Object?> json = {
       BaseEntityFields.id: 0,
-      BudgetFields.name: "Home",
+      BudgetFields.name: "name",
       BudgetFields.amountLimit: 100,
       BaseEntityFields.createdAt: DateTime.utc(2022).toIso8601String(),
       BaseEntityFields.updatedAt: DateTime.utc(2022).toIso8601String(),
@@ -44,7 +44,7 @@ void main() {
   test("Test toJson Budget", () {
     Budget b = Budget(
         id: 2,
-        name: "Home",
+        name: "name",
         amountLimit: 100,
         createdAt: DateTime.utc(2022),
         updatedAt: DateTime.utc(2022));

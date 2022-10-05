@@ -4,7 +4,7 @@ import 'package:sossoldi/model/recurring_transaction.dart';
 import 'package:sossoldi/model/base_entity.dart';
 
 void main() {
-  test('Test Copy Transaction', () {
+  test('Test Copy Recurring Transaction', () {
     RecurringTransaction t = RecurringTransaction(
         id: 2,
         from: DateTime.utc(2022),
@@ -23,7 +23,7 @@ void main() {
     assert(tCopy.updatedAt == t.updatedAt);
   });
 
-  test("Test fromJson Transaction", () {
+  test("Test fromJson Recurring Transaction", () {
     Map<String, Object?> json = {
       BaseEntityFields.id: 0,
       RecurringTransactionFields.from: DateTime.utc(2022).toIso8601String(),
@@ -47,7 +47,7 @@ void main() {
         json[BaseEntityFields.updatedAt]);
   });
 
-  test("Test toJson Transaction", () {
+  test("Test toJson Recurring Transaction", () {
     RecurringTransaction t = RecurringTransaction(
         id: 2,
         from: DateTime.utc(2022),
