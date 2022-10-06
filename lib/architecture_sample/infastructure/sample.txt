@@ -1,0 +1,1 @@
+Here implementation of external services. E.g. EmailSender 
