@@ -11,8 +11,9 @@ void main() {
         amount: 100,
         type: Type.income,
         idBankAccount: 0,
-        idBudget: "Home",
+        idBudget: 0,
         idCategory: 0,
+        idRecurringTransaction: 0,
         createdAt: DateTime.utc(2022),
         updatedAt: DateTime.utc(2022));
 
@@ -25,7 +26,8 @@ void main() {
     assert(tCopy.type == t.type);
     assert(tCopy.idBankAccount == t.idBankAccount);
     assert(tCopy.idBudget == t.idBudget);
-    assert(tCopy.idBudget == t.idBudget);
+    assert(tCopy.idCategory == t.idCategory);
+    assert(tCopy.idRecurringTransaction == t.idRecurringTransaction);
     assert(tCopy.createdAt == t.createdAt);
     assert(tCopy.updatedAt == t.updatedAt);
   });
@@ -38,8 +40,9 @@ void main() {
       TransactionFields.type: Type.income.index,
       TransactionFields.note: "Note",
       TransactionFields.idBankAccount: 0,
-      TransactionFields.idBudget: "Home",
+      TransactionFields.idBudget: 0,
       TransactionFields.idCategory: 0,
+      TransactionFields.idRecurringTransaction: 0,
       BaseEntityFields.createdAt: DateTime.utc(2022).toIso8601String(),
       BaseEntityFields.updatedAt: DateTime.utc(2022).toIso8601String(),
     };
@@ -54,6 +57,8 @@ void main() {
     assert(t.idBankAccount == json[TransactionFields.idBankAccount]);
     assert(t.idBudget == json[TransactionFields.idBudget]);
     assert(t.idCategory == json[TransactionFields.idCategory]);
+    assert(t.idRecurringTransaction ==
+        json[TransactionFields.idRecurringTransaction]);
     assert(t.createdAt?.toUtc().toIso8601String() ==
         json[BaseEntityFields.createdAt]);
     assert(t.updatedAt?.toUtc().toIso8601String() ==
@@ -67,8 +72,9 @@ void main() {
         amount: 100,
         type: Type.income,
         idBankAccount: 0,
-        idBudget: "Home",
+        idBudget: 0,
         idCategory: 0,
+        idRecurringTransaction: 0,
         createdAt: DateTime.utc(2022),
         updatedAt: DateTime.utc(2022));
 
@@ -82,6 +88,8 @@ void main() {
     assert(t.idBankAccount == json[TransactionFields.idBankAccount]);
     assert(t.idBudget == json[TransactionFields.idBudget]);
     assert(t.idCategory == json[TransactionFields.idCategory]);
+    assert(t.idRecurringTransaction ==
+        json[TransactionFields.idRecurringTransaction]);
     assert(t.createdAt?.toUtc().toIso8601String() ==
         json[BaseEntityFields.createdAt]);
     assert(t.updatedAt?.toUtc().toIso8601String() ==
