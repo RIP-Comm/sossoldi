@@ -10,6 +10,7 @@ void main() {
         from: DateTime.utc(2022),
         to: DateTime.utc(2023),
         payDay: 1,
+        recurrence: Recurrence.annual,
         idCategoryRecurring: 0,
         createdAt: DateTime.utc(2022),
         updatedAt: DateTime.utc(2022));
@@ -20,6 +21,7 @@ void main() {
     assert(tCopy.from == t.from);
     assert(tCopy.to == t.to);
     assert(tCopy.payDay == t.payDay);
+    assert(tCopy.recurrence == t.recurrence);
     assert(tCopy.idCategoryRecurring == t.idCategoryRecurring);
     assert(tCopy.createdAt == t.createdAt);
     assert(tCopy.updatedAt == t.updatedAt);
@@ -31,6 +33,7 @@ void main() {
       RecurringTransactionFields.from: DateTime.utc(2022).toIso8601String(),
       RecurringTransactionFields.to: DateTime.utc(2023).toIso8601String(),
       RecurringTransactionFields.payDay: 1,
+      RecurringTransactionFields.recurrence: Recurrence.annual.index,
       RecurringTransactionFields.idCategoryRecurring: 0,
       BaseEntityFields.createdAt: DateTime.utc(2022).toIso8601String(),
       BaseEntityFields.updatedAt: DateTime.utc(2022).toIso8601String(),
@@ -44,6 +47,7 @@ void main() {
     assert(
         t.to.toUtc().toIso8601String() == json[RecurringTransactionFields.to]);
     assert(t.payDay == json[RecurringTransactionFields.payDay]);
+    assert(t.recurrence.index == json[RecurringTransactionFields.recurrence]);
     assert(t.idCategoryRecurring ==
         json[RecurringTransactionFields.idCategoryRecurring]);
     assert(t.createdAt?.toUtc().toIso8601String() ==
@@ -58,6 +62,7 @@ void main() {
         from: DateTime.utc(2022),
         to: DateTime.utc(2023),
         payDay: 1,
+        recurrence: Recurrence.annual,
         idCategoryRecurring: 0,
         createdAt: DateTime.utc(2022),
         updatedAt: DateTime.utc(2022));
@@ -70,6 +75,7 @@ void main() {
     assert(
         t.to.toUtc().toIso8601String() == json[RecurringTransactionFields.to]);
     assert(t.payDay == json[RecurringTransactionFields.payDay]);
+    assert(t.recurrence.index == json[RecurringTransactionFields.recurrence]);
     assert(t.idCategoryRecurring ==
         json[RecurringTransactionFields.idCategoryRecurring]);
     assert(t.createdAt?.toUtc().toIso8601String() ==
