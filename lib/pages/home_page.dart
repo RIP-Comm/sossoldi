@@ -1,9 +1,12 @@
 // Home page.
 
 import 'dart:ui';
+import "dart:math";
 
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+
+import 'package:sossoldi/customWidgets/accounts_sum.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -93,7 +96,7 @@ class _HomePageState extends State<HomePage> {
                   "Your accounts",
                   style: Theme.of(context).textTheme.displayMedium,
                 ))),
-        const SizedBox(height: 16),
+        const SizedBox(height: 10),
         Container(
           height: 85.0,
           margin: const EdgeInsets.only(left: 16.0, right: 16.0),
@@ -102,49 +105,10 @@ class _HomePageState extends State<HomePage> {
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, i) {
-                return Container(
-                    width: 120.0,
-                    child: Card(
-                      semanticContainer: true,
-                      child: Column(
-                        children: [
-                          ListTile(
-                            leading: Container(
-                              child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Icon(Icons.settings, size: 15.0),
-                              ),
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Color.fromRGBO(217, 217, 217, 1)),
-                            ),
-                            contentPadding:
-                                EdgeInsets.only(left: 10.0, right: 10.0),
-                            horizontalTitleGap: 0.0,
-                            title: Text('Cash',
-                                style: Theme.of(context).textTheme.labelMedium),
-                          ),
-                          Transform.translate(
-                              offset: Offset(0, -10),
-                              child: RichText(
-                                  text: TextSpan(children: [
-                                TextSpan(
-                                    text: "1.320,50",
-                                    style:
-                                        Theme.of(context).textTheme.titleSmall),
-                                TextSpan(
-                                  text: "€",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelSmall
-                                      ?.apply(fontFeatures: [
-                                    FontFeature.subscripts()
-                                  ]),
-                                ),
-                              ]))),
-                        ],
-                      ),
-                    ));
+                var accountsList = ['N26','Fineco','Crypto.com','Mediolanum'];
+                var amountsList = ['3.823,56','0,07','574,22','14.549,01'];
+                final random = Random();
+                return AccountsSum(accountName: accountsList[random.nextInt(accountsList.length)], amount: amountsList[random.nextInt(amountsList.length)]);
               }),
         ),
         const SizedBox(height: 28),
