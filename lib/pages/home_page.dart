@@ -5,6 +5,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
+import 'package:sossoldi/custom_widgets/accounts_sum.dart';
+
 class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
@@ -102,49 +104,7 @@ class _HomePageState extends State<HomePage> {
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, i) {
-                return Container(
-                    width: 120.0,
-                    child: Card(
-                      semanticContainer: true,
-                      child: Column(
-                        children: [
-                          ListTile(
-                            leading: Container(
-                              child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Icon(Icons.settings, size: 15.0),
-                              ),
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Color.fromRGBO(217, 217, 217, 1)),
-                            ),
-                            contentPadding:
-                                EdgeInsets.only(left: 10.0, right: 10.0),
-                            horizontalTitleGap: 0.0,
-                            title: Text('Cash',
-                                style: Theme.of(context).textTheme.labelMedium),
-                          ),
-                          Transform.translate(
-                              offset: Offset(0, -10),
-                              child: RichText(
-                                  text: TextSpan(children: [
-                                TextSpan(
-                                    text: "1.320,50",
-                                    style:
-                                        Theme.of(context).textTheme.titleSmall),
-                                TextSpan(
-                                  text: "€",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelSmall
-                                      ?.apply(fontFeatures: [
-                                    FontFeature.subscripts()
-                                  ]),
-                                ),
-                              ]))),
-                        ],
-                      ),
-                    ));
+                return const AccountsSum(accountName: 'Cash', amount: '1.234,56');
               }),
         ),
         const SizedBox(height: 28),
