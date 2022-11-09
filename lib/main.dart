@@ -3,9 +3,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:sossoldi/pages/structure.dart';
+
 // sqflite
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite/sqflite.dart';
+
 // database
 import 'package:sossoldi/database/sossoldi_database.dart';
 import 'package:sossoldi/model/example.dart';

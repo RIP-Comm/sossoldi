@@ -104,7 +104,8 @@ class _HomePageState extends State<HomePage> {
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, i) {
-                return const AccountsSum(accountName: 'Cash', amount: '1.234,56');
+                return const AccountsSum(
+                    accountName: 'Cash', amount: '1.234,56');
               }),
         ),
         const SizedBox(height: 28),
@@ -128,7 +129,7 @@ class _HomePageState extends State<HomePage> {
                   Row(
                     children: [
                       Text("Monday 12 september"),
-                      Spacer(),
+                      const Spacer(),
                       RichText(
                           text: TextSpan(children: [
                         TextSpan(
@@ -200,7 +201,7 @@ class _HomePageState extends State<HomePage> {
                                           style: Theme.of(context)
                                               .textTheme
                                               .headlineMedium),
-                                      Spacer(),
+                                      const Spacer(),
                                       Text('CASH',
                                           style: Theme.of(context)
                                               .textTheme
@@ -332,8 +333,7 @@ class _HomePageState extends State<HomePage> {
                     progressColor: Color.fromRGBO(150, 150, 150, 1),
                   ),
                   const SizedBox(height: 10),
-                  Text("Spese",
-                      style: Theme.of(context).textTheme.labelMedium),
+                  Text("Spese", style: Theme.of(context).textTheme.labelMedium),
                 ],
               ),
               Spacer(),
@@ -386,8 +386,7 @@ class _HomePageState extends State<HomePage> {
                     progressColor: Color.fromRGBO(150, 150, 150, 1),
                   ),
                   const SizedBox(height: 10),
-                  Text("Svago",
-                      style: Theme.of(context).textTheme.labelMedium),
+                  Text("Svago", style: Theme.of(context).textTheme.labelMedium),
                 ],
               ),
             ],
@@ -395,7 +394,6 @@ class _HomePageState extends State<HomePage> {
           margin: const EdgeInsets.only(left: 16.0, right: 16.0),
         ),
         const SizedBox(height: 50),
-
       ],
     );
   }
