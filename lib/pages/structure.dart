@@ -70,8 +70,6 @@ class _StructureState extends State<Structure> {
         selectedItemColor: Colors.white,
         backgroundColor: const Color.fromRGBO(204, 204, 204, 1),
         currentIndex: _selectedIndex,
-        //showSelectedLabels: false,
-        //showUnselectedLabels: false,
         onTap: _onItemTapped,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

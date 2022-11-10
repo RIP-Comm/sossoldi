@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sossoldi/model/CircularMenuItemWrap.dart';
+import 'package:sossoldi/custom_widgets/circular_menu_item_wrap.dart';
 import 'package:sossoldi/pages/settings_page.dart';
 import 'package:circular_menu/circular_menu.dart';
 
