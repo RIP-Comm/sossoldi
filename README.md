@@ -51,14 +51,14 @@ The pages that will be implemented are:
 
 If you want to help with this project you are more than welcome!
 Here is a series of link to get started:
-[Github Repo](https://github.com/RIP-Comm/sossoldi)
-[Design file](https://www.figma.com/file/6NyY9yqunpbU7HIkbNEAL3/Sossoldi-App?node-id=0%3A1)
-[Information architecture](https://www.figma.com/file/xjVHAaHznRW1OFAJvp8DXn/Sossoldi-App---Figjam?node-id=0%3A1)
-[Interface study](https://www.notion.so/Sossoldi-Personal-finance-app-dd37eb9cbb2c44e59dd74f85e843e865)
-[Discord](http://mr.rip/discord)
+-   [Github Repo](https://github.com/RIP-Comm/sossoldi)
+-   [Design file](https://www.figma.com/file/6NyY9yqunpbU7HIkbNEAL3/Sossoldi-App?node-id=0%3A1)
+-   [Information architecture](https://www.figma.com/file/xjVHAaHznRW1OFAJvp8DXn/Sossoldi-App---Figjam?node-id=0%3A1)
+-   [Interface study](https://www.notion.so/Sossoldi-Personal-finance-app-dd37eb9cbb2c44e59dd74f85e843e865)
+-   [Discord](http://mr.rip/discord)
 
 #### New to Flutter? Here are some good (and free!) resources:
-[FreeCodeCampCourses](https://www.youtube.com/c/Freecodecamp/search?query=flutter)
-[Flutter Documentation](https://docs.flutter.dev/#new-to-flutter)
-[Flutter for beginners](https://www.youtube.com/playlist?list=PL4cUxeGkcC9jLYyp2Aoh6hcWuxFDX6PBJ)
-[Flutter course in italian](https://www.youtube.com/channel/UCYhryp9JC06XRKQUQsLZlfQ)
+-   [FreeCodeCampCourses](https://www.youtube.com/c/Freecodecamp/search?query=flutter)
+-   [Flutter Documentation](https://docs.flutter.dev/#new-to-flutter)
+-   [Flutter for beginners](https://www.youtube.com/playlist?list=PL4cUxeGkcC9jLYyp2Aoh6hcWuxFDX6PBJ)
+-   [Flutter course in italian](https://www.youtube.com/channel/UCYhryp9JC06XRKQUQsLZlfQ)
