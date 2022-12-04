@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 import 'package:sossoldi/custom_widgets/accounts_sum.dart';
+import 'package:sossoldi/custom_widgets/chart_home.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -17,76 +18,128 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return ListView(
       children: <Widget>[
-        const SizedBox(height: 32),
-        RichText(
-            textAlign: TextAlign.center,
-            text: TextSpan(children: [
-              TextSpan(
-                text: "3.250,65",
-                style: Theme.of(context).textTheme.titleMedium,
+        Card(
+          color: const Color(0xffF1F5F9),
+          child: Column(
+            children: [
+              const Padding(padding: EdgeInsets.only(top: 8.0),),
+              Row(
+                children: [
+                  const Padding(padding: EdgeInsets.only(left: 8.0),),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        "MONTHLY BALANCE",
+                        style: TextStyle(
+                          color: Color(0xff00152D),
+                          fontSize: 12.0,
+                          fontFamily: 'SF Pro Text',
+                          ),
+                        ),
+                      Text(
+                        "1.536,65€",
+                        style: TextStyle(
+                          color: Color(0xff00152D),
+                          fontSize: 27.0,
+                          fontFamily: 'SF Pro Text',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Padding(padding: EdgeInsets.only(right: 30.0),),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        "INCOME",
+                        style: TextStyle(
+                            color: Color(0xff00152D),
+                            fontSize: 10.0,
+                            fontFamily: 'SF Pro Text',
+                          ),
+                        ),
+                      Text(
+                        "+2620,55€",
+                        style: TextStyle(
+                            color: Color(0xff248731),
+                            fontSize: 16.0,
+                            fontFamily: 'SF Pro Text',
+                          ),
+                        ),
+                    ],),
+                  const Padding(padding: EdgeInsets.only(right: 30.0),),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        "EXPENSES",
+                        style: TextStyle(
+                            color: Color(0xff00152D),
+                            fontSize: 10.0,
+                            fontFamily: 'SF Pro Text',
+                          ),
+                        ),
+                      Text(
+                        "-1.050,65€",
+                        style: TextStyle(
+                            color: Color(0xffC52626),
+                            fontSize: 16.0,
+                            fontFamily: 'SF Pro Text',
+                          ),
+                        ),
+                    ],),
+                ],
               ),
-              TextSpan(
-                text: "€",
-                style: Theme.of(context)
-                    .textTheme
-                    .labelMedium
-                    ?.apply(fontFeatures: [FontFeature.subscripts()]),
+              const Padding(padding: EdgeInsets.all(8.0),),
+              const LineChartWidget(),
+              Row(
+                children: <Widget>[
+                  const Padding(padding: EdgeInsets.only(left: 8.0),),
+                  Container(
+                    width: 8,
+                    height: 8,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color(0xff00152D),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 4,
+                  ),
+                  const Text(
+                    "Spese mese corrente",
+                    style: TextStyle(
+                      fontSize: 8,
+                      color: Color(0xff00152D),
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.only(left: 8.0),),
+                  Container(
+                    width: 8,
+                    height: 8,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color(0xffB9BABC),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 4,
+                  ),
+                  const Text(
+                    "Spese mese precedente",
+                    style: TextStyle(
+                      fontSize: 8,
+                      color: Color(0xff00152D),
+                    ),
+                  ),
+                ],
               ),
-            ])),
-        Text(
-          textAlign: TextAlign.center,
-          "MONTHLY BALANCE",
-          style: Theme.of(context).textTheme.headlineMedium,
+              const Padding(padding: EdgeInsets.only(bottom: 9.0),),
+            ],
+          )
         ),
-        const SizedBox(height: 24),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Column(children: [
-              RichText(
-                  text: TextSpan(children: [
-                TextSpan(
-                  text: "+4.620,55",
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-                TextSpan(
-                  text: "€",
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelSmall
-                      ?.apply(fontFeatures: [FontFeature.subscripts()]),
-                )
-              ])),
-              Text(
-                "INCOME",
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-            ]),
-            const SizedBox(width: 87),
-            Column(children: [
-              RichText(
-                  text: TextSpan(children: [
-                TextSpan(
-                  text: "-1050,65",
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-                TextSpan(
-                  text: "€",
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelSmall
-                      ?.apply(fontFeatures: [FontFeature.subscripts()]),
-                )
-              ])),
-              Text(
-                "EXPENSES",
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-            ]),
-          ],
-        ),
-        const SizedBox(height: 28),
-        const SizedBox(height: 28),
         Align(
             alignment: Alignment.centerLeft,
             child: Padding(
@@ -150,6 +203,7 @@ class _HomePageState extends State<HomePage> {
                       color: Color.fromRGBO(231, 231, 231, 1),
                       height: 220,
                       child: ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(), // <-- this will disable scroll
                           itemCount: 5,
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
