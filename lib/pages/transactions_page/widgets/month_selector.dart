@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class MonthSelector extends StatelessWidget {
-  MonthSelector({
+  const MonthSelector({
     required this.amount,
     Key? key,
   }) : super(key: key);
 
-  double amount;
-  double height = 60;
+  final double amount;
+  final double height = 60;
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ElencoTab extends StatelessWidget {
-  const ElencoTab({
+class AccountsTab extends StatelessWidget {
+  const AccountsTab({
     Key? key,
   }) : super(key: key);
 
@@ -12,11 +12,11 @@ class ElencoTab extends StatelessWidget {
       itemBuilder: (context, index) {
         return ListTile(
           title: Text(
-            "Elenco $index",
+            "Conti $index",
             style: Theme.of(context)
                 .textTheme
                 .bodyText1
-                ?.copyWith(color: Colors.blue),
+                ?.copyWith(color: Colors.red),
           ),
         );
       },

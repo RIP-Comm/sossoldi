@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class CategorieTab extends StatelessWidget {
-  const CategorieTab({
+class CategoriesTab extends StatelessWidget {
+  const CategoriesTab({
     Key? key,
   }) : super(key: key);
 

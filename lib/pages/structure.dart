@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:sossoldi/pages/add_page.dart';
 import 'package:sossoldi/pages/home_page.dart';
-import 'package:sossoldi/pages/movements_page/movements_page.dart';
+import 'package:sossoldi/pages/transactions_page/transactions_page.dart';
 import 'package:sossoldi/pages/planning_budget_page.dart';
 import 'package:sossoldi/pages/settings_page.dart';
 import 'package:sossoldi/pages/statistics_page.dart';
@@ -26,7 +26,7 @@ class _StructureState extends State<Structure> {
   // We could add this List in the app's state, so it isn't intialized every time.
   final List<Widget> _pages = <Widget>[
     HomePage(),
-    MovementsPage(),
+    TransactionsPage(),
     AddPage(),
     PlanningPage(),
     StatsPage(),

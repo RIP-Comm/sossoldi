@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ContiTab extends StatelessWidget {
-  const ContiTab({
+class ListTab extends StatelessWidget {
+  const ListTab({
     Key? key,
   }) : super(key: key);
 
@@ -12,11 +12,11 @@ class ContiTab extends StatelessWidget {
       itemBuilder: (context, index) {
         return ListTile(
           title: Text(
-            "Conti $index",
+            "Elenco $index",
             style: Theme.of(context)
                 .textTheme
                 .bodyText1
-                ?.copyWith(color: Colors.red),
+                ?.copyWith(color: Colors.blue),
           ),
         );
       },

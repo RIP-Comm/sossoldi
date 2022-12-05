@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 import 'widgets/custom_sliver_delegate.dart';
-import 'widgets/categorie_tab.dart';
-import 'widgets/conti_tab.dart';
-import 'widgets/elenco_tab.dart';
+import 'widgets/categories_tab.dart';
+import 'widgets/accounts_tab.dart';
+import 'widgets/list_tab.dart';
 
-class MovementsPage extends StatefulWidget {
+class TransactionsPage extends StatefulWidget {
   @override
-  _MovementsPageState createState() => _MovementsPageState();
+  _TransactionsPageState createState() => _TransactionsPageState();
 }
 
-class _MovementsPageState extends State<MovementsPage>
+class _TransactionsPageState extends State<TransactionsPage>
     with SingleTickerProviderStateMixin {
   static const List<Tab> myTabs = <Tab>[
     Tab(text: "Elenco", height: 35),
@@ -52,9 +52,9 @@ class _MovementsPageState extends State<MovementsPage>
         body: TabBarView(
           controller: _tabController,
           children: const [
-            ElencoTab(),
-            CategorieTab(),
-            ContiTab(),
+            ListTab(),
+            CategoriesTab(),
+            AccountsTab(),
           ],
         ),
       ),

@@ -18,6 +18,9 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
 
   final amount = 258.45; // get from backend
 
+  // TODO: expand on Tap
+  // TODO: snap to open/closed when it's almost open/closed
+
   // TODO: make header floating
   // FloatingHeaderSnapConfiguration
   // https://api.flutter.dev/flutter/widgets/SliverPersistentHeaderDelegate/snapConfiguration.html
