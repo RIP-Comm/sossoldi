@@ -2,13 +2,17 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class LineChartWidget extends StatefulWidget {
-  const LineChartWidget({super.key});
+  final currentMonthData;
+  final previousMonthData;
+  const LineChartWidget({super.key, required this.currentMonthData, required this.previousMonthData});
 
   @override
   State<LineChartWidget> createState() => _LineChartSample2State();
 }
 
 class _LineChartSample2State extends State<LineChartWidget> {
+  _LineChartSample2State();
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -101,25 +105,7 @@ class _LineChartSample2State extends State<LineChartWidget> {
       maxY: 5,
       lineBarsData: [
         LineChartBarData(
-          spots: const [
-            FlSpot(0, -3),
-            FlSpot(1, -1.3),
-            FlSpot(2, 2),
-            FlSpot(3, 4.5),
-            FlSpot(4, 5),
-            FlSpot(5, 2.2),
-            FlSpot(6, 3.1),
-            FlSpot(7, 0.2),
-            FlSpot(8, 4),
-            FlSpot(9, 3),
-            FlSpot(10, 2),
-            FlSpot(11, 4),
-            FlSpot(12, -3),
-            FlSpot(13, -1.3),
-            FlSpot(14, 2),
-            FlSpot(15, 4.5),
-            FlSpot(16, 5),
-          ],
+          spots: widget.currentMonthData,
           isCurved: true,
           barWidth: 1.5,
           isStrokeCapRound: true,
@@ -133,38 +119,7 @@ class _LineChartSample2State extends State<LineChartWidget> {
           ),
         ),
         LineChartBarData(
-          spots: const [
-            FlSpot(0, 3),
-            FlSpot(1, 1.3),
-            FlSpot(2, -2),
-            FlSpot(3, -4.5),
-            FlSpot(4, -5),
-            FlSpot(5, -2.2),
-            FlSpot(6, -3.1),
-            FlSpot(7, -0.2),
-            FlSpot(8, -4),
-            FlSpot(9, -3),
-            FlSpot(10, -2),
-            FlSpot(11, -4),
-            FlSpot(12, 3),
-            FlSpot(13, 1.3),
-            FlSpot(14, -2),
-            FlSpot(15, -4.5),
-            FlSpot(16, -5),
-            FlSpot(17, -2.2),
-            FlSpot(18, -3.1),
-            FlSpot(19, -0.2),
-            FlSpot(20, -4),
-            FlSpot(21, -3),
-            FlSpot(22, -2),
-            FlSpot(23, -4),
-            FlSpot(24, 3),
-            FlSpot(25, 1.3),
-            FlSpot(26, -2),
-            FlSpot(27, -4.5),
-            FlSpot(28, -5),
-            FlSpot(29, -2.2),
-          ],
+          spots: widget.previousMonthData,
           isCurved: true,
           barWidth: 1,
           isStrokeCapRound: true,

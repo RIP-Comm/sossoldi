@@ -2,6 +2,7 @@
 
 import 'dart:ui';
 
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
@@ -93,7 +94,60 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
               const Padding(padding: EdgeInsets.all(8.0),),
-              const LineChartWidget(),
+              const LineChartWidget(
+                currentMonthData: [
+                  FlSpot(0, -3),
+                  FlSpot(1, -1.3),
+                  FlSpot(2, 2),
+                  FlSpot(3, 4.5),
+                  FlSpot(4, 5),
+                  FlSpot(5, 2.2),
+                  FlSpot(6, 3.1),
+                  FlSpot(7, 0.2),
+                  FlSpot(8, 4),
+                  FlSpot(9, 3),
+                  FlSpot(10, 2),
+                  FlSpot(11, 4),
+                  FlSpot(12, -3),
+                  FlSpot(13, -1.3),
+                  FlSpot(14, 2),
+                  FlSpot(15, 4.5),
+                  FlSpot(16, 5),
+                ],
+                previousMonthData: [
+                  FlSpot(0, -3),
+                  FlSpot(1, -1.3),
+                  FlSpot(2, 2),
+                  FlSpot(3, 4.5),
+                  FlSpot(4, 5),
+                  FlSpot(5, 2.2),
+                  FlSpot(6, 3.1),
+                  FlSpot(7, 0.2),
+                  FlSpot(8, 4),
+                  FlSpot(9, 3),
+                  FlSpot(10, 2),
+                  FlSpot(11, 4),
+                  FlSpot(12, -3),
+                  FlSpot(13, -1.3),
+                  FlSpot(14, 2),
+                  FlSpot(15, 4.5),
+                  FlSpot(16, 5),
+                  FlSpot(17, 2.2),
+                  FlSpot(18, 3.1),
+                  FlSpot(19, 0.2),
+                  FlSpot(20, 4),
+                  FlSpot(21, 3),
+                  FlSpot(22, 2),
+                  FlSpot(23, 4),
+                  FlSpot(24, -3),
+                  FlSpot(25, -1.3),
+                  FlSpot(26, 2),
+                  FlSpot(27, 4.5),
+                  FlSpot(28, 5),
+                  FlSpot(29, 5),
+                ],
+
+              ),
               Row(
                 children: <Widget>[
                   const Padding(padding: EdgeInsets.only(left: 8.0),),
@@ -139,11 +193,12 @@ class _HomePageState extends State<HomePage> {
               const Padding(padding: EdgeInsets.only(bottom: 9.0),),
             ],
           )
+          //child: LineChartWidget()
         ),
         Align(
             alignment: Alignment.centerLeft,
             child: Padding(
-                padding: EdgeInsets.only(left: 16),
+                padding: const EdgeInsets.only(left: 16),
                 child: Text(
                   "Your accounts",
                   style: Theme.of(context).textTheme.displayMedium,
@@ -210,13 +265,13 @@ class _HomePageState extends State<HomePage> {
                           itemBuilder: (context, i) {
                             return ListTile(
                               leading: Container(
-                                child: Padding(
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: const Color.fromRGBO(217, 217, 217, 1)),
+                                child: const Padding(
                                   padding: EdgeInsets.all(8.0),
                                   child: Icon(Icons.settings, size: 25.0),
                                 ),
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Color.fromRGBO(217, 217, 217, 1)),
                               ),
                               title: Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
