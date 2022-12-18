@@ -1,29 +1,29 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import 'month_selector.dart';
 
 class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
   const CustomSliverDelegate({
+    required this.ticker,
     required this.myTabs,
     required this.tabController,
+    required this.expandedHeight,
+    required this.minHeight,
   });
 
   final TabController tabController;
   final List<Tab> myTabs;
+  final TickerProvider ticker;
 
-  static const double minHeight = 56.0;
-  static const double expandedHeight = 140.0;
+  final double minHeight;
+  final double expandedHeight;
 
   final amount = 258.45; // get from backend
 
   // TODO: expand on Tap
-  // TODO: snap to open/closed when it's almost open/closed
-
-  // TODO: make header floating
-  // FloatingHeaderSnapConfiguration
-  // https://api.flutter.dev/flutter/widgets/SliverPersistentHeaderDelegate/snapConfiguration.html
 
   @override
   Widget build(context, double shrinkOffset, bool overlapsContent) {
@@ -32,8 +32,10 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
 
     // TODO: improve animations
     // prevent the expanded widget from shrinking in size when collapsing
+
     return Container(
-      color: Colors.grey.shade300,
+      color: Color(0xFFfafafa),
+      // color: Theme.of(context).colorScheme.background, // currently it's light blue
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -47,7 +49,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
             child: FittedBox(
               alignment: Alignment.topLeft,
               child: Text(
-                "Visualizza:",
+                "Display:",
                 style: Theme.of(context).textTheme.displayMedium,
               ),
             ),
@@ -59,15 +61,12 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
                 if (shrinkPercentage < .5)
                   Opacity(
                     opacity: 1 - shrinkPercentage,
-                    child: _buildExtendedWidget(context),
+                    child: _buildExtendedWidget(context, shrinkPercentage),
                   ),
                 if (shrinkPercentage > .5)
                   Opacity(
                     opacity: shrinkPercentage,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: _buildCollapsedWidget(context),
-                    ),
+                    child: _buildCollapsedWidget(context),
                   ),
               ],
             ),
@@ -76,44 +75,48 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
           const Divider(
             thickness: 1.0,
             height: 1,
-            color: Colors.black,
+            color: Color(0xFFB5BAC0),
           ),
         ],
       ),
     );
   }
 
-  _buildExtendedWidget(BuildContext context) {
+  _buildExtendedWidget(BuildContext context, double shrinkPercentage) {
     return ClipRect(
       child: FittedBox(
         fit: BoxFit.fitHeight,
         alignment: Alignment.center,
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 8),
-              TabBar(
-                controller: tabController,
-                labelColor: Colors.white,
-                indicatorSize: TabBarIndicatorSize.tab,
-                unselectedLabelColor: Color(0xFFB9BABC),
-                splashBorderRadius: BorderRadius.circular(50),
-                indicator: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  color: Color(0xFF356CA3),
+          child: IgnorePointer(
+            // disable all buttons during the transition
+            ignoring: (shrinkPercentage != 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 8),
+                TabBar(
+                  controller: tabController,
+                  labelColor: Colors.white,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  unselectedLabelColor: Color(0xFFB9BABC),
+                  splashBorderRadius: BorderRadius.circular(50),
+                  indicator: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    color: Color(0xFF356CA3),
+                  ),
+                  // TODO: capitalize text of the selected label
+                  // not possible from TextStyle https://github.com/flutter/flutter/issues/22695
+                  labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+                  unselectedLabelStyle:
+                      const TextStyle(fontWeight: FontWeight.normal),
+                  tabs: myTabs,
                 ),
-                // TODO: capitalize text of the selected label
-                labelStyle: const TextStyle(fontWeight: FontWeight.bold),
-                unselectedLabelStyle:
-                    const TextStyle(fontWeight: FontWeight.normal),
-                tabs: myTabs,
-              ),
-              const SizedBox(height: 8),
-              // TODO: make sure buttons are not clickable when partially collapsed
-              MonthSelector(amount: amount),
-            ],
+                const SizedBox(height: 8),
+                MonthSelector(amount: amount),
+              ],
+            ),
           ),
         ),
       ),
@@ -149,10 +152,10 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
         ),
         Text(
           "$amount €",
-          style: TextStyle(
-              color: (amount > 0) ? Colors.green : Colors.red,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'SF Pro Text'),
+          style: Theme.of(context)
+              .textTheme
+              .bodyLarge
+              ?.copyWith(color: (amount > 0) ? Colors.green : Colors.red),
         ),
       ],
     );
@@ -162,8 +165,19 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
   double get maxExtent => expandedHeight;
 
   @override
-  double get minExtent => minHeight; //kToolbarHeight + 30;
+  double get minExtent => minHeight;
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;
+
+  @override
+  TickerProvider? get vsync => ticker;
+
+  @override
+  FloatingHeaderSnapConfiguration? get snapConfiguration {
+    return FloatingHeaderSnapConfiguration(
+      curve: Curves.easeIn,
+      duration: const Duration(milliseconds: 200),
+    );
+  }
 }

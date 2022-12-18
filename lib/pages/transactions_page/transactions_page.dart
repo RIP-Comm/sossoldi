@@ -11,24 +11,30 @@ class TransactionsPage extends StatefulWidget {
 }
 
 class _TransactionsPageState extends State<TransactionsPage>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   static const List<Tab> myTabs = <Tab>[
-    Tab(text: "Elenco", height: 35),
-    Tab(text: "Cateogorie", height: 35),
-    Tab(text: "Conti", height: 35),
+    Tab(text: "List", height: 35),
+    Tab(text: "Categories", height: 35),
+    Tab(text: "Accounts", height: 35),
   ];
 
   late TabController _tabController;
+  late ScrollController _scrollController;
+
+  final double headerMaxHeight = 140.0;
+  final double headerMinHeight = 56.0;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(vsync: this, length: myTabs.length);
+    _scrollController = ScrollController();
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -36,26 +42,52 @@ class _TransactionsPageState extends State<TransactionsPage>
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
-      child: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
-            SliverPersistentHeader(
-              delegate: CustomSliverDelegate(
-                myTabs: myTabs,
-                tabController: _tabController,
-              ),
-              pinned: true,
-              floating: true,
-            ),
-          ];
+      child: NotificationListener<ScrollEndNotification>(
+        onNotification: (notification) {
+          // snap the header open/close when it's in between the two states
+          final double scrollDistance = headerMaxHeight - headerMinHeight;
+
+          if (_scrollController.offset > 0 &&
+              _scrollController.offset < scrollDistance) {
+            final double snapOffset =
+                (_scrollController.offset / scrollDistance > 0.5)
+                    ? scrollDistance + 10
+                    : 0;
+
+            //! the app freezes on animateTo
+            // // Future.microtask(() => _scrollController.animateTo(snapOffset,
+            // //     duration: Duration(milliseconds: 200), curve: Curves.easeIn));
+
+            // microtask() runs the callback after the build ends
+            Future.microtask(() => _scrollController.jumpTo(snapOffset));
+          }
+          return false;
         },
-        body: TabBarView(
-          controller: _tabController,
-          children: const [
-            ListTab(),
-            CategoriesTab(),
-            AccountsTab(),
-          ],
+        child: NestedScrollView(
+          controller: _scrollController,
+          headerSliverBuilder: (context, innerBoxIsScrolled) {
+            return [
+              SliverPersistentHeader(
+                delegate: CustomSliverDelegate(
+                  ticker: this,
+                  myTabs: myTabs,
+                  tabController: _tabController,
+                  expandedHeight: headerMaxHeight,
+                  minHeight: headerMinHeight,
+                ),
+                pinned: true,
+                floating: true,
+              ),
+            ];
+          },
+          body: TabBarView(
+            controller: _tabController,
+            children: const [
+              ListTab(),
+              CategoriesTab(),
+              AccountsTab(),
+            ],
+          ),
         ),
       ),
     );
