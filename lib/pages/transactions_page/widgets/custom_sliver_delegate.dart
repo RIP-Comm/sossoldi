@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+import '../../../constants/style.dart';
 import 'month_selector.dart';
 
 class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
@@ -34,8 +35,13 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
     // prevent the expanded widget from shrinking in size when collapsing
 
     return Container(
-      color: Color(0xFFfafafa),
-      // color: Theme.of(context).colorScheme.background, // currently it's light blue
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.background,
+        border: const Border(
+          bottom: BorderSide(width: 1.0, color: grey2),
+        ),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -49,8 +55,8 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
             child: FittedBox(
               alignment: Alignment.topLeft,
               child: Text(
-                "Display:",
-                style: Theme.of(context).textTheme.displayMedium,
+                "View:",
+                style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
           ),
@@ -72,11 +78,6 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
             ),
           ),
           const SizedBox(height: 8),
-          const Divider(
-            thickness: 1.0,
-            height: 1,
-            color: Color(0xFFB5BAC0),
-          ),
         ],
       ),
     );
@@ -98,20 +99,22 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
                 const SizedBox(height: 8),
                 TabBar(
                   controller: tabController,
+                  tabs: myTabs,
                   labelColor: Colors.white,
                   indicatorSize: TabBarIndicatorSize.tab,
-                  unselectedLabelColor: Color(0xFFB9BABC),
+                  unselectedLabelColor: grey2,
                   splashBorderRadius: BorderRadius.circular(50),
                   indicator: BoxDecoration(
                     borderRadius: BorderRadius.circular(50),
-                    color: Color(0xFF356CA3),
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
                   // TODO: capitalize text of the selected label
                   // not possible from TextStyle https://github.com/flutter/flutter/issues/22695
-                  labelStyle: const TextStyle(fontWeight: FontWeight.bold),
-                  unselectedLabelStyle:
-                      const TextStyle(fontWeight: FontWeight.normal),
-                  tabs: myTabs,
+                  labelStyle: Theme.of(context).textTheme.bodyLarge,
+                  unselectedLabelStyle: Theme.of(context)
+                      .textTheme
+                      .bodyLarge
+                      ?.copyWith(fontWeight: FontWeight.w400),
                 ),
                 const SizedBox(height: 8),
                 MonthSelector(amount: amount),
@@ -134,28 +137,27 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
           ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(50),
-            color: Color(0xFF356CA3),
+            color: Theme.of(context).colorScheme.secondary,
           ),
           child: Text(
             myTabs[tabController.index].text!,
             textAlign: TextAlign.center,
             style: Theme.of(context)
                 .textTheme
-                .labelLarge
+                .bodyLarge
                 ?.copyWith(color: Colors.white),
           ),
         ),
         Text(
           "Settembre 2022",
-          style:
-              Theme.of(context).textTheme.displayMedium?.copyWith(fontSize: 14),
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
         Text(
           "$amount €",
           style: Theme.of(context)
               .textTheme
               .bodyLarge
-              ?.copyWith(color: (amount > 0) ? Colors.green : Colors.red),
+              ?.copyWith(color: (amount > 0) ? green : red),
         ),
       ],
     );

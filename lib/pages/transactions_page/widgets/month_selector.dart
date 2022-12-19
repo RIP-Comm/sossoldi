@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../../constants/style.dart';
+
 class MonthSelector extends StatelessWidget {
   MonthSelector({
     required this.amount,
@@ -58,7 +60,7 @@ class MonthSelector extends StatelessWidget {
         clipBehavior: Clip.antiAlias, // force rounded corners on children
         height: height,
         decoration: const BoxDecoration(
-          color: Color(0xFFf1f5f9),
+          color: blue7,
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         child: Row(
@@ -75,7 +77,7 @@ class MonthSelector extends StatelessWidget {
               child: Container(
                 height: height,
                 width: height,
-                color: Color(0xFF00152d),
+                color: Theme.of(context).colorScheme.primary,
                 child: const Icon(
                   Icons.chevron_left,
                   color: Colors.white,
@@ -90,12 +92,14 @@ class MonthSelector extends StatelessWidget {
                   children: [
                     Text(
                       getFormattedDate(),
-                      style: Theme.of(context).textTheme.displayMedium,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     Text(
                       "$amount €",
-                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                          color: (amount > 0) ? Colors.green : Colors.red),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge
+                          ?.copyWith(color: (amount > 0) ? green : red),
                     ),
                   ],
                 );
@@ -112,7 +116,7 @@ class MonthSelector extends StatelessWidget {
               child: Container(
                 height: height,
                 width: height,
-                color: Color(0xFF00152d),
+                color: Theme.of(context).colorScheme.primary,
                 child: const Icon(
                   Icons.chevron_right,
                   color: Colors.white,
