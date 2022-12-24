@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'chart_home.dart';
+import 'line_chart.dart';
 
 class AccountDialog extends StatelessWidget {
   final accountName;

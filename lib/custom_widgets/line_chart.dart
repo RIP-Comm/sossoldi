@@ -1,11 +1,12 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
+//This class can be used when we need to draw a line chart with one or two lines
 class LineChartWidget extends StatefulWidget {
-  final line1Data;
+  final line1Data; //this should be a list of Flspot(x,y)
   final colorLine1Data;
 
-  final line2Data;
+  final line2Data; //this should be a list of Flspot(x,y), if you only need one just put an empty list
   final colorLine2Data;
 
   final colorBackground;

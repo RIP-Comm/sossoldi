@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 import '../custom_widgets/accounts_sum.dart';
-import '../custom_widgets/chart_home.dart';
+import '../custom_widgets/line_chart.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -29,68 +29,45 @@ class _HomePageState extends State<HomePage> {
                   const Padding(padding: EdgeInsets.only(left: 8.0),),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
                         "MONTHLY BALANCE",
-                        style: TextStyle(
-                          color: Color(0xff00152D),
-                          fontSize: 12.0,
-                          fontFamily: 'SF Pro Text',
-                          ),
+                        style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       Text(
                         "1.536,65€",
-                        style: TextStyle(
-                          color: Color(0xff00152D),
-                          fontSize: 27.0,
-                          fontFamily: 'SF Pro Text',
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: Colors.black),
                       ),
                     ],
                   ),
                   const Padding(padding: EdgeInsets.only(right: 30.0),),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
                         "INCOME",
-                        style: TextStyle(
-                            color: Color(0xff00152D),
-                            fontSize: 10.0,
-                            fontFamily: 'SF Pro Text',
-                          ),
+                        style: Theme.of(context).textTheme.labelLarge,
                         ),
                       Text(
                         "+2620,55€",
-                        style: TextStyle(
-                            color: Color(0xff248731),
-                            fontSize: 16.0,
-                            fontFamily: 'SF Pro Text',
-                          ),
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.green),
                         ),
-                    ],),
+                    ],
+                  ),
                   const Padding(padding: EdgeInsets.only(right: 30.0),),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
                         "EXPENSES",
-                        style: TextStyle(
-                            color: Color(0xff00152D),
-                            fontSize: 10.0,
-                            fontFamily: 'SF Pro Text',
-                          ),
+                        style: Theme.of(context).textTheme.labelLarge,
                         ),
                       Text(
                         "-1.050,65€",
-                        style: TextStyle(
-                            color: Color(0xffC52626),
-                            fontSize: 16.0,
-                            fontFamily: 'SF Pro Text',
-                          ),
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.red),
                         ),
-                    ],),
+                    ],
+                  ),
                 ],
               ),
               const Padding(padding: EdgeInsets.all(8.0),),
