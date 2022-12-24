@@ -95,26 +95,27 @@ class _HomePageState extends State<HomePage> {
               ),
               const Padding(padding: EdgeInsets.all(8.0),),
               const LineChartWidget(
-                currentMonthData: [
-                  FlSpot(0, -3),
-                  FlSpot(1, -1.3),
-                  FlSpot(2, 2),
-                  FlSpot(3, 4.5),
-                  FlSpot(4, 5),
-                  FlSpot(5, 2.2),
-                  FlSpot(6, 3.1),
-                  FlSpot(7, 0.2),
-                  FlSpot(8, 4),
-                  FlSpot(9, 3),
-                  FlSpot(10, 2),
-                  FlSpot(11, 4),
-                  FlSpot(12, -3),
-                  FlSpot(13, -1.3),
-                  FlSpot(14, 2),
-                  FlSpot(15, 4.5),
-                  FlSpot(16, 5),
+                line1Data: [
+                  FlSpot(0, 3),
+                  FlSpot(1, 1.3),
+                  FlSpot(2, -2),
+                  FlSpot(3, -4.5),
+                  FlSpot(4, -5),
+                  FlSpot(5, -2.2),
+                  FlSpot(6, -3.1),
+                  FlSpot(7, -0.2),
+                  FlSpot(8, -4),
+                  FlSpot(9, -3),
+                  FlSpot(10, -2),
+                  FlSpot(11, -4),
+                  FlSpot(12, 3),
+                  FlSpot(13, 1.3),
+                  FlSpot(14, -2),
+                  FlSpot(15, -4.5),
+                  FlSpot(16, 2.5),
                 ],
-                previousMonthData: [
+                colorLine1Data: Color(0xff00152D),
+                line2Data: [
                   FlSpot(0, -3),
                   FlSpot(1, -1.3),
                   FlSpot(2, 2),
@@ -146,7 +147,8 @@ class _HomePageState extends State<HomePage> {
                   FlSpot(28, 5),
                   FlSpot(29, 5),
                 ],
-
+                colorLine2Data: Color(0xffB9BABC),
+                colorBackground: Color(0xffF1F5F9),
               ),
               Row(
                 children: <Widget>[
@@ -193,7 +195,6 @@ class _HomePageState extends State<HomePage> {
               const Padding(padding: EdgeInsets.only(bottom: 9.0),),
             ],
           )
-          //child: LineChartWidget()
         ),
         Align(
             alignment: Alignment.centerLeft,

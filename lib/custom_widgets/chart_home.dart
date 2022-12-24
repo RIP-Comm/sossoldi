@@ -2,9 +2,21 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class LineChartWidget extends StatefulWidget {
-  final currentMonthData;
-  final previousMonthData;
-  const LineChartWidget({super.key, required this.currentMonthData, required this.previousMonthData});
+  final line1Data;
+  final colorLine1Data;
+
+  final line2Data;
+  final colorLine2Data;
+
+  final colorBackground;
+  const LineChartWidget({
+    super.key, 
+    required this.line1Data, 
+    required this.colorLine1Data, 
+    required this.line2Data,
+    required this.colorLine2Data, 
+    required this.colorBackground,
+    });
 
   @override
   State<LineChartWidget> createState() => _LineChartSample2State();
@@ -20,11 +32,11 @@ class _LineChartSample2State extends State<LineChartWidget> {
         AspectRatio(
           aspectRatio: 2,
           child: DecoratedBox(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(
                 Radius.circular(18),
               ),
-              color: Color(0xffF1F5F9),
+              color: widget.colorBackground,
             ),
             child: Padding(
                 padding: const EdgeInsets.only(
@@ -43,27 +55,27 @@ class _LineChartSample2State extends State<LineChartWidget> {
   }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
-    const style = TextStyle(
-      color: Color(0xff00152D),
+    final style = TextStyle(
+      color: widget.colorLine1Data.withOpacity(1.0),
       fontWeight: FontWeight.normal,
       fontSize: 9,
     );
     Widget text;
     switch (value.toInt()) {
       case 6:
-        text = const Text('8 Nov', style: style);
+        text = Text('8 Nov', style: style);
         break;
       case 16:
-        text = const Text('15 Nov', style: style);
+        text = Text('15 Nov', style: style);
         break;
       case 23:
-        text = const Text('22 Nov', style: style);
+        text = Text('22 Nov', style: style);
         break;
       case 6:
-        text = const Text('30 Nov', style: style);
+        text = Text('30 Nov', style: style);
         break;
       default:
-        text = const Text('', style: style);
+        text = Text('', style: style);
         break;
     }
 
@@ -105,25 +117,25 @@ class _LineChartSample2State extends State<LineChartWidget> {
       maxY: 5,
       lineBarsData: [
         LineChartBarData(
-          spots: widget.currentMonthData,
+          spots: widget.line1Data,
           isCurved: true,
           barWidth: 1.5,
           isStrokeCapRound: true,
-          color: const Color(0xff00152D),
+          color: widget.colorLine1Data,
           dotData: FlDotData(
             show: false,
           ),
           belowBarData: BarAreaData(
             show: true,
-            color: const Color.fromARGB(30, 0, 21, 45)
+            color: widget.colorLine1Data.withOpacity(0.3)
           ),
         ),
         LineChartBarData(
-          spots: widget.previousMonthData,
+          spots: widget.line2Data,
           isCurved: true,
           barWidth: 1,
           isStrokeCapRound: true,
-          color: const Color(0xffB9BABC),
+          color: widget.colorLine2Data,
           dotData: FlDotData(
             show: false,
           ),
