@@ -9,6 +9,13 @@ class LineChartWidget extends StatefulWidget {
   final line2Data; //this should be a list of Flspot(x,y), if you only need one just put an empty list
   final colorLine2Data;
 
+  //These will be used to determine the max value of the chart in order to get the right visualization of the data
+  final maxY;
+  final minY;
+
+  //Contains the number of days of the month
+  final maxDays; 
+
   final colorBackground;
   const LineChartWidget({
     super.key, 
@@ -17,6 +24,9 @@ class LineChartWidget extends StatefulWidget {
     required this.line2Data,
     required this.colorLine2Data, 
     required this.colorBackground,
+    required this.maxY,
+    required this.minY,
+    required this.maxDays,
     });
 
   @override
@@ -113,9 +123,9 @@ class _LineChartSample2State extends State<LineChartWidget> {
                 border: const Border(bottom: BorderSide(color: Colors.grey, width: 1.0, style: BorderStyle.solid))
                 ),
       minX: 0,
-      maxX: 29,
-      minY: -5,
-      maxY: 5,
+      maxX: widget.maxDays-1,
+      minY: widget.minY,
+      maxY: widget.maxY,
       lineBarsData: [
         LineChartBarData(
           spots: widget.line1Data,

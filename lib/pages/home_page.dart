@@ -126,6 +126,9 @@ class _HomePageState extends State<HomePage> {
                 ],
                 colorLine2Data: Color(0xffB9BABC),
                 colorBackground: Color(0xffF1F5F9),
+                maxY: 5.0,
+                minY: -5.0,
+                maxDays: 30.0,
               ),
               Row(
                 children: <Widget>[
