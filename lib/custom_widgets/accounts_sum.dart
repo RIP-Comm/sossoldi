@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:sossoldi/custom_widgets/account_modal.dart';
+import 'account_modal.dart';
 
 /// This class shows account summaries in dashboard
 class AccountsSum extends StatelessWidget {

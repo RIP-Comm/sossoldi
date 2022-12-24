@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:sossoldi/custom_widgets/chart_home.dart';
+import 'chart_home.dart';
 
 class AccountDialog extends StatelessWidget {
   final accountName;

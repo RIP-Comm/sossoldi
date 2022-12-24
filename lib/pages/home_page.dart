@@ -6,8 +6,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
-import 'package:sossoldi/custom_widgets/accounts_sum.dart';
-import 'package:sossoldi/custom_widgets/chart_home.dart';
+import '../custom_widgets/accounts_sum.dart';
+import '../custom_widgets/chart_home.dart';
 
 class HomePage extends StatefulWidget {
   @override
