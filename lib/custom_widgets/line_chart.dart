@@ -69,21 +69,21 @@ class _LineChartSample2State extends State<LineChartWidget> {
     final style = TextStyle(
       color: widget.colorLine1Data.withOpacity(1.0),
       fontWeight: FontWeight.normal,
-      fontSize: 9,
+      fontSize: 10,
     );
     Widget text;
     switch (value.toInt()) {
-      case 6:
-        text = Text('8 Nov', style: style);
+      case 3:
+        text = Text('4', style: style);
         break;
-      case 16:
-        text = Text('15 Nov', style: style);
+      case 10:
+        text = Text('11', style: style);
         break;
-      case 23:
-        text = Text('22 Nov', style: style);
+      case 17:
+        text = Text('18', style: style);
         break;
-      case 6:
-        text = Text('30 Nov', style: style);
+      case 24:
+        text = Text('25', style: style);
         break;
       default:
         text = Text('', style: style);
