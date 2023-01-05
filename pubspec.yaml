@@ -36,6 +36,9 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
+  # Support for various charts
+  fl_chart: ^0.55.2
+
   # Database storage
   sqflite: ^2.0.0+3
 

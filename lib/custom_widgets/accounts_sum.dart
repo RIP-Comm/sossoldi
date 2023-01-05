@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'account_modal.dart';
 
 /// This class shows account summaries in dashboard
 class AccountsSum extends StatelessWidget {
@@ -21,6 +22,34 @@ class AccountsSum extends StatelessWidget {
           child: Column(
             children: [
               ListTile(
+                onTap: () {
+                  showModalBottomSheet(
+                    backgroundColor: Colors.transparent,
+                    context: context,
+                    isScrollControlled: true,
+                    isDismissible: true,
+                    builder: (BuildContext buildContext) {
+                      return DraggableScrollableSheet(
+                        builder: (_, controller) => Container( 
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            color: const Color(0xff356CA3),
+                          ),
+                          child:
+                            ListView(
+                              controller: controller,
+                              children: [
+                                AccountDialog(accountName: accountName,)
+                              ],
+                            ),
+                      ),
+                        initialChildSize: 0.7,
+                        minChildSize: 0.5,
+                        maxChildSize: 1,
+                      );
+                    },
+                  );
+                },
                 leading: Container(
                   child: Image(
                       width: 27.0,
