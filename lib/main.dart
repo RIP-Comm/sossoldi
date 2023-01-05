@@ -2,27 +2,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:sossoldi/pages/structure.dart';
-
-// sqflite
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:sqflite/sqflite.dart';
-
-// database
-import 'package:sossoldi/database/sossoldi_database.dart';
-import 'package:sossoldi/model/example.dart';
+import 'pages/structure.dart';
 
 import 'constants/style.dart';
 
 void main() {
-  if (Platform.isWindows || Platform.isLinux) {
-    // Initialize FFI
-    sqfliteFfiInit();
-  }
-  // Change the default factory. On iOS/Android, if not using `sqlite_flutter_lib` you can forget
-  // this step, it will use the sqlite version available on the system.
-  databaseFactory = databaseFactoryFfi;
-
   runApp(const Launcher());
 }
 

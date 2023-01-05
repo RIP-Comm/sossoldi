@@ -5,7 +5,13 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
-import 'package:sossoldi/custom_widgets/accounts_sum.dart';
+import '../custom_widgets/accounts_sum.dart';
+
+// database
+import '../database/sossoldi_database.dart';
+
+// TEMP (just to use json.encode())
+import 'dart:convert';
 
 class HomePage extends StatefulWidget {
   @override
@@ -13,6 +19,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  Future dbAction() async {
+    print(json.encode(await SossoldiDatabase.instance.read(2)));
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -87,6 +98,12 @@ class _HomePageState extends State<HomePage> {
         ),
         const SizedBox(height: 28),
         const SizedBox(height: 28),
+        GestureDetector(
+          onTap: () async {
+            print(dbAction());
+          },
+          child: Text('TAP ME TAP ME'),
+        ),
         Align(
             alignment: Alignment.centerLeft,
             child: Padding(
