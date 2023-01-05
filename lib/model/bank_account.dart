@@ -1,12 +1,15 @@
 import 'package:sossoldi/model/base_entity.dart';
 
-const String bankAccount = 'bankAccount';
+const String bankAccountTable = 'bankAccount';
 
 class BankAccountFields extends BaseEntityFields {
+  static String id = 'id';
   static String name = 'name';
   static String value = 'value';
+  static String createdAt = 'createdAt';
+  static String updatedAt = 'updatedAt';
 
-  static final List<String?> allFields = [
+  static final List<String> allFields = [
     BaseEntityFields.id,
     name,
     value,
@@ -17,7 +20,7 @@ class BankAccountFields extends BaseEntityFields {
 
 class BankAccount extends BaseEntity {
   final String name;
-  final num value;
+  final String value;
 
   const BankAccount(
       {int? id,
@@ -30,7 +33,7 @@ class BankAccount extends BaseEntity {
   BankAccount copy(
           {int? id,
           String? name,
-          num? value,
+          String? value,
           DateTime? createdAt,
           DateTime? updatedAt}) =>
       BankAccount(
@@ -43,7 +46,7 @@ class BankAccount extends BaseEntity {
   static BankAccount fromJson(Map<String, Object?> json) => BankAccount(
       id: json[BaseEntityFields.id] as int?,
       name: json[BankAccountFields.name] as String,
-      value: json[BankAccountFields.value] as num,
+      value: json[BankAccountFields.value] as String,
       createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
       updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String));
 
