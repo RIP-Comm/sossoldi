@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sossoldi/main.dart';
+import '/main.dart';
 
 ///
 /// Builder class to create a customized dialog with some options
