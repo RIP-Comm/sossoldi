@@ -71,6 +71,12 @@ void showInfoDialog(BuildContext context, String text) =>
     AlertDialogBuilder(text: text, dialogType: AlertDialogType.info, primaryActionText: "OK").show(context);
 
 ///
+/// Shows a success dialog with given text
+///
+void showSuccessDialog(BuildContext context, String text) =>
+    AlertDialogBuilder(text: text, dialogType: AlertDialogType.success, primaryActionText: "OK").show(context);
+
+///
 /// Shows a warning dialog with given text
 ///
 void showWarningDialog(BuildContext context, String text) =>
