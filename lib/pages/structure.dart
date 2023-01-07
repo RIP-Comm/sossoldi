@@ -1,16 +1,17 @@
 // Defines application's structure
 
 import 'package:flutter/material.dart';
-import 'package:sossoldi/pages/add_page.dart';
-import 'package:sossoldi/pages/home_page.dart';
-import 'package:sossoldi/pages/transactions_page/transactions_page.dart';
-import 'package:sossoldi/pages/planning_budget_page.dart';
-import 'package:sossoldi/pages/settings_page.dart';
-import 'package:sossoldi/pages/statistics_page.dart';
+import '../constants/style.dart';
+import '../pages/add_page.dart';
+import '../pages/home_page.dart';
+import '../pages/transactions_page/transactions_page.dart';
+import '../pages/planning_budget_page.dart';
+import '../pages/settings_page.dart';
+import '../pages/statistics_page.dart';
 
 // database
-import 'package:sossoldi/database/sossoldi_database.dart';
-import 'package:sossoldi/model/example.dart';
+import '../database/sossoldi_database.dart';
+import '../model/example.dart';
 import 'package:circular_menu/circular_menu.dart';
 
 class Structure extends StatefulWidget {
@@ -24,10 +25,17 @@ class _StructureState extends State<Structure> {
   int _selectedIndex = 0;
 
   // We could add this List in the app's state, so it isn't intialized every time.
+  final List<String> _pagesTitle = [
+    "Dashboard",
+    "Transactions",
+    "",
+    "Planning",
+    "Graphs",
+  ];
   final List<Widget> _pages = <Widget>[
     HomePage(),
     TransactionsPage(),
-    AddPage(),
+    const SizedBox(),
     PlanningPage(),
     StatsPage(),
   ];
@@ -35,31 +43,60 @@ class _StructureState extends State<Structure> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: blue7,
       appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(204, 204, 204, 1),
+        // Sulla dashboard (0) setto il background blue
+        backgroundColor: _selectedIndex == 0 ? blue7 : Theme.of(context).colorScheme.background,
+        elevation: 0,
         centerTitle: true,
         title: Text(
-          "DASHBOARD",
-          style: Theme.of(context).textTheme.displayMedium,
+          _pagesTitle.elementAt(_selectedIndex),
+          style: Theme.of(context).textTheme.headlineLarge!.copyWith(color: Theme.of(context).colorScheme.primary),
         ),
-        leading: IconButton(
-            icon: const Icon(Icons.search),
-            tooltip: 'Search',
-            onPressed: () {}),
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 16),
+          child: ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              elevation: 0,
+              shape: const CircleBorder(),
+              padding: const EdgeInsets.all(8),
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              // foregroundColor: Colors.red, // <-- Splash color
+            ),
+            child: Icon(
+              Icons.search,
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
+          ),
+        ),
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(
                   context,
                   PageRouteBuilder(
-                    pageBuilder: (context, animation1, animation2) =>
-                        SettingsPage(),
+                    pageBuilder: (context, animation1, animation2) => SettingsPage(),
                     transitionDuration: Duration.zero,
                     reverseTransitionDuration: Duration.zero,
-                  ));
-            },
-            icon: const Icon(Icons.settings),
-          )
+                  ),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                elevation: 0,
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(8),
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                // foregroundColor: Colors.red, // <-- Splash color
+              ),
+              child: Icon(
+                Icons.settings,
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+            ),
+          ),
         ],
       ),
       body: Center(
@@ -72,36 +109,34 @@ class _StructureState extends State<Structure> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-              icon: Icon(Icons.business_center), label: "Home"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.attach_money), label: "Transaction"),
+          BottomNavigationBarItem(icon: Icon(Icons.business_center), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.attach_money), label: "Transaction"),
           BottomNavigationBarItem(icon: Text(""), label: ""),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.arrow_back), label: "Planning"),
+          BottomNavigationBarItem(icon: Icon(Icons.arrow_back), label: "Planning"),
           BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: "Graphs"),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-          elevation: 0,
-          highlightElevation: 0,
-          backgroundColor: const Color.fromRGBO(179, 179, 179, 1),
-          child: const Icon(
-            Icons.add,
-            size: 55,
-            color: Color.fromRGBO(93, 93, 93, 1),
-          ),
-          onPressed: () {
-            Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation1, animation2) => AddPage(),
-                  transitionDuration: Duration.zero,
-                  reverseTransitionDuration: Duration.zero,
-                ));
-          }),
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.miniCenterDocked,
+        elevation: 0,
+        highlightElevation: 0,
+        backgroundColor: const Color.fromRGBO(179, 179, 179, 1),
+        child: const Icon(
+          Icons.add,
+          size: 55,
+          color: Color.fromRGBO(93, 93, 93, 1),
+        ),
+        onPressed: () {
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (context, animation1, animation2) => AddPage(),
+              transitionDuration: Duration.zero,
+              reverseTransitionDuration: Duration.zero,
+            ),
+          );
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
     );
   }
 

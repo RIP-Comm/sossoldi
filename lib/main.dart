@@ -2,15 +2,15 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:sossoldi/pages/structure.dart';
+import 'pages/structure.dart';
 
 // sqflite
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite/sqflite.dart';
 
 // database
-import 'package:sossoldi/database/sossoldi_database.dart';
-import 'package:sossoldi/model/example.dart';
+import 'database/sossoldi_database.dart';
+import 'model/example.dart';
 
 import 'constants/style.dart';
 
@@ -42,7 +42,7 @@ ColorScheme customColorScheme = const ColorScheme(
 
 ThemeData customThemeData = ThemeData(
   colorScheme: customColorScheme,
-  backgroundColor: const Color(0xFFFFFFFF),
+  backgroundColor: white,
   fontFamily: 'SF Pro Text',
   textTheme: const TextTheme(
     // display

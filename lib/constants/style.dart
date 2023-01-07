@@ -11,6 +11,8 @@ const TextStyle labelLight = TextStyle(
   fontWeight: FontWeight.w400,
 );
 
+Color cardShadow = blue1.withOpacity(0.15);
+
 // colors
 const green = Color(0xFF248731);
 const red = Color(0xFFC52626);
