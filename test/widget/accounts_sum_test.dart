@@ -6,7 +6,7 @@ import 'package:sossoldi/custom_widgets/accounts_sum.dart';
 void main() {
     testWidgets('Properly Render Accounts Widget', (WidgetTester tester) async {
       var accountsList = ['N26','Fineco','Crypto.com','Mediolanum'];
-      var amountsList = ['3.823,56','0,07','574,22','14.549,01'];
+      var amountsList = [3823.56,0.07,574.22,14549.01];
 
       final random = Random();
 
