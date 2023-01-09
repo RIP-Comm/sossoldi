@@ -1,8 +1,9 @@
-import 'package:sossoldi/model/base_entity.dart';
+import 'base_entity.dart';
 
-const String transaction = 'transaction';
+const String transactionTable = 'transaction';
 
 class TransactionFields extends BaseEntityFields {
+  static String id = 'id';
   static String date = 'date';
   static String amount = 'amount';
   static String type = 'type';
@@ -11,6 +12,8 @@ class TransactionFields extends BaseEntityFields {
   static String idBudget = 'idBudget'; // FK
   static String idCategory = 'idCategory'; // FK
   static String idRecurringTransaction = 'idRecurringTransaction'; // FK
+  static String createdAt = 'createdAt';
+  static String updatedAt = 'updatedAt';
 
   static final List<String?> allFields = [
     BaseEntityFields.id,

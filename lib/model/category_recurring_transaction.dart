@@ -1,11 +1,14 @@
-import 'package:sossoldi/model/base_entity.dart';
+import 'base_entity.dart';
 
-const String categoryRecurringTransaction = 'categoryRecurringTransaction';
+const String categoryRecurringTransactionTable = 'categoryRecurringTransaction';
 
 class CategoryRecurringTransactionFields extends BaseEntityFields {
+  static String id = 'id';
   static String name = 'name';
   static String symbol = 'symbol'; // Short name
   static String note = 'note';
+  static String createdAt = 'createdAt';
+  static String updatedAt = 'updatedAt';
 
   static final List<String?> allFields = [
     BaseEntityFields.id,

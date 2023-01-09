@@ -1,10 +1,13 @@
-import 'package:sossoldi/model/base_entity.dart';
+import 'base_entity.dart';
 
-const String budget = 'budget';
+const String budgetTable = 'budget';
 
 class BudgetFields extends BaseEntityFields {
+  static String id = 'id';
   static String name = 'name';
   static String amountLimit = 'amountLimit';
+  static String createdAt = 'createdAt';
+  static String updatedAt = 'updatedAt';
 
   static final List<String?> allFields = [
     BaseEntityFields.id,

@@ -1,7 +1,14 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
+// Models
 import '../model/bank_account.dart';
+import '../model/transaction.dart';
+import '../model/recurring_transaction.dart';
+import '../model/recurring_transaction_amount.dart';
+import '../model/category_transaction.dart';
+import '../model/category_recurring_transaction.dart';
+import '../model/budget.dart';
 
 class SossoldiDatabase {
   static final SossoldiDatabase instance = SossoldiDatabase._init();
@@ -22,6 +29,7 @@ class SossoldiDatabase {
     // Directory databasePath = await getApplicationDocumentsDirectory();
 
     final path = join(databasePath, filePath);
+    print(path);
     return await openDatabase(path, version: 1, onCreate: _createDB);
   }
 
@@ -31,19 +39,102 @@ class SossoldiDatabase {
     const integerNotNull = 'INTEGER NOT NULL';
     const textNotNull = 'TEXT NOT NULL';
 
-    // If you want to create a new table you must duplicate the code below
-    // by changing the name and the fields.
-    // (and obviously create a new model for your table)
+    // Bank accounts Table
     await database.execute(
         '''
-      CREATE TABLE $bankAccountTable(
-        ${BankAccountFields.id} $integerPrimaryKeyAutoincrement,
-        ${BankAccountFields.name} $textNotNull,
-        ${BankAccountFields.value} $textNotNull,
-        ${BankAccountFields.createdAt} $textNotNull,
-        ${BankAccountFields.updatedAt} $textNotNull
+      CREATE TABLE `$bankAccountTable`(
+        `${BankAccountFields.id}` $integerPrimaryKeyAutoincrement,
+        `${BankAccountFields.name}` $textNotNull,
+        `${BankAccountFields.value}` $textNotNull,
+        `${BankAccountFields.createdAt}` $textNotNull,
+        `${BankAccountFields.updatedAt}` $textNotNull
       )
       ''');
+
+    // Transactions Table
+    await database.execute(
+        '''
+      CREATE TABLE `$transactionTable`(
+        `${TransactionFields.id}` $integerPrimaryKeyAutoincrement,
+        `${TransactionFields.date}` $textNotNull,
+        `${TransactionFields.amount}` $textNotNull,
+        `${TransactionFields.type}` $textNotNull,
+        `${TransactionFields.note}` $textNotNull,
+        `${TransactionFields.idBankAccount}` $textNotNull,
+        `${TransactionFields.idBudget}` $textNotNull,
+        `${TransactionFields.idCategory}` $textNotNull,
+        `${TransactionFields.idRecurringTransaction}` $textNotNull,
+        `${TransactionFields.createdAt}` $textNotNull,
+        `${TransactionFields.updatedAt}` $textNotNull
+      )
+    ''');
+
+    // Recurring Transactions Table
+    await database.execute(
+        '''
+      CREATE TABLE `$recurringTransactionTable`(
+        `${RecurringTransactionFields.id}` $integerPrimaryKeyAutoincrement,
+        `${RecurringTransactionFields.from}` $textNotNull,
+        `${RecurringTransactionFields.to}` $textNotNull,
+        `${RecurringTransactionFields.payDay}` $textNotNull,
+        `${RecurringTransactionFields.recurrence}` $textNotNull,
+        `${RecurringTransactionFields.idCategoryRecurring}` $textNotNull,
+        `${RecurringTransactionFields.createdAt}` $textNotNull,
+        `${RecurringTransactionFields.updatedAt}` $textNotNull
+      )
+    ''');
+
+    // Recurring Transactions Amount Table
+    await database.execute(
+        '''
+      CREATE TABLE `$recurringTransactionAmountTable`(
+        `${RecurringTransactionAmountFields.id}` $integerPrimaryKeyAutoincrement,
+        `${RecurringTransactionAmountFields.from}` $textNotNull,
+        `${RecurringTransactionAmountFields.to}` $textNotNull,
+        `${RecurringTransactionAmountFields.amount}` $textNotNull,
+        `${RecurringTransactionAmountFields.idRecurringTransaction}` $textNotNull,
+        `${RecurringTransactionAmountFields.createdAt}` $textNotNull,
+        `${RecurringTransactionAmountFields.updatedAt}` $textNotNull
+      )
+    ''');
+
+    // Category Transaction Table
+    await database.execute(
+        '''
+      CREATE TABLE `$categoryTransactionTable`(
+        `${CategoryTransactionFields.id}` $integerPrimaryKeyAutoincrement,
+        `${CategoryTransactionFields.name}` $textNotNull,
+        `${CategoryTransactionFields.symbol}` $textNotNull,
+        `${CategoryTransactionFields.note}` $textNotNull,
+        `${CategoryTransactionFields.createdAt}` $textNotNull,
+        `${CategoryTransactionFields.updatedAt}` $textNotNull
+      )
+    ''');
+
+    // Category Recurring Transaction Table
+    await database.execute(
+        '''
+      CREATE TABLE `$categoryRecurringTransactionTable`(
+        `${CategoryRecurringTransactionFields.id}` $integerPrimaryKeyAutoincrement,
+        `${CategoryRecurringTransactionFields.name}` $textNotNull,
+        `${CategoryRecurringTransactionFields.symbol}` $textNotNull,
+        `${CategoryRecurringTransactionFields.note}` $textNotNull,
+        `${CategoryRecurringTransactionFields.createdAt}` $textNotNull,
+        `${CategoryRecurringTransactionFields.updatedAt}` $textNotNull
+      )
+    ''');
+
+    // Budget Table
+    await database.execute(
+        '''
+      CREATE TABLE `$budgetTable`(
+        `${BudgetFields.id}` $integerPrimaryKeyAutoincrement,
+        `${BudgetFields.name}` $textNotNull,
+        `${BudgetFields.amountLimit}` $textNotNull,
+        `${BudgetFields.createdAt}` $textNotNull,
+        `${BudgetFields.updatedAt}` $textNotNull
+      )
+    ''');
   }
 
   Future<BankAccount> create(BankAccount example) async {
@@ -116,5 +207,12 @@ class SossoldiDatabase {
   Future close() async {
     final database = await instance.database;
     database.close();
+  }
+
+  // FOR DEV/TEST PURPOSES ONLY!!
+  Future<void> deleteDatabase() async {
+    final databasePath = await getDatabasesPath();
+    final path = join(databasePath, 'sossoldi.db');
+    databaseFactory.deleteDatabase(path);
   }
 }

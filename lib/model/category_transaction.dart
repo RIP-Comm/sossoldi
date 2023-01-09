@@ -1,11 +1,14 @@
-import 'package:sossoldi/model/base_entity.dart';
+import 'base_entity.dart';
 
-const String categoryTransaction = 'categoryTransaction';
+const String categoryTransactionTable = 'categoryTransaction';
 
 class CategoryTransactionFields extends BaseEntityFields {
+  static String id = 'id';
   static String name = 'name';
   static String symbol = 'symbol';
   static String note = 'note';
+  static String createdAt = 'createdAt';
+  static String updatedAt = 'updatedAt';
 
   static final List<String?> allFields = [
     BaseEntityFields.id,
