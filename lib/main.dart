@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'routes.dart';
 import 'pages/structure.dart';
 
@@ -24,7 +25,7 @@ void main() {
   // this step, it will use the sqlite version available on the system.
   databaseFactory = databaseFactoryFfi;
 
-  runApp(const Launcher());
+  runApp(const ProviderScope(child: Launcher()));
 }
 
 ColorScheme customColorScheme = const ColorScheme(

@@ -4,29 +4,34 @@ import 'dart:ui';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import '../providers/accounts_provider.dart';
 import '../constants/style.dart';
 import '../model/bank_account.dart';
 
 import '../custom_widgets/accounts_sum.dart';
 import '../custom_widgets/line_chart.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  static const List<BankAccount> accountList = [
-    BankAccount(name: 'Main account', value: 1235.10),
-    BankAccount(name: 'N26', value: 3823.56),
-    BankAccount(name: 'Fineco', value: 0.07),
-  ];
+class _HomePageState extends ConsumerState<HomePage> {
+  @override
+  void initState() {
+    // ref
+    //     .watch(accountListFutureProvider)
+    //     .whenData((value) => ref.read(accountListProvider.notifier).state = value);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final accountList = ref.watch(accountListProvider);
     return ListView(
       children: [
         Column(
@@ -218,12 +223,13 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              Container(
+              SizedBox(
                 height: 85.0,
-                margin: const EdgeInsets.only(left: 16.0, right: 16.0),
                 child: ListView.builder(
                   itemCount: accountList.length + 1,
                   shrinkWrap: true,
+                  padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                  physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, i) {
                     if (i == accountList.length) {
@@ -232,13 +238,7 @@ class _HomePageState extends State<HomePage> {
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            boxShadow: [
-                              BoxShadow(
-                                color: cardShadow,
-                                blurRadius: 2.0,
-                                offset: const Offset(1.0, 1.0),
-                              ),
-                            ],
+                            boxShadow: [defaultShadow],
                           ),
                           child: TextButton.icon(
                             style: ButtonStyle(
@@ -297,13 +297,7 @@ class _HomePageState extends State<HomePage> {
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,
                   borderRadius: BorderRadius.circular(8),
-                  boxShadow: [
-                    BoxShadow(
-                      color: cardShadow,
-                      blurRadius: 2.0,
-                      offset: const Offset(1.0, 1.0),
-                    ),
-                  ],
+                  boxShadow: [defaultShadow],
                 ),
                 margin: const EdgeInsets.only(left: 16.0, right: 16.0),
                 child: Padding(
