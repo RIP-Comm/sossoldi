@@ -1,3 +1,4 @@
+import '../database/sossoldi_database.dart';
 import 'base_entity.dart';
 
 const String recurringTransactionAmountTable = 'recurringTransactionAmount';
@@ -11,7 +12,7 @@ class RecurringTransactionAmountFields extends BaseEntityFields {
   static String createdAt = 'createdAt';
   static String updatedAt = 'updatedAt';
 
-  static final List<String?> allFields = [
+  static final List<String> allFields = [
     BaseEntityFields.id,
     from,
     to,
@@ -81,4 +82,65 @@ class RecurringTransactionAmount extends BaseEntity {
         BaseEntityFields.createdAt: createdAt?.toIso8601String(),
         BaseEntityFields.updatedAt: updatedAt?.toIso8601String(),
       };
+}
+
+class RecurringTransactionMethods extends SossoldiDatabase {
+  Future<RecurringTransactionAmount> insert(RecurringTransactionAmount item) async {
+    final database = await SossoldiDatabase.instance.database;
+    final id = await database.insert(recurringTransactionAmountTable, item.toJson());
+    return item.copy(id: id);
+  }
+
+
+  Future<RecurringTransactionAmount> selectById(int id) async {
+    final database = await SossoldiDatabase.instance.database;
+
+    final maps = await database.query(
+      recurringTransactionAmountTable,
+      columns: RecurringTransactionAmountFields.allFields,
+      where: '${RecurringTransactionAmountFields.id} = ?',
+      whereArgs: [id],
+    );
+
+    if (maps.isNotEmpty) {
+      return RecurringTransactionAmount.fromJson(maps.first);
+    } else {
+      throw Exception('ID $id not found');
+      // reutrn null;
+    }
+  }
+
+  Future<List<RecurringTransactionAmount>> selectAll() async {
+    final database = await SossoldiDatabase.instance.database;
+
+    final orderByASC = '${RecurringTransactionAmountFields.createdAt} ASC';
+
+    // final result = await database.rawQuery('SELECT * FROM $tableExample ORDER BY $orderByASC')
+    final result = await database.query(recurringTransactionAmountTable, orderBy: orderByASC);
+
+    return result.map((json) => RecurringTransactionAmount.fromJson(json)).toList();
+  }
+
+  Future<int> updateItem(RecurringTransactionAmount item) async {
+    final database = await SossoldiDatabase.instance.database;
+
+    // You can use `rawUpdate` to write the query in SQL
+    return database.update(
+      recurringTransactionAmountTable,
+      item.toJson(),
+      where:
+      '${RecurringTransactionAmountFields.id} = ?', // Use `:` if you will not use `sqflite_common_ffi`
+      whereArgs: [item.id],
+    );
+  }
+
+  Future<int> deleteById(int id) async {
+    final database = await SossoldiDatabase.instance.database;
+
+    return await database.delete(recurringTransactionAmountTable,
+        where:
+        '${RecurringTransactionAmountFields.id} = ?', // Use `:` if you will not use `sqflite_common_ffi`
+        whereArgs: [id]);
+  }
+
 }

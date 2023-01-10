@@ -1,11 +1,10 @@
-// Home page.
-
 import 'dart:ui';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import '../constants/style.dart';
+
 import '../model/bank_account.dart';
 
 import '../custom_widgets/accounts_sum.dart';
@@ -19,11 +18,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  static const List<BankAccount> accountList = [
-    BankAccount(name: 'Main account', value: 1235.10),
-    BankAccount(name: 'N26', value: 3823.56),
-    BankAccount(name: 'Fineco', value: 0.07),
-  ];
+  List<BankAccount> accountList = [];
+
+  void getAccounts() async {
+    accountList = await BankAccountMethods().selectAll();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -222,11 +221,12 @@ class _HomePageState extends State<HomePage> {
                 height: 85.0,
                 margin: const EdgeInsets.only(left: 16.0, right: 16.0),
                 child: ListView.builder(
-                  itemCount: accountList.length + 1,
+                  itemCount: (accountList?.length ?? 0) + 1,
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, i) {
-                    if (i == accountList.length) {
+                    getAccounts();
+                    if (i == accountList?.length) {
                       return Padding(
                         padding: const EdgeInsets.fromLTRB(0, 0, 4, 16),
                         child: Container(
