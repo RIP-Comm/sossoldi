@@ -4,7 +4,7 @@ import 'base_entity.dart';
 const String transactionTable = 'transaction';
 
 class TransactionFields extends BaseEntityFields {
-  static String id = 'id';
+  static String id = BaseEntityFields.getId;
   static String date = 'date';
   static String amount = 'amount';
   static String type = 'type';
@@ -13,8 +13,8 @@ class TransactionFields extends BaseEntityFields {
   static String idBudget = 'idBudget'; // FK
   static String idCategory = 'idCategory'; // FK
   static String idRecurringTransaction = 'idRecurringTransaction'; // FK
-  static String createdAt = 'createdAt';
-  static String updatedAt = 'updatedAt';
+  static String createdAt = BaseEntityFields.getCreatedAt;
+  static String updatedAt = BaseEntityFields.getUpdatedAt;
 
   static final List<String> allFields = [
     BaseEntityFields.id,
@@ -141,7 +141,6 @@ class TransactionMethods extends SossoldiDatabase {
 
     final orderByASC = '${TransactionFields.createdAt} ASC';
 
-    // final result = await database.rawQuery('SELECT * FROM $tableExample ORDER BY $orderByASC')
     final result = await database.query(transactionTable, orderBy: orderByASC);
 
     return result.map((json) => Transaction.fromJson(json)).toList();
@@ -155,7 +154,7 @@ class TransactionMethods extends SossoldiDatabase {
       transactionTable,
       item.toJson(),
       where:
-      '${TransactionFields.id} = ?', // Use `:` if you will not use `sqflite_common_ffi`
+      '${TransactionFields.id} = ?',
       whereArgs: [item.id],
     );
   }
@@ -165,7 +164,7 @@ class TransactionMethods extends SossoldiDatabase {
 
     return await database.delete(transactionTable,
         where:
-        '${TransactionFields.id} = ?', // Use `:` if you will not use `sqflite_common_ffi`
+        '${TransactionFields.id} = ?',
         whereArgs: [id]);
   }
 

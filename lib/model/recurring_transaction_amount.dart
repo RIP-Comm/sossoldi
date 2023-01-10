@@ -4,13 +4,13 @@ import 'base_entity.dart';
 const String recurringTransactionAmountTable = 'recurringTransactionAmount';
 
 class RecurringTransactionAmountFields extends BaseEntityFields {
-  static String id = 'id';
+  static String id = BaseEntityFields.getId;
   static String from = 'from';
   static String to = 'to';
   static String amount = 'amount';
   static String idRecurringTransaction = 'idRecurringTransaction'; // FK
-  static String createdAt = 'createdAt';
-  static String updatedAt = 'updatedAt';
+  static String createdAt = BaseEntityFields.getCreatedAt;
+  static String updatedAt = BaseEntityFields.getUpdatedAt;
 
   static final List<String> allFields = [
     BaseEntityFields.id,
@@ -114,7 +114,6 @@ class RecurringTransactionMethods extends SossoldiDatabase {
 
     final orderByASC = '${RecurringTransactionAmountFields.createdAt} ASC';
 
-    // final result = await database.rawQuery('SELECT * FROM $tableExample ORDER BY $orderByASC')
     final result = await database.query(recurringTransactionAmountTable, orderBy: orderByASC);
 
     return result.map((json) => RecurringTransactionAmount.fromJson(json)).toList();
@@ -128,7 +127,7 @@ class RecurringTransactionMethods extends SossoldiDatabase {
       recurringTransactionAmountTable,
       item.toJson(),
       where:
-      '${RecurringTransactionAmountFields.id} = ?', // Use `:` if you will not use `sqflite_common_ffi`
+      '${RecurringTransactionAmountFields.id} = ?',
       whereArgs: [item.id],
     );
   }
@@ -138,7 +137,7 @@ class RecurringTransactionMethods extends SossoldiDatabase {
 
     return await database.delete(recurringTransactionAmountTable,
         where:
-        '${RecurringTransactionAmountFields.id} = ?', // Use `:` if you will not use `sqflite_common_ffi`
+        '${RecurringTransactionAmountFields.id} = ?',
         whereArgs: [id]);
   }
 

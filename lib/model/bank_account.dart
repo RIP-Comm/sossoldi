@@ -4,11 +4,11 @@ import 'base_entity.dart';
 const String bankAccountTable = 'bankAccount';
 
 class BankAccountFields extends BaseEntityFields {
-  static String id = 'id';
+  static String id = BaseEntityFields.getId;
   static String name = 'name';
   static String value = 'value';
-  static String createdAt = 'createdAt';
-  static String updatedAt = 'updatedAt';
+  static String createdAt = BaseEntityFields.getCreatedAt;
+  static String updatedAt = BaseEntityFields.getUpdatedAt;
 
   static final List<String> allFields = [
     BaseEntityFields.id,
@@ -90,7 +90,6 @@ class BankAccountMethods extends SossoldiDatabase {
 
     final orderByASC = '${BankAccountFields.createdAt} ASC';
 
-    // final result = await database.rawQuery('SELECT * FROM $tableExample ORDER BY $orderByASC')
     final result = await database.query(bankAccountTable, orderBy: orderByASC);
 
     return result.map((json) => BankAccount.fromJson(json)).toList();
@@ -104,7 +103,7 @@ class BankAccountMethods extends SossoldiDatabase {
       bankAccountTable,
       item.toJson(),
       where:
-      '${BankAccountFields.id} = ?', // Use `:` if you will not use `sqflite_common_ffi`
+      '${BankAccountFields.id} = ?',
       whereArgs: [item.id],
     );
   }
@@ -114,7 +113,7 @@ class BankAccountMethods extends SossoldiDatabase {
 
     return await database.delete(bankAccountTable,
         where:
-        '${BankAccountFields.id} = ?', // Use `:` if you will not use `sqflite_common_ffi`
+        '${BankAccountFields.id} = ?',
         whereArgs: [id]);
   }
 

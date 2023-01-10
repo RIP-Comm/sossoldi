@@ -4,11 +4,11 @@ import 'base_entity.dart';
 const String budgetTable = 'budget';
 
 class BudgetFields extends BaseEntityFields {
-  static String id = 'id';
+  static String id = BaseEntityFields.getId;
   static String name = 'name';
   static String amountLimit = 'amountLimit';
-  static String createdAt = 'createdAt';
-  static String updatedAt = 'updatedAt';
+  static String createdAt = BaseEntityFields.getCreatedAt;
+  static String updatedAt = BaseEntityFields.getUpdatedAt;
 
   static final List<String> allFields = [
     BaseEntityFields.id,
@@ -90,7 +90,6 @@ class BudgetMethods extends SossoldiDatabase {
 
     final orderByASC = '${BudgetFields.createdAt} ASC';
 
-    // final result = await database.rawQuery('SELECT * FROM $tableExample ORDER BY $orderByASC')
     final result = await database.query(budgetTable, orderBy: orderByASC);
 
     return result.map((json) => Budget.fromJson(json)).toList();
@@ -104,7 +103,7 @@ class BudgetMethods extends SossoldiDatabase {
       budgetTable,
       item.toJson(),
       where:
-      '${BudgetFields.id} = ?', // Use `:` if you will not use `sqflite_common_ffi`
+      '${BudgetFields.id} = ?',
       whereArgs: [item.id],
     );
   }
@@ -114,7 +113,7 @@ class BudgetMethods extends SossoldiDatabase {
 
     return await database.delete(budgetTable,
         where:
-        '${BudgetFields.id} = ?', // Use `:` if you will not use `sqflite_common_ffi`
+        '${BudgetFields.id} = ?',
         whereArgs: [id]);
   }
 
