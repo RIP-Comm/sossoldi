@@ -1,7 +1,7 @@
 import '../database/sossoldi_database.dart';
 import 'base_entity.dart';
 
-const String BankAccountTable = 'bankAccount';
+const String bankAccountTable = 'bankAccount';
 
 class BankAccountFields extends BaseEntityFields {
   static String id = 'id';
@@ -63,7 +63,7 @@ class BankAccount extends BaseEntity {
 class BankAccountMethods extends SossoldiDatabase {
   Future<BankAccount> insert(BankAccount item) async {
     final database = await SossoldiDatabase.instance.database;
-    final id = await database.insert(BankAccountTable, item.toJson());
+    final id = await database.insert(bankAccountTable, item.toJson());
     return item.copy(id: id);
   }
 
@@ -72,7 +72,7 @@ class BankAccountMethods extends SossoldiDatabase {
     final database = await SossoldiDatabase.instance.database;
 
     final maps = await database.query(
-      BankAccountTable,
+      bankAccountTable,
       columns: BankAccountFields.allFields,
       where: '${BankAccountFields.id} = ?',
       whereArgs: [id],
@@ -82,7 +82,6 @@ class BankAccountMethods extends SossoldiDatabase {
       return BankAccount.fromJson(maps.first);
     } else {
       throw Exception('ID $id not found');
-      // reutrn null;
     }
   }
 
@@ -92,7 +91,7 @@ class BankAccountMethods extends SossoldiDatabase {
     final orderByASC = '${BankAccountFields.createdAt} ASC';
 
     // final result = await database.rawQuery('SELECT * FROM $tableExample ORDER BY $orderByASC')
-    final result = await database.query(BankAccountTable, orderBy: orderByASC);
+    final result = await database.query(bankAccountTable, orderBy: orderByASC);
 
     return result.map((json) => BankAccount.fromJson(json)).toList();
   }
@@ -102,7 +101,7 @@ class BankAccountMethods extends SossoldiDatabase {
 
     // You can use `rawUpdate` to write the query in SQL
     return database.update(
-      BankAccountTable,
+      bankAccountTable,
       item.toJson(),
       where:
       '${BankAccountFields.id} = ?', // Use `:` if you will not use `sqflite_common_ffi`
@@ -113,7 +112,7 @@ class BankAccountMethods extends SossoldiDatabase {
   Future<int> deleteById(int id) async {
     final database = await SossoldiDatabase.instance.database;
 
-    return await database.delete(BankAccountTable,
+    return await database.delete(bankAccountTable,
         where:
         '${BankAccountFields.id} = ?', // Use `:` if you will not use `sqflite_common_ffi`
         whereArgs: [id]);

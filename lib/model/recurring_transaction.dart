@@ -120,7 +120,6 @@ class RecurringTransactionMethods extends SossoldiDatabase {
       return RecurringTransaction.fromJson(maps.first);
     } else {
       throw Exception('ID $id not found');
-      // reutrn null;
     }
   }
 

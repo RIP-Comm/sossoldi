@@ -92,7 +92,6 @@ class CategoryTransactionMethods extends SossoldiDatabase {
       return CategoryTransaction.fromJson(maps.first);
     } else {
       throw Exception('ID $id not found');
-      // reutrn null;
     }
   }
 

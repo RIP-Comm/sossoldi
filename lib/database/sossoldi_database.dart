@@ -47,7 +47,7 @@ class SossoldiDatabase {
     // Bank accounts Table
     await database.execute(
         '''
-      CREATE TABLE `$BankAccountTable`(
+      CREATE TABLE `$bankAccountTable`(
         `${BankAccountFields.id}` $integerPrimaryKeyAutoincrement,
         `${BankAccountFields.name}` $textNotNull,
         `${BankAccountFields.value}` $realNotNull,

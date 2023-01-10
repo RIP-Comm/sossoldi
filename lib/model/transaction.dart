@@ -133,7 +133,6 @@ class TransactionMethods extends SossoldiDatabase {
       return Transaction.fromJson(maps.first);
     } else {
       throw Exception('ID $id not found');
-      // reutrn null;
     }
   }
 

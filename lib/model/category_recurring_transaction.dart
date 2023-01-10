@@ -92,7 +92,6 @@ class CategoryRecurringTransactionMethods extends SossoldiDatabase {
       return CategoryRecurringTransaction.fromJson(maps.first);
     } else {
       throw Exception('ID $id not found');
-      // reutrn null;
     }
   }
 

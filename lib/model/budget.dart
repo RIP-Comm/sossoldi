@@ -82,7 +82,6 @@ class BudgetMethods extends SossoldiDatabase {
       return Budget.fromJson(maps.first);
     } else {
       throw Exception('ID $id not found');
-      // reutrn null;
     }
   }
 
