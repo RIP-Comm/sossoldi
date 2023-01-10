@@ -20,8 +20,6 @@ Route<dynamic> makeRoute(RouteSettings settings) {
       return _materialPageRoute(settings.name, PlanningPage());
     case '/graphs':
       return _materialPageRoute(settings.name, StatsPage());
-    case '/add':
-      return _noTransitionPageRoute(settings.name, AddPage());
     case '/settings':
       return _noTransitionPageRoute(settings.name, SettingsPage());
     default:

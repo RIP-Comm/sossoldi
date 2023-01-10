@@ -6,7 +6,6 @@ import '../pages/add_page.dart';
 import '../pages/home_page.dart';
 import '../pages/transactions_page/transactions_page.dart';
 import '../pages/planning_budget_page.dart';
-import '../pages/settings_page.dart';
 import '../pages/statistics_page.dart';
 
 // database
@@ -33,7 +32,7 @@ class _StructureState extends State<Structure> {
     "Graphs",
   ];
   final List<Widget> _pages = <Widget>[
-    HomePage(),
+    const HomePage(),
     TransactionsPage(),
     const SizedBox(),
     PlanningPage(),
@@ -62,11 +61,10 @@ class _StructureState extends State<Structure> {
               shape: const CircleBorder(),
               padding: const EdgeInsets.all(8),
               backgroundColor: Theme.of(context).colorScheme.primary,
-              // foregroundColor: Colors.red, // <-- Splash color
             ),
             child: Icon(
               Icons.search,
-              color: Theme.of(context).colorScheme.onPrimary,
+              color: Theme.of(context).colorScheme.background,
             ),
           ),
         ),
@@ -80,11 +78,10 @@ class _StructureState extends State<Structure> {
                 shape: const CircleBorder(),
                 padding: const EdgeInsets.all(8),
                 backgroundColor: Theme.of(context).colorScheme.primary,
-                // foregroundColor: Colors.red, // <-- Splash color
               ),
               child: Icon(
                 Icons.settings,
-                color: Theme.of(context).colorScheme.onPrimary,
+                color: Theme.of(context).colorScheme.background,
               ),
             ),
           ),
@@ -95,28 +92,52 @@ class _StructureState extends State<Structure> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.white,
-        backgroundColor: const Color.fromRGBO(204, 204, 204, 1),
+        selectedItemColor: Theme.of(context).colorScheme.primary,
+        unselectedItemColor: grey1,
+        selectedFontSize: 8,
+        unselectedFontSize: 8,
+        backgroundColor: const Color(0xFFF6F6F6),
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.business_center), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.attach_money), label: "Transaction"),
-          BottomNavigationBarItem(icon: Text(""), label: ""),
-          BottomNavigationBarItem(icon: Icon(Icons.arrow_back), label: "Planning"),
-          BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: "Graphs"),
+        items: [
+          BottomNavigationBarItem(icon: Icon(_selectedIndex == 0 ? Icons.home : Icons.home_outlined), label: "DASHBOARD"),
+          BottomNavigationBarItem(icon: Icon(_selectedIndex == 1 ? Icons.swap_horizontal_circle : Icons.swap_horizontal_circle_outlined), label: "TRANSACTIONS"),
+          const BottomNavigationBarItem(icon: Text(""), label: ""),
+          BottomNavigationBarItem(icon: Icon(_selectedIndex == 3 ? Icons.calendar_today : Icons.calendar_today_outlined), label: "PLANNING"),
+          BottomNavigationBarItem(icon: Icon(_selectedIndex == 4 ? Icons.data_exploration : Icons.data_exploration_outlined), label: "GRAPHS"),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        elevation: 0,
+        elevation: 4,
         highlightElevation: 0,
-        backgroundColor: const Color.fromRGBO(179, 179, 179, 1),
-        child: const Icon(
-          Icons.add,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        child: Icon(
+          Icons.add_rounded,
           size: 55,
-          color: Color.fromRGBO(93, 93, 93, 1),
+          color: Theme.of(context).colorScheme.background,
         ),
-        onPressed: () => Navigator.of(context).pushNamed('/add'),
+        onPressed: () {
+          showModalBottomSheet(
+            backgroundColor: Colors.transparent,
+            context: context,
+            isScrollControlled: true,
+            isDismissible: true,
+            builder: (BuildContext buildContext) {
+              return DraggableScrollableSheet(
+                builder: (_, controller) => Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    color: Theme.of(context).colorScheme.background,
+                  ),
+                  child: AddPage(controller: controller),
+                ),
+                initialChildSize: 0.92,
+                minChildSize: 0.92,
+                maxChildSize: 0.92,
+              );
+            },
+          );
+        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
     );

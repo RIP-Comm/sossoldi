@@ -5,7 +5,7 @@ import 'dart:ui';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:percent_indicator/percent_indicator.dart';
+import '../custom_widgets/budget_circular_indicator.dart';
 import '../providers/accounts_provider.dart';
 import '../constants/style.dart';
 import '../model/bank_account.dart';
@@ -36,10 +36,10 @@ class _HomePageState extends ConsumerState<HomePage> {
       children: [
         Column(
           children: [
-            const Padding(padding: EdgeInsets.only(top: 24)),
+            const SizedBox(height: 24),
             Row(
               children: [
-                const Padding(padding: EdgeInsets.only(left: 8.0)),
+                const SizedBox(width: 8),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -59,7 +59,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ),
                   ],
                 ),
-                const Padding(padding: EdgeInsets.only(right: 30.0)),
+                const SizedBox(width: 30),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -73,7 +73,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ),
                   ],
                 ),
-                const Padding(padding: EdgeInsets.only(right: 30.0)),
+                const SizedBox(width: 30),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -100,9 +100,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 ),
               ],
             ),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-            ),
+            const SizedBox(height: 16),
             const LineChartWidget(
               line1Data: [
                 FlSpot(0, 3),
@@ -234,7 +232,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   itemBuilder: (context, i) {
                     if (i == accountList.length) {
                       return Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 4, 16),
+                        padding: const EdgeInsets.fromLTRB(0, 4, 0, 16),
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
@@ -299,9 +297,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                   borderRadius: BorderRadius.circular(8),
                   boxShadow: [defaultShadow],
                 ),
-                margin: const EdgeInsets.only(left: 16.0, right: 16.0),
+                margin: const EdgeInsets.symmetric(horizontal: 16),
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
+                  padding: const EdgeInsets.all(16),
                   child: Column(
                     children: [
                       Row(
@@ -461,173 +459,25 @@ class _HomePageState extends ConsumerState<HomePage> {
               Container(
                 margin: const EdgeInsets.only(left: 16.0, right: 16.0),
                 child: Row(
-                  children: [
-                    Column(
-                      children: [
-                        CircularPercentIndicator(
-                          radius: 50.0,
-                          animation: true,
-                          animationDuration: 1200,
-                          lineWidth: 10.0,
-                          percent: 0.25,
-                          center: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: "320",
-                                      style: Theme.of(context).textTheme.labelMedium,
-                                    ),
-                                    TextSpan(
-                                      text: "€",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall
-                                          ?.apply(fontFeatures: [const FontFeature.subscripts()]),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: "25",
-                                      style: Theme.of(context).textTheme.labelSmall,
-                                    ),
-                                    TextSpan(
-                                      text: "%",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headlineSmall
-                                          ?.apply(fontFeatures: [const FontFeature.subscripts()]),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          circularStrokeCap: CircularStrokeCap.butt,
-                          backgroundColor: const Color.fromRGBO(217, 217, 217, 1),
-                          progressColor: const Color.fromRGBO(150, 150, 150, 1),
-                        ),
-                        const SizedBox(height: 10),
-                        Text("Totale", style: Theme.of(context).textTheme.labelMedium),
-                      ],
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    BudgetCircularIndicator(
+                      title: "TOTALE",
+                      amount: 320,
+                      perc: 0.25,
+                      color: Color(0xFFEBC35F),
                     ),
-                    const Spacer(),
-                    Column(
-                      children: [
-                        CircularPercentIndicator(
-                          radius: 50.0,
-                          animation: true,
-                          animationDuration: 1200,
-                          lineWidth: 10.0,
-                          percent: 0.5,
-                          center: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: "500",
-                                      style: Theme.of(context).textTheme.labelMedium,
-                                    ),
-                                    TextSpan(
-                                      text: "€",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall
-                                          ?.apply(fontFeatures: [const FontFeature.subscripts()]),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: "50",
-                                      style: Theme.of(context).textTheme.labelSmall,
-                                    ),
-                                    TextSpan(
-                                      text: "%",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headlineSmall
-                                          ?.apply(fontFeatures: [const FontFeature.subscripts()]),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          circularStrokeCap: CircularStrokeCap.butt,
-                          backgroundColor: const Color.fromRGBO(217, 217, 217, 1),
-                          progressColor: const Color.fromRGBO(150, 150, 150, 1),
-                        ),
-                        const SizedBox(height: 10),
-                        Text("Spese", style: Theme.of(context).textTheme.labelMedium),
-                      ],
+                    BudgetCircularIndicator(
+                      title: "SPESE",
+                      amount: 500,
+                      perc: 0.5,
+                      color: Color(0xFFD336B6),
                     ),
-                    const Spacer(),
-                    Column(
-                      children: [
-                        CircularPercentIndicator(
-                          radius: 50.0,
-                          animation: true,
-                          animationDuration: 1200,
-                          lineWidth: 10.0,
-                          percent: 0.88,
-                          center: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            //Center Row contents horizontally,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            //Center Row contents vertically,
-                            children: [
-                              RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                        text: "178,67",
-                                        style: Theme.of(context).textTheme.labelMedium),
-                                    TextSpan(
-                                      text: "€",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall
-                                          ?.apply(fontFeatures: [const FontFeature.subscripts()]),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                        text: "88%", style: Theme.of(context).textTheme.labelSmall),
-                                    TextSpan(
-                                      text: "%",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headlineSmall
-                                          ?.apply(fontFeatures: [const FontFeature.subscripts()]),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          circularStrokeCap: CircularStrokeCap.butt,
-                          backgroundColor: const Color.fromRGBO(217, 217, 217, 1),
-                          progressColor: const Color.fromRGBO(150, 150, 150, 1),
-                        ),
-                        const SizedBox(height: 10),
-                        Text("Svago", style: Theme.of(context).textTheme.labelMedium),
-                      ],
+                    BudgetCircularIndicator(
+                      title: "SVAGO",
+                      amount: 178.67,
+                      perc: 0.88,
+                      color: Color(0xFF8E5FEB),
                     ),
                   ],
                 ),
