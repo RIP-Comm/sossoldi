@@ -57,16 +57,3 @@ PageRoute _noTransitionPageRoute(String? routeName, Widget viewToShow) {
     pageBuilder: (_, __, ___) => viewToShow,
   );
 }
-
-class NoAnimationPageRoute extends MaterialPageRoute {
-  NoAnimationPageRoute({builder, settings}) : super(builder: builder, settings: settings);
-
-  @override
-  Duration get transitionDuration => const Duration(milliseconds: 0);
-
-  @override
-  Widget buildTransitions(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation, Widget child) {
-    return FadeTransition(opacity: animation, child: child);
-  }
-}
