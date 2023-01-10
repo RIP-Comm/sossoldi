@@ -74,16 +74,7 @@ class _StructureState extends State<Structure> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation1, animation2) => SettingsPage(),
-                    transitionDuration: Duration.zero,
-                    reverseTransitionDuration: Duration.zero,
-                  ),
-                );
-              },
+              onPressed: () => Navigator.of(context).pushNamed('/settings'),
               style: ElevatedButton.styleFrom(
                 elevation: 0,
                 shape: const CircleBorder(),
@@ -125,16 +116,7 @@ class _StructureState extends State<Structure> {
           size: 55,
           color: Color.fromRGBO(93, 93, 93, 1),
         ),
-        onPressed: () {
-          Navigator.push(
-            context,
-            PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => AddPage(),
-              transitionDuration: Duration.zero,
-              reverseTransitionDuration: Duration.zero,
-            ),
-          );
-        },
+        onPressed: () => Navigator.of(context).pushNamed('/add'),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
     );

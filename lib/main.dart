@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'routes.dart';
 import 'pages/structure.dart';
 
 // sqflite
@@ -119,7 +120,8 @@ class Launcher extends StatelessWidget {
     return MaterialApp(
       title: 'Sossoldi',
       theme: customThemeData,
-      home: const Structure(),
+      onGenerateRoute: makeRoute,
+      initialRoute: '/',
     );
   }
 }
