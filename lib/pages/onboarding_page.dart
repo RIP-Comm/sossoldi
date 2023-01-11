@@ -366,6 +366,7 @@ class _Step2State extends State<Step2> {
     accountNameController.text = "Main account";
 
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: blue7,
         body: Center(
             child: Column(children: [
