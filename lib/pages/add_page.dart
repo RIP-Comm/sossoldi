@@ -30,16 +30,7 @@ class _AddPageState extends State<AddPage> {
             onPressed: () {}),
         actions: [
           IconButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation1, animation2) =>
-                        SettingsPage(),
-                    transitionDuration: Duration.zero,
-                    reverseTransitionDuration: Duration.zero,
-                  ));
-            },
+            onPressed: () => Navigator.of(context).pushNamed('/settings'),
             icon: const Icon(Icons.settings),
           )
         ],
