@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'routes.dart';
-import 'pages/structure.dart';
+import 'package:sossoldi/pages/onboarding_page.dart';
 
 // sqflite
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -121,7 +121,7 @@ class Launcher extends StatelessWidget {
       title: 'Sossoldi',
       theme: customThemeData,
       onGenerateRoute: makeRoute,
-      initialRoute: '/',
+      initialRoute: '/onboarding',
     );
   }
 }

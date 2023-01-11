@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sossoldi/pages/onboarding_page.dart';
 import 'pages/add_page.dart';
 import 'pages/home_page.dart';
 import 'pages/planning_budget_page.dart';
@@ -12,6 +13,8 @@ Route<dynamic> makeRoute(RouteSettings settings) {
   switch (settings.name) {
     case '/':
       return _materialPageRoute(settings.name, const Structure());
+    case '/onboarding':
+      return _materialPageRoute(settings.name, const Onboarding());
     case '/dashboard':
       return _materialPageRoute(settings.name, const HomePage());
     case '/transactions':

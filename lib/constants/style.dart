@@ -17,7 +17,7 @@ Color cardShadow = blue1.withOpacity(0.15);
 const green = Color(0xFF248731);
 const red = Color(0xFFC52626);
 const white = Color(0xFFFFFFFF);
-const black = Color(0x00000000);
+const black = Color(0xFF000000);
 
 const blue1 = Color(0xFF00152D);
 const blue2 = Color(0xFF002855);
