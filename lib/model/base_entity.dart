@@ -3,7 +3,7 @@ abstract class BaseEntityFields {
   static String createdAt = 'createdAt';
   static String updatedAt = 'updatedAt';
 
-  static String? get getId {
+  static String get getId {
     return id;
   }
 

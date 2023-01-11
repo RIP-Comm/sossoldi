@@ -1,12 +1,16 @@
-import 'package:sossoldi/model/base_entity.dart';
+import '../database/sossoldi_database.dart';
+import 'base_entity.dart';
 
-const String bankAccount = 'bankAccount';
+const String bankAccountTable = 'bankAccount';
 
 class BankAccountFields extends BaseEntityFields {
+  static String id = BaseEntityFields.getId;
   static String name = 'name';
   static String value = 'value';
+  static String createdAt = BaseEntityFields.getCreatedAt;
+  static String updatedAt = BaseEntityFields.getUpdatedAt;
 
-  static final List<String?> allFields = [
+  static final List<String> allFields = [
     BaseEntityFields.id,
     name,
     value,
@@ -54,4 +58,63 @@ class BankAccount extends BaseEntity {
         BaseEntityFields.createdAt: createdAt?.toIso8601String(),
         BaseEntityFields.updatedAt: updatedAt?.toIso8601String(),
       };
+}
+
+class BankAccountMethods extends SossoldiDatabase {
+  Future<BankAccount> insert(BankAccount item) async {
+    final database = await SossoldiDatabase.instance.database;
+    final id = await database.insert(bankAccountTable, item.toJson());
+    return item.copy(id: id);
+  }
+
+
+  Future<BankAccount> selectById(int id) async {
+    final database = await SossoldiDatabase.instance.database;
+
+    final maps = await database.query(
+      bankAccountTable,
+      columns: BankAccountFields.allFields,
+      where: '${BankAccountFields.id} = ?',
+      whereArgs: [id],
+    );
+
+    if (maps.isNotEmpty) {
+      return BankAccount.fromJson(maps.first);
+    } else {
+      throw Exception('ID $id not found');
+    }
+  }
+
+  Future<List<BankAccount>> selectAll() async {
+    final database = await SossoldiDatabase.instance.database;
+
+    final orderByASC = '${BankAccountFields.createdAt} ASC';
+
+    final result = await database.query(bankAccountTable, orderBy: orderByASC);
+
+    return result.map((json) => BankAccount.fromJson(json)).toList();
+  }
+
+  Future<int> updateItem(BankAccount item) async {
+    final database = await SossoldiDatabase.instance.database;
+
+    // You can use `rawUpdate` to write the query in SQL
+    return database.update(
+      bankAccountTable,
+      item.toJson(),
+      where:
+      '${BankAccountFields.id} = ?',
+      whereArgs: [item.id],
+    );
+  }
+
+  Future<int> deleteById(int id) async {
+    final database = await SossoldiDatabase.instance.database;
+
+    return await database.delete(bankAccountTable,
+        where:
+        '${BankAccountFields.id} = ?',
+        whereArgs: [id]);
+  }
+
 }
