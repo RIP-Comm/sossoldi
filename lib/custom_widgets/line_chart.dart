@@ -69,25 +69,60 @@ class _LineChartSample2State extends State<LineChartWidget> {
     final style = TextStyle(
       color: widget.colorLine1Data.withOpacity(1.0),
       fontWeight: FontWeight.normal,
-      fontSize: 10,
+      fontSize: 8,
     );
     Widget text;
-    switch (value.toInt()) {
-      case 3:
-        text = Text('4', style: style);
+    switch(widget.maxDays) {
+      case 12:
+        switch (value.toInt()) {
+          case 0:
+            text = Text('Jan', style: style);
+            break;
+          case 2:
+            text = Text('Mar', style: style);
+            break;
+          case 4:
+            text = Text('May', style: style);
+            break;
+          case 6:
+            text = Text('Jul', style: style);
+            break;
+          case 8:
+            text = Text('Sep', style: style);
+            break;  
+          case 10:
+            text = Text('Nov', style: style);
+            break;
+          default:
+            text = Text('', style: style);
+            break;
+        }
         break;
-      case 10:
-        text = Text('11', style: style);
+      case 31:
+          switch (value.toInt()) {
+            case 3:
+              text = Text('4', style: style);
+              break;
+            case 10:
+              text = Text('11', style: style);
+              break;
+            case 17:
+              text = Text('18', style: style);
+              break;
+            case 24:
+              text = Text('25', style: style);
+              break;
+            case 30:
+              text = Text('31', style: style);
+              break;
+            default:
+              text = Text('', style: style);
+              break;
+          }
         break;
-      case 17:
-        text = Text('18', style: style);
-        break;
-      case 24:
-        text = Text('25', style: style);
-        break;
-      default:
-        text = Text('', style: style);
-        break;
+        default:
+              text = Text('', style: style);
+              break;
     }
 
     return SideTitleWidget(
