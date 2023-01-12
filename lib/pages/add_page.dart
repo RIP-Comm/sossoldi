@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../providers/transactions_provider.dart';
 import '../constants/style.dart';
 
 class AddPage extends ConsumerStatefulWidget {
@@ -14,22 +15,17 @@ class AddPage extends ConsumerStatefulWidget {
 }
 
 class _AddPageState extends ConsumerState<AddPage> {
-  // final List<bool> _selectedTransactionType = [false, true, false];
-  final StateProvider _selectedTransactionType =
-      StateProvider<List<bool>>((ref) => [false, true, false]);
-  final StateProvider _selectedRecurringPay = StateProvider<bool>((ref) => false);
-  final TextEditingController importController = TextEditingController();
+  final TextEditingController importController = TextEditingController(text: "0.0");
 
   @override
   Widget build(BuildContext context) {
-    final selectedTrnscType = ref.watch(_selectedTransactionType);
-    final selectedRecurringPay = ref.watch(_selectedRecurringPay);
+    final selectedTrnscType = ref.watch(selectedTransactionTypeProvider);
+    final selectedRecurringPay = ref.watch(selectedRecurringPayProvider);
 
-    return Stack(
-      children: [
-        SingleChildScrollView(
-          controller: widget.controller,
-          child: Column(
+    return SingleChildScrollView(
+      child: Stack(
+        children: [
+          Column(
             children: [
               Container(
                 color: Theme.of(context).colorScheme.surface,
@@ -76,7 +72,7 @@ class _AddPageState extends ConsumerState<AddPage> {
                           for (int i = 0; i < 3; i++) {
                             list[i] = i == index;
                           }
-                          ref.read(_selectedTransactionType.notifier).state = [...list];
+                          ref.read(selectedTransactionTypeProvider.notifier).state = [...list];
                         },
                         borderRadius: const BorderRadius.all(Radius.circular(4)),
                         renderBorder: false,
@@ -319,53 +315,126 @@ class _AddPageState extends ConsumerState<AddPage> {
                             .titleLarge!
                             .copyWith(color: Theme.of(context).colorScheme.primary),
                       ),
-                      trailing: CupertinoSwitch(value: selectedRecurringPay, onChanged: (select) => ref.read(_selectedRecurringPay.notifier).state = select),
+                      trailing: CupertinoSwitch(
+                          value: selectedRecurringPay,
+                          onChanged: (select) =>
+                              ref.read(selectedRecurringPayProvider.notifier).state = select),
                     ),
+                    if (selectedRecurringPay)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor: Theme.of(context).colorScheme.background,
+                            padding: const EdgeInsets.all(16),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                          ),
+                          onPressed: () => null,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                "Interval",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(color: Theme.of(context).colorScheme.primary),
+                              ),
+                              const Spacer(),
+                              Text(
+                                "Monthly",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(color: Theme.of(context).colorScheme.secondary),
+                              ),
+                              const SizedBox(width: 6),
+                              Icon(Icons.chevron_right,
+                                  color: Theme.of(context).colorScheme.secondary),
+                            ],
+                          ),
+                        ),
+                      ),
+                    if (selectedRecurringPay)
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor: Theme.of(context).colorScheme.background,
+                            padding: const EdgeInsets.all(16),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                          ),
+                          onPressed: () => null,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                "End repetition",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(color: Theme.of(context).colorScheme.primary),
+                              ),
+                              const Spacer(),
+                              Text(
+                                "Never",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(color: Theme.of(context).colorScheme.secondary),
+                              ),
+                              const SizedBox(width: 6),
+                              Icon(Icons.chevron_right,
+                                  color: Theme.of(context).colorScheme.secondary),
+                            ],
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               ),
             ],
           ),
-        ),
-        Container(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              boxShadow: [
-                BoxShadow(
-                  color: blue1.withOpacity(0.15),
-                  blurRadius: 5.0,
-                  offset: const Offset(0, -1.0),
-                )
-              ],
-            ),
-            padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
+          Container(
+            alignment: Alignment.bottomCenter,
             child: Container(
-              height: 48,
+              width: double.infinity,
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondary,
-                boxShadow: [defaultShadow],
-                borderRadius: BorderRadius.circular(8),
+                color: Theme.of(context).colorScheme.surface,
+                boxShadow: [
+                  BoxShadow(
+                    color: blue1.withOpacity(0.15),
+                    blurRadius: 5.0,
+                    offset: const Offset(0, -1.0),
+                  )
+                ],
               ),
-              child: TextButton(
-                onPressed: () => print("click"),
-                style: TextButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.secondary,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
-                child: Text(
-                  "ADD TRANSACTION",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge!
-                      .copyWith(color: Theme.of(context).colorScheme.background),
+              padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
+              child: Container(
+                height: 48,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.secondary,
+                  boxShadow: [defaultShadow],
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: TextButton(
+                  onPressed: () => print("click"),
+                  style: TextButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.secondary,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+                  child: Text(
+                    "ADD TRANSACTION",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge!
+                        .copyWith(color: Theme.of(context).colorScheme.background),
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

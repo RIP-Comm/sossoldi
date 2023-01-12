@@ -43,6 +43,7 @@ class _StructureState extends State<Structure> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: blue7,
+      resizeToAvoidBottomInset: false, // Prevent the fab moving up when the keyboard is opened
       appBar: AppBar(
         // Sulla dashboard (0) setto il background blue
         backgroundColor: _selectedIndex == 0 ? blue7 : Theme.of(context).colorScheme.background,
@@ -129,11 +130,11 @@ class _StructureState extends State<Structure> {
                     borderRadius: BorderRadius.circular(10.0),
                     color: Theme.of(context).colorScheme.background,
                   ),
-                  child: AddPage(controller: controller),
+                  child: SingleChildScrollView(controller: controller, child: AddPage(controller: controller)),
                 ),
                 initialChildSize: 0.92,
                 minChildSize: 0.92,
-                maxChildSize: 0.92,
+                maxChildSize: 1,
               );
             },
           );
