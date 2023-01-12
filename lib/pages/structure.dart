@@ -9,11 +9,6 @@ import '../pages/planning_budget_page.dart';
 import '../pages/settings_page.dart';
 import '../pages/statistics_page.dart';
 
-// database
-import '../database/sossoldi_database.dart';
-import '../model/example.dart';
-import 'package:circular_menu/circular_menu.dart';
-
 class Structure extends StatefulWidget {
   const Structure({super.key});
 

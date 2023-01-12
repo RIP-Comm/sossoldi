@@ -1,18 +1,23 @@
-import 'dart:io';
-
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:path_provider/path_provider.dart';
 
-// This is an example of table
-import 'package:sossoldi/model/example.dart';
+// Models
+import '../model/bank_account.dart';
+import '../model/transaction.dart';
+import '../model/recurring_transaction.dart';
+import '../model/recurring_transaction_amount.dart';
+import '../model/category_transaction.dart';
+import '../model/category_recurring_transaction.dart';
+import '../model/budget.dart';
 
-class ExampleDatabase {
-  static final ExampleDatabase instance = ExampleDatabase._init();
-
+class SossoldiDatabase {
+  static final SossoldiDatabase instance = SossoldiDatabase._init();
   static Database? _database;
 
-  ExampleDatabase._init();
+  // Zero args constructor needed to extend this class
+  SossoldiDatabase();
+
+  SossoldiDatabase._init();
 
   Future<Database> get database async {
     if (_database != null) return _database!;
@@ -24,11 +29,10 @@ class ExampleDatabase {
   Future<Database> _initDB(String filePath) async {
     // On Android, it is typically data/data//databases.
     // On iOS and MacOS, it is the Documents directory.
-    // final databasePath = await getDatabasesPath();
-    Directory databasePath = await getApplicationDocumentsDirectory();
+    final databasePath = await getDatabasesPath();
+    // Directory databasePath = await getApplicationDocumentsDirectory();
 
-    final path = join(databasePath.path, filePath);
-
+    final path = join(databasePath, filePath);
     return await openDatabase(path, version: 1, onCreate: _createDB);
   }
 
@@ -36,94 +40,127 @@ class ExampleDatabase {
     const integerPrimaryKeyAutoincrement = 'INTEGER PRIMARY KEY AUTOINCREMENT';
     const booleanNotNull = 'BOOLEAN NOT NULL';
     const integerNotNull = 'INTEGER NOT NULL';
+    const realNotNull = 'REAL NOT NULL';
     const textNotNull = 'TEXT NOT NULL';
+    const text = 'TEXT';
 
-    // If you want to create a new table you must duplicate the code below
-    // by changing the name and the fields.
-    // (and obviously create a new model for your table)
+    // Bank accounts Table
     await database.execute(
         '''
-      CREATE TABLE $tableExample(
-        ${ExampleFields.id} $integerPrimaryKeyAutoincrement,
-        ${ExampleFields.isImportant} $booleanNotNull,
-        ${ExampleFields.number} $integerNotNull,
-        ${ExampleFields.title} $textNotNull,
-        ${ExampleFields.description} $textNotNull,
-        ${ExampleFields.dataTime} $textNotNull
+      CREATE TABLE `$bankAccountTable`(
+        `${BankAccountFields.id}` $integerPrimaryKeyAutoincrement,
+        `${BankAccountFields.name}` $textNotNull,
+        `${BankAccountFields.value}` $realNotNull,
+        `${BankAccountFields.createdAt}` $textNotNull,
+        `${BankAccountFields.updatedAt}` $text
       )
       ''');
-  }
 
-  Future<Example> create(Example example) async {
-    final database = await instance.database;
+    // Transactions Table
+    await database.execute(
+        '''
+      CREATE TABLE `$transactionTable`(
+        `${TransactionFields.id}` $integerPrimaryKeyAutoincrement,
+        `${TransactionFields.date}` $textNotNull,
+        `${TransactionFields.amount}` $realNotNull,
+        `${TransactionFields.type}` $textNotNull,
+        `${TransactionFields.note}` $textNotNull,
+        `${TransactionFields.idBankAccount}` $integerNotNull,
+        `${TransactionFields.idBudget}` $integerNotNull,
+        `${TransactionFields.idCategory}` $integerNotNull,
+        `${TransactionFields.idRecurringTransaction}` $integerNotNull,
+        `${TransactionFields.createdAt}` $textNotNull,
+        `${TransactionFields.updatedAt}` $textNotNull
+      )
+    ''');
 
-    // final json = example.toJson();
-    // final columns =
-    //     '${ExampleFields.title}, ${ExampleFields.description}, ${ExampleFields.dataTime}';
-    // final values =
-    //     '${json[ExampleFields.title]}, ${json[ExampleFields.description]}, ${json[ExampleFields.dataTime]}';
-    // final id = await database
-    //     .rawInsert('INSERT INTO table_name ($columns) VALUES ($values)');
+    // Recurring Transactions Table
+    await database.execute(
+        '''
+      CREATE TABLE `$recurringTransactionTable`(
+        `${RecurringTransactionFields.id}` $integerPrimaryKeyAutoincrement,
+        `${RecurringTransactionFields.from}` $textNotNull,
+        `${RecurringTransactionFields.to}` $textNotNull,
+        `${RecurringTransactionFields.payDay}` $textNotNull,
+        `${RecurringTransactionFields.recurrence}` $textNotNull,
+        `${RecurringTransactionFields.idCategoryRecurring}` $integerNotNull,
+        `${RecurringTransactionFields.createdAt}` $textNotNull,
+        `${RecurringTransactionFields.updatedAt}` $textNotNull
+      )
+    ''');
 
-    final id = await database.insert(tableExample, example.toJson());
+    // Recurring Transactions Amount Table
+    await database.execute(
+        '''
+      CREATE TABLE `$recurringTransactionAmountTable`(
+        `${RecurringTransactionAmountFields.id}` $integerPrimaryKeyAutoincrement,
+        `${RecurringTransactionAmountFields.from}` $textNotNull,
+        `${RecurringTransactionAmountFields.to}` $textNotNull,
+        `${RecurringTransactionAmountFields.amount}` $realNotNull,
+        `${RecurringTransactionAmountFields.idRecurringTransaction}` $integerNotNull,
+        `${RecurringTransactionAmountFields.createdAt}` $textNotNull,
+        `${RecurringTransactionAmountFields.updatedAt}` $textNotNull
+      )
+    ''');
 
-    return example.copy(id: id);
-  }
+    // Category Transaction Table
+    await database.execute(
+        '''
+      CREATE TABLE `$categoryTransactionTable`(
+        `${CategoryTransactionFields.id}` $integerPrimaryKeyAutoincrement,
+        `${CategoryTransactionFields.name}` $textNotNull,
+        `${CategoryTransactionFields.symbol}` $textNotNull,
+        `${CategoryTransactionFields.note}` $textNotNull,
+        `${CategoryTransactionFields.createdAt}` $textNotNull,
+        `${CategoryTransactionFields.updatedAt}` $textNotNull
+      )
+    ''');
 
-  Future<Example> read(int id) async {
-    final database = await instance.database;
+    // Category Recurring Transaction Table
+    await database.execute(
+        '''
+      CREATE TABLE `$categoryRecurringTransactionTable`(
+        `${CategoryRecurringTransactionFields.id}` $integerPrimaryKeyAutoincrement,
+        `${CategoryRecurringTransactionFields.name}` $textNotNull,
+        `${CategoryRecurringTransactionFields.symbol}` $textNotNull,
+        `${CategoryRecurringTransactionFields.note}` $textNotNull,
+        `${CategoryRecurringTransactionFields.createdAt}` $textNotNull,
+        `${CategoryRecurringTransactionFields.updatedAt}` $textNotNull
+      )
+    ''');
 
-    final maps = await database.query(
-      tableExample,
-      columns: ExampleFields.allFields,
-      where: '${ExampleFields.id} = ?',
-      whereArgs: [id],
-    );
+    // Budget Table
+    await database.execute(
+        '''
+      CREATE TABLE `$budgetTable`(
+        `${BudgetFields.id}` $integerPrimaryKeyAutoincrement,
+        `${BudgetFields.name}` $textNotNull,
+        `${BudgetFields.amountLimit}` $realNotNull,
+        `${BudgetFields.createdAt}` $textNotNull,
+        `${BudgetFields.updatedAt}` $textNotNull
+      )
+    ''');
 
-    if (maps.isNotEmpty) {
-      return Example.fromJson(maps.first);
-    } else {
-      throw Exception('ID $id not found');
-      // reutrn null;
-    }
-  }
+    // TEMP Insert Demo data
+    await database.execute(
+        '''
+      INSERT INTO bankAccount(name, value, createdAt, updatedAt) VALUES
+        ("DB main", 1235.10, '2023-01-01', '2023-01-01'),
+        ("DB N26", 3823.56, '2023-01-01', '2023-01-01'),
+        ("DB Fineco", 0.07, '2023-01-01', '2023-01-01');
+    ''');
 
-  Future<List<Example>> readAll() async {
-    final database = await instance.database;
-
-    final orderByASC = '${ExampleFields.dataTime} ASC';
-
-    // final result = await database.rawQuery('SELECT * FROM $tableExample ORDER BY $orderByASC')
-    final result = await database.query(tableExample, orderBy: orderByASC);
-
-    return result.map((json) => Example.fromJson(json)).toList();
-  }
-
-  Future<int> update(Example example) async {
-    final database = await instance.database;
-
-    // You can use `rawUpdate` to write the query in SQL
-    return database.update(
-      tableExample,
-      example.toJson(),
-      where:
-          '${ExampleFields.id} = ?', // Use `:` if you will not use `sqflite_common_ffi`
-      whereArgs: [example.id],
-    );
-  }
-
-  Future<int> delete(int id) async {
-    Database database = await instance.database;
-
-    return await database.delete(tableExample,
-        where:
-            '${ExampleFields.id} = ?', // Use `:` if you will not use `sqflite_common_ffi`
-        whereArgs: [id]);
   }
 
   Future close() async {
     final database = await instance.database;
-
     database.close();
+  }
+
+  // WARNING: FOR DEV/TEST PURPOSES ONLY!!
+  Future<void> deleteDatabase() async {
+    final databasePath = await getDatabasesPath();
+    final path = join(databasePath, 'sossoldi.db');
+    databaseFactory.deleteDatabase(path);
   }
 }
