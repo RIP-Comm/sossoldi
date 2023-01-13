@@ -1,5 +1,3 @@
-// Home page.
-
 import 'dart:ui';
 
 import 'package:fl_chart/fl_chart.dart';
@@ -8,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../custom_widgets/budget_circular_indicator.dart';
 import '../providers/accounts_provider.dart';
 import '../constants/style.dart';
+
 import '../model/bank_account.dart';
 
 import '../custom_widgets/accounts_sum.dart';
@@ -21,17 +20,23 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
+  List accountList = [];
   @override
   void initState() {
     // ref
     //     .watch(accountListFutureProvider)
     //     .whenData((value) => ref.read(accountListProvider.notifier).state = value);
+    getAccounts();
     super.initState();
+  }
+
+  void getAccounts() async {
+    accountList = await BankAccountMethods().selectAll();
   }
 
   @override
   Widget build(BuildContext context) {
-    final accountList = ref.watch(accountListProvider);
+    // final accountList = ref.watch(accountListProvider);
     return ListView(
       children: [
         Column(

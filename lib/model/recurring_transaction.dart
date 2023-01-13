@@ -1,15 +1,19 @@
-import 'package:sossoldi/model/base_entity.dart';
+import '../database/sossoldi_database.dart';
+import 'base_entity.dart';
 
-const String recurringTransaction = 'recurringTransaction';
+const String recurringTransactionTable = 'recurringTransaction';
 
 class RecurringTransactionFields extends BaseEntityFields {
+  static String id = BaseEntityFields.getId;
   static String from = 'from';
   static String to = 'to';
   static String payDay = 'payDay';
   static String recurrence = 'recurrence';
   static String idCategoryRecurring = 'idCategoryRecurring'; // FK
+  static String createdAt = BaseEntityFields.getCreatedAt;
+  static String updatedAt = BaseEntityFields.getUpdatedAt;
 
-  static final List<String?> allFields = [
+  static final List<String> allFields = [
     BaseEntityFields.id,
     from,
     to,
@@ -92,4 +96,63 @@ class RecurringTransaction extends BaseEntity {
         BaseEntityFields.createdAt: createdAt?.toIso8601String(),
         BaseEntityFields.updatedAt: updatedAt?.toIso8601String(),
       };
+}
+
+class RecurringTransactionMethods extends SossoldiDatabase {
+  Future<RecurringTransaction> insert(RecurringTransaction item) async {
+    final database = await SossoldiDatabase.instance.database;
+    final id = await database.insert(recurringTransactionTable, item.toJson());
+    return item.copy(id: id);
+  }
+
+
+  Future<RecurringTransaction> selectById(int id) async {
+    final database = await SossoldiDatabase.instance.database;
+
+    final maps = await database.query(
+      recurringTransactionTable,
+      columns: RecurringTransactionFields.allFields,
+      where: '${RecurringTransactionFields.id} = ?',
+      whereArgs: [id],
+    );
+
+    if (maps.isNotEmpty) {
+      return RecurringTransaction.fromJson(maps.first);
+    } else {
+      throw Exception('ID $id not found');
+    }
+  }
+
+  Future<List<RecurringTransaction>> selectAll() async {
+    final database = await SossoldiDatabase.instance.database;
+
+    final orderByASC = '${RecurringTransactionFields.createdAt} ASC';
+
+    final result = await database.query(recurringTransactionTable, orderBy: orderByASC);
+
+    return result.map((json) => RecurringTransaction.fromJson(json)).toList();
+  }
+
+  Future<int> updateItem(RecurringTransaction item) async {
+    final database = await SossoldiDatabase.instance.database;
+
+    // You can use `rawUpdate` to write the query in SQL
+    return database.update(
+      recurringTransactionTable,
+      item.toJson(),
+      where:
+      '${RecurringTransactionFields.id} = ?',
+      whereArgs: [item.id],
+    );
+  }
+
+  Future<int> deleteById(int id) async {
+    final database = await SossoldiDatabase.instance.database;
+
+    return await database.delete(recurringTransactionTable,
+        where:
+        '${RecurringTransactionFields.id} = ?',
+        whereArgs: [id]);
+  }
+
 }

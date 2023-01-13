@@ -43,11 +43,8 @@ dependencies:
   flutter_riverpod: ^2.1.3
 
   # Database storage
-  sqflite: ^2.0.0+3
-
-  sqflite_common_ffi: ^2.1.1+1
-
-  path_provider:
+  sqflite: ^2.2.2
+  sqflite_common_ffi: ^2.2.0+1
 
   # iOS, Android and MacOS
   sqlite3_flutter_libs:

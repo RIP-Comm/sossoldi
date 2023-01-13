@@ -1,13 +1,17 @@
-import 'package:sossoldi/model/base_entity.dart';
+import '../database/sossoldi_database.dart';
+import 'base_entity.dart';
 
-const String categoryTransaction = 'categoryTransaction';
+const String categoryTransactionTable = 'categoryTransaction';
 
 class CategoryTransactionFields extends BaseEntityFields {
+  static String id = BaseEntityFields.getId;
   static String name = 'name';
   static String symbol = 'symbol';
   static String note = 'note';
+  static String createdAt = BaseEntityFields.getCreatedAt;
+  static String updatedAt = BaseEntityFields.getUpdatedAt;
 
-  static final List<String?> allFields = [
+  static final List<String> allFields = [
     BaseEntityFields.id,
     name,
     symbol,
@@ -64,4 +68,63 @@ class CategoryTransaction extends BaseEntity {
         BaseEntityFields.createdAt: createdAt?.toIso8601String(),
         BaseEntityFields.updatedAt: updatedAt?.toIso8601String(),
       };
+}
+
+class CategoryTransactionMethods extends SossoldiDatabase {
+  Future<CategoryTransaction> insert(CategoryTransaction item) async {
+    final database = await SossoldiDatabase.instance.database;
+    final id = await database.insert(categoryTransactionTable, item.toJson());
+    return item.copy(id: id);
+  }
+
+
+  Future<CategoryTransaction> selectById(int id) async {
+    final database = await SossoldiDatabase.instance.database;
+
+    final maps = await database.query(
+      categoryTransactionTable,
+      columns: CategoryTransactionFields.allFields,
+      where: '${CategoryTransactionFields.id} = ?',
+      whereArgs: [id],
+    );
+
+    if (maps.isNotEmpty) {
+      return CategoryTransaction.fromJson(maps.first);
+    } else {
+      throw Exception('ID $id not found');
+    }
+  }
+
+  Future<List<CategoryTransaction>> selectAll() async {
+    final database = await SossoldiDatabase.instance.database;
+
+    final orderByASC = '${CategoryTransactionFields.createdAt} ASC';
+
+    final result = await database.query(categoryTransactionTable, orderBy: orderByASC);
+
+    return result.map((json) => CategoryTransaction.fromJson(json)).toList();
+  }
+
+  Future<int> updateItem(CategoryTransaction item) async {
+    final database = await SossoldiDatabase.instance.database;
+
+    // You can use `rawUpdate` to write the query in SQL
+    return database.update(
+      categoryTransactionTable,
+      item.toJson(),
+      where:
+      '${CategoryTransactionFields.id} = ?',
+      whereArgs: [item.id],
+    );
+  }
+
+  Future<int> deleteById(int id) async {
+    final database = await SossoldiDatabase.instance.database;
+
+    return await database.delete(categoryTransactionTable,
+        where:
+        '${CategoryTransactionFields.id} = ?',
+        whereArgs: [id]);
+  }
+
 }
