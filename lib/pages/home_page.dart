@@ -215,15 +215,13 @@ class _HomePageState extends ConsumerState<HomePage> {
             ),
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
-                  child: Text(
-                    "Your accounts",
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+                child: Text(
+                  "Your accounts",
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
               SizedBox(
