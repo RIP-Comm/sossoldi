@@ -38,54 +38,29 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.background,
+        elevation: 0,
+        centerTitle: true,
         leading: IconButton(
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back_ios_new,
-            color: Color(0XFF7DA1C4),
+            color: Theme.of(context).colorScheme.primary,
           ),
           onPressed: () {
             Navigator.pop(context);
             // Return to previous page
           },
         ),
-        backgroundColor: const Color.fromRGBO(204, 204, 204, 1),
-        title: const Text(
-          'Back',
-          style: TextStyle(color: Color(0XFF7DA1C4)),
+        title: Text(
+          'Settings',
+          style: Theme.of(context)
+              .textTheme
+              .headlineLarge!
+              .copyWith(color: Theme.of(context).colorScheme.primary),
         ),
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Row(
-              children: [
-                Container(
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Color(0XFF00152D),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(3.0),
-                    child: Icon(
-                      Icons.settings,
-                      size: 25.0,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 8.0),
-                  child: Text(
-                    'Settings',
-                    style: TextStyle(
-                      fontSize: 22.0,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
           const SizedBox(
             height: 10,
           ),
