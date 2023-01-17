@@ -52,6 +52,7 @@ class SossoldiDatabase {
         `${BankAccountFields.id}` $integerPrimaryKeyAutoincrement,
         `${BankAccountFields.name}` $textNotNull,
         `${BankAccountFields.value}` $realNotNull,
+        `${BankAccountFields.mainAccount}` $booleanNotNull CHECK (${BankAccountFields.mainAccount} IN (0, 1)),
         `${BankAccountFields.createdAt}` $textNotNull,
         `${BankAccountFields.updatedAt}` $text
       )
@@ -145,10 +146,10 @@ class SossoldiDatabase {
     // TEMP Insert Demo data
     await database.execute(
         '''
-      INSERT INTO bankAccount(name, value, createdAt, updatedAt) VALUES
-        ("DB main", 1235.10, '2023-01-01', '2023-01-01'),
-        ("DB N26", 3823.56, '2023-01-01', '2023-01-01'),
-        ("DB Fineco", 0.07, '2023-01-01', '2023-01-01');
+      INSERT INTO bankAccount(name, value, mainAccount, createdAt, updatedAt) VALUES
+        ("DB main", 1235.10, true, '${DateTime.now()}', '${DateTime.now()}'),
+        ("DB N26", 3823.56, false, '${DateTime.now()}', '${DateTime.now()}'),
+        ("DB Fineco", 0.07, false, '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
   }

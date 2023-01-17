@@ -7,6 +7,7 @@ class BankAccountFields extends BaseEntityFields {
   static String id = BaseEntityFields.getId;
   static String name = 'name';
   static String value = 'value';
+  static String mainAccount = 'mainAccount';
   static String createdAt = BaseEntityFields.getCreatedAt;
   static String updatedAt = BaseEntityFields.getUpdatedAt;
 
@@ -14,6 +15,7 @@ class BankAccountFields extends BaseEntityFields {
     BaseEntityFields.id,
     name,
     value,
+    mainAccount,
     BaseEntityFields.createdAt,
     BaseEntityFields.updatedAt
   ];
@@ -22,16 +24,29 @@ class BankAccountFields extends BaseEntityFields {
 class BankAccount extends BaseEntity {
   final String name;
   final num value;
+  final bool mainAccount;
 
   const BankAccount(
-      {int? id, required this.name, required this.value, DateTime? createdAt, DateTime? updatedAt})
+      {int? id,
+      required this.name,
+      required this.value,
+      required this.mainAccount,
+      DateTime? createdAt,
+      DateTime? updatedAt})
       : super(id: id, createdAt: createdAt, updatedAt: updatedAt);
 
-  BankAccount copy({int? id, String? name, num? value, DateTime? createdAt, DateTime? updatedAt}) =>
+  BankAccount copy(
+          {int? id,
+          String? name,
+          num? value,
+          bool? mainAccount,
+          DateTime? createdAt,
+          DateTime? updatedAt}) =>
       BankAccount(
           id: id ?? this.id,
           name: name ?? this.name,
           value: value ?? this.value,
+          mainAccount: mainAccount ?? this.mainAccount,
           createdAt: createdAt ?? this.createdAt,
           updatedAt: updatedAt ?? this.updatedAt);
 
@@ -39,6 +54,7 @@ class BankAccount extends BaseEntity {
       id: json[BaseEntityFields.id] as int,
       name: json[BankAccountFields.name] as String,
       value: json[BankAccountFields.value] as num,
+      mainAccount: json[BankAccountFields.mainAccount] == 1 ? true : false,
       createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
       updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String));
 
@@ -46,6 +62,7 @@ class BankAccount extends BaseEntity {
         BaseEntityFields.id: id,
         BankAccountFields.name: name,
         BankAccountFields.value: value,
+        BankAccountFields.mainAccount: mainAccount,
         BaseEntityFields.createdAt:
             update ? createdAt?.toIso8601String() : DateTime.now().toIso8601String(),
         BaseEntityFields.updatedAt: DateTime.now().toIso8601String(),
