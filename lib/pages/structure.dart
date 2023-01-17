@@ -1,23 +1,24 @@
 // Defines application's structure
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../constants/style.dart';
-import '../pages/add_page.dart';
+import 'add_page/add_page.dart';
 import '../pages/home_page.dart';
 import '../pages/transactions_page/transactions_page.dart';
 import '../pages/planning_budget_page.dart';
 import '../pages/statistics_page.dart';
 
-class Structure extends StatefulWidget {
+final StateProvider selectedIndexProvider = StateProvider<int>((ref) => 0);
+
+class Structure extends ConsumerStatefulWidget {
   const Structure({super.key});
 
   @override
-  State<Structure> createState() => _StructureState();
+  ConsumerState<Structure> createState() => _StructureState();
 }
 
-class _StructureState extends State<Structure> {
-  int _selectedIndex = 0;
-
+class _StructureState extends ConsumerState<Structure> {
   // We could add this List in the app's state, so it isn't intialized every time.
   final List<String> _pagesTitle = [
     "Dashboard",
@@ -26,7 +27,7 @@ class _StructureState extends State<Structure> {
     "Planning",
     "Graphs",
   ];
-  final List<Widget> _pages = <Widget>[
+  final List<Widget> _pages = [
     const HomePage(),
     TransactionsPage(),
     const SizedBox(),
@@ -36,17 +37,21 @@ class _StructureState extends State<Structure> {
 
   @override
   Widget build(BuildContext context) {
+    final selectedIndex = ref.watch(selectedIndexProvider);
     return Scaffold(
       backgroundColor: blue7,
       resizeToAvoidBottomInset: false, // Prevent the fab moving up when the keyboard is opened
       appBar: AppBar(
         // Sulla dashboard (0) setto il background blue
-        backgroundColor: _selectedIndex == 0 ? blue7 : Theme.of(context).colorScheme.background,
+        backgroundColor: selectedIndex == 0 ? blue7 : Theme.of(context).colorScheme.background,
         elevation: 0,
         centerTitle: true,
         title: Text(
-          _pagesTitle.elementAt(_selectedIndex),
-          style: Theme.of(context).textTheme.headlineLarge!.copyWith(color: Theme.of(context).colorScheme.primary),
+          _pagesTitle.elementAt(selectedIndex),
+          style: Theme.of(context)
+              .textTheme
+              .headlineLarge!
+              .copyWith(color: Theme.of(context).colorScheme.primary),
         ),
         leading: Padding(
           padding: const EdgeInsets.only(left: 16),
@@ -84,7 +89,7 @@ class _StructureState extends State<Structure> {
         ],
       ),
       body: Center(
-        child: _pages.elementAt(_selectedIndex),
+        child: _pages.elementAt(selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -93,14 +98,30 @@ class _StructureState extends State<Structure> {
         selectedFontSize: 8,
         unselectedFontSize: 8,
         backgroundColor: const Color(0xFFF6F6F6),
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
+        currentIndex: selectedIndex,
+        onTap: (index) =>
+            index != 2 ? ref.read(selectedIndexProvider.notifier).state = index : null,
         items: [
-          BottomNavigationBarItem(icon: Icon(_selectedIndex == 0 ? Icons.home : Icons.home_outlined), label: "DASHBOARD"),
-          BottomNavigationBarItem(icon: Icon(_selectedIndex == 1 ? Icons.swap_horizontal_circle : Icons.swap_horizontal_circle_outlined), label: "TRANSACTIONS"),
+          BottomNavigationBarItem(
+            icon: Icon(selectedIndex == 0 ? Icons.home : Icons.home_outlined),
+            label: "DASHBOARD",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(selectedIndex == 1
+                ? Icons.swap_horizontal_circle
+                : Icons.swap_horizontal_circle_outlined),
+            label: "TRANSACTIONS",
+          ),
           const BottomNavigationBarItem(icon: Text(""), label: ""),
-          BottomNavigationBarItem(icon: Icon(_selectedIndex == 3 ? Icons.calendar_today : Icons.calendar_today_outlined), label: "PLANNING"),
-          BottomNavigationBarItem(icon: Icon(_selectedIndex == 4 ? Icons.data_exploration : Icons.data_exploration_outlined), label: "GRAPHS"),
+          BottomNavigationBarItem(
+            icon: Icon(selectedIndex == 3 ? Icons.calendar_today : Icons.calendar_today_outlined),
+            label: "PLANNING",
+          ),
+          BottomNavigationBarItem(
+            icon:
+                Icon(selectedIndex == 4 ? Icons.data_exploration : Icons.data_exploration_outlined),
+            label: "GRAPHS",
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -112,7 +133,7 @@ class _StructureState extends State<Structure> {
           size: 55,
           color: Theme.of(context).colorScheme.background,
         ),
-        onPressed: () {
+        onPressed: () async {
           showModalBottomSheet(
             backgroundColor: Colors.transparent,
             context: context,
@@ -125,11 +146,15 @@ class _StructureState extends State<Structure> {
                     borderRadius: BorderRadius.circular(10.0),
                     color: Theme.of(context).colorScheme.background,
                   ),
-                  child: SingleChildScrollView(controller: controller, child: AddPage(controller: controller)),
+                  child: ListView(
+                    controller: controller,
+                    shrinkWrap: true,
+                    children: const [AddPage()],
+                  ),
                 ),
                 initialChildSize: 0.92,
-                minChildSize: 0.92,
-                maxChildSize: 1,
+                minChildSize: 0.75,
+                maxChildSize: 0.92,
               );
             },
           );
@@ -137,13 +162,5 @@ class _StructureState extends State<Structure> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
     );
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      if (index != 2) {
-        _selectedIndex = index;
-      }
-    });
   }
 }

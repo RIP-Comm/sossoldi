@@ -24,19 +24,10 @@ class BankAccount extends BaseEntity {
   final num value;
 
   const BankAccount(
-      {int? id,
-      required this.name,
-      required this.value,
-      DateTime? createdAt,
-      DateTime? updatedAt})
+      {int? id, required this.name, required this.value, DateTime? createdAt, DateTime? updatedAt})
       : super(id: id, createdAt: createdAt, updatedAt: updatedAt);
 
-  BankAccount copy(
-          {int? id,
-          String? name,
-          num? value,
-          DateTime? createdAt,
-          DateTime? updatedAt}) =>
+  BankAccount copy({int? id, String? name, num? value, DateTime? createdAt, DateTime? updatedAt}) =>
       BankAccount(
           id: id ?? this.id,
           name: name ?? this.name,
@@ -45,33 +36,33 @@ class BankAccount extends BaseEntity {
           updatedAt: updatedAt ?? this.updatedAt);
 
   static BankAccount fromJson(Map<String, Object?> json) => BankAccount(
-      id: json[BaseEntityFields.id] as int?,
+      id: json[BaseEntityFields.id] as int,
       name: json[BankAccountFields.name] as String,
       value: json[BankAccountFields.value] as num,
       createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
       updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String));
 
-  Map<String, Object?> toJson() => {
+  Map<String, Object?> toJson({bool update = false}) => {
         BaseEntityFields.id: id,
         BankAccountFields.name: name,
         BankAccountFields.value: value,
-        BaseEntityFields.createdAt: createdAt?.toIso8601String(),
-        BaseEntityFields.updatedAt: updatedAt?.toIso8601String(),
+        BaseEntityFields.createdAt:
+            update ? createdAt?.toIso8601String() : DateTime.now().toIso8601String(),
+        BaseEntityFields.updatedAt: DateTime.now().toIso8601String(),
       };
 }
 
 class BankAccountMethods extends SossoldiDatabase {
   Future<BankAccount> insert(BankAccount item) async {
-    final database = await SossoldiDatabase.instance.database;
-    final id = await database.insert(bankAccountTable, item.toJson());
+    final db = await database;
+    final id = await db.insert(bankAccountTable, item.toJson());
     return item.copy(id: id);
   }
 
-
   Future<BankAccount> selectById(int id) async {
-    final database = await SossoldiDatabase.instance.database;
+    final db = await database;
 
-    final maps = await database.query(
+    final maps = await db.query(
       bankAccountTable,
       columns: BankAccountFields.allFields,
       where: '${BankAccountFields.id} = ?',
@@ -86,35 +77,30 @@ class BankAccountMethods extends SossoldiDatabase {
   }
 
   Future<List<BankAccount>> selectAll() async {
-    final database = await SossoldiDatabase.instance.database;
+    final db = await database;
 
     final orderByASC = '${BankAccountFields.createdAt} ASC';
 
-    final result = await database.query(bankAccountTable, orderBy: orderByASC);
+    final result = await db.query(bankAccountTable, orderBy: orderByASC);
 
     return result.map((json) => BankAccount.fromJson(json)).toList();
   }
 
   Future<int> updateItem(BankAccount item) async {
-    final database = await SossoldiDatabase.instance.database;
+    final db = await database;
 
     // You can use `rawUpdate` to write the query in SQL
-    return database.update(
+    return db.update(
       bankAccountTable,
-      item.toJson(),
-      where:
-      '${BankAccountFields.id} = ?',
+      item.toJson(update: true),
+      where: '${BankAccountFields.id} = ?',
       whereArgs: [item.id],
     );
   }
 
   Future<int> deleteById(int id) async {
-    final database = await SossoldiDatabase.instance.database;
+    final db = await database;
 
-    return await database.delete(bankAccountTable,
-        where:
-        '${BankAccountFields.id} = ?',
-        whereArgs: [id]);
+    return await db.delete(bankAccountTable, where: '${BankAccountFields.id} = ?', whereArgs: [id]);
   }
-
 }

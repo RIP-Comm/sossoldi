@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'pages/add_page.dart';
 import 'pages/home_page.dart';
 import 'pages/planning_budget_page.dart';
 import 'pages/settings_page.dart';

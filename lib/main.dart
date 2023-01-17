@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'routes.dart';
-
+import 'package:intl/date_symbol_data_local.dart';
 import 'constants/style.dart';
 
 void main() {
-  runApp(const ProviderScope(child: Launcher()));
+  initializeDateFormatting('it_IT', null).then((_) => runApp(const ProviderScope(child: Launcher())));
 }
 
 ColorScheme customColorScheme = const ColorScheme(

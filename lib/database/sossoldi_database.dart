@@ -40,6 +40,7 @@ class SossoldiDatabase {
     const integerPrimaryKeyAutoincrement = 'INTEGER PRIMARY KEY AUTOINCREMENT';
     const booleanNotNull = 'BOOLEAN NOT NULL';
     const integerNotNull = 'INTEGER NOT NULL';
+    const integer = 'INTEGER';
     const realNotNull = 'REAL NOT NULL';
     const textNotNull = 'TEXT NOT NULL';
     const text = 'TEXT';
@@ -63,12 +64,12 @@ class SossoldiDatabase {
         `${TransactionFields.id}` $integerPrimaryKeyAutoincrement,
         `${TransactionFields.date}` $textNotNull,
         `${TransactionFields.amount}` $realNotNull,
-        `${TransactionFields.type}` $textNotNull,
-        `${TransactionFields.note}` $textNotNull,
+        `${TransactionFields.type}` $integerNotNull,
+        `${TransactionFields.note}` $text,
         `${TransactionFields.idBankAccount}` $integerNotNull,
         `${TransactionFields.idBudget}` $integerNotNull,
         `${TransactionFields.idCategory}` $integerNotNull,
-        `${TransactionFields.idRecurringTransaction}` $integerNotNull,
+        `${TransactionFields.idRecurringTransaction}` $integer,
         `${TransactionFields.createdAt}` $textNotNull,
         `${TransactionFields.updatedAt}` $textNotNull
       )

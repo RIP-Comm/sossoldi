@@ -1,56 +1,77 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../providers/accounts_provider.dart';
+import '../model/bank_account.dart';
+import '../model/transaction.dart';
+import '../model/category_transaction.dart';
 
-final selectedTransactionTypeProvider = StateProvider.autoDispose<List<bool>>((ref) => [false, true, false]);
-final transactionImportProvider = StateProvider.autoDispose<num>((ref) => 0);
+final transactionTypesProvider =
+    StateProvider.autoDispose<List<bool>>((ref) => [false, true, false]);
+final dateProvider = StateProvider.autoDispose<DateTime>((ref) => DateTime.now());
+final bankAccountProvider =
+    StateProvider.autoDispose<BankAccount?>((ref) => ref.read(mainAccountProvider));
+final amountProvider = StateProvider<num>((ref) => 0);
+final noteProvider = StateProvider.autoDispose<String?>((ref) => null);
+final categoryProvider = StateProvider.autoDispose<CategoryTransaction?>((ref) => null);
 final selectedRecurringPayProvider = StateProvider.autoDispose<bool>((ref) => false);
 
-
-class TransactionsNotifier extends StateNotifier<List> {
-  // Inizializzamo la lista dei todo con una lista vuota
-
-  TransactionsNotifier() : super([]);
-
-  // Consentiamo alla UI di aggiungere i todo
-  void addTodo(Object todo) {
-    // Poichè il nostro stato è immutabile, non siamo autorizzati a fare `state.add(todo)`.
-    // Dovremmo invece creare una nuova lista di todo contenente
-    // gli elementi precedenti e il nuovo
-
-    // Usare lo spread operator di Dart qui è d'aiuto!
-
-    state = [...state, todo];
-    // Non c'è bisogno di chiamare "notifiyListeners" o qualcosa di simile.
-    // Chiamare "state =" ricostruirà automaticamente la UI quando necessario.
+class AsyncTransactionsNotifier extends AsyncNotifier<List<Transaction>> {
+  @override
+  Future<List<Transaction>> build() async {
+    return _getTransactions();
   }
 
-  // Consentiamo di rimuovere i todo
-  void removeTodo(String todoId) {
-    // Di nuovo, il nostro stato è immutabile. Quindi facciamo una nuova lista
-    // invece di modificare la lista esistente.
-
-    state = [
-      for (final todo in state)
-        if (todo.id != todoId) todo,
-    ];
+  Future<List<Transaction>> _getTransactions() async {
+    final transaction = await TransactionMethods().selectAll();
+    return transaction;
   }
 
-  // Contrassegniamo il todo come completato
-  void toggle(String todoId) {
-    state = [
-      for (final todo in state)
-        // contrassegniamo solo il todo corrispondente come completato
-        if (todo.id == todoId)
-          // Usiamo il metodo `copyWith` implementato prima per aiutarci nel
-          // modificare lo stato
+  Future<void> addTransaction(num amount) async {
+    final date = ref.read(dateProvider);
+    // final amount = ref.read(amountProvider);
+    final bankAccount = ref.read(bankAccountProvider)!;
+    List<Type> typeList = [Type.income, Type.expense, Type.transfer];
+    final typeIndex = ref.read(transactionTypesProvider).indexOf(true);
+    final category = ref.read(categoryProvider);
+    final note = ref.read(noteProvider);
+    state = const AsyncValue.loading();
 
-          todo.copyWith(completed: !todo.completed)
-        else
-          // gli altri todo non sono modificati
-          todo,
-    ];
+    Transaction transaction = Transaction(
+      date: date,
+      amount: amount,
+      type: typeList[typeIndex],
+      note: note,
+      idBankAccount: bankAccount.id!,
+      idBudget: 0,
+      idCategory: 0,
+    );
+
+    // Dispose dell'amount provider manuale, nell'attesa di capire perchè se metto autodispose ogni volta che aggiorna il valore fa il dispose da solo in contemporanea
+    ref.invalidate(amountProvider);
+
+    state = await AsyncValue.guard(() async {
+      await TransactionMethods().insert(transaction);
+      return _getTransactions();
+    });
+  }
+
+  Future<void> updateTransaction(Transaction transaction) async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      await TransactionMethods().updateItem(transaction);
+      return _getTransactions();
+    });
+  }
+
+  Future<void> removeTransaction(int transactionId) async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      await TransactionMethods().deleteById(transactionId);
+      return _getTransactions();
+    });
   }
 }
 
-final todosProvider = StateNotifierProvider<TransactionsNotifier, List>((ref) {
-  return TransactionsNotifier();
+final transactionsProvider =
+    AsyncNotifierProvider<AsyncTransactionsNotifier, List<Transaction>>(() {
+  return AsyncTransactionsNotifier();
 });

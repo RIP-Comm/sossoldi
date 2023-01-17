@@ -78,8 +78,7 @@ class Transaction extends BaseEntity {
           idBankAccount: idBankAccount ?? this.idBankAccount,
           idBudget: idBudget ?? this.idBudget,
           idCategory: idCategory ?? this.idCategory,
-          idRecurringTransaction:
-              idRecurringTransaction ?? this.idRecurringTransaction,
+          idRecurringTransaction: idRecurringTransaction ?? this.idRecurringTransaction,
           createdAt: createdAt ?? this.createdAt,
           updatedAt: updatedAt ?? this.updatedAt);
 
@@ -88,7 +87,7 @@ class Transaction extends BaseEntity {
       date: DateTime.parse(json[TransactionFields.date] as String),
       amount: json[TransactionFields.amount] as num,
       type: Type.values[json[TransactionFields.type] as int],
-      note: json[TransactionFields.note] as String,
+      note: json[TransactionFields.note] as String?,
       idBankAccount: json[TransactionFields.idBankAccount] as int,
       idBudget: json[TransactionFields.idBudget] as int,
       idCategory: json[TransactionFields.idCategory] as int,
@@ -96,8 +95,8 @@ class Transaction extends BaseEntity {
       createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
       updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String));
 
-  Map<String, Object?> toJson() => {
-        BaseEntityFields.id: id,
+  Map<String, Object?> toJson({bool update = false}) => {
+        TransactionFields.id: id,
         TransactionFields.date: date.toIso8601String(),
         TransactionFields.amount: amount,
         TransactionFields.type: type.index,
@@ -106,23 +105,23 @@ class Transaction extends BaseEntity {
         TransactionFields.idBudget: idBudget,
         TransactionFields.idCategory: idCategory,
         TransactionFields.idRecurringTransaction: idRecurringTransaction,
-        BaseEntityFields.createdAt: createdAt?.toIso8601String(),
-        BaseEntityFields.updatedAt: updatedAt?.toIso8601String(),
+        BaseEntityFields.createdAt:
+            update ? createdAt?.toIso8601String() : DateTime.now().toIso8601String(),
+        BaseEntityFields.updatedAt: DateTime.now().toIso8601String(),
       };
 }
 
 class TransactionMethods extends SossoldiDatabase {
   Future<Transaction> insert(Transaction item) async {
-    final database = await SossoldiDatabase.instance.database;
-    final id = await database.insert(transactionTable, item.toJson());
+    final db = await database;
+    final id = await db.insert(transactionTable, item.toJson());
     return item.copy(id: id);
   }
 
-
   Future<Transaction> selectById(int id) async {
-    final database = await SossoldiDatabase.instance.database;
+    final db = await database;
 
-    final maps = await database.query(
+    final maps = await db.query(
       transactionTable,
       columns: TransactionFields.allFields,
       where: '${TransactionFields.id} = ?',
@@ -136,36 +135,35 @@ class TransactionMethods extends SossoldiDatabase {
     }
   }
 
-  Future<List<Transaction>> selectAll() async {
-    final database = await SossoldiDatabase.instance.database;
+  Future<List<Transaction>> selectAll({int? limit}) async {
+    final db = await database;
 
-    final orderByASC = '${TransactionFields.createdAt} ASC';
+    final orderByDESC = '${TransactionFields.createdAt} DESC';
 
-    final result = await database.query(transactionTable, orderBy: orderByASC);
+    final result = await db.query(transactionTable, orderBy: orderByDESC, limit: limit);
 
     return result.map((json) => Transaction.fromJson(json)).toList();
   }
 
   Future<int> updateItem(Transaction item) async {
-    final database = await SossoldiDatabase.instance.database;
+    final db = await database;
 
     // You can use `rawUpdate` to write the query in SQL
-    return database.update(
+    return db.update(
       transactionTable,
-      item.toJson(),
-      where:
-      '${TransactionFields.id} = ?',
+      item.toJson(update: true),
+      where: '${TransactionFields.id} = ?',
       whereArgs: [item.id],
     );
   }
 
   Future<int> deleteById(int id) async {
-    final database = await SossoldiDatabase.instance.database;
+    final db = await database;
 
-    return await database.delete(transactionTable,
-        where:
-        '${TransactionFields.id} = ?',
-        whereArgs: [id]);
+    return await db.delete(
+      transactionTable,
+      where: '${TransactionFields.id} = ?',
+      whereArgs: [id],
+    );
   }
-
 }
