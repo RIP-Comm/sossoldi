@@ -9,6 +9,7 @@ void main() {
         id: 2,
         name: "name",
         value: 100,
+        mainAccount: true,
         createdAt: DateTime.utc(2022),
         updatedAt: DateTime.utc(2022));
 
@@ -17,6 +18,7 @@ void main() {
     assert(bCopy.id == 10);
     assert(bCopy.name == b.name);
     assert(bCopy.value == bCopy.value);
+    assert(bCopy.mainAccount == bCopy.mainAccount);
     assert(bCopy.createdAt == b.createdAt);
     assert(bCopy.updatedAt == b.updatedAt);
   });
@@ -46,6 +48,7 @@ void main() {
         id: 2,
         name: "name",
         value: 100,
+        mainAccount: false,
         createdAt: DateTime.utc(2022),
         updatedAt: DateTime.utc(2022));
 
@@ -54,6 +57,7 @@ void main() {
     assert(b.id == json[BaseEntityFields.id]);
     assert(b.name == json[BankAccountFields.name]);
     assert(b.value == json[BankAccountFields.value]);
+    assert(b.mainAccount == json[BankAccountFields.mainAccount]);
     assert(b.createdAt?.toUtc().toIso8601String() ==
         json[BaseEntityFields.createdAt]);
     assert(b.updatedAt?.toUtc().toIso8601String() ==
