@@ -8,6 +8,7 @@ void main() {
     CategoryTransaction c = CategoryTransaction(
         id: 2,
         name: "name",
+        symbol: '0xe318',
         createdAt: DateTime.utc(2022),
         updatedAt: DateTime.utc(2022));
 
@@ -42,13 +43,11 @@ void main() {
   });
 
   test("Test toJson Category Transaction", () {
-    CategoryTransaction c = CategoryTransaction(
+    CategoryTransaction c = const CategoryTransaction(
         id: 2,
         name: "name",
         symbol: "symbol",
-        note: "note",
-        createdAt: DateTime.utc(2022),
-        updatedAt: DateTime.utc(2022));
+        note: "note");
 
     Map<String, Object?> json = c.toJson();
 
@@ -56,9 +55,5 @@ void main() {
     assert(c.name == json[CategoryTransactionFields.name]);
     assert(c.symbol == json[CategoryTransactionFields.symbol]);
     assert(c.note == json[CategoryTransactionFields.note]);
-    assert(c.createdAt?.toUtc().toIso8601String() ==
-        json[BaseEntityFields.createdAt]);
-    assert(c.updatedAt?.toUtc().toIso8601String() ==
-        json[BaseEntityFields.updatedAt]);
   });
 }

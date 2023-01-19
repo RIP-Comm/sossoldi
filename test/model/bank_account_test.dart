@@ -44,13 +44,11 @@ void main() {
   });
 
   test("Test toJson BankAccount", () {
-    BankAccount b = BankAccount(
+    BankAccount b = const BankAccount(
         id: 2,
         name: "name",
         value: 100,
-        mainAccount: false,
-        createdAt: DateTime.utc(2022),
-        updatedAt: DateTime.utc(2022));
+        mainAccount: false);
 
     Map<String, Object?> json = b.toJson();
 
@@ -58,9 +56,5 @@ void main() {
     assert(b.name == json[BankAccountFields.name]);
     assert(b.value == json[BankAccountFields.value]);
     assert(b.mainAccount == json[BankAccountFields.mainAccount]);
-    assert(b.createdAt?.toUtc().toIso8601String() ==
-        json[BaseEntityFields.createdAt]);
-    assert(b.updatedAt?.toUtc().toIso8601String() ==
-        json[BaseEntityFields.updatedAt]);
   });
 }

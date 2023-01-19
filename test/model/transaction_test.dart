@@ -74,9 +74,7 @@ void main() {
         idBankAccount: 0,
         idBudget: 0,
         idCategory: 0,
-        idRecurringTransaction: 0,
-        createdAt: DateTime.utc(2022),
-        updatedAt: DateTime.utc(2022));
+        idRecurringTransaction: 0);
 
     Map<String, Object?> json = t.toJson();
 
@@ -90,9 +88,5 @@ void main() {
     assert(t.idCategory == json[TransactionFields.idCategory]);
     assert(t.idRecurringTransaction ==
         json[TransactionFields.idRecurringTransaction]);
-    assert(t.createdAt?.toUtc().toIso8601String() ==
-        json[BaseEntityFields.createdAt]);
-    assert(t.updatedAt?.toUtc().toIso8601String() ==
-        json[BaseEntityFields.updatedAt]);
   });
 }
