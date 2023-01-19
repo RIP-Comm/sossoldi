@@ -8,7 +8,7 @@ void main() {
     CategoryTransaction c = CategoryTransaction(
         id: 2,
         name: "name",
-        symbol: '0xe318',
+        symbol: 'symbol',
         createdAt: DateTime.utc(2022),
         updatedAt: DateTime.utc(2022));
 
