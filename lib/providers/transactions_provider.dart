@@ -1,15 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/accounts_provider.dart';
+import 'accounts_provider.dart';
 import '../model/bank_account.dart';
 import '../model/transaction.dart';
 import '../model/category_transaction.dart';
+
+final transactionTypeList = Provider<List<Type>>((ref) => [Type.income, Type.expense, Type.transfer]);
 
 final transactionTypesProvider =
     StateProvider.autoDispose<List<bool>>((ref) => [false, true, false]);
 final dateProvider = StateProvider.autoDispose<DateTime>((ref) => DateTime.now());
 final bankAccountProvider =
     StateProvider.autoDispose<BankAccount?>((ref) => ref.read(mainAccountProvider));
-final amountProvider = StateProvider<num>((ref) => 0);
+final amountProvider = StateProvider.autoDispose<num>((ref) => 0);
 final noteProvider = StateProvider.autoDispose<String?>((ref) => null);
 final categoryProvider = StateProvider.autoDispose<CategoryTransaction?>((ref) => null);
 final selectedRecurringPayProvider = StateProvider.autoDispose<bool>((ref) => false);
@@ -25,28 +27,24 @@ class AsyncTransactionsNotifier extends AsyncNotifier<List<Transaction>> {
     return transaction;
   }
 
-  Future<void> addTransaction(num amount) async {
+  Future<void> addTransaction() async {
     final date = ref.read(dateProvider);
-    // final amount = ref.read(amountProvider);
+    final amount = ref.read(amountProvider);
     final bankAccount = ref.read(bankAccountProvider)!;
-    List<Type> typeList = [Type.income, Type.expense, Type.transfer];
     final typeIndex = ref.read(transactionTypesProvider).indexOf(true);
-    final category = ref.read(categoryProvider);
+    final category = ref.read(categoryProvider)!;
     final note = ref.read(noteProvider);
     state = const AsyncValue.loading();
 
     Transaction transaction = Transaction(
       date: date,
       amount: amount,
-      type: typeList[typeIndex],
+      type: ref.read(transactionTypeList)[typeIndex],
       note: note,
       idBankAccount: bankAccount.id!,
       idBudget: 0,
-      idCategory: 0,
+      idCategory: category.id!,
     );
-
-    // Dispose dell'amount provider manuale, nell'attesa di capire perchè se metto autodispose ogni volta che aggiorna il valore fa il dispose da solo in contemporanea
-    ref.invalidate(amountProvider);
 
     state = await AsyncValue.guard(() async {
       await TransactionMethods().insert(transaction);

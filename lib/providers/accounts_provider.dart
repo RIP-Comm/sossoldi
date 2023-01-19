@@ -15,9 +15,8 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
     return account;
   }
 
-  // TODO bisognerebbe aggiungere un campo bool 'main_account' o qualcosa di simile, serve per avere l'account già selezionato quando si aggiungono spese
   Future<BankAccount> _getMainAccount() async {
-    final account = await BankAccountMethods().selectById(1);
+    final account = await BankAccountMethods().selectMain();
     return account;
   }
 

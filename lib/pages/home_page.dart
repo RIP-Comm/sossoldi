@@ -3,9 +3,9 @@ import 'dart:ui';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sossoldi/constants/functions.dart';
-import 'package:sossoldi/model/transaction.dart';
-import 'package:sossoldi/providers/transactions_provider.dart';
+import '../constants/functions.dart';
+import '../model/transaction.dart';
+import '../providers/transactions_provider.dart';
 import '../custom_widgets/budget_circular_indicator.dart';
 import '../providers/accounts_provider.dart';
 import '../constants/style.dart';
@@ -443,7 +443,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                                           Row(
                                             children: [
                                               Text(
-                                                'HOME',
+                                                transaction.idCategory.toString(),
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .labelMedium!
@@ -453,7 +453,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                                               ),
                                               const Spacer(),
                                               Text(
-                                                transaction.idBankAccount.toString(),
+                                                accountList.value!.firstWhere((element) => element.id == transaction.idBankAccount).name,
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .labelMedium!

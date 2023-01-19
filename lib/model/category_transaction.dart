@@ -23,13 +23,13 @@ class CategoryTransactionFields extends BaseEntityFields {
 
 class CategoryTransaction extends BaseEntity {
   final String name;
-  final String? symbol;
+  final String symbol;
   final String? note;
 
   const CategoryTransaction(
       {int? id,
       required this.name,
-      this.symbol,
+      required this.symbol,
       this.note,
       DateTime? createdAt,
       DateTime? updatedAt})
@@ -50,38 +50,36 @@ class CategoryTransaction extends BaseEntity {
           createdAt: createdAt ?? this.createdAt,
           updatedAt: updatedAt ?? this.updatedAt);
 
-  static CategoryTransaction fromJson(Map<String, Object?> json) =>
-      CategoryTransaction(
-          id: json[BaseEntityFields.id] as int?,
-          name: json[CategoryTransactionFields.name] as String,
-          symbol: json[CategoryTransactionFields.symbol] as String,
-          note: json[CategoryTransactionFields.note] as String,
-          createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
-          updatedAt:
-              DateTime.parse(json[BaseEntityFields.updatedAt] as String));
+  static CategoryTransaction fromJson(Map<String, Object?> json) => CategoryTransaction(
+      id: json[BaseEntityFields.id] as int?,
+      name: json[CategoryTransactionFields.name] as String,
+      symbol: json[CategoryTransactionFields.symbol] as String,
+      note: json[CategoryTransactionFields.note] as String,
+      createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
+      updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String));
 
-  Map<String, Object?> toJson() => {
+  Map<String, Object?> toJson({bool update = false}) => {
         BaseEntityFields.id: id,
         CategoryTransactionFields.name: name,
         CategoryTransactionFields.symbol: symbol,
         CategoryTransactionFields.note: note,
-        BaseEntityFields.createdAt: createdAt?.toIso8601String(),
-        BaseEntityFields.updatedAt: updatedAt?.toIso8601String(),
+        BaseEntityFields.createdAt:
+            update ? createdAt?.toIso8601String() : DateTime.now().toIso8601String(),
+        BaseEntityFields.updatedAt: DateTime.now().toIso8601String(),
       };
 }
 
 class CategoryTransactionMethods extends SossoldiDatabase {
   Future<CategoryTransaction> insert(CategoryTransaction item) async {
-    final database = await SossoldiDatabase.instance.database;
-    final id = await database.insert(categoryTransactionTable, item.toJson());
+    final db = await database;
+    final id = await db.insert(categoryTransactionTable, item.toJson());
     return item.copy(id: id);
   }
 
-
   Future<CategoryTransaction> selectById(int id) async {
-    final database = await SossoldiDatabase.instance.database;
+    final db = await database;
 
-    final maps = await database.query(
+    final maps = await db.query(
       categoryTransactionTable,
       columns: CategoryTransactionFields.allFields,
       where: '${CategoryTransactionFields.id} = ?',
@@ -96,35 +94,31 @@ class CategoryTransactionMethods extends SossoldiDatabase {
   }
 
   Future<List<CategoryTransaction>> selectAll() async {
-    final database = await SossoldiDatabase.instance.database;
+    final db = await database;
 
     final orderByASC = '${CategoryTransactionFields.createdAt} ASC';
 
-    final result = await database.query(categoryTransactionTable, orderBy: orderByASC);
+    final result = await db.query(categoryTransactionTable, orderBy: orderByASC);
 
     return result.map((json) => CategoryTransaction.fromJson(json)).toList();
   }
 
   Future<int> updateItem(CategoryTransaction item) async {
-    final database = await SossoldiDatabase.instance.database;
+    final db = await database;
 
     // You can use `rawUpdate` to write the query in SQL
-    return database.update(
+    return db.update(
       categoryTransactionTable,
-      item.toJson(),
-      where:
-      '${CategoryTransactionFields.id} = ?',
+      item.toJson(update: true),
+      where: '${CategoryTransactionFields.id} = ?',
       whereArgs: [item.id],
     );
   }
 
   Future<int> deleteById(int id) async {
-    final database = await SossoldiDatabase.instance.database;
+    final db = await database;
 
-    return await database.delete(categoryTransactionTable,
-        where:
-        '${CategoryTransactionFields.id} = ?',
-        whereArgs: [id]);
+    return await db.delete(categoryTransactionTable,
+        where: '${CategoryTransactionFields.id} = ?', whereArgs: [id]);
   }
-
 }

@@ -18,14 +18,14 @@ class AddPage extends ConsumerStatefulWidget {
 class _AddPageState extends ConsumerState<AddPage> with Functions {
   final TextEditingController amountController = TextEditingController();
 
-  final List<Color> _colorList = [green, red, blue3];
   final List<String> _titleList = ['Income', 'Expense', 'Transfer'];
 
   @override
   Widget build(BuildContext context) {
+    final trsncTypeList = ref.read(transactionTypeList);
     final trnscTypes = ref.watch(transactionTypesProvider);
     final selectedRecurringPay = ref.watch(selectedRecurringPayProvider);
-
+    ref.listen(amountProvider, (_, __) {});
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -94,7 +94,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                       (index) => TypeTab(
                         trnscTypes[index],
                         _titleList[index],
-                        _colorList[index],
+                        typeToColor(trsncTypeList[index]),
                       ),
                     ),
                   ),
@@ -104,11 +104,11 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                   child: TextField(
                     controller: amountController,
                     decoration: InputDecoration(
-                      prefixText: ' ', // set to center the amount
                       border: InputBorder.none,
+                      prefixText: ' ', // set to center the amount
                       suffixText: '€',
                       suffixStyle: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                            color: trnscTypes[0] ? green : (trnscTypes[1] ? red : blue3),
+                            color: typeToColor(trsncTypeList[trnscTypes.indexOf(true)]),
                           ),
                     ),
                     keyboardType: TextInputType.number,
@@ -119,15 +119,12 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                     textAlign: TextAlign.center,
                     cursorColor: grey1,
                     style: TextStyle(
-                      color: trnscTypes[0] ? green : (trnscTypes[1] ? red : blue3),
+                      color: typeToColor(trsncTypeList[trnscTypes.indexOf(true)]),
                       fontSize: 58,
                       fontWeight: FontWeight.bold,
                     ),
-                    onChanged: (value) {
-                      print(ref.read(amountProvider));
-                      ref.read(amountProvider.notifier).state = currencyToNum(value);
-                      print(ref.read(amountProvider));
-                    },
+                    onChanged: (value) =>
+                        ref.read(amountProvider.notifier).state = currencyToNum(value),
                   ),
                 ),
               ],
@@ -160,6 +157,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                   bankAccountProvider,
                   "Account",
                   Icons.account_balance_wallet,
+                  () => Navigator.of(context).pushNamed('/'),
                   value: ref.watch(bankAccountProvider)?.name,
                 ),
                 const Divider(height: 1, color: grey1),
@@ -167,6 +165,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                   categoryProvider,
                   "Category",
                   Icons.list_alt,
+                  () => Navigator.of(context).pushNamed('/categoryselect'),
                   value: ref.watch(categoryProvider)?.name,
                 ),
                 const Divider(height: 1, color: grey1),
@@ -174,6 +173,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                   noteProvider,
                   "Notes",
                   Icons.description,
+                  () => Navigator.of(context).pushNamed('/'),
                   value: ref.watch(noteProvider),
                 ),
                 const Divider(height: 1, color: grey1),
@@ -181,6 +181,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                   dateProvider,
                   "Date",
                   Icons.calendar_month,
+                  () => Navigator.of(context).pushNamed('/'),
                   value: dateToString(ref.watch(dateProvider)),
                 ),
                 const Divider(height: 1, color: grey1),
@@ -307,9 +308,9 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                 ),
                 child: TextButton(
                   onPressed: () => ref
-                        .read(transactionsProvider.notifier)
-                        .addTransaction(currencyToNum(amountController.text))
-                        .whenComplete(() => Navigator.of(context).pop()),
+                      .read(transactionsProvider.notifier)
+                      .addTransaction()
+                      .whenComplete(() => Navigator.of(context).pop()),
                   style: TextButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.secondary,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

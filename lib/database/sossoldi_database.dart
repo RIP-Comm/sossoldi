@@ -54,7 +54,7 @@ class SossoldiDatabase {
         `${BankAccountFields.value}` $realNotNull,
         `${BankAccountFields.mainAccount}` $booleanNotNull CHECK (${BankAccountFields.mainAccount} IN (0, 1)),
         `${BankAccountFields.createdAt}` $textNotNull,
-        `${BankAccountFields.updatedAt}` $text
+        `${BankAccountFields.updatedAt}` $textNotNull
       )
       ''');
 
@@ -112,7 +112,7 @@ class SossoldiDatabase {
         `${CategoryTransactionFields.id}` $integerPrimaryKeyAutoincrement,
         `${CategoryTransactionFields.name}` $textNotNull,
         `${CategoryTransactionFields.symbol}` $textNotNull,
-        `${CategoryTransactionFields.note}` $textNotNull,
+        `${CategoryTransactionFields.note}` $text,
         `${CategoryTransactionFields.createdAt}` $textNotNull,
         `${CategoryTransactionFields.updatedAt}` $textNotNull
       )
@@ -125,7 +125,7 @@ class SossoldiDatabase {
         `${CategoryRecurringTransactionFields.id}` $integerPrimaryKeyAutoincrement,
         `${CategoryRecurringTransactionFields.name}` $textNotNull,
         `${CategoryRecurringTransactionFields.symbol}` $textNotNull,
-        `${CategoryRecurringTransactionFields.note}` $textNotNull,
+        `${CategoryRecurringTransactionFields.note}` $text,
         `${CategoryRecurringTransactionFields.createdAt}` $textNotNull,
         `${CategoryRecurringTransactionFields.updatedAt}` $textNotNull
       )
@@ -150,6 +150,14 @@ class SossoldiDatabase {
         ("DB main", 1235.10, true, '${DateTime.now()}', '${DateTime.now()}'),
         ("DB N26", 3823.56, false, '${DateTime.now()}', '${DateTime.now()}'),
         ("DB Fineco", 0.07, false, '${DateTime.now()}', '${DateTime.now()}');
+    ''');
+    await database.execute(
+        '''
+      INSERT INTO categoryTransaction(name, symbol, note, createdAt, updatedAt) VALUES
+        ("Cibo", "0xe532", '', '${DateTime.now()}', '${DateTime.now()}'),
+        ("Casa", "0xe318", '', '${DateTime.now()}', '${DateTime.now()}'),
+        ("Abbigliamento", "0xe59c", '', '${DateTime.now()}', '${DateTime.now()}'),
+        ("Svago", "0xe618", '', '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
   }

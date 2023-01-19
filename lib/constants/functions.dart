@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:intl/intl.dart';
-import 'package:sossoldi/constants/style.dart';
+import '../constants/style.dart';
 import '../model/transaction.dart';
 
 mixin Functions {
@@ -10,7 +10,10 @@ mixin Functions {
   }
 
   num currencyToNum(String value) {
-    return num.parse(value.replaceAll(",", "."));
+    if (value != '') {
+      return num.parse(value.replaceAll(",", "."));
+    }
+    return 0;
   }
 
   String dateToString(DateTime date) {

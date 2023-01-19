@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sossoldi/constants/style.dart';
+import '../../../constants/style.dart';
 
 class TypeTab extends StatelessWidget {
   const TypeTab(
