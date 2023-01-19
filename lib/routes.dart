@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'pages/add_page.dart';
+import 'pages/add_page/widgets/category_selector.dart';
 import 'pages/home_page.dart';
 import 'pages/planning_budget_page.dart';
 import 'pages/settings_page.dart';
@@ -16,12 +16,13 @@ Route<dynamic> makeRoute(RouteSettings settings) {
       return _materialPageRoute(settings.name, const HomePage());
     case '/transactions':
       return _materialPageRoute(settings.name, TransactionsPage());
+    case '/categoryselect':
+      // Test route
+      return _cupertinoPageRoute(settings.name, const CategorySelector());
     case '/planning':
       return _materialPageRoute(settings.name, PlanningPage());
     case '/graphs':
       return _materialPageRoute(settings.name, StatsPage());
-    case '/add':
-      return _noTransitionPageRoute(settings.name, AddPage());
     case '/settings':
       return _noTransitionPageRoute(settings.name, SettingsPage());
     default:
