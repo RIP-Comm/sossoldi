@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sossoldi/constants/functions.dart';
 import '../../../model/category_transaction.dart';
 import '../../../providers/categories_provider.dart';
 import '../../../providers/transactions_provider.dart';
@@ -11,7 +12,7 @@ class CategorySelector extends ConsumerStatefulWidget {
   ConsumerState<CategorySelector> createState() => _CategorySelectorState();
 }
 
-class _CategorySelectorState extends ConsumerState<CategorySelector> {
+class _CategorySelectorState extends ConsumerState<CategorySelector> with Functions {
   @override
   Widget build(BuildContext context) {
     final categoriesList = ref.watch(categoriesProvider);
@@ -26,6 +27,7 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
             shrinkWrap: true,
             itemBuilder: (context, i) {
               CategoryTransaction category = categories[i];
+              IconData? icon = stringToIcon(category.symbol);
               return Material(
                 child: InkWell(
                   onTap: () => ref.read(categoryProvider.notifier).state = category,
@@ -38,11 +40,11 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
-                        child: Icon(
-                          IconData(int.parse(category.symbol), fontFamily: 'MaterialIcons'),
+                        child: icon != null ? Icon(
+                          icon,
                           size: 24.0,
                           color: Theme.of(context).colorScheme.background,
-                        ),
+                        ) : const SizedBox(),
                       ),
                     ),
                     title: Text(

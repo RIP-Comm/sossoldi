@@ -157,7 +157,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                   bankAccountProvider,
                   "Account",
                   Icons.account_balance_wallet,
-                  () => Navigator.of(context).pushNamed('/'),
+                  () => Navigator.of(context).pushNamed('/accountselect'),
                   value: ref.watch(bankAccountProvider)?.name,
                 ),
                 const Divider(height: 1, color: grey1),

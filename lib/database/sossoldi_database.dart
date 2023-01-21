@@ -154,10 +154,10 @@ class SossoldiDatabase {
     await database.execute(
         '''
       INSERT INTO categoryTransaction(name, symbol, note, createdAt, updatedAt) VALUES
-        ("Cibo", "0xe532", '', '${DateTime.now()}', '${DateTime.now()}'),
-        ("Casa", "0xe318", '', '${DateTime.now()}', '${DateTime.now()}'),
-        ("Abbigliamento", "0xe59c", '', '${DateTime.now()}', '${DateTime.now()}'),
-        ("Svago", "0xe618", '', '${DateTime.now()}', '${DateTime.now()}');
+        ("Cibo", "restaurant", '', '${DateTime.now()}', '${DateTime.now()}'),
+        ("Casa", "home", '', '${DateTime.now()}', '${DateTime.now()}'),
+        ("Abbigliamento", "shopping_cart", '', '${DateTime.now()}', '${DateTime.now()}'),
+        ("Svago", "subscriptions", '', '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
   }
