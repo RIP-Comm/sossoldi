@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../constants/style.dart';
 import '../model/transaction.dart';
@@ -31,6 +32,21 @@ mixin Functions {
         return blue3;
       default:
         return blue3;
+    }
+  }
+
+  IconData? stringToIcon(String iconName) {
+    switch (iconName) {
+      case 'restaurant':
+        return Icons.restaurant;
+      case 'home':
+        return Icons.home;
+      case 'shopping_cart':
+        return Icons.shopping_cart;
+      case 'subscriptions':
+        return Icons.subscriptions;
+      default:
+        return null;
     }
   }
 }
