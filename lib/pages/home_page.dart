@@ -173,13 +173,14 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                 FlSpot(26, 2),
                 FlSpot(27, 4.5),
                 FlSpot(28, 5),
-                FlSpot(29, 5),
+                FlSpot(29, 4.7),
+                FlSpot(30, 1),
               ],
               colorLine2Data: Color(0xffB9BABC),
               colorBackground: Color(0xffF1F5F9),
               maxY: 5.0,
               minY: -5.0,
-              maxDays: 30.0,
+              maxDays: 31.0,
             ),
             Row(
               children: [

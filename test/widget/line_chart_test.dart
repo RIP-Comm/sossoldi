@@ -70,7 +70,7 @@ void main() {
                     colorBackground: const Color(0xff356CA3),
                     maxY: upper,
                     minY: lower,
-                    maxDays: 30.0,
+                    maxDays: 31.0,
                   ),
         ),
       )
