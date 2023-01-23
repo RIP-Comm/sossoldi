@@ -2,7 +2,12 @@ import 'dart:ui';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/percent_indicator.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../constants/functions.dart';
+import '../model/transaction.dart';
+import '../providers/transactions_provider.dart';
+import '../custom_widgets/budget_circular_indicator.dart';
+import '../providers/accounts_provider.dart';
 import '../constants/style.dart';
 
 import '../model/bank_account.dart';
@@ -10,30 +15,27 @@ import '../model/bank_account.dart';
 import '../custom_widgets/accounts_sum.dart';
 import '../custom_widgets/line_chart.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  List<BankAccount> accountList = [];
-
-  void getAccounts() async {
-    accountList = await BankAccountMethods().selectAll();
-  }
+class _HomePageState extends ConsumerState<HomePage> with Functions {
 
   @override
   Widget build(BuildContext context) {
+    final accountList = ref.watch(accountsProvider);
+    final transactionList = ref.watch(transactionsProvider);
     return ListView(
       children: [
         Column(
           children: [
-            const Padding(padding: EdgeInsets.only(top: 24)),
+            const SizedBox(height: 24),
             Row(
               children: [
-                const Padding(padding: EdgeInsets.only(left: 8.0)),
+                const SizedBox(width: 8),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -44,16 +46,30 @@ class _HomePageState extends State<HomePage> {
                           .labelMedium
                           ?.copyWith(color: Theme.of(context).colorScheme.primary),
                     ),
-                    Text(
-                      "1.536,65€",
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineLarge
-                          ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                    RichText(
+                      textScaleFactor: MediaQuery.of(context).textScaleFactor,
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: numToCurrency(-1536.65),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineLarge
+                                ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                          ),
+                          TextSpan(
+                            text: "€",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-                const Padding(padding: EdgeInsets.only(right: 30.0)),
+                const SizedBox(width: 30),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -61,13 +77,24 @@ class _HomePageState extends State<HomePage> {
                       "INCOME",
                       style: Theme.of(context).textTheme.labelMedium,
                     ),
-                    Text(
-                      "+2620,55€",
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: green),
+                    RichText(
+                      textScaleFactor: MediaQuery.of(context).textScaleFactor,
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: numToCurrency(-1050.65),
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: green),
+                          ),
+                          TextSpan(
+                            text: "€",
+                            style: Theme.of(context).textTheme.labelLarge?.copyWith(color: green),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-                const Padding(padding: EdgeInsets.only(right: 30.0)),
+                const SizedBox(width: 30),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -80,7 +107,7 @@ class _HomePageState extends State<HomePage> {
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: (-1050.65).toStringAsFixed(2),
+                            text: numToCurrency(-1050.65),
                             style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: red),
                           ),
                           TextSpan(
@@ -94,9 +121,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-            ),
+            const SizedBox(height: 16),
             const LineChartWidget(
               line1Data: [
                 FlSpot(0, 3),
@@ -206,81 +231,78 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
-                  child: Text(
-                    "Your accounts",
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+                child: Text(
+                  "Your accounts",
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
-              Container(
+              SizedBox(
                 height: 85.0,
-                margin: const EdgeInsets.only(left: 16.0, right: 16.0),
-                child: ListView.builder(
-                  itemCount: (accountList?.length ?? 0) + 1,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, i) {
-                    getAccounts();
-                    if (i == accountList?.length) {
-                      return Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 4, 16),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            boxShadow: [
-                              BoxShadow(
-                                color: cardShadow,
-                                blurRadius: 2.0,
-                                offset: const Offset(1.0, 1.0),
-                              ),
-                            ],
-                          ),
-                          child: TextButton.icon(
-                            style: ButtonStyle(
-                              maximumSize: MaterialStateProperty.all(const Size(130, 48)),
-                              backgroundColor:
-                                  MaterialStateProperty.all(Theme.of(context).colorScheme.surface),
-                              shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8.0),
+                child: accountList.when(
+                  data: (accounts) => ListView.builder(
+                    itemCount: accounts.length + 1,
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                    physics: const BouncingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, i) {
+                      if (i == accounts.length) {
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 4, 0, 16),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              boxShadow: [defaultShadow],
+                            ),
+                            child: TextButton.icon(
+                              style: ButtonStyle(
+                                maximumSize: MaterialStateProperty.all(const Size(130, 48)),
+                                backgroundColor: MaterialStateProperty.all(
+                                    Theme.of(context).colorScheme.surface),
+                                shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
                                 ),
                               ),
-                            ),
-                            icon: Container(
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: grey1,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: Icon(
-                                  Icons.add_rounded,
-                                  size: 24.0,
-                                  color: Theme.of(context).colorScheme.surface,
+                              icon: Container(
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: grey1,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Icon(
+                                    Icons.add_rounded,
+                                    size: 24.0,
+                                    color: Theme.of(context).colorScheme.surface,
+                                  ),
                                 ),
                               ),
+                              label: Text(
+                                "New Account",
+                                style:
+                                    Theme.of(context).textTheme.bodyLarge!.copyWith(color: grey1),
+                                maxLines: 2,
+                              ),
+                              onPressed: () {
+                                // TODO: Navigate to the page to add account
+                              },
                             ),
-                            label: Text(
-                              "New Account",
-                              style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: grey1),
-                              maxLines: 2,
-                            ),
-                            onPressed: () {
-                              // Perform action
-                            },
                           ),
-                        ),
-                      );
-                    } else {
-                      BankAccount account = accountList[i];
-                      return AccountsSum(accountName: account.name, amount: account.value);
-                    }
-                  },
+                        );
+                      } else {
+                        BankAccount account = accounts[i];
+                        return AccountsSum(accountName: account.name, amount: account.value);
+                      }
+                    },
+                  ),
+                  loading: () => const Center(child: CircularProgressIndicator()),
+                  error: (err, stack) => Text('Error: $err'),
                 ),
               ),
               Align(
@@ -297,17 +319,11 @@ class _HomePageState extends State<HomePage> {
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,
                   borderRadius: BorderRadius.circular(8),
-                  boxShadow: [
-                    BoxShadow(
-                      color: cardShadow,
-                      blurRadius: 2.0,
-                      offset: const Offset(1.0, 1.0),
-                    ),
-                  ],
+                  boxShadow: [defaultShadow],
                 ),
-                margin: const EdgeInsets.only(left: 16.0, right: 16.0),
+                margin: const EdgeInsets.symmetric(horizontal: 16),
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
+                  padding: const EdgeInsets.all(16),
                   child: Column(
                     children: [
                       Row(
@@ -348,104 +364,116 @@ class _HomePageState extends State<HomePage> {
                           color: white,
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: ListView.builder(
-                          // disable scroll
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: 2,
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemBuilder: (context, i) {
-                            return Container(
-                              padding: const EdgeInsets.fromLTRB(15, 8, 15, 8),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Theme.of(context).colorScheme.secondary,
+                        child: transactionList.when(
+                          data: (transactions) => ListView.builder(
+                            // disable scroll
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: transactions.length,
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemBuilder: (context, i) {
+                              Transaction transaction = transactions[i];
+                              return Container(
+                                padding: const EdgeInsets.fromLTRB(15, 8, 15, 8),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Theme.of(context).colorScheme.secondary,
+                                      ),
+                                      child: const Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Icon(Icons.settings, size: 25.0, color: white),
+                                      ),
                                     ),
-                                    child: const Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Icon(Icons.settings, size: 25.0, color: white),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                                      children: [
-                                        const SizedBox(height: 11),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'Affitto',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleLarge!
-                                                  .copyWith(
-                                                      color: Theme.of(context).colorScheme.primary),
-                                            ),
-                                            const Spacer(),
-                                            RichText(
-                                              textScaleFactor:
-                                                  MediaQuery.of(context).textScaleFactor,
-                                              text: TextSpan(
-                                                children: [
-                                                  TextSpan(
-                                                    text: "-280,00",
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .labelLarge!
-                                                        .copyWith(color: red),
-                                                  ),
-                                                  TextSpan(
-                                                    text: "€",
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .labelSmall!
-                                                        .copyWith(color: red)
-                                                        .apply(
-                                                      fontFeatures: [
-                                                        const FontFeature.subscripts()
-                                                      ],
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                                        children: [
+                                          const SizedBox(height: 11),
+                                          Row(
+                                            children: [
+                                              transaction.note != null
+                                                  ? Text(
+                                                      transaction.note!,
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .titleLarge!
+                                                          .copyWith(
+                                                            color: Theme.of(context)
+                                                                .colorScheme
+                                                                .primary,
+                                                          ),
+                                                    )
+                                                  : const SizedBox(),
+                                              const Spacer(),
+                                              RichText(
+                                                textScaleFactor:
+                                                    MediaQuery.of(context).textScaleFactor,
+                                                text: TextSpan(
+                                                  children: [
+                                                    TextSpan(
+                                                      text: numToCurrency(transaction.amount),
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .labelLarge!
+                                                          .copyWith(color: typeToColor(transaction.type)),
                                                     ),
-                                                  ),
-                                                ],
+                                                    TextSpan(
+                                                      text: "€",
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .labelSmall!
+                                                          .copyWith(color: typeToColor(transaction.type))
+                                                          .apply(
+                                                        fontFeatures: [
+                                                          const FontFeature.subscripts()
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 12),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'HOME',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .labelMedium!
-                                                  .copyWith(
-                                                      color: Theme.of(context).colorScheme.primary),
-                                            ),
-                                            const Spacer(),
-                                            Text(
-                                              'CASH',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .labelMedium!
-                                                  .copyWith(
-                                                      color: Theme.of(context).colorScheme.primary),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 11),
-                                      ],
+                                            ],
+                                          ),
+                                          const SizedBox(height: 12),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                transaction.idCategory.toString(),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .labelMedium!
+                                                    .copyWith(
+                                                      color: Theme.of(context).colorScheme.primary,
+                                                    ),
+                                              ),
+                                              const Spacer(),
+                                              Text(
+                                                accountList.value!.firstWhere((element) => element.id == transaction.idBankAccount).name,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .labelMedium!
+                                                    .copyWith(
+                                                      color: Theme.of(context).colorScheme.primary,
+                                                    ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 11),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                          loading: () => const Center(child: CircularProgressIndicator()),
+                          error: (err, stack) => Text('Error: $err'),
                         ),
                       ),
                     ],
@@ -467,173 +495,25 @@ class _HomePageState extends State<HomePage> {
               Container(
                 margin: const EdgeInsets.only(left: 16.0, right: 16.0),
                 child: Row(
-                  children: [
-                    Column(
-                      children: [
-                        CircularPercentIndicator(
-                          radius: 50.0,
-                          animation: true,
-                          animationDuration: 1200,
-                          lineWidth: 10.0,
-                          percent: 0.25,
-                          center: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: "320",
-                                      style: Theme.of(context).textTheme.labelMedium,
-                                    ),
-                                    TextSpan(
-                                      text: "€",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall
-                                          ?.apply(fontFeatures: [const FontFeature.subscripts()]),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: "25",
-                                      style: Theme.of(context).textTheme.labelSmall,
-                                    ),
-                                    TextSpan(
-                                      text: "%",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headlineSmall
-                                          ?.apply(fontFeatures: [const FontFeature.subscripts()]),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          circularStrokeCap: CircularStrokeCap.butt,
-                          backgroundColor: const Color.fromRGBO(217, 217, 217, 1),
-                          progressColor: const Color.fromRGBO(150, 150, 150, 1),
-                        ),
-                        const SizedBox(height: 10),
-                        Text("Totale", style: Theme.of(context).textTheme.labelMedium),
-                      ],
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    BudgetCircularIndicator(
+                      title: "TOTALE",
+                      amount: 320,
+                      perc: 0.25,
+                      color: Color(0xFFEBC35F),
                     ),
-                    const Spacer(),
-                    Column(
-                      children: [
-                        CircularPercentIndicator(
-                          radius: 50.0,
-                          animation: true,
-                          animationDuration: 1200,
-                          lineWidth: 10.0,
-                          percent: 0.5,
-                          center: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: "500",
-                                      style: Theme.of(context).textTheme.labelMedium,
-                                    ),
-                                    TextSpan(
-                                      text: "€",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall
-                                          ?.apply(fontFeatures: [const FontFeature.subscripts()]),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: "50",
-                                      style: Theme.of(context).textTheme.labelSmall,
-                                    ),
-                                    TextSpan(
-                                      text: "%",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headlineSmall
-                                          ?.apply(fontFeatures: [const FontFeature.subscripts()]),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          circularStrokeCap: CircularStrokeCap.butt,
-                          backgroundColor: const Color.fromRGBO(217, 217, 217, 1),
-                          progressColor: const Color.fromRGBO(150, 150, 150, 1),
-                        ),
-                        const SizedBox(height: 10),
-                        Text("Spese", style: Theme.of(context).textTheme.labelMedium),
-                      ],
+                    BudgetCircularIndicator(
+                      title: "SPESE",
+                      amount: 500,
+                      perc: 0.5,
+                      color: Color(0xFFD336B6),
                     ),
-                    const Spacer(),
-                    Column(
-                      children: [
-                        CircularPercentIndicator(
-                          radius: 50.0,
-                          animation: true,
-                          animationDuration: 1200,
-                          lineWidth: 10.0,
-                          percent: 0.88,
-                          center: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            //Center Row contents horizontally,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            //Center Row contents vertically,
-                            children: [
-                              RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                        text: "178,67",
-                                        style: Theme.of(context).textTheme.labelMedium),
-                                    TextSpan(
-                                      text: "€",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall
-                                          ?.apply(fontFeatures: [const FontFeature.subscripts()]),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                        text: "88%", style: Theme.of(context).textTheme.labelSmall),
-                                    TextSpan(
-                                      text: "%",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headlineSmall
-                                          ?.apply(fontFeatures: [const FontFeature.subscripts()]),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          circularStrokeCap: CircularStrokeCap.butt,
-                          backgroundColor: const Color.fromRGBO(217, 217, 217, 1),
-                          progressColor: const Color.fromRGBO(150, 150, 150, 1),
-                        ),
-                        const SizedBox(height: 10),
-                        Text("Svago", style: Theme.of(context).textTheme.labelMedium),
-                      ],
+                    BudgetCircularIndicator(
+                      title: "SVAGO",
+                      amount: 178.67,
+                      perc: 0.88,
+                      color: Color(0xFF8E5FEB),
                     ),
                   ],
                 ),

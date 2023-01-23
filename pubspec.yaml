@@ -39,6 +39,9 @@ dependencies:
   # Support for various charts
   fl_chart: ^0.55.2
 
+  # State manager
+  flutter_riverpod: ^2.1.3
+
   # Database storage
   sqflite: ^2.2.2
   sqflite_common_ffi: ^2.2.0+1

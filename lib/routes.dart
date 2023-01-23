@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'pages/add_page.dart';
+import 'package:sossoldi/pages/add_page/widgets/account_selector.dart';
+import 'pages/add_page/widgets/category_selector.dart';
 import 'pages/home_page.dart';
 import 'pages/planning_budget_page.dart';
 import 'pages/settings_page.dart';
@@ -16,12 +17,16 @@ Route<dynamic> makeRoute(RouteSettings settings) {
       return _materialPageRoute(settings.name, const HomePage());
     case '/transactions':
       return _materialPageRoute(settings.name, TransactionsPage());
+    // Test route
+    case '/categoryselect':
+      return _cupertinoPageRoute(settings.name, const CategorySelector());
+    // Test route
+    case '/accountselect':
+      return _cupertinoPageRoute(settings.name, const AccountSelector());
     case '/planning':
       return _materialPageRoute(settings.name, PlanningPage());
     case '/graphs':
       return _materialPageRoute(settings.name, StatsPage());
-    case '/add':
-      return _noTransitionPageRoute(settings.name, AddPage());
     case '/settings':
       return _noTransitionPageRoute(settings.name, SettingsPage());
     default:

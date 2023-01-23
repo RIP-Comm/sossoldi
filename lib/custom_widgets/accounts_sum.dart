@@ -24,9 +24,7 @@ class AccountsSum extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFFD7E2ED),
         borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(color: cardShadow, blurRadius: 2.0, offset: const Offset(1.0, 1.0)),
-        ],
+        boxShadow: [defaultShadow],
       ),
       child: Material(
         color: Colors.transparent,

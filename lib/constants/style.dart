@@ -11,7 +11,11 @@ const TextStyle labelLight = TextStyle(
   fontWeight: FontWeight.w400,
 );
 
-Color cardShadow = blue1.withOpacity(0.15);
+BoxShadow defaultShadow = BoxShadow(
+  color: blue1.withOpacity(0.20),
+  blurRadius: 4.0,
+  offset: const Offset(1.0, 1.0),
+);
 
 // colors
 const green = Color(0xFF248731);
