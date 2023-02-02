@@ -1,17 +1,13 @@
-import 'dart:ui';
-
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../custom_widgets/transactions_list.dart';
 import '../constants/functions.dart';
-import '../model/transaction.dart';
 import '../providers/transactions_provider.dart';
 import '../custom_widgets/budget_circular_indicator.dart';
 import '../providers/accounts_provider.dart';
 import '../constants/style.dart';
-
 import '../model/bank_account.dart';
-
 import '../custom_widgets/accounts_sum.dart';
 import '../custom_widgets/line_chart.dart';
 
@@ -82,7 +78,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: numToCurrency(-1050.65),
+                            text: numToCurrency(1050.65),
                             style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: green),
                           ),
                           TextSpan(
@@ -302,7 +298,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                       }
                     },
                   ),
-                  loading: () => const Center(child: CircularProgressIndicator()),
+                  loading: () => const SizedBox(),
                   error: (err, stack) => Text('Error: $err'),
                 ),
               ),
@@ -316,170 +312,10 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                   ),
                 ),
               ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
-                  borderRadius: BorderRadius.circular(8),
-                  boxShadow: [defaultShadow],
-                ),
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            "Monday 12 september",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall!
-                                .copyWith(color: Theme.of(context).colorScheme.primary),
-                          ),
-                          const Spacer(),
-                          RichText(
-                            textScaleFactor: MediaQuery.of(context).textScaleFactor,
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: "-285,99",
-                                  style:
-                                      Theme.of(context).textTheme.bodyLarge!.copyWith(color: red),
-                                ),
-                                TextSpan(
-                                  text: "€",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelMedium!
-                                      .copyWith(color: red)
-                                      .apply(fontFeatures: [const FontFeature.subscripts()]),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: white,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: transactionList.when(
-                          data: (transactions) => ListView.builder(
-                            // disable scroll
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: transactions.length,
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            itemBuilder: (context, i) {
-                              Transaction transaction = transactions[i];
-                              return Container(
-                                padding: const EdgeInsets.fromLTRB(15, 8, 15, 8),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Theme.of(context).colorScheme.secondary,
-                                      ),
-                                      child: const Padding(
-                                        padding: EdgeInsets.all(8.0),
-                                        child: Icon(Icons.settings, size: 25.0, color: white),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                                        children: [
-                                          const SizedBox(height: 11),
-                                          Row(
-                                            children: [
-                                              transaction.note != null
-                                                  ? Text(
-                                                      transaction.note!,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .titleLarge!
-                                                          .copyWith(
-                                                            color: Theme.of(context)
-                                                                .colorScheme
-                                                                .primary,
-                                                          ),
-                                                    )
-                                                  : const SizedBox(),
-                                              const Spacer(),
-                                              RichText(
-                                                textScaleFactor:
-                                                    MediaQuery.of(context).textScaleFactor,
-                                                text: TextSpan(
-                                                  children: [
-                                                    TextSpan(
-                                                      text: numToCurrency(transaction.amount),
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .labelLarge!
-                                                          .copyWith(color: typeToColor(transaction.type)),
-                                                    ),
-                                                    TextSpan(
-                                                      text: "€",
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .labelSmall!
-                                                          .copyWith(color: typeToColor(transaction.type))
-                                                          .apply(
-                                                        fontFeatures: [
-                                                          const FontFeature.subscripts()
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 12),
-                                          Row(
-                                            children: [
-                                              Text(
-                                                transaction.idCategory.toString(),
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .labelMedium!
-                                                    .copyWith(
-                                                      color: Theme.of(context).colorScheme.primary,
-                                                    ),
-                                              ),
-                                              const Spacer(),
-                                              Text(
-                                                accountList.value!.firstWhere((element) => element.id == transaction.idBankAccount).name,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .labelMedium!
-                                                    .copyWith(
-                                                      color: Theme.of(context).colorScheme.primary,
-                                                    ),
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 11),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                          loading: () => const Center(child: CircularProgressIndicator()),
-                          error: (err, stack) => Text('Error: $err'),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              transactionList.when(
+                data: (transactions) => TransactionsList(transactions: transactions),
+                loading: () => const SizedBox(),
+                error: (err, stack) => Text('Error: $err'),
               ),
               const SizedBox(height: 28),
               Align(

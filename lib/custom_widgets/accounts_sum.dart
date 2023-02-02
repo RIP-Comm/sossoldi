@@ -1,10 +1,11 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import '../constants/functions.dart';
 import '../constants/style.dart';
 import 'account_modal.dart';
 
 /// This class shows account summaries in dashboard
-class AccountsSum extends StatelessWidget {
+class AccountsSum extends StatelessWidget with Functions {
   final String accountName;
   final num amount;
   final String accountLogo;
@@ -85,7 +86,7 @@ class AccountsSum extends StatelessWidget {
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: amount.toStringAsFixed(2),
+                            text: numToCurrency(amount),
                             style: Theme.of(context).textTheme.titleSmall,
                           ),
                           TextSpan(

@@ -6,7 +6,7 @@ final mainAccountProvider = StateProvider<BankAccount?>((ref) => null);
 class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
   @override
   Future<List<BankAccount>> build() async {
-    ref.read(mainAccountProvider.notifier).state = await _getMainAccount();
+    ref.watch(mainAccountProvider.notifier).state = await _getMainAccount();
     return _getAccounts();
   }
 

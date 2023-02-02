@@ -138,7 +138,7 @@ class TransactionMethods extends SossoldiDatabase {
   Future<List<Transaction>> selectAll({int? limit}) async {
     final db = await database;
 
-    final orderByDESC = '${TransactionFields.createdAt} DESC';
+    final orderByDESC = '${TransactionFields.date} DESC';
 
     final result = await db.query(transactionTable, orderBy: orderByDESC, limit: limit);
 

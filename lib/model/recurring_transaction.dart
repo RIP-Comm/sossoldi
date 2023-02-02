@@ -25,15 +25,17 @@ class RecurringTransactionFields extends BaseEntityFields {
   ];
 }
 
-enum Recurrence {
-  daily,
-  weekly,
-  monthly,
-  bimonthly,
-  quarterly,
-  semester,
-  annual
-}
+enum Recurrence { daily, weekly, monthly, bimonthly, quarterly, semester, annual }
+
+Map<Recurrence, String> recurrenceMap = {
+  Recurrence.daily: "Daily",
+  Recurrence.weekly: "Weekly",
+  Recurrence.monthly: "Monthly",
+  Recurrence.bimonthly: "Bimonthly",
+  Recurrence.quarterly: "Quarterly",
+  Recurrence.semester: "Semester",
+  Recurrence.annual: "Annual",
+};
 
 class RecurringTransaction extends BaseEntity {
   final DateTime from;
@@ -72,19 +74,15 @@ class RecurringTransaction extends BaseEntity {
           createdAt: createdAt ?? this.createdAt,
           updatedAt: updatedAt ?? this.updatedAt);
 
-  static RecurringTransaction fromJson(Map<String, Object?> json) =>
-      RecurringTransaction(
-          id: json[BaseEntityFields.id] as int?,
-          from: DateTime.parse(json[RecurringTransactionFields.from] as String),
-          to: DateTime.parse(json[RecurringTransactionFields.to] as String),
-          payDay: json[RecurringTransactionFields.payDay] as int,
-          recurrence: Recurrence
-              .values[json[RecurringTransactionFields.recurrence] as int],
-          idCategoryRecurring:
-              json[RecurringTransactionFields.idCategoryRecurring] as int?,
-          createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
-          updatedAt:
-              DateTime.parse(json[BaseEntityFields.updatedAt] as String));
+  static RecurringTransaction fromJson(Map<String, Object?> json) => RecurringTransaction(
+      id: json[BaseEntityFields.id] as int?,
+      from: DateTime.parse(json[RecurringTransactionFields.from] as String),
+      to: DateTime.parse(json[RecurringTransactionFields.to] as String),
+      payDay: json[RecurringTransactionFields.payDay] as int,
+      recurrence: Recurrence.values[json[RecurringTransactionFields.recurrence] as int],
+      idCategoryRecurring: json[RecurringTransactionFields.idCategoryRecurring] as int?,
+      createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
+      updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String));
 
   Map<String, Object?> toJson() => {
         BaseEntityFields.id: id,
@@ -104,7 +102,6 @@ class RecurringTransactionMethods extends SossoldiDatabase {
     final id = await database.insert(recurringTransactionTable, item.toJson());
     return item.copy(id: id);
   }
-
 
   Future<RecurringTransaction> selectById(int id) async {
     final database = await SossoldiDatabase.instance.database;
@@ -140,8 +137,7 @@ class RecurringTransactionMethods extends SossoldiDatabase {
     return database.update(
       recurringTransactionTable,
       item.toJson(),
-      where:
-      '${RecurringTransactionFields.id} = ?',
+      where: '${RecurringTransactionFields.id} = ?',
       whereArgs: [item.id],
     );
   }
@@ -150,9 +146,6 @@ class RecurringTransactionMethods extends SossoldiDatabase {
     final database = await SossoldiDatabase.instance.database;
 
     return await database.delete(recurringTransactionTable,
-        where:
-        '${RecurringTransactionFields.id} = ?',
-        whereArgs: [id]);
+        where: '${RecurringTransactionFields.id} = ?', whereArgs: [id]);
   }
-
 }

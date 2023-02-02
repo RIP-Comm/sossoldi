@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sossoldi/pages/add_page/widgets/account_selector.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'pages/add_page/widgets/recurrence_selector.dart';
+import 'pages/add_page/widgets/account_selector.dart';
 import 'pages/add_page/widgets/category_selector.dart';
 import 'pages/home_page.dart';
 import 'pages/planning_budget_page.dart';
@@ -22,13 +24,15 @@ Route<dynamic> makeRoute(RouteSettings settings) {
       return _cupertinoPageRoute(settings.name, const CategorySelector());
     // Test route
     case '/accountselect':
-      return _cupertinoPageRoute(settings.name, const AccountSelector());
+      return _cupertinoPageRoute(settings.name, AccountSelector(settings.arguments as AutoDisposeStateProvider));
+    case '/recurrenceselect':
+      return _cupertinoPageRoute(settings.name, const RecurrenceSelector());
     case '/planning':
       return _materialPageRoute(settings.name, PlanningPage());
     case '/graphs':
       return _materialPageRoute(settings.name, StatsPage());
     case '/settings':
-      return _noTransitionPageRoute(settings.name, SettingsPage());
+      return _noTransitionPageRoute(settings.name, const SettingsPage());
     default:
       throw 'Route is not defined';
   }

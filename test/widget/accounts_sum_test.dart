@@ -20,6 +20,6 @@ void main() {
       ));
 
       expect(find.text(randomAccount), findsOneWidget);
-      expect(find.text("$randomValue€", findRichText: true), findsOneWidget);
+      expect(find.text("${randomValue.toStringAsFixed(2).replaceAll('.', ',')}€", findRichText: true), findsOneWidget);
     });
 }
