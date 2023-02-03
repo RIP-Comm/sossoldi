@@ -6,7 +6,9 @@ import '../../../providers/accounts_provider.dart';
 import '../../../providers/transactions_provider.dart';
 
 class AccountSelector extends ConsumerStatefulWidget {
-  const AccountSelector({Key? key}) : super(key: key);
+  const AccountSelector(this.provider, {Key? key}) : super(key: key);
+
+  final AutoDisposeStateProvider provider;
 
   @override
   ConsumerState<AccountSelector> createState() => _AccountSelectorState();
@@ -29,7 +31,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> with Function
               BankAccount account = accounts[i];
               return Material(
                 child: InkWell(
-                  onTap: () => ref.read(bankAccountProvider.notifier).state = account,
+                  onTap: () => ref.read(widget.provider.notifier).state = account,
                   child: ListTile(
                     contentPadding: const EdgeInsets.fromLTRB(32, 20, 20, 20),
                     leading: const SizedBox(width: 10),
@@ -40,7 +42,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> with Function
                           .bodySmall!
                           .copyWith(color: Theme.of(context).colorScheme.primary),
                     ),
-                    trailing: ref.watch(bankAccountProvider)?.id == account.id
+                    trailing: ref.watch(widget.provider)?.id == account.id
                         ? Icon(Icons.done, color: Theme.of(context).colorScheme.secondary)
                         : null,
                   ),

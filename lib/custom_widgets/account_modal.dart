@@ -2,9 +2,10 @@ import 'dart:ui';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import '../constants/functions.dart';
 import 'line_chart.dart';
 
-class AccountDialog extends StatelessWidget {
+class AccountDialog extends StatelessWidget with Functions {
   final String accountName;
   final num amount;
 
@@ -37,7 +38,7 @@ class AccountDialog extends StatelessWidget {
                         ),
                         const Padding(padding: EdgeInsets.all(12)),
                         Text(
-                          amount.toStringAsFixed(2),
+                          numToCurrency(amount),
                           style: const TextStyle(
                             color: Color(0xffffffff),
                             fontSize: 32.0,

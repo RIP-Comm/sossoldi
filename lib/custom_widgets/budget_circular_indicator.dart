@@ -2,9 +2,10 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import '../constants/functions.dart';
 
 /// This class shows account summaries in dashboard
-class BudgetCircularIndicator extends StatelessWidget {
+class BudgetCircularIndicator extends StatelessWidget with Functions {
   final String title;
   final num amount;
   final double perc;
@@ -35,7 +36,7 @@ class BudgetCircularIndicator extends StatelessWidget {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: amount.toStringAsFixed(2),
+                      text: numToCurrency(amount),
                       style: Theme.of(context)
                           .textTheme
                           .titleMedium!

@@ -3,16 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/style.dart';
 
 class DetailsTile extends ConsumerWidget {
-  const DetailsTile(
-    this.provider,
-    this.title,
-    this.icon,
-    this.func, {
-    Key? key,
-    this.value
-  }) : super(key: key);
+  const DetailsTile(this.title, this.icon, this.func, {Key? key, this.value})
+      : super(key: key);
 
-  final AutoDisposeStateProvider provider;
   final String? value;
   final String title;
   final IconData icon;
@@ -21,6 +14,7 @@ class DetailsTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Material(
+      color: Theme.of(context).colorScheme.surface,
       child: InkWell(
         onTap: func,
         child: ListTile(
@@ -30,13 +24,11 @@ class DetailsTile extends ConsumerWidget {
               shape: BoxShape.circle,
               color: Theme.of(context).colorScheme.secondary,
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Icon(
-                icon,
-                size: 24.0,
-                color: Theme.of(context).colorScheme.background,
-              ),
+            padding: const EdgeInsets.all(10.0),
+            child: Icon(
+              icon,
+              size: 24.0,
+              color: Theme.of(context).colorScheme.background,
             ),
           ),
           title: Text(

@@ -123,6 +123,8 @@ class BankAccountMethods extends SossoldiDatabase {
   Future<int> updateItem(BankAccount item) async {
     final db = await database;
 
+    // TODO need to check if the new item has mainAccount true, than find the previous main account and set it to false
+
     // You can use `rawUpdate` to write the query in SQL
     return db.update(
       bankAccountTable,

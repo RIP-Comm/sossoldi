@@ -1,6 +1,7 @@
 // Settings page.
 
 import 'package:flutter/material.dart';
+import '../constants/style.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -19,7 +20,7 @@ var settingsOptions = const [
   [
     Icons.list_alt,
     "Categories",
-    "Add or edit categories or subcategories",
+    "Add or edit categories and subcategories",
   ],
   [
     Icons.attach_money,
@@ -59,66 +60,65 @@ class _SettingsPageState extends State<SettingsPage> {
               .copyWith(color: Theme.of(context).colorScheme.primary),
         ),
       ),
-      body: Column(
-        children: [
-          const SizedBox(
-            height: 10,
-          ),
-          Expanded(
-            child: GridView.count(
-              padding: const EdgeInsets.all(12.0),
-              crossAxisCount: 2,
-              childAspectRatio: 3 / 2.5,
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
-              children: List.generate(
-                settingsOptions.length,
-                (index) {
-                  return InkWell(
-                    onTap: () {},
-                    child: Card(
-                      color: const Color(0XFFF1F5F9),
-                      child: Container(
-                        height: double.infinity,
-                        margin: const EdgeInsets.only(left: 8),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                              width: 40.0,
-                              height: 40.0,
-                              decoration: const BoxDecoration(
-                                color: Color(0xFF03478c),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                settingsOptions[index][0] as IconData,
-                                color: Colors.white,
-                              ),
-                            ),
-                            Text(settingsOptions[index][1].toString(),
-                                style: const TextStyle(
-                                    fontSize: 18, color: Color(0XFF00152D)),
-                                textAlign: TextAlign.left),
-                            Text(
-                              settingsOptions[index][2].toString(),
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w100,
-                                  fontSize: 14,
-                                  color: Color(0XFF00152D)),
-                              textAlign: TextAlign.left,
-                            ),
-                          ],
+      body: GridView.count(
+        padding: const EdgeInsets.all(16.0),
+        crossAxisCount: 2,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        childAspectRatio: 3 / 2.5,
+        mainAxisSpacing: 16,
+        crossAxisSpacing: 16,
+        children: List.generate(
+          settingsOptions.length,
+          (index) {
+            return Material(
+              color: blue7,
+              borderRadius: BorderRadius.circular(4),
+              child: InkWell(
+                onTap: () => print("click"),
+                borderRadius: BorderRadius.circular(4),
+                child: Container(
+                  height: double.infinity,
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        width: 40.0,
+                        height: 40.0,
+                        decoration: const BoxDecoration(
+                          color: blue4,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          settingsOptions[index][0] as IconData,
+                          color: Colors.white,
                         ),
                       ),
-                    ),
-                  );
-                },
+                      Text(
+                        settingsOptions[index][1].toString(),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge!
+                            .copyWith(color: Theme.of(context).colorScheme.primary),
+                        textAlign: TextAlign.left,
+                      ),
+                      Text(
+                        settingsOptions[index][2].toString(),
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(color: Theme.of(context).colorScheme.primary),
+                        textAlign: TextAlign.left,
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            ),
-          ),
-        ],
+            );
+          },
+        ),
       ),
     );
   }
