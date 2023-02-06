@@ -9,10 +9,14 @@ class TransactionFields extends BaseEntityFields {
   static String amount = 'amount';
   static String type = 'type';
   static String note = 'note';
-  static String idBankAccount = 'idBankAccount'; // FK
-  static String idBudget = 'idBudget'; // FK
   static String idCategory = 'idCategory'; // FK
-  static String idRecurringTransaction = 'idRecurringTransaction'; // FK
+  static String idBankAccount = 'idBankAccount'; // FK
+  static String idBankAccountTransfer = 'idBankAccountTransfer';
+  static String recurring = 'recurring';
+  static String recurrencyType = 'recurrencyType';
+  static String recurrencyPayDay = 'recurrencyPayDay';
+  static String recurrencyFrom = 'recurrencyFrom';
+  static String recurrencyTo = 'recurrencyTo';
   static String createdAt = BaseEntityFields.getCreatedAt;
   static String updatedAt = BaseEntityFields.getUpdatedAt;
 
@@ -22,26 +26,45 @@ class TransactionFields extends BaseEntityFields {
     amount,
     type,
     note,
-    idBankAccount,
-    idBudget,
     idCategory,
-    idRecurringTransaction,
+    idBankAccount,
+    idBankAccountTransfer,
+    recurring,
+    recurrencyType,
+    recurrencyPayDay,
+    recurrencyFrom,
+    recurrencyTo,
     BaseEntityFields.createdAt,
     BaseEntityFields.updatedAt
   ];
 }
 
 enum Type { income, expense, transfer }
+enum Recurrence { daily, weekly, monthly, bimonthly, quarterly, semester, annual }
+
+Map<Recurrence, String> recurrenceMap = {
+  Recurrence.daily: "Daily",
+  Recurrence.weekly: "Weekly",
+  Recurrence.monthly: "Monthly",
+  Recurrence.bimonthly: "Bimonthly",
+  Recurrence.quarterly: "Quarterly",
+  Recurrence.semester: "Semester",
+  Recurrence.annual: "Annual",
+};
 
 class Transaction extends BaseEntity {
   final DateTime date;
   final num amount;
   final Type type;
   final String? note;
-  final int idBankAccount;
-  final int idBudget;
   final int idCategory;
-  final int? idRecurringTransaction;
+  final int idBankAccount;
+  final int? idBankAccountTransfer;
+  final bool recurring;
+  final String? recurrencyType;
+  final int? recurrencyPayDay;
+  final DateTime? recurrencyFrom;
+  final DateTime? recurrencyTo;
 
   const Transaction(
       {int? id,
@@ -49,38 +72,51 @@ class Transaction extends BaseEntity {
       required this.amount,
       required this.type,
       this.note,
-      required this.idBankAccount,
-      required this.idBudget,
       required this.idCategory,
-      this.idRecurringTransaction,
+      required this.idBankAccount,
+      this.idBankAccountTransfer,
+      required this.recurring,
+      this.recurrencyType,
+      this.recurrencyPayDay,
+      this.recurrencyFrom,
+      this.recurrencyTo,
       DateTime? createdAt,
       DateTime? updatedAt})
       : super(id: id, createdAt: createdAt, updatedAt: updatedAt);
 
   Transaction copy(
-          {int? id,
-          DateTime? date,
-          int? amount,
-          Type? type,
-          String? note,
-          int? idBankAccount,
-          int? idBudget,
-          int? idCategory,
-          int? idRecurringTransaction,
-          DateTime? createdAt,
-          DateTime? updatedAt}) =>
-      Transaction(
-          id: id ?? this.id,
-          date: date ?? this.date,
-          amount: amount ?? this.amount,
-          type: type ?? this.type,
-          note: note ?? this.note,
-          idBankAccount: idBankAccount ?? this.idBankAccount,
-          idBudget: idBudget ?? this.idBudget,
-          idCategory: idCategory ?? this.idCategory,
-          idRecurringTransaction: idRecurringTransaction ?? this.idRecurringTransaction,
-          createdAt: createdAt ?? this.createdAt,
-          updatedAt: updatedAt ?? this.updatedAt);
+      {int? id,
+      DateTime? date,
+      int? amount,
+      Type? type,
+      String? note,
+      int? idCategory,
+      int? idBankAccount,
+      int? idBankAccountTransfer,
+      bool? recurring,
+      String? recurrencyType,
+      int? recurrencyPayDay,
+      DateTime? recurrencyFrom,
+      DateTime? recurrencyTo,
+      DateTime? createdAt,
+      DateTime? updatedAt}) =>
+        Transaction(
+            id: id ?? this.id,
+            date: date ?? this.date,
+            amount: amount ?? this.amount,
+            type: type ?? this.type,
+            note: note ?? this.note,
+            idCategory: idCategory ?? this.idCategory,
+            idBankAccount: idBankAccount ?? this.idBankAccount,
+            idBankAccountTransfer: idBankAccountTransfer ?? this.idBankAccountTransfer,
+            recurring: recurring ?? this.recurring,
+            recurrencyType: recurrencyType ?? this.recurrencyType,
+            recurrencyPayDay: recurrencyPayDay ?? this.recurrencyPayDay,
+            recurrencyFrom: recurrencyFrom ?? this.recurrencyFrom,
+            recurrencyTo: recurrencyTo ?? this.recurrencyTo,
+            createdAt: createdAt ?? this.createdAt,
+            updatedAt: updatedAt ?? this.updatedAt
+        );
 
   static Transaction fromJson(Map<String, Object?> json) => Transaction(
       id: json[BaseEntityFields.id] as int?,
@@ -88,12 +124,17 @@ class Transaction extends BaseEntity {
       amount: json[TransactionFields.amount] as num,
       type: Type.values[json[TransactionFields.type] as int],
       note: json[TransactionFields.note] as String?,
-      idBankAccount: json[TransactionFields.idBankAccount] as int,
-      idBudget: json[TransactionFields.idBudget] as int,
       idCategory: json[TransactionFields.idCategory] as int,
-      idRecurringTransaction: json[TransactionFields.idCategory] as int?,
+      idBankAccount: json[TransactionFields.idBankAccount] as int,
+      idBankAccountTransfer: json[TransactionFields.idBankAccountTransfer] as int?,
+      recurring: json[TransactionFields.recurring] == 1 ? true : false,
+      recurrencyType: json[TransactionFields.recurrencyType] as String?,
+      recurrencyPayDay: json[TransactionFields.recurrencyPayDay] as int?,
+      recurrencyFrom: json[TransactionFields.recurrencyFrom] != null ? DateTime.parse (TransactionFields.recurrencyFrom) : null,
+      recurrencyTo: json[TransactionFields.recurrencyTo] != null ? DateTime.parse (TransactionFields.recurrencyTo) : null,
       createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
-      updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String));
+      updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String)
+  );
 
   Map<String, Object?> toJson({bool update = false}) => {
         TransactionFields.id: id,
@@ -101,10 +142,14 @@ class Transaction extends BaseEntity {
         TransactionFields.amount: amount,
         TransactionFields.type: type.index,
         TransactionFields.note: note,
-        TransactionFields.idBankAccount: idBankAccount,
-        TransactionFields.idBudget: idBudget,
         TransactionFields.idCategory: idCategory,
-        TransactionFields.idRecurringTransaction: idRecurringTransaction,
+        TransactionFields.idBankAccount: idBankAccount,
+        TransactionFields.idBankAccountTransfer: idBankAccountTransfer,
+        TransactionFields.recurring: recurring,
+        TransactionFields.recurrencyType: recurrencyType,
+        TransactionFields.recurrencyPayDay: recurrencyPayDay,
+        TransactionFields.recurrencyFrom: recurrencyFrom,
+        TransactionFields.recurrencyTo: recurrencyTo,
         BaseEntityFields.createdAt:
             update ? createdAt?.toIso8601String() : DateTime.now().toIso8601String(),
         BaseEntityFields.updatedAt: DateTime.now().toIso8601String(),

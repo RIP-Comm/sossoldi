@@ -3,7 +3,6 @@ import 'accounts_provider.dart';
 import '../model/bank_account.dart';
 import '../model/transaction.dart';
 import '../model/category_transaction.dart';
-import '../model/recurring_transaction.dart';
 
 final transactionTypeList =
     Provider<List<Type>>((ref) => [Type.income, Type.expense, Type.transfer]);
@@ -50,8 +49,8 @@ class AsyncTransactionsNotifier extends AsyncNotifier<List<Transaction>> {
       type: ref.watch(transactionTypeList)[typeIndex],
       note: note,
       idBankAccount: bankAccount.id!,
-      idBudget: 0,
       idCategory: category.id!,
+      recurring: false,
     );
 
     state = await AsyncValue.guard(() async {
@@ -74,8 +73,9 @@ class AsyncTransactionsNotifier extends AsyncNotifier<List<Transaction>> {
       type: Type.transfer,
       note: note,
       idBankAccount: fromAccount.id!,
-      idBudget: 0,
+      idBankAccountTransfer: toAccount.id!,
       idCategory: 0,
+      recurring: false,
     );
 
     state = await AsyncValue.guard(() async {

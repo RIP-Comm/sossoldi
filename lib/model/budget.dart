@@ -1,4 +1,5 @@
 import '../database/sossoldi_database.dart';
+import '../model/category_transaction.dart';
 import 'base_entity.dart';
 
 const String budgetTable = 'budget';
@@ -6,54 +7,59 @@ const String budgetTable = 'budget';
 class BudgetFields extends BaseEntityFields {
   static String id = BaseEntityFields.getId;
   static String name = 'name';
+  static String idCategory = 'idCategory'; // FK
   static String amountLimit = 'amountLimit';
   static String createdAt = BaseEntityFields.getCreatedAt;
   static String updatedAt = BaseEntityFields.getUpdatedAt;
 
   static final List<String> allFields = [
     BaseEntityFields.id,
-    name,
+    idCategory,
     amountLimit,
+    name,
     BaseEntityFields.createdAt,
     BaseEntityFields.updatedAt
   ];
 }
 
 class Budget extends BaseEntity {
-  final String name;
+  final int idCategory;
   final num amountLimit;
+  final String? name;
 
   const Budget(
       {int? id,
-      required this.name,
+      required this.idCategory,
       required this.amountLimit,
+      String? this.name,
       DateTime? createdAt,
       DateTime? updatedAt})
       : super(id: id, createdAt: createdAt, updatedAt: updatedAt);
 
   Budget copy(
           {int? id,
-          String? name,
+          int? idCategory,
           num? amountLimit,
           DateTime? createdAt,
           DateTime? updatedAt}) =>
       Budget(
           id: id ?? this.id,
-          name: name ?? this.name,
+          idCategory: idCategory ?? this.idCategory,
           amountLimit: amountLimit ?? this.amountLimit,
           createdAt: createdAt ?? this.createdAt,
           updatedAt: updatedAt ?? this.updatedAt);
 
   static Budget fromJson(Map<String, Object?> json) => Budget(
       id: json[BaseEntityFields.id] as int?,
-      name: json[BudgetFields.name] as String,
+      idCategory: json[BudgetFields.idCategory] as int,
+      name: json[BudgetFields.name] as String?,
       amountLimit: json[BudgetFields.amountLimit] as num,
       createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
       updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String));
 
   Map<String, Object?> toJson() => {
         BaseEntityFields.id: id,
-        BudgetFields.name: name,
+        BudgetFields.idCategory: idCategory,
         BudgetFields.amountLimit: amountLimit,
         BaseEntityFields.createdAt: createdAt?.toIso8601String(),
         BaseEntityFields.updatedAt: updatedAt?.toIso8601String(),
@@ -87,11 +93,8 @@ class BudgetMethods extends SossoldiDatabase {
 
   Future<List<Budget>> selectAll() async {
     final database = await SossoldiDatabase.instance.database;
-
     final orderByASC = '${BudgetFields.createdAt} ASC';
-
-    final result = await database.query(budgetTable, orderBy: orderByASC);
-
+    final result = await database.rawQuery('SELECT bt.*, ct.name FROM $budgetTable as bt LEFT JOIN $categoryTransactionTable as ct ON bt.${BudgetFields.idCategory} = ct.${CategoryTransactionFields.id} ORDER BY $orderByASC');
     return result.map((json) => Budget.fromJson(json)).toList();
   }
 

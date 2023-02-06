@@ -8,6 +8,7 @@ class CategoryTransactionFields extends BaseEntityFields {
   static String name = 'name';
   static String symbol = 'symbol';
   static String note = 'note';
+  static String parent = 'parent';
   static String createdAt = BaseEntityFields.getCreatedAt;
   static String updatedAt = BaseEntityFields.getUpdatedAt;
 
@@ -16,6 +17,7 @@ class CategoryTransactionFields extends BaseEntityFields {
     name,
     symbol,
     note,
+    parent,
     BaseEntityFields.createdAt,
     BaseEntityFields.updatedAt
   ];
@@ -25,12 +27,14 @@ class CategoryTransaction extends BaseEntity {
   final String name;
   final String symbol;
   final String? note;
+  final int? parent;
 
   const CategoryTransaction(
       {int? id,
       required this.name,
       required this.symbol,
       this.note,
+      this.parent,
       DateTime? createdAt,
       DateTime? updatedAt})
       : super(id: id, createdAt: createdAt, updatedAt: updatedAt);
@@ -40,6 +44,7 @@ class CategoryTransaction extends BaseEntity {
           String? name,
           String? symbol,
           String? note,
+          int? parent,
           DateTime? createdAt,
           DateTime? updatedAt}) =>
       CategoryTransaction(
@@ -47,6 +52,7 @@ class CategoryTransaction extends BaseEntity {
           name: name ?? this.name,
           symbol: symbol ?? this.symbol,
           note: note ?? this.note,
+          parent: parent ?? this.parent,
           createdAt: createdAt ?? this.createdAt,
           updatedAt: updatedAt ?? this.updatedAt);
 
@@ -55,6 +61,7 @@ class CategoryTransaction extends BaseEntity {
       name: json[CategoryTransactionFields.name] as String,
       symbol: json[CategoryTransactionFields.symbol] as String,
       note: json[CategoryTransactionFields.note] as String,
+      parent: json[CategoryTransactionFields.parent] as int?,
       createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
       updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String));
 
@@ -63,6 +70,7 @@ class CategoryTransaction extends BaseEntity {
         CategoryTransactionFields.name: name,
         CategoryTransactionFields.symbol: symbol,
         CategoryTransactionFields.note: note,
+        CategoryTransactionFields.parent: parent,
         BaseEntityFields.createdAt:
             update ? createdAt?.toIso8601String() : DateTime.now().toIso8601String(),
         BaseEntityFields.updatedAt: DateTime.now().toIso8601String(),

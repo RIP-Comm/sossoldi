@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../model/recurring_transaction.dart';
+import '../../../model/transaction.dart';
 import '../../../constants/functions.dart';
 import '../../../providers/transactions_provider.dart';
 
