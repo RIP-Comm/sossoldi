@@ -4,11 +4,10 @@ import 'package:sqflite/sqflite.dart';
 // Models
 import '../model/bank_account.dart';
 import '../model/transaction.dart';
-import '../model/recurring_transaction.dart';
 import '../model/recurring_transaction_amount.dart';
 import '../model/category_transaction.dart';
-import '../model/category_recurring_transaction.dart';
 import '../model/budget.dart';
+import '../model/currency.dart';
 
 class SossoldiDatabase {
   static final SossoldiDatabase instance = SossoldiDatabase._init();
@@ -67,27 +66,16 @@ class SossoldiDatabase {
         `${TransactionFields.amount}` $realNotNull,
         `${TransactionFields.type}` $integerNotNull,
         `${TransactionFields.note}` $text,
-        `${TransactionFields.idBankAccount}` $integerNotNull,
-        `${TransactionFields.idBudget}` $integerNotNull,
         `${TransactionFields.idCategory}` $integerNotNull,
-        `${TransactionFields.idRecurringTransaction}` $integer,
+        `${TransactionFields.idBankAccount}` $integerNotNull,
+        `${TransactionFields.idBankAccountTransfer}` $integer,
+        `${TransactionFields.recurring}` $booleanNotNull CHECK (${TransactionFields.recurring} IN (0, 1)),
+        `${TransactionFields.recurrencyType}` $text,
+        `${TransactionFields.recurrencyPayDay}` $integer,
+        `${TransactionFields.recurrencyFrom}` $textNotNull,
+        `${TransactionFields.recurrencyTo}` $textNotNull,
         `${TransactionFields.createdAt}` $textNotNull,
         `${TransactionFields.updatedAt}` $textNotNull
-      )
-    ''');
-
-    // Recurring Transactions Table
-    await database.execute(
-        '''
-      CREATE TABLE `$recurringTransactionTable`(
-        `${RecurringTransactionFields.id}` $integerPrimaryKeyAutoincrement,
-        `${RecurringTransactionFields.from}` $textNotNull,
-        `${RecurringTransactionFields.to}` $textNotNull,
-        `${RecurringTransactionFields.payDay}` $textNotNull,
-        `${RecurringTransactionFields.recurrence}` $textNotNull,
-        `${RecurringTransactionFields.idCategoryRecurring}` $integerNotNull,
-        `${RecurringTransactionFields.createdAt}` $textNotNull,
-        `${RecurringTransactionFields.updatedAt}` $textNotNull
       )
     ''');
 
@@ -113,21 +101,9 @@ class SossoldiDatabase {
         `${CategoryTransactionFields.name}` $textNotNull,
         `${CategoryTransactionFields.symbol}` $textNotNull,
         `${CategoryTransactionFields.note}` $text,
+        `${CategoryTransactionFields.parent}` $integer,
         `${CategoryTransactionFields.createdAt}` $textNotNull,
         `${CategoryTransactionFields.updatedAt}` $textNotNull
-      )
-    ''');
-
-    // Category Recurring Transaction Table
-    await database.execute(
-        '''
-      CREATE TABLE `$categoryRecurringTransactionTable`(
-        `${CategoryRecurringTransactionFields.id}` $integerPrimaryKeyAutoincrement,
-        `${CategoryRecurringTransactionFields.name}` $textNotNull,
-        `${CategoryRecurringTransactionFields.symbol}` $textNotNull,
-        `${CategoryRecurringTransactionFields.note}` $text,
-        `${CategoryRecurringTransactionFields.createdAt}` $textNotNull,
-        `${CategoryRecurringTransactionFields.updatedAt}` $textNotNull
       )
     ''');
 
@@ -136,28 +112,57 @@ class SossoldiDatabase {
         '''
       CREATE TABLE `$budgetTable`(
         `${BudgetFields.id}` $integerPrimaryKeyAutoincrement,
-        `${BudgetFields.name}` $textNotNull,
+        `${BudgetFields.idCategory}` $integerNotNull,
         `${BudgetFields.amountLimit}` $realNotNull,
         `${BudgetFields.createdAt}` $textNotNull,
         `${BudgetFields.updatedAt}` $textNotNull
       )
     ''');
 
+    // Currencies Table
+    await database.execute(
+        '''
+      CREATE TABLE `$currencyTable`(
+        `${CurrencyFields.id}` $integerPrimaryKeyAutoincrement,
+        `${CurrencyFields.symbol}` $textNotNull,
+        `${CurrencyFields.code}` $textNotNull,
+        `${CurrencyFields.name}` $textNotNull,
+        `${CurrencyFields.mainCurrency}` $booleanNotNull CHECK (${CurrencyFields.mainCurrency} IN (0, 1))
+      )
+      ''');
+
     // TEMP Insert Demo data
     await database.execute(
         '''
       INSERT INTO bankAccount(name, value, mainAccount, createdAt, updatedAt) VALUES
-        ("DB main", 1235.10, true, '${DateTime.now()}', '${DateTime.now()}'),
-        ("DB N26", 3823.56, false, '${DateTime.now()}', '${DateTime.now()}'),
-        ("DB Fineco", 0.07, false, '${DateTime.now()}', '${DateTime.now()}');
+        ("main", 1235.10, true, '${DateTime.now()}', '${DateTime.now()}'),
+        ("N26", 3823.56, false, '${DateTime.now()}', '${DateTime.now()}'),
+        ("Fineco", 0.07, false, '${DateTime.now()}', '${DateTime.now()}');
     ''');
     await database.execute(
         '''
-      INSERT INTO categoryTransaction(name, symbol, note, createdAt, updatedAt) VALUES
-        ("Cibo", "restaurant", '', '${DateTime.now()}', '${DateTime.now()}'),
-        ("Casa", "home", '', '${DateTime.now()}', '${DateTime.now()}'),
-        ("Abbigliamento", "shopping_cart", '', '${DateTime.now()}', '${DateTime.now()}'),
-        ("Svago", "subscriptions", '', '${DateTime.now()}', '${DateTime.now()}');
+      INSERT INTO categoryTransaction(name, symbol, note, parent, createdAt, updatedAt) VALUES
+        ("Out", "restaurant", '', '', '${DateTime.now()}', '${DateTime.now()}'),
+        ("Home", "home", '', '', '${DateTime.now()}', '${DateTime.now()}'),
+        ("Furniture", "home", '', 2, '${DateTime.now()}', '${DateTime.now()}'),
+        ("Shopping", "shopping_cart", '', '', '${DateTime.now()}', '${DateTime.now()}'),
+        ("Leisure", "subscriptions", '', '', '${DateTime.now()}', '${DateTime.now()}');
+    ''');
+
+    await database.execute(
+        '''
+      INSERT INTO currency(symbol, code, name, mainCurrency) VALUES
+        ("€", "EUR", "Euro", true),
+        ("\$", "USD", "United States Dollar", false),
+        ("CHF", "CHF", "Switzerland Franc", false),
+        ("£", "GBP", "United Kingdom Pound", false);
+    ''');
+
+    await database.execute(
+        '''
+      INSERT INTO budget(idCategory, amountLimit, createdAt, updatedAt) VALUES
+        (2, 400.00, '${DateTime.now()}', '${DateTime.now()}'),
+        (3, 123.45, '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
   }
