@@ -37,7 +37,6 @@ class SossoldiDatabase {
 
   Future _createDB(Database database, int version) async {
     const integerPrimaryKeyAutoincrement = 'INTEGER PRIMARY KEY AUTOINCREMENT';
-    const booleanNotNull = 'BOOLEAN NOT NULL';
     const integerNotNull = 'INTEGER NOT NULL';
     const integer = 'INTEGER';
     const realNotNull = 'REAL NOT NULL';
@@ -51,7 +50,7 @@ class SossoldiDatabase {
         `${BankAccountFields.id}` $integerPrimaryKeyAutoincrement,
         `${BankAccountFields.name}` $textNotNull,
         `${BankAccountFields.value}` $realNotNull,
-        `${BankAccountFields.mainAccount}` $booleanNotNull CHECK (${BankAccountFields.mainAccount} IN (0, 1)),
+        `${BankAccountFields.mainAccount}` $integerNotNull CHECK (${BankAccountFields.mainAccount} IN (0, 1)),
         `${BankAccountFields.createdAt}` $textNotNull,
         `${BankAccountFields.updatedAt}` $textNotNull
       )
@@ -69,11 +68,11 @@ class SossoldiDatabase {
         `${TransactionFields.idCategory}` $integerNotNull,
         `${TransactionFields.idBankAccount}` $integerNotNull,
         `${TransactionFields.idBankAccountTransfer}` $integer,
-        `${TransactionFields.recurring}` $booleanNotNull CHECK (${TransactionFields.recurring} IN (0, 1)),
+        `${TransactionFields.recurring}` $integerNotNull CHECK (${TransactionFields.recurring} IN (0, 1)),
         `${TransactionFields.recurrencyType}` $text,
         `${TransactionFields.recurrencyPayDay}` $integer,
-        `${TransactionFields.recurrencyFrom}` $textNotNull,
-        `${TransactionFields.recurrencyTo}` $textNotNull,
+        `${TransactionFields.recurrencyFrom}` $text,
+        `${TransactionFields.recurrencyTo}` $text,
         `${TransactionFields.createdAt}` $textNotNull,
         `${TransactionFields.updatedAt}` $textNotNull
       )
@@ -127,7 +126,7 @@ class SossoldiDatabase {
         `${CurrencyFields.symbol}` $textNotNull,
         `${CurrencyFields.code}` $textNotNull,
         `${CurrencyFields.name}` $textNotNull,
-        `${CurrencyFields.mainCurrency}` $booleanNotNull CHECK (${CurrencyFields.mainCurrency} IN (0, 1))
+        `${CurrencyFields.mainCurrency}` $integerNotNull CHECK (${CurrencyFields.mainCurrency} IN (0, 1))
       )
       ''');
 
@@ -135,27 +134,27 @@ class SossoldiDatabase {
     await database.execute(
         '''
       INSERT INTO bankAccount(name, value, mainAccount, createdAt, updatedAt) VALUES
-        ("main", 1235.10, true, '${DateTime.now()}', '${DateTime.now()}'),
-        ("N26", 3823.56, false, '${DateTime.now()}', '${DateTime.now()}'),
-        ("Fineco", 0.07, false, '${DateTime.now()}', '${DateTime.now()}');
+        ("main", 1235.10, 1, '${DateTime.now()}', '${DateTime.now()}'),
+        ("N26", 3823.56, 0, '${DateTime.now()}', '${DateTime.now()}'),
+        ("Fineco", 0.07, 0, '${DateTime.now()}', '${DateTime.now()}');
     ''');
     await database.execute(
         '''
       INSERT INTO categoryTransaction(name, symbol, note, parent, createdAt, updatedAt) VALUES
-        ("Out", "restaurant", '', '', '${DateTime.now()}', '${DateTime.now()}'),
-        ("Home", "home", '', '', '${DateTime.now()}', '${DateTime.now()}'),
+        ("Out", "restaurant", '', null, '${DateTime.now()}', '${DateTime.now()}'),
+        ("Home", "home", '', null, '${DateTime.now()}', '${DateTime.now()}'),
         ("Furniture", "home", '', 2, '${DateTime.now()}', '${DateTime.now()}'),
-        ("Shopping", "shopping_cart", '', '', '${DateTime.now()}', '${DateTime.now()}'),
-        ("Leisure", "subscriptions", '', '', '${DateTime.now()}', '${DateTime.now()}');
+        ("Shopping", "shopping_cart", '', null, '${DateTime.now()}', '${DateTime.now()}'),
+        ("Leisure", "subscriptions", '', null, '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
     await database.execute(
         '''
       INSERT INTO currency(symbol, code, name, mainCurrency) VALUES
-        ("€", "EUR", "Euro", true),
-        ("\$", "USD", "United States Dollar", false),
-        ("CHF", "CHF", "Switzerland Franc", false),
-        ("£", "GBP", "United Kingdom Pound", false);
+        ("€", "EUR", "Euro", 1),
+        ("\$", "USD", "United States Dollar", 0),
+        ("CHF", "CHF", "Switzerland Franc", 0),
+        ("£", "GBP", "United Kingdom Pound", 0);
     ''');
 
     await database.execute(

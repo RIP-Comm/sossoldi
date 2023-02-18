@@ -130,8 +130,8 @@ class Transaction extends BaseEntity {
       recurring: json[TransactionFields.recurring] == 1 ? true : false,
       recurrencyType: json[TransactionFields.recurrencyType] as String?,
       recurrencyPayDay: json[TransactionFields.recurrencyPayDay] as int?,
-      recurrencyFrom: json[TransactionFields.recurrencyFrom] != null ? DateTime.parse (TransactionFields.recurrencyFrom) : null,
-      recurrencyTo: json[TransactionFields.recurrencyTo] != null ? DateTime.parse (TransactionFields.recurrencyTo) : null,
+      recurrencyFrom: json[TransactionFields.recurrencyFrom] != null ? DateTime.parse(TransactionFields.recurrencyFrom) : null,
+      recurrencyTo: json[TransactionFields.recurrencyTo] != null ? DateTime.parse(TransactionFields.recurrencyTo) : null,
       createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
       updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String)
   );

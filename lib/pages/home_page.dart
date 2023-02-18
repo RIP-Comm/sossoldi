@@ -238,7 +238,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                 ),
               ),
               SizedBox(
-                height: 85.0,
+                height: 86.0,
                 child: accountList.when(
                   data: (accounts) => ListView.builder(
                     itemCount: accounts.length + 1,

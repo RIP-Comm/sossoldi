@@ -21,7 +21,7 @@ class AccountsSum extends StatelessWidget with Functions {
   Widget build(BuildContext context) {
     return Container(
       width: 160.0,
-      margin: const EdgeInsets.fromLTRB(0, 4, 16, 4),
+      margin: const EdgeInsets.fromLTRB(0, 4, 16, 6),
       decoration: BoxDecoration(
         color: const Color(0xFFD7E2ED),
         borderRadius: BorderRadius.circular(8),

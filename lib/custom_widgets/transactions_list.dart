@@ -156,7 +156,7 @@ class TransactionRow extends ConsumerWidget with Functions {
     final categoriesList = ref.watch(categoriesProvider);
     return Container(
       decoration: BoxDecoration(
-        color: white,
+        color: Theme.of(context).colorScheme.background,
         borderRadius: BorderRadius.circular(8),
       ),
       child: ListView.builder(
@@ -173,9 +173,11 @@ class TransactionRow extends ConsumerWidget with Functions {
           return Column(
             children: [
               Material(
+                borderRadius: BorderRadius.circular(8),
+                color: Theme.of(context).colorScheme.background,
                 child: InkWell(
                   onTap: () => null,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.vertical(top: i == 0 ? const Radius.circular(8) : Radius.zero, bottom: transactions.length == i + 1 ? const Radius.circular(8) : Radius.zero),
                   child: Container(
                     padding: const EdgeInsets.fromLTRB(8, 12, 8, 12),
                     child: Row(
