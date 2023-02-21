@@ -100,7 +100,7 @@ class BankAccountMethods extends SossoldiDatabase {
       bankAccountTable,
       columns: BankAccountFields.allFields,
       where: '${BankAccountFields.mainAccount} = ?',
-      whereArgs: [true],
+      whereArgs: [1],
     );
 
     if (maps.isNotEmpty) {
