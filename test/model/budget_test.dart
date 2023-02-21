@@ -9,6 +9,7 @@ void main() {
         id: 2,
         idCategory: 2,
         amountLimit: 100,
+        active: 1,
         createdAt: DateTime.utc(2022),
         updatedAt: DateTime.utc(2022));
 
@@ -17,6 +18,7 @@ void main() {
     assert(bCopy.id == 10);
     assert(bCopy.idCategory == b.idCategory);
     assert(bCopy.amountLimit == bCopy.amountLimit);
+    assert(bCopy.active == bCopy.active);
     assert(bCopy.createdAt == b.createdAt);
     assert(bCopy.updatedAt == b.updatedAt);
   });
@@ -26,6 +28,7 @@ void main() {
       BaseEntityFields.id: 0,
       BudgetFields.idCategory: 3,
       BudgetFields.amountLimit: 100,
+      BudgetFields.active: 0,
       BaseEntityFields.createdAt: DateTime.utc(2022).toIso8601String(),
       BaseEntityFields.updatedAt: DateTime.utc(2022).toIso8601String(),
     };
@@ -35,6 +38,7 @@ void main() {
     assert(b.id == json[BaseEntityFields.id]);
     assert(b.idCategory == json[BudgetFields.idCategory]);
     assert(b.amountLimit == json[BudgetFields.amountLimit]);
+    assert(b.active == json[BudgetFields.active]);
     assert(b.createdAt?.toUtc().toIso8601String() ==
         json[BaseEntityFields.createdAt]);
     assert(b.updatedAt?.toUtc().toIso8601String() ==
@@ -46,6 +50,7 @@ void main() {
         id: 2,
         idCategory: 2,
         amountLimit: 100,
+        active: 1,
         createdAt: DateTime.utc(2022),
         updatedAt: DateTime.utc(2022));
 
@@ -54,6 +59,7 @@ void main() {
     assert(b.id == json[BaseEntityFields.id]);
     assert(b.idCategory == json[BudgetFields.idCategory]);
     assert(b.amountLimit == json[BudgetFields.amountLimit]);
+    assert(b.active == json[BudgetFields.active]);
     assert(b.createdAt?.toUtc().toIso8601String() ==
         json[BaseEntityFields.createdAt]);
     assert(b.updatedAt?.toUtc().toIso8601String() ==
