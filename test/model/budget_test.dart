@@ -9,7 +9,7 @@ void main() {
         id: 2,
         idCategory: 2,
         amountLimit: 100,
-        active: 1,
+        active: true,
         createdAt: DateTime.utc(2022),
         updatedAt: DateTime.utc(2022));
 
@@ -28,7 +28,7 @@ void main() {
       BaseEntityFields.id: 0,
       BudgetFields.idCategory: 3,
       BudgetFields.amountLimit: 100,
-      BudgetFields.active: 0,
+      BudgetFields.active: false,
       BaseEntityFields.createdAt: DateTime.utc(2022).toIso8601String(),
       BaseEntityFields.updatedAt: DateTime.utc(2022).toIso8601String(),
     };
@@ -50,7 +50,7 @@ void main() {
         id: 2,
         idCategory: 2,
         amountLimit: 100,
-        active: 1,
+        active: true,
         createdAt: DateTime.utc(2022),
         updatedAt: DateTime.utc(2022));
 
