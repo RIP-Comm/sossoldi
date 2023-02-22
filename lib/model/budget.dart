@@ -26,7 +26,7 @@ class BudgetFields extends BaseEntityFields {
 class Budget extends BaseEntity {
   final int idCategory;
   final num amountLimit;
-  final int active;
+  final bool active;
   final String? name;
 
   const Budget(
@@ -43,7 +43,7 @@ class Budget extends BaseEntity {
           {int? id,
           int? idCategory,
           num? amountLimit,
-          int? active,
+          bool? active,
           DateTime? createdAt,
           DateTime? updatedAt}) =>
       Budget(
@@ -59,7 +59,7 @@ class Budget extends BaseEntity {
       idCategory: json[BudgetFields.idCategory] as int,
       name: json[BudgetFields.name] as String?,
       amountLimit: json[BudgetFields.amountLimit] as num,
-      active: json[BudgetFields.active] as int,
+      active: json[BudgetFields.active] == 1 ? true : false,
       createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
       updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String));
 
