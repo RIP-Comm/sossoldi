@@ -108,8 +108,9 @@ class SossoldiDatabase {
       CREATE TABLE `$budgetTable`(
         `${BudgetFields.id}` $integerPrimaryKeyAutoincrement,
         `${BudgetFields.idCategory}` $integerNotNull,
+        `${BudgetFields.name}` $textNotNull,
         `${BudgetFields.amountLimit}` $realNotNull,
-        `${BudgetFields.active}` $integerNotNull,
+        `${BudgetFields.active}` $integerNotNull  CHECK (${BudgetFields.active} IN (0, 1)),
         `${BudgetFields.createdAt}` $textNotNull,
         `${BudgetFields.updatedAt}` $textNotNull
       )
@@ -151,9 +152,9 @@ class SossoldiDatabase {
     ''');
 
     await database.execute('''
-      INSERT INTO budget(idCategory, amountLimit, active, createdAt, updatedAt) VALUES
-        (2, 400.00, 1, '${DateTime.now()}', '${DateTime.now()}'),
-        (3, 123.45, 0, '${DateTime.now()}', '${DateTime.now()}');
+      INSERT INTO budget(idCategory, name, amountLimit, active, createdAt, updatedAt) VALUES
+        (2, "Car", 400.00, 1, '${DateTime.now()}', '${DateTime.now()}'),
+        (3, "Home", 123.45, 0, '${DateTime.now()}', '${DateTime.now()}');
     ''');
   }
 
