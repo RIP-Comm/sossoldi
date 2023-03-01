@@ -8,7 +8,7 @@ class RecurringTransactionAmountFields extends BaseEntityFields {
   static String from = 'from';
   static String to = 'to';
   static String amount = 'amount';
-  static String idRecurringTransaction = 'idRecurringTransaction'; // FK
+  static String idTransaction = 'idTransaction'; // FK
   static String createdAt = BaseEntityFields.getCreatedAt;
   static String updatedAt = BaseEntityFields.getUpdatedAt;
 
@@ -17,7 +17,7 @@ class RecurringTransactionAmountFields extends BaseEntityFields {
     from,
     to,
     amount,
-    idRecurringTransaction,
+    idTransaction,
     BaseEntityFields.createdAt,
     BaseEntityFields.updatedAt
   ];
@@ -27,14 +27,14 @@ class RecurringTransactionAmount extends BaseEntity {
   final DateTime from;
   final DateTime to;
   final num amount;
-  final int? idRecurringTransaction;
+  final int? idTransaction;
 
   const RecurringTransactionAmount(
       {int? id,
       required this.from,
       required this.to,
       required this.amount,
-      required this.idRecurringTransaction,
+      required this.idTransaction,
       DateTime? createdAt,
       DateTime? updatedAt})
       : super(id: id, createdAt: createdAt, updatedAt: updatedAt);
@@ -44,7 +44,7 @@ class RecurringTransactionAmount extends BaseEntity {
           DateTime? from,
           DateTime? to,
           num? amount,
-          int? idRecurringTransaction,
+          int? idTransaction,
           DateTime? createdAt,
           DateTime? updatedAt}) =>
       RecurringTransactionAmount(
@@ -52,8 +52,8 @@ class RecurringTransactionAmount extends BaseEntity {
           from: from ?? this.from,
           to: to ?? this.to,
           amount: amount ?? this.amount,
-          idRecurringTransaction:
-              idRecurringTransaction ?? this.idRecurringTransaction,
+          idTransaction:
+              idTransaction ?? this.idTransaction,
           createdAt: createdAt ?? this.createdAt,
           updatedAt: updatedAt ?? this.updatedAt);
 
@@ -65,8 +65,8 @@ class RecurringTransactionAmount extends BaseEntity {
           to: DateTime.parse(
               json[RecurringTransactionAmountFields.to] as String),
           amount: json[RecurringTransactionAmountFields.amount] as num,
-          idRecurringTransaction:
-              json[RecurringTransactionAmountFields.idRecurringTransaction]
+          idTransaction:
+              json[RecurringTransactionAmountFields.idTransaction]
                   as int,
           createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
           updatedAt:
@@ -77,8 +77,8 @@ class RecurringTransactionAmount extends BaseEntity {
         RecurringTransactionAmountFields.from: from.toIso8601String(),
         RecurringTransactionAmountFields.to: to.toIso8601String(),
         RecurringTransactionAmountFields.amount: amount,
-        RecurringTransactionAmountFields.idRecurringTransaction:
-            idRecurringTransaction,
+        RecurringTransactionAmountFields.idTransaction:
+            idTransaction,
         BaseEntityFields.createdAt: createdAt?.toIso8601String(),
         BaseEntityFields.updatedAt: updatedAt?.toIso8601String(),
       };

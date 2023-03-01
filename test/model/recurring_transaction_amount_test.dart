@@ -10,7 +10,7 @@ void main() {
         from: DateTime.utc(2022),
         to: DateTime.utc(2023),
         amount: 0,
-        idRecurringTransaction: 0,
+        idTransaction: 0,
         createdAt: DateTime.utc(2022),
         updatedAt: DateTime.utc(2022));
 
@@ -20,7 +20,7 @@ void main() {
     assert(tCopy.from == t.from);
     assert(tCopy.to == t.to);
     assert(tCopy.amount == t.amount);
-    assert(tCopy.idRecurringTransaction == t.idRecurringTransaction);
+    assert(tCopy.idTransaction == t.idTransaction);
     assert(tCopy.createdAt == t.createdAt);
     assert(tCopy.updatedAt == t.updatedAt);
   });
@@ -32,7 +32,7 @@ void main() {
           DateTime.utc(2022).toIso8601String(),
       RecurringTransactionAmountFields.to: DateTime.utc(2023).toIso8601String(),
       RecurringTransactionAmountFields.amount: 0,
-      RecurringTransactionAmountFields.idRecurringTransaction: 0,
+      RecurringTransactionAmountFields.idTransaction: 0,
       BaseEntityFields.createdAt: DateTime.utc(2022).toIso8601String(),
       BaseEntityFields.updatedAt: DateTime.utc(2022).toIso8601String(),
     };
@@ -45,8 +45,8 @@ void main() {
     assert(t.to.toUtc().toIso8601String() ==
         json[RecurringTransactionAmountFields.to]);
     assert(t.amount == json[RecurringTransactionAmountFields.amount]);
-    assert(t.idRecurringTransaction ==
-        json[RecurringTransactionAmountFields.idRecurringTransaction]);
+    assert(t.idTransaction ==
+        json[RecurringTransactionAmountFields.idTransaction]);
     assert(t.createdAt?.toUtc().toIso8601String() ==
         json[BaseEntityFields.createdAt]);
     assert(t.updatedAt?.toUtc().toIso8601String() ==
@@ -59,7 +59,7 @@ void main() {
         from: DateTime.utc(2022),
         to: DateTime.utc(2023),
         amount: 0,
-        idRecurringTransaction: 0,
+        idTransaction: 0,
         createdAt: DateTime.utc(2022),
         updatedAt: DateTime.utc(2022));
 
@@ -71,8 +71,8 @@ void main() {
     assert(t.to.toUtc().toIso8601String() ==
         json[RecurringTransactionAmountFields.to]);
     assert(t.amount == json[RecurringTransactionAmountFields.amount]);
-    assert(t.idRecurringTransaction ==
-        json[RecurringTransactionAmountFields.idRecurringTransaction]);
+    assert(t.idTransaction ==
+        json[RecurringTransactionAmountFields.idTransaction]);
     assert(t.createdAt?.toUtc().toIso8601String() ==
         json[BaseEntityFields.createdAt]);
     assert(t.updatedAt?.toUtc().toIso8601String() ==
