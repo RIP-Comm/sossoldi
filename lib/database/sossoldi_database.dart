@@ -86,7 +86,7 @@ class SossoldiDatabase {
         `${RecurringTransactionAmountFields.from}` $textNotNull,
         `${RecurringTransactionAmountFields.to}` $textNotNull,
         `${RecurringTransactionAmountFields.amount}` $realNotNull,
-        `${RecurringTransactionAmountFields.idRecurringTransaction}` $integerNotNull,
+        `${RecurringTransactionAmountFields.idTransaction}` $integerNotNull,
         `${RecurringTransactionAmountFields.createdAt}` $textNotNull,
         `${RecurringTransactionAmountFields.updatedAt}` $textNotNull
       )
