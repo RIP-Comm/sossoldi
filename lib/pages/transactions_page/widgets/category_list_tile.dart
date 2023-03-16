@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 
-import '/constants/style.dart';
+import '../../../constants/style.dart';
 
-class CategoryListTile extends StatefulWidget {
+class CategoryListTile extends StatelessWidget {
   const CategoryListTile({
     super.key,
     required this.title,
@@ -11,6 +11,8 @@ class CategoryListTile extends StatefulWidget {
     required this.percent,
     required this.color,
     required this.icon,
+    required this.notifier,
+    required this.index,
   });
 
   final String title;
@@ -19,102 +21,195 @@ class CategoryListTile extends StatefulWidget {
   final double percent;
   final Color color;
   final IconData icon;
+  final ValueNotifier<int> notifier;
+  final int index;
 
-  @override
-  State<CategoryListTile> createState() => _CategoryListTileState();
-}
-
-class _CategoryListTileState extends State<CategoryListTile> {
-  bool _isExpanded = false;
 
   /// Toogle the box to expand or collapse
   void _toogleExpand() {
-    setState(() {
-      _isExpanded = !_isExpanded;
-    });
+    if (notifier.value == index) {
+      notifier.value = -1;
+    } else {
+      notifier.value = index;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        GestureDetector(
-          onTap: _toogleExpand,
-          child: Container(
-            color: widget.color.withAlpha(90),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 8.0,
-              vertical: 16.0,
+    return ValueListenableBuilder(
+      valueListenable: notifier,
+      builder: (context, value, child) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            GestureDetector(
+              onTap: _toogleExpand,
+              child: Container(
+                color: color.withAlpha(90),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8.0,
+                  vertical: 16.0,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: color,
+                      ),
+                      child: Icon(icon),
+                    ),
+                    const SizedBox(width: 8.0),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                title,
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                              Text(
+                                "$amount €",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(
+                                        color: (amount > 0) ? green : red),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "$nTransactions transactions",
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
+                              Text(
+                                "$percent%",
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 8.0),
+                    Icon(
+                      (notifier.value == index)
+                          ? Icons.expand_more
+                          : Icons.chevron_right,
+                    ),
+                  ],
+                ),
+              ),
             ),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
+            ExpandedSection(
+              expand: notifier.value == index,
+              // TODO: add transactions under category
+              child: Container(
+                color: white,
+                height: 70.0 * nTransactions,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: List.generate(
+                    2 * nTransactions - 1,
+                    (index) {
+                      if (index % 2 == 0) {
+                        return const TransactionRow(
+                          account: "Buddybank",
+                          amount: -25.80,
+                          category: "Casa",
+                          title: "Spesa",
+                        );
+                      } else {
+                        return const Divider(
+                          height: 1,
+                          thickness: 1,
+                          indent: 15,
+                          endIndent: 15,
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ),
+            )
+          ],
+        );
+      }
+    );
+  }
+}
+
+class TransactionRow extends StatelessWidget {
+  const TransactionRow({
+    super.key,
+    required this.title,
+    required this.category,
+    required this.amount,
+    required this.account,
+  });
+
+  final String title;
+  final String category;
+  final double amount;
+  final String account;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 8.0,
+        vertical: 16.0,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          const SizedBox(width: 48.0),
+          Expanded(
+            child: Column(
               children: [
-                Container(
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: widget.color,
-                  ),
-                  child: Icon(widget.icon),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      title,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    Text(
+                      "$amount €",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge
+                          ?.copyWith(color: (amount > 0) ? green : red),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 8.0),
-                Expanded(
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            widget.title,
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          Text(
-                            "${widget.amount} €",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.copyWith(
-                                    color: (widget.amount > 0) ? green : red),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "${widget.nTransactions} transactions",
-                            style: Theme.of(context).textTheme.labelLarge,
-                          ),
-                          Text(
-                            "${widget.percent}%",
-                            style: Theme.of(context).textTheme.labelLarge,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 8.0),
-                Icon(
-                  (_isExpanded) ? Icons.expand_more : Icons.chevron_right,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      category.toUpperCase(),
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                    Text(
+                      account.toUpperCase(),
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
-        ),
-        ExpandedSection(
-          expand: _isExpanded,
-          // TODO: add transactions under category
-          child: Container(
-            width: double.infinity,
-            height: 100,
-            color: Colors.red,
-            padding: EdgeInsets.all(25.0),
-            child: Text('Work in progress...'),
-          ),
-        )
-      ],
+          const SizedBox(width: 8.0),
+        ],
+      ),
     );
   }
 }
