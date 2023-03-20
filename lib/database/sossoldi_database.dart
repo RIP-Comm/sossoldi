@@ -44,8 +44,7 @@ class SossoldiDatabase {
     const text = 'TEXT';
 
     // Bank accounts Table
-    await database.execute(
-        '''
+    await database.execute('''
       CREATE TABLE `$bankAccountTable`(
         `${BankAccountFields.id}` $integerPrimaryKeyAutoincrement,
         `${BankAccountFields.name}` $textNotNull,
@@ -57,8 +56,7 @@ class SossoldiDatabase {
       ''');
 
     // Transactions Table
-    await database.execute(
-        '''
+    await database.execute('''
       CREATE TABLE `$transactionTable`(
         `${TransactionFields.id}` $integerPrimaryKeyAutoincrement,
         `${TransactionFields.date}` $textNotNull,
@@ -79,8 +77,7 @@ class SossoldiDatabase {
     ''');
 
     // Recurring Transactions Amount Table
-    await database.execute(
-        '''
+    await database.execute('''
       CREATE TABLE `$recurringTransactionAmountTable`(
         `${RecurringTransactionAmountFields.id}` $integerPrimaryKeyAutoincrement,
         `${RecurringTransactionAmountFields.from}` $textNotNull,
@@ -93,8 +90,7 @@ class SossoldiDatabase {
     ''');
 
     // Category Transaction Table
-    await database.execute(
-        '''
+    await database.execute('''
       CREATE TABLE `$categoryTransactionTable`(
         `${CategoryTransactionFields.id}` $integerPrimaryKeyAutoincrement,
         `${CategoryTransactionFields.name}` $textNotNull,
@@ -107,20 +103,20 @@ class SossoldiDatabase {
     ''');
 
     // Budget Table
-    await database.execute(
-        '''
+    await database.execute('''
       CREATE TABLE `$budgetTable`(
         `${BudgetFields.id}` $integerPrimaryKeyAutoincrement,
         `${BudgetFields.idCategory}` $integerNotNull,
+        `${BudgetFields.name}` $textNotNull,
         `${BudgetFields.amountLimit}` $realNotNull,
+        `${BudgetFields.active}` $integerNotNull  CHECK (${BudgetFields.active} IN (0, 1)),
         `${BudgetFields.createdAt}` $textNotNull,
         `${BudgetFields.updatedAt}` $textNotNull
       )
     ''');
 
     // Currencies Table
-    await database.execute(
-        '''
+    await database.execute('''
       CREATE TABLE `$currencyTable`(
         `${CurrencyFields.id}` $integerPrimaryKeyAutoincrement,
         `${CurrencyFields.symbol}` $textNotNull,
@@ -131,15 +127,13 @@ class SossoldiDatabase {
       ''');
 
     // TEMP Insert Demo data
-    await database.execute(
-        '''
+    await database.execute('''
       INSERT INTO bankAccount(name, value, mainAccount, createdAt, updatedAt) VALUES
         ("main", 1235.10, 1, '${DateTime.now()}', '${DateTime.now()}'),
         ("N26", 3823.56, 0, '${DateTime.now()}', '${DateTime.now()}'),
         ("Fineco", 0.07, 0, '${DateTime.now()}', '${DateTime.now()}');
     ''');
-    await database.execute(
-        '''
+    await database.execute('''
       INSERT INTO categoryTransaction(name, symbol, note, parent, createdAt, updatedAt) VALUES
         ("Out", "restaurant", '', null, '${DateTime.now()}', '${DateTime.now()}'),
         ("Home", "home", '', null, '${DateTime.now()}', '${DateTime.now()}'),
@@ -148,8 +142,7 @@ class SossoldiDatabase {
         ("Leisure", "subscriptions", '', null, '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
-    await database.execute(
-        '''
+    await database.execute('''
       INSERT INTO currency(symbol, code, name, mainCurrency) VALUES
         ("€", "EUR", "Euro", 1),
         ("\$", "USD", "United States Dollar", 0),
@@ -157,13 +150,11 @@ class SossoldiDatabase {
         ("£", "GBP", "United Kingdom Pound", 0);
     ''');
 
-    await database.execute(
-        '''
-      INSERT INTO budget(idCategory, amountLimit, createdAt, updatedAt) VALUES
-        (2, 400.00, '${DateTime.now()}', '${DateTime.now()}'),
-        (3, 123.45, '${DateTime.now()}', '${DateTime.now()}');
+    await database.execute('''
+      INSERT INTO budget(idCategory, name, amountLimit, active, createdAt, updatedAt) VALUES
+        (2, "Car", 400.00, 1, '${DateTime.now()}', '${DateTime.now()}'),
+        (3, "Home", 123.45, 0, '${DateTime.now()}', '${DateTime.now()}');
     ''');
-
   }
 
   Future close() async {
