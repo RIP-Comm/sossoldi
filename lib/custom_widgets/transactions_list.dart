@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../pages/add_page/add_page.dart';
+import '../providers/transactions_provider.dart';
 import '../constants/functions.dart';
 import '../model/bank_account.dart';
 import '../model/category_transaction.dart';
@@ -58,30 +60,32 @@ class _TransactionsListState extends State<TransactionsList> with Functions {
 
   @override
   Widget build(BuildContext context) {
-    return list.isNotEmpty ? Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [defaultShadow],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: list,
-        ),
-      ),
-    ) : Container(
-      margin: const EdgeInsets.all(16),
-      width: double.infinity,
-      child: const Padding(
-        padding: EdgeInsets.all(16),
-        child: Center(
-          child: Text("No transactions available"),
-        ),
-      ),
-    );
+    return list.isNotEmpty
+        ? Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [defaultShadow],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: list,
+              ),
+            ),
+          )
+        : Container(
+            margin: const EdgeInsets.all(16),
+            width: double.infinity,
+            child: const Padding(
+              padding: EdgeInsets.all(16),
+              child: Center(
+                child: Text("No transactions available"),
+              ),
+            ),
+          );
   }
 }
 
@@ -166,18 +170,55 @@ class TransactionRow extends ConsumerWidget with Functions {
         shrinkWrap: true,
         itemBuilder: (context, i) {
           Transaction transaction = transactions[i];
-          CategoryTransaction? category =
-              categoriesList.value?.firstWhere((element) => element.id == transaction.idCategory);
+          Iterable<CategoryTransaction>? categories =
+              transaction.type != Type.transfer && categoriesList.value != null
+                  ? categoriesList.value!.where((element) => element.id == transaction.idCategory)
+                  : [];
+          CategoryTransaction? category = categories.isNotEmpty ? categories.first : null;
           BankAccount account =
               accountList.value!.firstWhere((element) => element.id == transaction.idBankAccount);
+          BankAccount? accountTransfer = transaction.type == Type.transfer
+              ? accountList.value!
+                  .firstWhere((element) => element.id == transaction.idBankAccountTransfer)
+              : null;
           return Column(
             children: [
               Material(
                 borderRadius: BorderRadius.circular(8),
                 color: Theme.of(context).colorScheme.background,
                 child: InkWell(
-                  onTap: () => null,
-                  borderRadius: BorderRadius.vertical(top: i == 0 ? const Radius.circular(8) : Radius.zero, bottom: transactions.length == i + 1 ? const Radius.circular(8) : Radius.zero),
+                  onTap: () {
+                    ref.read(selectedTransactionUpdateProvider.notifier).state = transaction;
+                    ref.read(transactionsProvider.notifier).transactionUpdateState();
+                    showModalBottomSheet(
+                      backgroundColor: Colors.transparent,
+                      context: context,
+                      isScrollControlled: true,
+                      isDismissible: true,
+                      builder: (BuildContext buildContext) {
+                        return DraggableScrollableSheet(
+                          builder: (_, controller) => Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0),
+                              color: Theme.of(context).colorScheme.background,
+                            ),
+                            child: ListView(
+                              controller: controller,
+                              shrinkWrap: true,
+                              children: const [AddPage()],
+                            ),
+                          ),
+                          initialChildSize: 0.92,
+                          minChildSize: 0.75,
+                          maxChildSize: 0.92,
+                        );
+                      },
+                    );
+                  },
+                  borderRadius: BorderRadius.vertical(
+                    top: i == 0 ? const Radius.circular(8) : Radius.zero,
+                    bottom: transactions.length == i + 1 ? const Radius.circular(8) : Radius.zero,
+                  ),
                   child: Container(
                     padding: const EdgeInsets.fromLTRB(8, 12, 8, 12),
                     child: Row(
@@ -190,7 +231,13 @@ class TransactionRow extends ConsumerWidget with Functions {
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: category?.symbol != null ? Icon(stringToIcon(category!.symbol), size: 25.0, color: white) : const SizedBox(),
+                            child: Icon(
+                              category?.symbol != null
+                                  ? stringToIcon(category!.symbol)
+                                  : Icons.swap_horiz_rounded,
+                              size: 25.0,
+                              color: white,
+                            ),
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -214,7 +261,8 @@ class TransactionRow extends ConsumerWidget with Functions {
                                     text: TextSpan(
                                       children: [
                                         TextSpan(
-                                          text: '${transaction.type == Type.expense ? "-" : ""}${numToCurrency(transaction.amount)}',
+                                          text:
+                                              '${transaction.type == Type.expense ? "-" : ""}${numToCurrency(transaction.amount)}',
                                           style: Theme.of(context)
                                               .textTheme
                                               .labelLarge!
@@ -236,23 +284,43 @@ class TransactionRow extends ConsumerWidget with Functions {
                                 ],
                               ),
                               const SizedBox(height: 12),
-                              Row(
-                                children: [
-                                  if(category?.symbol != null) Text(
-                                    category!.name,
-                                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                                          color: Theme.of(context).colorScheme.primary,
+                              transaction.type == Type.transfer
+                                  ? Row(
+                                      children: [
+                                        Text(
+                                          account.name,
+                                          style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                                                color: Theme.of(context).colorScheme.primary,
+                                              ),
                                         ),
-                                  ),
-                                  const Spacer(),
-                                  Text(
-                                    account.name,
-                                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                                          color: Theme.of(context).colorScheme.primary,
+                                        const Spacer(),
+                                        Text(
+                                          accountTransfer!.name,
+                                          style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                                                color: Theme.of(context).colorScheme.primary,
+                                              ),
                                         ),
-                                  ),
-                                ],
-                              ),
+                                      ],
+                                    )
+                                  : Row(
+                                      children: [
+                                        if (category != null)
+                                          Text(
+                                            category.name,
+                                            style:
+                                                Theme.of(context).textTheme.labelMedium!.copyWith(
+                                                      color: Theme.of(context).colorScheme.primary,
+                                                    ),
+                                          ),
+                                        const Spacer(),
+                                        Text(
+                                          account.name,
+                                          style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                                                color: Theme.of(context).colorScheme.primary,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
                               const SizedBox(height: 11),
                             ],
                           ),

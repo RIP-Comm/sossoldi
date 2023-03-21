@@ -62,7 +62,7 @@ class BankAccount extends BaseEntity {
         BaseEntityFields.id: id,
         BankAccountFields.name: name,
         BankAccountFields.value: value,
-        BankAccountFields.mainAccount: mainAccount,
+        BankAccountFields.mainAccount: mainAccount ? 1 : 0,
         BaseEntityFields.createdAt:
             update ? createdAt?.toIso8601String() : DateTime.now().toIso8601String(),
         BaseEntityFields.updatedAt: DateTime.now().toIso8601String(),

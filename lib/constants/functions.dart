@@ -4,7 +4,8 @@ import '../constants/style.dart';
 import '../model/transaction.dart';
 
 mixin Functions {
-  String numToCurrency(num value) {
+  String numToCurrency(num? value) {
+    if(value == null) return '';
     return value.toStringAsFixed(2).replaceAll(".", ",");
   }
 
