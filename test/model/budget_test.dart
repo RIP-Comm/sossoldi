@@ -59,6 +59,6 @@ void main() {
     assert(b.idCategory == json[BudgetFields.idCategory]);
     assert(b.name == json[BudgetFields.name]);
     assert(b.amountLimit == json[BudgetFields.amountLimit]);
-    assert(b.active == json[BudgetFields.active]);
+    assert((b.active ? 1 : 0) == json[BudgetFields.active]);
   });
 }

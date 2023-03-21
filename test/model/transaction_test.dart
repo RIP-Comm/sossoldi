@@ -108,7 +108,7 @@ void main() {
     assert(t.idCategory == json[TransactionFields.idCategory]);
     assert(t.idBankAccount == json[TransactionFields.idBankAccount]);
     assert(t.idBankAccountTransfer == json[TransactionFields.idBankAccountTransfer]);
-    assert(t.recurring == json[TransactionFields.recurring]);
+    assert((t.recurring ? 1 : 0) == json[TransactionFields.recurring]);
     assert(t.recurrencyType == json[TransactionFields.recurrencyType]);
     assert(t.recurrencyPayDay == json[TransactionFields.recurrencyPayDay]);
     assert(t.recurrencyFrom == json[TransactionFields.recurrencyFrom]);

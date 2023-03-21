@@ -26,14 +26,14 @@ class BudgetFields extends BaseEntityFields {
 
 class Budget extends BaseEntity {
   final int idCategory;
-  final String name;
+  final String? name;
   final num amountLimit;
   final bool active;
 
   const Budget(
       {int? id,
       required this.idCategory,
-      required this.name,
+      this.name,
       required this.amountLimit,
       required this.active,
       DateTime? createdAt,
@@ -60,7 +60,7 @@ class Budget extends BaseEntity {
   static Budget fromJson(Map<String, Object?> json) => Budget(
       id: json[BaseEntityFields.id] as int,
       idCategory: json[BudgetFields.idCategory] as int,
-      name: json[BudgetFields.name] as String,
+      name: json[BudgetFields.name] as String?,
       amountLimit: json[BudgetFields.amountLimit] as num,
       active: json[BudgetFields.active] == 1 ? true : false,
       createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
@@ -71,25 +71,24 @@ class Budget extends BaseEntity {
         BudgetFields.idCategory: idCategory,
         BudgetFields.name: name,
         BudgetFields.amountLimit: amountLimit,
-        BudgetFields.active: active,
-        BaseEntityFields.createdAt: update
-            ? createdAt?.toIso8601String()
-            : DateTime.now().toIso8601String(),
+        BudgetFields.active: active ? 1 : 0,
+        BaseEntityFields.createdAt:
+            update ? createdAt?.toIso8601String() : DateTime.now().toIso8601String(),
         BaseEntityFields.updatedAt: DateTime.now().toIso8601String(),
       };
 }
 
 class BudgetMethods extends SossoldiDatabase {
   Future<Budget> insert(Budget item) async {
-    final database = await SossoldiDatabase.instance.database;
-    final id = await database.insert(budgetTable, item.toJson());
+    final db = await database;
+    final id = await db.insert(budgetTable, item.toJson());
     return item.copy(id: id);
   }
 
   Future<Budget> selectById(int id) async {
-    final database = await SossoldiDatabase.instance.database;
+    final db = await database;
 
-    final maps = await database.query(
+    final maps = await db.query(
       budgetTable,
       columns: BudgetFields.allFields,
       where: '${BudgetFields.id} = ?',
@@ -104,9 +103,9 @@ class BudgetMethods extends SossoldiDatabase {
   }
 
   Future<List<Budget>> selectAll() async {
-    final database = await SossoldiDatabase.instance.database;
+    final db = await database;
     final orderByASC = '${BudgetFields.createdAt} ASC';
-    final result = await database.rawQuery(
+    final result = await db.rawQuery(
         'SELECT bt.*, ct.name FROM $budgetTable as bt LEFT JOIN $categoryTransactionTable as ct ON bt.${BudgetFields.idCategory} = ct.${CategoryTransactionFields.id} ORDER BY $orderByASC');
     return result.map((json) => Budget.fromJson(json)).toList();
   }
@@ -120,10 +119,10 @@ class BudgetMethods extends SossoldiDatabase {
   }
 
   Future<int> updateItem(Budget item) async {
-    final database = await SossoldiDatabase.instance.database;
+    final db = await database;
 
     // You can use `rawUpdate` to write the query in SQL
-    return database.update(
+    return db.update(
       budgetTable,
       item.toJson(update: true),
       where: '${BudgetFields.id} = ?',
@@ -132,10 +131,8 @@ class BudgetMethods extends SossoldiDatabase {
   }
 
   Future<int> deleteById(int id) async {
-    final database = await SossoldiDatabase.instance.database;
+    final db = await database;
 
-    // logical delete by setting active to 0
-    return await database
-        .rawUpdate('UPDATE Budget SET active = 0 WHERE id = ?', [id]);
+    return await db.delete(budgetTable, where: '${BudgetFields.id} = ?', whereArgs: [id]);
   }
 }
