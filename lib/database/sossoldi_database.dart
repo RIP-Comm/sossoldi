@@ -63,7 +63,7 @@ class SossoldiDatabase {
         `${TransactionFields.amount}` $realNotNull,
         `${TransactionFields.type}` $integerNotNull,
         `${TransactionFields.note}` $text,
-        `${TransactionFields.idCategory}` $integerNotNull,
+        `${TransactionFields.idCategory}` $integer,
         `${TransactionFields.idBankAccount}` $integerNotNull,
         `${TransactionFields.idBankAccountTransfer}` $integer,
         `${TransactionFields.recurring}` $integerNotNull CHECK (${TransactionFields.recurring} IN (0, 1)),

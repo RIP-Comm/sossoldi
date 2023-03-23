@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'categories_provider.dart';
 import 'accounts_provider.dart';
 import '../model/bank_account.dart';
 import '../model/transaction.dart';
@@ -7,21 +8,22 @@ import '../model/category_transaction.dart';
 final transactionTypeList =
     Provider<List<Type>>((ref) => [Type.income, Type.expense, Type.transfer]);
 
-final transactionTypesProvider =
-    StateProvider.autoDispose<List<bool>>((ref) => [false, true, false]);
-final toAccountProvider = StateProvider.autoDispose<BankAccount?>((ref) => null);
+final transactionTypesProvider = StateProvider<List<bool>>((ref) => [false, true, false]);
+final bankAccountTransferProvider = StateProvider<BankAccount?>((ref) => null);
 // Used as from account in transfer transactions
-final bankAccountProvider =
-    StateProvider.autoDispose<BankAccount?>((ref) => ref.read(mainAccountProvider));
-final dateProvider = StateProvider.autoDispose<DateTime>((ref) => DateTime.now());
-final categoryProvider = StateProvider.autoDispose<CategoryTransaction?>((ref) => null);
-final amountProvider = StateProvider.autoDispose<num>((ref) => 0);
-final noteProvider = StateProvider.autoDispose<String?>((ref) => null);
+final bankAccountProvider = StateProvider<BankAccount?>((ref) => ref.read(mainAccountProvider));
+final dateProvider = StateProvider<DateTime>((ref) => DateTime.now());
+final categoryProvider = StateProvider<CategoryTransaction?>((ref) => null);
+final amountProvider = StateProvider<num>((ref) => 0);
+final noteProvider = StateProvider<String?>((ref) => null);
 
 //Recurring Payment
-final selectedRecurringPayProvider = StateProvider.autoDispose<bool>((ref) => false);
-final intervalProvider = StateProvider.autoDispose<Recurrence>((ref) => Recurrence.monthly);
-// final repetitionProvider = StateProvider.autoDispose<dynamic>((ref) => null);
+final selectedRecurringPayProvider = StateProvider<bool>((ref) => false);
+final intervalProvider = StateProvider<Recurrence>((ref) => Recurrence.monthly);
+final repetitionProvider = StateProvider<dynamic>((ref) => null);
+
+// Set when a transaction is selected for update
+final selectedTransactionUpdateProvider = StateProvider<Transaction?>((ref) => null);
 
 class AsyncTransactionsNotifier extends AsyncNotifier<List<Transaction>> {
   @override
@@ -35,13 +37,16 @@ class AsyncTransactionsNotifier extends AsyncNotifier<List<Transaction>> {
   }
 
   Future<void> addTransaction() async {
+    state = const AsyncValue.loading();
+
     final typeIndex = ref.read(transactionTypesProvider).indexOf(true);
     final date = ref.read(dateProvider);
     final amount = ref.read(amountProvider);
     final bankAccount = ref.read(bankAccountProvider)!;
-    final category = ref.read(categoryProvider)!;
+    final bankAccountTransfer = ref.read(bankAccountTransferProvider);
+    final category = ref.read(categoryProvider);
     final note = ref.read(noteProvider);
-    state = const AsyncValue.loading();
+    final recurring = ref.read(selectedRecurringPayProvider);
 
     Transaction transaction = Transaction(
       date: date,
@@ -49,8 +54,9 @@ class AsyncTransactionsNotifier extends AsyncNotifier<List<Transaction>> {
       type: ref.watch(transactionTypeList)[typeIndex],
       note: note,
       idBankAccount: bankAccount.id!,
-      idCategory: category.id!,
-      recurring: false,
+      idBankAccountTransfer: bankAccountTransfer?.id,
+      idCategory: category?.id,
+      recurring: recurring,
     );
 
     state = await AsyncValue.guard(() async {
@@ -59,32 +65,27 @@ class AsyncTransactionsNotifier extends AsyncNotifier<List<Transaction>> {
     });
   }
 
-  Future<void> addTransfer() async {
+  Future<void> updateTransaction() async {
+    final typeIndex = ref.read(transactionTypesProvider).indexOf(true);
     final date = ref.read(dateProvider);
     final amount = ref.read(amountProvider);
-    final fromAccount = ref.read(bankAccountProvider)!;
-    final toAccount = ref.read(toAccountProvider)!;
+    final bankAccount = ref.read(bankAccountProvider)!;
+    final bankAccountTransfer = ref.read(bankAccountTransferProvider);
+    final category = ref.read(categoryProvider);
     final note = ref.read(noteProvider);
-    state = const AsyncValue.loading();
+    final recurring = ref.read(selectedRecurringPayProvider);
 
-    Transaction transaction = Transaction(
-      date: date,
-      amount: amount,
-      type: Type.transfer,
-      note: note,
-      idBankAccount: fromAccount.id!,
-      idBankAccountTransfer: toAccount.id!,
-      idCategory: 0,
-      recurring: false,
-    );
+    Transaction transaction = ref.read(selectedTransactionUpdateProvider)!.copy(
+          date: date,
+          amount: amount,
+          type: ref.watch(transactionTypeList)[typeIndex],
+          note: note,
+          idBankAccount: bankAccount.id!,
+          idBankAccountTransfer: bankAccountTransfer?.id,
+          idCategory: category?.id,
+          recurring: recurring,
+        );
 
-    state = await AsyncValue.guard(() async {
-      await TransactionMethods().insert(transaction);
-      return _getTransactions();
-    });
-  }
-
-  Future<void> updateTransaction(Transaction transaction) async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       await TransactionMethods().updateItem(transaction);
@@ -92,7 +93,35 @@ class AsyncTransactionsNotifier extends AsyncNotifier<List<Transaction>> {
     });
   }
 
-  Future<void> removeTransaction(int transactionId) async {
+  Future<void> transactionUpdateState() async {
+    if (ref.read(selectedTransactionUpdateProvider) == null) return;
+    Transaction transaction = ref.read(selectedTransactionUpdateProvider)!;
+    final accountList = ref.watch(accountsProvider);
+    ref.read(categoryProvider.notifier).state = transaction.type != Type.transfer
+        ? ref
+            .watch(categoriesProvider)
+            .value!
+            .where((element) => element.id == transaction.idCategory)
+            .first
+        : null;
+    ref.read(bankAccountProvider.notifier).state =
+        accountList.value!.firstWhere((element) => element.id == transaction.idBankAccount);
+    ref.read(bankAccountTransferProvider.notifier).state = transaction.type == Type.transfer
+        ? accountList.value!
+            .firstWhere((element) => element.id == transaction.idBankAccountTransfer)
+        : null;
+    ref.read(transactionTypesProvider.notifier).state = [
+      transaction.type == Type.income,
+      transaction.type == Type.expense,
+      transaction.type == Type.transfer,
+    ];
+    ref.read(dateProvider.notifier).state = transaction.date;
+    ref.read(amountProvider.notifier).state = transaction.amount;
+    ref.read(noteProvider.notifier).state = transaction.note;
+    ref.read(selectedRecurringPayProvider.notifier).state = transaction.recurring;
+  }
+
+  Future<void> deleteTransaction(int transactionId) async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       await TransactionMethods().deleteById(transactionId);
@@ -102,10 +131,10 @@ class AsyncTransactionsNotifier extends AsyncNotifier<List<Transaction>> {
 
   void switchAccount() {
     final fromAccount = ref.read(bankAccountProvider);
-    final toAccount = ref.read(toAccountProvider);
+    final toAccount = ref.read(bankAccountTransferProvider);
     if (fromAccount != null && toAccount != null) {
       ref.read(bankAccountProvider.notifier).state = toAccount;
-      ref.read(toAccountProvider.notifier).state = fromAccount;
+      ref.read(bankAccountTransferProvider.notifier).state = fromAccount;
     }
   }
 }

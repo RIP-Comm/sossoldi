@@ -86,16 +86,16 @@ class RecurringTransactionAmount extends BaseEntity {
 
 class RecurringTransactionMethods extends SossoldiDatabase {
   Future<RecurringTransactionAmount> insert(RecurringTransactionAmount item) async {
-    final database = await SossoldiDatabase.instance.database;
-    final id = await database.insert(recurringTransactionAmountTable, item.toJson());
+    final db = await database;
+    final id = await db.insert(recurringTransactionAmountTable, item.toJson());
     return item.copy(id: id);
   }
 
 
   Future<RecurringTransactionAmount> selectById(int id) async {
-    final database = await SossoldiDatabase.instance.database;
+    final db = await database;
 
-    final maps = await database.query(
+    final maps = await db.query(
       recurringTransactionAmountTable,
       columns: RecurringTransactionAmountFields.allFields,
       where: '${RecurringTransactionAmountFields.id} = ?',
@@ -110,20 +110,20 @@ class RecurringTransactionMethods extends SossoldiDatabase {
   }
 
   Future<List<RecurringTransactionAmount>> selectAll() async {
-    final database = await SossoldiDatabase.instance.database;
+    final db = await database;
 
     final orderByASC = '${RecurringTransactionAmountFields.createdAt} ASC';
 
-    final result = await database.query(recurringTransactionAmountTable, orderBy: orderByASC);
+    final result = await db.query(recurringTransactionAmountTable, orderBy: orderByASC);
 
     return result.map((json) => RecurringTransactionAmount.fromJson(json)).toList();
   }
 
   Future<int> updateItem(RecurringTransactionAmount item) async {
-    final database = await SossoldiDatabase.instance.database;
+    final db = await database;
 
     // You can use `rawUpdate` to write the query in SQL
-    return database.update(
+    return db.update(
       recurringTransactionAmountTable,
       item.toJson(),
       where:
@@ -133,9 +133,9 @@ class RecurringTransactionMethods extends SossoldiDatabase {
   }
 
   Future<int> deleteById(int id) async {
-    final database = await SossoldiDatabase.instance.database;
+    final db = await database;
 
-    return await database.delete(recurringTransactionAmountTable,
+    return await db.delete(recurringTransactionAmountTable,
         where:
         '${RecurringTransactionAmountFields.id} = ?',
         whereArgs: [id]);

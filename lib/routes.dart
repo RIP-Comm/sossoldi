@@ -24,7 +24,7 @@ Route<dynamic> makeRoute(RouteSettings settings) {
       return _cupertinoPageRoute(settings.name, const CategorySelector());
     // Test route
     case '/accountselect':
-      return _cupertinoPageRoute(settings.name, AccountSelector(settings.arguments as AutoDisposeStateProvider));
+      return _cupertinoPageRoute(settings.name, AccountSelector(settings.arguments as StateProvider));
     case '/recurrenceselect':
       return _cupertinoPageRoute(settings.name, const RecurrenceSelector());
     case '/planning':

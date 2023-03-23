@@ -55,6 +55,6 @@ void main() {
     assert(b.id == json[BaseEntityFields.id]);
     assert(b.name == json[BankAccountFields.name]);
     assert(b.value == json[BankAccountFields.value]);
-    assert(b.mainAccount == json[BankAccountFields.mainAccount]);
+    assert((b.mainAccount ? 1 : 0) == json[BankAccountFields.mainAccount]);
   });
 }

@@ -18,13 +18,40 @@ class AddPage extends ConsumerStatefulWidget {
 
 class _AddPageState extends ConsumerState<AddPage> with Functions {
   final TextEditingController amountController = TextEditingController();
+  final TextEditingController noteController = TextEditingController();
 
   final List<String> _titleList = ['Income', 'Expense', 'Transfer'];
+
+  @override
+  void initState() {
+    amountController.text = numToCurrency(ref.read(selectedTransactionUpdateProvider)?.amount);
+    noteController.text = ref.read(selectedTransactionUpdateProvider)?.note ?? '';
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    amountController.dispose();
+    noteController.dispose();
+    ref.invalidate(selectedTransactionUpdateProvider);
+    ref.invalidate(transactionTypesProvider);
+    ref.invalidate(bankAccountProvider);
+    ref.invalidate(dateProvider);
+    ref.invalidate(categoryProvider);
+    ref.invalidate(amountProvider);
+    ref.invalidate(noteProvider);
+    ref.invalidate(selectedRecurringPayProvider);
+    ref.invalidate(intervalProvider);
+    ref.invalidate(repetitionProvider);
+    ref.invalidate(transactionTypesProvider);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final trsncTypeList = ref.watch(transactionTypeList);
     final trnscTypes = ref.watch(transactionTypesProvider);
+    final selectedTransaction = ref.watch(selectedTransactionUpdateProvider);
     final selectedType = trsncTypeList[trnscTypes.indexOf(true)];
     final selectedRecurringPay = ref.watch(selectedRecurringPayProvider);
     // I listen servono a evitare che il provider faccia il dispose subito dopo essere stato aggiornato
@@ -66,7 +93,26 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                           ),
                         ),
                       ),
-                      const Expanded(flex: 1, child: SizedBox()),
+                      Expanded(
+                        flex: 1,
+                        child: selectedTransaction != null
+                            ? Container(
+                                alignment: Alignment.centerRight,
+                                child: IconButton(
+                                  icon: Icon(
+                                    Icons.delete_outline,
+                                    color: Theme.of(context).colorScheme.error,
+                                  ),
+                                  onPressed: () async {
+                                    ref
+                                        .read(transactionsProvider.notifier)
+                                        .deleteTransaction(selectedTransaction.id!)
+                                        .whenComplete(() => Navigator.of(context).pop());
+                                  },
+                                ),
+                              )
+                            : const SizedBox(),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 34),
@@ -200,8 +246,10 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                                   const SizedBox(height: 2),
                                   Material(
                                     child: InkWell(
-                                      onTap: () => Navigator.of(context).pushNamed('/accountselect',
-                                          arguments: toAccountProvider),
+                                      onTap: () => Navigator.of(context).pushNamed(
+                                        '/accountselect',
+                                        arguments: bankAccountTransferProvider,
+                                      ),
                                       child: Container(
                                         decoration: BoxDecoration(
                                           color: white,
@@ -214,7 +262,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                                             const Icon(Icons.sort, color: grey2),
                                             const Spacer(),
                                             Text(
-                                              ref.watch(toAccountProvider)?.name ??
+                                              ref.watch(bankAccountTransferProvider)?.name ??
                                                   "Select account",
                                               style:
                                                   Theme.of(context).textTheme.bodySmall!.copyWith(
@@ -243,7 +291,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                         prefixText: ' ', // set to center the amount
                         suffixText: '€',
                         suffixStyle: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                              color: typeToColor(trsncTypeList[trnscTypes.indexOf(true)]),
+                              color: typeToColor(selectedType),
                             ),
                       ),
                       keyboardType: TextInputType.number,
@@ -254,7 +302,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                       textAlign: TextAlign.center,
                       cursorColor: grey1,
                       style: TextStyle(
-                        color: typeToColor(trsncTypeList[trnscTypes.indexOf(true)]),
+                        color: typeToColor(selectedType),
                         fontSize: 58,
                         fontWeight: FontWeight.bold,
                       ),
@@ -265,22 +313,16 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                 ],
               ),
             ),
-            Column(
-              children: [
-                const SizedBox(height: 32),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.only(left: 16),
-                  child: Text(
-                    "DETAILS",
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelLarge!
-                        .copyWith(color: Theme.of(context).colorScheme.primary),
-                  ),
-                ),
-                const SizedBox(height: 8),
-              ],
+            Container(
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.only(left: 16, top: 32, bottom: 8),
+              child: Text(
+                "DETAILS",
+                style: Theme.of(context)
+                    .textTheme
+                    .labelLarge!
+                    .copyWith(color: Theme.of(context).colorScheme.primary),
+              ),
             ),
             Container(
               color: Theme.of(context).colorScheme.surface,
@@ -288,7 +330,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
-                  if (trsncTypeList[trnscTypes.indexOf(true)] != Type.transfer)
+                  if (selectedType != Type.transfer)
                     DetailsTile(
                       "Account",
                       Icons.account_balance_wallet,
@@ -299,9 +341,9 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                       },
                       value: ref.watch(bankAccountProvider)?.name,
                     ),
-                  if (trsncTypeList[trnscTypes.indexOf(true)] != Type.transfer)
+                  if (selectedType != Type.transfer)
                     const Divider(height: 1, color: grey1),
-                  if (trsncTypeList[trnscTypes.indexOf(true)] != Type.transfer)
+                  if (selectedType != Type.transfer)
                     DetailsTile(
                       "Category",
                       Icons.list_alt,
@@ -311,7 +353,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                       },
                       value: ref.watch(categoryProvider)?.name,
                     ),
-                  if (trsncTypeList[trnscTypes.indexOf(true)] != Type.transfer)
+                  if (selectedType != Type.transfer)
                     const Divider(height: 1, color: grey1),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 16, 32, 16),
@@ -342,6 +384,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                         const SizedBox(width: 16),
                         Expanded(
                           child: TextField(
+                            controller: noteController,
                             decoration: const InputDecoration(border: InputBorder.none),
                             textAlign: TextAlign.end,
                             style: Theme.of(context).textTheme.bodySmall!.copyWith(color: grey1),
@@ -377,9 +420,9 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                     ),
                     value: dateToString(ref.watch(dateProvider)),
                   ),
-                  if (trsncTypeList[trnscTypes.indexOf(true)] == Type.expense)
+                  if (selectedType == Type.expense)
                     const Divider(height: 1, color: grey1),
-                  if (trsncTypeList[trnscTypes.indexOf(true)] == Type.expense)
+                  if (selectedType == Type.expense)
                     ListTile(
                       contentPadding: const EdgeInsets.all(16),
                       leading: Container(
@@ -404,9 +447,10 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                             .copyWith(color: Theme.of(context).colorScheme.primary),
                       ),
                       trailing: CupertinoSwitch(
-                          value: selectedRecurringPay,
-                          onChanged: (select) =>
-                              ref.read(selectedRecurringPayProvider.notifier).state = select),
+                        value: selectedRecurringPay,
+                        onChanged: (select) =>
+                            ref.read(selectedRecurringPayProvider.notifier).state = select,
+                      ),
                     ),
                   if (selectedRecurringPay && selectedType == Type.expense)
                     Padding(
@@ -437,8 +481,10 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                                   .copyWith(color: Theme.of(context).colorScheme.secondary),
                             ),
                             const SizedBox(width: 6),
-                            Icon(Icons.chevron_right,
-                                color: Theme.of(context).colorScheme.secondary),
+                            Icon(
+                              Icons.chevron_right,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
                           ],
                         ),
                       ),
@@ -506,12 +552,19 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: TextButton(
-                    onPressed: () {
-                      if (ref.read(amountProvider) != 0) {
-                        ref
-                            .read(transactionsProvider.notifier)
-                            .addTransaction()
-                            .whenComplete(() => Navigator.of(context).pop());
+                    onPressed: () async {
+                      if (ref.read(amountProvider) != 0 && (selectedType == Type.transfer || ref.read(categoryProvider) != null)) {
+                        if (selectedTransaction != null) {
+                          ref
+                              .read(transactionsProvider.notifier)
+                              .updateTransaction()
+                              .whenComplete(() => Navigator.of(context).pop());
+                        } else {
+                          ref
+                              .read(transactionsProvider.notifier)
+                              .addTransaction()
+                              .whenComplete(() => Navigator.of(context).pop());
+                        }
                       }
                     },
                     style: TextButton.styleFrom(
@@ -519,7 +572,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     ),
                     child: Text(
-                      "ADD TRANSACTION",
+                      selectedTransaction != null ? "UPDATE TRANSACTION" : "ADD TRANSACTION",
                       style: Theme.of(context)
                           .textTheme
                           .bodyLarge!
