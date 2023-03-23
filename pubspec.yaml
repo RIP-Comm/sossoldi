@@ -57,6 +57,7 @@ dependencies:
 
   percent_indicator: ^4.2.2
   circular_menu: ^2.0.1
+  flutter_native_splash: ^2.0.4
 
 dev_dependencies:
   flutter_test:
@@ -87,10 +88,10 @@ flutter:
     - family: SF Pro Text
       fonts:
         - asset: fonts/SFProText.ttf
+
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -117,3 +118,7 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_native_splash:
+  color: "#ffffff"
+  image: assets/splash.png
