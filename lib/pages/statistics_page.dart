@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../constants/style.dart';
 import '../custom_widgets/line_chart.dart';
 import 'package:fl_chart/fl_chart.dart';
+import '../custom_widgets/bar_chart/bar_chart.dart';
 
 class StatsPage extends StatefulWidget {
   @override
@@ -11,6 +12,15 @@ class StatsPage extends StatefulWidget {
 }
 
 class _StatsPageState extends State<StatsPage> {
+  List<double> accounts = [
+    1032.5,
+    756,
+    344,
+    322,
+    0.4
+  ];
+
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -96,6 +106,17 @@ class _StatsPageState extends State<StatsPage> {
               minY: -5.0,
               maxDays: 12.0,
             ),
+            Card(
+              child: SizedBox(
+                height: 300,
+                child:RotatedBox(
+                  quarterTurns: 1, 
+                  child: BarChartWidget(
+                    accounts: accounts,
+                  )
+                )
+              ),
+            )
           ],
         ),
       ],
