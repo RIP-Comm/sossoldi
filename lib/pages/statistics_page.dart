@@ -1,28 +1,28 @@
 // Satistics page.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../constants/functions.dart';
 import '../constants/style.dart';
+import '../custom_widgets/accounts_sum.dart';
 import '../custom_widgets/line_chart.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../custom_widgets/bar_chart/bar_chart.dart';
+import '../model/bank_account.dart';
+import '../providers/accounts_provider.dart';
 
-class StatsPage extends StatefulWidget {
+class StatsPage extends ConsumerStatefulWidget {
+  const StatsPage({super.key});
+
   @override
-  _StatsPageState createState() => _StatsPageState();
+  ConsumerState<StatsPage> createState() => _StatsPageState();
 }
 
-class _StatsPageState extends State<StatsPage> {
-  List<double> accounts = [
-    1032.5,
-    756,
-    344,
-    322,
-    0.4
-  ];
-
+class _StatsPageState extends ConsumerState<StatsPage> with Functions {
 
   @override
   Widget build(BuildContext context) {
+    final accountList = ref.watch(accountsProvider);
     return ListView(
       children: [
         Column(
@@ -108,13 +108,34 @@ class _StatsPageState extends State<StatsPage> {
             ),
             Card(
               child: SizedBox(
-                height: 300,
-                child:RotatedBox(
-                  quarterTurns: 1, 
-                  child: BarChartWidget(
-                    accounts: accounts,
-                  )
-                )
+                height: 86.0,
+                child: accountList.when(
+                  data: (accounts) => ListView.builder(
+                    itemCount: accounts.length + 1,
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                    physics: const BouncingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, i) {
+                      if (i == accounts.length) {
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 4, 0, 16),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              boxShadow: [defaultShadow],
+                            ),
+                          ),
+                        );
+                      } else {
+                        BankAccount account = accounts[i];
+                        return AccountsSum(accountName: account.name, amount: account.value);
+                      }
+                    },
+                  ),
+                  loading: () => const SizedBox(),
+                  error: (err, stack) => Text('Error: $err'),
+                ),
               ),
             )
           ],

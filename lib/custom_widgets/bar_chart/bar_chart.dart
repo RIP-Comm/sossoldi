@@ -59,7 +59,7 @@ class BarChartWidget extends StatelessWidget {
               barRods: [
                 BarChartRodData(
                   toY: data.y,
-                  width: 20,
+                  width: 2,
                   borderRadius: BorderRadius.circular(5),
                   backDrawRodData: BackgroundBarChartRodData(
                     show: true,
