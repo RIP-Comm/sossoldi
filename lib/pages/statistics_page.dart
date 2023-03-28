@@ -111,11 +111,11 @@ class _StatsPageState extends ConsumerState<StatsPage> with Functions {
                 height: 86.0,
                 child: accountList.when(
                   data: (accounts) => ListView.builder(
-                    itemCount: accounts.length + 1,
+                    itemCount: accounts.length,
                     shrinkWrap: true,
                     padding: const EdgeInsets.only(left: 16.0, right: 16.0),
                     physics: const BouncingScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
+                    scrollDirection: Axis.vertical,
                     itemBuilder: (context, i) {
                       if (i == accounts.length) {
                         return Padding(
@@ -129,7 +129,20 @@ class _StatsPageState extends ConsumerState<StatsPage> with Functions {
                         );
                       } else {
                         BankAccount account = accounts[i];
-                        return AccountsSum(accountName: account.name, amount: account.value);
+                        return SizedBox(
+                          height: 20.0,
+                          child: Row(
+                            children: [
+                              Text(account.name),
+                              Expanded(
+                                child: Text(
+                                  account.value.toString(),
+                                  textAlign: TextAlign.right,
+                                ),
+                              ),
+                            ],
+                          )
+                        );
                       }
                     },
                   ),
