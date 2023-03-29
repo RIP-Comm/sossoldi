@@ -7,6 +7,8 @@ import '../../../constants/style.dart';
 import 'categories_pie_chart.dart';
 import 'category_list_tile.dart';
 
+enum Type { income, expense }
+
 class CategoriesTab extends ConsumerStatefulWidget {
   const CategoriesTab({
     Key? key,
@@ -17,7 +19,8 @@ class CategoriesTab extends ConsumerStatefulWidget {
 }
 
 class _CategoriesTabState extends ConsumerState<CategoriesTab> with Functions {
-  final notifier = ValueNotifier<int>(-1);
+  final selectedCategory = ValueNotifier<int>(-1);
+  final transactionType = ValueNotifier<int>(Type.income.index);
 
   @override
   Widget build(BuildContext context) {
@@ -29,42 +32,17 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> with Functions {
       color: grey3,
       child: ListView(
         children: [
-          // TODO: extract to a separate widget
-          // switch between income and expenses
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: blue3,
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 4.0,
-                      horizontal: 12.0,
-                    ),
-                    child: Text(
-                      "Income",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge
-                          ?.copyWith(color: white),
-                    ),
-                  ),
-                ),
-                Container(child: Text("Expenses")),
-              ],
-            ),
+          TransactionTypeButton(
+            width: MediaQuery.of(context).size.width,
+            notifier: transactionType,
           ),
+          const SizedBox(height: 16),
           CategoriesPieChart(
-            notifier: notifier,
+            notifier: selectedCategory,
             // will it rebuild the child on change?
             categories: categoriesList.value ?? [],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 16),
           SizedBox(
             height: 400,
             child: ListView.builder(
@@ -78,12 +56,106 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> with Functions {
                 percent: 70,
                 color: const Color(0xFFEBC35F),
                 icon: Icons.home_rounded,
-                notifier: notifier,
+                notifier: selectedCategory,
                 index: index,
               ),
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Switch between income and expenses
+class TransactionTypeButton extends StatelessWidget {
+  const TransactionTypeButton({
+    super.key,
+    required this.width,
+    required this.notifier,
+  });
+
+  final ValueNotifier<int> notifier;
+  final double width;
+  final double height = 28.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(
+          Radius.circular(5.0),
+        ),
+      ),
+      child: ValueListenableBuilder(
+        valueListenable: notifier,
+        builder: (context, value, child) {
+          return Stack(
+            children: [
+              AnimatedAlign(
+                alignment: Alignment(
+                  (notifier.value == Type.income.index) ? -1 : 1,
+                  0,
+                ),
+                curve: Curves.decelerate,
+                duration: const Duration(milliseconds: 180),
+                child: Container(
+                  width: width * 0.5,
+                  height: height,
+                  decoration: const BoxDecoration(
+                    color: blue5,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(5.0),
+                    ),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  notifier.value = Type.income.index;
+                },
+                child: Align(
+                  alignment: const Alignment(-1, 0),
+                  child: Container(
+                    width: width * 0.5,
+                    color: Colors.transparent,
+                    alignment: Alignment.center,
+                    child: Text(
+                      "Income",
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: (notifier.value == Type.income.index)
+                              ? white
+                              : blue2),
+                    ),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  notifier.value = Type.expense.index;
+                },
+                child: Align(
+                  alignment: const Alignment(1, 0),
+                  child: Container(
+                    width: width * 0.5,
+                    color: Colors.transparent,
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Expenses',
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: (notifier.value == Type.expense.index)
+                              ? white
+                              : blue2),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

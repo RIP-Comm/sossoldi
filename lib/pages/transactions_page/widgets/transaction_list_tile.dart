@@ -23,10 +23,10 @@ class TransactionListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: color.withAlpha(90),
+      color: Colors.white,
       padding: const EdgeInsets.symmetric(
         horizontal: 8.0,
-        vertical: 16.0,
+        vertical: 12.0,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.max,
