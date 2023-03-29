@@ -145,6 +145,11 @@ class _StatsPageState extends ConsumerState<StatsPage> with Functions {
                           );
                         } else {
                           BankAccount account = accounts[i];
+                          double max = 0;
+                          for(var i = 0; i < accounts.length; i++)
+                          {
+                            if (max <= accounts[i].value){max = accounts[i].value.toDouble();}
+                          }
                           return SizedBox(
                             height: 50.0,
                             child: Column(
@@ -179,7 +184,7 @@ class _StatsPageState extends ConsumerState<StatsPage> with Functions {
                                   child: Row(                                    
                                     children: [
                                       Container(
-                                        width: MediaQuery.of(context).size.width * 0.9 * (account.value.toDouble()/3823.56),
+                                        width: MediaQuery.of(context).size.width * 0.9 * (account.value.toDouble()/max),
                                         decoration: const BoxDecoration(
                                           borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(4.0),
@@ -189,7 +194,7 @@ class _StatsPageState extends ConsumerState<StatsPage> with Functions {
                                         ),
                                       ),
                                       Container(
-                                        width: MediaQuery.of(context).size.width * 0.9 *(1 - (account.value.toDouble()/3823.56)),
+                                        width: MediaQuery.of(context).size.width * 0.9 *(1 - (account.value.toDouble()/max)),
                                         decoration: const BoxDecoration(
                                           borderRadius: BorderRadius.only(
                                             topRight: Radius.circular(4.0),
