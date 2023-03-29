@@ -179,7 +179,7 @@ class _StatsPageState extends ConsumerState<StatsPage> with Functions {
                                   child: Row(                                    
                                     children: [
                                       Container(
-                                        width: 350*(account.value.toDouble()/3823.56),
+                                        width: MediaQuery.of(context).size.width * 0.9 * (account.value.toDouble()/3823.56),
                                         decoration: const BoxDecoration(
                                           borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(4.0),
@@ -189,7 +189,7 @@ class _StatsPageState extends ConsumerState<StatsPage> with Functions {
                                         ),
                                       ),
                                       Container(
-                                        width: 350-350*(account.value.toDouble()/3823.56),
+                                        width: MediaQuery.of(context).size.width * 0.9 *(1 - (account.value.toDouble()/3823.56)),
                                         decoration: const BoxDecoration(
                                           borderRadius: BorderRadius.only(
                                             topRight: Radius.circular(4.0),
