@@ -16,10 +16,12 @@ import '../constants/style.dart';
 /// This class shows account summaries in dashboard
 class TransactionsList extends StatefulWidget {
   final List<Transaction> transactions;
+  final id;
 
   const TransactionsList({
     super.key,
     required this.transactions,
+    this.id,
   });
 
   @override
