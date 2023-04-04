@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import '../constants/style.dart';
+import '../custom_widgets/alert_dialog.dart';
+import '../database/sossoldi_database.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -119,6 +121,43 @@ class _SettingsPageState extends State<SettingsPage> {
             );
           },
         ),
+      ),
+      bottomSheet: Container(
+        color: Colors.deepOrangeAccent,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget> [
+            const Text(
+              '[DEV ONLY]\nDANGEROUS\nZONE',
+              style: TextStyle(
+                fontSize: 11, color: Colors.yellowAccent,
+                shadows: <Shadow>[
+                    Shadow(
+                    offset: Offset(1.0, 1.0),
+                    blurRadius: 3.0,
+                    color: Color.fromARGB(255, 0, 0, 0),
+                  ),
+                ],
+              ),
+              textAlign: TextAlign.center,
+            ),
+            ElevatedButton(
+              child: const Text('CLEAR DB'),
+              onPressed: () async {
+                await SossoldiDatabase.instance.clearDatabase();
+                showSuccessDialog(context, "DB Cleared");
+              },
+            ),
+            ElevatedButton(
+              child: const Text('CLEAR AND FILL DEMO DATA'),
+              onPressed: () async {
+                await SossoldiDatabase.instance.clearDatabase();
+                await SossoldiDatabase.instance.fillDemoData();
+                showSuccessDialog(context, "DB Cleared, and DEMO data added");
+              },
+            ),
+          ],
+        )
       ),
     );
   }
