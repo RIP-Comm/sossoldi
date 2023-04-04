@@ -199,7 +199,7 @@ class SossoldiDatabase {
         randomNote = '';
         idBankAccountTransfer = accounts[rnd.nextInt(accounts.length)];
 
-        // be sure out FROM/TO accounts are not the same
+        // be sure our FROM/TO accounts are not the same
         while (idBankAccountTransfer == randomAccount) {
           idBankAccountTransfer = accounts[rnd.nextInt(accounts.length)];
         }
