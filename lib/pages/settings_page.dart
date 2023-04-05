@@ -1,14 +1,21 @@
 // Settings page.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../constants/style.dart';
+import '../custom_widgets/alert_dialog.dart';
+import '../database/sossoldi_database.dart';
+import '../providers/transactions_provider.dart';
+import '../providers/accounts_provider.dart';
+import '../providers/budgets_provider.dart';
+import '../providers/categories_provider.dart';
 
-class SettingsPage extends StatefulWidget {
+class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _SettingsPageState createState() => _SettingsPageState();
+  ConsumerState<SettingsPage> createState() => _SettingsPageState();
 }
 
 var settingsOptions = const [
@@ -34,7 +41,7 @@ var settingsOptions = const [
   ],
 ];
 
-class _SettingsPageState extends State<SettingsPage> {
+class _SettingsPageState extends ConsumerState<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,6 +126,53 @@ class _SettingsPageState extends State<SettingsPage> {
             );
           },
         ),
+      ),
+      bottomSheet: Container(
+        color: Colors.deepOrangeAccent,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget> [
+            const Text(
+              '[DEV ONLY]\nDANGEROUS\nZONE',
+              style: TextStyle(
+                fontSize: 11, color: Colors.yellowAccent,
+                shadows: <Shadow>[
+                    Shadow(
+                    offset: Offset(1.0, 1.0),
+                    blurRadius: 3.0,
+                    color: Color.fromARGB(255, 0, 0, 0),
+                  ),
+                ],
+              ),
+              textAlign: TextAlign.center,
+            ),
+            ElevatedButton(
+              child: const Text('CLEAR DB'),
+              onPressed: () async {
+                await SossoldiDatabase.instance.clearDatabase().then((v){
+                  ref.refresh(accountsProvider);
+                  ref.refresh(categoriesProvider);
+                  ref.refresh(transactionsProvider);
+                  ref.refresh(budgetsProvider);
+                  showSuccessDialog(context, "DB Cleared");
+                });
+              },
+            ),
+            ElevatedButton(
+              child: const Text('CLEAR AND FILL DEMO DATA'),
+              onPressed: () async {
+                await SossoldiDatabase.instance.clearDatabase();
+                await SossoldiDatabase.instance.fillDemoData().then((value) {
+                  ref.refresh(accountsProvider);
+                  ref.refresh(categoriesProvider);
+                  ref.refresh(transactionsProvider);
+                  ref.refresh(budgetsProvider);
+                  showSuccessDialog(context, "DB Cleared, and DEMO data added");
+                });
+              },
+            ),
+          ],
+        )
       ),
     );
   }
