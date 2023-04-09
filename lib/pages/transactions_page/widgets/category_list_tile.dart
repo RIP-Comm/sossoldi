@@ -8,6 +8,7 @@ class CategoryListTile extends StatelessWidget {
     required this.title,
     required this.amount,
     required this.nTransactions,
+    required this.transactions,
     required this.percent,
     required this.color,
     required this.icon,
@@ -18,12 +19,12 @@ class CategoryListTile extends StatelessWidget {
   final String title;
   final double amount;
   final int nTransactions;
+  final List<Map<String, dynamic>> transactions;
   final double percent;
   final Color color;
   final IconData icon;
   final ValueNotifier<int> notifier;
   final int index;
-
 
   /// Toogle the box to expand or collapse
   void _toogleExpand() {
@@ -73,7 +74,7 @@ class CategoryListTile extends StatelessWidget {
                                 style: Theme.of(context).textTheme.titleMedium,
                               ),
                               Text(
-                                "$amount €",
+                                "${amount.toStringAsFixed(2)} €",
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyLarge
@@ -90,7 +91,7 @@ class CategoryListTile extends StatelessWidget {
                                 style: Theme.of(context).textTheme.labelLarge,
                               ),
                               Text(
-                                "$percent%",
+                                "${percent.toStringAsFixed(2)}%",
                                 style: Theme.of(context).textTheme.labelLarge,
                               ),
                             ],
@@ -110,39 +111,40 @@ class CategoryListTile extends StatelessWidget {
             ),
             ExpandedSection(
               expand: notifier.value == index,
-              // TODO: add transactions under category
               child: Container(
                 color: white,
                 height: 70.0 * nTransactions,
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: List.generate(
-                    2 * nTransactions - 1,
-                    (index) {
-                      if (index % 2 == 0) {
-                        return const TransactionRow(
-                          account: "Buddybank",
-                          amount: -25.80,
-                          category: "Casa",
-                          title: "Spesa",
-                        );
-                      } else {
-                        return const Divider(
-                          height: 1,
-                          thickness: 1,
-                          indent: 15,
-                          endIndent: 15,
-                        );
-                      }
-                    },
-                  ),
+                  children: (nTransactions > 0)
+                      ? List.generate(
+                          2 * nTransactions - 1,
+                          (i) {
+                            if (i % 2 == 0) {
+                              return TransactionRow(
+                                account: transactions[i ~/ 2]["account"],
+                                amount: transactions[i ~/ 2]["amount"],
+                                category: transactions[i ~/ 2]["category"],
+                                title: transactions[i ~/ 2]["title"],
+                              );
+                            } else {
+                              return const Divider(
+                                height: 1,
+                                thickness: 1,
+                                indent: 15,
+                                endIndent: 15,
+                              );
+                            }
+                          },
+                        )
+                      : [],
                 ),
               ),
             )
           ],
         );
-      }
+      },
     );
   }
 }
@@ -183,7 +185,7 @@ class TransactionRow extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(
-                      "$amount €",
+                      "${amount.toStringAsFixed(2)} €",
                       style: Theme.of(context)
                           .textTheme
                           .bodyLarge

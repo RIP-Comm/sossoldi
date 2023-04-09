@@ -1,18 +1,23 @@
 import "package:flutter/material.dart";
 import 'package:fl_chart/fl_chart.dart';
-import 'package:sossoldi/constants/style.dart';
 
+import '../../../constants/functions.dart';
+import '../../../constants/style.dart';
 import '../../../model/category_transaction.dart';
 
-class CategoriesPieChart extends StatelessWidget {
+class CategoriesPieChart extends StatelessWidget with Functions {
   const CategoriesPieChart({
     required this.notifier,
     required this.categories,
+    required this.amounts,
+    required this.total,
     Key? key,
   }) : super(key: key);
 
   final ValueNotifier<int> notifier;
   final List<CategoryTransaction> categories;
+  final Map<int, double> amounts;
+  final double total;
 
   @override
   Widget build(BuildContext context) {
@@ -47,27 +52,34 @@ class CategoriesPieChart extends StatelessWidget {
               ),
               Column(
                 mainAxisSize: MainAxisSize.min,
-                // TODO: get icon, color and color from category
                 children: [
-                  (notifier.value != -1)
+                  (value != -1)
                       ? Container(
                           padding: const EdgeInsets.all(8.0),
                           decoration: const BoxDecoration(
                             shape: BoxShape.circle,
+                            // TODO: get color from category
                             color: Colors.amber,
                           ),
-                          child: const Icon(Icons.home_rounded),
+                          child: Icon(
+                            stringToIcon(categories[value].symbol) ??
+                                Icons.swap_horiz_rounded,
+                          ),
                         )
                       : const SizedBox(),
                   Text(
-                    "-325.80€",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineLarge
-                        ?.copyWith(color: red),
+                    (value != -1)
+                        ? "${amounts[categories[value].id]!.toStringAsFixed(2)} €"
+                        : "${total.toStringAsFixed(2)} €",
+                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                        color: ((value != -1 &&
+                                    amounts[categories[value].id]! > 0) ||
+                                (value == -1 && total > 0))
+                            ? green
+                            : red),
                   ),
-                  (notifier.value != -1)
-                      ? Text(categories[notifier.value].name)
+                  (value != -1)
+                      ? Text(categories[value].name)
                       : const Text("Total"),
                 ],
               ),
@@ -80,15 +92,15 @@ class CategoriesPieChart extends StatelessWidget {
 
   List<PieChartSectionData> showingSections() {
     return List.generate(
-      categories.length,
+      amounts.values.length,
       (i) {
         final isTouched = (i == notifier.value);
 
         final radius = isTouched ? 30.0 : 25.0;
-        // TODO: get the percentage of the total for each category
         return PieChartSectionData(
+          // TODO: get color from category
           color: (i % 2 == 0) ? Colors.red : Colors.blue,
-          value: 360 / categories.length,
+          value: 360 * amounts[categories[i].id]!,
           radius: radius,
           showTitle: false,
         );
