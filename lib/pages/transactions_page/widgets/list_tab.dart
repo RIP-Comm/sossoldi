@@ -1,108 +1,116 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/style.dart';
+import '../../../constants/functions.dart';
+import '../../../model/category_transaction.dart';
 import '../../../model/transaction.dart';
 import '../../../pages/transactions_page/widgets/transaction_list_tile.dart';
+import '../../../providers/accounts_provider.dart';
+import '../../../providers/transactions_provider.dart';
+import '../../../providers/categories_provider.dart';
 
-class ListTab extends StatelessWidget {
+class ListTab extends ConsumerStatefulWidget {
   const ListTab({
     Key? key,
   }) : super(key: key);
 
   @override
+  ConsumerState<ListTab> createState() => _ListTabState();
+}
+
+class _ListTabState extends ConsumerState<ListTab> with Functions {
+  @override
   Widget build(BuildContext context) {
-    // TODO: get list of transactions from database
-    List<Transaction> transactions = [
-      Transaction(
-        id: 0,
-        recurring: false,
-        date: DateTime.now(),
-        amount: 300,
-        type: Type.income,
-        idBankAccount: 0,
-        idCategory: 0,
-      ),
-      Transaction(
-        id: 1,
-        recurring: false,
-        date: DateTime.now(),
-        amount: 65,
-        type: Type.income,
-        idBankAccount: 0,
-        idCategory: 0,
-      ),
-      Transaction(
-        id: 2,
-        recurring: false,
-        date: DateTime.now().subtract(Duration(days: 1)),
-        amount: 34,
-        type: Type.income,
-        idBankAccount: 0,
-        idCategory: 0,
-      ),
-      Transaction(
-        id: 3,
-        recurring: false,
-        date: DateTime.now().subtract(Duration(days: 3)),
-        amount: -304,
-        type: Type.income,
-        idBankAccount: 0,
-        idCategory: 0,
-      ),
-      Transaction(
-        id: 4,
-        recurring: false,
-        date: DateTime.now().subtract(Duration(days: 3)),
-        amount: 231,
-        type: Type.income,
-        idBankAccount: 0,
-        idCategory: 0,
-      ),
-    ];
+    final categories = ref.watch(categoriesProvider);
+    final transactions = ref.watch(transactionsProvider);
+    final accounts = ref.watch(accountsProvider);
+
+    // calculate the total for each day
+    Map<String, double> totals = {};
+    if (transactions.value != null) {
+      for (var t in transactions.value!) {
+        String date = t.date.toYMD();
+        if (totals.containsKey(date)) {
+          totals[date] = totals[date]! + t.amount.toDouble();
+        } else {
+          totals.putIfAbsent(date, () => t.amount.toDouble());
+        }
+      }
+    }
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8.0),
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
       color: grey3,
-      child: ListView.separated(
-        itemCount: transactions.length + 1,
-        itemBuilder: (context, i) {
-          if (i == 0) {
-            return DateSeparator(
-              transaction: transactions[i],
-              total: 123,
-            );
-          } else {
-            return TransactionListTile(
-              title:
-                  "${transactions[i - 1].date.day}-${transactions[i - 1].date.month}",
-              amount: transactions[i - 1].amount.toDouble(),
-              account: "Account",
-              category: "Category",
-              color: Colors.red,
-              icon: Icons.home,
-            );
-          }
+      child: transactions.when(
+        data: (data) {
+          return ListView.separated(
+            itemCount: transactions.value!.length + 1,
+            itemBuilder: (context, i) {
+              if (i == 0) {
+                return DateSeparator(
+                  transaction: transactions.value![i],
+                  total: totals[transactions.value![i].date.toYMD()] ?? 0,
+                );
+              } else {
+                Transaction transaction = transactions.value![i - 1];
+                Iterable<CategoryTransaction> tCategories =
+                    (transaction.type != Type.transfer &&
+                            categories.value != null)
+                        ? categories.value!
+                            .where((e) => e.id == transaction.idCategory)
+                        : [];
+
+                return TransactionListTile(
+                  title: transaction.note ?? "Title",
+                  amount: transaction.amount.toDouble(),
+                  account: accounts.value!
+                      .firstWhere((e) => e.id == transaction.idBankAccount)
+                      .name,
+                  category: (tCategories.isNotEmpty)
+                      ? tCategories.first.name
+                      : "not found",
+                  color: Colors.red,
+                  icon: (tCategories.isNotEmpty)
+                      ? stringToIcon(tCategories.first.symbol) ??
+                          Icons.swap_horiz_rounded
+                      : Icons.swap_horiz_rounded,
+                );
+              }
+            },
+            separatorBuilder: (context, i) {
+              if (i == 0) {
+                return const SizedBox(height: 0);
+              } else {
+                if (!transactions.value![i - 1].date
+                    .isSameDate(transactions.value![i].date)) {
+                  return DateSeparator(
+                    transaction: transactions.value![i],
+                    total: totals[transactions.value![i].date.toYMD()] ?? 0,
+                  );
+                } else {
+                  return const Divider(
+                    height: 0,
+                    thickness: 1,
+                    endIndent: 10,
+                    indent: 10,
+                  );
+                }
+              }
+            },
+          );
         },
-        separatorBuilder: (context, i) {
-          if (i == 0) {
-            return const SizedBox(height: 0);
-          } else {
-            if (!transactions[i - 1].date.isSameDate(transactions[i].date)) {
-              return DateSeparator(
-                transaction: transactions[i],
-                total: 123,
-              );
-            } else {
-              return const Divider(
-                height: 0,
-                thickness: 1,
-                endIndent: 10,
-                indent: 10,
-              );
-            }
-          }
+        loading: () {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+        error: (error, stackTrace) {
+          return Center(
+            child: Text(error.toString()),
+          );
         },
       ),
     );
@@ -132,7 +140,7 @@ class DateSeparator extends StatelessWidget {
                 Theme.of(context).textTheme.bodySmall?.copyWith(color: blue1),
           ),
           Text(
-            "$total €",
+            "${total.toStringAsFixed(2)} €",
             style: Theme.of(context)
                 .textTheme
                 .bodyLarge
@@ -145,10 +153,16 @@ class DateSeparator extends StatelessWidget {
 }
 
 const String dateFormatter = 'MMMM d, EEEE';
+const String dateYMDFormatter = 'yyyyMMdd';
 
 extension DateHelper on DateTime {
   String formatDate() {
     final formatter = DateFormat(dateFormatter);
+    return formatter.format(this);
+  }
+
+  String toYMD() {
+    final formatter = DateFormat(dateYMDFormatter);
     return formatter.format(this);
   }
 

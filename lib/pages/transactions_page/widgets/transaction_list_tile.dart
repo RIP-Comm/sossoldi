@@ -51,7 +51,7 @@ class TransactionListTile extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(
-                      "$amount €",
+                      "${amount.toStringAsFixed(2)} €",
                       style: Theme.of(context)
                           .textTheme
                           .bodyLarge
