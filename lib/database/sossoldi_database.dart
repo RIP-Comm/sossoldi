@@ -146,7 +146,7 @@ class SossoldiDatabase {
         (11, "Home", "home", '', null, '${DateTime.now()}', '${DateTime.now()}'),
         (12, "Furniture", "home", '', 11, '${DateTime.now()}', '${DateTime.now()}'),
         (13, "Shopping", "shopping_cart", '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (14, "Leisure", "subscriptions", '', null, '${DateTime.now()}', '${DateTime.now()}');
+        (14, "Leisure", "subscriptions", '', null, '${DateTime.now()}', '${DateTime.now()}'),
         (15, "Salary", "work", '', null, '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
