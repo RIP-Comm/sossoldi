@@ -97,13 +97,15 @@ class AsyncTransactionsNotifier extends AsyncNotifier<List<Transaction>> {
     if (ref.read(selectedTransactionUpdateProvider) == null) return;
     Transaction transaction = ref.read(selectedTransactionUpdateProvider)!;
     final accountList = ref.watch(accountsProvider);
-    ref.read(categoryProvider.notifier).state = transaction.type != Type.transfer
-        ? ref
-            .watch(categoriesProvider)
-            .value!
-            .where((element) => element.id == transaction.idCategory)
-            .first
-        : null;
+    if (transaction.type != Type.transfer) {
+      final categories = ref
+          .watch(categoriesProvider)
+          .value!
+          .where((element) => element.id == transaction.idCategory);
+      if (categories.isNotEmpty) {
+        ref.read(categoryProvider.notifier).state = categories.first;
+      }
+    }
     ref.read(bankAccountProvider.notifier).state =
         accountList.value!.firstWhere((element) => element.id == transaction.idBankAccount);
     ref.read(bankAccountTransferProvider.notifier).state = transaction.type == Type.transfer

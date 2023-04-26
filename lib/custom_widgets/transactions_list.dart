@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../constants/constants.dart';
 import '../pages/add_page/add_page.dart';
 import '../providers/transactions_provider.dart';
 import '../constants/functions.dart';
@@ -33,10 +34,10 @@ class _TransactionsListState extends State<TransactionsList> with Functions {
     num sum = 0;
     DateTime? date;
     List<Transaction> transactionList = [];
-    widget.transactions.forEach((transaction) {
+    for (var transaction in widget.transactions) {
       if (transaction != widget.transactions.first &&
           dateToString(transaction.date) != dateToString(date!)) {
-        final title = TransactionTitle(date: date!, sum: sum, first: list.isEmpty ? true : false);
+        final title = TransactionTitle(date: date, sum: sum, first: list.isEmpty ? true : false);
         final transactionRow = TransactionRow(transactions: transactionList);
         list = [...list, title, transactionRow];
         transactionList = [];
@@ -50,11 +51,11 @@ class _TransactionsListState extends State<TransactionsList> with Functions {
         sum += transaction.amount;
       }
       if (transaction == widget.transactions.last) {
-        final title = TransactionTitle(date: date!, sum: sum, first: list.isEmpty ? true : false);
+        final title = TransactionTitle(date: date, sum: sum, first: list.isEmpty ? true : false);
         final transactionRow = TransactionRow(transactions: transactionList);
         list = [...list, title, transactionRow];
       }
-    });
+    }
     super.initState();
   }
 
@@ -69,21 +70,17 @@ class _TransactionsListState extends State<TransactionsList> with Functions {
               borderRadius: BorderRadius.circular(8),
               boxShadow: [defaultShadow],
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                children: list,
-              ),
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: list,
             ),
           )
         : Container(
             margin: const EdgeInsets.all(16),
             width: double.infinity,
-            child: const Padding(
-              padding: EdgeInsets.all(16),
-              child: Center(
-                child: Text("No transactions available"),
-              ),
+            padding: const EdgeInsets.all(16),
+            child: const Center(
+              child: Text("No transactions available"),
             ),
           );
   }
@@ -227,13 +224,15 @@ class TransactionRow extends ConsumerWidget with Functions {
                         Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Theme.of(context).colorScheme.secondary,
+                            color: category?.color != null
+                                ? categoryColorList[category!.color]
+                                : Theme.of(context).colorScheme.secondary,
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Icon(
                               category?.symbol != null
-                                  ? stringToIcon(category!.symbol)
+                                  ? iconList[category!.symbol]
                                   : Icons.swap_horiz_rounded,
                               size: 25.0,
                               color: white,

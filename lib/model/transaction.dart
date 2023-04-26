@@ -42,6 +42,11 @@ class TransactionFields extends BaseEntityFields {
 enum Type { income, expense, transfer }
 enum Recurrence { daily, weekly, monthly, bimonthly, quarterly, semester, annual }
 
+Map<String, Type> typeMap = {
+  "IN": Type.income,
+  "OUT": Type.expense,
+  "TRSF": Type.transfer,
+};
 Map<Recurrence, String> recurrenceMap = {
   Recurrence.daily: "Daily",
   Recurrence.weekly: "Weekly",
@@ -122,7 +127,7 @@ class Transaction extends BaseEntity {
       id: json[BaseEntityFields.id] as int?,
       date: DateTime.parse(json[TransactionFields.date] as String),
       amount: json[TransactionFields.amount] as num,
-      type: Type.values[json[TransactionFields.type] as int],
+      type: typeMap[json[TransactionFields.type] as String]!,
       note: json[TransactionFields.note] as String?,
       idCategory: json[TransactionFields.idCategory] as int?,
       idBankAccount: json[TransactionFields.idBankAccount] as int,
@@ -140,7 +145,7 @@ class Transaction extends BaseEntity {
         TransactionFields.id: id,
         TransactionFields.date: date.toIso8601String(),
         TransactionFields.amount: amount,
-        TransactionFields.type: type.index,
+        TransactionFields.type: typeMap.keys.firstWhere((k) => typeMap[k] == type),
         TransactionFields.note: note,
         TransactionFields.idCategory: idCategory,
         TransactionFields.idBankAccount: idBankAccount,
