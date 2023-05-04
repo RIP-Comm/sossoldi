@@ -286,15 +286,13 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                                     Theme.of(context).textTheme.bodyLarge!.copyWith(color: grey1),
                                 maxLines: 2,
                               ),
-                              onPressed: () {
-                                // TODO: Navigate to the page to add account
-                              },
+                              onPressed: () => Navigator.of(context).pushNamed('/add-account'),
                             ),
                           ),
                         );
                       } else {
                         BankAccount account = accounts[i];
-                        return AccountsSum(accountName: account.name, amount: account.value);
+                        return AccountsSum(account: account);
                       }
                     },
                   ),

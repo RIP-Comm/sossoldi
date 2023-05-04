@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:fl_chart/fl_chart.dart';
+import 'package:sossoldi/constants/constants.dart';
 
 import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
@@ -62,7 +63,7 @@ class CategoriesPieChart extends StatelessWidget with Functions {
                             color: Colors.amber,
                           ),
                           child: Icon(
-                            stringToIcon(categories[value].symbol) ??
+                            iconList[categories[value].symbol] ??
                                 Icons.swap_horiz_rounded,
                           ),
                         )

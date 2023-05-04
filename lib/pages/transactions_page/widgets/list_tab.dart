@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sossoldi/constants/constants.dart';
 
 import '../../../constants/style.dart';
 import '../../../constants/functions.dart';
@@ -74,7 +75,7 @@ class _ListTabState extends ConsumerState<ListTab> with Functions {
                       : "not found",
                   color: Colors.red,
                   icon: (tCategories.isNotEmpty)
-                      ? stringToIcon(tCategories.first.symbol) ??
+                      ? iconList[tCategories.first.symbol] ??
                           Icons.swap_horiz_rounded
                       : Icons.swap_horiz_rounded,
                 );

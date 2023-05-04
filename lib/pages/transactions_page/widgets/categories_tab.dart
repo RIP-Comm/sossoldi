@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sossoldi/constants/constants.dart';
 
 import '../../../constants/style.dart';
 import '../../../constants/functions.dart';
@@ -137,7 +138,7 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> with Functions {
                             percent:
                                 (categoryToAmount[t.id] ?? 0) / total * 100,
                             color: const Color(0xFFEBC35F),
-                            icon: stringToIcon(t.symbol) ??
+                            icon: iconList[t.symbol] ??
                                 Icons.swap_horiz_rounded,
                             notifier: selectedCategory,
                             index: index,

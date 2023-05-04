@@ -8,6 +8,8 @@ void main() {
     BankAccount b = BankAccount(
         id: 2,
         name: "name",
+        symbol: 'symbol',
+        color: 0,
         value: 100,
         mainAccount: true,
         createdAt: DateTime.utc(2022),
@@ -17,6 +19,8 @@ void main() {
 
     assert(bCopy.id == 10);
     assert(bCopy.name == b.name);
+    assert(bCopy.symbol == b.symbol);
+    assert(bCopy.color == b.color);
     assert(bCopy.value == bCopy.value);
     assert(bCopy.mainAccount == bCopy.mainAccount);
     assert(bCopy.createdAt == b.createdAt);
@@ -27,6 +31,8 @@ void main() {
     Map<String, Object?> json = {
       BaseEntityFields.id: 0,
       BankAccountFields.name: "name",
+      BankAccountFields.symbol: "symbol",
+      BankAccountFields.color: 0,
       BankAccountFields.value: 100,
       BaseEntityFields.createdAt: DateTime.utc(2022).toIso8601String(),
       BaseEntityFields.updatedAt: DateTime.utc(2022).toIso8601String(),
@@ -36,6 +42,8 @@ void main() {
 
     assert(b.id == json[BaseEntityFields.id]);
     assert(b.name == json[BankAccountFields.name]);
+    assert(b.symbol == json[BankAccountFields.symbol]);
+    assert(b.color == json[BankAccountFields.color]);
     assert(b.value == json[BankAccountFields.value]);
     assert(b.createdAt?.toUtc().toIso8601String() ==
         json[BaseEntityFields.createdAt]);
@@ -47,6 +55,8 @@ void main() {
     BankAccount b = const BankAccount(
         id: 2,
         name: "name",
+        symbol: "symbol",
+        color: 0,
         value: 100,
         mainAccount: false);
 
@@ -54,6 +64,8 @@ void main() {
 
     assert(b.id == json[BaseEntityFields.id]);
     assert(b.name == json[BankAccountFields.name]);
+    assert(b.symbol == json[BankAccountFields.symbol]);
+    assert(b.color == json[BankAccountFields.color]);
     assert(b.value == json[BankAccountFields.value]);
     assert((b.mainAccount ? 1 : 0) == json[BankAccountFields.mainAccount]);
   });

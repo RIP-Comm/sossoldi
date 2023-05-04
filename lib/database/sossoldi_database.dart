@@ -50,6 +50,8 @@ class SossoldiDatabase {
       CREATE TABLE `$bankAccountTable`(
         `${BankAccountFields.id}` $integerPrimaryKeyAutoincrement,
         `${BankAccountFields.name}` $textNotNull,
+        `${BankAccountFields.symbol}` $textNotNull,
+        `${BankAccountFields.color}` $integerNotNull,
         `${BankAccountFields.value}` $realNotNull,
         `${BankAccountFields.mainAccount}` $integerNotNull CHECK (${BankAccountFields.mainAccount} IN (0, 1)),
         `${BankAccountFields.createdAt}` $textNotNull,
@@ -97,6 +99,7 @@ class SossoldiDatabase {
         `${CategoryTransactionFields.id}` $integerPrimaryKeyAutoincrement,
         `${CategoryTransactionFields.name}` $textNotNull,
         `${CategoryTransactionFields.symbol}` $textNotNull,
+        `${CategoryTransactionFields.color}` $integerNotNull,
         `${CategoryTransactionFields.note}` $text,
         `${CategoryTransactionFields.parent}` $integer,
         `${CategoryTransactionFields.createdAt}` $textNotNull,
@@ -133,21 +136,21 @@ class SossoldiDatabase {
   Future fillDemoData() async {
     // Add some fake accounts
     await _database?.execute('''
-      INSERT INTO bankAccount(id, name, value, mainAccount, createdAt, updatedAt) VALUES
-        (70, "Revolut", 1235.10, 1, '${DateTime.now()}', '${DateTime.now()}'),
-        (71, "N26", 3823.56, 0, '${DateTime.now()}', '${DateTime.now()}'),
-        (72, "Fineco", 0.07, 0, '${DateTime.now()}', '${DateTime.now()}');
+      INSERT INTO bankAccount(id, name, symbol, color, value, mainAccount, createdAt, updatedAt) VALUES
+        (70, "Revolut", 'payments', 1, 1235.10, 1, '${DateTime.now()}', '${DateTime.now()}'),
+        (71, "N26", 'credit_card', 2, 3823.56, 0, '${DateTime.now()}', '${DateTime.now()}'),
+        (72, "Fineco", 'account_balance', 3, 0.07, 0, '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
     // Add fake categories
     await _database?.execute('''
-      INSERT INTO categoryTransaction(id, name, symbol, note, parent, createdAt, updatedAt) VALUES
-        (10, "Out", "restaurant", '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (11, "Home", "home", '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (12, "Furniture", "home", '', 11, '${DateTime.now()}', '${DateTime.now()}'),
-        (13, "Shopping", "shopping_cart", '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (14, "Leisure", "subscriptions", '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (15, "Salary", "work", '', null, '${DateTime.now()}', '${DateTime.now()}');
+      INSERT INTO categoryTransaction(id, name, symbol, color, note, parent, createdAt, updatedAt) VALUES
+        (10, "Out", "restaurant", 0, '', null, '${DateTime.now()}', '${DateTime.now()}'),
+        (11, "Home", "home", 1, '', null, '${DateTime.now()}', '${DateTime.now()}'),
+        (12, "Furniture", "home", 2, '', 11, '${DateTime.now()}', '${DateTime.now()}'),
+        (13, "Shopping", "shopping_cart", 3, '', null, '${DateTime.now()}', '${DateTime.now()}'),
+        (14, "Leisure", "subscriptions", 4, '', null, '${DateTime.now()}', '${DateTime.now()}'),
+        (15, "Salary", "work", 5, '', null, '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
     // Add currencies
