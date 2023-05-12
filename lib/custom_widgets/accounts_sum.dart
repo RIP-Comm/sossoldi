@@ -53,7 +53,6 @@ class AccountsSum extends StatelessWidget with Functions {
                           AccountDialog(
                             accountName: account.name,
                             amount: account.value,
-                            id: account.id,
                           )
                         ],
                       ),
