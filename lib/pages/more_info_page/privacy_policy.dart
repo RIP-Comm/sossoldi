@@ -145,7 +145,7 @@ class _PrivacyPolicyPageState extends ConsumerState<PrivacyPolicyPage> {
                       .copyWith(color: Theme.of(context).colorScheme.primary),
                     children: [
                       TextSpan(
-                        text: 'support@sossoldi.com',
+                        text: 'help.sossoldi@gmail.com',
                         style: const TextStyle(
                           color: Colors.blue,
                           decoration: TextDecoration.underline,
@@ -154,7 +154,7 @@ class _PrivacyPolicyPageState extends ConsumerState<PrivacyPolicyPage> {
                           ..onTap = () {
                             launchUrl(Uri(
                                 scheme: 'mailto',
-                                path: 'support@sossoldi.com',
+                                path: 'help.sossoldi@gmail.com',
                                 queryParameters: {
                                     'subject': 'Request info',
                                 },
