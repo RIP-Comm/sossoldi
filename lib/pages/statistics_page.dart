@@ -181,15 +181,31 @@ class _StatsPageState extends ConsumerState<StatsPage> with Functions {
                                 SizedBox(
                                   height: 12,
                                   width: double.infinity,
-                                  child: ClipRRect(
-                                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                                    child: LinearProgressIndicator(
-                                      value: MediaQuery.of(context).size.width * 0.9 * (account.value.toDouble()/max) / MediaQuery.of(context).size.width, //current / max
-                                      color: blue3,
-                                      backgroundColor: blue7,
-                                    ),
+                                  child: Row(                                    
+                                    children: [
+                                      Container(
+                                        width: MediaQuery.of(context).size.width * 0.9 * (account.value.toDouble()/max),
+                                        decoration: const BoxDecoration(
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(4.0),
+                                            bottomLeft: Radius.circular(4.0),
+                                          ),
+                                          color: blue3,
+                                        ),
+                                      ),
+                                      Container(
+                                        width: MediaQuery.of(context).size.width * 0.9 *(1 - (account.value.toDouble()/max)),
+                                        decoration: const BoxDecoration(
+                                          borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(4.0),
+                                            bottomRight: Radius.circular(4.0),
+                                          ),
+                                          color: blue7,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
+                                )
                               ],
                             )
                           );
