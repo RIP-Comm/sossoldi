@@ -49,6 +49,9 @@ dependencies:
   # iOS, Android and MacOS
   sqlite3_flutter_libs:
 
+  # mailto
+  url_launcher: ^6.0.6
+
   # Format DateTime
   intl: ^0.17.0
 

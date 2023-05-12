@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sossoldi/pages/categories/category_list.dart';
 import 'model/bank_account.dart';
+import '/pages/more_info_page/more_info.dart';
+import '/pages/more_info_page/privacy_policy.dart';
 import 'pages/accounts/account_list.dart';
 import 'pages/categories/add_category.dart';
 import 'pages/accounts/add_account.dart';
@@ -30,6 +32,10 @@ Route<dynamic> makeRoute(RouteSettings settings) {
       return _cupertinoPageRoute(settings.name, const CategoryList());
     case '/add-category':
       return _cupertinoPageRoute(settings.name, const AddCategory());
+    case '/more-info':
+      return _cupertinoPageRoute(settings.name, const MoreInfoPage());
+    case '/privacy-policy':
+      return _cupertinoPageRoute(settings.name, const PrivacyPolicyPage());
     case '/account-list':
       return _cupertinoPageRoute(settings.name, const AccountList());
     case '/add-account':
