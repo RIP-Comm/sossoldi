@@ -7,6 +7,7 @@ class CategoryTransactionFields extends BaseEntityFields {
   static String id = BaseEntityFields.getId;
   static String name = 'name';
   static String symbol = 'symbol';
+  static String color = 'color';
   static String note = 'note';
   static String parent = 'parent';
   static String createdAt = BaseEntityFields.getCreatedAt;
@@ -16,6 +17,7 @@ class CategoryTransactionFields extends BaseEntityFields {
     BaseEntityFields.id,
     name,
     symbol,
+    color,
     note,
     parent,
     BaseEntityFields.createdAt,
@@ -26,6 +28,7 @@ class CategoryTransactionFields extends BaseEntityFields {
 class CategoryTransaction extends BaseEntity {
   final String name;
   final String symbol;
+  final int color;
   final String? note;
   final int? parent;
 
@@ -33,6 +36,7 @@ class CategoryTransaction extends BaseEntity {
       {int? id,
       required this.name,
       required this.symbol,
+      required this.color,
       this.note,
       this.parent,
       DateTime? createdAt,
@@ -43,6 +47,7 @@ class CategoryTransaction extends BaseEntity {
           {int? id,
           String? name,
           String? symbol,
+          int? color,
           String? note,
           int? parent,
           DateTime? createdAt,
@@ -51,6 +56,7 @@ class CategoryTransaction extends BaseEntity {
           id: id ?? this.id,
           name: name ?? this.name,
           symbol: symbol ?? this.symbol,
+          color: color ?? this.color,
           note: note ?? this.note,
           parent: parent ?? this.parent,
           createdAt: createdAt ?? this.createdAt,
@@ -60,7 +66,8 @@ class CategoryTransaction extends BaseEntity {
       id: json[BaseEntityFields.id] as int?,
       name: json[CategoryTransactionFields.name] as String,
       symbol: json[CategoryTransactionFields.symbol] as String,
-      note: json[CategoryTransactionFields.note] as String,
+      color: json[CategoryTransactionFields.color] as int,
+      note: json[CategoryTransactionFields.note] as String?,
       parent: json[CategoryTransactionFields.parent] as int?,
       createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
       updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String));
@@ -69,6 +76,7 @@ class CategoryTransaction extends BaseEntity {
         BaseEntityFields.id: id,
         CategoryTransactionFields.name: name,
         CategoryTransactionFields.symbol: symbol,
+        CategoryTransactionFields.color: color,
         CategoryTransactionFields.note: note,
         CategoryTransactionFields.parent: parent,
         BaseEntityFields.createdAt:

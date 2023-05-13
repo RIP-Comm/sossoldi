@@ -1,14 +1,22 @@
 // Settings page.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sossoldi/custom_widgets/default_container.dart';
 import '../constants/style.dart';
+import '../custom_widgets/alert_dialog.dart';
+import '../database/sossoldi_database.dart';
+import '../providers/transactions_provider.dart';
+import '../providers/accounts_provider.dart';
+import '../providers/budgets_provider.dart';
+import '../providers/categories_provider.dart';
 
-class SettingsPage extends StatefulWidget {
+class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _SettingsPageState createState() => _SettingsPageState();
+  ConsumerState<SettingsPage> createState() => _SettingsPageState();
 }
 
 var settingsOptions = const [
@@ -16,25 +24,35 @@ var settingsOptions = const [
     Icons.account_balance_wallet,
     "Accounts",
     "Add or edit your accounts",
+    "/account-list",
   ],
   [
     Icons.list_alt,
     "Categories",
     "Add or edit categories and subcategories",
+    "/category-list",
   ],
   [
     Icons.attach_money,
     "Budget",
     "Add or edit your budgets",
+    null,
   ],
   [
     Icons.download_for_offline,
     "Import/Export",
     "Import or export data from a CSV file",
+    null,
+  ],
+  [
+    Icons.notifications_active,
+    "Notifications",
+    "Manage your notifications settings",
+    null,
   ],
 ];
 
-class _SettingsPageState extends State<SettingsPage> {
+class _SettingsPageState extends ConsumerState<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,66 +78,142 @@ class _SettingsPageState extends State<SettingsPage> {
               .copyWith(color: Theme.of(context).colorScheme.primary),
         ),
       ),
-      body: GridView.count(
-        padding: const EdgeInsets.all(16.0),
-        crossAxisCount: 2,
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        childAspectRatio: 3 / 2.5,
-        mainAxisSpacing: 16,
-        crossAxisSpacing: 16,
-        children: List.generate(
-          settingsOptions.length,
-          (index) {
-            return Material(
-              color: blue7,
-              borderRadius: BorderRadius.circular(4),
-              child: InkWell(
-                onTap: () => print("click"),
-                borderRadius: BorderRadius.circular(4),
-                child: Container(
-                  height: double.infinity,
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+              child: Row(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    padding: const EdgeInsets.all(10.0),
+                    child: Icon(
+                      Icons.account_balance_wallet,
+                      size: 16.0,
+                      color: Theme.of(context).colorScheme.background,
+                    ),
+                  ),
+                  const SizedBox(width: 12.0),
+                  Text(
+                    "Your accounts",
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineLarge!
+                        .copyWith(color: Theme.of(context).colorScheme.primary),
+                  ),
+                ],
+              ),
+            ),
+            ListView.separated(
+              itemCount: settingsOptions.length,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              separatorBuilder: (context, index) => const SizedBox(height: 16),
+              itemBuilder: (context, i) {
+                List setting = settingsOptions[i];
+                return DefaultContainer(
+                  onTap: () {
+                    setting[3] != null
+                        ? Navigator.of(context).pushNamed(setting[3] as String)
+                        : print("click");
+                  },
+                  child: Row(
+                    children: [
                       Container(
-                        width: 40.0,
-                        height: 40.0,
                         decoration: const BoxDecoration(
-                          color: blue4,
+                          color: blue5,
                           shape: BoxShape.circle,
                         ),
+                        padding: const EdgeInsets.all(10.0),
                         child: Icon(
-                          settingsOptions[index][0] as IconData,
-                          color: Colors.white,
+                          setting[0] as IconData,
+                          size: 30.0,
+                          color: Theme.of(context).colorScheme.background,
                         ),
                       ),
-                      Text(
-                        settingsOptions[index][1].toString(),
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge!
-                            .copyWith(color: Theme.of(context).colorScheme.primary),
-                        textAlign: TextAlign.left,
-                      ),
-                      Text(
-                        settingsOptions[index][2].toString(),
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall!
-                            .copyWith(color: Theme.of(context).colorScheme.primary),
-                        textAlign: TextAlign.left,
+                      const SizedBox(width: 12.0),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            setting[1].toString(),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge!
+                                .copyWith(color: Theme.of(context).colorScheme.primary),
+                            textAlign: TextAlign.left,
+                          ),
+                          Text(
+                            setting[2].toString(),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall!
+                                .copyWith(color: Theme.of(context).colorScheme.primary),
+                            textAlign: TextAlign.left,
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ),
-              ),
-            );
-          },
+                );
+              },
+            ),
+          ],
         ),
       ),
+      bottomSheet: Container(
+          color: Colors.deepOrangeAccent,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              const Text(
+                '[DEV ONLY]\nDANGEROUS\nZONE',
+                style: TextStyle(
+                  fontSize: 11,
+                  color: Colors.yellowAccent,
+                  shadows: <Shadow>[
+                    Shadow(
+                      offset: Offset(1.0, 1.0),
+                      blurRadius: 3.0,
+                      color: Color.fromARGB(255, 0, 0, 0),
+                    ),
+                  ],
+                ),
+                textAlign: TextAlign.center,
+              ),
+              ElevatedButton(
+                child: const Text('CLEAR DB'),
+                onPressed: () async {
+                  await SossoldiDatabase.instance.clearDatabase().then((v) {
+                    ref.refresh(accountsProvider);
+                    ref.refresh(categoriesProvider);
+                    ref.refresh(transactionsProvider);
+                    ref.refresh(budgetsProvider);
+                    showSuccessDialog(context, "DB Cleared");
+                  });
+                },
+              ),
+              ElevatedButton(
+                child: const Text('CLEAR AND FILL DEMO DATA'),
+                onPressed: () async {
+                  await SossoldiDatabase.instance.clearDatabase();
+                  await SossoldiDatabase.instance.fillDemoData().then((value) {
+                    ref.refresh(accountsProvider);
+                    ref.refresh(categoriesProvider);
+                    ref.refresh(transactionsProvider);
+                    ref.refresh(budgetsProvider);
+                    showSuccessDialog(context, "DB Cleared, and DEMO data added");
+                  });
+                },
+              ),
+            ],
+          )),
     );
   }
 }

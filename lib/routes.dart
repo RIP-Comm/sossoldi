@@ -1,6 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sossoldi/pages/categories/category_list.dart';
+import 'model/bank_account.dart';
+import 'pages/accounts/account_list.dart';
+import 'pages/categories/add_category.dart';
+import 'pages/accounts/add_account.dart';
 import 'pages/add_page/widgets/recurrence_selector.dart';
 import 'pages/add_page/widgets/account_selector.dart';
 import 'pages/add_page/widgets/category_selector.dart';
@@ -19,18 +24,25 @@ Route<dynamic> makeRoute(RouteSettings settings) {
       return _materialPageRoute(settings.name, const HomePage());
     case '/transactions':
       return _materialPageRoute(settings.name, TransactionsPage());
-    // Test route
     case '/categoryselect':
       return _cupertinoPageRoute(settings.name, const CategorySelector());
-    // Test route
+    case '/category-list':
+      return _cupertinoPageRoute(settings.name, const CategoryList());
+    case '/add-category':
+      return _cupertinoPageRoute(settings.name, const AddCategory());
+    case '/account-list':
+      return _cupertinoPageRoute(settings.name, const AccountList());
+    case '/add-account':
+      return _cupertinoPageRoute(settings.name, const AddAccount());
     case '/accountselect':
-      return _cupertinoPageRoute(settings.name, AccountSelector(settings.arguments as AutoDisposeStateProvider));
+      return _cupertinoPageRoute(
+          settings.name, AccountSelector(settings.arguments as StateProvider));
     case '/recurrenceselect':
       return _cupertinoPageRoute(settings.name, const RecurrenceSelector());
     case '/planning':
-      return _materialPageRoute(settings.name, PlanningPage());
+      return _materialPageRoute(settings.name, const PlanningPage());
     case '/graphs':
-      return _materialPageRoute(settings.name, StatsPage());
+      return _materialPageRoute(settings.name, const StatsPage());
     case '/settings':
       return _noTransitionPageRoute(settings.name, const SettingsPage());
     default:

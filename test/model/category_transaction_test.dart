@@ -9,6 +9,7 @@ void main() {
         id: 2,
         name: "name",
         symbol: 'symbol',
+        color: 0,
         createdAt: DateTime.utc(2022),
         updatedAt: DateTime.utc(2022));
 
@@ -16,6 +17,8 @@ void main() {
 
     assert(cCopy.id == 10);
     assert(cCopy.name == c.name);
+    assert(cCopy.symbol == c.symbol);
+    assert(cCopy.color == c.color);
     assert(cCopy.createdAt == c.createdAt);
     assert(cCopy.updatedAt == c.updatedAt);
   });
@@ -25,6 +28,7 @@ void main() {
       BaseEntityFields.id: 0,
       CategoryTransactionFields.name: "name",
       CategoryTransactionFields.symbol: "symbol",
+      CategoryTransactionFields.color: 0,
       CategoryTransactionFields.note: "note",
       BaseEntityFields.createdAt: DateTime.utc(2022).toIso8601String(),
       BaseEntityFields.updatedAt: DateTime.utc(2022).toIso8601String(),
@@ -35,6 +39,7 @@ void main() {
     assert(c.id == json[BaseEntityFields.id]);
     assert(c.name == json[CategoryTransactionFields.name]);
     assert(c.symbol == json[CategoryTransactionFields.symbol]);
+    assert(c.color == json[CategoryTransactionFields.color]);
     assert(c.note == json[CategoryTransactionFields.note]);
     assert(c.createdAt?.toUtc().toIso8601String() ==
         json[BaseEntityFields.createdAt]);
@@ -47,6 +52,7 @@ void main() {
         id: 2,
         name: "name",
         symbol: "symbol",
+        color: 0,
         note: "note");
 
     Map<String, Object?> json = c.toJson();
@@ -54,6 +60,7 @@ void main() {
     assert(c.id == json[BaseEntityFields.id]);
     assert(c.name == json[CategoryTransactionFields.name]);
     assert(c.symbol == json[CategoryTransactionFields.symbol]);
+    assert(c.color == json[CategoryTransactionFields.color]);
     assert(c.note == json[CategoryTransactionFields.note]);
   });
 }

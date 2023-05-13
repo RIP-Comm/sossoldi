@@ -8,7 +8,7 @@ class AsyncBudgetsNotifier extends AsyncNotifier<List<Budget>> {
   }
 
   Future<List<Budget>> _getBudgets() async {
-    final account = await BudgetMethods().selectAll();
+    final account = await BudgetMethods().selectAllActive();
     return account;
   }
 
@@ -37,6 +37,7 @@ class AsyncBudgetsNotifier extends AsyncNotifier<List<Budget>> {
   }
 }
 
-final budgetsProvider = AsyncNotifierProvider<AsyncBudgetsNotifier, List<Budget>>(() {
+final budgetsProvider =
+    AsyncNotifierProvider<AsyncBudgetsNotifier, List<Budget>>(() {
   return AsyncBudgetsNotifier();
 });

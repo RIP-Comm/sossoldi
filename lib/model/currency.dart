@@ -58,22 +58,22 @@ class Currency extends BaseEntity {
         CurrencyFields.symbol: symbol,
         CurrencyFields.code: code,
         CurrencyFields.name: name,
-        CurrencyFields.mainCurrency: mainCurrency
+        CurrencyFields.mainCurrency: mainCurrency ? 1 : 0,
       };
 }
 
 class BudgetMethods extends SossoldiDatabase {
   Future<Currency> insert(Currency item) async {
-    final database = await SossoldiDatabase.instance.database;
-    final id = await database.insert(currencyTable, item.toJson());
+    final db = await database;
+    final id = await db.insert(currencyTable, item.toJson());
     return item.copy(id: id);
   }
 
 
   Future<Currency> selectById(int id) async {
-    final database = await SossoldiDatabase.instance.database;
+    final db = await database;
 
-    final maps = await database.query(
+    final maps = await db.query(
       currencyTable,
       columns: CurrencyFields.allFields,
       where: '${CurrencyFields.id} = ?',
@@ -88,20 +88,20 @@ class BudgetMethods extends SossoldiDatabase {
   }
 
   Future<List<Currency>> selectAll() async {
-    final database = await SossoldiDatabase.instance.database;
+    final db = await database;
 
     final orderByASC = '${CurrencyFields.id} ASC';
 
-    final result = await database.query(currencyTable, orderBy: orderByASC);
+    final result = await db.query(currencyTable, orderBy: orderByASC);
 
     return result.map((json) => Currency.fromJson(json)).toList();
   }
 
   Future<int> updateItem(Currency item) async {
-    final database = await SossoldiDatabase.instance.database;
+    final db = await database;
 
     // You can use `rawUpdate` to write the query in SQL
-    return database.update(
+    return db.update(
       currencyTable,
       item.toJson(),
       where:
@@ -111,9 +111,9 @@ class BudgetMethods extends SossoldiDatabase {
   }
 
   Future<int> deleteById(int id) async {
-    final database = await SossoldiDatabase.instance.database;
+    final db = await database;
 
-    return await database.delete(currencyTable,
+    return await db.delete(currencyTable,
         where:
         '${CurrencyFields.id} = ?',
         whereArgs: [id]);

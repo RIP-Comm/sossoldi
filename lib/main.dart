@@ -24,7 +24,17 @@ ColorScheme customColorScheme = const ColorScheme(
 
 ThemeData customThemeData = ThemeData(
   colorScheme: customColorScheme,
-  backgroundColor: white,
+  appBarTheme: const AppBarTheme(
+    color: grey3,
+    elevation: 0,
+    centerTitle: true,
+    iconTheme: IconThemeData(color: blue5),
+    titleTextStyle: TextStyle(
+      color: blue1,
+      fontSize: 18,
+      fontWeight: FontWeight.w700,
+    ),
+  ),
   fontFamily: 'SF Pro Text',
   textTheme: const TextTheme(
     // display

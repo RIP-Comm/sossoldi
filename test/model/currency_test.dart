@@ -54,6 +54,6 @@ void main() {
     assert(b.symbol == json[CurrencyFields.symbol]);
     assert(b.code == json[CurrencyFields.code]);
     assert(b.symbol == json[CurrencyFields.symbol]);
-    assert(b.mainCurrency == json[CurrencyFields.mainCurrency]);
+    assert((b.mainCurrency ? 1 : 0) == json[CurrencyFields.mainCurrency]);
   });
 }

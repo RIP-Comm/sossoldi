@@ -6,8 +6,10 @@ import 'widgets/accounts_tab.dart';
 import 'widgets/list_tab.dart';
 
 class TransactionsPage extends StatefulWidget {
+  const TransactionsPage({super.key});
+
   @override
-  _TransactionsPageState createState() => _TransactionsPageState();
+  State<TransactionsPage> createState() => _TransactionsPageState();
 }
 
 class _TransactionsPageState extends State<TransactionsPage>

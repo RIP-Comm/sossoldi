@@ -42,6 +42,11 @@ class TransactionFields extends BaseEntityFields {
 enum Type { income, expense, transfer }
 enum Recurrence { daily, weekly, monthly, bimonthly, quarterly, semester, annual }
 
+Map<String, Type> typeMap = {
+  "IN": Type.income,
+  "OUT": Type.expense,
+  "TRSF": Type.transfer,
+};
 Map<Recurrence, String> recurrenceMap = {
   Recurrence.daily: "Daily",
   Recurrence.weekly: "Weekly",
@@ -57,7 +62,7 @@ class Transaction extends BaseEntity {
   final num amount;
   final Type type;
   final String? note;
-  final int idCategory;
+  final int? idCategory;
   final int idBankAccount;
   final int? idBankAccountTransfer;
   final bool recurring;
@@ -72,7 +77,7 @@ class Transaction extends BaseEntity {
       required this.amount,
       required this.type,
       this.note,
-      required this.idCategory,
+      this.idCategory,
       required this.idBankAccount,
       this.idBankAccountTransfer,
       required this.recurring,
@@ -87,7 +92,7 @@ class Transaction extends BaseEntity {
   Transaction copy(
       {int? id,
       DateTime? date,
-      int? amount,
+      num? amount,
       Type? type,
       String? note,
       int? idCategory,
@@ -122,16 +127,16 @@ class Transaction extends BaseEntity {
       id: json[BaseEntityFields.id] as int?,
       date: DateTime.parse(json[TransactionFields.date] as String),
       amount: json[TransactionFields.amount] as num,
-      type: Type.values[json[TransactionFields.type] as int],
+      type: typeMap[json[TransactionFields.type] as String]!,
       note: json[TransactionFields.note] as String?,
-      idCategory: json[TransactionFields.idCategory] as int,
+      idCategory: json[TransactionFields.idCategory] as int?,
       idBankAccount: json[TransactionFields.idBankAccount] as int,
       idBankAccountTransfer: json[TransactionFields.idBankAccountTransfer] as int?,
       recurring: json[TransactionFields.recurring] == 1 ? true : false,
       recurrencyType: json[TransactionFields.recurrencyType] as String?,
       recurrencyPayDay: json[TransactionFields.recurrencyPayDay] as int?,
-      recurrencyFrom: json[TransactionFields.recurrencyFrom] != null ? DateTime.parse (TransactionFields.recurrencyFrom) : null,
-      recurrencyTo: json[TransactionFields.recurrencyTo] != null ? DateTime.parse (TransactionFields.recurrencyTo) : null,
+      recurrencyFrom: json[TransactionFields.recurrencyFrom] != null ? DateTime.parse(TransactionFields.recurrencyFrom) : null,
+      recurrencyTo: json[TransactionFields.recurrencyTo] != null ? DateTime.parse(TransactionFields.recurrencyTo) : null,
       createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
       updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String)
   );
@@ -140,12 +145,12 @@ class Transaction extends BaseEntity {
         TransactionFields.id: id,
         TransactionFields.date: date.toIso8601String(),
         TransactionFields.amount: amount,
-        TransactionFields.type: type.index,
+        TransactionFields.type: typeMap.keys.firstWhere((k) => typeMap[k] == type),
         TransactionFields.note: note,
         TransactionFields.idCategory: idCategory,
         TransactionFields.idBankAccount: idBankAccount,
         TransactionFields.idBankAccountTransfer: idBankAccountTransfer,
-        TransactionFields.recurring: recurring,
+        TransactionFields.recurring: recurring ? 1 : 0,
         TransactionFields.recurrencyType: recurrencyType,
         TransactionFields.recurrencyPayDay: recurrencyPayDay,
         TransactionFields.recurrencyFrom: recurrencyFrom,
@@ -180,12 +185,17 @@ class TransactionMethods extends SossoldiDatabase {
     }
   }
 
-  Future<List<Transaction>> selectAll({int? limit}) async {
+  Future<List<Transaction>> selectAll({int? type, DateTime? date, int? limit}) async {
     final db = await database;
+
+    String? where = type != null ? '${TransactionFields.type} = $type' : null; // filter type
+    if(date != null) {
+      where = where != null ? "$where and ${TransactionFields.date} >= '2021-01-01' and ${TransactionFields.date} <= '2022-10-10'" : "${TransactionFields.date} >= '2021-01-01' and ${TransactionFields.date} <= '2022-10-10'"; // filter date
+    }
 
     final orderByDESC = '${TransactionFields.date} DESC';
 
-    final result = await db.query(transactionTable, orderBy: orderByDESC, limit: limit);
+    final result = await db.query(transactionTable, where: where, orderBy: orderByDESC, limit: limit);
 
     return result.map((json) => Transaction.fromJson(json)).toList();
   }
