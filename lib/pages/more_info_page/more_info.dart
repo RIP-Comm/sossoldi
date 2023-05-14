@@ -23,7 +23,7 @@ var moreInfoOptions = const [
   [
     "Collaborators",
     "See the team behind this app",
-    null,
+    "/collaborators",
   ],
   [
     "Privacy Policy",
