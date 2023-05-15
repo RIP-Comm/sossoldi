@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sossoldi/constants/style.dart';
+import '../constants/style.dart';
 
 class DefaultContainer extends StatefulWidget {
   const DefaultContainer({required this.child, required this.onTap, super.key});

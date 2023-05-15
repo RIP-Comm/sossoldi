@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sossoldi/custom_widgets/default_container.dart';
+import '../custom_widgets/default_container.dart';
 import '../constants/style.dart';
 import '../custom_widgets/alert_dialog.dart';
 import '../database/sossoldi_database.dart';
@@ -29,7 +29,7 @@ var settingsOptions = const [
   [
     Icons.list_alt,
     "Categories",
-    "Add or edit categories and subcategories",
+    "Add/edit categories and subcategories",
     "/category-list",
   ],
   [
@@ -88,32 +88,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
-              child: Row(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    padding: const EdgeInsets.all(10.0),
-                    child: Icon(
-                      Icons.account_balance_wallet,
-                      size: 16.0,
-                      color: Theme.of(context).colorScheme.background,
-                    ),
-                  ),
-                  const SizedBox(width: 12.0),
-                  Text(
-                    "Your accounts",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineLarge!
-                        .copyWith(color: Theme.of(context).colorScheme.primary),
-                  ),
-                ],
-              ),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
             ),
             ListView.separated(
               itemCount: settingsOptions.length,

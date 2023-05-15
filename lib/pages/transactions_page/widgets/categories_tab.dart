@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sossoldi/constants/constants.dart';
-
+import '../../../constants/constants.dart';
 import '../../../constants/style.dart';
 import '../../../constants/functions.dart';
 import '../../../model/category_transaction.dart';

@@ -20,6 +20,7 @@ void main() {
         symbol: "account_balance",
         color: 0,
         value: randomValue,
+        active: true,
         mainAccount: false,
       );
 
