@@ -2,10 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sossoldi/custom_widgets/default_container.dart';
-import '../../constants/style.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter/gestures.dart';
 
 class CollaboratorsPage extends ConsumerStatefulWidget {
   const CollaboratorsPage({super.key});
@@ -22,8 +19,8 @@ var collaborators = const [
     "github.com/theperu",
   ],
   [
-    "mikev-cw",
-    "Maintainer",
+    "Michele Vulcano",
+    "Maintainer, Backend Dev",
     "github.com/mikev-cw",
   ],
   [

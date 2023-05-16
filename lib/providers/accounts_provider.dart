@@ -36,6 +36,7 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
       symbol: ref.read(accountIconProvider),
       color: ref.read(accountColorProvider),
       value: 0,
+      active: true,
       mainAccount: ref.read(accountMainSwitchProvider),
     );
 
@@ -74,7 +75,7 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
   Future<void> removeAccount(int accountId) async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
-      await BankAccountMethods().deleteById(accountId);
+      await BankAccountMethods().deactivateById(accountId);
       return _getAccounts();
     });
   }

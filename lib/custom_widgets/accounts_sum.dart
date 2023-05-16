@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:sossoldi/constants/constants.dart';
+import '../constants/constants.dart';
 import '../model/bank_account.dart';
 import '../constants/functions.dart';
 import '../constants/style.dart';

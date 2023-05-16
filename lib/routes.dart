@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sossoldi/pages/categories/category_list.dart';
-import 'package:sossoldi/pages/more_info_page/collaborators_page.dart';
-import 'model/bank_account.dart';
-import '/pages/more_info_page/more_info.dart';
-import '/pages/more_info_page/privacy_policy.dart';
+import 'pages/categories/category_list.dart';
+import 'pages/more_info_page/collaborators_page.dart';
+import 'pages/more_info_page/more_info.dart';
+import 'pages/more_info_page/privacy_policy.dart';
 import 'pages/accounts/account_list.dart';
 import 'pages/categories/add_category.dart';
 import 'pages/accounts/add_account.dart';

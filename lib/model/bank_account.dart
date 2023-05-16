@@ -11,6 +11,7 @@ class BankAccountFields extends BaseEntityFields {
   static String symbol = 'symbol';
   static String color = 'color';
   static String value = 'value';
+  static String active = 'active';
   static String mainAccount = 'mainAccount';
   static String createdAt = BaseEntityFields.getCreatedAt;
   static String updatedAt = BaseEntityFields.getUpdatedAt;
@@ -21,6 +22,7 @@ class BankAccountFields extends BaseEntityFields {
     symbol,
     color,
     value,
+    active,
     mainAccount,
     BaseEntityFields.createdAt,
     BaseEntityFields.updatedAt
@@ -32,6 +34,7 @@ class BankAccount extends BaseEntity {
   final String symbol;
   final int color;
   final num value;
+  final bool active;
   final bool mainAccount;
 
   const BankAccount(
@@ -41,6 +44,7 @@ class BankAccount extends BaseEntity {
       required this.color,
       required this.value,
       required this.mainAccount,
+      required this.active,
       DateTime? createdAt,
       DateTime? updatedAt})
       : super(id: id, createdAt: createdAt, updatedAt: updatedAt);
@@ -51,6 +55,7 @@ class BankAccount extends BaseEntity {
           String? symbol,
           int? color,
           num? value,
+          bool? active,
           bool? mainAccount,
           DateTime? createdAt,
           DateTime? updatedAt}) =>
@@ -60,6 +65,7 @@ class BankAccount extends BaseEntity {
           symbol: symbol ?? this.symbol,
           color: color ?? this.color,
           value: value ?? this.value,
+          active: active ?? this.active,
           mainAccount: mainAccount ?? this.mainAccount,
           createdAt: createdAt ?? this.createdAt,
           updatedAt: updatedAt ?? this.updatedAt);
@@ -70,6 +76,7 @@ class BankAccount extends BaseEntity {
       symbol: json[BankAccountFields.symbol] as String,
       color: json[BankAccountFields.color] as int,
       value: json[BankAccountFields.value] as num,
+      active: json[BankAccountFields.active] == 1 ? true : false,
       mainAccount: json[BankAccountFields.mainAccount] == 1 ? true : false,
       createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
       updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String));
@@ -80,6 +87,7 @@ class BankAccount extends BaseEntity {
         BankAccountFields.symbol: symbol,
         BankAccountFields.color: color,
         BankAccountFields.value: value,
+        BankAccountFields.active: active ? 1 : 0,
         BankAccountFields.mainAccount: mainAccount ? 1 : 0,
         BaseEntityFields.createdAt:
             update ? createdAt?.toIso8601String() : DateTime.now().toIso8601String(),
@@ -135,8 +143,9 @@ class BankAccountMethods extends SossoldiDatabase {
     final db = await database;
 
     final orderByASC = '${BankAccountFields.createdAt} ASC';
+    final where = '${BankAccountFields.active}  = 1';
 
-    final result = await db.query(bankAccountTable, orderBy: orderByASC);
+    final result = await db.query(bankAccountTable, where:where, orderBy: orderByASC);
 
     return result.map((json) => BankAccount.fromJson(json)).toList();
   }
@@ -175,5 +184,15 @@ class BankAccountMethods extends SossoldiDatabase {
     final db = await database;
 
     return await db.delete(bankAccountTable, where: '${BankAccountFields.id} = ?', whereArgs: [id]);
+  }
+  Future<int> deactivateById(int id) async {
+    final db = await database;
+
+    return await db.update(
+        bankAccountTable,
+        {'active':0},
+        where: '${BankAccountFields.id} = ?',
+        whereArgs: [id],
+    );
   }
 }

@@ -53,6 +53,7 @@ class SossoldiDatabase {
         `${BankAccountFields.symbol}` $textNotNull,
         `${BankAccountFields.color}` $integerNotNull,
         `${BankAccountFields.value}` $realNotNull,
+        `${BankAccountFields.active}` $integerNotNull CHECK (${BankAccountFields.active} IN (0, 1)),
         `${BankAccountFields.mainAccount}` $integerNotNull CHECK (${BankAccountFields.mainAccount} IN (0, 1)),
         `${BankAccountFields.createdAt}` $textNotNull,
         `${BankAccountFields.updatedAt}` $textNotNull
@@ -136,10 +137,10 @@ class SossoldiDatabase {
   Future fillDemoData() async {
     // Add some fake accounts
     await _database?.execute('''
-      INSERT INTO bankAccount(id, name, symbol, color, value, mainAccount, createdAt, updatedAt) VALUES
-        (70, "Revolut", 'payments', 1, 1235.10, 1, '${DateTime.now()}', '${DateTime.now()}'),
-        (71, "N26", 'credit_card', 2, 3823.56, 0, '${DateTime.now()}', '${DateTime.now()}'),
-        (72, "Fineco", 'account_balance', 3, 0.07, 0, '${DateTime.now()}', '${DateTime.now()}');
+      INSERT INTO bankAccount(id, name, symbol, color, value, active, mainAccount, createdAt, updatedAt) VALUES
+        (70, "Revolut", 'payments', 1, 1235.10, 1, 1, '${DateTime.now()}', '${DateTime.now()}'),
+        (71, "N26", 'credit_card', 2, 3823.56, 1, 0, '${DateTime.now()}', '${DateTime.now()}'),
+        (72, "Fineco", 'account_balance', 3, 0.07, 1, 0, '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
     // Add fake categories
