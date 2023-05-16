@@ -50,6 +50,12 @@ var settingsOptions = const [
     "Manage your notifications settings",
     null,
   ],
+  [
+    Icons.info,
+    "App Info",
+    "Learn more about us and the app",
+    "/more-info",
+  ],
 ];
 
 class _SettingsPageState extends ConsumerState<SettingsPage> {
