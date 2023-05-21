@@ -26,6 +26,17 @@ class _TransactionsPageState extends State<TransactionsPage>
   final double headerMaxHeight = 140.0;
   final double headerMinHeight = 56.0;
 
+  final startDate = ValueNotifier<DateTime>(DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    1,
+  )); // last day of the month
+  final endDate = ValueNotifier<DateTime>(DateTime(
+    DateTime.now().year,
+    DateTime.now().month + 1,
+    0,
+  ));
+
   @override
   void initState() {
     super.initState();
@@ -74,6 +85,9 @@ class _TransactionsPageState extends State<TransactionsPage>
                 tabController: _tabController,
                 expandedHeight: headerMaxHeight,
                 minHeight: headerMinHeight,
+                amount: 290.89, // TODO: compute for current date range
+                startDate: startDate,
+                endDate: endDate,
               ),
               pinned: true,
               floating: true,
