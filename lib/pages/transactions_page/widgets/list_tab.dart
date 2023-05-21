@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../constants/constants.dart';
 import '../../../constants/style.dart';
 import '../../../constants/functions.dart';
@@ -10,6 +10,7 @@ import '../../../pages/transactions_page/widgets/transaction_list_tile.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../providers/categories_provider.dart';
+import '../../../utils/date_helper.dart';
 
 class ListTab extends ConsumerStatefulWidget {
   const ListTab({
@@ -149,24 +150,5 @@ class DateSeparator extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-const String dateFormatter = 'MMMM d, EEEE';
-const String dateYMDFormatter = 'yyyyMMdd';
-
-extension DateHelper on DateTime {
-  String formatDate() {
-    final formatter = DateFormat(dateFormatter);
-    return formatter.format(this);
-  }
-
-  String toYMD() {
-    final formatter = DateFormat(dateYMDFormatter);
-    return formatter.format(this);
-  }
-
-  bool isSameDate(DateTime other) {
-    return year == other.year && month == other.month && day == other.day;
   }
 }
