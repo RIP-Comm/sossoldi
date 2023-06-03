@@ -15,7 +15,7 @@ void main() {
       var randomValue = amountsList[random.nextInt(amountsList.length)];
 
       BankAccount randomBankAccount = BankAccount(
-        id: 0,
+        id: 99,
         name: randomAccount,
         symbol: "account_balance",
         color: 0,
@@ -30,7 +30,21 @@ void main() {
         ),
       ));
 
+      FutureBuilder<num?>(
+          future: BankAccountMethods().getAccountSum(99),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              // Show an error message if the future encounters an error
+              return Text('Error: ${snapshot.error}');
+            } else {
+              final accountSum = snapshot.data ?? 0;
+              // TODO need to test total amount with some transactions too
+              expect(find.text("${accountSum.toStringAsFixed(2).replaceAll('.', ',')}€", findRichText: true), findsOneWidget);
+              return const Text('Ok!');
+            }
+          }
+      );
+
       expect(find.text(randomAccount), findsOneWidget);
-      expect(find.text("${randomValue.toStringAsFixed(2).replaceAll('.', ',')}€", findRichText: true), findsOneWidget);
     });
 }

@@ -176,9 +176,10 @@ class SossoldiDatabase {
     var accounts = [70,71,72];
     var outNotes = ['Grocery', 'Tolls', 'Toys', 'Tobacco', 'Concert', 'Clothing', 'Pizza', 'Drugs', 'Laundry', 'Taxes', 'Health insurance', 'Furniture', 'Car Fuel', 'Train', 'Amazon', 'Delivery', 'CHEK dividends', 'Babysitter', 'sono.pove.ro Fees', 'Quingentole trip'];
     var categories = [10,11,12,13,14];
-    int countOfGeneratedTransaction = 1000;
+    int countOfGeneratedTransaction = 10000;
     double maxAmountOfSingleTransaction = 250.00;
-    int dateInPastMaxRange = 2*365; // we want simulate past 2 years
+    int dateInPastMaxRange = (countOfGeneratedTransaction / 90 ).round() * 30; // we want simulate about 90 transactions per month
+    num fakeSalary = 5000;
     DateTime now = DateTime.now();
 
     // start building mega-query
@@ -192,10 +193,10 @@ class SossoldiDatabase {
       num randomAmount = 0;
 
       // we are more likely to give low amounts
-      if (rnd.nextInt(10) < 7) {
-        randomAmount = rnd.nextDouble() * 19.99;
+      if (rnd.nextInt(10) < 8) {
+        randomAmount = rnd.nextDouble() * (19.99 - 1) + 1;
       } else {
-        randomAmount = rnd.nextDouble() * maxAmountOfSingleTransaction;
+        randomAmount = rnd.nextDouble() * (maxAmountOfSingleTransaction - 100) + 100;
       }
 
       var randomType = 'OUT';
@@ -211,7 +212,7 @@ class SossoldiDatabase {
         randomNote = 'Transfer';
         randomAccount = 70; // sender account is hardcoded with the one that receives our fake salary
         idBankAccountTransfer = accounts[rnd.nextInt(accounts.length)];
-        randomAmount = rnd.nextDouble() * 500;
+        randomAmount = (fakeSalary/100)*70;
 
         // be sure our FROM/TO accounts are not the same
         while (idBankAccountTransfer == randomAccount) {
@@ -228,7 +229,7 @@ class SossoldiDatabase {
       DateTime randomDate =  now.subtract(Duration(days: 30*i));
       var time = randomDate.toLocal();
       DateTime salaryDateTime = DateTime(time.year, time.month, 27, time.hour, time.minute, time.second, time.millisecond, time.microsecond);
-      demoTransactions.add('''('$salaryDateTime', 1550.00, 'IN', 'Salary', 15, 70, null, 0, null, null, null, null, '$salaryDateTime', '$salaryDateTime')''');
+      demoTransactions.add('''('$salaryDateTime', $fakeSalary, 'IN', 'Salary', 15, 70, null, 0, null, null, null, null, '$salaryDateTime', '$salaryDateTime')''');
     }
 
     // add some recurring payment too
