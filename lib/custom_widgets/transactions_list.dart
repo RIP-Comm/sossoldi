@@ -13,7 +13,6 @@ import '../providers/accounts_provider.dart';
 import '../providers/categories_provider.dart';
 import '../constants/style.dart';
 
-/// This class shows account summaries in dashboard
 class TransactionsList extends StatefulWidget {
   final List<Transaction> transactions;
 

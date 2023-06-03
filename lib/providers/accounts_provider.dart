@@ -35,7 +35,7 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
       name: ref.read(accountNameProvider)!,
       symbol: ref.read(accountIconProvider),
       color: ref.read(accountColorProvider),
-      value: 0,
+      starting_value: 0,
       active: true,
       mainAccount: ref.read(accountMainSwitchProvider),
     );

@@ -10,7 +10,7 @@ void main() {
         name: "name",
         symbol: 'symbol',
         color: 0,
-        value: 100,
+        starting_value: 100,
         active: true,
         mainAccount: true,
         createdAt: DateTime.utc(2022),
@@ -22,7 +22,7 @@ void main() {
     assert(bCopy.name == b.name);
     assert(bCopy.symbol == b.symbol);
     assert(bCopy.color == b.color);
-    assert(bCopy.value == bCopy.value);
+    assert(bCopy.starting_value == bCopy.starting_value);
     assert(bCopy.active == bCopy.active);
     assert(bCopy.mainAccount == bCopy.mainAccount);
     assert(bCopy.createdAt == b.createdAt);
@@ -35,7 +35,7 @@ void main() {
       BankAccountFields.name: "name",
       BankAccountFields.symbol: "symbol",
       BankAccountFields.color: 0,
-      BankAccountFields.value: 100,
+      BankAccountFields.starting_value: 100,
       BaseEntityFields.createdAt: DateTime.utc(2022).toIso8601String(),
       BaseEntityFields.updatedAt: DateTime.utc(2022).toIso8601String(),
     };
@@ -46,7 +46,7 @@ void main() {
     assert(b.name == json[BankAccountFields.name]);
     assert(b.symbol == json[BankAccountFields.symbol]);
     assert(b.color == json[BankAccountFields.color]);
-    assert(b.value == json[BankAccountFields.value]);
+    assert(b.starting_value == json[BankAccountFields.starting_value]);
     assert(b.createdAt?.toUtc().toIso8601String() ==
         json[BaseEntityFields.createdAt]);
     assert(b.updatedAt?.toUtc().toIso8601String() ==
@@ -59,7 +59,7 @@ void main() {
         name: "name",
         symbol: "symbol",
         color: 0,
-        value: 100,
+        starting_value: 100,
         active: true,
         mainAccount: false);
 
@@ -69,7 +69,7 @@ void main() {
     assert(b.name == json[BankAccountFields.name]);
     assert(b.symbol == json[BankAccountFields.symbol]);
     assert(b.color == json[BankAccountFields.color]);
-    assert(b.value == json[BankAccountFields.value]);
+    assert(b.starting_value == json[BankAccountFields.starting_value]);
     assert((b.active ? 1 : 0) == json[BankAccountFields.active]);
     assert((b.mainAccount ? 1 : 0) == json[BankAccountFields.mainAccount]);
   });
