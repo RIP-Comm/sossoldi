@@ -202,19 +202,16 @@ class BankAccountMethods extends SossoldiDatabase {
     final db = await database;
 
     //get account infos first
-    final where = '${BankAccountFields.id}  = $id';
-    final result = await db.query(bankAccountTable, where:where, limit: 1);
+    final result = await db.query(bankAccountTable, where:'${BankAccountFields.id}  = $id', limit: 1);
     final singleObject = result.isNotEmpty ? result[0] : null;
 
     if (singleObject != null) {
       num balance = singleObject[BankAccountFields.starting_value] as num;
 
       // get all transactions of that account
-      final where2 = '${TransactionFields.idBankAccount}  = $id OR ${TransactionFields.idBankAccountTransfer} = $id';
-      final result2 = await db.query(transactionTable, where:where2);
+      final transactionsResult = await db.query(transactionTable, where:'${TransactionFields.idBankAccount}  = $id OR ${TransactionFields.idBankAccountTransfer} = $id');
 
-
-      for (var transaction in result2) {
+      for (var transaction in transactionsResult) {
         num amount = transaction[TransactionFields.amount] as num;
 
         switch (transaction[TransactionFields.type]) {
@@ -232,11 +229,9 @@ class BankAccountMethods extends SossoldiDatabase {
             }
             break;
         }
-
       }
 
       return balance;
-
     } else {
       return 0;
     }
