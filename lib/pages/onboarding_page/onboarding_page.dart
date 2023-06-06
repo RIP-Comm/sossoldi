@@ -644,19 +644,16 @@ class _Step2State extends State<Step2> {
 
 class NumericKeyboardDialog extends StatelessWidget {
   CategoryTransaction category;
-  var valueEntered;
-  NumericKeyboardDialog(this.category, {this.valueEntered, super.key});
+  NumericKeyboardDialog(this.category, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, ref, _) {
-        final budgetsValue = ref.watch(budgetsValueProvider);
         return AlertDialog(
           title: Text('Add budget for ${category.name}'),
-          content: TextField(
+          content: const TextField(
             keyboardType: TextInputType.number,
-            onChanged: (value) => ref.read(budgetsValueProvider.notifier).state = value as int,
           ),
           actions: [
             ElevatedButton(
