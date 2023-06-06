@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '/custom_widgets/default_container.dart';
 import '/model/budget.dart';
 import '/providers/categories_provider.dart';
 import '/constants/constants.dart';
@@ -139,7 +138,7 @@ class _Step1State extends ConsumerState<Step1> {
                   },
                   child: categoriesGrid.when(
                     data: (categories) => GridView.builder(
-                      itemCount: categories.length+1,
+                      itemCount: categories.length + 1,
                       scrollDirection: Axis.vertical,
                       gridDelegate:
                           const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -148,12 +147,28 @@ class _Step1State extends ConsumerState<Step1> {
                         crossAxisSpacing: 18,
                         mainAxisSpacing: 12,
                       ),
-                      itemBuilder: (context, i) => GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          child: buildCard(categories.elementAt(i)),
-                        ),
-                      ),
+                      itemBuilder: (context, i) {
+                        if (i < categories.length) {
+                          return GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => NumericKeyboardDialog(
+                                    categories.elementAt(i)),
+                              );
+                            },
+                            child: Container(
+                              child: buildCard(categories.elementAt(i)),
+                            ),
+                          );
+                        } else {
+                          return GestureDetector(
+                            onTap: () => Navigator.of(context)
+                                .pushNamed('/add-category'),
+                            child: buildDefaultCard(),
+                          );
+                        }
+                      },
                     ),
                     error: (err, stack) => Text('Error: $err'),
                     loading: () => const Center(
@@ -370,7 +385,7 @@ class _Step1State extends ConsumerState<Step1> {
                   child: Text("ADD BUDGET",
                       style: Theme.of(context).textTheme.bodySmall)),
             ],
-          )
+          ),
         ],
       ),
     );
@@ -623,6 +638,36 @@ class _Step2State extends State<Step2> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class NumericKeyboardDialog extends StatelessWidget {
+  CategoryTransaction category;
+  var valueEntered;
+  NumericKeyboardDialog(this.category, {this.valueEntered, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer(
+      builder: (context, ref, _) {
+        final budgetsValue = ref.watch(budgetsValueProvider);
+        return AlertDialog(
+          title: Text('Add budget for ${category.name}'),
+          content: TextField(
+            keyboardType: TextInputType.number,
+            onChanged: (value) => ref.read(budgetsValueProvider.notifier).state = value as int,
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Confirm'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
