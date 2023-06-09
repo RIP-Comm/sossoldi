@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sossoldi/pages/onboarding_page/widgets/account_setup.dart';
+import 'package:sossoldi/pages/onboarding_page/widgets/add_budget.dart';
 import '/model/budget.dart';
 import '/providers/categories_provider.dart';
 import '/constants/constants.dart';
@@ -76,7 +77,7 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                             onTap: () {
                               showDialog(
                                 context: context,
-                                builder: (context) => NumericKeyboardDialog(
+                                builder: (context) => AddBudget(
                                     categories.elementAt(i)),
                               );
                             },
@@ -360,31 +361,3 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
     );
   }
 }
-
-class NumericKeyboardDialog extends StatelessWidget {
-  final CategoryTransaction category;
-  const NumericKeyboardDialog(this.category, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer(
-      builder: (context, ref, _) {
-        return AlertDialog(
-          title: Text('Add budget for ${category.name}'),
-          content: const TextField(
-            keyboardType: TextInputType.number,
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Confirm'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-}
-
