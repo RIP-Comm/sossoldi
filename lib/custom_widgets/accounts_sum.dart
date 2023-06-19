@@ -52,7 +52,7 @@ class AccountsSum extends StatelessWidget with Functions {
                         children: [
                           AccountDialog(
                             accountName: account.name,
-                            amount: account.starting_value,
+                            amount: account.startingValue,
                           )
                         ],
                       ),

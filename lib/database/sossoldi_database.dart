@@ -52,7 +52,7 @@ class SossoldiDatabase {
         `${BankAccountFields.name}` $textNotNull,
         `${BankAccountFields.symbol}` $textNotNull,
         `${BankAccountFields.color}` $integerNotNull,
-        `${BankAccountFields.starting_value}` $realNotNull,
+        `${BankAccountFields.startingValue}` $realNotNull,
         `${BankAccountFields.active}` $integerNotNull CHECK (${BankAccountFields.active} IN (0, 1)),
         `${BankAccountFields.mainAccount}` $integerNotNull CHECK (${BankAccountFields.mainAccount} IN (0, 1)),
         `${BankAccountFields.createdAt}` $textNotNull,
@@ -137,7 +137,7 @@ class SossoldiDatabase {
   Future fillDemoData() async {
     // Add some fake accounts
     await _database?.execute('''
-      INSERT INTO bankAccount(id, name, symbol, color, starting_value, active, mainAccount, createdAt, updatedAt) VALUES
+      INSERT INTO bankAccount(id, name, symbol, color, startingValue, active, mainAccount, createdAt, updatedAt) VALUES
         (70, "Revolut", 'payments', 1, 1235.10, 1, 1, '${DateTime.now()}', '${DateTime.now()}'),
         (71, "N26", 'credit_card', 2, 3823.56, 1, 0, '${DateTime.now()}', '${DateTime.now()}'),
         (72, "Fineco", 'account_balance', 3, 0.00, 1, 0, '${DateTime.now()}', '${DateTime.now()}');
