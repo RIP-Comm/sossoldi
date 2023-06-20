@@ -52,7 +52,7 @@ class SossoldiDatabase {
         `${BankAccountFields.name}` $textNotNull,
         `${BankAccountFields.symbol}` $textNotNull,
         `${BankAccountFields.color}` $integerNotNull,
-        `${BankAccountFields.value}` $realNotNull,
+        `${BankAccountFields.startingValue}` $realNotNull,
         `${BankAccountFields.active}` $integerNotNull CHECK (${BankAccountFields.active} IN (0, 1)),
         `${BankAccountFields.mainAccount}` $integerNotNull CHECK (${BankAccountFields.mainAccount} IN (0, 1)),
         `${BankAccountFields.createdAt}` $textNotNull,
@@ -137,10 +137,10 @@ class SossoldiDatabase {
   Future fillDemoData() async {
     // Add some fake accounts
     await _database?.execute('''
-      INSERT INTO bankAccount(id, name, symbol, color, value, active, mainAccount, createdAt, updatedAt) VALUES
+      INSERT INTO bankAccount(id, name, symbol, color, startingValue, active, mainAccount, createdAt, updatedAt) VALUES
         (70, "Revolut", 'payments', 1, 1235.10, 1, 1, '${DateTime.now()}', '${DateTime.now()}'),
         (71, "N26", 'credit_card', 2, 3823.56, 1, 0, '${DateTime.now()}', '${DateTime.now()}'),
-        (72, "Fineco", 'account_balance', 3, 0.07, 1, 0, '${DateTime.now()}', '${DateTime.now()}');
+        (72, "Fineco", 'account_balance', 3, 0.00, 1, 0, '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
     // Add fake categories
@@ -174,11 +174,12 @@ class SossoldiDatabase {
     // First initialize some config stuff
     final rnd = Random();
     var accounts = [70,71,72];
-    var outNotes = ['Grocery', 'Tolls', 'Toys', 'Tobacco', 'Concert', 'Clothing', 'Pizza', 'Drugs', 'Laundry', 'Taxes', 'Health insurance', 'Furniture', 'Car Fuel', 'Train', 'Amazon', 'Delivery', 'Hotel', 'Babysitter', 'Paypal Fees', 'Quingentole trip'];
+    var outNotes = ['Grocery', 'Tolls', 'Toys', 'Tobacco', 'Concert', 'Clothing', 'Pizza', 'Drugs', 'Laundry', 'Taxes', 'Health insurance', 'Furniture', 'Car Fuel', 'Train', 'Amazon', 'Delivery', 'CHEK dividends', 'Babysitter', 'sono.pove.ro Fees', 'Quingentole trip'];
     var categories = [10,11,12,13,14];
-    int countOfGeneratedTransaction = 5000;
+    int countOfGeneratedTransaction = 10000;
     double maxAmountOfSingleTransaction = 250.00;
-    int dateInPastMaxRange = 2*365; // we want simulate past 2 years
+    int dateInPastMaxRange = (countOfGeneratedTransaction / 90 ).round() * 30; // we want simulate about 90 transactions per month
+    num fakeSalary = 5000;
     DateTime now = DateTime.now();
 
     // start building mega-query
@@ -189,7 +190,15 @@ class SossoldiDatabase {
 
     // Start a loop
     for (int i = 0; i < countOfGeneratedTransaction; i++) {
-      var randomAmount = rnd.nextDouble() * maxAmountOfSingleTransaction;
+      num randomAmount = 0;
+
+      // we are more likely to give low amounts
+      if (rnd.nextInt(10) < 8) {
+        randomAmount = rnd.nextDouble() * (19.99 - 1) + 1;
+      } else {
+        randomAmount = rnd.nextDouble() * (maxAmountOfSingleTransaction - 100) + 100;
+      }
+
       var randomType = 'OUT';
       var randomAccount = accounts[rnd.nextInt(accounts.length)];
       var randomNote = outNotes[rnd.nextInt(outNotes.length)];
@@ -197,11 +206,13 @@ class SossoldiDatabase {
       var idBankAccountTransfer;
       DateTime randomDate =  now.subtract(Duration(days: rnd.nextInt(dateInPastMaxRange), hours: rnd.nextInt(20), minutes: rnd.nextInt(50)));
 
-      if (i % 70 == 0) {
-        // simulating a transfer every 70 iterations
+      if (i % (countOfGeneratedTransaction/100) == 0) {
+        // simulating a transfer every 1% of total iterations
         randomType = 'TRSF';
-        randomNote = '';
+        randomNote = 'Transfer';
+        randomAccount = 70; // sender account is hardcoded with the one that receives our fake salary
         idBankAccountTransfer = accounts[rnd.nextInt(accounts.length)];
+        randomAmount = (fakeSalary/100)*70;
 
         // be sure our FROM/TO accounts are not the same
         while (idBankAccountTransfer == randomAccount) {
@@ -214,9 +225,11 @@ class SossoldiDatabase {
     }
 
     // add salary every month
-    for (int i = 0; i < dateInPastMaxRange/30; i++) {
+    for (int i = 1; i < dateInPastMaxRange/30; i++) {
       DateTime randomDate =  now.subtract(Duration(days: 30*i));
-      demoTransactions.add('''('$randomDate', 1550.00, 'IN', 'Salary', 15, 70, null, 0, null, null, null, null, '$randomDate', '$randomDate')''');
+      var time = randomDate.toLocal();
+      DateTime salaryDateTime = DateTime(time.year, time.month, 27, time.hour, time.minute, time.second, time.millisecond, time.microsecond);
+      demoTransactions.add('''('$salaryDateTime', $fakeSalary, 'IN', 'Salary', 15, 70, null, 0, null, null, null, null, '$salaryDateTime', '$salaryDateTime')''');
     }
 
     // add some recurring payment too

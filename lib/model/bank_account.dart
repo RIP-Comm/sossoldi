@@ -1,3 +1,4 @@
+import 'package:sossoldi/model/transaction.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../database/sossoldi_database.dart';
@@ -10,7 +11,7 @@ class BankAccountFields extends BaseEntityFields {
   static String name = 'name';
   static String symbol = 'symbol';
   static String color = 'color';
-  static String value = 'value';
+  static String startingValue = 'startingValue';
   static String active = 'active';
   static String mainAccount = 'mainAccount';
   static String createdAt = BaseEntityFields.getCreatedAt;
@@ -21,7 +22,7 @@ class BankAccountFields extends BaseEntityFields {
     name,
     symbol,
     color,
-    value,
+    startingValue,
     active,
     mainAccount,
     BaseEntityFields.createdAt,
@@ -33,7 +34,7 @@ class BankAccount extends BaseEntity {
   final String name;
   final String symbol;
   final int color;
-  final num value;
+  final num startingValue;
   final bool active;
   final bool mainAccount;
 
@@ -42,7 +43,7 @@ class BankAccount extends BaseEntity {
       required this.name,
       required this.symbol,
       required this.color,
-      required this.value,
+      required this.startingValue,
       required this.mainAccount,
       required this.active,
       DateTime? createdAt,
@@ -54,7 +55,7 @@ class BankAccount extends BaseEntity {
           String? name,
           String? symbol,
           int? color,
-          num? value,
+          num? startingValue,
           bool? active,
           bool? mainAccount,
           DateTime? createdAt,
@@ -64,7 +65,7 @@ class BankAccount extends BaseEntity {
           name: name ?? this.name,
           symbol: symbol ?? this.symbol,
           color: color ?? this.color,
-          value: value ?? this.value,
+          startingValue: startingValue ?? this.startingValue,
           active: active ?? this.active,
           mainAccount: mainAccount ?? this.mainAccount,
           createdAt: createdAt ?? this.createdAt,
@@ -75,7 +76,7 @@ class BankAccount extends BaseEntity {
       name: json[BankAccountFields.name] as String,
       symbol: json[BankAccountFields.symbol] as String,
       color: json[BankAccountFields.color] as int,
-      value: json[BankAccountFields.value] as num,
+      startingValue: json[BankAccountFields.startingValue] as num,
       active: json[BankAccountFields.active] == 1 ? true : false,
       mainAccount: json[BankAccountFields.mainAccount] == 1 ? true : false,
       createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
@@ -86,7 +87,7 @@ class BankAccount extends BaseEntity {
         BankAccountFields.name: name,
         BankAccountFields.symbol: symbol,
         BankAccountFields.color: color,
-        BankAccountFields.value: value,
+        BankAccountFields.startingValue: startingValue,
         BankAccountFields.active: active ? 1 : 0,
         BankAccountFields.mainAccount: mainAccount ? 1 : 0,
         BaseEntityFields.createdAt:
@@ -185,6 +186,7 @@ class BankAccountMethods extends SossoldiDatabase {
 
     return await db.delete(bankAccountTable, where: '${BankAccountFields.id} = ?', whereArgs: [id]);
   }
+
   Future<int> deactivateById(int id) async {
     final db = await database;
 
@@ -194,5 +196,44 @@ class BankAccountMethods extends SossoldiDatabase {
         where: '${BankAccountFields.id} = ?',
         whereArgs: [id],
     );
+  }
+
+  Future<num?> getAccountSum(int? id) async {
+    final db = await database;
+
+    //get account infos first
+    final result = await db.query(bankAccountTable, where:'${BankAccountFields.id}  = $id', limit: 1);
+    final singleObject = result.isNotEmpty ? result[0] : null;
+
+    if (singleObject != null) {
+      num balance = singleObject[BankAccountFields.startingValue] as num;
+
+      // get all transactions of that account
+      final transactionsResult = await db.query(transactionTable, where:'${TransactionFields.idBankAccount}  = $id OR ${TransactionFields.idBankAccountTransfer} = $id');
+
+      for (var transaction in transactionsResult) {
+        num amount = transaction[TransactionFields.amount] as num;
+
+        switch (transaction[TransactionFields.type]) {
+          case ('IN'):
+            balance += amount;
+            break;
+          case ('OUT'):
+            balance -= amount;
+            break;
+          case ('TRSF'):
+            if (transaction[TransactionFields.idBankAccount] == id) {
+              balance -= amount;
+            } else {
+              balance += amount;
+            }
+            break;
+        }
+      }
+
+      return balance;
+    } else {
+      return 0;
+    }
   }
 }
