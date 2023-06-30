@@ -400,14 +400,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.1.0"
-  plugin_platform_interface:
-    dependency: transitive
-    description:
-      name: plugin_platform_interface
-      sha256: "6a2128648c854906c53fa8e33986fc0247a1116122f9534dd20e3ab9e16a32bc"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.4"
   pointycastle:
     dependency: transitive
     description:
