@@ -12,7 +12,7 @@ import 'pages/add_page/widgets/recurrence_selector.dart';
 import 'pages/add_page/widgets/account_selector.dart';
 import 'pages/add_page/widgets/category_selector.dart';
 import 'pages/home_page.dart';
-import 'pages/planning_budget_page.dart';
+import 'pages/planning_page/planning_page.dart';
 import 'pages/settings_page.dart';
 import 'pages/statistics_page.dart';
 import 'pages/structure.dart';
