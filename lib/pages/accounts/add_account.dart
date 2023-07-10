@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/accounts_provider.dart';
 import '../../constants/constants.dart';
@@ -17,6 +18,7 @@ class AddAccount extends ConsumerStatefulWidget {
 
 class _AddAccountState extends ConsumerState<AddAccount> with Functions {
   final TextEditingController nameController = TextEditingController();
+  final TextEditingController startingValueController = TextEditingController();
 
   @override
   void dispose() {
@@ -24,6 +26,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
     ref.invalidate(accountNameProvider);
     ref.invalidate(accountIconProvider);
     ref.invalidate(accountColorProvider);
+    ref.invalidate(accountStartingValueProvider);
     ref.invalidate(accountMainSwitchProvider);
     ref.invalidate(countNetWorthSwitchProvider);
     super.dispose();
@@ -234,6 +237,56 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                     ],
                   ),
                 ),
+                
+                if (selectedAccount == null)
+                  Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.fromLTRB(16, 24, 16, 0),
+                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surface,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "STARTING VALUE",
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelLarge!
+                              .copyWith(
+                                  color: Theme.of(context).colorScheme.primary),
+                        ),
+                        TextField(
+                          controller: startingValueController,
+                          decoration: InputDecoration(
+                            hintText: "Initial balance",
+                            suffixText: "€",
+                            hintStyle: Theme.of(context)
+                                .textTheme
+                                .titleLarge!
+                                .copyWith(color: grey2),
+                            border: InputBorder.none,
+                            contentPadding: const EdgeInsets.all(0),
+                          ),
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'[0-9,]')),
+                          ],
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge!
+                              .copyWith(color: grey1),
+                          onChanged: (value) => ref
+                              .read(accountStartingValueProvider.notifier)
+                              .state = currencyToNum(value),
+                        )
+                      ],
+                    ),
+                  ),
+                
                 Container(
                   width: double.infinity,
                   margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
