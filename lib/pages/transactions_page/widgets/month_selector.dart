@@ -1,40 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../../constants/style.dart';
+import '../../../utils/formatted_date_range.dart';
 
 class MonthSelector extends StatelessWidget {
-  MonthSelector({
+  const MonthSelector({
     required this.amount,
+    required this.startDate,
+    required this.endDate,
     Key? key,
   }) : super(key: key);
 
-  final double amount; // get from backend (Bloc) instead of from parent
+  final double amount;
+  final ValueNotifier<DateTime> startDate;
+  final ValueNotifier<DateTime> endDate;
   final double height = 60;
 
-  final startDate = ValueNotifier<DateTime>(DateTime(
-    DateTime.now().year,
-    DateTime.now().month,
-    1,
-  )); // last day of the month
-  final endDate = ValueNotifier<DateTime>(DateTime(
-    DateTime.now().year,
-    DateTime.now().month + 1,
-    0,
-  )); // last day of the month
-
-  String getFormattedDate() {
-    DateTime lastOfMonth =
-        DateTime(startDate.value.year, startDate.value.month + 1, 0);
-
-    if (startDate.value.day == 1 && endDate.value == lastOfMonth) {
-      return DateFormat('MMMM yyyy').format(startDate.value);
-    } else {
-      final s = DateFormat('dd/MM/yy').format(startDate.value);
-      final e = DateFormat('dd/MM/yy').format(endDate.value);
-      return "$s - $e";
-    }
-  }
+  // last day of the month
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +31,14 @@ class MonthSelector extends StatelessWidget {
           initialDateRange: DateTimeRange(
             start: startDate.value,
             end: endDate.value,
+          ),
+          builder: (context, child) => Theme(
+            data: Theme.of(context).copyWith(
+              appBarTheme: Theme.of(context)
+                  .appBarTheme
+                  .copyWith(backgroundColor: blue1),
+            ),
+            child: child!,
           ),
         );
         if (range != null) {
@@ -91,7 +81,7 @@ class MonthSelector extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(
-                      getFormattedDate(),
+                      getFormattedDateRange(startDate.value, endDate.value),
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     Text(

@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:fl_chart/fl_chart.dart';
-import 'package:sossoldi/constants/constants.dart';
-
+import '../../../constants/constants.dart';
 import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
 import '../../../model/category_transaction.dart';

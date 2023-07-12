@@ -2,8 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sossoldi/custom_widgets/default_container.dart';
-import '../../constants/style.dart';
+import '../../custom_widgets/default_container.dart';
 
 
 class MoreInfoPage extends ConsumerStatefulWidget {

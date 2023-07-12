@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import '../../../constants/style.dart';
+import '../../../utils/formatted_date_range.dart';
 import 'month_selector.dart';
 
 class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
@@ -13,16 +14,21 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
     required this.tabController,
     required this.expandedHeight,
     required this.minHeight,
+    required this.startDate,
+    required this.endDate,
+    required this.amount,
   });
 
   final TabController tabController;
   final List<Tab> myTabs;
   final TickerProvider ticker;
 
+  final ValueNotifier<DateTime> startDate;
+  final ValueNotifier<DateTime> endDate;
+
+  final double amount;
   final double minHeight;
   final double expandedHeight;
-
-  final amount = 258.45; // get from backend
 
   // TODO: expand on Tap
 
@@ -117,7 +123,11 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
                       ?.copyWith(fontWeight: FontWeight.w400),
                 ),
                 const SizedBox(height: 8),
-                MonthSelector(amount: amount),
+                MonthSelector(
+                  amount: amount,
+                  startDate: startDate,
+                  endDate: endDate,
+                ),
               ],
             ),
           ),
@@ -149,7 +159,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
           ),
         ),
         Text(
-          "Settembre 2022",
+          getFormattedDateRange(startDate.value, endDate.value),
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         Text(

@@ -1,19 +1,19 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:sossoldi/constants/constants.dart';
+import '../constants/constants.dart';
 import '../model/bank_account.dart';
 import '../constants/functions.dart';
 import '../constants/style.dart';
 import 'account_modal.dart';
 
-/// This class shows account summaries in dashboard
+/// This class shows account summaries in the dashboard
 class AccountsSum extends StatelessWidget with Functions {
   final BankAccount account;
 
   const AccountsSum({
-    super.key,
+    Key? key,
     required this.account,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +26,10 @@ class AccountsSum extends StatelessWidget with Functions {
         boxShadow: [defaultShadow],
       ),
       child: Container(
-      decoration: BoxDecoration(
-        color: accountColorList[account.color].withOpacity(0.2),
-        borderRadius: BorderRadius.circular(8),
-      ),
+        decoration: BoxDecoration(
+          color: accountColorList[account.color].withOpacity(0.2),
+          borderRadius: BorderRadius.circular(8),
+        ),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
@@ -52,7 +52,7 @@ class AccountsSum extends StatelessWidget with Functions {
                         children: [
                           AccountDialog(
                             accountName: account.name,
-                            amount: account.value,
+                            amount: account.startingValue,
                           )
                         ],
                       ),
@@ -84,22 +84,40 @@ class AccountsSum extends StatelessWidget with Functions {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(account.name, style: Theme.of(context).textTheme.bodyLarge),
-                      RichText(
-                        textScaleFactor: MediaQuery.of(context).textScaleFactor,
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: numToCurrency(account.value),
-                              style: Theme.of(context).textTheme.titleSmall,
-                            ),
-                            TextSpan(
-                              text: "€",
-                              style: Theme.of(context).textTheme.bodyMedium?.apply(
-                                fontFeatures: [const FontFeature.subscripts()],
+                      FutureBuilder<num?>(
+                        future: BankAccountMethods().getAccountSum(account.id),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            // Show a loading indicator while waiting for the future to complete
+                            return Transform.scale(
+                              scale: 0.5,
+                              child: CircularProgressIndicator(),
+                            );
+                          } else if (snapshot.hasError) {
+                            // Show an error message if the future encounters an error
+                            return Text('Error: ${snapshot.error}');
+                          } else {
+                            // Display the result once the future completes successfully
+                            final accountSum = snapshot.data ?? 0;
+                            return RichText(
+                              textScaleFactor: MediaQuery.of(context).textScaleFactor,
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: numToCurrency(accountSum),
+                                    style: Theme.of(context).textTheme.titleSmall,
+                                  ),
+                                  TextSpan(
+                                    text: "€",
+                                    style: Theme.of(context).textTheme.bodyMedium?.apply(
+                                      fontFeatures: [const FontFeature.subscripts()],
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
-                        ),
+                            );
+                          }
+                        },
                       ),
                     ],
                   ),
