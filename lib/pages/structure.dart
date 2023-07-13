@@ -6,8 +6,8 @@ import '../constants/style.dart';
 import 'add_page/add_page.dart';
 import '../pages/home_page.dart';
 import '../pages/transactions_page/transactions_page.dart';
-import '../pages/planning_budget_page.dart';
 import '../pages/statistics_page.dart';
+import '../pages/planning_page/planning_page.dart';
 
 final StateProvider selectedIndexProvider = StateProvider<int>((ref) => 0);
 
