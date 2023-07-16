@@ -1,15 +1,10 @@
-import 'dart:ui';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '/model/budget.dart';
-import '/providers/categories_provider.dart';
-import '/constants/constants.dart';
+import '../../../constants/constants.dart';
+import '../../../providers/accounts_provider.dart';
 import '/constants/style.dart';
-import '/model/category_transaction.dart';
-import '/providers/budgets_provider.dart';
-import 'package:collection/collection.dart';
+
+final showAccountIconsProvider = StateProvider.autoDispose<bool>((ref) => false);
 
 class AccountSetup extends ConsumerStatefulWidget {
   const AccountSetup({Key? key}) : super(key: key);
@@ -25,9 +20,12 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
   @override
   Widget build(BuildContext context) {
     accountNameController.text = "Main account";
+    final accountIcon = ref.watch(accountIconProvider);
+    final accountColor = ref.watch(accountColorProvider);
 
     return Scaffold(
       backgroundColor: blue7,
+      resizeToAvoidBottomInset: false,
       body: Center(
         child: Column(
           children: [
@@ -84,6 +82,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                         ?.apply(color: black),
                     textAlign: TextAlign.center,
                     controller: accountNameController,
+                    autofocus: true,
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.black, width: 0.8),
@@ -126,22 +125,99 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                       const Icon(Icons.edit, size: 10)
                     ],
                   ),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    // TO DO - icona modificabile
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      shape: const CircleBorder(),
-                      padding: const EdgeInsets.all(10),
-                      backgroundColor: blue5,
-                    ),
-                    child: const Icon(
-                      Icons.account_balance,
-                      size: 40,
-                      color: white,
+                  const SizedBox(height: 20),
+                  Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: const BorderRadius.all(Radius.circular(90)),
+                      onTap: () => ref.read(showAccountIconsProvider.notifier).state = true,
+                      child: Ink(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: accountColorList[accountColor],
+                        ),
+                        padding: const EdgeInsets.all(16),
+                        child: Icon(
+                          accountIconList[accountIcon],
+                          size: 36,
+                          color: Theme.of(context).colorScheme.background,
+                        ),
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 10),
+                  const Divider(height: 1, color: grey2),
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    height: 38,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      physics: const BouncingScrollPhysics(),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      separatorBuilder: (context, index) => const SizedBox(width: 16),
+                      itemBuilder: (context, index) {
+                        Color color = accountColorList[index];
+                        return GestureDetector(
+                          onTap: () => ref.read(accountColorProvider.notifier).state = index,
+                          child: Container(
+                            height: accountColorList[accountColor] == color ? 38 : 32,
+                            width: accountColorList[accountColor] == color ? 38 : 32,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: color,
+                              border: accountColorList[accountColor] == color
+                                  ? Border.all(
+                                color: Theme.of(context).colorScheme.primary,
+                                width: 3,
+                              )
+                                  : null,
+                            ),
+                          ),
+                        );
+                      },
+                      itemCount: accountColorList.length,
+                    ),
+                  ),
+                  const SizedBox(height: 12,),
+                  const Divider(height: 1, color: grey2),
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    height: 38,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      physics: const BouncingScrollPhysics(),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      separatorBuilder: (context, index) => const SizedBox(width: 16),
+                      itemBuilder: (context, index) {
+                        IconData accountIconData =
+                        accountIconList.values.elementAt(index);
+                        String accountIconName = accountIconList.keys.elementAt(index);
+                        return GestureDetector(
+                          onTap: () => ref.read(accountIconProvider.notifier).state =
+                              accountIconName,
+                          child: Container(
+                            width: 38,
+                            height: 38,
+                            margin: const EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                                color: accountIconList[accountIcon] == accountIconData
+                                    ? Theme.of(context).colorScheme.secondary
+                                    : Theme.of(context).colorScheme.surface,
+                                shape: BoxShape.circle,),
+                            child: Icon(
+                              accountIconData,
+                              color: accountIconList[accountIcon] == accountIconData
+                                  ? Colors.white
+                                  : Theme.of(context).colorScheme.primary,
+                              size: 24,
+                            ),
+                          ),
+                        );
+                      },
+                      itemCount: accountIconList.length,
+                    ),
+                  ),
+                  const SizedBox(height: 12,),
                 ],
               ),
             ),
@@ -186,12 +262,13 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
             SizedBox(
               width: 342,
               height: 48,
               child: ElevatedButton(
                 onPressed: () {
+                  //TODO: check if data are present
                   Navigator.of(context).pushNamed('/');
                 },
                 style: ElevatedButton.styleFrom(

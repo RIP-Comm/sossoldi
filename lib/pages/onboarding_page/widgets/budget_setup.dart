@@ -3,8 +3,8 @@ import 'dart:ui';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:sossoldi/pages/onboarding_page/widgets/account_setup.dart';
-import 'package:sossoldi/pages/onboarding_page/widgets/add_budget.dart';
+import '/pages/onboarding_page/widgets/account_setup.dart';
+import '/pages/onboarding_page/widgets/add_budget.dart';
 import '/model/budget.dart';
 import '/providers/categories_provider.dart';
 import '/constants/constants.dart';
@@ -43,14 +43,13 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                   .headlineLarge
                   ?.copyWith(color: blue1),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
             Text(
               "Choose which categories you want to set a budget for",
               textAlign: TextAlign.center,
               style:
-              Theme.of(context).textTheme.bodySmall?.copyWith(color: blue1),
+                  Theme.of(context).textTheme.bodySmall?.copyWith(color: blue1),
             ),
-            const SizedBox(height: 5),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(
@@ -65,7 +64,7 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                       itemCount: categories.length + 1,
                       scrollDirection: Axis.vertical,
                       gridDelegate:
-                      const SliverGridDelegateWithMaxCrossAxisExtent(
+                          const SliverGridDelegateWithMaxCrossAxisExtent(
                         maxCrossAxisExtent: 300,
                         childAspectRatio: 3,
                         crossAxisSpacing: 18,
@@ -77,8 +76,8 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                             onTap: () {
                               showDialog(
                                 context: context,
-                                builder: (context) => AddBudget(
-                                    categories.elementAt(i)),
+                                builder: (context) =>
+                                    AddBudget(categories.elementAt(i)),
                               );
                             },
                             child: Container(
@@ -106,39 +105,65 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
             // if the total budget (sum of the budget of the selected cards) is > 0, set the other layout. otherwise set the "continue without budget" button
             totalBudget > 0
                 ? Center(
-              child: Column(
-                children: [
-                  Text("Monthly budget total:",
-                      style: Theme.of(context).textTheme.bodySmall),
-                  const SizedBox(height: 10),
-                  RichText(
-                    textScaleFactor:
-                    MediaQuery.of(context).textScaleFactor,
-                    text: TextSpan(
+                    child: Column(
                       children: [
-                        TextSpan(
-                          text: totalBudget.toString(),
-                          style:
-                          Theme.of(context).textTheme.displayMedium,
-                        ),
-                        TextSpan(
-                          text: "€",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.apply(
-                            fontFeatures: [
-                              const FontFeature.subscripts()
+                        Text("Monthly budget total:",
+                            style: Theme.of(context).textTheme.bodySmall),
+                        const SizedBox(height: 10),
+                        RichText(
+                          textScaleFactor:
+                              MediaQuery.of(context).textScaleFactor,
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: totalBudget.toString(),
+                                style:
+                                    Theme.of(context).textTheme.displayMedium,
+                              ),
+                              TextSpan(
+                                text: "€",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.apply(
+                                  fontFeatures: [
+                                    const FontFeature.subscripts()
+                                  ],
+                                ),
+                              ),
                             ],
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        SizedBox(
+                          width: 342,
+                          height: 48,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const AccountSetup()),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: blue5,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            child: Text('NEXT STEP',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(color: Colors.white)),
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    width: 342,
-                    height: 48,
+                  )
+                : Padding(
+                    padding: const EdgeInsets.only(left: 75, right: 75),
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.push(
@@ -148,55 +173,29 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: blue5,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                        elevation: 0.0,
+                        shadowColor: Colors.transparent,
+                        backgroundColor: Colors.transparent,
+                      ),
+                      child: Container(
+                        padding: const EdgeInsets.only(bottom: 1.0),
+                        decoration: const BoxDecoration(
+                            border: Border(
+                                bottom: BorderSide(width: 1.2, color: black))),
+                        child: Row(
+                          children: [
+                            Text('CONTINUE WITHOUT BUDGET  ',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(color: blue1)),
+                            const Icon(Icons.arrow_forward,
+                                size: 15, color: blue1),
+                          ],
                         ),
                       ),
-                      child: Text('NEXT STEP',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(color: Colors.white)),
                     ),
                   ),
-                ],
-              ),
-            )
-                : Padding(
-              padding: const EdgeInsets.only(left: 75, right: 75),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const AccountSetup()),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  elevation: 0.0,
-                  shadowColor: Colors.transparent,
-                  backgroundColor: Colors.transparent,
-                ),
-                child: Container(
-                  padding: const EdgeInsets.only(bottom: 1.0),
-                  decoration: const BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(width: 1.2, color: black))),
-                  child: Row(
-                    children: [
-                      Text('CONTINUE WITHOUT BUDGET  ',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(color: blue1)),
-                      const Icon(Icons.arrow_forward,
-                          size: 15, color: blue1),
-                    ],
-                  ),
-                ),
-              ),
-            ),
             const SizedBox(height: 20),
           ],
         ),
@@ -212,7 +211,7 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
       final budgets = budgetsList.value;
 
       Budget? budget =
-      budgets?.firstWhereOrNull((c) => c.idCategory == category.id);
+          budgets?.firstWhereOrNull((c) => c.idCategory == category.id);
 
       if (budget != null && budget.active) {
         return Container(
@@ -318,7 +317,7 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
   Widget buildDefaultCard() {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: grey2, width: 0.5),
+        border: Border.all(color: grey2, width: 1.5),
         color: grey3,
         borderRadius: const BorderRadius.all(
           Radius.circular(8),

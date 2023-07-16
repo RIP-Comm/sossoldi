@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sossoldi/pages/onboarding_page/widgets/budget_setup.dart';
+import '/pages/onboarding_page/widgets/budget_setup.dart';
 import '/constants/style.dart';
 
 class Onboarding extends StatefulWidget {
@@ -8,6 +8,8 @@ class Onboarding extends StatefulWidget {
   @override
   State<Onboarding> createState() => _OnboardingState();
 }
+
+//TODO: make visible only at the first access in the app
 
 class _OnboardingState extends State<Onboarding> {
   @override
@@ -26,7 +28,7 @@ class _OnboardingState extends State<Onboarding> {
               style: Theme.of(context)
                   .textTheme
                   .headlineLarge
-                  ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                  ?.copyWith(color: blue1),
             ),
             const SizedBox(
               height: 80,
@@ -68,7 +70,7 @@ class _OnboardingState extends State<Onboarding> {
                   style: Theme.of(context)
                       .textTheme
                       .bodyMedium
-                      ?.copyWith(color: Colors.white),
+                      ?.copyWith(color: white),
                 ),
               ),
             ),
