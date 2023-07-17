@@ -119,7 +119,7 @@ class _StatsPageState extends ConsumerState<StatsPage> with Functions {
                         fontWeight: FontWeight.w600,
                         ),
                   textAlign: TextAlign.left,
-                ),  
+                ),
               ),
             ),
             Card(
@@ -181,20 +181,22 @@ class _StatsPageState extends ConsumerState<StatsPage> with Functions {
                                 SizedBox(
                                   height: 12,
                                   width: double.infinity,
-                                  child: Row(                                    
+                                  child: Row(
                                     children: [
                                       Container(
-                                        width: MediaQuery.of(context).size.width * 0.9 * (account.startingValue.toDouble()/max),
-                                        decoration: const BoxDecoration(
+                                        width: MediaQuery.of(context).size.width * 0.9 * (account.startingValue.toDouble()/max) - (account.startingValue.toDouble()/max > 0 ? 1 : 0),
+                                        decoration: BoxDecoration(
                                           borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            bottomLeft: Radius.circular(4.0),
+                                            topLeft: const Radius.circular(4.0),
+                                            bottomLeft: const Radius.circular(4.0),
+                                            topRight: Radius.circular(account.startingValue.toDouble()/max == 1 ? 4.0 : 0.0),
+                                            bottomRight: Radius.circular(account.startingValue.toDouble()/max == 1 ? 4.0 : 0.0),
                                           ),
                                           color: blue3,
                                         ),
                                       ),
                                       Container(
-                                        width: MediaQuery.of(context).size.width * 0.9 *(1 - (account.startingValue.toDouble()/max)),
+                                        width: account.startingValue.toDouble()/max == 1 ? 0 : MediaQuery.of(context).size.width * 0.9 * (1 - (account.startingValue.toDouble()/max)) - 1,
                                         decoration: const BoxDecoration(
                                           borderRadius: BorderRadius.only(
                                             topRight: Radius.circular(4.0),
