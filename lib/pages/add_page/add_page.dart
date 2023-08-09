@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sossoldi/utils/decimal_text_input_formatter.dart';
+import '../../utils/decimal_text_input_formatter.dart';
 import '../../model/transaction.dart';
 import 'widgets/details_tile.dart';
 import 'widgets/type_tab.dart';
