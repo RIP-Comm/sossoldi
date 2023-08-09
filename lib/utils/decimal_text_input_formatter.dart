@@ -7,6 +7,7 @@ class DecimalTextInputFormatter extends TextInputFormatter {
 
   final int? decimalDigits;
   final String decimalSeparator = ".";
+  final String thousandsSeparator = ",";
 
   @override
   TextEditingValue formatEditUpdate(
@@ -16,7 +17,7 @@ class DecimalTextInputFormatter extends TextInputFormatter {
     TextSelection newSelection = newValue.selection;
     String value = newValue.text;
 
-    if (decimalSeparator.allMatches(value).length > 1) {
+    if (decimalSeparator.allMatches(value).length > 1 || value.contains(thousandsSeparator)) {
       return oldValue;
     }
     
