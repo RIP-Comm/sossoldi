@@ -17,6 +17,12 @@ class DecimalTextInputFormatter extends TextInputFormatter {
     TextSelection newSelection = newValue.selection;
     String value = newValue.text;
 
+    RegExp regex = RegExp(r'[\d\,\.]');
+
+    if (value.isNotEmpty && !regex.hasMatch(value[value.length -1])) {
+      return oldValue;
+    }
+    
     if (value.contains(thousandsSeparator)) {
       value = value.replaceAll(thousandsSeparator, decimalSeparator);
     }
