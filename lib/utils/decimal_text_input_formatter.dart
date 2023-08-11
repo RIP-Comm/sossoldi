@@ -17,6 +17,10 @@ class DecimalTextInputFormatter extends TextInputFormatter {
     TextSelection newSelection = newValue.selection;
     String value = newValue.text;
 
+    if (value.contains(thousandsSeparator)) {
+      value = value.replaceAll(thousandsSeparator, decimalSeparator);
+    }
+
     if (decimalSeparator.allMatches(value).length > 1 || value.contains(thousandsSeparator)) {
       return oldValue;
     }
