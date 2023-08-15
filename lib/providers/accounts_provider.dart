@@ -8,6 +8,7 @@ final selectedAccountProvider = StateProvider<BankAccount?>((ref) => null);
 final accountNameProvider = StateProvider<String?>((ref) => null);
 final accountIconProvider = StateProvider<String>((ref) => accountIconList.keys.first);
 final accountColorProvider = StateProvider<int>((ref) => 0);
+final accountStartingValueProvider = StateProvider<num?>((ref) => null);
 final accountMainSwitchProvider = StateProvider<bool>((ref) => false);
 final countNetWorthSwitchProvider = StateProvider<bool>((ref) => true);
 
@@ -35,7 +36,7 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
       name: ref.read(accountNameProvider)!,
       symbol: ref.read(accountIconProvider),
       color: ref.read(accountColorProvider),
-      startingValue: 0,
+      startingValue: ref.read(accountStartingValueProvider) ?? 0,
       active: true,
       mainAccount: ref.read(accountMainSwitchProvider),
     );
@@ -69,6 +70,7 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
     ref.read(accountNameProvider.notifier).state = account.name;
     ref.read(accountIconProvider.notifier).state = account.symbol;
     ref.read(accountColorProvider.notifier).state = account.color;
+    ref.read(accountStartingValueProvider.notifier).state = account.startingValue;
     ref.read(accountMainSwitchProvider.notifier).state = account.mainAccount;
   }
 
