@@ -17,11 +17,14 @@ import 'pages/settings_page.dart';
 import 'pages/statistics_page.dart';
 import 'pages/structure.dart';
 import 'pages/transactions_page/transactions_page.dart';
+import 'pages/onboarding_page/onboarding_page.dart';
 
 Route<dynamic> makeRoute(RouteSettings settings) {
   switch (settings.name) {
     case '/':
       return _materialPageRoute(settings.name, const Structure());
+    case '/onboarding':
+      return _materialPageRoute(settings.name, const Onboarding());
     case '/dashboard':
       return _materialPageRoute(settings.name, const HomePage());
     case '/transactions':

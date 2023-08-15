@@ -112,7 +112,7 @@ class Launcher extends StatelessWidget {
       title: 'Sossoldi',
       theme: customThemeData,
       onGenerateRoute: makeRoute,
-      initialRoute: '/',
+      initialRoute: '/onboarding',
     );
   }
 }
