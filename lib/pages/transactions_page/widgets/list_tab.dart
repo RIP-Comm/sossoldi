@@ -34,9 +34,17 @@ class _ListTabState extends ConsumerState<ListTab> with Functions {
       for (var t in transactions.value!) {
         String date = t.date.toYMD();
         if (totals.containsKey(date)) {
-          totals[date] = totals[date]! + t.amount.toDouble();
+          if (t.type == Type.expense) {
+            totals[date] = totals[date]! - t.amount.toDouble();
+          } else if (t.type == Type.income) {
+            totals[date] = totals[date]! + t.amount.toDouble();
+          }
         } else {
-          totals.putIfAbsent(date, () => t.amount.toDouble());
+          if (t.type == Type.expense) {
+            totals.putIfAbsent(date, () => -t.amount.toDouble());
+          } else if (t.type == Type.income) {
+            totals.putIfAbsent(date, () => t.amount.toDouble());
+          }
         }
       }
     }
@@ -64,16 +72,33 @@ class _ListTabState extends ConsumerState<ListTab> with Functions {
                             .where((e) => e.id == transaction.idCategory)
                         : [];
 
+                String account = accounts.value!
+                    .firstWhere((e) => e.id == transaction.idBankAccount)
+                    .name;
+
+                // account the money is moved to in a trasfer
+                String targetAccount = (transaction.type == Type.transfer)
+                    ? accounts.value!
+                        .firstWhere(
+                          (element) =>
+                              element.id == transaction.idBankAccountTransfer,
+                        )
+                        .name
+                    : "";
+
                 return TransactionListTile(
-                  title: transaction.note ?? "Title",
+                  title: transaction.note ?? "",
+                  type: transaction.type,
                   amount: transaction.amount.toDouble(),
-                  account: accounts.value!
-                      .firstWhere((e) => e.id == transaction.idBankAccount)
-                      .name,
+                  account: (transaction.type == Type.transfer)
+                      ? "$account → $targetAccount"
+                      : account,
                   category: (tCategories.isNotEmpty)
                       ? tCategories.first.name
-                      : "not found",
-                  color: Colors.red,
+                      : "no category",
+                  color: (tCategories.isNotEmpty)
+                      ? categoryColorList[tCategories.first.color]
+                      : blue3,
                   icon: (tCategories.isNotEmpty)
                       ? iconList[tCategories.first.symbol] ??
                           Icons.swap_horiz_rounded
@@ -118,7 +143,7 @@ class _ListTabState extends ConsumerState<ListTab> with Functions {
   }
 }
 
-class DateSeparator extends StatelessWidget {
+class DateSeparator extends StatelessWidget with Functions {
   const DateSeparator({
     Key? key,
     required this.transaction,
@@ -141,7 +166,7 @@ class DateSeparator extends StatelessWidget {
                 Theme.of(context).textTheme.bodySmall?.copyWith(color: blue1),
           ),
           Text(
-            "${total.toStringAsFixed(2)} €",
+            "${numToCurrency(total)} €",
             style: Theme.of(context)
                 .textTheme
                 .bodyLarge

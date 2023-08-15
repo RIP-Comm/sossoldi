@@ -1,11 +1,14 @@
 import "package:flutter/material.dart";
 
 import '../../../constants/style.dart';
+import '../../../constants/functions.dart';
+import '../../../model/transaction.dart';
 
-class TransactionListTile extends StatelessWidget {
+class TransactionListTile extends StatelessWidget with Functions {
   const TransactionListTile({
     Key? key,
     required this.title,
+    required this.type,
     required this.amount,
     required this.color,
     required this.category,
@@ -14,6 +17,7 @@ class TransactionListTile extends StatelessWidget {
   }) : super(key: key);
 
   final String title;
+  final Type type;
   final double amount;
   final Color color;
   final String category;
@@ -23,7 +27,7 @@ class TransactionListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: white,
       padding: const EdgeInsets.symmetric(
         horizontal: 8.0,
         vertical: 12.0,
@@ -37,7 +41,7 @@ class TransactionListTile extends StatelessWidget {
               shape: BoxShape.circle,
               color: color,
             ),
-            child: Icon(icon),
+            child: Icon(icon, color: white),
           ),
           const SizedBox(width: 8.0),
           Expanded(
@@ -51,11 +55,11 @@ class TransactionListTile extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(
-                      "${amount.toStringAsFixed(2)} €",
+                      "${type == Type.expense ? '-' : ''}${numToCurrency(amount)} €",
                       style: Theme.of(context)
                           .textTheme
                           .bodyLarge
-                          ?.copyWith(color: (amount > 0) ? green : red),
+                          ?.copyWith(color: typeToColor(type)),
                     ),
                   ],
                 ),
