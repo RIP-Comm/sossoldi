@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'pages/account_page/account_page.dart';
 import 'pages/accounts/account_list.dart';
 import 'pages/accounts/add_account.dart';
+import 'pages/add_page/add_page.dart';
 import 'pages/add_page/widgets/recurrence_selector.dart';
 import 'pages/add_page/widgets/account_selector.dart';
 import 'pages/add_page/widgets/category_selector.dart';
@@ -27,6 +28,8 @@ Route<dynamic> makeRoute(RouteSettings settings) {
       return _materialPageRoute(settings.name, const Structure());
     case '/dashboard':
       return _materialPageRoute(settings.name, const HomePage());
+    case '/add-page':
+      return _materialPageRoute(settings.name, const AddPage());
     case '/transactions':
       return _materialPageRoute(settings.name, const TransactionsPage());
     case '/categoryselect':

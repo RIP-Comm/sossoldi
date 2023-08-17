@@ -2,13 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../utils/decimal_text_input_formatter.dart';
-import '../../model/transaction.dart';
-import 'widgets/details_tile.dart';
-import 'widgets/type_tab.dart';
-import '../../providers/transactions_provider.dart';
+
 import '../../constants/style.dart';
 import '../../constants/functions.dart';
+import '../../model/transaction.dart';
+import '../../providers/transactions_provider.dart';
+import '../../utils/decimal_text_input_formatter.dart';
+import 'widgets/details_tile.dart';
+import 'widgets/type_tab.dart';
 
 class AddPage extends ConsumerStatefulWidget {
   const AddPage({super.key});
@@ -61,10 +62,43 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
     ref.listen(amountProvider, (_, __) {});
     ref.listen(noteProvider, (_, __) {});
 
-    return GestureDetector(
-      // Serve a togliere il focus se si preme su altro
-      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: SingleChildScrollView(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          (selectedTransaction != null)
+              ? "Editing transaction"
+              : "New transaction",
+        ),
+        leadingWidth: 100,
+        leading: TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(
+            'Cancel',
+            style:
+                Theme.of(context).textTheme.titleMedium!.copyWith(color: blue5),
+          ),
+        ),
+        actions: [
+          selectedTransaction != null
+              ? Container(
+                  alignment: Alignment.centerRight,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.delete_outline,
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+                    onPressed: () async {
+                      ref
+                          .read(transactionsProvider.notifier)
+                          .deleteTransaction(selectedTransaction.id!)
+                          .whenComplete(() => Navigator.of(context).pop());
+                    },
+                  ),
+                )
+              : const SizedBox(),
+        ],
+      ),
+      body: SingleChildScrollView(
         child: Column(
           children: [
             Container(
@@ -74,55 +108,6 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
               ),
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: Text(
-                            'Cancel',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium!
-                                .copyWith(color: blue5),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Center(
-                          child: Text(
-                            "New Transaction",
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: selectedTransaction != null
-                            ? Container(
-                                alignment: Alignment.centerRight,
-                                child: IconButton(
-                                  icon: Icon(
-                                    Icons.delete_outline,
-                                    color: Theme.of(context).colorScheme.error,
-                                  ),
-                                  onPressed: () async {
-                                    ref
-                                        .read(transactionsProvider.notifier)
-                                        .deleteTransaction(
-                                            selectedTransaction.id!)
-                                        .whenComplete(
-                                            () => Navigator.of(context).pop());
-                                  },
-                                ),
-                              )
-                            : const SizedBox(),
-                      ),
-                    ],
-                  ),
                   const SizedBox(height: 34),
                   Container(
                     height: 30,
@@ -338,7 +323,8 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                               color: typeToColor(selectedType),
                             ),
                       ),
-                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true),
                       inputFormatters: <TextInputFormatter>[
                         DecimalTextInputFormatter(decimalDigits: 2)
                       ],
