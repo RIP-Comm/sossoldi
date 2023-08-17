@@ -6,11 +6,11 @@ import '../../../constants/style.dart';
 import '../../../constants/functions.dart';
 import '../../../model/category_transaction.dart';
 import '../../../model/transaction.dart';
-import '../../../pages/transactions_page/widgets/transaction_list_tile.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../providers/categories_provider.dart';
 import '../../../utils/date_helper.dart';
+import '../../transactions_page/widgets/transaction_list_tile.dart';
 
 class ListTab extends ConsumerStatefulWidget {
   const ListTab({
@@ -87,6 +87,7 @@ class _ListTabState extends ConsumerState<ListTab> with Functions {
                     : "";
 
                 return TransactionListTile(
+                  transaction: transaction,
                   title: transaction.note ?? "",
                   type: transaction.type,
                   amount: transaction.amount.toDouble(),
