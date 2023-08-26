@@ -21,12 +21,6 @@ class SettingsPage extends ConsumerStatefulWidget {
 
 var settingsOptions = const [
   [
-    Icons.settings,
-    "General Settings",
-    "Edit general settings",
-    "/general-settings",
-  ],
-  [
     Icons.account_balance_wallet,
     "Accounts",
     "Add or edit your accounts",
