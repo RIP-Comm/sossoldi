@@ -58,7 +58,6 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
     final trnscTypes = ref.watch(transactionTypesProvider);
     final selectedTransaction = ref.watch(selectedTransactionUpdateProvider);
     final selectedType = trsncTypeList[trnscTypes.indexOf(true)];
-    final selectedRecurringPay = ref.watch(selectedRecurringPayProvider);
     // I listen servono a evitare che il provider faccia il dispose subito dopo essere stato aggiornato
     ref.listen(amountProvider, (_, __) {});
     ref.listen(noteProvider, (_, __) {});
@@ -191,11 +190,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                     },
                   ),
                   if (selectedType == Type.expense) ...[
-                    RecurrenceListTile(
-                      isRecurring: selectedRecurringPay,
-                      recurringProvider: selectedRecurringPayProvider,
-                      intervalProvider: intervalProvider,
-                    ),
+                    const RecurrenceListTile(),
                   ],
                 ],
               ),

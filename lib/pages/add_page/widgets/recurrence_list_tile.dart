@@ -4,22 +4,19 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import 'dart:io' show Platform;
 
 import "../../../constants/style.dart";
+import '../../../providers/transactions_provider.dart';
 import '../../../model/transaction.dart';
+import 'recurrence_selector.dart';
 
 class RecurrenceListTile extends ConsumerWidget {
   const RecurrenceListTile({
-    required this.isRecurring,
-    required this.recurringProvider,
-    required this.intervalProvider,
     Key? key,
   }) : super(key: key);
 
-  final bool isRecurring;
-  final StateProvider<bool> recurringProvider;
-  final StateProvider<Recurrence> intervalProvider;
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isRecurring = ref.watch(selectedRecurringPayProvider);
+
     return Column(
       children: [
         const Divider(height: 1, color: grey1),
@@ -49,13 +46,14 @@ class RecurrenceListTile extends ConsumerWidget {
           trailing: (Platform.isIOS)
               ? CupertinoSwitch(
                   value: isRecurring,
-                  onChanged: (select) =>
-                      ref.read(recurringProvider.notifier).state = select,
+                  onChanged: (select) => ref
+                      .read(selectedRecurringPayProvider.notifier)
+                      .state = select,
                 )
               : Switch(
                   value: isRecurring,
                   onChanged: (select) =>
-                      ref.read(recurringProvider.notifier).state = select,
+                      ref.read(selectedRecurringPayProvider.notifier).state = select,
                 ),
         ),
         if (isRecurring) ...[
@@ -68,8 +66,13 @@ class RecurrenceListTile extends ConsumerWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(4)),
               ),
-              onPressed: () =>
-                  Navigator.of(context).pushNamed('/recurrenceselect'),
+              onPressed: () {
+                FocusManager.instance.primaryFocus?.unfocus();
+                showModalBottomSheet(
+                  context: context,
+                  builder: (_) => const RecurrenceSelector(),
+                );
+              },
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
