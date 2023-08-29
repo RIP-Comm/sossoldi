@@ -5,7 +5,7 @@ import '../model/transaction.dart';
 
 mixin Functions {
   String numToCurrency(num? value) {
-    if(value == null) return '';
+    if (value == null) return '';
     return value.toStringAsFixed(2).replaceAll(".", ",");
   }
 
@@ -17,7 +17,7 @@ mixin Functions {
   }
 
   String dateToString(DateTime date) {
-    final format = DateFormat('E d MMMM', 'it_IT');
+    final format = DateFormat('E, d MMMM y');
     return format.format(date);
   }
 
