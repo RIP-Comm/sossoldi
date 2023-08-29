@@ -1,3 +1,4 @@
+import 'dart:io' show Platform;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -158,22 +159,35 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                     title: "Date",
                     icon: Icons.calendar_month,
                     value: dateToString(ref.watch(dateProvider)),
-                    callback: () {
+                    callback: () async {
                       FocusManager.instance.primaryFocus?.unfocus();
-                      showCupertinoModalPopup(
-                        context: context,
-                        builder: (_) => Container(
-                          height: 300,
-                          color: white,
-                          child: CupertinoDatePicker(
-                            initialDateTime: ref.watch(dateProvider),
-                            mode: CupertinoDatePickerMode.date,
-                            use24hFormat: true,
-                            onDateTimeChanged: (date) =>
-                                ref.read(dateProvider.notifier).state = date,
+                      if (Platform.isIOS) {
+                        showCupertinoModalPopup(
+                          context: context,
+                          builder: (_) => Container(
+                            height: 300,
+                            color: white,
+                            child: CupertinoDatePicker(
+                              initialDateTime: ref.watch(dateProvider),
+                              minimumYear: 2015,
+                              maximumYear: 2050,
+                              mode: CupertinoDatePickerMode.date,
+                              onDateTimeChanged: (date) =>
+                                  ref.read(dateProvider.notifier).state = date,
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      } else if (Platform.isAndroid) {
+                        final DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: ref.watch(dateProvider),
+                          firstDate: DateTime(2015),
+                          lastDate: DateTime(2050),
+                        );
+                        if (pickedDate != null) {
+                          ref.read(dateProvider.notifier).state = pickedDate;
+                        }
+                      }
                     },
                   ),
                   if (selectedType == Type.expense) ...[
