@@ -270,6 +270,7 @@ class AmountSection extends ConsumerWidget with Functions {
             child: TextField(
               controller: amountController,
               decoration: InputDecoration(
+                hintText: "0",
                 border: InputBorder.none,
                 prefixText: ' ', // set to center the amount
                 suffixText: '€',
