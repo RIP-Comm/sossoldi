@@ -135,7 +135,25 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                         FocusManager.instance.primaryFocus?.unfocus();
                         showModalBottomSheet(
                           context: context,
-                          builder: (_) => AccountSelector(bankAccountProvider),
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          isScrollControlled: true,
+                          useSafeArea: true,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10.0),
+                              topRight: Radius.circular(10.0),
+                            ),
+                          ),
+                          builder: (_) => DraggableScrollableSheet(
+                            expand: false,
+                            minChildSize: 0.5,
+                            initialChildSize: 0.7,
+                            maxChildSize: 0.9,
+                            builder: (_, controller) => AccountSelector(
+                              provider: bankAccountProvider,
+                              scrollController: controller,
+                            ),
+                          ),
                         );
                       },
                     ),
@@ -148,7 +166,24 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                         FocusManager.instance.primaryFocus?.unfocus();
                         showModalBottomSheet(
                           context: context,
-                          builder: (_) => const CategorySelector(),
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          isScrollControlled: true,
+                          useSafeArea: true,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10.0),
+                              topRight: Radius.circular(10.0),
+                            ),
+                          ),
+                          builder: (_) => DraggableScrollableSheet(
+                            expand: false,
+                            minChildSize: 0.5,
+                            initialChildSize: 0.7,
+                            maxChildSize: 0.9,
+                            builder: (_, controller) => CategorySelector(
+                              scrollController: controller,
+                            ),
+                          ),
                         );
                       },
                     ),

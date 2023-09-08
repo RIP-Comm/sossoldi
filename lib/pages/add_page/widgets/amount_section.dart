@@ -96,8 +96,25 @@ class AmountSection extends ConsumerWidget with Functions {
                                 FocusManager.instance.primaryFocus?.unfocus();
                                 showModalBottomSheet(
                                   context: context,
-                                  builder: (_) => AccountSelector(
-                                    bankAccountProvider, // from
+                                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                                  isScrollControlled: true,
+                                  useSafeArea: true,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10.0),
+                                      topRight: Radius.circular(10.0),
+                                    ),
+                                  ),
+                                  builder: (_) => DraggableScrollableSheet(
+                                    expand: false,
+                                    minChildSize: 0.5,
+                                    initialChildSize: 0.7,
+                                    maxChildSize: 0.9,
+                                    builder: (_, controller) => AccountSelector(
+                                      // from
+                                      provider: bankAccountProvider,
+                                      scrollController: controller,
+                                    ),
                                   ),
                                 );
                               },
@@ -186,10 +203,28 @@ class AmountSection extends ConsumerWidget with Functions {
                             child: InkWell(
                               onTap: () {
                                 FocusManager.instance.primaryFocus?.unfocus();
+                                FocusManager.instance.primaryFocus?.unfocus();
                                 showModalBottomSheet(
                                   context: context,
-                                  builder: (_) => AccountSelector(
-                                    bankAccountTransferProvider, // to
+                                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                                  isScrollControlled: true,
+                                  useSafeArea: true,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10.0),
+                                      topRight: Radius.circular(10.0),
+                                    ),
+                                  ),
+                                  builder: (_) => DraggableScrollableSheet(
+                                    expand: false,
+                                    minChildSize: 0.5,
+                                    initialChildSize: 0.7,
+                                    maxChildSize: 0.9,
+                                    builder: (_, controller) => AccountSelector(
+                                      // to
+                                      provider: bankAccountTransferProvider,
+                                      scrollController: controller,
+                                    ),
                                   ),
                                 );
                               },
