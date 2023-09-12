@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../utils/decimal_text_input_formatter.dart';
 import '../../model/transaction.dart';
 import 'widgets/details_tile.dart';
 import 'widgets/type_tab.dart';
@@ -337,9 +338,9 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                               color: typeToColor(selectedType),
                             ),
                       ),
-                      keyboardType: TextInputType.number,
+                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
                       inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.allow(RegExp(r'[0,0-9,9]')),
+                        DecimalTextInputFormatter(decimalDigits: 2)
                       ],
                       autofocus: true,
                       textAlign: TextAlign.center,
