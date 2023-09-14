@@ -1,4 +1,3 @@
-import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -17,13 +16,13 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
   //default values
   bool darkMode = false;
   String selectedCurrency = "EUR";
-  String selectedLanguage = "GB";
+  dynamic selectedLanguage = "🇬🇧";
 
-  List<List<String>> languages = [
-    ["GB", "English"],
-    ["IT", "Italiano"],
-    ["FR", "Français"],
-    ["DE", "Deutsch"]
+  List<List<dynamic>> languages = [
+    ["🇬🇧", "English"],
+    ["🇮🇹", "Italiano"],
+    ["🇫🇷", "Français"],
+    ["🇩🇪", "Deutsch"]
   ];
 
   List<List<String>> currencies = [
@@ -110,6 +109,7 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
               ],
             ),
             const SizedBox(height: 20),
+            /*
             Row(
               children: [
                 Text("Language",
@@ -123,16 +123,10 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                     child: CircleAvatar(
                       radius: 30.0,
                       backgroundColor: blue5,
-                      child: Center(
-                          child: CountryFlag.fromCountryCode(
-                        selectedLanguage,
-                        height: 40,
-                        width: 40,
-                        borderRadius: 0,
-                      )),
+                      child: Center(child: Text(selectedLanguage, style: const TextStyle(fontSize: 30))),
                     )),
               ],
-            ),
+            ),*/
           ],
         ),
       ),
@@ -164,12 +158,8 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                           Navigator.pop(context);
                         },
                         child: ListTile(
-                          leading: CountryFlag.fromCountryCode(
-                            languages.elementAt(index)[0],
-                            height: 40,
-                            width: 40,
-                            borderRadius: 0,
-                          ),
+                          leading: Text(languages.elementAt(index)[0],
+                              style: const TextStyle(fontSize: 30)),
                           title: Text(
                             languages.elementAt(index)[1],
                             textAlign: TextAlign.center,

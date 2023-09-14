@@ -61,7 +61,6 @@ dependencies:
   percent_indicator: ^4.2.2
   circular_menu: ^2.0.1
   flutter_native_splash: ^2.2.18
-  country_flags: ^2.1.1
 
 dev_dependencies:
   flutter_test:
