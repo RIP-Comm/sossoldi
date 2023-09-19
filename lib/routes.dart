@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'pages/categories/category_list.dart';
+import 'pages/general_options/general_settings.dart';
 import 'pages/more_info_page/collaborators_page.dart';
 import 'pages/more_info_page/more_info.dart';
 import 'pages/more_info_page/privacy_policy.dart';
@@ -53,6 +54,8 @@ Route<dynamic> makeRoute(RouteSettings settings) {
       return _materialPageRoute(settings.name, const StatsPage());
     case '/settings':
       return _noTransitionPageRoute(settings.name, const SettingsPage());
+    case '/general-settings':
+      return _noTransitionPageRoute(settings.name, const GeneralSettingsPage());
     default:
       throw 'Route is not defined';
   }
