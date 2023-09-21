@@ -117,7 +117,7 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> with Functions {
                                     0.0) *
                                 70.0
                             : 0.0),
-                    child: Column(
+                    child: Wrap(
                       children: List.generate(
                         categories.value!.length,
                         (index) {
