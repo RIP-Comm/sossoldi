@@ -181,7 +181,7 @@ class TransactionRow extends ConsumerWidget with Functions {
             children: [
               Material(
                 borderRadius: BorderRadius.circular(8),
-                color: Theme.of(context).colorScheme.background,
+                color: Theme.of(context).colorScheme.primaryContainer,
                 child: InkWell(
                   onTap: () {
                     ref.read(selectedTransactionUpdateProvider.notifier).state = transaction;

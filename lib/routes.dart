@@ -26,7 +26,7 @@ Route<dynamic> makeRoute(RouteSettings settings) {
     case '/dashboard':
       return _materialPageRoute(settings.name, const HomePage());
     case '/transactions':
-      return _materialPageRoute(settings.name, TransactionsPage());
+      return _materialPageRoute(settings.name, const TransactionsPage());
     case '/categoryselect':
       return _cupertinoPageRoute(settings.name, const CategorySelector());
     case '/category-list':

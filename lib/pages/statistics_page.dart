@@ -8,7 +8,6 @@ import 'package:fl_chart/fl_chart.dart';
 import '../model/bank_account.dart';
 import '../providers/accounts_provider.dart';
 
-
 class StatsPage extends ConsumerStatefulWidget {
   const StatsPage({super.key});
 
@@ -17,7 +16,6 @@ class StatsPage extends ConsumerStatefulWidget {
 }
 
 class _StatsPageState extends ConsumerState<StatsPage> with Functions {
-
   @override
   Widget build(BuildContext context) {
     final accountList = ref.watch(accountsProvider);
@@ -35,13 +33,10 @@ class _StatsPageState extends ConsumerState<StatsPage> with Functions {
                   children: [
                     Text(
                       "Available liquidity",
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6
-                          ?.copyWith(
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
                             color: Theme.of(context).colorScheme.primary,
                             fontWeight: FontWeight.w600,
-                            ),
+                          ),
                     ),
                   ],
                 ),
@@ -55,12 +50,17 @@ class _StatsPageState extends ConsumerState<StatsPage> with Functions {
                         children: [
                           TextSpan(
                             text: "10.635",
-                            style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: blue4),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineLarge
+                                ?.copyWith(color: blue4),
                           ),
                           TextSpan(
-                            text: "€",
-                            style: Theme.of(context).textTheme.labelLarge?.copyWith(color: blue4)
-                          ),
+                              text: "€",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelLarge
+                                  ?.copyWith(color: blue4)),
                         ],
                       ),
                     ),
@@ -70,11 +70,18 @@ class _StatsPageState extends ConsumerState<StatsPage> with Functions {
                         children: [
                           TextSpan(
                             text: "+6%",
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: green, fontWeight: FontWeight.w600),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                    color: green, fontWeight: FontWeight.w600),
                           ),
                           TextSpan(
                             text: " VS last month",
-                            style: Theme.of(context).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w300),
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge
+                                ?.copyWith(fontWeight: FontWeight.w300),
                           ),
                         ],
                       ),
@@ -111,13 +118,10 @@ class _StatsPageState extends ConsumerState<StatsPage> with Functions {
                 padding: const EdgeInsets.only(left: 8.0, top: 8.0),
                 child: Text(
                   "Accounts",
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline6
-                      ?.copyWith(
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: Theme.of(context).colorScheme.primary,
                         fontWeight: FontWeight.w600,
-                        ),
+                      ),
                   textAlign: TextAlign.left,
                 ),
               ),
@@ -129,7 +133,8 @@ class _StatsPageState extends ConsumerState<StatsPage> with Functions {
                     child: ListView.builder(
                       itemCount: accounts.length,
                       shrinkWrap: true,
-                      padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 8.0),
+                      padding: const EdgeInsets.only(
+                          left: 16.0, right: 16.0, top: 8.0),
                       physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.vertical,
                       itemBuilder: (context, i) {
@@ -146,71 +151,118 @@ class _StatsPageState extends ConsumerState<StatsPage> with Functions {
                         } else {
                           BankAccount account = accounts[i];
                           double max = 0;
-                          for(var i = 0; i < accounts.length; i++)
-                          {
-                            if (max <= accounts[i].startingValue){max = accounts[i].startingValue.toDouble();}
+                          for (var i = 0; i < accounts.length; i++) {
+                            if (max <= accounts[i].startingValue) {
+                              max = accounts[i].startingValue.toDouble();
+                            }
                           }
                           return SizedBox(
-                            height: 50.0,
-                            child: Column(
-                              children: [
-                                const Padding(padding: EdgeInsets.all(2.0)),
-                                Row(
-                                  children: [
-                                    RichText(
-                                      textScaleFactor: MediaQuery.of(context).textScaleFactor,
-                                      text: TextSpan(
-                                        children: [
-                                          TextSpan(
-                                            text: account.name,
-                                            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: blue1),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        "${account.startingValue}€",
-                                        textAlign: TextAlign.right,
-                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(color: blue1),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const Padding(padding: EdgeInsets.only(top: 4.0)),
-                                SizedBox(
-                                  height: 12,
-                                  width: double.infinity,
-                                  child: Row(
+                              height: 50.0,
+                              child: Column(
+                                children: [
+                                  const Padding(padding: EdgeInsets.all(2.0)),
+                                  Row(
                                     children: [
-                                      Container(
-                                        width: MediaQuery.of(context).size.width * 0.9 * (account.startingValue.toDouble()/max) - (account.startingValue.toDouble()/max > 0 ? 1 : 0),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: const Radius.circular(4.0),
-                                            bottomLeft: const Radius.circular(4.0),
-                                            topRight: Radius.circular(account.startingValue.toDouble()/max == 1 ? 4.0 : 0.0),
-                                            bottomRight: Radius.circular(account.startingValue.toDouble()/max == 1 ? 4.0 : 0.0),
-                                          ),
-                                          color: blue3,
+                                      RichText(
+                                        textScaleFactor: MediaQuery.of(context)
+                                            .textScaleFactor,
+                                        text: TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text: account.name,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall
+                                                  ?.copyWith(color: blue1),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      Container(
-                                        width: account.startingValue.toDouble()/max == 1 ? 0 : MediaQuery.of(context).size.width * 0.9 * (1 - (account.startingValue.toDouble()/max)) - 1,
-                                        decoration: const BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                            topRight: Radius.circular(4.0),
-                                            bottomRight: Radius.circular(4.0),
-                                          ),
-                                          color: blue7,
+                                      Expanded(
+                                        child: Text(
+                                          "${account.startingValue}€",
+                                          textAlign: TextAlign.right,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall
+                                              ?.copyWith(color: blue1),
                                         ),
                                       ),
                                     ],
                                   ),
-                                )
-                              ],
-                            )
-                          );
+                                  const Padding(
+                                      padding: EdgeInsets.only(top: 4.0)),
+                                  SizedBox(
+                                    height: 12,
+                                    width: double.infinity,
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.9 *
+                                                  (account.startingValue
+                                                          .toDouble() /
+                                                      max) -
+                                              (account.startingValue
+                                                              .toDouble() /
+                                                          max >
+                                                      0
+                                                  ? 1
+                                                  : 0),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft:
+                                                  const Radius.circular(4.0),
+                                              bottomLeft:
+                                                  const Radius.circular(4.0),
+                                              topRight: Radius.circular(account
+                                                              .startingValue
+                                                              .toDouble() /
+                                                          max ==
+                                                      1
+                                                  ? 4.0
+                                                  : 0.0),
+                                              bottomRight: Radius.circular(
+                                                  account.startingValue
+                                                                  .toDouble() /
+                                                              max ==
+                                                          1
+                                                      ? 4.0
+                                                      : 0.0),
+                                            ),
+                                            color: blue3,
+                                          ),
+                                        ),
+                                        Container(
+                                          width: account.startingValue
+                                                          .toDouble() /
+                                                      max ==
+                                                  1
+                                              ? 0
+                                              : MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.9 *
+                                                      (1 -
+                                                          (account.startingValue
+                                                                  .toDouble() /
+                                                              max)) -
+                                                  1,
+                                          decoration: const BoxDecoration(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(4.0),
+                                              bottomRight: Radius.circular(4.0),
+                                            ),
+                                            color: blue7,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ));
                         }
                       },
                     ),

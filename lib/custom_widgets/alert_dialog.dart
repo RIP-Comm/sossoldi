@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '/main.dart';
+import '../utils/app_theme.dart';
 
 ///
 /// Builder class to create a customized dialog with some options
