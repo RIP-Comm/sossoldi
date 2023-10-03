@@ -1,45 +1,63 @@
+<div align="center">
+
+<img src="./assets/iosicon.png" width="100" alt="Sossoldi icon">
+
+# Sossoldi
+
+**Wealth management app**
+
+[![Discord](https://img.shields.io/discord/919139369774891088?style=flat&logo=discord)](https://discord.com/channels/919139369774891088/1013368203575038012)
+[![Shield: Contributions Welcome](https://img.shields.io/badge/contributions-welcome-blue)](#Contributing)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+
 # Sossoldi (Wealth management app)
 
-"Sossoldi" is a wealth management / personal finance / Net Worth tracking app, made with Flutter.
+**Sossoldi** is a free and open source wealth management / personal finance / Net Worth tracking app, made with Flutter.
 
-#### What problem we are solving & why
 
-[Mr. Rip](https://retireinprogress.com/) is a blogger that has a [spreadsheet](https://docs.google.com/spreadsheets/d/1ilL6rBdzIQ6yRotqOKLUKI7KXFxu5_cZ5FQgdYTSHJk/edit#gid=138629885) in which he tracks his net worth. Sossoldi is a Mobile + Desktop app that aims at replacing that spreadsheet and hopefully it will be easier to use for people that do not already have that kind of knowledge about personal finance.
 
-The app will be developed using the [Flutter](https://docs.flutter.dev/get-started/install) framework which makes it possible to have one codebase for different platforms (Android, iOS, Windows, macOS, Linux).
+<img src="./assets/sossoldi project cover.jpg" width="1000" alt="Sossoldi icon">
+</div>
 
-#### What’s already on the market?
 
-Currently there are a lot of options on the market ([interface study](https://www.notion.so/Sossoldi-Personal-finance-app-dd37eb9cbb2c44e59dd74f85e843e865)) if you want to track your expenses, but most of them have limitations on what you can do without paying and it’s really difficult to track your investments or track your portfolio in different currencies.
+## ❓ What problem we are solving & why
 
-#### High level approach
+[Mr. Rip](https://retireinprogress.com/) is a blogger that has a [spreadsheet](https://docs.google.com/spreadsheets/d/1ilL6rBdzIQ6yRotqOKLUKI7KXFxu5_cZ5FQgdYTSHJk/edit#gid=138629885) in which he tracks his net worth. Sossoldi is a Mobile + Desktop app that aims at replacing that spreadsheet and make it easier for everyone to track their net worth even if they are not as skilled with Google sheets or Excel.
 
-Who are we building for?
--   People that want to track their net worth
--   People that want to track expenses to better understand where they are spending their money
--   People that want to keep track of their investments
--   Mr. Rip followers
+The app is being developed using the [Flutter](https://docs.flutter.dev/get-started/install) framework which makes it possible to have one codebase for different platforms (Android, iOS, Windows, macOS, Linux). We are currently working on a beta which hopefully will be out soon.
+
+## This app is for you if you want to...
+
+-   📈 track their net worth
+-   💸 track your expenses to better understand where they are spending their money
+-   👀 keep track of your investments
+-   🪦 keep everything in one place like Mr. Rip
 
 What features do we want to implement?
--   Track expenses (even recurrent ones)
--   Track different bank accounts
--   Graphs, statistics and reports
--   All data are stored locally (with the option to share it in different platforms)
--   Track investments: Stocks, Bonds, Crypto, Private equity
--   Track taxes
--   Net worth on different currencies
--   Import/export data
--   Link bank accounts that support the OpenBanking PSD2 API
--   Advanced onboarding
+-   💸 Track expenses (even recurrent ones)
+-   🏦 Track different bank accounts
+-   📊 Graphs, statistics and reports
+-   💻 All data are stored locally (with the option to share it in different platforms)
+-   👀 Track investments: Stocks, Bonds, Crypto, Private equity
+-   💶 Track taxes
+-   💴 Net worth on different currencies
+-   ↔️ Import/export data
+-   🔗 Link bank accounts that support the OpenBanking PSD2 API
+-   🤓 Advanced onboarding
 
-#### Phase 1
-We will not build everything at once so we will start from the basic features and then we will move to the others.
-Phase 1 will be completed when the following features will ready:
--   Expenses (even recurrent ones) tracker
--   Income tracker
--   Bank accounts balance (without the use of API)
--   Basic stats
--   Data stored only locally
+<div align="center">
+<img src="./assets/Sossoldi-portfolio-card-image.png" width="500" alt="Sossoldi icon">
+</div>
+
+## Phase 1 (Ongoing)
+We will not build the complete app all at once. We will start from the basic features and then we will move onto the others.
+Phase 1 will be completed when the following features will be ready:
+-   💸 Expenses (even recurrent ones) tracker
+-   🤑 Income tracker
+-   ⚖️ Bank accounts balance (without the use of API)
+-   📊 Basic stats
+-   📱 Data stored only locally
 
 The pages that will be implemented are:
 -   Dashboard
@@ -47,15 +65,17 @@ The pages that will be implemented are:
 -   Basic settings
 -   Basic onboarding
 
-#### How you can help
+## Contributing
 
-If you want to help with this project you are more than welcome!
-Here is a series of link to get started:
+If you want to help with this project you are more than welcome! Sossoldi is completely free and open source, the best place to start is from the issue tab and look for something that seems interesting to you. If are unsure on where to start feel free to reach out to us on [Discord](https://discord.com/channels/919139369774891088/1013368203575038012), we will be more than happy to help you find what's best for you!
+
+### Useful links to get started
 -   [Github Repo](https://github.com/RIP-Comm/sossoldi)
+-   [Discord](http://mr.rip/discord)
 -   [Design file](https://www.figma.com/file/6NyY9yqunpbU7HIkbNEAL3/Sossoldi-App?node-id=0%3A1)
+-   [UX Research](https://www.federicopozzato.it/portfolio/sossoldi-personal-finance-app)
 -   [Information architecture](https://www.figma.com/file/xjVHAaHznRW1OFAJvp8DXn/Sossoldi-App---Figjam?node-id=0%3A1)
 -   [Interface study](https://www.notion.so/Sossoldi-Personal-finance-app-dd37eb9cbb2c44e59dd74f85e843e865)
--   [Discord](http://mr.rip/discord)
 
 #### New to Flutter? Here are some good (and free!) resources:
 -   [FreeCodeCampCourses](https://www.youtube.com/c/Freecodecamp/search?query=flutter)

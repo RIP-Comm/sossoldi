@@ -38,46 +38,40 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> with Functions {
     Map<int, double> categoryToAmount = {};
     double total = 0;
 
-    if (transactions.value != null) {
-      for (var t in transactions.value!) {
-        // add transaction to its category
-        int categoryId = t.idCategory!;
+    for (var transaction in transactions.value ?? []) {
+      print(transaction.idCategory);
+      final categoryId = transaction.idCategory;
+      if (categoryId != null) {
+        final updateValue = {
+          "account": transaction.idBankAccount.toString(),
+          "amount": transaction.amount,
+          "category": categoryId.toString(),
+          "title": transaction.note,
+        };
+
         if (categoryToTransactions.containsKey(categoryId)) {
-          categoryToTransactions[categoryId]?.add({
-            "account": t.idBankAccount.toString(),
-            "amount": t.amount,
-            "category": categoryId.toString(),
-            "title": t.note,
-          });
+          categoryToTransactions[categoryId]?.add(updateValue);
         } else {
-          categoryToTransactions.putIfAbsent(
-            categoryId,
-            () => [
-              {
-                "account": t.idBankAccount.toString(),
-                "amount": t.amount,
-                "category": categoryId.toString(),
-                "title": t.note,
-              }
-            ],
-          );
+          categoryToTransactions.putIfAbsent(categoryId, () => [updateValue]);
         }
 
         // update total amount for the category
-        total += t.amount;
+        total += transaction.amount;
         if (categoryToAmount.containsKey(categoryId)) {
           categoryToAmount[categoryId] =
-              categoryToAmount[categoryId]! + t.amount.toDouble();
+              categoryToAmount[categoryId]! + transaction.amount.toDouble();
         } else {
-          categoryToAmount.putIfAbsent(categoryId, () => t.amount.toDouble());
+          categoryToAmount.putIfAbsent(categoryId, () => transaction.amount.toDouble());
         }
       }
     }
 
     // Add missing catogories (with amount 0)
     // This will be removed when only categories with transactions are queried
-    for (var c in categories.value!) {
-      categoryToAmount.putIfAbsent(c.id!, () => 0);
+    for (var category in categories.value ?? []) {
+      if (category.id != null) {
+        categoryToAmount.putIfAbsent(category.id, () => 0);
+      }
     }
 
     return Container(
@@ -123,7 +117,7 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> with Functions {
                                     0.0) *
                                 70.0
                             : 0.0),
-                    child: Column(
+                    child: Wrap(
                       children: List.generate(
                         categories.value!.length,
                         (index) {
@@ -137,8 +131,8 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> with Functions {
                             percent:
                                 (categoryToAmount[t.id] ?? 0) / total * 100,
                             color: const Color(0xFFEBC35F),
-                            icon: iconList[t.symbol] ??
-                                Icons.swap_horiz_rounded,
+                            icon:
+                                iconList[t.symbol] ?? Icons.swap_horiz_rounded,
                             notifier: selectedCategory,
                             index: index,
                           );
