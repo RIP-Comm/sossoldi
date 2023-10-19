@@ -69,7 +69,7 @@ class _CategoryListState extends ConsumerState<CategoryList> with Functions {
                 itemBuilder: (context, i) {
                   CategoryTransaction category = categorys[i];
                   IconData? icon = iconList[category.symbol];
-                  Color? color = categoryColorList[category.color];
+                  Color? color = categoryColorListTheme[category.color];
                   return DefaultContainer(
                     onTap: () async {
                       // TODO: fix this

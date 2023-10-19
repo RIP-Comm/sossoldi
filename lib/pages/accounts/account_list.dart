@@ -69,7 +69,7 @@ class _AccountListState extends ConsumerState<AccountList> with Functions {
                 itemBuilder: (context, i) {
                   BankAccount account = accounts[i];
                   IconData? icon = accountIconList[account.symbol];
-                  Color? color = accountColorList[account.color];
+                  Color? color = accountColorListTheme[account.color];
                   return DefaultContainer(
                     onTap: () async {
                       await ref.read(accountsProvider.notifier).selectedAccount(account).whenComplete(() => Navigator.of(context).pushNamed('/add-account'));

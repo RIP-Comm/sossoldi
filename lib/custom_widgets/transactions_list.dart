@@ -224,7 +224,7 @@ class TransactionRow extends ConsumerWidget with Functions {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: category?.color != null
-                                ? categoryColorList[category!.color]
+                                ? categoryColorListTheme[category!.color]
                                 : Theme.of(context).colorScheme.secondary,
                           ),
                           child: Padding(

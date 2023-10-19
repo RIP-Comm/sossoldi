@@ -115,7 +115,9 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                         child: Center(
                             child: Text(
                           NumberFormat().simpleCurrencySymbol(selectedCurrency),
-                          style: const TextStyle(color: white, fontSize: 25),
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.background,
+                              fontSize: 25),
                         )))),
               ],
             ),
@@ -209,8 +211,11 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                             radius: 22,
                             backgroundColor: blue5,
                             child: Text(currencies.elementAt(index)[0],
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 20)),
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .background,
+                                    fontSize: 20)),
                           ),
                           title: Text(
                             currencies.elementAt(index)[1],

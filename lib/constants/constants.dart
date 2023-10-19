@@ -43,6 +43,18 @@ const categoryColorList = [
   category10,
 ];
 
+const darkCategoryColorList = [
+  darkCategory1,
+  darkCategory2,
+  darkCategory3,
+  darkCategory4,
+  darkCategory5,
+  darkCategory6,
+  darkCategory7,
+  darkCategory8,
+  darkCategory9,
+];
+
 const accountColorList = [
   account1,
   account2,
@@ -50,3 +62,24 @@ const accountColorList = [
   account4,
   account5,
 ];
+
+const darkAccountColorList = [
+  darkAccount1,
+  darkAccount2,
+  darkAccount3,
+  darkAccount4,
+  darkAccount5,
+];
+
+List<Color> categoryColorListTheme = categoryColorList;
+List<Color> accountColorListTheme = accountColorList;
+
+void updateColorsBasedOnTheme(bool isDarkModeEnabled) {
+  if (isDarkModeEnabled) {
+    categoryColorListTheme = darkCategoryColorList;
+    accountColorListTheme = darkAccountColorList;
+  } else {
+    categoryColorListTheme = categoryColorList;
+    accountColorListTheme = accountColorList;
+  }
+}

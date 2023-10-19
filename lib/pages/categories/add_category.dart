@@ -108,7 +108,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                           child: Ink(
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: categoryColorList[categoryColor],
+                              color: categoryColorListTheme[categoryColor],
                             ),
                             padding: const EdgeInsets.all(16),
                             child: Icon(
@@ -193,16 +193,16 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           separatorBuilder: (context, index) => const SizedBox(width: 16),
                           itemBuilder: (context, index) {
-                            Color color = categoryColorList[index];
+                            Color color = categoryColorListTheme[index];
                             return GestureDetector(
                               onTap: () => ref.read(categoryColorProvider.notifier).state = index,
                               child: Container(
-                                height: categoryColorList[categoryColor] == color ? 38 : 32,
-                                width: categoryColorList[categoryColor] == color ? 38 : 32,
+                                height: categoryColorListTheme[categoryColor] == color ? 38 : 32,
+                                width: categoryColorListTheme[categoryColor] == color ? 38 : 32,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: color,
-                                  border: categoryColorList[categoryColor] == color
+                                  border: categoryColorListTheme[categoryColor] == color
                                       ? Border.all(
                                           color: grey1,
                                           width: 3,
@@ -212,7 +212,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                               ),
                             );
                           },
-                          itemCount: categoryColorList.length,
+                          itemCount: categoryColorListTheme.length,
                         ),
                       ),
                       const SizedBox(height: 6),
