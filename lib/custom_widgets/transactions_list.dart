@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../constants/constants.dart';
-import '../pages/add_page/add_page.dart';
 import '../providers/transactions_provider.dart';
 import '../constants/functions.dart';
 import '../model/bank_account.dart';
@@ -184,32 +183,17 @@ class TransactionRow extends ConsumerWidget with Functions {
                 color: Theme.of(context).colorScheme.background,
                 child: InkWell(
                   onTap: () {
-                    ref.read(selectedTransactionUpdateProvider.notifier).state = transaction;
-                    ref.read(transactionsProvider.notifier).transactionUpdateState();
-                    showModalBottomSheet(
-                      backgroundColor: Colors.transparent,
-                      context: context,
-                      isScrollControlled: true,
-                      isDismissible: true,
-                      builder: (BuildContext buildContext) {
-                        return DraggableScrollableSheet(
-                          builder: (_, controller) => Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.0),
-                              color: Theme.of(context).colorScheme.background,
-                            ),
-                            child: ListView(
-                              controller: controller,
-                              shrinkWrap: true,
-                              children: const [AddPage()],
-                            ),
-                          ),
-                          initialChildSize: 0.92,
-                          minChildSize: 0.75,
-                          maxChildSize: 0.92,
+                    ref.read(selectedTransactionUpdateProvider.notifier).state =
+                        transaction;
+                    ref
+                        .read(transactionsProvider.notifier)
+                        .transactionUpdateState();
+                    ref
+                        .read(transactionsProvider.notifier)
+                        .transactionUpdateState()
+                        .whenComplete(
+                          () => Navigator.of(context).pushNamed("/add-page"),
                         );
-                      },
-                    );
                   },
                   borderRadius: BorderRadius.vertical(
                     top: i == 0 ? const Radius.circular(8) : Radius.zero,
