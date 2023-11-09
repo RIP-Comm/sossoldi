@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import "package:flutter_riverpod/flutter_riverpod.dart";
-import 'dart:io' show Platform;
 
 import "../../../constants/style.dart";
 import '../../../providers/transactions_provider.dart';
@@ -43,18 +41,11 @@ class RecurrenceListTile extends ConsumerWidget {
                 .titleLarge!
                 .copyWith(color: Theme.of(context).colorScheme.primary),
           ),
-          trailing: (Platform.isIOS)
-              ? CupertinoSwitch(
-                  value: isRecurring,
-                  onChanged: (select) => ref
-                      .read(selectedRecurringPayProvider.notifier)
-                      .state = select,
-                )
-              : Switch(
-                  value: isRecurring,
-                  onChanged: (select) =>
-                      ref.read(selectedRecurringPayProvider.notifier).state = select,
-                ),
+          trailing: Switch.adaptive(
+            value: isRecurring,
+            onChanged: (select) =>
+                ref.read(selectedRecurringPayProvider.notifier).state = select,
+          ),
         ),
         if (isRecurring) ...[
           Padding(
