@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../constants/style.dart';
 
 class AppTheme {
@@ -194,13 +193,15 @@ class AppTheme {
 ColorScheme customColorScheme = const ColorScheme(
   primary: blue1,
   primaryContainer: white,
+  secondaryContainer: blue7,
   secondary: blue5,
   tertiary: blue4,
   surface: grey3,
   background: white,
   error: red,
   onPrimary: white,
-  onSecondary: white,
+  onSecondary: black,
+  onSecondaryContainer: blue6,
   onSurface: blue1,
   onBackground: blue1,
   onError: black,
@@ -210,13 +211,15 @@ ColorScheme customColorScheme = const ColorScheme(
 ColorScheme darkCustomColorScheme = const ColorScheme(
   primary: darkBlue1,
   primaryContainer: darkGrey4,
+  secondaryContainer: darkBlue7,
   secondary: darkBlue5,
   tertiary: darkBlack,
   surface: darkBlue7, //darkBlue3
   background: darkWhite,
   error: darkRed,
   onPrimary: darkWhite,
-  onSecondary: darkWhite,
+  onSecondary: darkBlack,
+  onSecondaryContainer: darkGrey2,
   onSurface: darkBlue1,
   onBackground: darkBlue1,
   onError: darkBlack,

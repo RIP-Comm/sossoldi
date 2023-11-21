@@ -2,7 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'add_page/add_page.dart';
+import '../constants/style.dart';
+import '../pages/add_page/add_page.dart';
 import '../pages/home_page.dart';
 import '../pages/transactions_page/transactions_page.dart';
 import '../pages/statistics_page.dart';
@@ -48,7 +49,10 @@ class _StructureState extends ConsumerState<Structure> {
         centerTitle: true,
         title: Text(
           _pagesTitle.elementAt(selectedIndex),
-          style: Theme.of(context).textTheme.headlineLarge!,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.primary,
+            fontSize: Theme.of(context).textTheme.headlineLarge!.fontSize,
+          ),
         ),
         leading: Padding(
           padding: const EdgeInsets.only(left: 16),
@@ -58,11 +62,11 @@ class _StructureState extends ConsumerState<Structure> {
               elevation: 0,
               shape: const CircleBorder(),
               padding: const EdgeInsets.all(8),
-              backgroundColor: Theme.of(context).colorScheme.primary,
+              backgroundColor: Theme.of(context).colorScheme.secondary,
             ),
-            child: Icon(
+            child: const Icon(
               Icons.search,
-              color: Theme.of(context).colorScheme.background,
+              color: white,
             ),
           ),
         ),
@@ -75,11 +79,11 @@ class _StructureState extends ConsumerState<Structure> {
                 elevation: 0,
                 shape: const CircleBorder(),
                 padding: const EdgeInsets.all(8),
-                backgroundColor: Theme.of(context).colorScheme.primary,
+                backgroundColor: Theme.of(context).colorScheme.secondary,
               ),
-              child: Icon(
+              child: const Icon(
                 Icons.settings,
-                color: Theme.of(context).colorScheme.background,
+                color: white,
               ),
             ),
           ),
@@ -95,6 +99,7 @@ class _StructureState extends ConsumerState<Structure> {
         selectedFontSize: 8,
         unselectedFontSize: 8,
         // backgroundColor: const Color(0xFFF6F6F6),
+        
         currentIndex: selectedIndex,
         onTap: (index) => index != 2
             ? ref.read(selectedIndexProvider.notifier).state = index
@@ -103,6 +108,7 @@ class _StructureState extends ConsumerState<Structure> {
           BottomNavigationBarItem(
             icon: Icon(selectedIndex == 0 ? Icons.home : Icons.home_outlined),
             label: "DASHBOARD",
+            
           ),
           BottomNavigationBarItem(
             icon: Icon(selectedIndex == 1
@@ -129,10 +135,10 @@ class _StructureState extends ConsumerState<Structure> {
         elevation: 4,
         highlightElevation: 0,
         backgroundColor: Theme.of(context).colorScheme.secondary,
-        child: Icon(
+        child: const Icon(
           Icons.add_rounded,
           size: 55,
-          color: Theme.of(context).colorScheme.background,
+          color: white,
         ),
         onPressed: () async {
           showModalBottomSheet(
