@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../utils/decimal_text_input_formatter.dart';
 import '../../model/transaction.dart';
-import 'widgets/details_tile.dart';
-import 'widgets/type_tab.dart';
+import '../add_page/widgets/details_tile.dart';
+import '../add_page/widgets/type_tab.dart';
 import '../../providers/transactions_provider.dart';
 import '../../constants/style.dart';
 import '../../constants/functions.dart';
@@ -240,9 +240,9 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                               onTap: () => ref
                                   .read(transactionsProvider.notifier)
                                   .switchAccount(),
-                              child: Column(
+                              child: const Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
+                                children: [
                                   Expanded(
                                       child: VerticalDivider(
                                           width: 1, color: grey2)),
@@ -338,7 +338,8 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                               color: typeToColor(selectedType),
                             ),
                       ),
-                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true),
                       inputFormatters: <TextInputFormatter>[
                         DecimalTextInputFormatter(decimalDigits: 2)
                       ],
@@ -437,7 +438,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                             style: Theme.of(context)
                                 .textTheme
                                 .bodySmall!
-                                .copyWith(color: grey1),
+                                .copyWith(color: Theme.of(context).colorScheme.onSecondary),
                             onChanged: (value) =>
                                 ref.read(noteProvider.notifier).state = value,
                           ),
@@ -660,7 +661,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                           ? "UPDATE TRANSACTION"
                           : "ADD TRANSACTION",
                       style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.background),
+                          color: white),
                     ),
                   ),
                 ),

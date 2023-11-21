@@ -131,8 +131,8 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
               ],
             ),
             const SizedBox(height: 16),
-            const LineChartWidget(
-              line1Data: [
+            LineChartWidget(
+              line1Data: const [
                 FlSpot(0, 3),
                 FlSpot(1, 1.3),
                 FlSpot(2, -2),
@@ -151,8 +151,8 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                 FlSpot(15, -4.5),
                 FlSpot(16, 2.5),
               ],
-              colorLine1Data: Color(0xff00152D),
-              line2Data: [
+              colorLine1Data: Theme.of(context).colorScheme.onSecondaryContainer,
+              line2Data: const [
                 FlSpot(0, -3),
                 FlSpot(1, -1.3),
                 FlSpot(2, 2),
@@ -185,8 +185,8 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                 FlSpot(29, 4.7),
                 FlSpot(30, 1),
               ],
-              colorLine2Data: Color(0xffB9BABC), //da modificare in darkMode
-              colorBackground: Color(0xffF1F5F9),
+              colorLine2Data: Colors.red, //da modificare in darkMode e capire a cosa fa riferimento
+              colorBackground: Theme.of(context).colorScheme.secondaryContainer,
               maxY: 5.0,
               minY: -5.0,
               maxDays: 31.0,
