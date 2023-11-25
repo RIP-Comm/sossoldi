@@ -93,7 +93,7 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                             ? Icons.dark_mode
                             : Icons.light_mode,
                         size: 25.0,
-                        color: white,
+                        color: Theme.of(context).colorScheme.background,
                       ),
                     )),
               ],
@@ -115,8 +115,8 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                         child: Center(
                             child: Text(
                           NumberFormat().simpleCurrencySymbol(selectedCurrency),
-                          style: const TextStyle(
-                              color: white,
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.background,
                               fontSize: 25),
                         )))),
               ],
