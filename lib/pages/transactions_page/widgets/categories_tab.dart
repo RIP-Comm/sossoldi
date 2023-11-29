@@ -106,21 +106,12 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> with Functions {
               return ValueListenableBuilder(
                 valueListenable: selectedCategory,
                 builder: (context, value, child) {
-                  return SizedBox(
-                    // calculate height from the number of categories and transactions
-                    //! it throws RenderFlex overflowed during the closing animation
-                    height: 72.0 * categories.value!.length +
-                        ((value != -1)
-                            ? (categoryToTransactions[
-                                            categories.value![value].id]
-                                        ?.length ??
-                                    0.0) *
-                                70.0
-                            : 0.0),
-                    child: Wrap(
-                      children: List.generate(
-                        categories.value!.length,
-                        (index) {
+                  return ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: categories.value!.length,
+                        separatorBuilder: (context, index) => const SizedBox(height: 10),
+                        itemBuilder: (context, index) {
                           CategoryTransaction t = categories.value![index];
                           return CategoryListTile(
                             title: t.name,
@@ -130,15 +121,13 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> with Functions {
                             amount: categoryToAmount[t.id] ?? 0,
                             percent:
                                 (categoryToAmount[t.id] ?? 0) / total * 100,
-                            color: const Color(0xFFEBC35F),
+                            color: categoryColorList[t.color],
                             icon:
                                 iconList[t.symbol] ?? Icons.swap_horiz_rounded,
                             notifier: selectedCategory,
                             index: index,
                           );
                         },
-                      ),
-                    ),
                   );
                 },
               );
