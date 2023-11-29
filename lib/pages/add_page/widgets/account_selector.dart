@@ -58,7 +58,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> with Function
                   itemBuilder: (context, i) {
                     BankAccount account = accounts[i];
                     IconData? icon = accountIconList[account.symbol];
-                    Color? color = accountColorList[account.color];
+                    Color? color = accountColorListTheme[account.color];
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Column(
@@ -115,7 +115,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> with Function
                 itemBuilder: (context, i) {
                   BankAccount account = accounts[i];
                   IconData? icon = accountIconList[account.symbol];
-                  Color? color = accountColorList[account.color];
+                  Color? color = accountColorListTheme[account.color];
                   return Material(
                     color: Theme.of(context).colorScheme.surface,
                     child: InkWell(

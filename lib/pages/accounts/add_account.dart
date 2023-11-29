@@ -117,7 +117,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                           child: Ink(
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: accountColorList[accountColor],
+                              color: accountColorListTheme[accountColor],
                             ),
                             padding: const EdgeInsets.all(16),
                             child: Icon(
@@ -203,16 +203,16 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           separatorBuilder: (context, index) => const SizedBox(width: 16),
                           itemBuilder: (context, index) {
-                            Color color = accountColorList[index];
+                            Color color = accountColorListTheme[index];
                             return GestureDetector(
                               onTap: () => ref.read(accountColorProvider.notifier).state = index,
                               child: Container(
-                                height: accountColorList[accountColor] == color ? 38 : 32,
-                                width: accountColorList[accountColor] == color ? 38 : 32,
+                                height: accountColorListTheme[accountColor] == color ? 38 : 32,
+                                width: accountColorListTheme[accountColor] == color ? 38 : 32,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: color,
-                                  border: accountColorList[accountColor] == color
+                                  border: accountColorListTheme[accountColor] == color
                                       ? Border.all(
                                           color: Theme.of(context).colorScheme.primary,
                                           width: 3,
@@ -222,7 +222,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                               ),
                             );
                           },
-                          itemCount: accountColorList.length,
+                          itemCount: accountColorListTheme.length,
                         ),
                       ),
                       const SizedBox(height: 6),

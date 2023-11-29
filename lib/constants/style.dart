@@ -41,7 +41,7 @@ const category3 = Color(0xFFFF4754);
 const category4 = Color(0xFFD336B6);
 const category5 = Color(0xFF7236D3);
 const category6 = Color(0xFF2675E3);
-const category7 = Color(0xFF16ADDF);
+const category7 = Color(0xFF16ADDF);//inesistente sul figma
 const category8 = Color(0xFF12BFCE);
 const category9 = Color(0xFF12BA95);
 const category10 = Color(0xFF0BC11D);
@@ -51,3 +51,40 @@ const account2 = Color(0xFFFB8500);
 const account3 = Color(0xFF356CA3);
 const account4 = Color(0xFF8ECAE6);
 const account5 = Color(0xFF3E9B12);
+
+//dark colors
+
+const darkGreen = Color(0xFF31B943);
+const darkRed = Color(0xFFD83131);
+const darkWhite = Color(0xFF181E25);
+const darkBlack = Color(0xFFFFFFFF);
+
+const darkBlue1 = Color(0xFFE3E5E8);
+const darkBlue2 = Color(0xFF002247);
+const darkBlue3 = Color(0xFF012C5A);
+const darkBlue4 = Color(0xFF033D78);
+const darkBlue5 = Color(0xFF2C5987);
+const darkBlue6 = Color(0xFF6C94BC);
+const darkBlue7 = Color(0xFF181E25);
+
+const darkGrey1 = Color(0xFFA8AAAC);
+const darkGrey2 = Color(0xFFC6C7C8);
+const darkGrey3 = Color(0xFF181E25);
+const darkGrey4 = Color(0xFF2E3338);
+
+const darkCategory1 = Color(0xFFE3B912);
+const darkCategory2 = Color(0xFFF6740C);
+const darkCategory3 = Color(0xFFFA3240);
+const darkCategory4 = Color(0xFFBF2AA4);
+const darkCategory5 = Color(0xFF672BC7);
+const darkCategory6 = Color(0xFF1B6BD9);
+const darkCategory7 = Color(0xFF0FB1C0);
+const darkCategory8 = Color(0xFF0EB38F);
+const darkCategory9 = Color(0xFF0AAF1A);
+// const darkCategory10 = Color(0xFF);
+
+const darkAccount1 = Color(0xFFE0A30C);
+const darkAccount2 = Color(0xFFDC7807);
+const darkAccount3 = Color(0xFF33679B);
+const darkAccount4 = Color(0xFF61B4DB);
+const darkAccount5 = Color(0xFF398F10);

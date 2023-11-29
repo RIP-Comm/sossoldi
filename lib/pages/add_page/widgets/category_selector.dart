@@ -57,7 +57,7 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> with Functi
                   itemBuilder: (context, i) {
                     CategoryTransaction category = categories[i];
                     IconData? icon = iconList[category.symbol];
-                    Color? color = categoryColorList[category.color];
+                    Color? color = categoryColorListTheme[category.color];
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Column(
@@ -114,7 +114,7 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> with Functi
                 itemBuilder: (context, i) {
                   CategoryTransaction category = categories[i];
                   IconData? icon = iconList[category.symbol];
-                  Color? color = categoryColorList[category.color];
+                  Color? color = categoryColorListTheme[category.color];
                   return Material(
                     color: Theme.of(context).colorScheme.surface,
                     child: InkWell(

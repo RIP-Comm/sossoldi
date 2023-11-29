@@ -121,7 +121,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         child: Icon(
                           setting[0] as IconData,
                           size: 30.0,
-                          color: Theme.of(context).colorScheme.background,
+                          color: white,
                         ),
                       ),
                       const SizedBox(width: 12.0),
