@@ -24,7 +24,7 @@ class Launcher extends ConsumerWidget {
       themeMode:
           appThemeState.isDarkModeEnabled ? ThemeMode.dark : ThemeMode.light,
       onGenerateRoute: makeRoute,
-      initialRoute: '/',
+      initialRoute: '/onboarding',
     );
   }
 }
