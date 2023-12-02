@@ -3,19 +3,20 @@ import 'package:fl_chart/fl_chart.dart';
 import '../../../constants/constants.dart';
 import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
+import '../../../model/bank_account.dart';
 import '../../../model/category_transaction.dart';
 
-class CategoriesPieChart extends StatelessWidget with Functions {
-  const CategoriesPieChart({
+class AccountsPieChart extends StatelessWidget with Functions {
+  const AccountsPieChart({
     required this.notifier,
-    required this.categories,
+    required this.accounts,
     required this.amounts,
     required this.total,
     Key? key,
   }) : super(key: key);
 
   final ValueNotifier<int> notifier;
-  final List<CategoryTransaction> categories;
+  final List<BankAccount> accounts;
   final Map<int, double> amounts;
   final double total;
 
@@ -56,12 +57,12 @@ class CategoriesPieChart extends StatelessWidget with Functions {
                   (value != -1)
                       ? Container(
                           padding: const EdgeInsets.all(8.0),
-                          decoration: BoxDecoration(
+                          decoration:  BoxDecoration(
                             shape: BoxShape.circle,
-                            color: categoryColorList[categories[value].color],
+                            color: accountColorList[accounts[value].color],
                           ),
                           child: Icon(
-                            iconList[categories[value].symbol] ??
+                            accountIconList[accounts[value].symbol] ??
                                 Icons.swap_horiz_rounded,
                             color: Colors.white,
                           ),
@@ -69,17 +70,17 @@ class CategoriesPieChart extends StatelessWidget with Functions {
                       : const SizedBox(),
                   Text(
                     (value != -1)
-                        ? "${amounts[categories[value].id]!.toStringAsFixed(2)} €"
+                        ? "${amounts[accounts[value].id]!.toStringAsFixed(2)} €"
                         : "${total.toStringAsFixed(2)} €",
                     style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                         color: ((value != -1 &&
-                                    amounts[categories[value].id]! > 0) ||
+                                    amounts[accounts[value].id]! > 0) ||
                                 (value == -1 && total > 0))
                             ? green
                             : red),
                   ),
                   (value != -1)
-                      ? Text(categories[value].name)
+                      ? Text(accounts[value].name)
                       : const Text("Total"),
                 ],
               ),
@@ -98,8 +99,8 @@ class CategoriesPieChart extends StatelessWidget with Functions {
 
         final radius = isTouched ? 30.0 : 25.0;
         return PieChartSectionData(
-          color: categoryColorList[categories[i].color],
-          value: 360 * amounts[categories[i].id]!,
+          color: accountColorList[accounts[i].color],
+          value: 360 * amounts[accounts[i].id]!,
           radius: radius,
           showTitle: false,
         );

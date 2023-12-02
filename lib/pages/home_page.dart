@@ -19,7 +19,6 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> with Functions {
-
   @override
   Widget build(BuildContext context) {
     final accountList = ref.watch(accountsProvider);
@@ -37,10 +36,8 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                   children: [
                     Text(
                       "MONTHLY BALANCE",
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelMedium
-                          ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.primary),
                     ),
                     RichText(
                       textScaleFactor: MediaQuery.of(context).textScaleFactor,
@@ -51,14 +48,18 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                             style: Theme.of(context)
                                 .textTheme
                                 .headlineLarge
-                                ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                                ?.copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
                           ),
                           TextSpan(
                             text: "€",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyLarge
-                                ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                                ?.copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
                           ),
                         ],
                       ),
@@ -79,11 +80,17 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                         children: [
                           TextSpan(
                             text: numToCurrency(1050.65),
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: green),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(color: green),
                           ),
                           TextSpan(
                             text: "€",
-                            style: Theme.of(context).textTheme.labelLarge?.copyWith(color: green),
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge
+                                ?.copyWith(color: green),
                           ),
                         ],
                       ),
@@ -104,11 +111,17 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                         children: [
                           TextSpan(
                             text: numToCurrency(-1050.65),
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: red),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(color: red),
                           ),
                           TextSpan(
                             text: "€",
-                            style: Theme.of(context).textTheme.labelLarge?.copyWith(color: red),
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge
+                                ?.copyWith(color: red),
                           ),
                         ],
                       ),
@@ -172,7 +185,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                 FlSpot(29, 4.7),
                 FlSpot(30, 1),
               ],
-              colorLine2Data: Color(0xffB9BABC),
+              colorLine2Data: Color(0xffB9BABC), //da modificare in darkMode
               colorBackground: Color(0xffF1F5F9),
               maxY: 5.0,
               minY: -5.0,
@@ -220,9 +233,11 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
           ],
         ),
         Container(
-          decoration: const BoxDecoration(
-            color: white,
-            borderRadius: BorderRadius.only(
+          decoration: BoxDecoration(
+            color: Theme.of(context)
+                .colorScheme
+                .primaryContainer, //da modificare in darkMode
+            borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(16),
               topRight: Radius.circular(16),
             ),
@@ -257,7 +272,8 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                             ),
                             child: TextButton.icon(
                               style: ButtonStyle(
-                                maximumSize: MaterialStateProperty.all(const Size(130, 48)),
+                                maximumSize: MaterialStateProperty.all(
+                                    const Size(130, 48)),
                                 backgroundColor: MaterialStateProperty.all(
                                     Theme.of(context).colorScheme.surface),
                                 shape: MaterialStateProperty.all(
@@ -269,24 +285,31 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                               icon: Container(
                                 decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: grey1,
+                                  color: blue5,
                                 ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5.0),
+                                child: const Padding(
+                                  padding: EdgeInsets.all(5.0),
                                   child: Icon(
                                     Icons.add_rounded,
                                     size: 24.0,
-                                    color: Theme.of(context).colorScheme.surface,
+                                    color: white,
                                   ),
                                 ),
                               ),
                               label: Text(
                                 "New Account",
-                                style:
-                                    Theme.of(context).textTheme.bodyLarge!.copyWith(color: grey1),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .tertiary,
+                                    ),
                                 maxLines: 2,
                               ),
-                              onPressed: () => Navigator.of(context).pushNamed('/add-account'),
+                              onPressed: () => Navigator.of(context)
+                                  .pushNamed('/add-account'),
                             ),
                           ),
                         );
@@ -311,7 +334,8 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                 ),
               ),
               transactionList.when(
-                data: (transactions) => TransactionsList(transactions: transactions),
+                data: (transactions) =>
+                    TransactionsList(transactions: transactions),
                 loading: () => const SizedBox(),
                 error: (err, stack) => Text('Error: $err'),
               ),

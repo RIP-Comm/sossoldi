@@ -27,7 +27,7 @@ class AccountsSum extends StatelessWidget with Functions {
       ),
       child: Container(
         decoration: BoxDecoration(
-          color: accountColorList[account.color].withOpacity(0.2),
+          color: accountColorListTheme[account.color].withOpacity(0.2),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Material(
@@ -72,26 +72,33 @@ class AccountsSum extends StatelessWidget with Functions {
                   Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: accountColorList[account.color],
+                      color: accountColorListTheme[account.color],
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(6.0),
-                      child: Icon(accountIconList[account.symbol], size: 20.0, color: white),
+                      child: Icon(accountIconList[account.symbol],
+                          size: 20.0,
+                          color: white), //capire se cambiare colore icona
                     ),
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text(account.name, style: Theme.of(context).textTheme.bodyLarge),
+                      Text(account.name,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge!
+                              .copyWith(color: darkBlue7)),//impostato manualmente darkBlue7, da rivedere
                       FutureBuilder<num?>(
                         future: BankAccountMethods().getAccountSum(account.id),
                         builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
                             // Show a loading indicator while waiting for the future to complete
                             return Transform.scale(
                               scale: 0.5,
-                              child: CircularProgressIndicator(),
+                              child: const CircularProgressIndicator(),
                             );
                           } else if (snapshot.hasError) {
                             // Show an error message if the future encounters an error
@@ -100,18 +107,25 @@ class AccountsSum extends StatelessWidget with Functions {
                             // Display the result once the future completes successfully
                             final accountSum = snapshot.data ?? 0;
                             return RichText(
-                              textScaleFactor: MediaQuery.of(context).textScaleFactor,
+                              textScaleFactor:
+                                  MediaQuery.of(context).textScaleFactor,
                               text: TextSpan(
                                 children: [
                                   TextSpan(
                                     text: numToCurrency(accountSum),
-                                    style: Theme.of(context).textTheme.titleSmall,
+                                    style:
+                                        Theme.of(context).textTheme.titleSmall!.copyWith(color: darkBlue7),
                                   ),
                                   TextSpan(
                                     text: "€",
-                                    style: Theme.of(context).textTheme.bodyMedium?.apply(
-                                      fontFeatures: [const FontFeature.subscripts()],
-                                    ),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.apply(
+                                      fontFeatures: [
+                                        const FontFeature.subscripts()
+                                      ],
+                                    ).copyWith(color: darkBlue7),
                                   ),
                                 ],
                               ),
