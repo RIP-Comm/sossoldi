@@ -56,7 +56,7 @@ const account5 = Color(0xFF3E9B12);
 
 const darkGreen = Color(0xFF31B943);
 const darkRed = Color(0xFFD83131);
-const darkWhite = Color(0xFF181E25);
+const darkWhite = Color(0xFF2E3338);
 const darkBlack = Color(0xFFFFFFFF);
 
 const darkBlue1 = Color(0xFFE3E5E8);

@@ -195,6 +195,7 @@ ColorScheme customColorScheme = const ColorScheme(
   primary: blue1,
   primaryContainer: white,
   secondary: blue5,
+  secondaryContainer: Colors.white70,
   tertiary: blue4,
   surface: grey3,
   background: white,
@@ -204,6 +205,8 @@ ColorScheme customColorScheme = const ColorScheme(
   onSurface: blue1,
   onBackground: blue1,
   onError: black,
+  onTertiaryContainer: grey3,
+  outline: grey1,
   brightness: Brightness.light,
 );
 
@@ -211,14 +214,17 @@ ColorScheme darkCustomColorScheme = const ColorScheme(
   primary: darkBlue1,
   primaryContainer: darkGrey4,
   secondary: darkBlue5,
+  secondaryContainer: darkGrey1,
   tertiary: darkBlack,
   surface: darkBlue7, //darkBlue3
   background: darkWhite,
   error: darkRed,
   onPrimary: darkWhite,
   onSecondary: darkWhite,
-  onSurface: darkBlue1,
   onBackground: darkBlue1,
+  onSurface: darkBlue1,
   onError: darkBlack,
+  onTertiaryContainer: grey3,
+  outline: darkGrey1,
   brightness: Brightness.dark,
 );

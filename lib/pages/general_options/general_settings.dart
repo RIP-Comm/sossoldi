@@ -77,21 +77,20 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                     child: IconButton(
                       color: blue5,
                       onPressed: () {
-                        // Toggle dark mode using the provider
-                        if (appThemeState.isDarkModeEnabled) {
-                          ref
-                              .read(appThemeStateNotifier.notifier)
-                              .setLightTheme();
+                        if (appThemeState.themeMode == ThemeMode.light) {
+                          ref.read(appThemeStateNotifier.notifier).setDarkTheme();
+                        } else if (appThemeState.themeMode == ThemeMode.dark) {
+                          ref.read(appThemeStateNotifier.notifier).setAutoTheme();
                         } else {
-                          ref
-                              .read(appThemeStateNotifier.notifier)
-                              .setDarkTheme();
+                          ref.read(appThemeStateNotifier.notifier).setLightTheme();
                         }
                       },
                       icon: Icon(
-                        appThemeState.isDarkModeEnabled
+                        appThemeState.themeMode == ThemeMode.dark
                             ? Icons.dark_mode
-                            : Icons.light_mode,
+                            : appThemeState.themeMode == ThemeMode.light
+                            ? Icons.light_mode
+                            : Icons.auto_awesome,
                         size: 25.0,
                         color: Theme.of(context).colorScheme.background,
                       ),

@@ -87,22 +87,24 @@ class _BudgetCardState extends State<BudgetCard> {
                       },
                     ),
                     const SizedBox(height: 5),
-                    const Divider(color: Colors.black),
+                    Divider(color: Theme.of(context).colorScheme.outline),
                     const SizedBox(height: 5),
-                    ElevatedButton.icon(
-                      icon: Icon(
-                        Icons.add_circle,
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                      onPressed: createBudget,
-                      label: Text(
-                        "Add category budget",
-                        style: Theme.of(context).textTheme.titleSmall!.apply(
-                            color: Theme.of(context).colorScheme.secondary),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        fixedSize: const Size(330, 50),
+                    Center(
+                      child: ElevatedButton.icon(
+                        icon: Icon(
+                          Icons.add_circle,
+                          color: Theme.of(context).colorScheme.onTertiaryContainer,
+                        ),
+                        onPressed: createBudget,
+                        label: Text(
+                          "Add category budget",
+                          style: Theme.of(context).textTheme.titleSmall!.apply(
+                              color: Theme.of(context).colorScheme.onTertiaryContainer),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).colorScheme.secondary,
+                          fixedSize: const Size(330, 50),
+                        ),
                       ),
                     )
                   ],
