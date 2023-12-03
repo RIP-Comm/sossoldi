@@ -62,6 +62,9 @@ dependencies:
   circular_menu: ^2.0.1
   flutter_native_splash: ^2.2.18
 
+  #Added for theme
+  shared_preferences: ^2.2.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

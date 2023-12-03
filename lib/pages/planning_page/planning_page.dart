@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sossoldi/utils/app_theme.dart';
 import 'widget/budget_card.dart';
 import 'widget/recurring_payments_card.dart';
 
@@ -13,7 +14,7 @@ class _PlanningPageState extends State<PlanningPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.primaryContainer,
         child: ListView(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 45),
             children: [

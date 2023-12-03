@@ -32,7 +32,7 @@ class _RecurringPaymentCardState extends State<RecurringPaymentCard> {
                 ElevatedButton.icon(
                   icon: Icon(
                     Icons.add_circle,
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: Theme.of(context).colorScheme.onTertiaryContainer,
                   ),
                   onPressed: addRecurringPayment,
                   label: Text(
@@ -40,10 +40,10 @@ class _RecurringPaymentCardState extends State<RecurringPaymentCard> {
                     style: Theme.of(context)
                         .textTheme
                         .titleSmall!
-                        .apply(color: Theme.of(context).colorScheme.secondary),
+                        .apply(color: Theme.of(context).colorScheme.onTertiaryContainer),
                   ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
                     fixedSize: const Size(330, 50),
                   ),
                 )
