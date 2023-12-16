@@ -2,8 +2,8 @@ import "package:flutter/material.dart";
 
 import '../../../constants/style.dart';
 
-class CategoryListTile extends StatelessWidget {
-  const CategoryListTile({
+class AccountListTile extends StatelessWidget {
+  const AccountListTile({
     super.key,
     required this.title,
     required this.amount,
@@ -63,7 +63,9 @@ class CategoryListTile extends StatelessWidget {
                         shape: BoxShape.circle,
                         color: color,
                       ),
-                      child: Icon(icon, color: Colors.white,
+                      child: Icon(
+                        icon,
+                        color: Colors.white,
                       ),
                     ),
                     const SizedBox(width: 8.0),
@@ -75,19 +77,15 @@ class CategoryListTile extends StatelessWidget {
                             children: [
                               Text(
                                 title,
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .titleMedium,
+                                style: Theme.of(context).textTheme.titleMedium,
                               ),
                               Text(
                                 "${amount.toStringAsFixed(2)} €",
-                                style: Theme
-                                    .of(context)
+                                style: Theme.of(context)
                                     .textTheme
                                     .bodyLarge
                                     ?.copyWith(
-                                    color: (amount > 0) ? green : red),
+                                        color: (amount > 0) ? green : red),
                               ),
                             ],
                           ),
@@ -96,17 +94,11 @@ class CategoryListTile extends StatelessWidget {
                             children: [
                               Text(
                                 "$nTransactions transactions",
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .labelLarge,
+                                style: Theme.of(context).textTheme.labelLarge,
                               ),
                               Text(
                                 "${percent.toStringAsFixed(2)}%",
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .labelLarge,
+                                style: Theme.of(context).textTheme.labelLarge,
                               ),
                             ],
                           ),
@@ -133,25 +125,25 @@ class CategoryListTile extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: (nTransactions > 0)
                       ? List.generate(
-                    2 * nTransactions - 1,
-                        (i) {
-                      if (i % 2 == 0) {
-                        return TransactionRow(
-                          account: transactions[i ~/ 2]["account"],
-                          amount: transactions[i ~/ 2]["amount"],
-                          category: transactions[i ~/ 2]["category"],
-                          title: transactions[i ~/ 2]["title"],
-                        );
-                      } else {
-                        return const Divider(
-                          height: 1,
-                          thickness: 1,
-                          indent: 15,
-                          endIndent: 15,
-                        );
-                      }
-                    },
-                  )
+                          2 * nTransactions - 1,
+                          (i) {
+                            if (i % 2 == 0) {
+                              return TransactionRow(
+                                account: transactions[i ~/ 2]["account"],
+                                amount: transactions[i ~/ 2]["amount"],
+                                category: transactions[i ~/ 2]["category"],
+                                title: transactions[i ~/ 2]["title"],
+                              );
+                            } else {
+                              return const Divider(
+                                height: 1,
+                                thickness: 1,
+                                indent: 15,
+                                endIndent: 15,
+                              );
+                            }
+                          },
+                        )
                       : [],
                 ),
               ),
@@ -196,15 +188,11 @@ class TransactionRow extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .titleMedium,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(
                       "${amount.toStringAsFixed(2)} €",
-                      style: Theme
-                          .of(context)
+                      style: Theme.of(context)
                           .textTheme
                           .bodyLarge
                           ?.copyWith(color: (amount > 0) ? green : red),
@@ -216,17 +204,11 @@ class TransactionRow extends StatelessWidget {
                   children: [
                     Text(
                       category.toUpperCase(),
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .labelLarge,
+                      style: Theme.of(context).textTheme.labelLarge,
                     ),
                     Text(
                       account.toUpperCase(),
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .labelLarge,
+                      style: Theme.of(context).textTheme.labelLarge,
                     ),
                   ],
                 ),

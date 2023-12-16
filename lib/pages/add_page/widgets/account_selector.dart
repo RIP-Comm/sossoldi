@@ -68,7 +68,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
                       itemBuilder: (context, i) {
                         BankAccount account = accounts[i];
                         IconData? icon = accountIconList[account.symbol];
-                        Color? color = accountColorList[account.color];
+                        Color? color = accountColorListTheme[account.color];
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: Column(
@@ -95,10 +95,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
                                 style: Theme.of(context)
                                     .textTheme
                                     .labelLarge!
-                                    .copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary),
+                                    .copyWith(color: Theme.of(context).colorScheme.primary),
                               ),
                             ],
                           ),
@@ -132,7 +129,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
                     itemBuilder: (context, i) {
                       BankAccount account = accounts[i];
                       IconData? icon = accountIconList[account.symbol];
-                      Color? color = accountColorList[account.color];
+                      Color? color = accountColorListTheme[account.color];
                       return ListTile(
                         tileColor: Theme.of(context).colorScheme.surface,
                         onTap: () =>

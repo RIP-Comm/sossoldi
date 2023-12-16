@@ -29,7 +29,7 @@ class AccountsSum extends ConsumerWidget with Functions {
       ),
       child: Container(
         decoration: BoxDecoration(
-          color: accountColorList[account.color].withOpacity(0.2),
+          color: accountColorListTheme[account.color].withOpacity(0.2),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Material(
@@ -51,20 +51,28 @@ class AccountsSum extends ConsumerWidget with Functions {
                   Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: accountColorList[account.color],
+                      color: accountColorListTheme[account.color],
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(6.0),
-                      child: Icon(accountIconList[account.symbol],
-                          size: 20.0, color: white),
+                      child: Icon(
+                        accountIconList[account.symbol],
+                        size: 20.0,
+                        color: white,
+                      ),
                     ),
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text(account.name,
-                          style: Theme.of(context).textTheme.bodyLarge),
+                      Text(
+                        account.name,
+                        style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge!
+                              .copyWith(color: darkBlue7),
+                      ), // TODO: set dinamically instead of hardcoded
                       FutureBuilder<num?>(
                         future: BankAccountMethods().getAccountSum(account.id),
                         builder: (context, snapshot) {
@@ -89,7 +97,7 @@ class AccountsSum extends ConsumerWidget with Functions {
                                   TextSpan(
                                     text: numToCurrency(accountSum),
                                     style:
-                                        Theme.of(context).textTheme.titleSmall,
+                                        Theme.of(context).textTheme.titleSmall!.copyWith(color: darkBlue7),
                                   ),
                                   TextSpan(
                                     text: "€",
@@ -100,7 +108,7 @@ class AccountsSum extends ConsumerWidget with Functions {
                                       fontFeatures: [
                                         const FontFeature.subscripts()
                                       ],
-                                    ),
+                                    ).copyWith(color: darkBlue7),
                                   ),
                                 ],
                               ),

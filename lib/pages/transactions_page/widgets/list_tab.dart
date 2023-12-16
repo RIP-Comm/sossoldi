@@ -52,7 +52,7 @@ class _ListTabState extends ConsumerState<ListTab> with Functions {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8.0),
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
-      color: grey3,
+      color: Theme.of(context).colorScheme.primaryContainer, // da sistemare prima il layout della pagina
       child: transactions.when(
         data: (data) {
           return ListView.separated(

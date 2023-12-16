@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:sossoldi/providers/theme_provider.dart';
 
 import '../../constants/style.dart';
 
@@ -35,6 +36,7 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final appThemeState = ref.watch(appThemeStateNotifier);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.background,
@@ -75,12 +77,21 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                     child: IconButton(
                       color: blue5,
                       onPressed: () {
-                        setState(() {
-                          darkMode = !darkMode;
-                        });
+                        // Toggle dark mode using the provider
+                        if (appThemeState.isDarkModeEnabled) {
+                          ref
+                              .read(appThemeStateNotifier.notifier)
+                              .setLightTheme();
+                        } else {
+                          ref
+                              .read(appThemeStateNotifier.notifier)
+                              .setDarkTheme();
+                        }
                       },
                       icon: Icon(
-                        darkMode ? Icons.dark_mode : Icons.light_mode,
+                        appThemeState.isDarkModeEnabled
+                            ? Icons.dark_mode
+                            : Icons.light_mode,
                         size: 25.0,
                         color: Theme.of(context).colorScheme.background,
                       ),
@@ -104,7 +115,9 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                         child: Center(
                             child: Text(
                           NumberFormat().simpleCurrencySymbol(selectedCurrency),
-                          style: const TextStyle(color: white, fontSize: 25),
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.background,
+                              fontSize: 25),
                         )))),
               ],
             ),
@@ -198,8 +211,11 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                             radius: 22,
                             backgroundColor: blue5,
                             child: Text(currencies.elementAt(index)[0],
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 20)),
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .background,
+                                    fontSize: 20)),
                           ),
                           title: Text(
                             currencies.elementAt(index)[1],
