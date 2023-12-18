@@ -2,11 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../constants/style.dart';
 import 'add_page/add_page.dart';
-import '../pages/home_page.dart';
-import '../pages/transactions_page/transactions_page.dart';
-import '../pages/statistics_page.dart';
-import '../pages/planning_page/planning_page.dart';
+import 'home_page.dart';
+import 'planning_page/planning_page.dart';
+import 'statistics_page.dart';
+import 'transactions_page/transactions_page.dart';
 
 final StateProvider selectedIndexProvider = StateProvider<int>((ref) => 0);
 
@@ -134,32 +136,7 @@ class _StructureState extends ConsumerState<Structure> {
           size: 55,
           color: Theme.of(context).colorScheme.background,
         ),
-        onPressed: () async {
-          showModalBottomSheet(
-            backgroundColor: Colors.transparent,
-            context: context,
-            isScrollControlled: true,
-            isDismissible: true,
-            builder: (BuildContext buildContext) {
-              return DraggableScrollableSheet(
-                builder: (_, controller) => Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    color: Theme.of(context).colorScheme.background,
-                  ),
-                  child: ListView(
-                    controller: controller,
-                    shrinkWrap: true,
-                    children: const [AddPage()],
-                  ),
-                ),
-                initialChildSize: 0.92,
-                minChildSize: 0.75,
-                maxChildSize: 0.92,
-              );
-            },
-          );
-        },
+        onPressed: () => Navigator.of(context).pushNamed("/add-page"),
       ),
       floatingActionButtonLocation:
           FloatingActionButtonLocation.miniCenterDocked,

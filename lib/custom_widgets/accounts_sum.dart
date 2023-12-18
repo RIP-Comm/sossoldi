@@ -1,13 +1,15 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../constants/constants.dart';
 import '../model/bank_account.dart';
 import '../constants/functions.dart';
 import '../constants/style.dart';
-import 'account_modal.dart';
+import '../../../providers/accounts_provider.dart';
 
 /// This class shows account summaries in the dashboard
-class AccountsSum extends StatelessWidget with Functions {
+class AccountsSum extends ConsumerWidget with Functions {
   final BankAccount account;
 
   const AccountsSum({
@@ -16,7 +18,7 @@ class AccountsSum extends StatelessWidget with Functions {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       width: 160.0,
       margin: const EdgeInsets.fromLTRB(0, 4, 16, 6),
@@ -34,35 +36,12 @@ class AccountsSum extends StatelessWidget with Functions {
           color: Colors.transparent,
           child: InkWell(
             borderRadius: BorderRadius.circular(8),
-            onTap: () {
-              showModalBottomSheet(
-                backgroundColor: Colors.transparent,
-                context: context,
-                isScrollControlled: true,
-                isDismissible: true,
-                builder: (BuildContext buildContext) {
-                  return DraggableScrollableSheet(
-                    builder: (_, controller) => Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: const Color(0xff356CA3),
-                      ),
-                      child: ListView(
-                        controller: controller,
-                        children: [
-                          AccountDialog(
-                            accountName: account.name,
-                            amount: account.startingValue,
-                          )
-                        ],
-                      ),
-                    ),
-                    initialChildSize: 0.7,
-                    minChildSize: 0.5,
-                    maxChildSize: 1,
-                  );
-                },
-              );
+            onTap: () async {
+              await ref
+                  .read(accountsProvider.notifier)
+                  .selectedAccount(account)
+                  .whenComplete(
+                      () => Navigator.of(context).pushNamed('/account'));
             },
             child: Container(
               padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
@@ -76,20 +55,24 @@ class AccountsSum extends StatelessWidget with Functions {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(6.0),
-                      child: Icon(accountIconList[account.symbol],
-                          size: 20.0,
-                          color: white), //capire se cambiare colore icona
+                      child: Icon(
+                        accountIconList[account.symbol],
+                        size: 20.0,
+                        color: white,
+                      ),
                     ),
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text(account.name,
-                          style: Theme.of(context)
+                      Text(
+                        account.name,
+                        style: Theme.of(context)
                               .textTheme
                               .bodyLarge!
-                              .copyWith(color: darkBlue7)),//impostato manualmente darkBlue7, da rivedere
+                              .copyWith(color: darkBlue7),
+                      ), // TODO: set dinamically instead of hardcoded
                       FutureBuilder<num?>(
                         future: BankAccountMethods().getAccountSum(account.id),
                         builder: (context, snapshot) {
