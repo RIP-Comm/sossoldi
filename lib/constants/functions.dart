@@ -5,7 +5,7 @@ import '../model/transaction.dart';
 
 mixin Functions {
   String numToCurrency(num? value, String localeCode) {
-    if(value == null) return '';
+    if (value == null) return '';
 
     //create formatter instance
     final formatter = NumberFormat.currency(locale: localeCode, symbol: '');
@@ -22,7 +22,7 @@ mixin Functions {
   }
 
   String dateToString(DateTime date) {
-    final format = DateFormat('E d MMMM', 'it_IT');
+    final format = DateFormat('E, d MMMM y');
     return format.format(date);
   }
 
