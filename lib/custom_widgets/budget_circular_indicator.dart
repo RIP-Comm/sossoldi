@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import '../constants/functions.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// This class shows account summaries in dashboard
 class BudgetCircularIndicator extends StatelessWidget with Functions {
@@ -21,6 +22,7 @@ class BudgetCircularIndicator extends StatelessWidget with Functions {
 
   @override
   Widget build(BuildContext context) {
+    final Locale currentLocale = Localizations.localeOf(context);
     return Column(
       children: [
         CircularPercentIndicator(
@@ -36,7 +38,7 @@ class BudgetCircularIndicator extends StatelessWidget with Functions {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: numToCurrency(amount),
+                      text: numToCurrency(amount, currentLocale.languageCode),
                       style: Theme.of(context)
                           .textTheme
                           .titleMedium!
@@ -57,7 +59,7 @@ class BudgetCircularIndicator extends StatelessWidget with Functions {
               ),
               const SizedBox(height: 6),
               Text(
-                "LEFT",
+                AppLocalizations.of(context)!.left,
                 style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Theme.of(context).colorScheme.primary),
               ),
             ],

@@ -10,7 +10,7 @@ import '../constants/style.dart';
 import '../model/bank_account.dart';
 import '../custom_widgets/accounts_sum.dart';
 import '../custom_widgets/line_chart.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
@@ -23,6 +23,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
   Widget build(BuildContext context) {
     final accountList = ref.watch(accountsProvider);
     final transactionList = ref.watch(transactionsProvider);
+    final Locale currentLocale = Localizations.localeOf(context);
     return ListView(
       children: [
         Column(
@@ -35,7 +36,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "MONTHLY BALANCE",
+                      AppLocalizations.of(context)!.monthlyBalance,
                       style: Theme.of(context).textTheme.labelMedium?.copyWith(
                           color: Theme.of(context).colorScheme.primary),
                     ),
@@ -44,7 +45,8 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: numToCurrency(-1536.65),
+                            text: numToCurrency(-1536.65,
+                                currentLocale.languageCode),
                             style: Theme.of(context)
                                 .textTheme
                                 .headlineLarge
@@ -71,7 +73,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "INCOME",
+                      AppLocalizations.of(context)!.income,
                       style: Theme.of(context).textTheme.labelMedium,
                     ),
                     RichText(
@@ -79,7 +81,8 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: numToCurrency(1050.65),
+                            text: numToCurrency(1050.65,
+                                currentLocale.languageCode),
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
@@ -102,7 +105,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "EXPENSES",
+                      AppLocalizations.of(context)!.expenses,
                       style: Theme.of(context).textTheme.labelMedium,
                     ),
                     RichText(
@@ -110,7 +113,8 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: numToCurrency(-1050.65),
+                            text: numToCurrency(-1050.65,
+                                currentLocale.languageCode),
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
@@ -204,7 +208,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                 ),
                 const SizedBox(width: 4),
                 Text(
-                  "Current month",
+                  AppLocalizations.of(context)!.currentMonth,
                   style: Theme.of(context)
                       .textTheme
                       .labelMedium
@@ -221,7 +225,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                 ),
                 const SizedBox(width: 4),
                 Text(
-                  "Last month",
+                  AppLocalizations.of(context)!.lastMonth,
                   style: Theme.of(context)
                       .textTheme
                       .labelMedium
@@ -248,7 +252,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
                 child: Text(
-                  "Your accounts",
+                  AppLocalizations.of(context)!.yourAccounts,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
@@ -297,7 +301,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                                 ),
                               ),
                               label: Text(
-                                "New Account",
+                               AppLocalizations.of(context)!.newAccount,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyLarge!
@@ -328,7 +332,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(16, 32, 16, 8),
                   child: Text(
-                    "Last transactions",
+                    AppLocalizations.of(context)!.lastTransaction,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ),
@@ -345,7 +349,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 16),
                   child: Text(
-                    "Your budgets",
+                    AppLocalizations.of(context)!.yourBudgets,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ),

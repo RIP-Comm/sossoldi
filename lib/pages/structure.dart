@@ -7,6 +7,7 @@ import '../pages/home_page.dart';
 import '../pages/transactions_page/transactions_page.dart';
 import '../pages/statistics_page.dart';
 import '../pages/planning_page/planning_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final StateProvider selectedIndexProvider = StateProvider<int>((ref) => 0);
 
@@ -47,7 +48,7 @@ class _StructureState extends ConsumerState<Structure> {
         elevation: 0,
         centerTitle: true,
         title: Text(
-          _pagesTitle.elementAt(selectedIndex),
+            _pagesTitle.elementAt(selectedIndex),
           style: Theme.of(context).textTheme.headlineLarge!,
         ),
         leading: Padding(
@@ -102,26 +103,26 @@ class _StructureState extends ConsumerState<Structure> {
         items: [
           BottomNavigationBarItem(
             icon: Icon(selectedIndex == 0 ? Icons.home : Icons.home_outlined),
-            label: "DASHBOARD",
+            label: AppLocalizations.of(context)!.dashboard,
           ),
           BottomNavigationBarItem(
             icon: Icon(selectedIndex == 1
                 ? Icons.swap_horizontal_circle
                 : Icons.swap_horizontal_circle_outlined),
-            label: "TRANSACTIONS",
+            label: AppLocalizations.of(context)!.transactions,
           ),
           const BottomNavigationBarItem(icon: Text(""), label: ""),
           BottomNavigationBarItem(
             icon: Icon(selectedIndex == 3
                 ? Icons.calendar_today
                 : Icons.calendar_today_outlined),
-            label: "PLANNING",
+            label:  AppLocalizations.of(context)!.planning,
           ),
           BottomNavigationBarItem(
             icon: Icon(selectedIndex == 4
                 ? Icons.data_exploration
                 : Icons.data_exploration_outlined),
-            label: "GRAPHS",
+            label:  AppLocalizations.of(context)!.graphs,
           ),
         ],
       ),

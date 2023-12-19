@@ -25,8 +25,10 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
 
   @override
   void initState() {
+    Locale currentLocale = Localizations.localeOf(context);
     amountController.text =
-        numToCurrency(ref.read(selectedTransactionUpdateProvider)?.amount);
+        numToCurrency(ref.read(selectedTransactionUpdateProvider)?.amount,
+            currentLocale.languageCode);
     noteController.text =
         ref.read(selectedTransactionUpdateProvider)?.note ?? '';
     super.initState();
@@ -57,6 +59,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
     final selectedTransaction = ref.watch(selectedTransactionUpdateProvider);
     final selectedType = trsncTypeList[trnscTypes.indexOf(true)];
     final selectedRecurringPay = ref.watch(selectedRecurringPayProvider);
+
     // I listen servono a evitare che il provider faccia il dispose subito dopo essere stato aggiornato
     ref.listen(amountProvider, (_, __) {});
     ref.listen(noteProvider, (_, __) {});

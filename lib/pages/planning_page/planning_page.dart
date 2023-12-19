@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'widget/budget_card.dart';
 import 'widget/recurring_payments_card.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class PlanningPage extends StatefulWidget {
   const PlanningPage({super.key});
 
@@ -19,7 +19,7 @@ class _PlanningPageState extends State<PlanningPage> {
             children: [
               Row(
                 children: [
-                  Text("Monthly budget",
+                  Text(AppLocalizations.of(context)!.monthlyBudget,
                       style: Theme.of(context).textTheme.titleLarge),
                   const Spacer(),
                   GestureDetector(
@@ -27,7 +27,7 @@ class _PlanningPageState extends State<PlanningPage> {
                       print("Manage budgets");
                     },
                       child: Row(children: [
-                    Text("MANAGE",
+                    Text(AppLocalizations.of(context)!.manage,
                         style: Theme.of(context).textTheme.labelLarge),
                     SizedBox(width: 5),
                     Icon(Icons.edit, size: 13)
@@ -37,7 +37,7 @@ class _PlanningPageState extends State<PlanningPage> {
               const SizedBox(height: 10),
               BudgetCard(),
               const SizedBox(height: 20),
-              Text("Recurring payments",
+              Text(AppLocalizations.of(context)!.recurringPayments,
                   style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(height: 10),
               RecurringPaymentCard()

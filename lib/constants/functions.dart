@@ -4,9 +4,14 @@ import '../constants/style.dart';
 import '../model/transaction.dart';
 
 mixin Functions {
-  String numToCurrency(num? value) {
+  String numToCurrency(num? value, String localeCode) {
     if(value == null) return '';
-    return value.toStringAsFixed(2).replaceAll(".", ",");
+
+    //create formatter instance
+    final formatter = NumberFormat.currency(locale: localeCode, symbol: '');
+
+    //format and return value
+    return formatter.format(value);
   }
 
   num currencyToNum(String value) {

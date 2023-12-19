@@ -1,7 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-
 import '../../../model/budget.dart';
+
 
 class BudgetPieChart extends StatefulWidget {
   BudgetPieChart({super.key, required this.budgets});

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'widgets/custom_sliver_delegate.dart';
 import 'widgets/categories_tab.dart';
 import 'widgets/accounts_tab.dart';

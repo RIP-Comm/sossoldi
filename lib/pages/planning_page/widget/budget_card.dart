@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../model/budget.dart';
 import 'budget_pie_chart.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class BudgetCard extends StatefulWidget {
   const BudgetCard({super.key});
 
@@ -35,10 +35,10 @@ class _BudgetCardState extends State<BudgetCard> {
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Composition",
+                    Text(AppLocalizations.of(context)!.composition,
                         style: Theme.of(context).textTheme.titleLarge),
                     BudgetPieChart(budgets: budgets),
-                    Text("Progress",
+                    Text(AppLocalizations.of(context)!.progress,
                         style: Theme.of(context).textTheme.titleLarge),
                     const SizedBox(height: 10),
                     ListView.separated(
@@ -96,7 +96,7 @@ class _BudgetCardState extends State<BudgetCard> {
                       ),
                       onPressed: createBudget,
                       label: Text(
-                        "Add category budget",
+                        AppLocalizations.of(context)!.addCategoryBudget,
                         style: Theme.of(context).textTheme.titleSmall!.apply(
                             color: Theme.of(context).colorScheme.secondary),
                       ),

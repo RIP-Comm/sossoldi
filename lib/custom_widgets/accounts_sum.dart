@@ -17,6 +17,7 @@ class AccountsSum extends StatelessWidget with Functions {
 
   @override
   Widget build(BuildContext context) {
+    final Locale currentLocale = Localizations.localeOf(context);
     return Container(
       width: 160.0,
       margin: const EdgeInsets.fromLTRB(0, 4, 16, 6),
@@ -112,7 +113,8 @@ class AccountsSum extends StatelessWidget with Functions {
                               text: TextSpan(
                                 children: [
                                   TextSpan(
-                                    text: numToCurrency(accountSum),
+                                    text: numToCurrency(accountSum,
+                                        currentLocale.languageCode),
                                     style:
                                         Theme.of(context).textTheme.titleSmall!.copyWith(color: darkBlue7),
                                   ),

@@ -13,6 +13,7 @@ class AccountDialog extends StatelessWidget with Functions {
 
   @override
   Widget build(BuildContext context) {
+    final Locale currentLocale = Localizations.localeOf(context);
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -38,7 +39,7 @@ class AccountDialog extends StatelessWidget with Functions {
                         ),
                         const Padding(padding: EdgeInsets.all(12)),
                         Text(
-                          numToCurrency(amount),
+                          numToCurrency(amount, currentLocale.languageCode),
                           style: const TextStyle(
                             color: Color(0xffffffff),
                             fontSize: 32.0,
@@ -152,7 +153,7 @@ class AccountDialog extends StatelessWidget with Functions {
                                       text: TextSpan(
                                         children: [
                                           TextSpan(
-                                              text: "-280,00",
+                                              text: numToCurrency(-280.00, currentLocale.languageCode),
                                               style: Theme.of(context).textTheme.labelSmall),
                                           TextSpan(
                                             text: "€",

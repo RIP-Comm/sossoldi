@@ -71,6 +71,11 @@ const darkAccountColorList = [
   darkAccount5,
 ];
 
+const supportedLocales = [
+  Locale('en'),
+  Locale('it')
+];
+
 List<Color> categoryColorListTheme = categoryColorList;
 List<Color> accountColorListTheme = accountColorList;
 

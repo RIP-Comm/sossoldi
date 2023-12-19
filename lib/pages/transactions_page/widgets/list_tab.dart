@@ -48,7 +48,7 @@ class _ListTabState extends ConsumerState<ListTab> with Functions {
       child: transactions.when(
         data: (data) {
           return ListView.separated(
-            itemCount: transactions.value!.length + 1,
+            itemCount: transactions.value!.length,
             itemBuilder: (context, i) {
               if (i == 0) {
                 return DateSeparator(

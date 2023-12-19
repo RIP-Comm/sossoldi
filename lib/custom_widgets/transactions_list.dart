@@ -100,6 +100,7 @@ class TransactionTitle extends StatelessWidget with Functions {
   @override
   Widget build(BuildContext context) {
     final color = sum >= 0 ? green : red;
+    final Locale currentLocale = Localizations.localeOf(context);
     return Padding(
       padding: EdgeInsets.only(top: first ? 0 : 24),
       child: Column(
@@ -119,7 +120,7 @@ class TransactionTitle extends StatelessWidget with Functions {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: numToCurrency(sum),
+                      text: numToCurrency(sum, currentLocale.languageCode),
                       style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: color),
                     ),
                     TextSpan(
@@ -260,7 +261,7 @@ class TransactionRow extends ConsumerWidget with Functions {
                                       children: [
                                         TextSpan(
                                           text:
-                                              '${transaction.type == Type.expense ? "-" : ""}${numToCurrency(transaction.amount)}',
+                                              '${transaction.type == Type.expense ? "-" : ""}${numToCurrency(transaction.amount,'en_US')}',
                                           style: Theme.of(context)
                                               .textTheme
                                               .labelLarge!
