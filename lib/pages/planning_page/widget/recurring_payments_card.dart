@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../../../model/recurring_transaction_amount.dart';
 
 class RecurringPaymentCard extends StatefulWidget {
   const RecurringPaymentCard({super.key});
@@ -25,9 +24,9 @@ class _RecurringPaymentCardState extends State<RecurringPaymentCard> {
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
             child: Column(
               children: [
-                const Text(AppLocalizations.of(context)!.recurrentSubTitle,
+                Text(AppLocalizations.of(context)!.recurrentSubTitle,
                     style:
-                        TextStyle(fontWeight: FontWeight.normal, fontSize: 13)),
+                        const TextStyle(fontWeight: FontWeight.normal, fontSize: 13)),
                 const SizedBox(height: 10),
                 ElevatedButton.icon(
                   icon: Icon(
@@ -36,7 +35,7 @@ class _RecurringPaymentCardState extends State<RecurringPaymentCard> {
                   ),
                   onPressed: addRecurringPayment,
                   label: Text(
-                    AppLocalizations.of(context).recurrentSubTitle,
+                    AppLocalizations.of(context)!.recurrentSubTitle,
                     style: Theme.of(context)
                         .textTheme
                         .titleSmall!

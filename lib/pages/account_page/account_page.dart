@@ -19,7 +19,7 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
   Widget build(BuildContext context) {
     final accountName = ref.read(accountNameProvider);
     final accountAmount = ref.read(accountStartingValueProvider);
-
+    final Locale currentLocale = Localizations.localeOf(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(accountName ?? "", style: const TextStyle(color: white)),
@@ -35,7 +35,7 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
               child: Column(
                 children: [
                   Text(
-                    numToCurrency(accountAmount),
+                    numToCurrency(accountAmount,currentLocale.languageCode),
                     style: const TextStyle(
                       color: white,
                       fontSize: 32.0,

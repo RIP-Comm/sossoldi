@@ -156,6 +156,7 @@ class DateSeparator extends StatelessWidget with Functions {
 
   @override
   Widget build(BuildContext context) {
+    final Locale currentLocale = Localizations.localeOf(context);
     return Padding(
       padding: const EdgeInsets.only(top: 12.0, bottom: 6.0),
       child: Row(
@@ -167,7 +168,7 @@ class DateSeparator extends StatelessWidget with Functions {
                 Theme.of(context).textTheme.bodySmall?.copyWith(color: blue1),
           ),
           Text(
-            "${numToCurrency(total)} €",
+            "${numToCurrency(total, currentLocale.languageCode)} €",
             style: Theme.of(context)
                 .textTheme
                 .bodyLarge

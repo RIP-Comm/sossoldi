@@ -30,6 +30,7 @@ class TransactionListTile extends ConsumerWidget with Functions {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final Locale currentLocale = Localizations.localeOf(context);
     return InkWell(
       onTap: () {
         ref.read(selectedTransactionUpdateProvider.notifier).state =
@@ -67,7 +68,7 @@ class TransactionListTile extends ConsumerWidget with Functions {
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       Text(
-                        "${type == Type.expense ? '-' : ''}${numToCurrency(amount)} €",
+                        "${type == Type.expense ? '-' : ''}${numToCurrency(amount, currentLocale.languageCode)} €",
                         style: Theme.of(context)
                             .textTheme
                             .bodyLarge
