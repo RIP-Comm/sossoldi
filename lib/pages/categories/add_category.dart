@@ -18,6 +18,12 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
   final TextEditingController nameController = TextEditingController();
 
   @override
+  void initState() {
+    nameController.text = ref.read(categoryNameProvider) ?? '';
+    super.initState();
+  }
+
+  @override
   void dispose() {
     ref.invalidate(selectedCategoryProvider);
     ref.invalidate(categoryNameProvider);
@@ -28,17 +34,11 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
 
   @override
   Widget build(BuildContext context) {
-    final categoryName =
-        ref.read(categoryNameProvider); // Used only to retrieve the value when updating a category
     final selectedCategory = ref.watch(selectedCategoryProvider);
     final categoryIcon = ref.watch(categoryIconProvider);
     final categoryColor = ref.watch(categoryColorProvider);
     final showCategoryIcons = ref.watch(showCategoryIconsProvider);
     ref.listen(categoryNameProvider, (_, __) {});
-
-    setState(() {
-      nameController.text = categoryName ?? '';
-    });
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(title: Text("${selectedCategory == null ? "New" : "Edit"} Category")),
@@ -267,7 +267,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                           .removeCategory(selectedCategory.id!)
                           .whenComplete(() => Navigator.of(context).pop()),
                       style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        padding: const EdgeInsets.all(16),
                         side: const BorderSide(color: red, width: 1),
                       ),
                       icon: const Icon(Icons.delete_outlined, color: red),
@@ -294,11 +294,9 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                   )
                 ],
               ),
-              padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               child: Container(
-                height: 48,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.secondary,
                   boxShadow: [defaultShadow],
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -310,14 +308,15 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                           .updateCategory(selectedCategory)
                           .whenComplete(() => Navigator.of(context).pop());
                     } else {
-                    ref
-                        .read(categoriesProvider.notifier)
-                        .addCategory()
-                        .whenComplete(() => Navigator.of(context).pop());
+                      ref
+                          .read(categoriesProvider.notifier)
+                          .addCategory()
+                          .whenComplete(() => Navigator.of(context).pop());
                     }
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.secondary,
+                    padding: const EdgeInsets.all(16),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   ),
                   child: Text(

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../constants/constants.dart';
-import '../../../custom_widgets/default_container.dart';
 import '../../../constants/functions.dart';
+import '../../../custom_widgets/default_container.dart';
 import '../../../model/bank_account.dart';
 import '../../../providers/accounts_provider.dart';
 
 class AccountList extends ConsumerStatefulWidget {
-  const AccountList({Key? key}) : super(key: key);
+  const AccountList({super.key});
 
   @override
   ConsumerState<AccountList> createState() => _AccountListState();
@@ -18,9 +19,11 @@ class _AccountListState extends ConsumerState<AccountList> with Functions {
   Widget build(BuildContext context) {
     final accountsList = ref.watch(accountsProvider);
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        title: const Text("Account"),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new),
+          onPressed: () => Navigator.pop(context),
+        ),
         actions: [
           IconButton(
             onPressed: () => Navigator.of(context).pushNamed('/add-account'),
@@ -42,10 +45,10 @@ class _AccountListState extends ConsumerState<AccountList> with Functions {
                       shape: BoxShape.circle,
                       color: Theme.of(context).colorScheme.primary,
                     ),
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: Icon(
                       Icons.account_balance_wallet,
-                      size: 16.0,
+                      size: 24.0,
                       color: Theme.of(context).colorScheme.background,
                     ),
                   ),
@@ -72,7 +75,10 @@ class _AccountListState extends ConsumerState<AccountList> with Functions {
                   Color? color = accountColorListTheme[account.color];
                   return DefaultContainer(
                     onTap: () async {
-                      await ref.read(accountsProvider.notifier).selectedAccount(account).whenComplete(() => Navigator.of(context).pushNamed('/add-account'));
+                      await ref
+                          .read(accountsProvider.notifier)
+                          .selectedAccount(account)
+                          .whenComplete(() => Navigator.of(context).pushNamed('/add-account'));
                     },
                     child: Row(
                       children: [

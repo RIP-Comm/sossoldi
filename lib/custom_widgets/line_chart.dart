@@ -3,31 +3,31 @@ import 'package:flutter/material.dart';
 
 //This class can be used when we need to draw a line chart with one or two lines
 class LineChartWidget extends StatefulWidget {
-  final line1Data; //this should be a list of Flspot(x,y)
-  final colorLine1Data;
+  final List<FlSpot> line1Data; //this should be a list of Flspot(x,y)
+  final Color colorLine1Data;
 
-  final line2Data; //this should be a list of Flspot(x,y), if you only need one just put an empty list
-  final colorLine2Data;
+  final List<FlSpot> line2Data; //this should be a list of Flspot(x,y), if you only need one just put an empty list
+  final Color colorLine2Data;
 
   //These will be used to determine the max value of the chart in order to get the right visualization of the data
-  final maxY;
-  final minY;
+  final double maxY;
+  final double minY;
 
   //Contains the number of days of the month
-  final maxDays; 
+  final double maxDays;
 
-  final colorBackground;
+  final Color colorBackground;
   const LineChartWidget({
-    super.key, 
-    required this.line1Data, 
-    required this.colorLine1Data, 
+    super.key,
+    required this.line1Data,
+    required this.colorLine1Data,
     required this.line2Data,
-    required this.colorLine2Data, 
+    required this.colorLine2Data,
     required this.colorBackground,
     required this.maxY,
     required this.minY,
     required this.maxDays,
-    });
+  });
 
   @override
   State<LineChartWidget> createState() => _LineChartSample2State();
@@ -39,7 +39,7 @@ class _LineChartSample2State extends State<LineChartWidget> {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: <Widget>[
+      children: [
         AspectRatio(
           aspectRatio: 2,
           child: DecoratedBox(
@@ -50,11 +50,7 @@ class _LineChartSample2State extends State<LineChartWidget> {
               color: widget.colorBackground,
             ),
             child: Padding(
-                padding: const EdgeInsets.only(
-                right: 18,
-                left: 12,
-                top: 24,
-              ),
+              padding: const EdgeInsets.only(top: 24),
               child: LineChart(
                 mainData(),
               ),
@@ -72,7 +68,7 @@ class _LineChartSample2State extends State<LineChartWidget> {
       fontSize: 8,
     );
     Widget text;
-    switch(widget.maxDays) {
+    switch (widget.maxDays) {
       case 12:
         switch (value.toInt()) {
           case 0:
@@ -89,7 +85,7 @@ class _LineChartSample2State extends State<LineChartWidget> {
             break;
           case 8:
             text = Text('Sep', style: style);
-            break;  
+            break;
           case 10:
             text = Text('Nov', style: style);
             break;
@@ -99,30 +95,30 @@ class _LineChartSample2State extends State<LineChartWidget> {
         }
         break;
       case 31:
-          switch (value.toInt()) {
-            case 3:
-              text = Text('4', style: style);
-              break;
-            case 10:
-              text = Text('11', style: style);
-              break;
-            case 17:
-              text = Text('18', style: style);
-              break;
-            case 24:
-              text = Text('25', style: style);
-              break;
-            case 30:
-              text = Text('31', style: style);
-              break;
-            default:
-              text = Text('', style: style);
-              break;
-          }
+        switch (value.toInt()) {
+          case 3:
+            text = Text('4', style: style);
+            break;
+          case 10:
+            text = Text('11', style: style);
+            break;
+          case 17:
+            text = Text('18', style: style);
+            break;
+          case 24:
+            text = Text('25', style: style);
+            break;
+          case 30:
+            text = Text('31', style: style);
+            break;
+          default:
+            text = Text('', style: style);
+            break;
+        }
         break;
-        default:
-              text = Text('', style: style);
-              break;
+      default:
+        text = Text('', style: style);
+        break;
     }
 
     return SideTitleWidget(
@@ -135,15 +131,13 @@ class _LineChartSample2State extends State<LineChartWidget> {
     return LineChartData(
       titlesData: FlTitlesData(
         show: true,
-        rightTitles: AxisTitles(
+        rightTitles: const AxisTitles(
           sideTitles: SideTitles(showTitles: false),
         ),
-        topTitles: AxisTitles(
+        topTitles: const AxisTitles(
           sideTitles: SideTitles(showTitles: false),
         ),
-        leftTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false)
-        ),
+        leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
@@ -153,12 +147,14 @@ class _LineChartSample2State extends State<LineChartWidget> {
           ),
         ),
       ),
-      gridData: FlGridData(show: false),
+      gridData: const FlGridData(show: false),
       borderData: FlBorderData(
-                border: const Border(bottom: BorderSide(color: Colors.grey, width: 1.0, style: BorderStyle.solid))
-                ),
+        border: const Border(
+          bottom: BorderSide(color: Colors.grey, width: 1.0, style: BorderStyle.solid),
+        ),
+      ),
       minX: 0,
-      maxX: widget.maxDays-1,
+      maxX: widget.maxDays - 1,
       minY: widget.minY,
       maxY: widget.maxY,
       lineBarsData: [
@@ -168,13 +164,10 @@ class _LineChartSample2State extends State<LineChartWidget> {
           barWidth: 1.5,
           isStrokeCapRound: true,
           color: widget.colorLine1Data,
-          dotData: FlDotData(
+          dotData: const FlDotData(
             show: false,
           ),
-          belowBarData: BarAreaData(
-            show: true,
-            color: widget.colorLine1Data.withOpacity(0.3)
-          ),
+          belowBarData: BarAreaData(show: true, color: widget.colorLine1Data.withOpacity(0.3)),
         ),
         LineChartBarData(
           spots: widget.line2Data,
@@ -182,7 +175,7 @@ class _LineChartSample2State extends State<LineChartWidget> {
           barWidth: 1,
           isStrokeCapRound: true,
           color: widget.colorLine2Data,
-          dotData: FlDotData(
+          dotData: const FlDotData(
             show: false,
           ),
         ),

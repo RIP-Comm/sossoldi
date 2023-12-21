@@ -3,8 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../constants/style.dart';
-import 'add_page/add_page.dart';
+import '../providers/transactions_provider.dart';
 import 'home_page.dart';
 import 'planning_page/planning_page.dart';
 import 'statistics_page.dart';
@@ -40,17 +39,12 @@ class _StructureState extends ConsumerState<Structure> {
   Widget build(BuildContext context) {
     final selectedIndex = ref.watch(selectedIndexProvider);
     return Scaffold(
-      // backgroundColor: blue7,
-      resizeToAvoidBottomInset:
-          false, // Prevent the fab moving up when the keyboard is opened
+      // Prevent the fab moving up when the keyboard is opened
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        // Sulla dashboard (0) setto il background blue
-        // backgroundColor: selectedIndex == 0 ? blue7 : Theme.of(context).colorScheme.background,
-        elevation: 0,
-        centerTitle: true,
+        backgroundColor: selectedIndex == 0 ? Theme.of(context).colorScheme.tertiary : Theme.of(context).colorScheme.background,
         title: Text(
           _pagesTitle.elementAt(selectedIndex),
-          style: Theme.of(context).textTheme.headlineLarge!,
         ),
         leading: Padding(
           padding: const EdgeInsets.only(left: 16),
@@ -92,15 +86,11 @@ class _StructureState extends ConsumerState<Structure> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: Theme.of(context).colorScheme.primary,
-        // unselectedItemColor: grey1,
         selectedFontSize: 8,
         unselectedFontSize: 8,
-        // backgroundColor: const Color(0xFFF6F6F6),
         currentIndex: selectedIndex,
-        onTap: (index) => index != 2
-            ? ref.read(selectedIndexProvider.notifier).state = index
-            : null,
+        onTap: (index) =>
+            index != 2 ? ref.read(selectedIndexProvider.notifier).state = index : null,
         items: [
           BottomNavigationBarItem(
             icon: Icon(selectedIndex == 0 ? Icons.home : Icons.home_outlined),
@@ -114,15 +104,12 @@ class _StructureState extends ConsumerState<Structure> {
           ),
           const BottomNavigationBarItem(icon: Text(""), label: ""),
           BottomNavigationBarItem(
-            icon: Icon(selectedIndex == 3
-                ? Icons.calendar_today
-                : Icons.calendar_today_outlined),
+            icon: Icon(selectedIndex == 3 ? Icons.calendar_today : Icons.calendar_today_outlined),
             label: "PLANNING",
           ),
           BottomNavigationBarItem(
-            icon: Icon(selectedIndex == 4
-                ? Icons.data_exploration
-                : Icons.data_exploration_outlined),
+            icon:
+                Icon(selectedIndex == 4 ? Icons.data_exploration : Icons.data_exploration_outlined),
             label: "GRAPHS",
           ),
         ],
@@ -136,10 +123,12 @@ class _StructureState extends ConsumerState<Structure> {
           size: 55,
           color: Theme.of(context).colorScheme.background,
         ),
-        onPressed: () => Navigator.of(context).pushNamed("/add-page"),
+        onPressed: () {
+          ref.read(transactionsProvider.notifier).reset();
+          Navigator.of(context).pushNamed("/add-page");
+        },
       ),
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.miniCenterDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
     );
   }
 }
