@@ -2,8 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/style.dart';
+import '../../../providers/transactions_provider.dart';
 import '../../../utils/formatted_date_range.dart';
 import 'month_selector.dart';
 
@@ -14,17 +16,12 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
     required this.tabController,
     required this.expandedHeight,
     required this.minHeight,
-    required this.startDate,
-    required this.endDate,
     required this.amount,
   });
 
   final TabController tabController;
   final List<Tab> myTabs;
   final TickerProvider ticker;
-
-  final ValueNotifier<DateTime> startDate;
-  final ValueNotifier<DateTime> endDate;
 
   final double amount;
   final double minHeight;
@@ -117,17 +114,11 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
                   // TODO: capitalize text of the selected label
                   // not possible from TextStyle https://github.com/flutter/flutter/issues/22695
                   labelStyle: Theme.of(context).textTheme.bodyLarge,
-                  unselectedLabelStyle: Theme.of(context)
-                      .textTheme
-                      .bodyLarge
-                      ?.copyWith(fontWeight: FontWeight.w400),
+                  unselectedLabelStyle:
+                      Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w400),
                 ),
                 const SizedBox(height: 8),
-                MonthSelector(
-                  amount: amount,
-                  startDate: startDate,
-                  endDate: endDate,
-                ),
+                MonthSelector(amount: amount),
               ],
             ),
           ),
@@ -137,39 +128,39 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
   }
 
   _buildCollapsedWidget(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(
-            vertical: 4.0,
-            horizontal: 8.0,
-          ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(50),
-            color: Theme.of(context).colorScheme.secondary,
-          ),
-          child: Text(
-            myTabs[tabController.index].text!,
-            textAlign: TextAlign.center,
-            style: Theme.of(context)
-                .textTheme
-                .bodyLarge
-                ?.copyWith(color: Colors.white),
-          ),
-        ),
-        Text(
-          getFormattedDateRange(startDate.value, endDate.value),
-          style: Theme.of(context).textTheme.bodyLarge,
-        ),
-        Text(
-          "$amount €",
-          style: Theme.of(context)
-              .textTheme
-              .bodyLarge
-              ?.copyWith(color: (amount > 0) ? green : red),
-        ),
-      ],
+    return Consumer(
+      builder: (context, ref, child) {
+        final startDate = ref.watch(filterDateStartProvider);
+        final endDate = ref.watch(filterDateEndProvider);
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(
+                vertical: 4.0,
+                horizontal: 8.0,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+              child: Text(
+                myTabs[tabController.index].text!,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white),
+              ),
+            ),
+            Text(
+              getFormattedDateRange(startDate, endDate),
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+            Text(
+              "$amount €",
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: (amount > 0) ? green : red),
+            ),
+          ],
+        );
+      }
     );
   }
 

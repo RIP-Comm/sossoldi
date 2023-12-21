@@ -1,10 +1,11 @@
 import 'dart:io' show Platform;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../constants/style.dart';
 import '../../constants/functions.dart';
+import '../../constants/style.dart';
 import '../../model/transaction.dart';
 import '../../providers/transactions_provider.dart';
 import "widgets/account_selector.dart";
@@ -27,10 +28,8 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
 
   @override
   void initState() {
-    amountController.text =
-        numToCurrency(ref.read(selectedTransactionUpdateProvider)?.amount);
-    noteController.text =
-        ref.read(selectedTransactionUpdateProvider)?.note ?? '';
+    amountController.text = numToCurrency(ref.read(selectedTransactionUpdateProvider)?.amount);
+    noteController.text = ref.read(selectedTransactionUpdateProvider)?.note ?? '';
     super.initState();
   }
 
@@ -38,44 +37,25 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
   void dispose() {
     amountController.dispose();
     noteController.dispose();
-    ref.invalidate(selectedTransactionUpdateProvider);
-    ref.invalidate(transactionTypesProvider);
-    ref.invalidate(bankAccountProvider);
-    ref.invalidate(dateProvider);
-    ref.invalidate(categoryProvider);
-    ref.invalidate(amountProvider);
-    ref.invalidate(noteProvider);
-    ref.invalidate(selectedRecurringPayProvider);
-    ref.invalidate(intervalProvider);
-    ref.invalidate(repetitionProvider);
-    ref.invalidate(transactionTypesProvider);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final trsncTypeList = ref.watch(transactionTypeList);
-    final trnscTypes = ref.watch(transactionTypesProvider);
+    final selectedType = ref.watch(transactionTypeProvider);
     final selectedTransaction = ref.watch(selectedTransactionUpdateProvider);
-    final selectedType = trsncTypeList[trnscTypes.indexOf(true)];
-    // I listen servono a evitare che il provider faccia il dispose subito dopo essere stato aggiornato
-    ref.listen(amountProvider, (_, __) {});
-    ref.listen(noteProvider, (_, __) {});
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          (selectedTransaction != null)
-              ? "Editing transaction"
-              : "New transaction",
+          (selectedTransaction != null) ? "Editing transaction" : "New transaction",
         ),
         leadingWidth: 100,
         leading: TextButton(
           onPressed: () => Navigator.pop(context),
           child: Text(
             'Cancel',
-            style:
-                Theme.of(context).textTheme.titleMedium!.copyWith(color: blue5),
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(color: blue5),
           ),
         ),
         actions: [
@@ -91,216 +71,212 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                       ref
                           .read(transactionsProvider.notifier)
                           .deleteTransaction(selectedTransaction.id!)
-                          .whenComplete(() => Navigator.of(context).pop());
+                          .whenComplete(() => Navigator.pop(context));
                     },
                   ),
                 )
               : const SizedBox(),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            AmountSection(
-              amountController: amountController,
-            ),
-            Container(
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.only(left: 16, top: 32, bottom: 8),
-              child: Text(
-                "DETAILS",
-                style: Theme.of(context)
-                    .textTheme
-                    .labelLarge!
-                    .copyWith(color: Theme.of(context).colorScheme.primary),
-              ),
-            ),
-            Container(
-              color: Theme.of(context).colorScheme.surface,
-              child: ListView(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  LabelListTile(
-                    labelController: noteController,
-                    labelProvider: noteProvider,
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            padding: const EdgeInsets.only(bottom: 72),
+            child: Column(
+              children: [
+                AmountSection(amountController),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  padding: const EdgeInsets.only(left: 16, top: 32, bottom: 8),
+                  child: Text(
+                    "DETAILS",
+                    style: Theme.of(context)
+                        .textTheme
+                        .labelLarge!
+                        .copyWith(color: Theme.of(context).colorScheme.primary),
                   ),
-                  const Divider(height: 1, color: grey1),
-                  if (selectedType != Type.transfer) ...[
-                    DetailsListTile(
-                      title: "Account",
-                      icon: Icons.account_balance_wallet,
-                      value: ref.watch(bankAccountProvider)?.name,
-                      callback: () {
-                        FocusManager.instance.primaryFocus?.unfocus();
-                        showModalBottomSheet(
-                          context: context,
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          isScrollControlled: true,
-                          useSafeArea: true,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10.0),
-                              topRight: Radius.circular(10.0),
-                            ),
-                          ),
-                          builder: (_) => DraggableScrollableSheet(
-                            expand: false,
-                            minChildSize: 0.5,
-                            initialChildSize: 0.7,
-                            maxChildSize: 0.9,
-                            builder: (_, controller) => AccountSelector(
-                              provider: bankAccountProvider,
-                              scrollController: controller,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                    const Divider(height: 1, color: grey1),
-                    DetailsListTile(
-                      title: "Category",
-                      icon: Icons.list_alt,
-                      value: ref.watch(categoryProvider)?.name,
-                      callback: () {
-                        FocusManager.instance.primaryFocus?.unfocus();
-                        showModalBottomSheet(
-                          context: context,
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          isScrollControlled: true,
-                          useSafeArea: true,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10.0),
-                              topRight: Radius.circular(10.0),
-                            ),
-                          ),
-                          builder: (_) => DraggableScrollableSheet(
-                            expand: false,
-                            minChildSize: 0.5,
-                            initialChildSize: 0.7,
-                            maxChildSize: 0.9,
-                            builder: (_, controller) => CategorySelector(
-                              scrollController: controller,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                  const Divider(height: 1, color: grey1),
-                  DetailsListTile(
-                    title: "Date",
-                    icon: Icons.calendar_month,
-                    value: dateToString(ref.watch(dateProvider)),
-                    callback: () async {
-                      FocusManager.instance.primaryFocus?.unfocus();
-                      if (Platform.isIOS) {
-                        showCupertinoModalPopup(
-                          context: context,
-                          builder: (_) => Container(
-                            height: 300,
-                            color: white,
-                            child: CupertinoDatePicker(
-                              initialDateTime: ref.watch(dateProvider),
-                              minimumYear: 2015,
-                              maximumYear: 2050,
-                              mode: CupertinoDatePickerMode.date,
-                              onDateTimeChanged: (date) =>
-                                  ref.read(dateProvider.notifier).state = date,
-                            ),
-                          ),
-                        );
-                      } else if (Platform.isAndroid) {
-                        final DateTime? pickedDate = await showDatePicker(
-                          context: context,
-                          initialDate: ref.watch(dateProvider),
-                          firstDate: DateTime(2015),
-                          lastDate: DateTime(2050),
-                        );
-                        if (pickedDate != null) {
-                          ref.read(dateProvider.notifier).state = pickedDate;
-                        }
-                      }
-                    },
+                ),
+                Container(
+                  color: Theme.of(context).colorScheme.surface,
+                  child: Column(
+                    children: [
+                      LabelListTile(noteController),
+                      const Divider(height: 1, color: grey1),
+                      if (selectedType != TransactionType.transfer) ...[
+                        DetailsListTile(
+                          title: "Account",
+                          icon: Icons.account_balance_wallet,
+                          value: ref.watch(bankAccountProvider)?.name,
+                          callback: () {
+                            FocusManager.instance.primaryFocus?.unfocus();
+                            showModalBottomSheet(
+                              context: context,
+                              clipBehavior: Clip.antiAliasWithSaveLayer,
+                              isScrollControlled: true,
+                              useSafeArea: true,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10.0),
+                                  topRight: Radius.circular(10.0),
+                                ),
+                              ),
+                              builder: (_) => DraggableScrollableSheet(
+                                expand: false,
+                                minChildSize: 0.5,
+                                initialChildSize: 0.7,
+                                maxChildSize: 0.9,
+                                builder: (_, controller) => AccountSelector(
+                                  provider: bankAccountProvider,
+                                  scrollController: controller,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        const Divider(height: 1, color: grey1),
+                        DetailsListTile(
+                          title: "Category",
+                          icon: Icons.list_alt,
+                          value: ref.watch(categoryProvider)?.name,
+                          callback: () {
+                            FocusManager.instance.primaryFocus?.unfocus();
+                            showModalBottomSheet(
+                              context: context,
+                              clipBehavior: Clip.antiAliasWithSaveLayer,
+                              isScrollControlled: true,
+                              useSafeArea: true,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10.0),
+                                  topRight: Radius.circular(10.0),
+                                ),
+                              ),
+                              builder: (_) => DraggableScrollableSheet(
+                                expand: false,
+                                minChildSize: 0.5,
+                                initialChildSize: 0.7,
+                                maxChildSize: 0.9,
+                                builder: (_, controller) => CategorySelector(
+                                  scrollController: controller,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                      const Divider(height: 1, color: grey1),
+                      DetailsListTile(
+                        title: "Date",
+                        icon: Icons.calendar_month,
+                        value: dateToString(ref.watch(dateProvider)),
+                        callback: () async {
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          if (Platform.isIOS) {
+                            showCupertinoModalPopup(
+                              context: context,
+                              builder: (_) => Container(
+                                height: 300,
+                                color: white,
+                                child: CupertinoDatePicker(
+                                  initialDateTime: ref.watch(dateProvider),
+                                  minimumYear: 2015,
+                                  maximumYear: 2050,
+                                  mode: CupertinoDatePickerMode.date,
+                                  onDateTimeChanged: (date) =>
+                                      ref.read(dateProvider.notifier).state = date,
+                                ),
+                              ),
+                            );
+                          } else if (Platform.isAndroid) {
+                            final DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: ref.watch(dateProvider),
+                              firstDate: DateTime(2015),
+                              lastDate: DateTime(2050),
+                            );
+                            if (pickedDate != null) {
+                              ref.read(dateProvider.notifier).state = pickedDate;
+                            }
+                          }
+                        },
+                      ),
+                      if (selectedType == TransactionType.expense) ...[
+                        const RecurrenceListTile(),
+                      ],
+                    ],
                   ),
-                  if (selectedType == Type.expense) ...[
-                    const RecurrenceListTile(),
-                  ],
+                ),
+              ],
+            ),
+          ),
+          Container(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                boxShadow: [
+                  BoxShadow(
+                    color: blue1.withOpacity(0.15),
+                    blurRadius: 5.0,
+                    offset: const Offset(0, -1.0),
+                  )
                 ],
               ),
-            ),
-            Container(
-              alignment: Alignment.bottomCenter,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               child: Container(
-                width: double.infinity,
+                height: 48,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
-                  boxShadow: [
-                    BoxShadow(
-                      color: blue1.withOpacity(0.15),
-                      blurRadius: 5.0,
-                      offset: const Offset(0, -1.0),
-                    )
-                  ],
+                  color: Theme.of(context).colorScheme.secondary,
+                  boxShadow: [defaultShadow],
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
-                child: Container(
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
-                    boxShadow: [defaultShadow],
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: TextButton(
-                    onPressed: () async {
-                      // Check that an amount it's inserted
-                      if (ref.read(amountProvider) != 0) {
-                        if (selectedTransaction != null) {
-                          ref
-                              .read(transactionsProvider.notifier)
-                              .updateTransaction()
-                              .whenComplete(() => Navigator.of(context).pop());
+                child: TextButton(
+                  onPressed: () async {
+                    // Check that an amount it's inserted
+
+                    if (amountController.text != '') {
+                      if (selectedTransaction != null) {
+                        ref
+                            .read(transactionsProvider.notifier)
+                            .updateTransaction(currencyToNum(amountController.text), noteController.text)
+                            .whenComplete(() => Navigator.of(context).pop());
+                      } else {
+                        if (selectedType == TransactionType.transfer) {
+                          if (ref.read(bankAccountTransferProvider) != null) {
+                            ref
+                                .read(transactionsProvider.notifier)
+                                .addTransaction(currencyToNum(amountController.text), noteController.text)
+                                .whenComplete(() => Navigator.of(context).pop());
+                          }
                         } else {
-                          if (selectedType == Type.transfer) {
-                            if (ref.read(bankAccountTransferProvider) != null) {
-                              ref
-                                  .read(transactionsProvider.notifier)
-                                  .addTransaction()
-                                  .whenComplete(
-                                      () => Navigator.of(context).pop());
-                            }
-                          } else {
-                            // It's an income or an expense
-                            if (ref.read(categoryProvider) != null) {
-                              ref
-                                  .read(transactionsProvider.notifier)
-                                  .addTransaction()
-                                  .whenComplete(
-                                      () => Navigator.of(context).pop());
-                            }
+                          // It's an income or an expense
+                          if (ref.read(categoryProvider) != null) {
+                            ref
+                                .read(transactionsProvider.notifier)
+                                .addTransaction(currencyToNum(amountController.text), noteController.text)
+                                .whenComplete(() => Navigator.of(context).pop());
                           }
                         }
                       }
-                    },
-                    style: TextButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.secondary,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8)),
-                    ),
-                    child: Text(
-                      selectedTransaction != null
-                          ? "UPDATE TRANSACTION"
-                          : "ADD TRANSACTION",
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.background),
-                    ),
+                    }
+                  },
+                  style: TextButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  ),
+                  child: Text(
+                    selectedTransaction != null ? "UPDATE TRANSACTION" : "ADD TRANSACTION",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge!
+                        .copyWith(color: Theme.of(context).colorScheme.background),
                   ),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

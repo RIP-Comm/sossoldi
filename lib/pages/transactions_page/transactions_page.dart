@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'widgets/custom_sliver_delegate.dart';
-import 'widgets/categories_tab.dart';
 import 'widgets/accounts_tab.dart';
+import 'widgets/categories_tab.dart';
+import 'widgets/custom_sliver_delegate.dart';
 import 'widgets/list_tab.dart';
 
 class TransactionsPage extends StatefulWidget {
@@ -25,17 +25,6 @@ class _TransactionsPageState extends State<TransactionsPage>
 
   final double headerMaxHeight = 140.0;
   final double headerMinHeight = 56.0;
-
-  final startDate = ValueNotifier<DateTime>(DateTime(
-    DateTime.now().year,
-    DateTime.now().month,
-    1,
-  )); // last day of the month
-  final endDate = ValueNotifier<DateTime>(DateTime(
-    DateTime.now().year,
-    DateTime.now().month + 1,
-    0,
-  ));
 
   @override
   void initState() {
@@ -86,8 +75,6 @@ class _TransactionsPageState extends State<TransactionsPage>
                 expandedHeight: headerMaxHeight,
                 minHeight: headerMinHeight,
                 amount: 290.89, // TODO: compute for current date range
-                startDate: startDate,
-                endDate: endDate,
               ),
               pinned: true,
               floating: true,

@@ -39,7 +39,6 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> with Functions {
     double total = 0;
 
     for (var transaction in transactions.value ?? []) {
-      print(transaction.idCategory);
       final categoryId = transaction.idCategory;
       if (categoryId != null) {
         final updateValue = {

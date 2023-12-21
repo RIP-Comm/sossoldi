@@ -4,7 +4,6 @@ import '../../../constants/constants.dart';
 import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
 import '../../../model/bank_account.dart';
-import '../../../model/category_transaction.dart';
 
 class AccountsPieChart extends StatelessWidget with Functions {
   const AccountsPieChart({
@@ -12,8 +11,8 @@ class AccountsPieChart extends StatelessWidget with Functions {
     required this.accounts,
     required this.amounts,
     required this.total,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final ValueNotifier<int> notifier;
   final List<BankAccount> accounts;

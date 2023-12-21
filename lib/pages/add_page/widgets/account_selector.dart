@@ -10,8 +10,8 @@ class AccountSelector extends ConsumerStatefulWidget {
   const AccountSelector({
     required this.provider,
     required this.scrollController,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final StateProvider provider;
   final ScrollController scrollController;
@@ -20,8 +20,7 @@ class AccountSelector extends ConsumerStatefulWidget {
   ConsumerState<AccountSelector> createState() => _AccountSelectorState();
 }
 
-class _AccountSelectorState extends ConsumerState<AccountSelector>
-    with Functions {
+class _AccountSelectorState extends ConsumerState<AccountSelector> with Functions {
   @override
   Widget build(BuildContext context) {
     final accountsList = ref.watch(accountsProvider);
@@ -84,9 +83,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
                                     ? Icon(
                                         icon,
                                         size: 24.0,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .background,
+                                        color: Theme.of(context).colorScheme.background,
                                       )
                                     : const SizedBox(),
                               ),
@@ -102,8 +99,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
                         );
                       },
                     ),
-                    loading: () =>
-                        const Center(child: CircularProgressIndicator()),
+                    loading: () => const Center(child: CircularProgressIndicator()),
                     error: (err, stack) => Text('Error: $err'),
                   ),
                 ),
@@ -124,16 +120,14 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    separatorBuilder: (context, index) =>
-                        const Divider(height: 1, color: grey1),
+                    separatorBuilder: (context, index) => const Divider(height: 1, color: grey1),
                     itemBuilder: (context, i) {
                       BankAccount account = accounts[i];
                       IconData? icon = accountIconList[account.symbol];
                       Color? color = accountColorListTheme[account.color];
                       return ListTile(
                         tileColor: Theme.of(context).colorScheme.surface,
-                        onTap: () =>
-                            ref.read(widget.provider.notifier).state = account,
+                        onTap: () => ref.read(widget.provider.notifier).state = account,
                         contentPadding: const EdgeInsets.all(12.0),
                         leading: Container(
                           decoration: BoxDecoration(
@@ -145,17 +139,13 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
                               ? Icon(
                                   icon,
                                   size: 24.0,
-                                  color:
-                                      Theme.of(context).colorScheme.background,
+                                  color: Theme.of(context).colorScheme.background,
                                 )
                               : const SizedBox(),
                         ),
                         title: Text(
                           account.name,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge!
-                              .copyWith(
+                          style: Theme.of(context).textTheme.titleLarge!.copyWith(
                                 color: Theme.of(context).colorScheme.primary,
                               ),
                         ),
@@ -168,8 +158,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
                       );
                     },
                   ),
-                  loading: () =>
-                      const Center(child: CircularProgressIndicator()),
+                  loading: () => const Center(child: CircularProgressIndicator()),
                   error: (err, stack) => Text('Error: $err'),
                 ),
               ],

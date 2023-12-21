@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../constants/constants.dart';
 import '../model/category_transaction.dart';
 
@@ -42,7 +42,7 @@ class AsyncCategoriesNotifier extends AsyncNotifier<List<CategoryTransaction>> {
     });
   }
 
-  Future<void> selectedCategory(CategoryTransaction category) async {
+  void selectedCategory(CategoryTransaction category) {
     ref.read(selectedCategoryProvider.notifier).state = category;
     ref.read(categoryNameProvider.notifier).state = category.name;
     ref.read(categoryIconProvider.notifier).state = category.symbol;

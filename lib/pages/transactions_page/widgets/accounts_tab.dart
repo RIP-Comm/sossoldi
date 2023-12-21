@@ -4,7 +4,6 @@ import '../../../constants/constants.dart';
 import '../../../constants/style.dart';
 import '../../../constants/functions.dart';
 import '../../../model/bank_account.dart';
-import '../../../model/category_transaction.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import 'accounts_pie_chart.dart';
@@ -14,8 +13,8 @@ enum Type { income, expense }
 
 class AccountsTab extends ConsumerStatefulWidget {
   const AccountsTab({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   ConsumerState<AccountsTab> createState() => _AccountsTabState();
