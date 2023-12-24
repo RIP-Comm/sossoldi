@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../constants/constants.dart';
-import '../../../constants/style.dart';
 import '../../../constants/functions.dart';
+import '../../../constants/style.dart';
 import '../../../model/bank_account.dart';
 import '../../../providers/accounts_provider.dart';
 
@@ -10,11 +11,13 @@ class AccountSelector extends ConsumerStatefulWidget {
   const AccountSelector({
     required this.provider,
     required this.scrollController,
+    this.fromAccount,
     super.key,
   });
 
   final StateProvider provider;
   final ScrollController scrollController;
+  final int? fromAccount;
 
   @override
   ConsumerState<AccountSelector> createState() => _AccountSelectorState();
@@ -126,9 +129,8 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> with Function
                       IconData? icon = accountIconList[account.symbol];
                       Color? color = accountColorListTheme[account.color];
                       return ListTile(
-                        tileColor: Theme.of(context).colorScheme.surface,
                         onTap: () => ref.read(widget.provider.notifier).state = account,
-                        contentPadding: const EdgeInsets.all(12.0),
+                        enabled: account.id != widget.fromAccount,
                         leading: Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
@@ -143,12 +145,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> with Function
                                 )
                               : const SizedBox(),
                         ),
-                        title: Text(
-                          account.name,
-                          style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                        ),
+                        title: Text(account.name),
                         trailing: (ref.watch(widget.provider)?.id == account.id)
                             ? Icon(
                                 Icons.done,

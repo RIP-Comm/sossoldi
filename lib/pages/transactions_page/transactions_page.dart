@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'widgets/accounts_tab.dart';
 import 'widgets/categories_tab.dart';
 import 'widgets/custom_sliver_delegate.dart';
 import 'widgets/list_tab.dart';
 
-class TransactionsPage extends StatefulWidget {
+class TransactionsPage extends ConsumerStatefulWidget {
   const TransactionsPage({super.key});
 
   @override
-  State<TransactionsPage> createState() => _TransactionsPageState();
+  ConsumerState<TransactionsPage> createState() => _TransactionsPageState();
 }
 
-class _TransactionsPageState extends State<TransactionsPage>
+class _TransactionsPageState extends ConsumerState<TransactionsPage>
     with TickerProviderStateMixin {
   static const List<Tab> myTabs = <Tab>[
     Tab(text: "List", height: 35),
@@ -74,7 +75,6 @@ class _TransactionsPageState extends State<TransactionsPage>
                 tabController: _tabController,
                 expandedHeight: headerMaxHeight,
                 minHeight: headerMinHeight,
-                amount: 290.89, // TODO: compute for current date range
               ),
               pinned: true,
               floating: true,

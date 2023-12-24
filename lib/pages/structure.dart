@@ -82,7 +82,7 @@ class _StructureState extends ConsumerState<Structure> {
         ],
       ),
       body: Center(
-        child: _pages.elementAt(selectedIndex),
+        child: _pages[selectedIndex],
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

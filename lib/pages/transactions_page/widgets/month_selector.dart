@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../utils/formatted_date_range.dart';
 
-class MonthSelector extends ConsumerWidget {
+class MonthSelector extends ConsumerWidget with Functions {
   const MonthSelector({
-    required this.amount,
     super.key,
   });
 
-  final double amount;
   final double height = 60;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final totalAmount = ref.watch(totalAmountProvider);
     final startDate = ref.watch(filterDateStartProvider);
     final endDate = ref.watch(filterDateEndProvider);
     return GestureDetector(
@@ -78,12 +78,25 @@ class MonthSelector extends ConsumerWidget {
                   getFormattedDateRange(startDate, endDate),
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
-                Text(
-                  "$amount €",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge
-                      ?.copyWith(color: (amount > 0) ? green : red),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: numToCurrency(totalAmount),
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge!
+                            .copyWith(color: totalAmount >= 0 ? green : red),
+                      ),
+                      TextSpan(
+                        text: "€",
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelLarge!
+                            .copyWith(color: totalAmount >= 0 ? green : red)
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -92,10 +105,9 @@ class MonthSelector extends ConsumerWidget {
                 // move to next month
                 ref.read(filterDateStartProvider.notifier).state =
                     DateTime(startDate.year, startDate.month + 1, startDate.day);
-                ref.read(filterDateEndProvider.notifier).state = DateTime(startDate.year, startDate.month + 2, 0);
-                ref
-                    .read(transactionsProvider.notifier)
-                    .filterTransactions();
+                ref.read(filterDateEndProvider.notifier).state =
+                    DateTime(startDate.year, startDate.month + 2, 0);
+                ref.read(transactionsProvider.notifier).filterTransactions();
               },
               child: Container(
                 height: height,

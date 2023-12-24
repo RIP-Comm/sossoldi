@@ -1,20 +1,14 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../constants/constants.dart';
 import '../constants/functions.dart';
 import '../constants/style.dart';
-import '../model/bank_account.dart';
-import '../model/category_transaction.dart';
 import '../model/transaction.dart';
-import '../providers/accounts_provider.dart';
-import '../providers/categories_provider.dart';
 import '../providers/transactions_provider.dart';
 import '../utils/date_helper.dart';
 
-class TransactionsList extends ConsumerStatefulWidget {
+class TransactionsList extends StatefulWidget {
   final List<Transaction> transactions;
 
   const TransactionsList({
@@ -23,10 +17,10 @@ class TransactionsList extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<TransactionsList> createState() => _TransactionsListState();
+  State<TransactionsList> createState() => _TransactionsListState();
 }
 
-class _TransactionsListState extends ConsumerState<TransactionsList> with Functions {
+class _TransactionsListState extends State<TransactionsList> with Functions {
   Map<String, double> totals = {};
   List<Transaction> get transactions => widget.transactions;
 
@@ -53,9 +47,6 @@ class _TransactionsListState extends ConsumerState<TransactionsList> with Functi
 
   @override
   Widget build(BuildContext context) {
-    final accountsList = ref.watch(accountsProvider);
-    final categoriesList = ref.watch(categoriesProvider);
-
     return transactions.isNotEmpty
         ? SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -83,7 +74,7 @@ class _TransactionsListState extends ConsumerState<TransactionsList> with Functi
                           total: totals[transaction.date.toYMD()] ?? 0,
                           first: index == 0,
                         ),
-                      TransactionRow(transaction, accountsList, categoriesList, first: first, last: last),
+                      TransactionRow(transaction, first: first, last: last),
                     ],
                   );
                 }).toList(),
@@ -142,8 +133,7 @@ class TransactionTitle extends StatelessWidget with Functions {
                       style: Theme.of(context)
                           .textTheme
                           .labelMedium!
-                          .copyWith(color: color)
-                          .apply(fontFeatures: [const FontFeature.subscripts()]),
+                          .copyWith(color: color),
                     ),
                   ],
                 ),
@@ -158,27 +148,14 @@ class TransactionTitle extends StatelessWidget with Functions {
 }
 
 class TransactionRow extends ConsumerWidget with Functions {
-  const TransactionRow(this.transaction, this.accountsList, this.categoriesList, {this.first = false, this.last = false, super.key});
+  const TransactionRow(this.transaction, {this.first = false, this.last = false, super.key});
 
   final Transaction transaction;
-  final AsyncValue<List<BankAccount>> accountsList;
-  final AsyncValue<List<CategoryTransaction>> categoriesList;
   final bool first;
   final bool last;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Iterable<CategoryTransaction>? categories =
-        transaction.type != TransactionType.transfer && categoriesList.value != null
-            ? categoriesList.value!.where((element) => element.id == transaction.idCategory)
-            : [];
-    CategoryTransaction? category = categories.isNotEmpty ? categories.first : null;
-    BankAccount account =
-        accountsList.value!.firstWhere((element) => element.id == transaction.idBankAccount);
-    BankAccount? accountTransfer = transaction.type == TransactionType.transfer
-        ? accountsList.value!
-            .firstWhere((element) => element.id == transaction.idBankAccountTransfer)
-        : null;
     return Column(
       children: [
         Material(
@@ -206,15 +183,15 @@ class TransactionRow extends ConsumerWidget with Functions {
                   Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: category?.color != null
-                          ? categoryColorListTheme[category!.color]
+                      color: transaction.categoryColor != null
+                          ? categoryColorListTheme[transaction.categoryColor!]
                           : Theme.of(context).colorScheme.secondary,
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Icon(
-                        category?.symbol != null
-                            ? iconList[category!.symbol]
+                        transaction.categorySymbol != null
+                            ? iconList[transaction.categorySymbol]
                             : Icons.swap_horiz_rounded,
                         size: 25.0,
                         color: white,
@@ -253,10 +230,7 @@ class TransactionRow extends ConsumerWidget with Functions {
                                     style: Theme.of(context)
                                         .textTheme
                                         .labelSmall!
-                                        .copyWith(color: typeToColor(transaction.type))
-                                        .apply(
-                                      fontFeatures: [const FontFeature.subscripts()],
-                                    ),
+                                        .copyWith(color: typeToColor(transaction.type)),
                                   ),
                                 ],
                               ),
@@ -266,9 +240,9 @@ class TransactionRow extends ConsumerWidget with Functions {
                         const SizedBox(height: 12),
                         Row(
                           children: [
-                            if (category != null)
+                            if (transaction.categoryName != null)
                               Text(
-                                category.name,
+                                transaction.categoryName!,
                                 style: Theme.of(context).textTheme.labelMedium!.copyWith(
                                       color: Theme.of(context).colorScheme.primary,
                                     ),
@@ -276,8 +250,8 @@ class TransactionRow extends ConsumerWidget with Functions {
                             const Spacer(),
                             Text(
                               transaction.type == TransactionType.transfer
-                                  ? "${account.name}→${accountTransfer!.name}"
-                                  : account.name,
+                                  ? "${transaction.bankAccountName}→${transaction.bankAccountTransferName}"
+                                  : transaction.bankAccountName!,
                               style: Theme.of(context).textTheme.labelMedium!.copyWith(
                                     color: Theme.of(context).colorScheme.primary,
                                   ),

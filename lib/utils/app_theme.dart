@@ -25,6 +25,11 @@ class AppTheme {
     iconTheme: const IconThemeData(
       color: blue1,
     ),
+    listTileTheme: const ListTileThemeData(
+      tileColor: grey3,
+      contentPadding: EdgeInsets.all(16),
+    ),
+    disabledColor: grey2,
     fontFamily: 'SF Pro Text',
     textTheme: const TextTheme(
       // display

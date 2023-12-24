@@ -1,5 +1,7 @@
 import '../database/sossoldi_database.dart';
+import 'bank_account.dart';
 import 'base_entity.dart';
+import 'category_transaction.dart';
 
 const String transactionTable = 'transaction';
 
@@ -10,8 +12,13 @@ class TransactionFields extends BaseEntityFields {
   static String type = 'type';
   static String note = 'note';
   static String idCategory = 'idCategory'; // FK
+  static String categoryName = 'categoryName';
+  static String categoryColor = 'categoryColor';
+  static String categorySymbol = 'categorySymbol';
   static String idBankAccount = 'idBankAccount'; // FK
+  static String bankAccountName = 'bankAccountName';
   static String idBankAccountTransfer = 'idBankAccountTransfer';
+  static String bankAccountTransferName = 'bankAccountTransferName';
   static String recurring = 'recurring';
   static String recurrencyType = 'recurrencyType';
   static String recurrencyPayDay = 'recurrencyPayDay';
@@ -64,8 +71,13 @@ class Transaction extends BaseEntity {
   final TransactionType type;
   final String? note;
   final int? idCategory;
+  final String? categoryName;
+  final int? categoryColor;
+  final String? categorySymbol;
   final int idBankAccount;
+  final String? bankAccountName;
   final int? idBankAccountTransfer;
+  final String? bankAccountTransferName;
   final bool recurring;
   final String? recurrencyType;
   final int? recurrencyPayDay;
@@ -79,8 +91,13 @@ class Transaction extends BaseEntity {
       required this.type,
       this.note,
       this.idCategory,
+      this.categoryName,
+      this.categoryColor,
+      this.categorySymbol,
       required this.idBankAccount,
+      this.bankAccountName,
       this.idBankAccountTransfer,
+      this.bankAccountTransferName,
       required this.recurring,
       this.recurrencyType,
       this.recurrencyPayDay,
@@ -129,8 +146,13 @@ class Transaction extends BaseEntity {
       type: typeMap[json[TransactionFields.type] as String]!,
       note: json[TransactionFields.note] as String?,
       idCategory: json[TransactionFields.idCategory] as int?,
+      categoryName: json[TransactionFields.categoryName] as String?,
+      categoryColor: json[TransactionFields.categoryColor] as int?,
+      categorySymbol: json[TransactionFields.categorySymbol] as String?,
       idBankAccount: json[TransactionFields.idBankAccount] as int,
+      bankAccountName: json[TransactionFields.bankAccountName] as String?,
       idBankAccountTransfer: json[TransactionFields.idBankAccountTransfer] as int?,
+      bankAccountTransferName: json[TransactionFields.bankAccountTransferName] as String?,
       recurring: json[TransactionFields.recurring] == 1 ? true : false,
       recurrencyType: json[TransactionFields.recurrencyType] as String?,
       recurrencyPayDay: json[TransactionFields.recurrencyPayDay] as int?,
@@ -172,13 +194,7 @@ class TransactionMethods extends SossoldiDatabase {
 
   Future<Transaction> selectById(int id) async {
     final db = await database;
-
-    final maps = await db.query(
-      transactionTable,
-      columns: TransactionFields.allFields,
-      where: '${TransactionFields.id} = ?',
-      whereArgs: [id],
-    );
+    final maps = await db.rawQuery('SELECT t.*, c.${CategoryTransactionFields.name} as ${TransactionFields.categoryName}, c.${CategoryTransactionFields.color} as ${TransactionFields.categoryColor}, c.${CategoryTransactionFields.symbol} as ${TransactionFields.categorySymbol}, b1.${BankAccountFields.name} as ${TransactionFields.bankAccountName}, b2.${BankAccountFields.name} as ${TransactionFields.bankAccountTransferName} FROM $transactionTable as t LEFT JOIN $categoryTransactionTable as c ON t.${TransactionFields.idCategory} = c.${CategoryTransactionFields.id} LEFT JOIN $bankAccountTable as b1 ON t.${TransactionFields.idBankAccount} = b1.${BankAccountFields.id} LEFT JOIN $bankAccountTable as b2 ON t.${TransactionFields.idBankAccountTransfer} = b2.${BankAccountFields.id} WHERE t.${TransactionFields.id} = ?', [id]);
 
     if (maps.isNotEmpty) {
       return Transaction.fromJson(maps.first);
@@ -207,7 +223,7 @@ class TransactionMethods extends SossoldiDatabase {
     final orderByDESC = '${TransactionFields.date} DESC';
 
     final result =
-        await db.query(transactionTable, where: where, orderBy: orderByDESC, limit: limit);
+        await db.rawQuery('SELECT t.*, c.${CategoryTransactionFields.name} as ${TransactionFields.categoryName}, c.${CategoryTransactionFields.color} as ${TransactionFields.categoryColor}, c.${CategoryTransactionFields.symbol} as ${TransactionFields.categorySymbol}, b1.${BankAccountFields.name} as ${TransactionFields.bankAccountName}, b2.${BankAccountFields.name} as ${TransactionFields.bankAccountTransferName} FROM "$transactionTable" as t LEFT JOIN $categoryTransactionTable as c ON t.${TransactionFields.idCategory} = c.${CategoryTransactionFields.id} LEFT JOIN $bankAccountTable as b1 ON t.${TransactionFields.idBankAccount} = b1.${BankAccountFields.id} LEFT JOIN $bankAccountTable as b2 ON t.${TransactionFields.idBankAccountTransfer} = b2.${BankAccountFields.id} ${where != null ? "WHERE $where" : ""} ORDER BY $orderByDESC ${limit != null ? "LIMIT $limit" : ""}');
 
     return result.map((json) => Transaction.fromJson(json)).toList();
   }

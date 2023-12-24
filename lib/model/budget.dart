@@ -111,9 +111,9 @@ class BudgetMethods extends SossoldiDatabase {
   }
 
   Future<List<Budget>> selectAllActive() async {
-    final database = await SossoldiDatabase.instance.database;
+    final db = await database;
     final orderByASC = '${BudgetFields.createdAt} ASC';
-    final result = await database.rawQuery(
+    final result = await db.rawQuery(
         'SELECT bt.*, ct.name FROM $budgetTable as bt LEFT JOIN $categoryTransactionTable as ct ON bt.${BudgetFields.idCategory} = ct.${CategoryTransactionFields.id} WHERE bt.active = 1 ORDER BY $orderByASC');
     return result.map((json) => Budget.fromJson(json)).toList();
   }

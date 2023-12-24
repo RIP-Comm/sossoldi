@@ -29,6 +29,9 @@ final repetitionProvider = StateProvider<dynamic>((ref) => null);
 // Set when a transaction is selected for update
 final selectedTransactionUpdateProvider = StateProvider<Transaction?>((ref) => null);
 
+// Amount total for the transactions filtered
+final totalAmountProvider = StateProvider<num>((ref) => 0);
+
 // Filters
 final filterDateStartProvider =
     StateProvider<DateTime>((ref) => DateTime(DateTime.now().year, DateTime.now().month, 1));
@@ -49,6 +52,9 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
     final dateEnd = ref.watch(filterDateEndProvider);
     final transactions = await TransactionMethods()
         .selectAll(dateRangeStart: dateStart, dateRangeEnd: dateEnd, limit: limit);
+
+    ref.read(totalAmountProvider.notifier).state = transactions.fold<num>(
+        0, (prev, transaction) => transaction.type == TransactionType.transfer ? prev : transaction.type == TransactionType.expense ? prev - transaction.amount : prev + transaction.amount);
     return transactions;
   }
 

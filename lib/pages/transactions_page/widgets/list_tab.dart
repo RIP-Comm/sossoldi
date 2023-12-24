@@ -25,8 +25,8 @@ class _ListTabState extends ConsumerState<ListTab> with Functions {
           return TransactionsList(transactions: transactions);
         },
         loading: () {
-          return const Center(
-            child: CircularProgressIndicator(),
+          return Container(
+            color: Colors.white,
           );
         },
         error: (error, stackTrace) {

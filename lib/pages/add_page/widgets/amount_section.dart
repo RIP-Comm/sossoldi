@@ -230,6 +230,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                                       // to
                                       provider: bankAccountTransferProvider,
                                       scrollController: controller,
+                                      fromAccount: ref.watch(bankAccountProvider)?.id,
                                     ),
                                   ),
                                 );

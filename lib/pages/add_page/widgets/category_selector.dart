@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../constants/constants.dart';
-import '../../../constants/style.dart';
 import '../../../constants/functions.dart';
+import '../../../constants/style.dart';
 import '../../../model/category_transaction.dart';
 import '../../../providers/categories_provider.dart';
 import '../../../providers/transactions_provider.dart';
@@ -10,8 +11,8 @@ import '../../../providers/transactions_provider.dart';
 class CategorySelector extends ConsumerStatefulWidget {
   const CategorySelector({
     required this.scrollController,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final ScrollController scrollController;
 
@@ -19,8 +20,7 @@ class CategorySelector extends ConsumerStatefulWidget {
   ConsumerState<CategorySelector> createState() => _CategorySelectorState();
 }
 
-class _CategorySelectorState extends ConsumerState<CategorySelector>
-    with Functions {
+class _CategorySelectorState extends ConsumerState<CategorySelector> with Functions {
   @override
   Widget build(BuildContext context) {
     final categoriesList = ref.watch(categoriesProvider);
@@ -82,9 +82,7 @@ class _CategorySelectorState extends ConsumerState<CategorySelector>
                                     ? Icon(
                                         icon,
                                         size: 24.0,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .background,
+                                        color: Theme.of(context).colorScheme.background,
                                       )
                                     : const SizedBox(),
                               ),
@@ -93,18 +91,14 @@ class _CategorySelectorState extends ConsumerState<CategorySelector>
                                 style: Theme.of(context)
                                     .textTheme
                                     .labelLarge!
-                                    .copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary),
+                                    .copyWith(color: Theme.of(context).colorScheme.primary),
                               ),
                             ],
                           ),
                         );
                       },
                     ),
-                    loading: () =>
-                        const Center(child: CircularProgressIndicator()),
+                    loading: () => const Center(child: CircularProgressIndicator()),
                     error: (err, stack) => Text('Error: $err'),
                   ),
                 ),
@@ -125,17 +119,13 @@ class _CategorySelectorState extends ConsumerState<CategorySelector>
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    separatorBuilder: (context, index) =>
-                        const Divider(height: 1, color: grey1),
+                    separatorBuilder: (context, index) => const Divider(height: 1, color: grey1),
                     itemBuilder: (context, i) {
                       CategoryTransaction category = categories[i];
                       IconData? icon = iconList[category.symbol];
                       Color? color = categoryColorListTheme[category.color];
                       return ListTile(
-                        tileColor: Theme.of(context).colorScheme.surface,
-                        onTap: () => ref.read(categoryProvider.notifier).state =
-                            category,
-                        contentPadding: const EdgeInsets.all(16),
+                        onTap: () => ref.read(categoryProvider.notifier).state = category,
                         leading: Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
@@ -146,20 +136,11 @@ class _CategorySelectorState extends ConsumerState<CategorySelector>
                               ? Icon(
                                   icon,
                                   size: 24.0,
-                                  color:
-                                      Theme.of(context).colorScheme.background,
+                                  color: Theme.of(context).colorScheme.background,
                                 )
                               : const SizedBox(),
                         ),
-                        title: Text(
-                          category.name,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge!
-                              .copyWith(
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                        ),
+                        title: Text(category.name),
                         trailing: ref.watch(categoryProvider)?.id == category.id
                             ? Icon(
                                 Icons.done,
@@ -169,8 +150,7 @@ class _CategorySelectorState extends ConsumerState<CategorySelector>
                       );
                     },
                   ),
-                  loading: () =>
-                      const Center(child: CircularProgressIndicator()),
+                  loading: () => const Center(child: CircularProgressIndicator()),
                   error: (err, stack) => Text('Error: $err'),
                 ),
               ],

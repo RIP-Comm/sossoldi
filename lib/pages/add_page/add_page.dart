@@ -163,8 +163,8 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                             );
                           },
                         ),
+                        const Divider(height: 1, color: grey1),
                       ],
-                      const Divider(height: 1, color: grey1),
                       DetailsListTile(
                         title: "Date",
                         icon: Icons.calendar_month,
@@ -234,7 +234,6 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                 child: TextButton(
                   onPressed: () async {
                     // Check that an amount it's inserted
-
                     if (amountController.text != '') {
                       if (selectedTransaction != null) {
                         ref

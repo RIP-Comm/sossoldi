@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../utils/formatted_date_range.dart';
@@ -16,14 +17,12 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
     required this.tabController,
     required this.expandedHeight,
     required this.minHeight,
-    required this.amount,
   });
 
   final TabController tabController;
   final List<Tab> myTabs;
   final TickerProvider ticker;
 
-  final double amount;
   final double minHeight;
   final double expandedHeight;
 
@@ -48,21 +47,6 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          ConstrainedBox(
-            constraints: BoxConstraints.tightFor(
-              height: max(
-                18,
-                25 * (1 - shrinkPercentage),
-              ),
-            ),
-            child: FittedBox(
-              alignment: Alignment.topLeft,
-              child: Text(
-                "View:",
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-            ),
-          ),
           Expanded(
             child: Stack(
               alignment: Alignment.bottomCenter,
@@ -75,7 +59,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
                 if (shrinkPercentage > .5)
                   Opacity(
                     opacity: shrinkPercentage,
-                    child: _buildCollapsedWidget(context),
+                    child: CollapsedWidget(myTabs, tabController),
                   ),
               ],
             ),
@@ -99,13 +83,12 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 8),
                 TabBar(
                   controller: tabController,
                   tabs: myTabs,
                   labelColor: Colors.white,
                   indicatorSize: TabBarIndicatorSize.tab,
-                  unselectedLabelColor: grey2,
+                  unselectedLabelColor: Theme.of(context).colorScheme.secondary,
                   splashBorderRadius: BorderRadius.circular(50),
                   indicator: BoxDecoration(
                     borderRadius: BorderRadius.circular(50),
@@ -114,53 +97,15 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
                   // TODO: capitalize text of the selected label
                   // not possible from TextStyle https://github.com/flutter/flutter/issues/22695
                   labelStyle: Theme.of(context).textTheme.bodyLarge,
-                  unselectedLabelStyle:
-                      Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w400),
+                  unselectedLabelStyle: Theme.of(context).textTheme.bodyLarge,
                 ),
-                const SizedBox(height: 8),
-                MonthSelector(amount: amount),
+                const SizedBox(height: 16),
+                const MonthSelector(),
               ],
             ),
           ),
         ),
       ),
-    );
-  }
-
-  _buildCollapsedWidget(BuildContext context) {
-    return Consumer(
-      builder: (context, ref, child) {
-        final startDate = ref.watch(filterDateStartProvider);
-        final endDate = ref.watch(filterDateEndProvider);
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(
-                vertical: 4.0,
-                horizontal: 8.0,
-              ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-              child: Text(
-                myTabs[tabController.index].text!,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white),
-              ),
-            ),
-            Text(
-              getFormattedDateRange(startDate, endDate),
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            Text(
-              "$amount €",
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: (amount > 0) ? green : red),
-            ),
-          ],
-        );
-      }
     );
   }
 
@@ -182,5 +127,65 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
       curve: Curves.easeIn,
       duration: const Duration(milliseconds: 200),
     );
+  }
+}
+
+class CollapsedWidget extends StatelessWidget with Functions {
+  const CollapsedWidget(this.myTabs, this.tabController, {super.key});
+
+  final List<Tab> myTabs;
+  final TabController tabController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer(builder: (context, ref, child) {
+      final totalAmount = ref.watch(totalAmountProvider);
+      final startDate = ref.watch(filterDateStartProvider);
+      final endDate = ref.watch(filterDateEndProvider);
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(
+              vertical: 4.0,
+              horizontal: 8.0,
+            ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50),
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+            child: Text(
+              myTabs[tabController.index].text!,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white),
+            ),
+          ),
+          Text(
+            getFormattedDateRange(startDate, endDate),
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: numToCurrency(totalAmount),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .copyWith(color: totalAmount >= 0 ? green : red),
+                ),
+                TextSpan(
+                  text: "€",
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelLarge!
+                      .copyWith(color: totalAmount >= 0 ? green : red),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    });
   }
 }
