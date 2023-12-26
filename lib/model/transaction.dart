@@ -214,10 +214,10 @@ class TransactionMethods extends SossoldiDatabase {
     String? where = type != null ? '${TransactionFields.type} = $type' : null; // filter type
     if (date != null) {
       where =
-          "${where != null ? '$where and ' : ''}${TransactionFields.date} >= '${date.toIso8601String().substring(0, 10)}T00:00:00' and ${TransactionFields.date} <= '${date.toIso8601String().substring(0, 10)}T23:59:59'";
+          "${where != null ? '$where and ' : ''}strftime('%Y-%m-%d', ${TransactionFields.date}) >= '${date.toString().substring(0, 10)}' and ${TransactionFields.date} <= '${date.toIso8601String().substring(0, 10)}'";
     } else if (dateRangeStart != null && dateRangeEnd != null) {
       where =
-          "${where != null ? '$where and ' : ''}${TransactionFields.date} BETWEEN '${dateRangeStart.toIso8601String().substring(0, 10)}T00:00:00' and '${dateRangeEnd.toIso8601String().substring(0, 10)}T23:59:59'";
+          "${where != null ? '$where and ' : ''}strftime('%Y-%m-%d', ${TransactionFields.date}) BETWEEN '${dateRangeStart.toString().substring(0, 10)}' and '${dateRangeEnd.toIso8601String().substring(0, 10)}'";
     }
 
     final orderByDESC = '${TransactionFields.date} DESC';
@@ -226,6 +226,36 @@ class TransactionMethods extends SossoldiDatabase {
         await db.rawQuery('SELECT t.*, c.${CategoryTransactionFields.name} as ${TransactionFields.categoryName}, c.${CategoryTransactionFields.color} as ${TransactionFields.categoryColor}, c.${CategoryTransactionFields.symbol} as ${TransactionFields.categorySymbol}, b1.${BankAccountFields.name} as ${TransactionFields.bankAccountName}, b2.${BankAccountFields.name} as ${TransactionFields.bankAccountTransferName} FROM "$transactionTable" as t LEFT JOIN $categoryTransactionTable as c ON t.${TransactionFields.idCategory} = c.${CategoryTransactionFields.id} LEFT JOIN $bankAccountTable as b1 ON t.${TransactionFields.idBankAccount} = b1.${BankAccountFields.id} LEFT JOIN $bankAccountTable as b2 ON t.${TransactionFields.idBankAccountTransfer} = b2.${BankAccountFields.id} ${where != null ? "WHERE $where" : ""} ORDER BY $orderByDESC ${limit != null ? "LIMIT $limit" : ""}');
 
     return result.map((json) => Transaction.fromJson(json)).toList();
+  }
+
+  Future<List> currentMonthTransactions() async {
+    final db = await database;
+    final result = await db.rawQuery('''
+      SELECT
+        strftime('%Y-%m-%d', ${TransactionFields.date}) as day,
+        SUM(CASE WHEN ${TransactionFields.type} = 'IN' THEN ${TransactionFields.amount} ELSE 0 END) as income,
+        SUM(CASE WHEN ${TransactionFields.type} = 'OUT' THEN ${TransactionFields.amount} ELSE 0 END) as expense
+      FROM "$transactionTable"
+      WHERE strftime('%Y-%m', ${TransactionFields.date}) = strftime('%Y-%m', date('now'))
+      GROUP BY day
+    ''');
+
+    return result;
+  }
+
+  Future<List> lastMonthTransactions() async {
+    final db = await database;
+    final result = await db.rawQuery('''
+      SELECT
+        strftime('%Y-%m-%d', ${TransactionFields.date}) as day,
+        SUM(CASE WHEN ${TransactionFields.type} = 'IN' THEN ${TransactionFields.amount} ELSE 0 END) as income,
+        SUM(CASE WHEN ${TransactionFields.type} = 'OUT' THEN ${TransactionFields.amount} ELSE 0 END) as expense
+      FROM "$transactionTable"
+      WHERE strftime('%Y-%m', ${TransactionFields.date}) = strftime('%Y-%m', date('now', '-1 month'))
+      GROUP BY day
+    ''');
+
+    return result;
   }
 
   Future<int> updateItem(Transaction item) async {

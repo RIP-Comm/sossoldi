@@ -4,7 +4,7 @@ import '../model/bank_account.dart';
 import '../model/category_transaction.dart';
 import '../model/transaction.dart';
 import 'accounts_provider.dart';
-import 'categories_provider.dart';
+import 'dashboard_provider.dart';
 
 final lastTransactionsProvider = FutureProvider<List<Transaction>>((ref) async {
   final transactions = await TransactionMethods().selectAll(limit: 5);
@@ -47,6 +47,8 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
   Future<List<Transaction>> _getTransactions({int? limit, bool update = false}) async {
     if (update) {
       ref.invalidate(lastTransactionsProvider);
+      // ignore: unused_result
+      ref.refresh(dashboardProvider);
     }
     final dateStart = ref.watch(filterDateStartProvider);
     final dateEnd = ref.watch(filterDateEndProvider);
@@ -54,7 +56,12 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
         .selectAll(dateRangeStart: dateStart, dateRangeEnd: dateEnd, limit: limit);
 
     ref.read(totalAmountProvider.notifier).state = transactions.fold<num>(
-        0, (prev, transaction) => transaction.type == TransactionType.transfer ? prev : transaction.type == TransactionType.expense ? prev - transaction.amount : prev + transaction.amount);
+        0,
+        (prev, transaction) => transaction.type == TransactionType.transfer
+            ? prev
+            : transaction.type == TransactionType.expense
+                ? prev - transaction.amount
+                : prev + transaction.amount);
     return transactions;
   }
 
@@ -122,12 +129,9 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
     ref.read(selectedTransactionUpdateProvider.notifier).state = transaction;
     final accountList = ref.watch(accountsProvider);
     if (transaction.type != TransactionType.transfer) {
-      final categories = ref
-          .watch(categoriesProvider)
-          .value!
-          .where((element) => element.id == transaction.idCategory);
-      if (categories.isNotEmpty) {
-        ref.read(categoryProvider.notifier).state = categories.first;
+      if (transaction.idCategory != null) {
+        ref.read(categoryProvider.notifier).state =
+            await CategoryTransactionMethods().selectById(transaction.idCategory!);
       }
     }
     ref.read(bankAccountProvider.notifier).state =

@@ -1,11 +1,11 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fl_chart/fl_chart.dart';
 
-import '../../providers/accounts_provider.dart';
-import '../../custom_widgets/line_chart.dart';
 import '../../constants/functions.dart';
 import '../../constants/style.dart';
+import '../../custom_widgets/line_chart.dart';
+import '../../providers/accounts_provider.dart';
 
 class AccountPage extends ConsumerStatefulWidget {
   const AccountPage({Key? key}) : super(key: key);
@@ -68,8 +68,6 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                     line2Data: <FlSpot>[],
                     colorLine2Data: Color(0xffffffff),
                     colorBackground: blue5,
-                    maxY: 5.0,
-                    minY: -5.0,
                     maxDays: 30.0,
                   ),
                 ],

@@ -1,8 +1,8 @@
-import 'package:sossoldi/model/transaction.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../database/sossoldi_database.dart';
 import 'base_entity.dart';
+import 'transaction.dart';
 
 const String bankAccountTable = 'bankAccount';
 
@@ -14,6 +14,7 @@ class BankAccountFields extends BaseEntityFields {
   static String startingValue = 'startingValue';
   static String active = 'active';
   static String mainAccount = 'mainAccount';
+  static String total = 'total';
   static String createdAt = BaseEntityFields.getCreatedAt;
   static String updatedAt = BaseEntityFields.getUpdatedAt;
 
@@ -37,18 +38,19 @@ class BankAccount extends BaseEntity {
   final num startingValue;
   final bool active;
   final bool mainAccount;
+  final num? total;
 
   const BankAccount(
-      {int? id,
+      {super.id,
       required this.name,
       required this.symbol,
       required this.color,
       required this.startingValue,
-      required this.mainAccount,
       required this.active,
-      DateTime? createdAt,
-      DateTime? updatedAt})
-      : super(id: id, createdAt: createdAt, updatedAt: updatedAt);
+      required this.mainAccount,
+      this.total,
+      super.createdAt,
+      super.updatedAt});
 
   BankAccount copy(
           {int? id,
@@ -79,6 +81,7 @@ class BankAccount extends BaseEntity {
       startingValue: json[BankAccountFields.startingValue] as num,
       active: json[BankAccountFields.active] == 1 ? true : false,
       mainAccount: json[BankAccountFields.mainAccount] == 1 ? true : false,
+      total: json[BankAccountFields.total] as num?,
       createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
       updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String));
 
@@ -101,7 +104,7 @@ class BankAccountMethods extends SossoldiDatabase {
     final db = await database;
 
     await changeMainAccount(db, item);
-    
+
     final id = await db.insert(bankAccountTable, item.toJson());
     return item.copy(id: id);
   }
@@ -146,7 +149,19 @@ class BankAccountMethods extends SossoldiDatabase {
     final orderByASC = '${BankAccountFields.createdAt} ASC';
     final where = '${BankAccountFields.active}  = 1';
 
-    final result = await db.query(bankAccountTable, where:where, orderBy: orderByASC);
+    final result = await db.rawQuery('''
+      SELECT b.*, (b.${BankAccountFields.startingValue} +
+      SUM(CASE WHEN t.${TransactionFields.type} = 'IN' OR t.${TransactionFields.type} = 'TRSF' AND t.${TransactionFields.idBankAccountTransfer} = b.${BankAccountFields.id} THEN t.${TransactionFields.amount}
+               ELSE 0 END) -
+      SUM(CASE WHEN t.${TransactionFields.type} = 'OUT' OR t.${TransactionFields.type} = 'TRSF' AND t.${TransactionFields.idBankAccount} = b.${BankAccountFields.id} THEN t.${TransactionFields.amount}
+               ELSE 0 END)
+    ) as ${BankAccountFields.total}
+      FROM $bankAccountTable as b
+      LEFT JOIN "$transactionTable" as t ON t.${TransactionFields.idBankAccount} = b.${BankAccountFields.id} OR t.${TransactionFields.idBankAccountTransfer} = b.${BankAccountFields.id}
+      WHERE $where
+      GROUP BY b.${BankAccountFields.id}
+      ORDER BY $orderByASC
+    ''');
 
     return result.map((json) => BankAccount.fromJson(json)).toList();
   }

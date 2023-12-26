@@ -12,6 +12,7 @@ import '../database/sossoldi_database.dart';
 import '../providers/accounts_provider.dart';
 import '../providers/budgets_provider.dart';
 import '../providers/categories_provider.dart';
+import '../providers/dashboard_provider.dart';
 import '../providers/transactions_provider.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
@@ -208,6 +209,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   ref.refresh(categoriesProvider);
                   ref.refresh(transactionsProvider);
                   ref.refresh(budgetsProvider);
+                  ref.refresh(dashboardProvider);
+                  ref.refresh(lastTransactionsProvider);
                   showSuccessDialog(context, "DB Cleared, and DEMO data added");
                 });
               },

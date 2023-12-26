@@ -1,4 +1,3 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -10,6 +9,7 @@ import '../custom_widgets/line_chart.dart';
 import '../custom_widgets/transactions_list.dart';
 import '../model/bank_account.dart';
 import '../providers/accounts_provider.dart';
+import '../providers/dashboard_provider.dart';
 import '../providers/transactions_provider.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -28,196 +28,166 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
       color: Theme.of(context).colorScheme.tertiary,
       child: ListView(
         children: [
-          Column(
-            children: [
-              const SizedBox(height: 24),
-              Row(
-                children: [
-                  const SizedBox(width: 16),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+          ref.watch(dashboardProvider).when(
+                data: (value) {
+                  final income = ref.watch(incomeProvider);
+                  final expense = ref.watch(expenseProvider);
+                  final total = income + expense;
+                  final currentMonthList = ref.watch(currentMonthListProvider);
+                  final lastMonthList = ref.watch(lastMonthListProvider);
+                  return Column(
                     children: [
-                      Text(
-                        "MONTHLY BALANCE",
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelMedium
-                            ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                      const SizedBox(height: 24),
+                      Row(
+                        children: [
+                          const SizedBox(width: 16),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "MONTHLY BALANCE",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelMedium
+                                    ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                              ),
+                              RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: numToCurrency(total),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineLarge
+                                          ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                                    ),
+                                    TextSpan(
+                                      text: "€",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(width: 30),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "INCOME",
+                                style: Theme.of(context).textTheme.labelMedium,
+                              ),
+                              RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: numToCurrency(income),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(color: green),
+                                    ),
+                                    TextSpan(
+                                      text: "€",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge
+                                          ?.copyWith(color: green),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(width: 30),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "EXPENSES",
+                                style: Theme.of(context).textTheme.labelMedium,
+                              ),
+                              RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: numToCurrency(expense),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(color: red),
+                                    ),
+                                    TextSpan(
+                                      text: "€",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge
+                                          ?.copyWith(color: red),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: numToCurrency(-1536.65),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineLarge
-                                  ?.copyWith(color: Theme.of(context).colorScheme.primary),
-                            ),
-                            TextSpan(
-                              text: "€",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge
-                                  ?.copyWith(color: Theme.of(context).colorScheme.primary),
-                            ),
-                          ],
-                        ),
+                      const SizedBox(height: 16),
+                      LineChartWidget(
+                        line1Data: currentMonthList,
+                        colorLine1Data: const Color(0xff00152D),
+                        line2Data: lastMonthList,
+                        colorLine2Data: const Color(0xffB9BABC), //da modificare in darkMode
+                        colorBackground: Theme.of(context).colorScheme.tertiary,
                       ),
+                      Row(
+                        children: [
+                          const SizedBox(width: 16),
+                          Container(
+                            width: 8,
+                            height: 8,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            "Current month",
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelMedium
+                                ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                          ),
+                          const SizedBox(width: 12),
+                          Container(
+                            width: 8,
+                            height: 8,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: grey2,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            "Last month",
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelMedium
+                                ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 22),
                     ],
-                  ),
-                  const SizedBox(width: 30),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "INCOME",
-                        style: Theme.of(context).textTheme.labelMedium,
-                      ),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: numToCurrency(1050.65),
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: green),
-                            ),
-                            TextSpan(
-                              text: "€",
-                              style: Theme.of(context).textTheme.labelLarge?.copyWith(color: green),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(width: 30),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "EXPENSES",
-                        style: Theme.of(context).textTheme.labelMedium,
-                      ),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: numToCurrency(-1050.65),
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: red),
-                            ),
-                            TextSpan(
-                              text: "€",
-                              style: Theme.of(context).textTheme.labelLarge?.copyWith(color: red),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                  );
+                },
+                loading: () => const SizedBox(height: 330),
+                error: (err, stack) => Text('Error: $err'),
               ),
-              const SizedBox(height: 16),
-              LineChartWidget(
-                line1Data: const [
-                  FlSpot(0, 3),
-                  FlSpot(1, 1.3),
-                  FlSpot(2, -2),
-                  FlSpot(3, -4.5),
-                  FlSpot(4, -5),
-                  FlSpot(5, -2.2),
-                  FlSpot(6, -3.1),
-                  FlSpot(7, -0.2),
-                  FlSpot(8, -4),
-                  FlSpot(9, -3),
-                  FlSpot(10, -2),
-                  FlSpot(11, -4),
-                  FlSpot(12, 3),
-                  FlSpot(13, 1.3),
-                  FlSpot(14, -2),
-                  FlSpot(15, -4.5),
-                  FlSpot(16, 2.5),
-                ],
-                colorLine1Data: const Color(0xff00152D),
-                line2Data: const [
-                  FlSpot(0, -3),
-                  FlSpot(1, -1.3),
-                  FlSpot(2, 2),
-                  FlSpot(3, 4.5),
-                  FlSpot(4, 5),
-                  FlSpot(5, 2.2),
-                  FlSpot(6, 3.1),
-                  FlSpot(7, 0.2),
-                  FlSpot(8, 4),
-                  FlSpot(9, 3),
-                  FlSpot(10, 2),
-                  FlSpot(11, 4),
-                  FlSpot(12, -3),
-                  FlSpot(13, -1.3),
-                  FlSpot(14, 2),
-                  FlSpot(15, 4.5),
-                  FlSpot(16, 5),
-                  FlSpot(17, 2.2),
-                  FlSpot(18, 3.1),
-                  FlSpot(19, 0.2),
-                  FlSpot(20, 4),
-                  FlSpot(21, 3),
-                  FlSpot(22, 2),
-                  FlSpot(23, 4),
-                  FlSpot(24, -3),
-                  FlSpot(25, -1.3),
-                  FlSpot(26, 2),
-                  FlSpot(27, 4.5),
-                  FlSpot(28, 5),
-                  FlSpot(29, 4.7),
-                  FlSpot(30, 1),
-                ],
-                colorLine2Data: const Color(0xffB9BABC), //da modificare in darkMode
-                colorBackground: Theme.of(context).colorScheme.tertiary,
-                maxY: 5.0,
-                minY: -5.0,
-                maxDays: 31.0,
-              ),
-              Row(
-                children: [
-                  const SizedBox(width: 16),
-                  Container(
-                    width: 8,
-                    height: 8,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    "Current month",
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelMedium
-                        ?.copyWith(color: Theme.of(context).colorScheme.primary),
-                  ),
-                  const SizedBox(width: 12),
-                  Container(
-                    width: 8,
-                    height: 8,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: grey2,
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    "Last month",
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelMedium
-                        ?.copyWith(color: Theme.of(context).colorScheme.primary),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 22),
-            ],
-          ),
           Container(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primaryContainer, //da modificare in darkMode
