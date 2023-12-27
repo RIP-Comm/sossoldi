@@ -7,14 +7,17 @@ import '../constants/style.dart';
 import '../model/transaction.dart';
 import '../providers/transactions_provider.dart';
 import '../utils/date_helper.dart';
+import 'default_container.dart';
 
 class TransactionsList extends StatefulWidget {
-  final List<Transaction> transactions;
-
   const TransactionsList({
     super.key,
     required this.transactions,
+    this.padding,
   });
+
+  final List<Transaction> transactions;
+  final EdgeInsetsGeometry? padding;
 
   @override
   State<TransactionsList> createState() => _TransactionsListState();
@@ -26,6 +29,18 @@ class _TransactionsListState extends State<TransactionsList> with Functions {
 
   @override
   void initState() {
+    updateTotal();
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant TransactionsList oldWidget) {
+    updateTotal();
+    super.didUpdateWidget(oldWidget);
+  }
+
+  updateTotal() {
+    totals = {};
     for (var transaction in transactions) {
       String date = transaction.date.toYMD();
       if (totals.containsKey(date)) {
@@ -42,22 +57,14 @@ class _TransactionsListState extends State<TransactionsList> with Functions {
         }
       }
     }
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return transactions.isNotEmpty
         ? SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: [defaultShadow],
-              ),
-              padding: const EdgeInsets.all(16),
+          padding: widget.padding,
+          child: DefaultContainer(
               child: Column(
                 children: transactions.map((transaction) {
                   int index = transactions.indexOf(transaction);

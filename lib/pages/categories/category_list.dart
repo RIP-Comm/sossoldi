@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
 import '../../../constants/functions.dart';
-import '../../../custom_widgets/default_container.dart';
 import '../../../model/category_transaction.dart';
 import '../../../providers/categories_provider.dart';
+import '../../custom_widgets/default_card.dart';
 
 class CategoryList extends ConsumerStatefulWidget {
   const CategoryList({super.key});
@@ -73,7 +73,7 @@ class _CategoryListState extends ConsumerState<CategoryList> with Functions {
                   CategoryTransaction category = categorys[i];
                   IconData? icon = iconList[category.symbol];
                   Color? color = categoryColorListTheme[category.color];
-                  return DefaultContainer(
+                  return DefaultCard(
                     onTap: () {
                       ref.read(categoriesProvider.notifier).selectedCategory(category);
                       Navigator.of(context).pushNamed('/add-category');

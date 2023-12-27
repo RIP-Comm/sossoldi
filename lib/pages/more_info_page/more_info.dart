@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../custom_widgets/default_container.dart';
+import '../../custom_widgets/default_card.dart';
 
 class MoreInfoPage extends ConsumerStatefulWidget {
   const MoreInfoPage({super.key});
@@ -58,11 +58,11 @@ class _MoreInfoPageState extends ConsumerState<MoreInfoPage> {
           separatorBuilder: (context, index) => const SizedBox(height: 16),
           itemBuilder: (context, i) {
             List option = moreInfoOptions[i];
-            return DefaultContainer(
+            return DefaultCard(
               onTap: () {
-                option[2] != null
-                    ? Navigator.of(context).pushNamed(option[2] as String)
-                    : print("click");
+                if(option[2] != null) {
+                  Navigator.of(context).pushNamed(option[2] as String);
+                }
               },
               child: Row(
                 children: [

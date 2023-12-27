@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../constants/style.dart';
 import '../custom_widgets/alert_dialog.dart';
-import '../custom_widgets/default_container.dart';
+import '../custom_widgets/default_card.dart';
 import '../database/sossoldi_database.dart';
 import '../providers/accounts_provider.dart';
 import '../providers/budgets_provider.dart';
@@ -115,11 +115,11 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               separatorBuilder: (context, index) => const SizedBox(height: 16),
               itemBuilder: (context, i) {
                 List setting = settingsOptions[i];
-                return DefaultContainer(
+                return DefaultCard(
                   onTap: () {
-                    setting[3] != null
-                        ? Navigator.of(context).pushNamed(setting[3] as String)
-                        : print("click");
+                    if (setting[3] != null) {
+                      Navigator.of(context).pushNamed(setting[3] as String);
+                    }
                   },
                   child: Row(
                     children: [

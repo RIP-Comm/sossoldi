@@ -22,7 +22,10 @@ class _ListTabState extends ConsumerState<ListTab> with Functions {
     return Container(
       child: asyncTransactions.when(
         data: (transactions) {
-          return TransactionsList(transactions: transactions);
+          return TransactionsList(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            transactions: transactions,
+          );
         },
         loading: () {
           return Container(

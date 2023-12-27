@@ -1,184 +1,147 @@
 import "package:flutter/material.dart";
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../constants/constants.dart';
 import '../../../constants/style.dart';
+import '../../../model/category_transaction.dart';
+import 'categories_tab.dart';
 
-class CategoryListTile extends StatelessWidget {
+class CategoryListTile extends ConsumerWidget {
   const CategoryListTile({
     super.key,
-    required this.title,
+    required this.category,
     required this.amount,
-    required this.nTransactions,
     required this.transactions,
     required this.percent,
-    required this.color,
-    required this.icon,
-    required this.notifier,
     required this.index,
   });
 
-  final String title;
+  final CategoryTransaction category;
   final double amount;
-  final int nTransactions;
   final List<Map<String, dynamic>> transactions;
   final double percent;
-  final Color color;
-  final IconData icon;
-  final ValueNotifier<int> notifier;
   final int index;
 
-  /// Toogle the box to expand or collapse
-  void _toogleExpand() {
-    if (notifier.value == index) {
-      notifier.value = -1;
-    } else {
-      notifier.value = index;
-    }
-  }
-
   @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: notifier,
-      builder: (context, value, child) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            GestureDetector(
-              onTap: _toogleExpand,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  color: color.withAlpha(90),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectedCategoryIndex = ref.watch(selectedCategoryIndexProvider);
+    final nTransactions = transactions.length;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        GestureDetector(
+          onTap: () {
+            if (selectedCategoryIndex == index) {
+              ref.invalidate(selectedCategoryIndexProvider);
+            } else {
+              ref.read(selectedCategoryIndexProvider.notifier).state = index;
+            }
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+              color: categoryColorList[category.color].withAlpha(90),
+            ),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 8.0,
+              vertical: 16.0,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: categoryColorList[category.color],
+                  ),
+                  child: Icon(
+                    iconList[category.symbol],
+                    color: Colors.white,
+                  ),
                 ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0,
-                  vertical: 16.0,
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: color,
-                      ),
-                      child: Icon(icon, color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(width: 8.0),
-                    Expanded(
-                      child: Column(
+                const SizedBox(width: 8.0),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                title,
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .titleMedium,
-                              ),
-                              Text(
-                                "${amount.toStringAsFixed(2)} €",
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .bodyLarge
-                                    ?.copyWith(
-                                    color: (amount > 0) ? green : red),
-                              ),
-                            ],
+                          Text(
+                            category.name,
+                            style: Theme.of(context).textTheme.titleMedium,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "$nTransactions transactions",
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .labelLarge,
-                              ),
-                              Text(
-                                "${percent.toStringAsFixed(2)}%",
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .labelLarge,
-                              ),
-                            ],
+                          Text(
+                            "${amount.toStringAsFixed(2)} €",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(color: (amount > 0) ? green : red),
                           ),
                         ],
                       ),
-                    ),
-                    const SizedBox(width: 8.0),
-                    Icon(
-                      (notifier.value == index)
-                          ? Icons.expand_more
-                          : Icons.chevron_right,
-                    ),
-                  ],
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "$nTransactions transactions",
+                            style: Theme.of(context).textTheme.labelLarge,
+                          ),
+                          Text(
+                            "${percent.toStringAsFixed(2)}%",
+                            style: Theme.of(context).textTheme.labelLarge,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+                const SizedBox(width: 8.0),
+                Icon(
+                  (selectedCategoryIndex == index) ? Icons.expand_more : Icons.chevron_right,
+                ),
+              ],
             ),
-            ExpandedSection(
-              expand: notifier.value == index,
-              child: Container(
-                color: white,
-                height: 70.0 * nTransactions,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: (nTransactions > 0)
-                      ? List.generate(
-                    2 * nTransactions - 1,
-                        (i) {
-                      if (i % 2 == 0) {
-                        return TransactionRow(
-                          account: transactions[i ~/ 2]["account"],
-                          amount: transactions[i ~/ 2]["amount"],
-                          category: transactions[i ~/ 2]["category"],
-                          title: transactions[i ~/ 2]["title"],
-                        );
-                      } else {
-                        return const Divider(
-                          height: 1,
-                          thickness: 1,
-                          indent: 15,
-                          endIndent: 15,
-                        );
-                      }
-                    },
-                  )
-                      : [],
-                ),
+          ),
+        ),
+        ExpandedSection(
+          expand: selectedCategoryIndex == index,
+          child: Container(
+            color: white,
+            height: 70.0 * nTransactions,
+            child: ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: nTransactions,
+              separatorBuilder: (context, index) => const Divider(
+                height: 1,
+                thickness: 1,
+                indent: 15,
+                endIndent: 15,
               ),
-            )
-          ],
-        );
-      },
+              itemBuilder: (context, index) {
+                return TransactionRow(
+                  transaction: transactions[index],
+                );
+              },
+            ),
+          ),
+        )
+      ],
     );
   }
 }
 
-class TransactionRow extends StatelessWidget {
+class TransactionRow extends ConsumerWidget {
   const TransactionRow({
     super.key,
-    required this.title,
-    required this.category,
-    required this.amount,
-    required this.account,
+    required this.transaction,
   });
 
-  final String title;
-  final String category;
-  final double amount;
-  final String account;
+  final Map<String, dynamic> transaction;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 8.0,
@@ -195,19 +158,15 @@ class TransactionRow extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      title,
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .titleMedium,
+                      transaction['title'],
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(
-                      "${amount.toStringAsFixed(2)} €",
-                      style: Theme
-                          .of(context)
+                      "${transaction['amount'].toStringAsFixed(2)} €",
+                      style: Theme.of(context)
                           .textTheme
                           .bodyLarge
-                          ?.copyWith(color: (amount > 0) ? green : red),
+                          ?.copyWith(color: (transaction['amount'] > 0) ? green : red),
                     ),
                   ],
                 ),
@@ -215,18 +174,12 @@ class TransactionRow extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      category.toUpperCase(),
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .labelLarge,
+                      transaction['category'].toUpperCase(),
+                      style: Theme.of(context).textTheme.labelLarge,
                     ),
                     Text(
-                      account.toUpperCase(),
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .labelLarge,
+                      transaction['account'].toUpperCase(),
+                      style: Theme.of(context).textTheme.labelLarge,
                     ),
                   ],
                 ),
@@ -254,8 +207,7 @@ class ExpandedSection extends StatefulWidget {
   State<ExpandedSection> createState() => _ExpandedSectionState();
 }
 
-class _ExpandedSectionState extends State<ExpandedSection>
-    with SingleTickerProviderStateMixin {
+class _ExpandedSectionState extends State<ExpandedSection> with SingleTickerProviderStateMixin {
   late AnimationController expandController;
   late Animation<double> animation;
 

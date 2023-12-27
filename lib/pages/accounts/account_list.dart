@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../constants/constants.dart';
-import '../../../constants/functions.dart';
-import '../../../custom_widgets/default_container.dart';
-import '../../../model/bank_account.dart';
-import '../../../providers/accounts_provider.dart';
+import '../../constants/constants.dart';
+import '../../constants/functions.dart';
+import '../../custom_widgets/default_card.dart';
+import '../../model/bank_account.dart';
+import '../../providers/accounts_provider.dart';
 
 class AccountList extends ConsumerStatefulWidget {
   const AccountList({super.key});
@@ -73,7 +73,7 @@ class _AccountListState extends ConsumerState<AccountList> with Functions {
                   BankAccount account = accounts[i];
                   IconData? icon = accountIconList[account.symbol];
                   Color? color = accountColorListTheme[account.color];
-                  return DefaultContainer(
+                  return DefaultCard(
                     onTap: () async {
                       await ref
                           .read(accountsProvider.notifier)

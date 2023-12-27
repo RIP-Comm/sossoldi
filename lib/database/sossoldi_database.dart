@@ -1,15 +1,15 @@
+import 'dart:math'; // used for random number generation in demo data
+
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-import 'dart:math'; // used for random number generation in demo data
-
 // Models
 import '../model/bank_account.dart';
-import '../model/transaction.dart';
-import '../model/recurring_transaction_amount.dart';
-import '../model/category_transaction.dart';
 import '../model/budget.dart';
+import '../model/category_transaction.dart';
 import '../model/currency.dart';
+import '../model/recurring_transaction_amount.dart';
+import '../model/transaction.dart';
 
 class SossoldiDatabase {
   static final SossoldiDatabase instance = SossoldiDatabase._init();
@@ -211,6 +211,7 @@ class SossoldiDatabase {
         randomType = 'TRSF';
         randomNote = 'Transfer';
         randomAccount = 70; // sender account is hardcoded with the one that receives our fake salary
+        randomCategory = 0; // no category for transfers
         idBankAccountTransfer = accounts[rnd.nextInt(accounts.length)];
         randomAmount = (fakeSalary/100)*70;
 
