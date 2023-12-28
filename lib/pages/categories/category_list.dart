@@ -26,7 +26,10 @@ class _CategoryListState extends ConsumerState<CategoryList> with Functions {
         ),
         actions: [
           IconButton(
-            onPressed: () => Navigator.of(context).pushNamed('/add-category'),
+            onPressed: () {
+              ref.read(categoriesProvider.notifier).reset();
+              Navigator.of(context).pushNamed('/add-category');
+            },
             icon: const Icon(Icons.add_circle),
             splashRadius: 28,
           ),

@@ -4,7 +4,6 @@ import '../constants/constants.dart';
 import '../model/category_transaction.dart';
 
 final selectedCategoryProvider = StateProvider<CategoryTransaction?>((ref) => null);
-final categoryNameProvider = StateProvider<String?>((ref) => null);
 final categoryIconProvider = StateProvider<String>((ref) => iconList.keys.first);
 final categoryColorProvider = StateProvider<int>((ref) => 0);
 
@@ -19,22 +18,27 @@ class AsyncCategoriesNotifier extends AsyncNotifier<List<CategoryTransaction>> {
     return categories;
   }
 
-  Future<void> addCategory() async {
-    state = const AsyncValue.loading();
-
+  Future<void> addCategory(String name) async {
     CategoryTransaction category = CategoryTransaction(
-      name: ref.read(categoryNameProvider)!,
+      name: name,
       symbol: ref.read(categoryIconProvider),
       color: ref.read(categoryColorProvider),
     );
 
+    state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       await CategoryTransactionMethods().insert(category);
       return _getCategories();
     });
   }
 
-  Future<void> updateCategory(CategoryTransaction category) async {
+  Future<void> updateCategory(String name) async {
+    CategoryTransaction category = ref.read(selectedCategoryProvider)!.copy(
+      name: name,
+      symbol: ref.read(categoryIconProvider),
+      color: ref.read(categoryColorProvider),
+    );
+    
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       await CategoryTransactionMethods().updateItem(category);
@@ -44,7 +48,6 @@ class AsyncCategoriesNotifier extends AsyncNotifier<List<CategoryTransaction>> {
 
   void selectedCategory(CategoryTransaction category) {
     ref.read(selectedCategoryProvider.notifier).state = category;
-    ref.read(categoryNameProvider.notifier).state = category.name;
     ref.read(categoryIconProvider.notifier).state = category.symbol;
     ref.read(categoryColorProvider.notifier).state = category.color;
   }
@@ -55,6 +58,12 @@ class AsyncCategoriesNotifier extends AsyncNotifier<List<CategoryTransaction>> {
       await CategoryTransactionMethods().deleteById(categoryId);
       return _getCategories();
     });
+  }
+
+  void reset() {
+    ref.invalidate(selectedCategoryProvider);
+    ref.invalidate(categoryIconProvider);
+    ref.invalidate(categoryColorProvider);
   }
 }
 

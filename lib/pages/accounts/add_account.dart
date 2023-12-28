@@ -21,32 +21,27 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
   final TextEditingController startingValueController = TextEditingController();
 
   @override
+  void initState() {
+    nameController.text = ref.read(selectedAccountProvider)?.name ?? '';
+    startingValueController.text =
+        ref.read(selectedAccountProvider)?.startingValue.toString() ?? '';
+    super.initState();
+  }
+
+  @override
   void dispose() {
-    ref.invalidate(selectedAccountProvider);
-    ref.invalidate(accountNameProvider);
-    ref.invalidate(accountIconProvider);
-    ref.invalidate(accountColorProvider);
-    ref.invalidate(accountStartingValueProvider);
-    ref.invalidate(accountMainSwitchProvider);
-    ref.invalidate(countNetWorthSwitchProvider);
+    nameController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final accountName =
-        ref.read(accountNameProvider); // Used only to retrieve the value when updating an account
     final selectedAccount = ref.watch(selectedAccountProvider);
     final accountIcon = ref.watch(accountIconProvider);
     final accountColor = ref.watch(accountColorProvider);
     final showAccountIcons = ref.watch(showAccountIconsProvider);
     final accountMainSwitch = ref.watch(accountMainSwitchProvider);
     final countNetWorth = ref.watch(countNetWorthSwitchProvider);
-    ref.listen(accountNameProvider, (_, __) {});
-
-    setState(() {
-      nameController.text = accountName ?? '';
-    });
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
@@ -83,7 +78,6 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                           contentPadding: const EdgeInsets.all(0),
                         ),
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(color: grey1),
-                        onChanged: (value) => ref.read(accountNameProvider.notifier).state = value,
                       )
                     ],
                   ),
@@ -237,7 +231,6 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                     ],
                   ),
                 ),
-                
                 if (selectedAccount == null)
                   Container(
                     width: double.infinity,
@@ -279,14 +272,10 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                               .textTheme
                               .titleLarge!
                               .copyWith(color: grey1),
-                          onChanged: (value) => ref
-                              .read(accountStartingValueProvider.notifier)
-                              .state = currencyToNum(value),
                         )
                       ],
                     ),
                   ),
-                
                 Container(
                   width: double.infinity,
                   margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
@@ -331,7 +320,6 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                                   .bodyLarge!
                                   .copyWith(color: Theme.of(context).colorScheme.primary),
                             ),
-                            // TODO: Need to add this feature in the db
                             CupertinoSwitch(
                               value: countNetWorth,
                               onChanged: (value) =>
@@ -393,12 +381,12 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                     if (selectedAccount != null) {
                       ref
                           .read(accountsProvider.notifier)
-                          .updateAccount(selectedAccount)
+                          .updateAccount(nameController.text)
                           .whenComplete(() => Navigator.of(context).pop());
                     } else {
                       ref
                           .read(accountsProvider.notifier)
-                          .addAccount()
+                          .addAccount(nameController.text, startingValueController.text.isEmpty ? null : currencyToNum(startingValueController.text))
                           .whenComplete(() => Navigator.of(context).pop());
                     }
                   },

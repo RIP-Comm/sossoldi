@@ -256,7 +256,10 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                                       ),
                                   maxLines: 2,
                                 ),
-                                onPressed: () => Navigator.of(context).pushNamed('/add-account'),
+                                onPressed: () {
+                                  ref.read(accountsProvider.notifier).reset();
+                                  Navigator.of(context).pushNamed('/add-account');
+                                },
                               ),
                             ),
                           );

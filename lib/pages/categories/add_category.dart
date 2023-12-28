@@ -19,16 +19,13 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
 
   @override
   void initState() {
-    nameController.text = ref.read(categoryNameProvider) ?? '';
+    nameController.text = ref.read(selectedCategoryProvider)?.name ?? '';
     super.initState();
   }
 
   @override
   void dispose() {
-    ref.invalidate(selectedCategoryProvider);
-    ref.invalidate(categoryNameProvider);
-    ref.invalidate(categoryIconProvider);
-    ref.invalidate(categoryColorProvider);
+    nameController.dispose();
     super.dispose();
   }
 
@@ -38,7 +35,6 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
     final categoryIcon = ref.watch(categoryIconProvider);
     final categoryColor = ref.watch(categoryColorProvider);
     final showCategoryIcons = ref.watch(showCategoryIconsProvider);
-    ref.listen(categoryNameProvider, (_, __) {});
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(title: Text("${selectedCategory == null ? "New" : "Edit"} Category")),
@@ -74,7 +70,6 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                           contentPadding: const EdgeInsets.all(0),
                         ),
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(color: grey1),
-                        onChanged: (value) => ref.read(categoryNameProvider.notifier).state = value,
                       )
                     ],
                   ),
@@ -305,12 +300,12 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                     if (selectedCategory != null) {
                       ref
                           .read(categoriesProvider.notifier)
-                          .updateCategory(selectedCategory)
+                          .updateCategory(nameController.text)
                           .whenComplete(() => Navigator.of(context).pop());
                     } else {
                       ref
                           .read(categoriesProvider.notifier)
-                          .addCategory()
+                          .addCategory(nameController.text)
                           .whenComplete(() => Navigator.of(context).pop());
                     }
                   },

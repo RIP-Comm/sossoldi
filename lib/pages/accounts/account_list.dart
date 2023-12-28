@@ -26,7 +26,10 @@ class _AccountListState extends ConsumerState<AccountList> with Functions {
         ),
         actions: [
           IconButton(
-            onPressed: () => Navigator.of(context).pushNamed('/add-account'),
+            onPressed: () {
+              ref.read(accountsProvider.notifier).reset();
+              Navigator.of(context).pushNamed('/add-account');
+            },
             icon: const Icon(Icons.add_circle),
             splashRadius: 28,
           ),
