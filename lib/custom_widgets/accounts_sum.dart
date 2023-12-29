@@ -13,9 +13,9 @@ class AccountsSum extends ConsumerWidget with Functions {
   final BankAccount account;
 
   const AccountsSum({
-    Key? key,
+    super.key,
     required this.account,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -40,8 +40,7 @@ class AccountsSum extends ConsumerWidget with Functions {
               await ref
                   .read(accountsProvider.notifier)
                   .selectedAccount(account)
-                  .whenComplete(
-                      () => Navigator.of(context).pushNamed('/account'));
+                  .whenComplete(() => Navigator.of(context).pushNamed('/account'));
             },
             child: Container(
               padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
@@ -68,53 +67,26 @@ class AccountsSum extends ConsumerWidget with Functions {
                     children: [
                       Text(
                         account.name,
-                        style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge!
-                              .copyWith(color: darkBlue7),
-                      ), // TODO: set dinamically instead of hardcoded
-                      FutureBuilder<num?>(
-                        future: BankAccountMethods().getAccountSum(account.id),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            // Show a loading indicator while waiting for the future to complete
-                            return Transform.scale(
-                              scale: 0.5,
-                              child: const CircularProgressIndicator(),
-                            );
-                          } else if (snapshot.hasError) {
-                            // Show an error message if the future encounters an error
-                            return Text('Error: ${snapshot.error}');
-                          } else {
-                            // Display the result once the future completes successfully
-                            final accountSum = snapshot.data ?? 0;
-                            return RichText(
-                              textScaleFactor:
-                                  MediaQuery.of(context).textScaleFactor,
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: numToCurrency(accountSum),
-                                    style:
-                                        Theme.of(context).textTheme.titleSmall!.copyWith(color: darkBlue7),
-                                  ),
-                                  TextSpan(
-                                    text: "€",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.apply(
-                                      fontFeatures: [
-                                        const FontFeature.subscripts()
-                                      ],
-                                    ).copyWith(color: darkBlue7),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
-                        },
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: darkBlue7),
+                      ),
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: numToCurrency(account.total),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall!
+                                  .copyWith(color: darkBlue7),
+                            ),
+                            TextSpan(
+                              text: "€",
+                              style: Theme.of(context).textTheme.bodyMedium?.apply(
+                                fontFeatures: [const FontFeature.subscripts()],
+                              ).copyWith(color: darkBlue7),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),

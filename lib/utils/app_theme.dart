@@ -4,95 +4,103 @@ import '../constants/style.dart';
 
 class AppTheme {
   static final lightTheme = ThemeData(
-      colorScheme: customColorScheme,
-      scaffoldBackgroundColor: blue7,
-      appBarTheme: const AppBarTheme(
-        color: grey3,
-        elevation: 0,
-        centerTitle: true,
-        iconTheme: IconThemeData(color: blue5),
-        titleTextStyle: TextStyle(
-          color: blue1,
-          fontSize: 18,
-          fontWeight: FontWeight.w700,
-        ),
-      ),
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: blue7,
-        unselectedItemColor: grey1,
-      ),
-      iconTheme: const IconThemeData(
+    colorScheme: customColorScheme,
+    scaffoldBackgroundColor: white,
+    useMaterial3: false,
+    appBarTheme: const AppBarTheme(
+      color: grey3,
+      elevation: 0,
+      centerTitle: true,
+      iconTheme: IconThemeData(color: blue5),
+      titleTextStyle: TextStyle(
         color: blue1,
+        fontSize: 24,
+        fontWeight: FontWeight.w700,
       ),
-      fontFamily: 'SF Pro Text',
-      textTheme: const TextTheme(
-        // display
-        displayLarge: TextStyle(
-          fontSize: 34.0,
-          fontWeight: FontWeight.w700,
-        ),
-        displayMedium: TextStyle(
-          fontSize: 34.0,
-          fontWeight: FontWeight.w600,
-          color: Colors.black,
-        ),
+    ),
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      backgroundColor: grey3,
+      unselectedItemColor: grey1,
+    ),
+    iconTheme: const IconThemeData(
+      color: blue1,
+    ),
+    listTileTheme: const ListTileThemeData(
+      tileColor: grey3,
+      contentPadding: EdgeInsets.all(16),
+    ),
+    disabledColor: grey2,
+    fontFamily: 'SF Pro Text',
+    textTheme: const TextTheme(
+      // display
+      displayLarge: TextStyle(
+        fontSize: 34.0,
+        fontWeight: FontWeight.w700,
+      ),
+      displayMedium: TextStyle(
+        fontSize: 34.0,
+        fontWeight: FontWeight.w600,
+        color: Colors.black,
+      ),
 
-        // headline
-        headlineLarge: TextStyle(
-          fontSize: 24.0,
-          fontWeight: FontWeight.w700,
-        ),
-        headlineMedium: TextStyle(
-          fontSize: 24.0,
-          fontWeight: FontWeight.w600,
-        ),
+      // headline
+      headlineLarge: TextStyle(
+        fontSize: 24.0,
+        fontWeight: FontWeight.w700,
+      ),
+      headlineMedium: TextStyle(
+        fontSize: 24.0,
+        fontWeight: FontWeight.w600,
+      ),
 
-        // title
-        titleLarge: TextStyle(
-          fontSize: 18.0,
-          fontWeight: FontWeight.w700,
-        ),
-        titleMedium: TextStyle(
-          fontSize: 18.0,
-          fontWeight: FontWeight.w600,
-        ),
-        titleSmall: TextStyle(
-          fontSize: 18.0,
-          fontWeight: FontWeight.w400,
-        ),
+      // title
+      titleLarge: TextStyle(
+        fontSize: 18.0,
+        fontWeight: FontWeight.w700,
+      ),
+      titleMedium: TextStyle(
+        fontSize: 18.0,
+        fontWeight: FontWeight.w600,
+      ),
+      titleSmall: TextStyle(
+        fontSize: 18.0,
+        fontWeight: FontWeight.w400,
+      ),
 
-        // body
-        bodyLarge: TextStyle(
-          fontSize: 14.0,
-          fontWeight: FontWeight.w700,
-        ),
-        bodyMedium: TextStyle(
-          fontSize: 14.0,
-          fontWeight: FontWeight.w600,
-        ),
-        bodySmall: TextStyle(
-          fontSize: 14.0,
-          fontWeight: FontWeight.w400,
-        ),
+      // body
+      bodyLarge: TextStyle(
+        fontSize: 14.0,
+        fontWeight: FontWeight.w700,
+      ),
+      bodyMedium: TextStyle(
+        fontSize: 14.0,
+        fontWeight: FontWeight.w600,
+      ),
+      bodySmall: TextStyle(
+        fontSize: 14.0,
+        fontWeight: FontWeight.w400,
+      ),
 
-        // label
-        labelLarge: TextStyle(
-          fontSize: 10.0,
-          fontWeight: FontWeight.w700,
-        ),
-        labelMedium: TextStyle(
-          fontSize: 10.0,
-          fontWeight: FontWeight.w400,
-        ),
-        labelSmall: TextStyle(
-          fontSize: 8.0,
-          fontWeight: FontWeight.w700,
-        ),
-      ));
+      // label
+      labelLarge: TextStyle(
+        fontSize: 10.0,
+        fontWeight: FontWeight.w700,
+      ),
+      labelMedium: TextStyle(
+        fontSize: 10.0,
+        fontWeight: FontWeight.w400,
+      ),
+      labelSmall: TextStyle(
+        fontSize: 8.0,
+        fontWeight: FontWeight.w700,
+      ),
+    ),
+  );
 
   static final darkTheme = ThemeData(
     colorScheme: darkCustomColorScheme,
     scaffoldBackgroundColor: darkBlue7,
+    useMaterial3: false,
     appBarTheme: const AppBarTheme(
       color: darkGrey3,
       elevation: 0,
@@ -118,8 +126,7 @@ class AppTheme {
     //Text style
     fontFamily: 'SF Pro Text',
     textTheme: const TextTheme(
-      displayLarge: TextStyle(
-          fontSize: 34.0, fontWeight: FontWeight.w700, color: darkBlack),
+      displayLarge: TextStyle(fontSize: 34.0, fontWeight: FontWeight.w700, color: darkBlack),
       displayMedium: TextStyle(
         fontSize: 34.0,
         fontWeight: FontWeight.w600,
@@ -195,7 +202,7 @@ ColorScheme customColorScheme = const ColorScheme(
   primary: blue1,
   primaryContainer: white,
   secondary: blue5,
-  tertiary: blue4,
+  tertiary: blue7,
   surface: grey3,
   background: white,
   error: red,
@@ -211,7 +218,7 @@ ColorScheme darkCustomColorScheme = const ColorScheme(
   primary: darkBlue1,
   primaryContainer: darkGrey4,
   secondary: darkBlue5,
-  tertiary: darkBlack,
+  tertiary: darkBlue7,
   surface: darkBlue7, //darkBlue3
   background: darkWhite,
   error: darkRed,

@@ -1,14 +1,14 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fl_chart/fl_chart.dart';
 
-import '../../providers/accounts_provider.dart';
-import '../../custom_widgets/line_chart.dart';
 import '../../constants/functions.dart';
 import '../../constants/style.dart';
+import '../../custom_widgets/line_chart.dart';
+import '../../providers/accounts_provider.dart';
 
 class AccountPage extends ConsumerStatefulWidget {
-  const AccountPage({Key? key}) : super(key: key);
+  const AccountPage({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _AccountPage();
@@ -17,12 +17,11 @@ class AccountPage extends ConsumerStatefulWidget {
 class _AccountPage extends ConsumerState<AccountPage> with Functions {
   @override
   Widget build(BuildContext context) {
-    final accountName = ref.read(accountNameProvider);
-    final accountAmount = ref.read(accountStartingValueProvider);
+    final account = ref.read(selectedAccountProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(accountName ?? "", style: const TextStyle(color: white)),
+        title: Text(account?.name ?? "", style: const TextStyle(color: white)),
         backgroundColor: blue5,
         elevation: 0,
       ),
@@ -35,7 +34,7 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
               child: Column(
                 children: [
                   Text(
-                    numToCurrency(accountAmount),
+                    numToCurrency(account?.total),
                     style: const TextStyle(
                       color: white,
                       fontSize: 32.0,
@@ -68,8 +67,6 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                     line2Data: <FlSpot>[],
                     colorLine2Data: Color(0xffffffff),
                     colorBackground: blue5,
-                    maxY: 5.0,
-                    minY: -5.0,
                     maxDays: 30.0,
                   ),
                 ],

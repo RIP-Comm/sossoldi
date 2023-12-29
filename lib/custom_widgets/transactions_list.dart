@@ -1,82 +1,97 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../constants/constants.dart';
-import '../providers/transactions_provider.dart';
 import '../constants/functions.dart';
-import '../model/bank_account.dart';
-import '../model/category_transaction.dart';
-import '../model/transaction.dart';
-import '../providers/accounts_provider.dart';
-import '../providers/categories_provider.dart';
 import '../constants/style.dart';
+import '../model/transaction.dart';
+import '../providers/transactions_provider.dart';
+import '../utils/date_helper.dart';
+import 'default_container.dart';
 
 class TransactionsList extends StatefulWidget {
-  final List<Transaction> transactions;
-
   const TransactionsList({
     super.key,
     required this.transactions,
+    this.padding,
   });
+
+  final List<Transaction> transactions;
+  final EdgeInsetsGeometry? padding;
 
   @override
   State<TransactionsList> createState() => _TransactionsListState();
 }
 
 class _TransactionsListState extends State<TransactionsList> with Functions {
-  List<Widget> list = [];
+  Map<String, double> totals = {};
+  List<Transaction> get transactions => widget.transactions;
 
   @override
   void initState() {
-    num sum = 0;
-    DateTime? date;
-    List<Transaction> transactionList = [];
-    for (var transaction in widget.transactions) {
-      if (transaction != widget.transactions.first &&
-          dateToString(transaction.date) != dateToString(date!)) {
-        final title = TransactionTitle(date: date, sum: sum, first: list.isEmpty ? true : false);
-        final transactionRow = TransactionRow(transactions: transactionList);
-        list = [...list, title, transactionRow];
-        transactionList = [];
-        sum = 0;
-      }
-      date = transaction.date;
-      transactionList = [...transactionList, transaction];
-      if (transaction.type == Type.expense) {
-        sum -= transaction.amount;
-      } else if (transaction.type == Type.income) {
-        sum += transaction.amount;
-      }
-      if (transaction == widget.transactions.last) {
-        final title = TransactionTitle(date: date, sum: sum, first: list.isEmpty ? true : false);
-        final transactionRow = TransactionRow(transactions: transactionList);
-        list = [...list, title, transactionRow];
-      }
-    }
+    updateTotal();
     super.initState();
   }
 
   @override
+  void didUpdateWidget(covariant TransactionsList oldWidget) {
+    updateTotal();
+    super.didUpdateWidget(oldWidget);
+  }
+
+  updateTotal() {
+    totals = {};
+    for (var transaction in transactions) {
+      String date = transaction.date.toYMD();
+      if (totals.containsKey(date)) {
+        if (transaction.type == TransactionType.expense) {
+          totals[date] = totals[date]! - transaction.amount.toDouble();
+        } else if (transaction.type == TransactionType.income) {
+          totals[date] = totals[date]! + transaction.amount.toDouble();
+        }
+      } else {
+        if (transaction.type == TransactionType.expense) {
+          totals.putIfAbsent(date, () => -transaction.amount.toDouble());
+        } else if (transaction.type == TransactionType.income) {
+          totals.putIfAbsent(date, () => transaction.amount.toDouble());
+        }
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return list.isNotEmpty
-        ? Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(8),
-              boxShadow: [defaultShadow],
+    return transactions.isNotEmpty
+        ? SingleChildScrollView(
+          padding: widget.padding,
+          child: DefaultContainer(
+              child: Column(
+                children: transactions.map((transaction) {
+                  int index = transactions.indexOf(transaction);
+                  bool first =
+                      index == 0 || !transaction.date.isSameDate(transactions[index - 1].date);
+                  bool last = index == transactions.length - 1 ||
+                      !transaction.date.isSameDate(transactions[index + 1].date);
+
+                  return Column(
+                    children: [
+                      if (first)
+                        TransactionTitle(
+                          date: transaction.date,
+                          total: totals[transaction.date.toYMD()] ?? 0,
+                          first: index == 0,
+                        ),
+                      TransactionRow(transaction, first: first, last: last),
+                    ],
+                  );
+                }).toList(),
+              ),
             ),
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: list,
-            ),
-          )
+        )
         : Container(
+            padding: const EdgeInsets.all(16),
             margin: const EdgeInsets.all(16),
             width: double.infinity,
-            padding: const EdgeInsets.all(16),
             child: const Center(
               child: Text("No transactions available"),
             ),
@@ -86,19 +101,19 @@ class _TransactionsListState extends State<TransactionsList> with Functions {
 
 class TransactionTitle extends StatelessWidget with Functions {
   final DateTime date;
-  final num sum;
+  final num total;
   final bool first;
 
   const TransactionTitle({
     super.key,
     required this.date,
-    required this.sum,
-    required this.first,
+    this.total = 0,
+    this.first = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    final color = sum >= 0 ? green : red;
+    final color = total < 0 ? red : (total > 0 ? green : blue3);
     return Padding(
       padding: EdgeInsets.only(top: first ? 0 : 24),
       child: Column(
@@ -114,11 +129,10 @@ class TransactionTitle extends StatelessWidget with Functions {
               ),
               const Spacer(),
               RichText(
-                textScaleFactor: MediaQuery.of(context).textScaleFactor,
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: numToCurrency(sum),
+                      text: numToCurrency(total),
                       style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: color),
                     ),
                     TextSpan(
@@ -126,8 +140,7 @@ class TransactionTitle extends StatelessWidget with Functions {
                       style: Theme.of(context)
                           .textTheme
                           .labelMedium!
-                          .copyWith(color: color)
-                          .apply(fontFeatures: [const FontFeature.subscripts()]),
+                          .copyWith(color: color),
                     ),
                   ],
                 ),
@@ -142,187 +155,136 @@ class TransactionTitle extends StatelessWidget with Functions {
 }
 
 class TransactionRow extends ConsumerWidget with Functions {
-  final List<Transaction> transactions;
+  const TransactionRow(this.transaction, {this.first = false, this.last = false, super.key});
 
-  const TransactionRow({
-    super.key,
-    required this.transactions,
-  });
+  final Transaction transaction;
+  final bool first;
+  final bool last;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final accountList = ref.watch(accountsProvider);
-    final categoriesList = ref.watch(categoriesProvider);
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.background,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: ListView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: transactions.length,
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemBuilder: (context, i) {
-          Transaction transaction = transactions[i];
-          Iterable<CategoryTransaction>? categories =
-              transaction.type != Type.transfer && categoriesList.value != null
-                  ? categoriesList.value!.where((element) => element.id == transaction.idCategory)
-                  : [];
-          CategoryTransaction? category = categories.isNotEmpty ? categories.first : null;
-          BankAccount account =
-              accountList.value!.firstWhere((element) => element.id == transaction.idBankAccount);
-          BankAccount? accountTransfer = transaction.type == Type.transfer
-              ? accountList.value!
-                  .firstWhere((element) => element.id == transaction.idBankAccountTransfer)
-              : null;
-          return Column(
-            children: [
-              Material(
-                borderRadius: BorderRadius.circular(8),
-                color: Theme.of(context).colorScheme.primaryContainer,
-                child: InkWell(
-                  onTap: () {
-                    ref.read(selectedTransactionUpdateProvider.notifier).state =
-                        transaction;
-                    ref
-                        .read(transactionsProvider.notifier)
-                        .transactionUpdateState();
-                    ref
-                        .read(transactionsProvider.notifier)
-                        .transactionUpdateState()
-                        .whenComplete(
-                          () => Navigator.of(context).pushNamed("/add-page"),
-                        );
-                  },
-                  borderRadius: BorderRadius.vertical(
-                    top: i == 0 ? const Radius.circular(8) : Radius.zero,
-                    bottom: transactions.length == i + 1 ? const Radius.circular(8) : Radius.zero,
+    return Column(
+      children: [
+        Material(
+          borderRadius: BorderRadius.vertical(
+            top: first ? const Radius.circular(8) : Radius.zero,
+            bottom: last ? const Radius.circular(8) : Radius.zero,
+          ),
+          color: Theme.of(context).colorScheme.primaryContainer,
+          child: InkWell(
+            onTap: () {
+              ref
+                  .read(transactionsProvider.notifier)
+                  .transactionUpdateState(transaction)
+                  .whenComplete(() => Navigator.of(context).pushNamed("/add-page"));
+            },
+            borderRadius: BorderRadius.vertical(
+              top: first ? const Radius.circular(8) : Radius.zero,
+              bottom: last ? const Radius.circular(8) : Radius.zero,
+            ),
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(8, 12, 8, 12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: transaction.categoryColor != null
+                          ? categoryColorListTheme[transaction.categoryColor!]
+                          : Theme.of(context).colorScheme.secondary,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(
+                        transaction.categorySymbol != null
+                            ? iconList[transaction.categorySymbol]
+                            : Icons.swap_horiz_rounded,
+                        size: 25.0,
+                        color: white,
+                      ),
+                    ),
                   ),
-                  child: Container(
-                    padding: const EdgeInsets.fromLTRB(8, 12, 8, 12),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: category?.color != null
-                                ? categoryColorListTheme[category!.color]
-                                : Theme.of(context).colorScheme.secondary,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(
-                              category?.symbol != null
-                                  ? iconList[category!.symbol]
-                                  : Icons.swap_horiz_rounded,
-                              size: 25.0,
-                              color: white,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              const SizedBox(height: 11),
-                              Row(
+                        const SizedBox(height: 11),
+                        Row(
+                          children: [
+                            if (transaction.note != null)
+                              Text(
+                                transaction.note!,
+                                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                                      color: Theme.of(context).colorScheme.primary,
+                                    ),
+                              ),
+                            const Spacer(),
+                            RichText(
+                              text: TextSpan(
                                 children: [
-                                  if (transaction.note != null)
-                                    Text(
-                                      transaction.note!,
-                                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                                            color: Theme.of(context).colorScheme.primary,
-                                          ),
-                                    ),
-                                  const Spacer(),
-                                  RichText(
-                                    textScaleFactor: MediaQuery.of(context).textScaleFactor,
-                                    text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text:
-                                              '${transaction.type == Type.expense ? "-" : ""}${numToCurrency(transaction.amount)}',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .labelLarge!
-                                              .copyWith(color: typeToColor(transaction.type)),
-                                        ),
-                                        TextSpan(
-                                          text: "€",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .labelSmall!
-                                              .copyWith(color: typeToColor(transaction.type))
-                                              .apply(
-                                            fontFeatures: [const FontFeature.subscripts()],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                  TextSpan(
+                                    text:
+                                        '${transaction.type == TransactionType.expense ? "-" : ""}${numToCurrency(transaction.amount)}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelLarge!
+                                        .copyWith(color: typeToColor(transaction.type)),
+                                  ),
+                                  TextSpan(
+                                    text: "€",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelSmall!
+                                        .copyWith(color: typeToColor(transaction.type)),
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 12),
-                              transaction.type == Type.transfer
-                                  ? Row(
-                                      children: [
-                                        Text(
-                                          account.name,
-                                          style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                                                color: Theme.of(context).colorScheme.primary,
-                                              ),
-                                        ),
-                                        const Spacer(),
-                                        Text(
-                                          accountTransfer!.name,
-                                          style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                                                color: Theme.of(context).colorScheme.primary,
-                                              ),
-                                        ),
-                                      ],
-                                    )
-                                  : Row(
-                                      children: [
-                                        if (category != null)
-                                          Text(
-                                            category.name,
-                                            style:
-                                                Theme.of(context).textTheme.labelMedium!.copyWith(
-                                                      color: Theme.of(context).colorScheme.primary,
-                                                    ),
-                                          ),
-                                        const Spacer(),
-                                        Text(
-                                          account.name,
-                                          style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                                                color: Theme.of(context).colorScheme.primary,
-                                              ),
-                                        ),
-                                      ],
-                                    ),
-                              const SizedBox(height: 11),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            if (transaction.categoryName != null)
+                              Text(
+                                transaction.categoryName!,
+                                style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                                      color: Theme.of(context).colorScheme.primary,
+                                    ),
+                              ),
+                            const Spacer(),
+                            Text(
+                              transaction.type == TransactionType.transfer
+                                  ? "${transaction.bankAccountName}→${transaction.bankAccountTransferName}"
+                                  : transaction.bankAccountName!,
+                              style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                                    color: Theme.of(context).colorScheme.primary,
+                                  ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 11),
                       ],
                     ),
                   ),
-                ),
+                ],
               ),
-              if (transactions.length != i + 1)
-                Divider(
-                  height: 1,
-                  indent: 12,
-                  endIndent: 12,
-                  color: Theme.of(context).colorScheme.primary.withOpacity(0.4),
-                ),
-            ],
-          );
-        },
-      ),
+            ),
+          ),
+        ),
+        if (!last)
+          Container(
+            color: Theme.of(context).colorScheme.background,
+            child: Divider(
+              height: 1,
+              indent: 12,
+              endIndent: 12,
+              color: Theme.of(context).colorScheme.primary.withOpacity(0.4),
+            ),
+          ),
+      ],
     );
   }
 }

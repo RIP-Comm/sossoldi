@@ -1,30 +1,47 @@
 import 'package:flutter/material.dart';
 import "package:flutter_riverpod/flutter_riverpod.dart";
-import 'package:flutter/services.dart';
 
+import '../../../constants/functions.dart';
 import "../../../constants/style.dart";
-import "../../../constants/functions.dart";
 import '../../../model/transaction.dart';
 import '../../../providers/transactions_provider.dart';
-import '../../../utils/decimal_text_input_formatter.dart';
 import 'account_selector.dart';
 import 'type_tab.dart';
 
-class AmountSection extends ConsumerWidget with Functions {
-  const AmountSection({
-    required this.amountController,
-    Key? key,
-  }) : super(key: key);
+class AmountSection extends ConsumerStatefulWidget {
+  const AmountSection(
+    this.amountController, {
+    super.key,
+  });
 
   final TextEditingController amountController;
 
+  @override
+  ConsumerState<AmountSection> createState() => _AmountSectionState();
+}
+
+class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
   static const List<String> _titleList = ['Income', 'Expense', 'Transfer'];
 
+  List<bool> _typeToggleState = [false, true, false];
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void initState() {
+    final selectedType = ref.read(transactionTypeProvider);
+    setState(() {
+      if (selectedType == TransactionType.income) {
+        _typeToggleState = [true, false, false];
+      } else if (selectedType == TransactionType.transfer) {
+        _typeToggleState = [false, false, true];
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final trsncTypeList = ref.watch(transactionTypeList);
-    final trnscTypes = ref.watch(transactionTypesProvider);
-    final selectedType = trsncTypeList[trnscTypes.indexOf(true)];
+    final selectedType = ref.watch(transactionTypeProvider);
 
     return Container(
       color: Theme.of(context).colorScheme.surface,
@@ -41,11 +58,16 @@ class AmountSection extends ConsumerWidget with Functions {
             child: ToggleButtons(
               direction: Axis.horizontal,
               onPressed: (int index) {
-                List<bool> list = trnscTypes;
-                for (int i = 0; i < 3; i++) {
-                  list[i] = i == index;
+                List<bool> newSelection = [];
+                for (TransactionType type in trsncTypeList) {
+                  if (type == trsncTypeList[index]) {
+                    newSelection.add(true);
+                    ref.read(transactionTypeProvider.notifier).state = type;
+                  } else {
+                    newSelection.add(false);
+                  }
                 }
-                ref.read(transactionTypesProvider.notifier).state = [...list];
+                setState(() => _typeToggleState = newSelection);
               },
               borderRadius: const BorderRadius.all(Radius.circular(4)),
               renderBorder: false,
@@ -57,18 +79,18 @@ class AmountSection extends ConsumerWidget with Functions {
                 minWidth: (MediaQuery.of(context).size.width - 36) / 3,
                 maxWidth: (MediaQuery.of(context).size.width - 36) / 3,
               ),
-              isSelected: trnscTypes,
+              isSelected: _typeToggleState,
               children: List.generate(
-                trnscTypes.length,
+                _typeToggleState.length,
                 (index) => TypeTab(
-                  trnscTypes[index],
+                  _typeToggleState[index],
                   _titleList[index],
                   typeToColor(trsncTypeList[index]),
                 ),
               ),
             ),
           ),
-          if (selectedType == Type.transfer)
+          if (selectedType == TransactionType.transfer)
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
               child: SizedBox(
@@ -82,10 +104,7 @@ class AmountSection extends ConsumerWidget with Functions {
                           const SizedBox(height: 8),
                           Text(
                             "FROM:",
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelMedium!
-                                .copyWith(
+                            style: Theme.of(context).textTheme.labelMedium!.copyWith(
                                   color: grey1,
                                 ),
                           ),
@@ -130,9 +149,7 @@ class AmountSection extends ConsumerWidget with Functions {
                                     Container(
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
+                                        color: Theme.of(context).colorScheme.secondary,
                                       ),
                                       padding: const EdgeInsets.all(4.0),
                                       child: const Icon(
@@ -144,10 +161,7 @@ class AmountSection extends ConsumerWidget with Functions {
                                     const Spacer(),
                                     Text(
                                       ref.watch(bankAccountProvider)!.name,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall!
-                                          .copyWith(
+                                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                             color: grey1,
                                           ),
                                     ),
@@ -161,17 +175,13 @@ class AmountSection extends ConsumerWidget with Functions {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () => ref
-                          .read(transactionsProvider.notifier)
-                          .switchAccount(),
+                      onTap: () => ref.read(transactionsProvider.notifier).switchAccount(),
                       child: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Expanded(
-                              child: VerticalDivider(width: 1, color: grey2)),
+                          Expanded(child: VerticalDivider(width: 1, color: grey2)),
                           Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 2, horizontal: 20),
+                            padding: EdgeInsets.symmetric(vertical: 2, horizontal: 20),
                             child: Icon(
                               Icons.change_circle,
                               size: 32,
@@ -191,10 +201,7 @@ class AmountSection extends ConsumerWidget with Functions {
                           const SizedBox(height: 8),
                           Text(
                             "TO:",
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelMedium!
-                                .copyWith(
+                            style: Theme.of(context).textTheme.labelMedium!.copyWith(
                                   color: grey1,
                                 ),
                           ),
@@ -202,7 +209,6 @@ class AmountSection extends ConsumerWidget with Functions {
                           Material(
                             child: InkWell(
                               onTap: () {
-                                FocusManager.instance.primaryFocus?.unfocus();
                                 FocusManager.instance.primaryFocus?.unfocus();
                                 showModalBottomSheet(
                                   context: context,
@@ -224,6 +230,7 @@ class AmountSection extends ConsumerWidget with Functions {
                                       // to
                                       provider: bankAccountTransferProvider,
                                       scrollController: controller,
+                                      fromAccount: ref.watch(bankAccountProvider)?.id,
                                     ),
                                   ),
                                 );
@@ -240,15 +247,9 @@ class AmountSection extends ConsumerWidget with Functions {
                                     const Icon(Icons.sort, color: grey2),
                                     const Spacer(),
                                     Text(
-                                      ref
-                                              .watch(
-                                                  bankAccountTransferProvider)
-                                              ?.name ??
+                                      ref.watch(bankAccountTransferProvider)?.name ??
                                           "Select account",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall!
-                                          .copyWith(
+                                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                             color: grey1,
                                           ),
                                     ),
@@ -268,7 +269,7 @@ class AmountSection extends ConsumerWidget with Functions {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
             child: TextField(
-              controller: amountController,
+              controller: widget.amountController,
               decoration: InputDecoration(
                 hintText: "0",
                 border: InputBorder.none,
@@ -279,11 +280,8 @@ class AmountSection extends ConsumerWidget with Functions {
                     .headlineMedium!
                     .copyWith(color: typeToColor(selectedType)),
               ),
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
-              inputFormatters: <TextInputFormatter>[
-                DecimalTextInputFormatter(decimalDigits: 2)
-              ],
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              // inputFormatters: [DecimalTextInputFormatter(decimalDigits: 2)],
               autofocus: false,
               textAlign: TextAlign.center,
               cursorColor: grey1,
@@ -292,8 +290,6 @@ class AmountSection extends ConsumerWidget with Functions {
                 fontSize: 58,
                 fontWeight: FontWeight.bold,
               ),
-              onChanged: (value) => ref.read(amountProvider.notifier).state =
-                  currencyToNum(value),
             ),
           ),
         ],

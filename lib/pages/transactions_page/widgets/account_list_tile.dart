@@ -1,8 +1,10 @@
 import "package:flutter/material.dart";
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/style.dart';
+import 'accounts_tab.dart';
 
-class AccountListTile extends StatelessWidget {
+class AccountListTile extends ConsumerWidget {
   const AccountListTile({
     super.key,
     required this.title,
@@ -12,7 +14,6 @@ class AccountListTile extends StatelessWidget {
     required this.percent,
     required this.color,
     required this.icon,
-    required this.notifier,
     required this.index,
   });
 
@@ -23,134 +24,113 @@ class AccountListTile extends StatelessWidget {
   final double percent;
   final Color color;
   final IconData icon;
-  final ValueNotifier<int> notifier;
   final int index;
 
-  /// Toogle the box to expand or collapse
-  void _toogleExpand() {
-    if (notifier.value == index) {
-      notifier.value = -1;
-    } else {
-      notifier.value = index;
-    }
-  }
-
   @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: notifier,
-      builder: (context, value, child) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            GestureDetector(
-              onTap: _toogleExpand,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  color: color.withAlpha(90),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectedAccountIndex = ref.watch(selectedAccountIndexProvider);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        GestureDetector(
+          onTap: () {
+            if (selectedAccountIndex == index) {
+              ref.invalidate(selectedAccountIndexProvider);
+            } else {
+              ref.read(selectedAccountIndexProvider.notifier).state = index;
+            }
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+              color: color.withAlpha(90),
+            ),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 8.0,
+              vertical: 16.0,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: color,
+                  ),
+                  child: Icon(
+                    icon,
+                    color: Colors.white,
+                  ),
                 ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0,
-                  vertical: 16.0,
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: color,
-                      ),
-                      child: Icon(
-                        icon,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(width: 8.0),
-                    Expanded(
-                      child: Column(
+                const SizedBox(width: 8.0),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                title,
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                              Text(
-                                "${amount.toStringAsFixed(2)} €",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge
-                                    ?.copyWith(
-                                        color: (amount > 0) ? green : red),
-                              ),
-                            ],
+                          Text(
+                            title,
+                            style: Theme.of(context).textTheme.titleMedium,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "$nTransactions transactions",
-                                style: Theme.of(context).textTheme.labelLarge,
-                              ),
-                              Text(
-                                "${percent.toStringAsFixed(2)}%",
-                                style: Theme.of(context).textTheme.labelLarge,
-                              ),
-                            ],
+                          Text(
+                            "${amount.toStringAsFixed(2)} €",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(color: (amount > 0) ? green : red),
                           ),
                         ],
                       ),
-                    ),
-                    const SizedBox(width: 8.0),
-                    Icon(
-                      (notifier.value == index)
-                          ? Icons.expand_more
-                          : Icons.chevron_right,
-                    ),
-                  ],
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "$nTransactions transactions",
+                            style: Theme.of(context).textTheme.labelLarge,
+                          ),
+                          Text(
+                            "${percent.toStringAsFixed(2)}%",
+                            style: Theme.of(context).textTheme.labelLarge,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+                const SizedBox(width: 8.0),
+                Icon(
+                  (selectedAccountIndex == index) ? Icons.expand_more : Icons.chevron_right,
+                ),
+              ],
             ),
-            ExpandedSection(
-              expand: notifier.value == index,
-              child: Container(
-                color: white,
-                height: 70.0 * nTransactions,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: (nTransactions > 0)
-                      ? List.generate(
-                          2 * nTransactions - 1,
-                          (i) {
-                            if (i % 2 == 0) {
-                              return TransactionRow(
-                                account: transactions[i ~/ 2]["account"],
-                                amount: transactions[i ~/ 2]["amount"],
-                                category: transactions[i ~/ 2]["category"],
-                                title: transactions[i ~/ 2]["title"],
-                              );
-                            } else {
-                              return const Divider(
-                                height: 1,
-                                thickness: 1,
-                                indent: 15,
-                                endIndent: 15,
-                              );
-                            }
-                          },
-                        )
-                      : [],
-                ),
+          ),
+        ),
+        ExpandedSection(
+          expand: selectedAccountIndex == index,
+          child: Container(
+            color: white,
+            height: 70.0 * nTransactions,
+            child: ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: nTransactions,
+              separatorBuilder: (context, index) => const Divider(
+                height: 1,
+                thickness: 1,
+                indent: 15,
+                endIndent: 15,
               ),
-            )
-          ],
-        );
-      },
+              itemBuilder: (context, index) {
+                return TransactionRow(
+                  transaction: transactions[index],
+                );
+              },
+            ),
+          ),
+        )
+      ],
     );
   }
 }
@@ -158,16 +138,10 @@ class AccountListTile extends StatelessWidget {
 class TransactionRow extends StatelessWidget {
   const TransactionRow({
     super.key,
-    required this.title,
-    required this.category,
-    required this.amount,
-    required this.account,
+    required this.transaction,
   });
 
-  final String title;
-  final String category;
-  final double amount;
-  final String account;
+  final Map<String, dynamic> transaction;
 
   @override
   Widget build(BuildContext context) {
@@ -187,15 +161,15 @@ class TransactionRow extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      title,
+                      transaction['title'],
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(
-                      "${amount.toStringAsFixed(2)} €",
+                      "${transaction['amount'].toStringAsFixed(2)} €",
                       style: Theme.of(context)
                           .textTheme
                           .bodyLarge
-                          ?.copyWith(color: (amount > 0) ? green : red),
+                          ?.copyWith(color: (transaction['amount'] > 0) ? green : red),
                     ),
                   ],
                 ),
@@ -203,11 +177,11 @@ class TransactionRow extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      category.toUpperCase(),
+                      transaction['category'].toUpperCase(),
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     Text(
-                      account.toUpperCase(),
+                      transaction['account'].toUpperCase(),
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                   ],
@@ -236,8 +210,7 @@ class ExpandedSection extends StatefulWidget {
   State<ExpandedSection> createState() => _ExpandedSectionState();
 }
 
-class _ExpandedSectionState extends State<ExpandedSection>
-    with SingleTickerProviderStateMixin {
+class _ExpandedSectionState extends State<ExpandedSection> with SingleTickerProviderStateMixin {
   late AnimationController expandController;
   late Animation<double> animation;
 

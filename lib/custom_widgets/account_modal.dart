@@ -80,8 +80,6 @@ class AccountDialog extends StatelessWidget with Functions {
                   line2Data: <FlSpot>[],
                   colorLine2Data: Color(0xffffffff),
                   colorBackground: Color(0xff356CA3),
-                  maxY: 5.0,
-                  minY: -5.0,
                   maxDays: 30.0,
                 ),
                 const Padding(

@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
-import "package:flutter_riverpod/flutter_riverpod.dart";
 
 import "../../../constants/style.dart";
 
-class LabelListTile extends ConsumerWidget {
-  const LabelListTile({
-    required this.labelController,
-    required this.labelProvider,
-    Key? key,
-  }) : super(key: key);
+class LabelListTile extends StatelessWidget {
+  const LabelListTile(
+    this.labelController, {
+    super.key,
+  });
 
   final TextEditingController labelController;
-  final StateProvider labelProvider;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 16, 32, 16),
       child: Row(
@@ -47,10 +44,7 @@ class LabelListTile extends ConsumerWidget {
               controller: labelController,
               decoration: const InputDecoration(border: InputBorder.none),
               textAlign: TextAlign.end,
-              style:
-                  Theme.of(context).textTheme.bodySmall!.copyWith(color: grey1),
-              onChanged: (value) =>
-                  ref.read(labelProvider.notifier).state = value,
+              style: Theme.of(context).textTheme.bodySmall!.copyWith(color: grey1),
             ),
           ),
         ],

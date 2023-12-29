@@ -1,10 +1,11 @@
 // Satistics page.
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../constants/functions.dart';
 import '../constants/style.dart';
 import '../custom_widgets/line_chart.dart';
-import 'package:fl_chart/fl_chart.dart';
 import '../model/bank_account.dart';
 import '../providers/accounts_provider.dart';
 
@@ -108,8 +109,6 @@ class _StatsPageState extends ConsumerState<StatsPage> with Functions {
               line2Data: <FlSpot>[],
               colorLine2Data: Color(0xffB9BABC),
               colorBackground: Color(0xffF1F5F9),
-              maxY: 5.0,
-              minY: -5.0,
               maxDays: 12.0,
             ),
             Align(

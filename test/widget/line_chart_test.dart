@@ -68,8 +68,6 @@ void main() {
                     ],
                     colorLine2Data: const Color(0xffffffff),
                     colorBackground: const Color(0xff356CA3),
-                    maxY: upper,
-                    minY: lower,
                     maxDays: 31.0,
                   ),
         ),
@@ -80,7 +78,7 @@ void main() {
     expect(find.text('11'), findsOneWidget);
     expect(find.text('18'), findsOneWidget);
     expect(find.text('25'), findsOneWidget);
-      
+
     }
   );
 }

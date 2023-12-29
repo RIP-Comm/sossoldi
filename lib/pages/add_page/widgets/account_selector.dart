@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../constants/constants.dart';
-import '../../../constants/style.dart';
 import '../../../constants/functions.dart';
+import '../../../constants/style.dart';
 import '../../../model/bank_account.dart';
 import '../../../providers/accounts_provider.dart';
 
@@ -10,18 +11,19 @@ class AccountSelector extends ConsumerStatefulWidget {
   const AccountSelector({
     required this.provider,
     required this.scrollController,
-    Key? key,
-  }) : super(key: key);
+    this.fromAccount,
+    super.key,
+  });
 
   final StateProvider provider;
   final ScrollController scrollController;
+  final int? fromAccount;
 
   @override
   ConsumerState<AccountSelector> createState() => _AccountSelectorState();
 }
 
-class _AccountSelectorState extends ConsumerState<AccountSelector>
-    with Functions {
+class _AccountSelectorState extends ConsumerState<AccountSelector> with Functions {
   @override
   Widget build(BuildContext context) {
     final accountsList = ref.watch(accountsProvider);
@@ -84,9 +86,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
                                     ? Icon(
                                         icon,
                                         size: 24.0,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .background,
+                                        color: Theme.of(context).colorScheme.background,
                                       )
                                     : const SizedBox(),
                               ),
@@ -102,8 +102,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
                         );
                       },
                     ),
-                    loading: () =>
-                        const Center(child: CircularProgressIndicator()),
+                    loading: () => const Center(child: CircularProgressIndicator()),
                     error: (err, stack) => Text('Error: $err'),
                   ),
                 ),
@@ -124,17 +123,14 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    separatorBuilder: (context, index) =>
-                        const Divider(height: 1, color: grey1),
+                    separatorBuilder: (context, index) => const Divider(height: 1, color: grey1),
                     itemBuilder: (context, i) {
                       BankAccount account = accounts[i];
                       IconData? icon = accountIconList[account.symbol];
                       Color? color = accountColorListTheme[account.color];
                       return ListTile(
-                        tileColor: Theme.of(context).colorScheme.surface,
-                        onTap: () =>
-                            ref.read(widget.provider.notifier).state = account,
-                        contentPadding: const EdgeInsets.all(12.0),
+                        onTap: () => ref.read(widget.provider.notifier).state = account,
+                        enabled: account.id != widget.fromAccount,
                         leading: Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
@@ -145,20 +141,11 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
                               ? Icon(
                                   icon,
                                   size: 24.0,
-                                  color:
-                                      Theme.of(context).colorScheme.background,
+                                  color: Theme.of(context).colorScheme.background,
                                 )
                               : const SizedBox(),
                         ),
-                        title: Text(
-                          account.name,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge!
-                              .copyWith(
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                        ),
+                        title: Text(account.name),
                         trailing: (ref.watch(widget.provider)?.id == account.id)
                             ? Icon(
                                 Icons.done,
@@ -168,8 +155,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
                       );
                     },
                   ),
-                  loading: () =>
-                      const Center(child: CircularProgressIndicator()),
+                  loading: () => const Center(child: CircularProgressIndicator()),
                   error: (err, stack) => Text('Error: $err'),
                 ),
               ],

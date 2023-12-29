@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import '../constants/style.dart';
 import '../model/transaction.dart';
 
 mixin Functions {
   String numToCurrency(num? value) {
     if (value == null) return '';
-    return value.toStringAsFixed(2).replaceAll(".", ",");
+    return value.toStringAsFixed(2);
   }
 
   num currencyToNum(String value) {
@@ -21,13 +22,13 @@ mixin Functions {
     return format.format(date);
   }
 
-  Color typeToColor(Type type) {
+  Color typeToColor(TransactionType type) {
     switch (type) {
-      case Type.income:
+      case TransactionType.income:
         return green;
-      case Type.expense:
+      case TransactionType.expense:
         return red;
-      case Type.transfer:
+      case TransactionType.transfer:
         return blue3;
       default:
         return blue3;
