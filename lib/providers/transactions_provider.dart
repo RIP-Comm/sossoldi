@@ -50,6 +50,7 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
       ref.invalidate(lastTransactionsProvider);
       // ignore: unused_result
       ref.refresh(dashboardProvider);
+      // ignore: unused_result
       ref.refresh(statisticsProvider);
     }
     final dateStart = ref.watch(filterDateStartProvider);
