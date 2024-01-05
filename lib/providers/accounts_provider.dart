@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sossoldi/model/transaction.dart';
 import '../constants/constants.dart';
 import '../model/bank_account.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 final mainAccountProvider = StateProvider<BankAccount?>((ref) => null);
 
@@ -9,6 +11,7 @@ final accountIconProvider = StateProvider<String>((ref) => accountIconList.keys.
 final accountColorProvider = StateProvider<int>((ref) => 0);
 final accountMainSwitchProvider = StateProvider<bool>((ref) => false);
 final countNetWorthSwitchProvider = StateProvider<bool>((ref) => true);
+final selectedAccountCurrentMonthDailyBalanceProvider = StateProvider<List<FlSpot>>((ref) => const []);
 
 class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
   @override
@@ -68,6 +71,18 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
     ref.read(accountIconProvider.notifier).state = account.symbol;
     ref.read(accountColorProvider.notifier).state = account.color;
     ref.read(accountMainSwitchProvider.notifier).state = account.mainAccount;
+
+    final currentMonthDailyBalance = await TransactionMethods()
+        .currentMonthDailyTransactions(accountId: account.id!);
+
+    double runningTotal = 0;
+
+    ref.read(selectedAccountCurrentMonthDailyBalanceProvider.notifier).state =
+        currentMonthDailyBalance.map((e) {
+      runningTotal += e['income'] - e['expense'];
+      return FlSpot(double.parse(e['day'].substring(8)) - 1,
+          double.parse(runningTotal.toStringAsFixed(2)));
+    }).toList();
   }
 
   Future<void> removeAccount(int accountId) async {
@@ -80,6 +95,7 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
 
   void reset() {
     ref.invalidate(selectedAccountProvider);
+    ref.invalidate(selectedAccountCurrentMonthDailyBalanceProvider);
     ref.invalidate(accountIconProvider);
     ref.invalidate(accountColorProvider);
     ref.invalidate(accountMainSwitchProvider);
