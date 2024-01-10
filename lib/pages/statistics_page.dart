@@ -98,13 +98,16 @@ class _StatsPageState extends ConsumerState<StatsPage> with Functions {
             ),
             ref.watch(statisticsProvider).when(
               data: (value) {
-                return LineChartWidget(
-                  line1Data: curretYearMontlyTransactions,
-                  colorLine1Data: Color(0xff00152D),
-                  line2Data: <FlSpot>[],
-                  colorLine2Data: Color(0xffB9BABC),
-                  colorBackground: Color(0xffF1F5F9),
-                  maxDays: 12.0,
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: LineChartWidget(
+                    line1Data: curretYearMontlyTransactions,
+                    colorLine1Data: Color(0xff00152D),
+                    line2Data: <FlSpot>[],
+                    colorLine2Data: Color(0xffB9BABC),
+                    colorBackground: Color(0xffF1F5F9),
+                    maxDays: 12.0,
+                  ),
                 );
               },
               error: (err, stack) => Text('Error: $err'), 

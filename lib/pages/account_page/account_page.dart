@@ -44,13 +44,16 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                     ),
                   ),
                   const Padding(padding: EdgeInsets.all(8.0)),
-                  LineChartWidget(
-                    line1Data: accountTransactions,
-                    colorLine1Data: const Color(0xffffffff),
-                    line2Data: const <FlSpot>[],
-                    colorLine2Data: const Color(0xffffffff),
-                    colorBackground: blue5,
-                    maxDays: 30.0,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: LineChartWidget(
+                      line1Data: accountTransactions,
+                      colorLine1Data: const Color(0xffffffff),
+                      line2Data: const <FlSpot>[],
+                      colorLine2Data: const Color(0xffffffff),
+                      colorBackground: blue5,
+                      maxDays: DateUtils.getDaysInMonth(DateTime.now().year, DateTime.now().month).toDouble(),
+                    ),
                   ),
                 ],
               ),

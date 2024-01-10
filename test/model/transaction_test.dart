@@ -9,6 +9,8 @@ import 'package:sossoldi/model/base_entity.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
 import 'package:sqflite_common_ffi/sqflite_ffi.dart' as sqfliteFfi;
 
+import '../test_utils/sql_utils.dart';
+
 void main() {
   test('Test Copy Transaction', () {
     Transaction t = Transaction(
@@ -142,36 +144,10 @@ void main() {
 
     tearDownAll(() {
       sossoldiDatabase.close();
-    });
-
-    String createInsertSqlTransaction(
-      {  
-        DateTime? date,
-        double amount = 100,
-        String type = 'OUT',
-        String note = 'Test Transaction',
-        int idCategory = 10, // Out
-        int idBankAccount = 70, // Revolut
-        int? idBankTransfert,
-        bool recurring = false,
-        Recurrence? recurrencyType, 
-        int? recurrencyPayDay, 
-        DateTime? recurrencyFrom,
-        DateTime? recurrencyTo, 
-        DateTime? createdAt, 
-        DateTime? updatedAt
-      }
-    ){
-        date = date ?? DateTime.now();
-        createdAt = date;
-        updatedAt = date;
-        int recurringInt = recurring ? 1 : 0;
-        return '''('$date', $amount, '$type', '$note', $idCategory, $idBankAccount, $idBankTransfert, $recurringInt, $recurrencyType, $recurrencyPayDay, $recurrencyFrom, $recurrencyTo, '$createdAt', '$updatedAt')''';
-    }
-    
+    });    
 
     test("lastMonthDailyTransactions", () async {
-      sossoldiDatabase.fillDemoData();
+      await sossoldiDatabase.fillDemoData();
 
       try{
         await db.transaction((txn) async {
@@ -224,7 +200,7 @@ void main() {
     });
 
     test("currentMonthDailyTransactions", () async {
-      sossoldiDatabase.fillDemoData();
+      await sossoldiDatabase.fillDemoData();
 
       try{
         await db.transaction((txn) async {
@@ -277,7 +253,7 @@ void main() {
     });
 
     test("currentMonthDailyTransactions single account", () async {
-      sossoldiDatabase.fillDemoData();
+      await sossoldiDatabase.fillDemoData();
 
       try{
         await db.transaction((txn) async {
@@ -335,7 +311,7 @@ void main() {
     });
 
     test("currentYearMontlyTransactions", () async {
-      sossoldiDatabase.fillDemoData();
+      await sossoldiDatabase.fillDemoData();
 
       try{
         await db.transaction((txn) async {
@@ -391,5 +367,8 @@ void main() {
       expect(result[1]['expense'], 300);
     });
 
+    
+
   });
+  
 }
