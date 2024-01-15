@@ -6,7 +6,8 @@ Download and install Git from [https://git-scm.com/](https://git-scm.com/).
 
 ## Step 2: Install Flutter
 
-1. Download the Flutter SDK from [https://flutter.dev/docs/get-started/install](https://flutter.dev/docs/get-started/install).
+Installing flutter is slightly different between Windows, MacOS and Linux. Flutter already has a good step-by-step that you can find [here](https://docs.flutter.dev/get-started/install)
+1. Download the Flutter SDK from [flutter.dev/docs/get-started/install](https://flutter.dev/docs/get-started/install).
 2. Extract the downloaded archive to a location on your machine.
 3. Add the Flutter `bin` directory to your system's `PATH` variable.
 
