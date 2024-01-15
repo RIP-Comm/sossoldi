@@ -88,6 +88,72 @@ class _LineChartSample2State extends State<LineChartWidget> {
             break;
         }
         break;
+      case 28:
+        switch (value.toInt()) {
+          case 6:
+            text = Text('7', style: style);
+            break;
+          case 12:
+            text = Text('13', style: style);
+            break;
+          case 17:
+            text = Text('18', style: style);
+            break;
+          case 23:
+            text = Text('24', style: style);
+            break;
+          case 27:
+            text = Text('28', style: style);
+            break;
+          default:
+            text = Text('', style: style);
+            break;
+        }
+        break;
+      case 29:
+        switch (value.toInt()) {
+          case 6:
+            text = Text('7', style: style);
+            break;
+          case 12:
+            text = Text('13', style: style);
+            break;
+          case 17:
+            text = Text('18', style: style);
+            break;
+          case 23:
+            text = Text('24', style: style);
+            break;
+          case 27:
+            text = Text('28', style: style);
+            break;
+          default:
+            text = Text('', style: style);
+            break;
+        }
+        break;
+      case 30:
+        switch (value.toInt()) {
+          case 5:
+            text = Text('6', style: style);
+            break;
+          case 11:
+            text = Text('12', style: style);
+            break;
+          case 17:
+            text = Text('18', style: style);
+            break;
+          case 23:
+            text = Text('24', style: style);
+            break;
+          case 29:
+            text = Text('30', style: style);
+            break;
+          default:
+            text = Text('', style: style);
+            break;
+        }
+        break;
       case 31:
         switch (value.toInt()) {
           case 3:

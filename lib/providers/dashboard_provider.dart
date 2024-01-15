@@ -9,8 +9,8 @@ final currentMonthListProvider = StateProvider<List<FlSpot>>((ref) => const []);
 final lastMonthListProvider = StateProvider<List<FlSpot>>((ref) => const []);
 
 final dashboardProvider = FutureProvider<void>((ref) async {
-  final currentMonth = await TransactionMethods().currentMonthTransactions();
-  final lastMonth = await TransactionMethods().lastMonthTransactions();
+  final currentMonth = await TransactionMethods().currentMonthDailyTransactions();
+  final lastMonth = await TransactionMethods().lastMonthDailyTransactions();
 
   ref.read(incomeProvider.notifier).state =
       currentMonth.fold(0, (previousValue, element) => previousValue + element['income']);

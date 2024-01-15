@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sossoldi/providers/statistics_provider.dart';
 
 import '../constants/style.dart';
 import '../custom_widgets/alert_dialog.dart';
@@ -211,6 +212,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   ref.refresh(budgetsProvider);
                   ref.refresh(dashboardProvider);
                   ref.refresh(lastTransactionsProvider);
+                  ref.refresh(statisticsProvider);
                   showSuccessDialog(context, "DB Cleared, and DEMO data added");
                 });
               },

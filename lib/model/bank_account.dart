@@ -147,7 +147,7 @@ class BankAccountMethods extends SossoldiDatabase {
     final db = await database;
 
     final orderByASC = '${BankAccountFields.createdAt} ASC';
-    final where = '${BankAccountFields.active} = 1';
+    final where = '${BankAccountFields.active} = 1 AND ${TransactionFields.recurring} = 0';
 
     final result = await db.rawQuery('''
       SELECT b.*, (b.${BankAccountFields.startingValue} +
@@ -251,4 +251,54 @@ class BankAccountMethods extends SossoldiDatabase {
       return 0;
     }
   }
+
+  Future<List> accountDailyBalance(int accountId, {
+    DateTime? dateRangeStart,
+    DateTime? dateRangeEnd,
+  }) async {
+    final db = await database;
+
+    final accountFilter = "(${TransactionFields.idBankAccount} = $accountId OR ${TransactionFields.idBankAccountTransfer} = $accountId)";
+    final recurrentFilter = "(${TransactionFields.recurring} = 0)";
+    final periodFilterEnd = dateRangeEnd != null
+        ? "strftime('%Y-%m-%d', ${TransactionFields.date}) < '${dateRangeEnd.toString().substring(0, 10)}'"
+        : "";
+    final filters = [periodFilterEnd, accountFilter, recurrentFilter];
+    final sqlFilters = filters.where((filter) => filter != "").join(" AND ");
+
+    final resultQuery = await db.rawQuery('''
+      SELECT
+        strftime('%Y-%m-%d', ${TransactionFields.date}) as day,
+        SUM(CASE WHEN (${TransactionFields.type} = 'IN' OR (${TransactionFields.type} = 'TRSF' AND ${TransactionFields.idBankAccountTransfer} = $accountId)) THEN ${TransactionFields.amount} ELSE 0 END) as income,
+        SUM(CASE WHEN ${TransactionFields.type} = 'OUT' OR (${TransactionFields.type} = 'TRSF' AND ${TransactionFields.idBankAccount} = $accountId) THEN ${TransactionFields.amount} ELSE 0 END) as expense
+      FROM "$transactionTable"
+      WHERE $sqlFilters
+      GROUP BY day
+    ''');
+
+    final statritngValue = await db.rawQuery(
+      '''
+      SELECT ${BankAccountFields.startingValue} as Value
+      FROM $bankAccountTable
+      WHERE ${BankAccountFields.id} = $accountId
+    '''
+    );
+
+    double runningTotal = statritngValue[0]['Value'] as double;
+
+    var result = resultQuery.map((e) {
+        runningTotal += double.parse(e['income'].toString()) - double.parse(e['expense'].toString());
+        return {
+          "day": e["day"], 
+          "balance": runningTotal
+          };
+      }).toList();
+
+    if(dateRangeStart != null){
+      return result.where((element) => dateRangeStart.isBefore(DateTime.parse(element["day"].toString()).add(const Duration(days: 1)))).toList();
+    }
+
+    return result;
+  }
+
 }
