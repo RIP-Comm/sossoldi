@@ -24,6 +24,7 @@ jobs:
           cache-path: ${{ runner.tool_cache }}/flutter
 
       - run: |
+          flutter upgrade
           flutter pub get
           flutter test
           flutter build apk
