@@ -1,18 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'pages/account_page/account_page.dart';
+import 'pages/accounts/account_list.dart';
+import 'pages/accounts/add_account.dart';
+import 'pages/add_page/add_page.dart';
+import 'pages/categories/add_category.dart';
 import 'pages/categories/category_list.dart';
 import 'pages/general_options/general_settings.dart';
+import 'pages/home_page.dart';
 import 'pages/more_info_page/collaborators_page.dart';
 import 'pages/more_info_page/more_info.dart';
 import 'pages/more_info_page/privacy_policy.dart';
-import 'pages/accounts/account_list.dart';
-import 'pages/categories/add_category.dart';
-import 'pages/accounts/add_account.dart';
-import 'pages/add_page/widgets/recurrence_selector.dart';
-import 'pages/add_page/widgets/account_selector.dart';
-import 'pages/add_page/widgets/category_selector.dart';
-import 'pages/home_page.dart';
+import 'pages/notifications/notifications_settings.dart';
 import 'pages/planning_page/planning_page.dart';
 import 'pages/settings_page.dart';
 import 'pages/statistics_page.dart';
@@ -25,10 +25,10 @@ Route<dynamic> makeRoute(RouteSettings settings) {
       return _materialPageRoute(settings.name, const Structure());
     case '/dashboard':
       return _materialPageRoute(settings.name, const HomePage());
+    case '/add-page':
+      return _materialPageRoute(settings.name, const AddPage());
     case '/transactions':
       return _materialPageRoute(settings.name, const TransactionsPage());
-    case '/categoryselect':
-      return _cupertinoPageRoute(settings.name, const CategorySelector());
     case '/category-list':
       return _cupertinoPageRoute(settings.name, const CategoryList());
     case '/add-category':
@@ -39,15 +39,12 @@ Route<dynamic> makeRoute(RouteSettings settings) {
       return _cupertinoPageRoute(settings.name, const PrivacyPolicyPage());
     case '/collaborators':
       return _cupertinoPageRoute(settings.name, const CollaboratorsPage());
+    case '/account':
+      return _materialPageRoute(settings.name, const AccountPage());
     case '/account-list':
       return _cupertinoPageRoute(settings.name, const AccountList());
     case '/add-account':
       return _cupertinoPageRoute(settings.name, const AddAccount());
-    case '/accountselect':
-      return _cupertinoPageRoute(
-          settings.name, AccountSelector(settings.arguments as StateProvider));
-    case '/recurrenceselect':
-      return _cupertinoPageRoute(settings.name, const RecurrenceSelector());
     case '/planning':
       return _materialPageRoute(settings.name, const PlanningPage());
     case '/graphs':
@@ -55,7 +52,9 @@ Route<dynamic> makeRoute(RouteSettings settings) {
     case '/settings':
       return _noTransitionPageRoute(settings.name, const SettingsPage());
     case '/general-settings':
-      return _noTransitionPageRoute(settings.name, const GeneralSettingsPage());
+      return _cupertinoPageRoute(settings.name, const GeneralSettingsPage());
+    case '/notifications-settings':
+      return _cupertinoPageRoute(settings.name, const NotificationsSettings());
     default:
       throw 'Route is not defined';
   }

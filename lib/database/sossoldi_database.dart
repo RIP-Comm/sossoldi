@@ -1,29 +1,32 @@
+import 'dart:math'; // used for random number generation in demo data
+
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-import 'dart:math'; // used for random number generation in demo data
-
 // Models
 import '../model/bank_account.dart';
-import '../model/transaction.dart';
-import '../model/recurring_transaction_amount.dart';
-import '../model/category_transaction.dart';
 import '../model/budget.dart';
+import '../model/category_transaction.dart';
 import '../model/currency.dart';
+import '../model/recurring_transaction_amount.dart';
+import '../model/transaction.dart';
 
 class SossoldiDatabase {
   static final SossoldiDatabase instance = SossoldiDatabase._init();
   static Database? _database;
+  static String dbName = 'sossoldi.db';
 
   // Zero args constructor needed to extend this class
-  SossoldiDatabase();
+  SossoldiDatabase({String? dbName}){
+    dbName = dbName ?? 'sossoldi.db';
+  }
 
   SossoldiDatabase._init();
 
   Future<Database> get database async {
     if (_database != null) return _database!;
 
-    _database = await _initDB('sossoldi.db');
+    _database = await _initDB(dbName);
     return _database!;
   }
 
@@ -37,7 +40,7 @@ class SossoldiDatabase {
     return await openDatabase(path, version: 1, onCreate: _createDB);
   }
 
-  Future _createDB(Database database, int version) async {
+  static Future _createDB(Database database, int version) async {
     const integerPrimaryKeyAutoincrement = 'INTEGER PRIMARY KEY AUTOINCREMENT';
     const integerNotNull = 'INTEGER NOT NULL';
     const integer = 'INTEGER';
@@ -211,6 +214,7 @@ class SossoldiDatabase {
         randomType = 'TRSF';
         randomNote = 'Transfer';
         randomAccount = 70; // sender account is hardcoded with the one that receives our fake salary
+        randomCategory = 0; // no category for transfers
         idBankAccountTransfer = accounts[rnd.nextInt(accounts.length)];
         randomAmount = (fakeSalary/100)*70;
 

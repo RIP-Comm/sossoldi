@@ -1,49 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
+import '../../../providers/transactions_provider.dart';
 import '../../../utils/formatted_date_range.dart';
 
-class MonthSelector extends StatelessWidget {
+class MonthSelector extends ConsumerWidget with Functions {
   const MonthSelector({
-    required this.amount,
-    required this.startDate,
-    required this.endDate,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
-  final double amount;
-  final ValueNotifier<DateTime> startDate;
-  final ValueNotifier<DateTime> endDate;
   final double height = 60;
 
-  // last day of the month
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final totalAmount = ref.watch(totalAmountProvider);
+    final startDate = ref.watch(filterDateStartProvider);
+    final endDate = ref.watch(filterDateEndProvider);
     return GestureDetector(
       onTap: () async {
         // pick range of dates
         DateTimeRange? range = await showDateRangePicker(
           context: context,
-          firstDate: DateTime(2010, 1, 1),
-          lastDate: DateTime(2030, 12, 31),
+          firstDate: DateTime(1970, 1, 1),
+          lastDate: DateTime(2100, 12, 31),
           currentDate: DateTime.now(),
           initialDateRange: DateTimeRange(
-            start: startDate.value,
-            end: endDate.value,
+            start: startDate,
+            end: endDate,
           ),
           builder: (context, child) => Theme(
             data: Theme.of(context).copyWith(
-              appBarTheme: Theme.of(context)
-                  .appBarTheme
-                  .copyWith(backgroundColor: blue1),
+              appBarTheme: Theme.of(context).appBarTheme.copyWith(backgroundColor: blue1),
             ),
             child: child!,
           ),
         );
         if (range != null) {
-          startDate.value = range.start;
-          endDate.value = range.end;
+          ref.read(filterDateStartProvider.notifier).state = range.start;
+          ref.read(filterDateEndProvider.notifier).state = range.end;
         }
       },
       child: Container(
@@ -59,10 +55,11 @@ class MonthSelector extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 // move to previous month
-                startDate.value = DateTime(startDate.value.year,
-                    startDate.value.month - 1, startDate.value.day);
-                endDate.value = DateTime(
-                    startDate.value.year, startDate.value.month + 1, 0);
+                ref.read(filterDateStartProvider.notifier).state =
+                    DateTime(startDate.year, startDate.month - 1, startDate.day);
+                ref.read(filterDateEndProvider.notifier).state =
+                    DateTime(startDate.year, startDate.month, 0);
+                ref.read(transactionsProvider.notifier).filterTransactions();
               },
               child: Container(
                 height: height,
@@ -74,34 +71,43 @@ class MonthSelector extends StatelessWidget {
                 ),
               ),
             ),
-            ValueListenableBuilder(
-              valueListenable: startDate,
-              builder: (context, value, child) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      getFormattedDateRange(startDate.value, endDate.value),
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    Text(
-                      "$amount €",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge
-                          ?.copyWith(color: (amount > 0) ? green : red),
-                    ),
-                  ],
-                );
-              },
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  getFormattedDateRange(startDate, endDate),
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: numToCurrency(totalAmount),
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge!
+                            .copyWith(color: totalAmount >= 0 ? green : red),
+                      ),
+                      TextSpan(
+                        text: "€",
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelLarge!
+                            .copyWith(color: totalAmount >= 0 ? green : red)
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
             GestureDetector(
               onTap: () {
                 // move to next month
-                startDate.value = DateTime(startDate.value.year,
-                    startDate.value.month + 1, startDate.value.day);
-                endDate.value = DateTime(
-                    startDate.value.year, startDate.value.month + 1, 0);
+                ref.read(filterDateStartProvider.notifier).state =
+                    DateTime(startDate.year, startDate.month + 1, startDate.day);
+                ref.read(filterDateEndProvider.notifier).state =
+                    DateTime(startDate.year, startDate.month + 2, 0);
+                ref.read(transactionsProvider.notifier).filterTransactions();
               },
               child: Container(
                 height: height,

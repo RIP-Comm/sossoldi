@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../custom_widgets/default_container.dart';
 
+import '../../custom_widgets/default_card.dart';
 
 class MoreInfoPage extends ConsumerStatefulWidget {
   const MoreInfoPage({super.key});
@@ -36,21 +36,12 @@ class _MoreInfoPageState extends ConsumerState<MoreInfoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.background,
-        elevation: 0,
-        centerTitle: true,
         leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_new,
-            color: Color(0XFF7DA1C4),
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-            // Return to previous page
-          },
+          icon: const Icon(Icons.arrow_back_ios_new),
+          onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          'More Info',
+          'App Info',
           style: Theme.of(context)
               .textTheme
               .headlineLarge!
@@ -59,52 +50,49 @@ class _MoreInfoPageState extends ConsumerState<MoreInfoPage> {
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        child: Column(
-          children: [
-            ListView.separated(
-              itemCount: moreInfoOptions.length,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              separatorBuilder: (context, index) => const SizedBox(height: 16),
-              itemBuilder: (context, i) {
-                List option = moreInfoOptions[i];
-                return DefaultContainer(
-                  onTap: () {
-                    option[2] != null
-                        ? Navigator.of(context).pushNamed(option[2] as String)
-                        : print("click");
-                  },
-                  child: Row(
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        child: ListView.separated(
+          itemCount: moreInfoOptions.length,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          separatorBuilder: (context, index) => const SizedBox(height: 16),
+          itemBuilder: (context, i) {
+            List option = moreInfoOptions[i];
+            return DefaultCard(
+              onTap: () {
+                if(option[2] != null) {
+                  Navigator.of(context).pushNamed(option[2] as String);
+                }
+              },
+              child: Row(
+                children: [
+                  const SizedBox(width: 12.0),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(width: 12.0),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            option[0].toString(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge!
-                                .copyWith(color: Theme.of(context).colorScheme.primary),
-                            textAlign: TextAlign.left,
-                          ),
-                          Text(
-                            option[1].toString(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall!
-                                .copyWith(color: Theme.of(context).colorScheme.primary),
-                            textAlign: TextAlign.left,
-                          ),
-                        ],
+                      Text(
+                        option[0].toString(),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge!
+                            .copyWith(color: Theme.of(context).colorScheme.primary),
+                        textAlign: TextAlign.left,
+                      ),
+                      Text(
+                        option[1].toString(),
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(color: Theme.of(context).colorScheme.primary),
+                        textAlign: TextAlign.left,
                       ),
                     ],
                   ),
-                );
-              },
-            ),
-          ],
+                ],
+              ),
+            );
+          },
         ),
       ),
     );

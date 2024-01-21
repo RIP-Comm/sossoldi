@@ -17,12 +17,12 @@ jobs:
       - name: Flutter action
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.13.9'
+          flutter-version: '3.16.5'
           channel: stable
           cache: true
           cache-key: flutter
           cache-path: ${{ runner.tool_cache }}/flutter
-        
+
       - run: |
           flutter pub get
           flutter test

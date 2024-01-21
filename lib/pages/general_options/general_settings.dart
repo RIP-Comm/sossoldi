@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:sossoldi/providers/theme_provider.dart';
 
 import '../../constants/style.dart';
+import '../../providers/theme_provider.dart';
 
 class GeneralSettingsPage extends ConsumerStatefulWidget {
   const GeneralSettingsPage({super.key});
 
   @override
-  ConsumerState<GeneralSettingsPage> createState() =>
-      _GeneralSettingsPageState();
+  ConsumerState<GeneralSettingsPage> createState() => _GeneralSettingsPageState();
 }
 
 class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
@@ -39,18 +38,9 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
     final appThemeState = ref.watch(appThemeStateNotifier);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.background,
-        elevation: 0,
-        centerTitle: true,
         leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_new,
-            color: Color(0XFF7DA1C4),
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-            // Return to previous page
-          },
+          icon: const Icon(Icons.arrow_back_ios_new),
+          onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           'General Settings',
@@ -68,8 +58,10 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
             Row(
               children: [
                 Text("Appearance",
-                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        color: Theme.of(context).colorScheme.primary)),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge!
+                        .copyWith(color: Theme.of(context).colorScheme.primary)),
                 const Spacer(),
                 CircleAvatar(
                     radius: 30.0,
@@ -79,19 +71,13 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                       onPressed: () {
                         // Toggle dark mode using the provider
                         if (appThemeState.isDarkModeEnabled) {
-                          ref
-                              .read(appThemeStateNotifier.notifier)
-                              .setLightTheme();
+                          ref.read(appThemeStateNotifier.notifier).setLightTheme();
                         } else {
-                          ref
-                              .read(appThemeStateNotifier.notifier)
-                              .setDarkTheme();
+                          ref.read(appThemeStateNotifier.notifier).setDarkTheme();
                         }
                       },
                       icon: Icon(
-                        appThemeState.isDarkModeEnabled
-                            ? Icons.dark_mode
-                            : Icons.light_mode,
+                        appThemeState.isDarkModeEnabled ? Icons.dark_mode : Icons.light_mode,
                         size: 25.0,
                         color: Theme.of(context).colorScheme.background,
                       ),
@@ -102,8 +88,10 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
             Row(
               children: [
                 Text("Currency",
-                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        color: Theme.of(context).colorScheme.primary)),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge!
+                        .copyWith(color: Theme.of(context).colorScheme.primary)),
                 const Spacer(),
                 GestureDetector(
                     onTap: () {
@@ -116,8 +104,7 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                             child: Text(
                           NumberFormat().simpleCurrencySymbol(selectedCurrency),
                           style: TextStyle(
-                              color: Theme.of(context).colorScheme.background,
-                              fontSize: 25),
+                              color: Theme.of(context).colorScheme.background, fontSize: 25),
                         )))),
               ],
             ),
@@ -212,10 +199,7 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                             backgroundColor: blue5,
                             child: Text(currencies.elementAt(index)[0],
                                 style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .background,
-                                    fontSize: 20)),
+                                    color: Theme.of(context).colorScheme.background, fontSize: 20)),
                           ),
                           title: Text(
                             currencies.elementAt(index)[1],

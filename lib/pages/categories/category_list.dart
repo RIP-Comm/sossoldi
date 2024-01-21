@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../constants/constants.dart';
-import '../../../custom_widgets/default_container.dart';
 import '../../../constants/functions.dart';
 import '../../../model/category_transaction.dart';
 import '../../../providers/categories_provider.dart';
+import '../../custom_widgets/default_card.dart';
 
 class CategoryList extends ConsumerStatefulWidget {
-  const CategoryList({Key? key}) : super(key: key);
+  const CategoryList({super.key});
 
   @override
   ConsumerState<CategoryList> createState() => _CategoryListState();
@@ -18,12 +19,17 @@ class _CategoryListState extends ConsumerState<CategoryList> with Functions {
   Widget build(BuildContext context) {
     final categorysList = ref.watch(categoriesProvider);
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        title: const Text("Category"),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new),
+          onPressed: () => Navigator.pop(context),
+        ),
         actions: [
           IconButton(
-            onPressed: () => Navigator.of(context).pushNamed('/add-category'),
+            onPressed: () {
+              ref.read(categoriesProvider.notifier).reset();
+              Navigator.of(context).pushNamed('/add-category');
+            },
             icon: const Icon(Icons.add_circle),
             splashRadius: 28,
           ),
@@ -42,10 +48,10 @@ class _CategoryListState extends ConsumerState<CategoryList> with Functions {
                       shape: BoxShape.circle,
                       color: Theme.of(context).colorScheme.primary,
                     ),
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: Icon(
                       Icons.list_alt,
-                      size: 16.0,
+                      size: 24.0,
                       color: Theme.of(context).colorScheme.background,
                     ),
                   ),
@@ -70,10 +76,9 @@ class _CategoryListState extends ConsumerState<CategoryList> with Functions {
                   CategoryTransaction category = categorys[i];
                   IconData? icon = iconList[category.symbol];
                   Color? color = categoryColorListTheme[category.color];
-                  return DefaultContainer(
-                    onTap: () async {
-                      // TODO: fix this
-                      await ref.read(categoriesProvider.notifier).selectedCategory(category);
+                  return DefaultCard(
+                    onTap: () {
+                      ref.read(categoriesProvider.notifier).selectedCategory(category);
                       Navigator.of(context).pushNamed('/add-category');
                     },
                     child: Row(
