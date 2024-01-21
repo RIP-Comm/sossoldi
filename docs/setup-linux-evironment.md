@@ -1,4 +1,4 @@
-# Dev Environment Configuration
+# Linux Dev Environment Configuration
 
 The instructions below provide guidance on configuring the development environment for a Flutter application
 on a **Linux** platform, specifically **Pop!_OS**.
