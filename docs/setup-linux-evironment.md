@@ -5,9 +5,10 @@ on a **Linux** platform, specifically **Pop!_OS**.
 
 It's essential to note that there are multiple options for the required software,
 and various installation methods can be employed.
-You have the flexibsuility to choose an alternative approach that suits your preferences.
+You have the flexibility to choose an alternative approach that suits your preferences.
 
-## Prerequisites
+
+## What we will use
 
 - **Operating System:**
     - Pop!_OS (derived from Ubuntu)
@@ -15,15 +16,16 @@ You have the flexibsuility to choose an alternative approach that suits your pre
     - Flutter SDK
     - Android SDK
     - Java JDK 17
-- **Integrated Development Environment (IDE):**
+- **IDE (Integrated Development Environment:**
     - IntelliJ IDEA Community Edition
+- **Android device** (recommended, but not mandatory)
+  - tested with Android 13
 
-Ensure that you have a substantial amount of available space, at least 8 to 10 GB, to accommodate the IDE and the SDKs.
+Make sure you have a substantial amount of available space on your pc, at least 8 to 10 GB,
+to accommodate the IDE and the SDKs.
 
 
-## Configuration
-
-### 1. Clone the project
+## STEP 1: Clone the project
 
 Clone the project to a location of your choice:   
 
@@ -32,7 +34,7 @@ cd ~/projects
 git clone https://github.com/RIP-Comm/sossoldi.git
 ```
 
-## 2. Install IntelliJ IDEA Community Edition via JetBrains Toolbox
+## STEP 2: Install IntelliJ IDEA Community Edition via JetBrains Toolbox
 
 1. **Download JetBrains Toolbox App**: You can download the .tar.gz Toolbox App from the [official JetBrains Toolbox App webpage](https://www.jetbrains.com/toolbox-app/).
 
@@ -64,7 +66,7 @@ git clone https://github.com/RIP-Comm/sossoldi.git
 4. **Select IntelliJ IDEA Community Edition**: Click on the Toolbox App icon and select IntelliJ IDEA Community Edition for installation.
 
 
-## 3. Install Flutter SDK 
+## STEP 3: Install Flutter SDK 
 
 In the [official Linux installation guide](https://docs.flutter.dev/get-started/install/linux) follow:
 
@@ -114,7 +116,7 @@ In the [official Linux installation guide](https://docs.flutter.dev/get-started/
 > ```
 
 
-## 4. Check what you need
+## STEP 4: Check what you need
 
 Now, run the following command:
 
@@ -161,7 +163,7 @@ This will help you identify if you need to install:
 - Java JDK
 
 
-## 5. Install Linux dependencies
+## STEP 5: Install Linux dependencies
 
 Install the following dependencies using the package manager:
 
@@ -171,9 +173,9 @@ sudo apt-get install clang cmake git ninja-build pkg-config libgtk-3-dev liblzma
 
 These dependencies should be sufficient for your Linux environment.
 
-## 6. Install Android dependencies
+## STEP 6: Install Android dependencies
 
-### Download Java JDK
+### 6.1 Download Java JDK
 
 1. When you open the project in IntelliJ IDEA, it may suggest you to set the JDK 17. If it’s not already installed, it will suggest you to download it and by default, it will be placed in the `~/.jdks` directory.
 2. If any suggestion appeared, navigate to `File | Project Structure` and select `Project`.
@@ -197,7 +199,7 @@ export PATH="$PATH:$JAVA_HOME"
 > ```
 
 
-### Installation for Android SDK
+### 6.2 Installation for Android SDK
 
 1. Launch **IntelliJ IDEA**.
 2. Initiate the creation of a new Android Project.
@@ -213,7 +215,7 @@ flutter config --android-sdk /path/of/installation/Android/Sdk
 **Note**: Please replace `/path/of/installation/` with your actual Android SDK path (for example with your `development` directory used previously)
 
 
-### Install cmdline-tools with Intellij
+### 6.3 Install cmdline-tools with Intellij
 
 1. Open **IntelliJ IDEA**.
 2. Navigate to **Languages & Frameworks**.
@@ -223,13 +225,13 @@ flutter config --android-sdk /path/of/installation/Android/Sdk
 
 ![Screenshot_Intellij_cmdline-tools.png](assets/Screenshot_Intellij_cmdline-tools.png)
 
-## 7. Accept licence
+## STEP 7: Accept licence
 
  ```
  flutter doctor --android-licenses
  ```
 
-## 8. Enable Android device
+## STEP 8: Enable Android device
 
 If you want to run the application on your Android real device:
 
@@ -239,7 +241,7 @@ On your device:
 3. Connect your device to the pc and select `File Transfer/Android Auto` 
 
 
-## 9. Final check
+## STEP 9: Final check
 
 At this point your environment should be configurated.
 
@@ -298,7 +300,7 @@ On your pc:
 3. `Android Studio` and `Chrome` sections are not mandatory to build and run the project.
 
 
-## 10. Build and run the project
+## STEP 10: Build and run the project
 
 1. Navigate to the project directory of `sossoldi`.
 2. Connect your device to the pc and select `File Transfer/Android Auto`
