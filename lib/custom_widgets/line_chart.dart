@@ -17,10 +17,7 @@ class LineChartWidget extends StatefulWidget {
   final List<FlSpot> line2Data; //this should be a list of Flspot(x,y), if you only need one just put an empty list
   final Color colorLine2Data;
 
-  //Contains the number of days of the month
-  //final double maxDays;
-
-  // Used to decide the bottom labal
+  // Used to decide the bottom label
   final Period period;
   final int currentMonthDays = DateUtils.getDaysInMonth(DateTime.now().year, DateTime.now().month);
   final int nXLabel = 10;
