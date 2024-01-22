@@ -31,7 +31,7 @@ Once you've finished making all the changes you can create a commit to your fork
 
 ## Step 3: Create a PR
 
-If everything went to plan now you should be able to create a PR explaing the changes that you made, in order to facilitate the review process make sure to explain what you have done and add useful screenschoots (if you prefer you can just share the link *{your-username}.github.io/sossoldi/*). 
+If everything went to plan now you should be able to create a PR explaining the changes that you made, in order to facilitate the review process make sure to explain what you have done and add useful screenshots (if you prefer you can just share the link *{your-username}.github.io/sossoldi/*). 
 After the review process your PR will be merged and your changes should be online!
 
 *Don't know how to open a PR? Don't worry, you can read the [guide](PR-guide.md)*
