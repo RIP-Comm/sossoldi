@@ -95,7 +95,7 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                 const Spacer(),
                 GestureDetector(
                     onTap: () {
-                      sellectCurrency();
+                      selectCurrency();
                     },
                     child: CircleAvatar(
                         radius: 30.0,
@@ -169,7 +169,7 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
             )));
   }
 
-  sellectCurrency() {
+  selectCurrency() {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -183,7 +183,7 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
               width: 220,
               child: ListView.builder(
                   itemCount: currencies.length,
-                  physics: const NeverScrollableScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   shrinkWrap: true,
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
