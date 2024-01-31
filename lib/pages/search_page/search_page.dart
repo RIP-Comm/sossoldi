@@ -93,12 +93,12 @@ class _SearchPage extends ConsumerState<SearchPage> {
                               showCheckmark: false,
                               avatar: const Icon(Icons.trending_up_outlined),
                               label: const Text("Income"),
-                              selected: filterType["IN"]!,
+                              selected: filterType["IN"] ?? false,
                               selectedColor: Colors.lightBlue,
                               onSelected: (_) {
                                 ref.read(typeFilterProvider.notifier).state = {
                                   ...filterType,
-                                  "IN": !filterType["IN"]!
+                                  "IN": filterType["IN"] != null ? !filterType["IN"]! : false
                                 };
                                 _updateFutureTransactions();
                               },
@@ -110,12 +110,12 @@ class _SearchPage extends ConsumerState<SearchPage> {
                               showCheckmark: false,
                               avatar: const Icon(Icons.trending_down_rounded),
                               label: const Text("Outcome"),
-                              selected: filterType["OUT"]!,
+                              selected: filterType["OUT"] ?? false,
                               selectedColor: Colors.lightBlue,
                               onSelected: (_) {
                                 ref.read(typeFilterProvider.notifier).state = {
                                   ...filterType,
-                                  "OUT": !filterType["OUT"]!
+                                  "OUT": filterType["OUT"] != null ? !filterType["OUT"]! : false
                                 };
                                 _updateFutureTransactions();
                               },
@@ -127,12 +127,12 @@ class _SearchPage extends ConsumerState<SearchPage> {
                               showCheckmark: false,
                               avatar: const Icon(Icons.compare_arrows_rounded),
                               label: const Text("Transfer"),
-                              selected: filterType["TR"]!,
+                              selected: filterType["TR"] ?? false,
                               selectedColor: Colors.lightBlue,
                               onSelected: (_) {
                                 ref.read(typeFilterProvider.notifier).state = {
                                   ...filterType,
-                                  "TR": !filterType["TR"]!
+                                  "TR": filterType["TR"] != null ? !filterType["TR"]! : false
                                 };
                                 _updateFutureTransactions();
                               },
@@ -156,7 +156,7 @@ class _SearchPage extends ConsumerState<SearchPage> {
                                         horizontal: 10),
                                     child: FilterChip(
                                         label: Text(account.name),
-                                        selected: filterAccountList[account.id] != null && filterAccountList[account.id]!,
+                                        selected: filterAccountList[account.id] ?? false,
                                         onSelected: (_) {
                                           ref.read(filterAccountProvider.notifier).state = {
                                             ...ref.read(filterAccountProvider),
