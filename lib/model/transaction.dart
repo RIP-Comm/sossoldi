@@ -208,7 +208,10 @@ class TransactionMethods extends SossoldiDatabase {
       DateTime? date,
       DateTime? dateRangeStart,
       DateTime? dateRangeEnd,
-      int? limit}) async {
+      int? limit,
+      List<String>? transactionType,
+      String? label,
+      Map<int, bool>? bankAccounts}) async {
     final db = await database;
 
     String? where = type != null ? '${TransactionFields.type} = $type' : null; // filter type
@@ -220,12 +223,43 @@ class TransactionMethods extends SossoldiDatabase {
           "${where != null ? '$where and ' : ''}strftime('%Y-%m-%d', ${TransactionFields.date}) BETWEEN '${dateRangeStart.toString().substring(0, 10)}' and '${dateRangeEnd.toIso8601String().substring(0, 10)}'";
     }
 
+    if(label != null && label.isNotEmpty) {
+      where = "${where != null ? '$where and ' : ''}t.note LIKE '%$label%' "; 
+    }
+
+    if(transactionType != null) {
+      final transactionTypeList = transactionType.map((e) => "'$e'").toList();
+      where = "${where != null ? '$where and ' : ''}t.type IN (${transactionTypeList.join(',')}) "; 
+    }
+
+    if(bankAccounts != null && !bankAccounts.entries.every((element) => element.value == false)) {
+      print(bankAccounts.entries);
+      final bankAccountIds = bankAccounts.entries.where((bankAccount) => bankAccount.value).map((e) => "'${e.key}'");
+      where = "${where != null ? '$where and ' : ''}t.${TransactionFields.idBankAccount} IN (${bankAccountIds.join(',')}) "; 
+    }
+print(where);
     final orderByDESC = '${TransactionFields.date} DESC';
 
     final result =
         await db.rawQuery('SELECT t.*, c.${CategoryTransactionFields.name} as ${TransactionFields.categoryName}, c.${CategoryTransactionFields.color} as ${TransactionFields.categoryColor}, c.${CategoryTransactionFields.symbol} as ${TransactionFields.categorySymbol}, b1.${BankAccountFields.name} as ${TransactionFields.bankAccountName}, b2.${BankAccountFields.name} as ${TransactionFields.bankAccountTransferName} FROM "$transactionTable" as t LEFT JOIN $categoryTransactionTable as c ON t.${TransactionFields.idCategory} = c.${CategoryTransactionFields.id} LEFT JOIN $bankAccountTable as b1 ON t.${TransactionFields.idBankAccount} = b1.${BankAccountFields.id} LEFT JOIN $bankAccountTable as b2 ON t.${TransactionFields.idBankAccountTransfer} = b2.${BankAccountFields.id} ${where != null ? "WHERE $where" : ""} ORDER BY $orderByDESC ${limit != null ? "LIMIT $limit" : ""}');
 
     return result.map((json) => Transaction.fromJson(json)).toList();
+  }
+
+  Future<List<String>> getAllLabels({String? label}) async {
+    final db = await database;
+
+    String where = "";
+    final orderByDESC = '${TransactionFields.date} DESC';
+
+    if(label != null){
+      where = "t.note LIKE '%$label%' ";
+    }
+
+    final result =
+        await db.rawQuery('SELECT DISTINCT LOWER(t.note) as note FROM "$transactionTable" as t LEFT JOIN $bankAccountTable as b1 ON t.${TransactionFields.idBankAccount} = b1.${BankAccountFields.id} LEFT JOIN $bankAccountTable as b2 ON t.${TransactionFields.idBankAccountTransfer} = b2.${BankAccountFields.id} ${where.isNotEmpty ? "WHERE $where" : ""} ORDER BY $orderByDESC');
+        
+    return (result).map((x) => x["note"] as String).toList();
   }
 
   Future<List> currentMonthDailyTransactions({int? accountId}) async {

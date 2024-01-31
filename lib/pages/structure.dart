@@ -49,7 +49,7 @@ class _StructureState extends ConsumerState<Structure> {
         leading: Padding(
           padding: const EdgeInsets.only(left: 16),
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () => Navigator.of(context).pushNamed('/search'),
             style: ElevatedButton.styleFrom(
               elevation: 0,
               shape: const CircleBorder(),
