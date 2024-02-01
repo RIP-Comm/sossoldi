@@ -18,12 +18,13 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
   @override
   Future<List<BankAccount>> build() async {
     ref.watch(mainAccountProvider.notifier).state = await _getMainAccount();
-    _getAccounts().then((value) => {
-      for(BankAccount account in value) {
-        ref.watch(filterAccountProvider.notifier).state[account.id!] = true
-      }
-    });
-    return _getAccounts();
+    List<BankAccount> accounts = await _getAccounts();
+
+    for (BankAccount account in accounts) {
+      ref.watch(filterAccountProvider.notifier).state[account.id!] = account.mainAccount;
+    }
+
+    return accounts;
   }
 
   Future<List<BankAccount>> _getAccounts() async {

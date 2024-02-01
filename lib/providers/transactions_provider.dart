@@ -42,7 +42,7 @@ final typeFilterProvider = StateProvider<Map<String, bool>>(
   (ref) => {
     'IN': true,
     'OUT': true,
-    'TR': true,
+    'TR': false,
   },
 );
 

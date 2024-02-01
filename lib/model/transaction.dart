@@ -233,11 +233,10 @@ class TransactionMethods extends SossoldiDatabase {
     }
 
     if(bankAccounts != null && !bankAccounts.entries.every((element) => element.value == false)) {
-      print(bankAccounts.entries);
       final bankAccountIds = bankAccounts.entries.where((bankAccount) => bankAccount.value).map((e) => "'${e.key}'");
       where = "${where != null ? '$where and ' : ''}t.${TransactionFields.idBankAccount} IN (${bankAccountIds.join(',')}) "; 
     }
-print(where);
+
     final orderByDESC = '${TransactionFields.date} DESC';
 
     final result =

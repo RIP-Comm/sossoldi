@@ -81,8 +81,10 @@ class _SearchPage extends ConsumerState<SearchPage> {
                         _updateFutureTransactions();
                       },
                     )),
+                Container(
+                    alignment: Alignment.centerLeft,
+                    child:const Text("SEARCH FOR:")),
                 Row(children: [
-                  const Text("Search for: "),
                   Expanded(
                     child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
@@ -91,14 +93,23 @@ class _SearchPage extends ConsumerState<SearchPage> {
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: FilterChip(
                               showCheckmark: false,
-                              avatar: const Icon(Icons.trending_up_outlined),
-                              label: const Text("Income"),
+                              label: Text("Income", style: TextStyle(color: filterType["IN"]! ? Colors.white : Colors.blue)),
                               selected: filterType["IN"] ?? false,
-                              selectedColor: Colors.lightBlue,
+                              backgroundColor: Colors.white,
+                              selectedColor: Colors.blue.shade700,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50),
+                                side: BorderSide(
+                                  color: Colors.blue.shade700,
+                                  width: 2.0,
+                                ),
+                              ),
                               onSelected: (_) {
                                 ref.read(typeFilterProvider.notifier).state = {
                                   ...filterType,
-                                  "IN": filterType["IN"] != null ? !filterType["IN"]! : false
+                                  "IN": filterType["IN"] != null
+                                      ? !filterType["IN"]!
+                                      : false
                                 };
                                 _updateFutureTransactions();
                               },
@@ -108,14 +119,23 @@ class _SearchPage extends ConsumerState<SearchPage> {
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: FilterChip(
                               showCheckmark: false,
-                              avatar: const Icon(Icons.trending_down_rounded),
-                              label: const Text("Outcome"),
+                              label: Text("Outcome", style: TextStyle(color: filterType["OUT"]! ? Colors.white : Colors.blue)),
                               selected: filterType["OUT"] ?? false,
-                              selectedColor: Colors.lightBlue,
+                              backgroundColor: Colors.white,
+                              selectedColor: Colors.blue.shade700,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50),
+                                side: BorderSide(
+                                  color: Colors.blue.shade700,
+                                  width: 2.0,
+                                ),
+                              ),
                               onSelected: (_) {
                                 ref.read(typeFilterProvider.notifier).state = {
                                   ...filterType,
-                                  "OUT": filterType["OUT"] != null ? !filterType["OUT"]! : false
+                                  "OUT": filterType["OUT"] != null
+                                      ? !filterType["OUT"]!
+                                      : false
                                 };
                                 _updateFutureTransactions();
                               },
@@ -125,14 +145,23 @@ class _SearchPage extends ConsumerState<SearchPage> {
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: FilterChip(
                               showCheckmark: false,
-                              avatar: const Icon(Icons.compare_arrows_rounded),
-                              label: const Text("Transfer"),
+                              label: Text("Transfer", style: TextStyle(color: filterType["TR"]! ? Colors.white : Colors.blue)),
                               selected: filterType["TR"] ?? false,
-                              selectedColor: Colors.lightBlue,
+                              backgroundColor: Colors.white,
+                              selectedColor: Colors.blue.shade700,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50),
+                                side: BorderSide(
+                                  color: Colors.blue.shade700,
+                                  width: 2.0,
+                                ),
+                              ),
                               onSelected: (_) {
                                 ref.read(typeFilterProvider.notifier).state = {
                                   ...filterType,
-                                  "TR": filterType["TR"] != null ? !filterType["TR"]! : false
+                                  "TR": filterType["TR"] != null
+                                      ? !filterType["TR"]!
+                                      : false
                                 };
                                 _updateFutureTransactions();
                               },
@@ -141,9 +170,12 @@ class _SearchPage extends ConsumerState<SearchPage> {
                         ])),
                   )
                 ]),
+                Container(
+                    alignment: Alignment.centerLeft,
+                    child:
+                        const Text("SEARCH IN:")),
                 Row(
                   children: [
-                    const Text("Search in: "),
                     Expanded(
                       child: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
@@ -155,12 +187,35 @@ class _SearchPage extends ConsumerState<SearchPage> {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 10),
                                     child: FilterChip(
-                                        label: Text(account.name),
-                                        selected: filterAccountList[account.id] ?? false,
+                                        label: Text(account.name, style: TextStyle(color: filterAccountList[account.id]! ? Colors.white : Colors.blue)),
+                                        showCheckmark: false,
+                                        selected:
+                                            filterAccountList[account.id] ??
+                                                false,
+                                        backgroundColor: Colors.white,
+                                        selectedColor: Colors.blue.shade700,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                          side: BorderSide(
+                                            color: Colors.blue.shade700,
+                                            width: 2.0,
+                                          ),
+                                        ),
                                         onSelected: (_) {
-                                          ref.read(filterAccountProvider.notifier).state = {
+                                          ref
+                                              .read(filterAccountProvider
+                                                  .notifier)
+                                              .state = {
                                             ...ref.read(filterAccountProvider),
-                                            account.id!: ref.read(filterAccountProvider)[account.id] != null ? !ref.read(filterAccountProvider)[account.id]! : false
+                                            account.id!:
+                                                ref.read(filterAccountProvider)[
+                                                            account.id] !=
+                                                        null
+                                                    ? !ref.read(
+                                                            filterAccountProvider)[
+                                                        account.id]!
+                                                    : false
                                           };
                                           _updateFutureTransactions();
                                         }));
