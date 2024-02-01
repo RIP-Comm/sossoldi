@@ -106,7 +106,7 @@ class _StatsPageState extends ConsumerState<StatsPage> with Functions {
                     line2Data: <FlSpot>[],
                     colorLine2Data: Color(0xffB9BABC),
                     colorBackground: Color(0xffF1F5F9),
-                    maxDays: 12.0,
+                    period: Period.year,
                   ),
                 );
               },
