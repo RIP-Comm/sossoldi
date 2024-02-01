@@ -40,8 +40,8 @@ final filterDateEndProvider =
     StateProvider<DateTime>((ref) => DateTime(DateTime.now().year, DateTime.now().month + 1, 0));
 final typeFilterProvider = StateProvider<Map<String, bool>>(
   (ref) => {
-    'IN': true,
-    'OUT': true,
+    'IN': false,
+    'OUT': false,
     'TR': false,
   },
 );

@@ -93,7 +93,7 @@ class _SearchPage extends ConsumerState<SearchPage> {
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: FilterChip(
                               showCheckmark: false,
-                              label: Text("Income", style: TextStyle(color: filterType["IN"]! ? Colors.white : Colors.blue)),
+                              label: Text("Income", style: TextStyle(color: filterType["IN"]! ? Colors.white : Colors.blue.shade700)),
                               selected: filterType["IN"] ?? false,
                               backgroundColor: Colors.white,
                               selectedColor: Colors.blue.shade700,
@@ -119,7 +119,7 @@ class _SearchPage extends ConsumerState<SearchPage> {
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: FilterChip(
                               showCheckmark: false,
-                              label: Text("Outcome", style: TextStyle(color: filterType["OUT"]! ? Colors.white : Colors.blue)),
+                              label: Text("Outcome", style: TextStyle(color: filterType["OUT"]! ? Colors.white : Colors.blue.shade700)),
                               selected: filterType["OUT"] ?? false,
                               backgroundColor: Colors.white,
                               selectedColor: Colors.blue.shade700,
@@ -145,7 +145,7 @@ class _SearchPage extends ConsumerState<SearchPage> {
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: FilterChip(
                               showCheckmark: false,
-                              label: Text("Transfer", style: TextStyle(color: filterType["TR"]! ? Colors.white : Colors.blue)),
+                              label: Text("Transfer", style: TextStyle(color: filterType["TR"]! ? Colors.white : Colors.blue.shade700)),
                               selected: filterType["TR"] ?? false,
                               backgroundColor: Colors.white,
                               selectedColor: Colors.blue.shade700,
@@ -187,7 +187,7 @@ class _SearchPage extends ConsumerState<SearchPage> {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 10),
                                     child: FilterChip(
-                                        label: Text(account.name, style: TextStyle(color: filterAccountList[account.id]! ? Colors.white : Colors.blue)),
+                                        label: Text(account.name, style: TextStyle(color: filterAccountList[account.id]! ? Colors.white : Colors.blue.shade700)),
                                         showCheckmark: false,
                                         selected:
                                             filterAccountList[account.id] ??

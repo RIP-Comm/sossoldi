@@ -21,7 +21,7 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
     List<BankAccount> accounts = await _getAccounts();
 
     for (BankAccount account in accounts) {
-      ref.watch(filterAccountProvider.notifier).state[account.id!] = account.mainAccount;
+      ref.watch(filterAccountProvider.notifier).state[account.id!] = false;
     }
 
     return accounts;
