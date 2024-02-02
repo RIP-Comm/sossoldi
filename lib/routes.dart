@@ -14,6 +14,7 @@ import 'pages/more_info_page/more_info.dart';
 import 'pages/more_info_page/privacy_policy.dart';
 import 'pages/notifications/notifications_settings.dart';
 import 'pages/planning_page/planning_page.dart';
+import 'pages/search_page/search_page.dart';
 import 'pages/settings_page.dart';
 import 'pages/statistics_page.dart';
 import 'pages/structure.dart';
@@ -55,6 +56,8 @@ Route<dynamic> makeRoute(RouteSettings settings) {
       return _cupertinoPageRoute(settings.name, const GeneralSettingsPage());
     case '/notifications-settings':
       return _cupertinoPageRoute(settings.name, const NotificationsSettings());
+    case '/search':
+      return _materialPageRoute(settings.name, const SearchPage());
     default:
       throw 'Route is not defined';
   }

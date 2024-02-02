@@ -38,6 +38,13 @@ final filterDateStartProvider =
     StateProvider<DateTime>((ref) => DateTime(DateTime.now().year, DateTime.now().month, 1));
 final filterDateEndProvider =
     StateProvider<DateTime>((ref) => DateTime(DateTime.now().year, DateTime.now().month + 1, 0));
+final typeFilterProvider = StateProvider<Map<String, bool>>(
+  (ref) => {
+    'IN': false,
+    'OUT': false,
+    'TR': false,
+  },
+);
 
 class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transaction>> {
   @override
