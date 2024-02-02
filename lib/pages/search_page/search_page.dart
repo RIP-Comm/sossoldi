@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sossoldi/providers/accounts_provider.dart';
-import 'package:sossoldi/providers/transactions_provider.dart';
+import '../../../providers/accounts_provider.dart';
+import '../../../providers/transactions_provider.dart';
 import '../../custom_widgets/transactions_list.dart';
 import '../../model/transaction.dart';
 
