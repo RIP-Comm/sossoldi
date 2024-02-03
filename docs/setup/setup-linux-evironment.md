@@ -1,3 +1,9 @@
+---
+title: Linux Setup Guide
+layout: default
+nav_order: 4
+---
+
 # Linux Dev Environment Configuration
 
 The instructions below provide guidance on configuring the development environment for a Flutter application

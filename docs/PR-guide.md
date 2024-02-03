@@ -1,6 +1,6 @@
 ---
-title: Home
-layout: home
+title: How to open a PR
+layout: default
 nav_order: 2
 ---
 

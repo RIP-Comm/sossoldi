@@ -1,6 +1,6 @@
 ---
-title: Home
-layout: home
+title: Setup Guide
+layout: default
 nav_order: 3
 ---
 
