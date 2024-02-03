@@ -2,6 +2,7 @@
 title: Coding style
 layout: default
 nav_order: 4
+parent: How to contribute to the project
 ---
 
 # Resuable widget list

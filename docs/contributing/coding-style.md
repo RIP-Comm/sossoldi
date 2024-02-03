@@ -2,6 +2,7 @@
 title: Coding style
 layout: default
 nav_order: 3
+parent: How to contribute to the project
 ---
 
 # Coding style

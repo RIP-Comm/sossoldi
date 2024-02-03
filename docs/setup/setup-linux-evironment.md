@@ -2,6 +2,7 @@
 title: Linux Setup Guide
 layout: default
 nav_order: 4
+parent: Setup Guide
 ---
 
 # Linux Dev Environment Configuration
