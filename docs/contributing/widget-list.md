@@ -1,5 +1,5 @@
 ---
-title: Coding style
+title: Widget list
 layout: default
 nav_order: 4
 parent: How to contribute to the project
