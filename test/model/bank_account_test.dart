@@ -106,7 +106,7 @@ void main() {
     });
 
     test("selectAll", () async {
-      await sossoldiDatabase.fillDemoData();
+      await sossoldiDatabase.fillDemoData(countOfGeneratedTransaction: 2000);
 
       try{
         await db.transaction((txn) async {
@@ -172,7 +172,7 @@ void main() {
     });
 
     test("accountDailyBalance", () async {
-      await sossoldiDatabase.fillDemoData();
+      await sossoldiDatabase.fillDemoData(countOfGeneratedTransaction: 2000);
 
       try{
         await db.transaction((txn) async {
