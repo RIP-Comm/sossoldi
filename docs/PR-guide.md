@@ -1,3 +1,9 @@
+---
+title: Home
+layout: home
+nav_order: 2
+---
+
 # GitHub for beginners
 
 So you want to partecipate in our project but you don't know how? Don't worry, this guide is here for you.

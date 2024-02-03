@@ -1,3 +1,9 @@
+---
+title: How to contribute to the documentation
+layout: default
+nav_order: 4
+---
+
 # How to contribute to the documentation
 
 For our documentation we use GitHub Pages and this allows us to have a static page with all the info about the repo. This is very useful for use because it makes the docs easy to read and mantain by just using .md files that will then be converted to HTML. 

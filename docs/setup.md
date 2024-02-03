@@ -1,3 +1,9 @@
+---
+title: Home
+layout: home
+nav_order: 3
+---
+
 # Setup Guide
 
 ## Step 1: Install Git

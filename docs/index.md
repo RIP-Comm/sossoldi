@@ -1,6 +1,7 @@
 ---
 title: Home
 layout: home
+nav_order: 1
 ---
 
 **Sossoldi** is a free and open source wealth management / personal finance / Net Worth tracking app, made with Flutter.
