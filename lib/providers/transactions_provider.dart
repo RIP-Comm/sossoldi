@@ -5,6 +5,7 @@ import '../model/category_transaction.dart';
 import '../model/transaction.dart';
 import 'accounts_provider.dart';
 import 'dashboard_provider.dart';
+import 'statistics_provider.dart';
 
 final lastTransactionsProvider = FutureProvider<List<Transaction>>((ref) async {
   final transactions = await TransactionMethods().selectAll(limit: 5);
@@ -37,6 +38,13 @@ final filterDateStartProvider =
     StateProvider<DateTime>((ref) => DateTime(DateTime.now().year, DateTime.now().month, 1));
 final filterDateEndProvider =
     StateProvider<DateTime>((ref) => DateTime(DateTime.now().year, DateTime.now().month + 1, 0));
+final typeFilterProvider = StateProvider<Map<String, bool>>(
+  (ref) => {
+    'IN': false,
+    'OUT': false,
+    'TR': false,
+  },
+);
 
 class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transaction>> {
   @override
@@ -49,6 +57,8 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
       ref.invalidate(lastTransactionsProvider);
       // ignore: unused_result
       ref.refresh(dashboardProvider);
+      // ignore: unused_result
+      ref.refresh(statisticsProvider);
     }
     final dateStart = ref.watch(filterDateStartProvider);
     final dateEnd = ref.watch(filterDateEndProvider);

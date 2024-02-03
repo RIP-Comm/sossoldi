@@ -56,7 +56,7 @@ class AccountDialog extends StatelessWidget with Functions {
                 const Padding(
                   padding: EdgeInsets.all(8.0),
                 ),
-                const LineChartWidget(
+                LineChartWidget(
                   line1Data: [
                     FlSpot(0, 3),
                     FlSpot(1, 1.3),
@@ -80,7 +80,7 @@ class AccountDialog extends StatelessWidget with Functions {
                   line2Data: <FlSpot>[],
                   colorLine2Data: Color(0xffffffff),
                   colorBackground: Color(0xff356CA3),
-                  maxDays: 30.0,
+                  period: Period.month,
                 ),
                 const Padding(
                   padding: EdgeInsets.only(bottom: 14.0),

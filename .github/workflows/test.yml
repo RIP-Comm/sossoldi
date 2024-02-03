@@ -8,4 +8,4 @@ jobs:
     - uses: subosito/flutter-action@v2
       with:
         channel: 'stable'
-    - run: flutter test
+    - run: flutter test --concurrency=1

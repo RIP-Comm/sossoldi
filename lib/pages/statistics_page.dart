@@ -2,6 +2,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sossoldi/providers/statistics_provider.dart';
 
 import '../constants/functions.dart';
 import '../constants/style.dart';
@@ -20,6 +21,7 @@ class _StatsPageState extends ConsumerState<StatsPage> with Functions {
   @override
   Widget build(BuildContext context) {
     final accountList = ref.watch(accountsProvider);
+    final curretYearMontlyTransactions = ref.watch(currentYearMontlyTransactionsProvider);
 
     return ListView(
       children: [
@@ -94,23 +96,22 @@ class _StatsPageState extends ConsumerState<StatsPage> with Functions {
             const Padding(
               padding: EdgeInsets.all(8.0),
             ),
-            const LineChartWidget(
-              line1Data: [
-                FlSpot(0, 1),
-                FlSpot(1, 1.3),
-                FlSpot(2, 1.1),
-                FlSpot(3, 1.7),
-                FlSpot(4, 2.2),
-                FlSpot(5, 2.2),
-                FlSpot(6, 3.1),
-                FlSpot(7, 4.2),
-              ],
-              colorLine1Data: Color(0xff00152D),
-              line2Data: <FlSpot>[],
-              colorLine2Data: Color(0xffB9BABC),
-              colorBackground: Color(0xffF1F5F9),
-              maxDays: 12.0,
-            ),
+            ref.watch(statisticsProvider).when(
+              data: (value) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: LineChartWidget(
+                    line1Data: curretYearMontlyTransactions,
+                    colorLine1Data: Color(0xff00152D),
+                    line2Data: <FlSpot>[],
+                    colorLine2Data: Color(0xffB9BABC),
+                    colorBackground: Color(0xffF1F5F9),
+                    period: Period.year,
+                  ),
+                );
+              },
+              error: (err, stack) => Text('Error: $err'), 
+              loading: () => const SizedBox()),            
             Align(
               alignment: Alignment.centerLeft,
               child: Container(

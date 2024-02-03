@@ -18,6 +18,7 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
   @override
   Widget build(BuildContext context) {
     final account = ref.read(selectedAccountProvider);
+    final accountTransactions = ref.watch(selectedAccountCurrentMonthDailyBalanceProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -43,31 +44,17 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                     ),
                   ),
                   const Padding(padding: EdgeInsets.all(8.0)),
-                  const LineChartWidget(
-                    line1Data: [
-                      FlSpot(0, 3),
-                      FlSpot(1, 1.3),
-                      FlSpot(2, -2),
-                      FlSpot(3, -4.5),
-                      FlSpot(4, -5),
-                      FlSpot(5, -2.2),
-                      FlSpot(6, -3.1),
-                      FlSpot(7, -0.2),
-                      FlSpot(8, -4),
-                      FlSpot(9, -3),
-                      FlSpot(10, -2),
-                      FlSpot(11, -4),
-                      FlSpot(12, 3),
-                      FlSpot(13, 1.3),
-                      FlSpot(14, -2),
-                      FlSpot(15, -4.5),
-                      FlSpot(16, 2.5),
-                    ],
-                    colorLine1Data: Color(0xffffffff),
-                    line2Data: <FlSpot>[],
-                    colorLine2Data: Color(0xffffffff),
-                    colorBackground: blue5,
-                    maxDays: 30.0,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: LineChartWidget(
+                      line1Data: accountTransactions,
+                      colorLine1Data: const Color(0xffffffff),
+                      line2Data: const <FlSpot>[],
+                      colorLine2Data: const Color(0xffffffff),
+                      colorBackground: blue5,
+                      period: Period.month,
+                      minY: 0,
+                    ),
                   ),
                 ],
               ),

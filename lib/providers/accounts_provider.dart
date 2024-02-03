@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../constants/constants.dart';
 import '../model/bank_account.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 final mainAccountProvider = StateProvider<BankAccount?>((ref) => null);
 
@@ -9,12 +10,21 @@ final accountIconProvider = StateProvider<String>((ref) => accountIconList.keys.
 final accountColorProvider = StateProvider<int>((ref) => 0);
 final accountMainSwitchProvider = StateProvider<bool>((ref) => false);
 final countNetWorthSwitchProvider = StateProvider<bool>((ref) => true);
+final selectedAccountCurrentMonthDailyBalanceProvider = StateProvider<List<FlSpot>>((ref) => const []);
+final filterAccountProvider = StateProvider<Map<int, bool>>((ref) => {});
+
 
 class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
   @override
   Future<List<BankAccount>> build() async {
     ref.watch(mainAccountProvider.notifier).state = await _getMainAccount();
-    return _getAccounts();
+    List<BankAccount> accounts = await _getAccounts();
+
+    for (BankAccount account in accounts) {
+      ref.watch(filterAccountProvider.notifier).state[account.id!] = false;
+    }
+
+    return accounts;
   }
 
   Future<List<BankAccount>> _getAccounts() async {
@@ -68,6 +78,19 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
     ref.read(accountIconProvider.notifier).state = account.symbol;
     ref.read(accountColorProvider.notifier).state = account.color;
     ref.read(accountMainSwitchProvider.notifier).state = account.mainAccount;
+
+    final currentMonthDailyBalance = await BankAccountMethods()
+        .accountDailyBalance(
+          account.id!,
+          dateRangeStart: DateTime(DateTime.now().year, DateTime.now().month, 1), // beginnig of current month
+          dateRangeEnd: DateTime(DateTime.now().year, DateTime.now().month + 1, 1) // beginnig of next month
+        ); 
+
+    ref.read(selectedAccountCurrentMonthDailyBalanceProvider.notifier).state =
+        currentMonthDailyBalance.map((e) {
+      return FlSpot(double.parse(e['day'].substring(8)) - 1,
+          double.parse(e['balance'].toStringAsFixed(2)));
+    }).toList();
   }
 
   Future<void> removeAccount(int accountId) async {
@@ -80,6 +103,7 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
 
   void reset() {
     ref.invalidate(selectedAccountProvider);
+    ref.invalidate(selectedAccountCurrentMonthDailyBalanceProvider);
     ref.invalidate(accountIconProvider);
     ref.invalidate(accountColorProvider);
     ref.invalidate(accountMainSwitchProvider);

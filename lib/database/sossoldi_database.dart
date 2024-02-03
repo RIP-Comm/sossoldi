@@ -14,16 +14,19 @@ import '../model/transaction.dart';
 class SossoldiDatabase {
   static final SossoldiDatabase instance = SossoldiDatabase._init();
   static Database? _database;
+  static String dbName = 'sossoldi.db';
 
   // Zero args constructor needed to extend this class
-  SossoldiDatabase();
+  SossoldiDatabase({String? dbName}){
+    dbName = dbName ?? 'sossoldi.db';
+  }
 
   SossoldiDatabase._init();
 
   Future<Database> get database async {
     if (_database != null) return _database!;
 
-    _database = await _initDB('sossoldi.db');
+    _database = await _initDB(dbName);
     return _database!;
   }
 
@@ -37,7 +40,7 @@ class SossoldiDatabase {
     return await openDatabase(path, version: 1, onCreate: _createDB);
   }
 
-  Future _createDB(Database database, int version) async {
+  static Future _createDB(Database database, int version) async {
     const integerPrimaryKeyAutoincrement = 'INTEGER PRIMARY KEY AUTOINCREMENT';
     const integerNotNull = 'INTEGER NOT NULL';
     const integer = 'INTEGER';
@@ -134,7 +137,7 @@ class SossoldiDatabase {
 
   }
 
-  Future fillDemoData() async {
+  Future fillDemoData({int countOfGeneratedTransaction = 10000}) async {
     // Add some fake accounts
     await _database?.execute('''
       INSERT INTO bankAccount(id, name, symbol, color, startingValue, active, mainAccount, createdAt, updatedAt) VALUES
@@ -174,9 +177,8 @@ class SossoldiDatabase {
     // First initialize some config stuff
     final rnd = Random();
     var accounts = [70,71,72];
-    var outNotes = ['Grocery', 'Tolls', 'Toys', 'Tobacco', 'Concert', 'Clothing', 'Pizza', 'Drugs', 'Laundry', 'Taxes', 'Health insurance', 'Furniture', 'Car Fuel', 'Train', 'Amazon', 'Delivery', 'CHEK dividends', 'Babysitter', 'sono.pove.ro Fees', 'Quingentole trip'];
+    var outNotes = ['Grocery', 'Tolls', 'Toys', 'ETF Consultant Parcel', 'Concert', 'Clothing', 'Pizza', 'Drugs', 'Laundry', 'Taxes', 'Health insurance', 'Furniture', 'Car Fuel', 'Train', 'Amazon', 'Delivery', 'CHEK dividends', 'Babysitter', 'sono.pove.ro Fees', 'Quingentole trip'];
     var categories = [10,11,12,13,14];
-    int countOfGeneratedTransaction = 10000;
     double maxAmountOfSingleTransaction = 250.00;
     int dateInPastMaxRange = (countOfGeneratedTransaction / 90 ).round() * 30; // we want simulate about 90 transactions per month
     num fakeSalary = 5000;

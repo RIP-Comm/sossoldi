@@ -2,24 +2,25 @@
 permalink: /
 ---
 # **Documentation**
-
 > Making an open source wealth management app for everyone.
 
-## Useful links (Test)
+## Useful links
 
-- [Github Repo](https://github.com/RIP-Comm/sossoldi)
-- [Discord](http://mr.rip/discord)
-- [Design file](https://www.figma.com/file/6NyY9yqunpbU7HIkbNEAL3/Sossoldi-App?node-id=0%3A1)
-- [UX Research](https://www.federicopozzato.it/portfolio/sossoldi-personal-finance-app)
-- [Information architecture](https://www.figma.com/file/xjVHAaHznRW1OFAJvp8DXn/Sossoldi-App---Figjam?node-id=0%3A1)
-- [Interface study](https://www.notion.so/Sossoldi-Personal-finance-app-dd37eb9cbb2c44e59dd74f85e843e865)
-- [Set up guide](setup.md)
-- [GitHub for beginners](PR-guide.md)
-- [Contribuiting to the documentation](doc-guide.md)
+-   [Github Repo](https://github.com/RIP-Comm/sossoldi)
+-   [Discord](http://mr.rip/discord)
+-   [Design file](https://www.figma.com/file/6NyY9yqunpbU7HIkbNEAL3/Sossoldi-App?node-id=0%3A1)
+-   [UX Research](https://www.federicopozzato.it/portfolio/sossoldi-personal-finance-app)
+-   [Information architecture](https://www.figma.com/file/xjVHAaHznRW1OFAJvp8DXn/Sossoldi-App---Figjam?node-id=0%3A1)
+-   [Interface study](https://www.notion.so/Sossoldi-Personal-finance-app-dd37eb9cbb2c44e59dd74f85e843e865)
+-   [Set up guide](setup.md)
+-   [Linux set up guide detailed](setup-linux-evironment.md)
+-   [GitHub for beginners](PR-guide.md)
+-   [Contributing to the documentation](doc-guide.md)
 
 ## About
 
 **Sossoldi** is a free and open source wealth management / personal finance / Net Worth tracking app, made with Flutter.
+
 
 <div>
     <img src="./assets/sossoldi project cover.jpg" width="1000" alt="Sossoldi icon">
@@ -33,42 +34,39 @@ The app is being developed using the [Flutter](https://docs.flutter.dev/get-star
 
 ## This app is for you if you want to...
 
-- 📈 Track their net worth
-- 💸 Track your expenses to better understand where they are spending their money
-- 👀 Keep track of your investments
-- 🪦 Keep everything in one place like Mr. Rip
+-   📈 Track their net worth
+-   💸 Track your expenses to better understand where they are spending their money
+-   👀 Keep track of your investments
+-   🪦 Keep everything in one place like Mr. Rip
 
 What features do we want to implement?
-
-- 💸 Track expenses (even recurrent ones)
-- 🏦 Track different bank accounts
-- 📊 Graphs, statistics and reports
-- 💻 All data are stored locally (with the option to share it in different platforms)
-- 👀 Track investments: Stocks, Bonds, Crypto, Private equity
-- 💶 Track taxes
-- 💴 Net worth on different currencies
-- ↔️ Import/export data
-- 🔗 Link bank accounts that support the OpenBanking PSD2 API
-- 🤓 Advanced onboarding
+-   💸 Track expenses (even recurrent ones)
+-   🏦 Track different bank accounts
+-   📊 Graphs, statistics and reports
+-   💻 All data are stored locally (with the option to share it in different platforms)
+-   👀 Track investments: Stocks, Bonds, Crypto, Private equity
+-   💶 Track taxes
+-   💴 Net worth on different currencies
+-   ↔️ Import/export data
+-   🔗 Link bank accounts that support the OpenBanking PSD2 API
+-   🤓 Advanced onboarding
 
 <div align="center">
 <img src="./assets/Sossoldi-portfolio-card-image.png" width="500" alt="Sossoldi icon">
 </div>
 
 ## Phase 1 (Ongoing)
-
 We will not build the complete app all at once. We will start from the basic features and then we will move onto the others.
 Phase 1 will be completed when the following features will be ready:
-
-- 💸 Expenses (even recurrent ones) tracker
-- 🤑 Income tracker
-- ⚖️ Bank accounts balance (without the use of API)
-- 📊 Basic stats
-- 📱 Data stored only locally
+-   💸 Expenses (even recurrent ones) tracker
+-   🤑 Income tracker
+-   ⚖️ Bank accounts balance (without the use of API)
+-   📊 Basic stats
+-   📱 Data stored only locally
 
 The pages that will be implemented are:
+-   Dashboard
+-   Movements page
+-   Basic settings
+-   Basic onboarding
 
-- Dashboard
-- Movements page
-- Basic settings
-- Basic onboarding

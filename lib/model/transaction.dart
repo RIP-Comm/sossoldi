@@ -208,7 +208,10 @@ class TransactionMethods extends SossoldiDatabase {
       DateTime? date,
       DateTime? dateRangeStart,
       DateTime? dateRangeEnd,
-      int? limit}) async {
+      int? limit,
+      List<String>? transactionType,
+      String? label,
+      Map<int, bool>? bankAccounts}) async {
     final db = await database;
 
     String? where = type != null ? '${TransactionFields.type} = $type' : null; // filter type
@@ -220,6 +223,20 @@ class TransactionMethods extends SossoldiDatabase {
           "${where != null ? '$where and ' : ''}strftime('%Y-%m-%d', ${TransactionFields.date}) BETWEEN '${dateRangeStart.toString().substring(0, 10)}' and '${dateRangeEnd.toIso8601String().substring(0, 10)}'";
     }
 
+    if(label != null && label.isNotEmpty) {
+      where = "${where != null ? '$where and ' : ''}t.note LIKE '%$label%' "; 
+    }
+
+    if(transactionType != null) {
+      final transactionTypeList = transactionType.map((e) => "'$e'").toList();
+      where = "${where != null ? '$where and ' : ''}t.type IN (${transactionTypeList.join(',')}) "; 
+    }
+
+    if(bankAccounts != null && !bankAccounts.entries.every((element) => element.value == false)) {
+      final bankAccountIds = bankAccounts.entries.where((bankAccount) => bankAccount.value).map((e) => "'${e.key}'");
+      where = "${where != null ? '$where and ' : ''}t.${TransactionFields.idBankAccount} IN (${bankAccountIds.join(',')}) "; 
+    }
+
     final orderByDESC = '${TransactionFields.date} DESC';
 
     final result =
@@ -228,31 +245,110 @@ class TransactionMethods extends SossoldiDatabase {
     return result.map((json) => Transaction.fromJson(json)).toList();
   }
 
-  Future<List> currentMonthTransactions() async {
+  Future<List<String>> getAllLabels({String? label}) async {
     final db = await database;
-    final result = await db.rawQuery('''
-      SELECT
-        strftime('%Y-%m-%d', ${TransactionFields.date}) as day,
-        SUM(CASE WHEN ${TransactionFields.type} = 'IN' THEN ${TransactionFields.amount} ELSE 0 END) as income,
-        SUM(CASE WHEN ${TransactionFields.type} = 'OUT' THEN ${TransactionFields.amount} ELSE 0 END) as expense
-      FROM "$transactionTable"
-      WHERE strftime('%Y-%m', ${TransactionFields.date}) = strftime('%Y-%m', date('now'))
-      GROUP BY day
-    ''');
 
-    return result;
+    String where = "";
+    final orderByDESC = '${TransactionFields.date} DESC';
+
+    if(label != null){
+      where = "t.note LIKE '%$label%' ";
+    }
+
+    final result =
+        await db.rawQuery('SELECT DISTINCT LOWER(t.note) as note FROM "$transactionTable" as t LEFT JOIN $bankAccountTable as b1 ON t.${TransactionFields.idBankAccount} = b1.${BankAccountFields.id} LEFT JOIN $bankAccountTable as b2 ON t.${TransactionFields.idBankAccountTransfer} = b2.${BankAccountFields.id} ${where.isNotEmpty ? "WHERE $where" : ""} ORDER BY $orderByDESC');
+        
+    return (result).map((x) => x["note"] as String).toList();
   }
 
-  Future<List> lastMonthTransactions() async {
+  Future<List> currentMonthDailyTransactions({int? accountId}) async {
+    final today = DateTime.now();
+    final currentMonth = today.month;
+    final currentYear = today.year;
+
+    final beginningCurrentMonth = DateTime(currentYear, currentMonth, 1);
+    final beginningNextMonth = DateTime(currentYear, currentMonth + 1, 1);
+
+    return transactionByFrequencyAndPeriod(
+        accountId: accountId,
+        recurrence: Recurrence.daily,
+        dateRangeStart: beginningCurrentMonth,
+        dateRangeEnd: beginningNextMonth);
+  }
+
+  Future<List> lastMonthDailyTransactions() async {
+    final today = DateTime.now();
+    final currentMonth = today.month;
+    final currentYear = today.year;
+
+    final beginningCurrentMonth = DateTime(currentYear, currentMonth, 1);
+    final beginningLastMonth = DateTime(currentYear, currentMonth - 1, 1);
+
+    return transactionByFrequencyAndPeriod(
+        recurrence: Recurrence.daily,
+        dateRangeStart: beginningLastMonth,
+        dateRangeEnd: beginningCurrentMonth);
+  }
+
+  Future<List> currentYearMontlyTransactions() async {
+    final today = DateTime.now();
+    final currentYear = today.year;
+
+    final beginningCurrentYear = DateTime(currentYear, 1, 1);
+    final beginningNextMonth = DateTime(currentYear + 1, 1, 1);
+
+    return transactionByFrequencyAndPeriod(
+        recurrence: Recurrence.monthly,
+        dateRangeStart: beginningCurrentYear,
+        dateRangeEnd: beginningNextMonth);
+  }
+
+  Future<List> transactionByFrequencyAndPeriod({
+    int? accountId,
+    Recurrence recurrence = Recurrence.daily,
+    DateTime? dateRangeStart,
+    DateTime? dateRangeEnd,
+  }) async {
     final db = await database;
+
+    //TODO: validate parameters
+
+    var freqencyString = "";
+    var frequencyDateParser = "";
+    switch (recurrence) {
+      case Recurrence.daily:
+        freqencyString = "day";
+        frequencyDateParser = "%Y-%m-%d";
+        break;
+      case Recurrence.monthly:
+        freqencyString = "month";
+        frequencyDateParser = "%Y-%m";
+        break;
+      default:
+        throw ArgumentError("Query not implemented for frequency $recurrence");
+    }
+
+    final accountFilter = accountId != null
+        ? "${TransactionFields.idBankAccount} = $accountId"
+        : "";
+    //var periodDateFormatter = "";
+    final periodFilterStart = dateRangeStart != null
+        ? "strftime('%Y-%m-%d', ${TransactionFields.date}) >= '${dateRangeStart.toString().substring(0, 10)}'"
+        : "";
+    final periodFilterEnd = dateRangeEnd != null
+        ? "strftime('%Y-%m-%d', ${TransactionFields.date}) < '${dateRangeEnd.toString().substring(0, 10)}'"
+        : "";
+    final filters = [periodFilterStart, periodFilterEnd, accountFilter];
+    final sqlFilters = filters.where((filter) => filter != "").join(" AND ");
+
     final result = await db.rawQuery('''
       SELECT
-        strftime('%Y-%m-%d', ${TransactionFields.date}) as day,
+        strftime('$frequencyDateParser', ${TransactionFields.date}) as $freqencyString,
         SUM(CASE WHEN ${TransactionFields.type} = 'IN' THEN ${TransactionFields.amount} ELSE 0 END) as income,
         SUM(CASE WHEN ${TransactionFields.type} = 'OUT' THEN ${TransactionFields.amount} ELSE 0 END) as expense
       FROM "$transactionTable"
-      WHERE strftime('%Y-%m', ${TransactionFields.date}) = strftime('%Y-%m', date('now', '-1 month'))
-      GROUP BY day
+      WHERE $sqlFilters
+      GROUP BY $freqencyString
     ''');
 
     return result;
