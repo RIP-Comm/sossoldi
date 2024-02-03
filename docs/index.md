@@ -4,7 +4,7 @@ layout: home
 nav_order: 1
 ---
 
-**Sossoldi** is a free and open source wealth management / personal finance / Net Worth tracking app, made with Flutter.
+**[Sossoldi](https://github.com/RIP-Comm/sossoldi)** is a free and open source wealth management / personal finance / Net Worth tracking app, made with Flutter.
 
 <div>
     <img src="./assets/sossoldi project cover.jpg" width="1000" alt="Sossoldi icon">
@@ -40,6 +40,17 @@ What features do we want to implement?
 <img src="./assets/Sossoldi-portfolio-card-image.png" width="500" alt="Sossoldi icon">
 </div>
 
+## Useful links
+
+Here is a list of useful links if you want to contribute to the project:
+
+- [Github Repo](https://github.com/RIP-Comm/sossoldi)
+- [Discord](http://mr.rip/discord)
+- [Design file](https://www.figma.com/file/6NyY9yqunpbU7HIkbNEAL3/Sossoldi-App?node-id=0%3A1)
+- [UX Research](https://www.federicopozzato.it/portfolio/sossoldi-personal-finance-app)
+- [Information architecture](https://www.figma.com/file/xjVHAaHznRW1OFAJvp8DXn/Sossoldi-App---Figjam?node-id=0%3A1)
+- [Interface study](https://www.notion.so/Sossoldi-Personal-finance-app-dd37eb9cbb2c44e59dd74f85e843e865)
+
 ## Phase 1 (Ongoing)
 
 We will not build the complete app all at once. We will start from the basic features and then we will move onto the others.
@@ -57,16 +68,3 @@ The pages that will be implemented are:
 - Movements page
 - Basic settings
 - Basic onboarding
-
-
-----
-
-[Github Repo](https://github.com/RIP-Comm/sossoldi)
-[Discord](http://mr.rip/discord)
-[Design file](https://www.figma.com/file/6NyY9yqunpbU7HIkbNEAL3/Sossoldi-App?node-id=0%3A1)
-[UX Research](https://www.federicopozzato.it/portfolio/sossoldi-personal-finance-app)
-[Information architecture](https://www.figma.com/file/xjVHAaHznRW1OFAJvp8DXn/Sossoldi-App---Figjam?node-id=0%3A1)
-[Interface study](https://www.notion.so/Sossoldi-Personal-finance-app-dd37eb9cbb2c44e59dd74f85e843e865)
-[Set up guide](setup.md)
-[GitHub for beginners](PR-guide.md)
-[Contribuiting to the documentation](doc-guide.md)

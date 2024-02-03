@@ -1,7 +1,8 @@
 ---
-title: How to open a PR
+title: How to contribute to the project
 layout: default
 nav_order: 2
+has_children: true
 ---
 
 # GitHub for beginners
