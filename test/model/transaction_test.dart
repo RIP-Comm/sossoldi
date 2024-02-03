@@ -146,7 +146,7 @@ void main() {
     });    
 
     test("lastMonthDailyTransactions", () async {
-      await sossoldiDatabase.fillDemoData();
+      await sossoldiDatabase.fillDemoData(countOfGeneratedTransaction: 2000);
 
       try{
         await db.transaction((txn) async {
@@ -199,7 +199,7 @@ void main() {
     });
 
     test("currentMonthDailyTransactions", () async {
-      await sossoldiDatabase.fillDemoData();
+      await sossoldiDatabase.fillDemoData(countOfGeneratedTransaction: 2000);
 
       try{
         await db.transaction((txn) async {
@@ -252,7 +252,7 @@ void main() {
     });
 
     test("currentMonthDailyTransactions single account", () async {
-      await sossoldiDatabase.fillDemoData();
+      await sossoldiDatabase.fillDemoData(countOfGeneratedTransaction: 2000);
 
       try{
         await db.transaction((txn) async {
@@ -310,7 +310,7 @@ void main() {
     });
 
     test("currentYearMontlyTransactions", () async {
-      await sossoldiDatabase.fillDemoData();
+      await sossoldiDatabase.fillDemoData(countOfGeneratedTransaction: 2000);
 
       try{
         await db.transaction((txn) async {
