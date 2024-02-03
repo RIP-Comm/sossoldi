@@ -3,33 +3,69 @@ title: Home
 layout: home
 ---
 
-This is a *bare-minimum* template to create a Jekyll site that uses the [Just the Docs] theme. You can easily set the created site to be published on [GitHub Pages] – the [README] file explains how to do that, along with other details.
+**Sossoldi** is a free and open source wealth management / personal finance / Net Worth tracking app, made with Flutter.
 
-If [Jekyll] is installed on your computer, you can also build and preview the created site *locally*. This lets you test changes before committing them, and avoids waiting for GitHub Pages.[^1] And you will be able to deploy your local build to a different platform than GitHub Pages.
+<div>
+    <img src="./assets/sossoldi project cover.jpg" width="1000" alt="Sossoldi icon">
+</div>
 
-More specifically, the created site:
+## ❓ What problem we are solving & why
 
-- uses a gem-based approach, i.e. uses a `Gemfile` and loads the `just-the-docs` gem
-- uses the [GitHub Pages / Actions workflow] to build and publish the site on GitHub Pages
+[Mr. Rip](https://retireinprogress.com/) is a blogger that has a [spreadsheet](https://docs.google.com/spreadsheets/d/1ilL6rBdzIQ6yRotqOKLUKI7KXFxu5_cZ5FQgdYTSHJk/edit#gid=138629885) in which he tracks his net worth. Sossoldi is a Mobile + Desktop app that aims at replacing that spreadsheet and make it easier for everyone to track their net worth even if they are not as skilled with Google sheets or Excel.
 
-Other than that, you're free to customize sites that you create with this template, however you like. You can easily change the versions of `just-the-docs` and Jekyll it uses, as well as adding further plugins.
+The app is being developed using the [Flutter](https://docs.flutter.dev/get-started/install) framework which makes it possible to have one codebase for different platforms (Android, iOS, Windows, macOS, Linux). We are currently working on a beta which hopefully will be out soon.
 
-[Browse our documentation][Just the Docs] to learn more about how to use this theme.
+## This app is for you if you want to...
 
-To get started with creating a site, simply:
+- 📈 Track their net worth
+- 💸 Track your expenses to better understand where they are spending their money
+- 👀 Keep track of your investments
+- 🪦 Keep everything in one place like Mr. Rip
 
-1. click "[use this template]" to create a GitHub repository
-2. go to Settings > Pages > Build and deployment > Source, and select GitHub Actions
+What features do we want to implement?
 
-If you want to maintain your docs in the `docs` directory of an existing project repo, see [Hosting your docs from an existing project repo](https://github.com/just-the-docs/just-the-docs-template/blob/main/README.md#hosting-your-docs-from-an-existing-project-repo) in the template README.
+- 💸 Track expenses (even recurrent ones)
+- 🏦 Track different bank accounts
+- 📊 Graphs, statistics and reports
+- 💻 All data are stored locally (with the option to share it in different platforms)
+- 👀 Track investments: Stocks, Bonds, Crypto, Private equity
+- 💶 Track taxes
+- 💴 Net worth on different currencies
+- ↔️ Import/export data
+- 🔗 Link bank accounts that support the OpenBanking PSD2 API
+- 🤓 Advanced onboarding
+
+<div align="center">
+<img src="./assets/Sossoldi-portfolio-card-image.png" width="500" alt="Sossoldi icon">
+</div>
+
+## Phase 1 (Ongoing)
+
+We will not build the complete app all at once. We will start from the basic features and then we will move onto the others.
+Phase 1 will be completed when the following features will be ready:
+
+- 💸 Expenses (even recurrent ones) tracker
+- 🤑 Income tracker
+- ⚖️ Bank accounts balance (without the use of API)
+- 📊 Basic stats
+- 📱 Data stored only locally
+
+The pages that will be implemented are:
+
+- Dashboard
+- Movements page
+- Basic settings
+- Basic onboarding
+
 
 ----
 
-[^1]: [It can take up to 10 minutes for changes to your site to publish after you push the changes to GitHub](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/creating-a-github-pages-site-with-jekyll#creating-your-site).
-
-[Just the Docs]: https://just-the-docs.github.io/just-the-docs/
-[GitHub Pages]: https://docs.github.com/en/pages
-[README]: https://github.com/just-the-docs/just-the-docs-template/blob/main/README.md
-[Jekyll]: https://jekyllrb.com
-[GitHub Pages / Actions workflow]: https://github.blog/changelog/2022-07-27-github-pages-custom-github-actions-workflows-beta/
-[use this template]: https://github.com/just-the-docs/just-the-docs-template/generate
+[Github Repo](https://github.com/RIP-Comm/sossoldi)
+[Discord](http://mr.rip/discord)
+[Design file](https://www.figma.com/file/6NyY9yqunpbU7HIkbNEAL3/Sossoldi-App?node-id=0%3A1)
+[UX Research](https://www.federicopozzato.it/portfolio/sossoldi-personal-finance-app)
+[Information architecture](https://www.figma.com/file/xjVHAaHznRW1OFAJvp8DXn/Sossoldi-App---Figjam?node-id=0%3A1)
+[Interface study](https://www.notion.so/Sossoldi-Personal-finance-app-dd37eb9cbb2c44e59dd74f85e843e865)
+[Set up guide](setup.md)
+[GitHub for beginners](PR-guide.md)
+[Contribuiting to the documentation](doc-guide.md)
