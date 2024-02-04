@@ -67,33 +67,40 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> with Functi
                         CategoryTransaction category = categories[i];
                         IconData? icon = iconList[category.symbol];
                         Color? color = categoryColorListTheme[category.color];
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: color,
+                        return GestureDetector(
+                          onTap: () => {
+                            ref.read(categoryProvider.notifier).state =
+                                category,
+                            Navigator.of(context).pop(),
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: color,
+                                  ),
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: icon != null
+                                      ? Icon(
+                                          icon,
+                                          size: 24.0,
+                                          color: Theme.of(context).colorScheme.background,
+                                        )
+                                      : const SizedBox(),
                                 ),
-                                padding: const EdgeInsets.all(10.0),
-                                child: icon != null
-                                    ? Icon(
-                                        icon,
-                                        size: 24.0,
-                                        color: Theme.of(context).colorScheme.background,
-                                      )
-                                    : const SizedBox(),
-                              ),
-                              Text(
-                                category.name,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelLarge!
-                                    .copyWith(color: Theme.of(context).colorScheme.primary),
-                              ),
-                            ],
+                                Text(
+                                  category.name,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelLarge!
+                                      .copyWith(color: Theme.of(context).colorScheme.primary),
+                                ),
+                              ],
+                            ),
                           ),
                         );
                       },

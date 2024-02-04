@@ -71,33 +71,39 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> with Function
                         BankAccount account = accounts[i];
                         IconData? icon = accountIconList[account.symbol];
                         Color? color = accountColorListTheme[account.color];
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: color,
+                        return GestureDetector(
+                          onTap: () => {
+                            ref.read(widget.provider.notifier).state = account,
+                            Navigator.of(context).pop(),
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: color,
+                                  ),
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: icon != null
+                                      ? Icon(
+                                          icon,
+                                          size: 24.0,
+                                          color: Theme.of(context).colorScheme.background,
+                                        )
+                                      : const SizedBox(),
                                 ),
-                                padding: const EdgeInsets.all(10.0),
-                                child: icon != null
-                                    ? Icon(
-                                        icon,
-                                        size: 24.0,
-                                        color: Theme.of(context).colorScheme.background,
-                                      )
-                                    : const SizedBox(),
-                              ),
-                              Text(
-                                account.name,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelLarge!
-                                    .copyWith(color: Theme.of(context).colorScheme.primary),
-                              ),
-                            ],
+                                Text(
+                                  account.name,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelLarge!
+                                      .copyWith(color: Theme.of(context).colorScheme.primary),
+                                ),
+                              ],
+                            ),
                           ),
                         );
                       },
