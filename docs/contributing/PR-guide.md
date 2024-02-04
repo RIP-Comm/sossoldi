@@ -19,7 +19,7 @@ After the download, set up your account.
 Now comeback to your repository on GitHub and click on Code -> Open with GitHub Desktop
 
 <div>
-    <img src="./assets/doc-guide/Clone-repo.png" width="1000" alt="Sossoldi icon">
+    <img src="../assets/doc-guide/Clone-repo.png" width="1000" alt="Sossoldi icon">
 </div>
 
 This will open GitHub Desktop and it should ask you to add the path in which you want to save the folder with the project. Then click on clone.
@@ -34,7 +34,7 @@ When you are done, come back to GitHub Desktop and it should show the changes th
 **NOTE:** most of the times you will see a lot changes here but you should select ONLY the files that you changed and are needed for the feature that you have implemented. You should also remove all the ones edited/created by your IDE.
 
 <div>
-    <img src="./assets/doc-guide/GitHub-Desktop.png" width="1000" alt="Sossoldi icon">
+    <img src="../assets/doc-guide/GitHub-Desktop.png" width="1000" alt="Sossoldi icon">
 </div>
 
 ## Step 5: Push your changes
@@ -46,7 +46,7 @@ On the top right now you should see the option to push your changes, after that 
 Congrats this is the last step! Now go back to the [main repository](https://github.com/RIP-Comm/sossoldi/pulls) and create a new pull request by clicking on the top right.
 
 <div>
-    <img src="./assets/doc-guide/PR-screen.png" width="1000" alt="Sossoldi icon">
+    <img src="../assets/doc-guide/PR-screen.png" width="1000" alt="Sossoldi icon">
 </div>
 
 Tap on “compare across forks” and then select your repository.
