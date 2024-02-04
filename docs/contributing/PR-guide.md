@@ -1,10 +1,9 @@
 ---
 title: How to contribute to the project
 layout: default
-nav_order: 2
+nav_order: 3
 has_children: true
 ---
-
 # GitHub for beginners
 
 So you want to partecipate in our project but you don't know how? Don't worry, this guide is here for you.
@@ -12,10 +11,11 @@ In the next steps we will assume that you already completed the environment setu
 
 ## Step 1: Download GitHub Desktop
 
-This is pretty straightforward, go to this [link](https://desktop.github.com/) and download GitHub Desktop. With this it will be easier to manage and submit the changes that you will do. 
+This is pretty straightforward, go to this [link](https://desktop.github.com/) and download GitHub Desktop. With this it will be easier to manage and submit the changes that you will do.
 After the download, set up your account.
 
 ## Step 2: Clone the repository
+
 Now comeback to your repository on GitHub and click on Code -> Open with GitHub Desktop
 
 <div>
@@ -43,14 +43,14 @@ On the top right now you should see the option to push your changes, after that 
 
 ## Step 6: Create the pull request
 
-Congrats this is the last step! Now go back to the [main repository](https://github.com/RIP-Comm/sossoldi/pulls) and create a new pull request by clicking on the top right. 
+Congrats this is the last step! Now go back to the [main repository](https://github.com/RIP-Comm/sossoldi/pulls) and create a new pull request by clicking on the top right.
 
 <div>
     <img src="./assets/doc-guide/PR-screen.png" width="1000" alt="Sossoldi icon">
 </div>
 
 Tap on “compare across forks” and then select your repository.
-After that tap on “Create pull request” and write a title and a description for it. 
+After that tap on “Create pull request” and write a title and a description for it.
 Congratulations now you are ready to submit it!
 
 Thank you for taking your time in helping our project!
