@@ -11,12 +11,20 @@ final accountColorProvider = StateProvider<int>((ref) => 0);
 final accountMainSwitchProvider = StateProvider<bool>((ref) => false);
 final countNetWorthSwitchProvider = StateProvider<bool>((ref) => true);
 final selectedAccountCurrentMonthDailyBalanceProvider = StateProvider<List<FlSpot>>((ref) => const []);
+final filterAccountProvider = StateProvider<Map<int, bool>>((ref) => {});
+
 
 class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
   @override
   Future<List<BankAccount>> build() async {
     ref.watch(mainAccountProvider.notifier).state = await _getMainAccount();
-    return _getAccounts();
+    List<BankAccount> accounts = await _getAccounts();
+
+    for (BankAccount account in accounts) {
+      ref.watch(filterAccountProvider.notifier).state[account.id!] = false;
+    }
+
+    return accounts;
   }
 
   Future<List<BankAccount>> _getAccounts() async {

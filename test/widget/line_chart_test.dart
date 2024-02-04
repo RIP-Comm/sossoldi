@@ -68,16 +68,22 @@ void main() {
                     ],
                     colorLine2Data: const Color(0xffffffff),
                     colorBackground: const Color(0xff356CA3),
-                    maxDays: 31.0,
+                    period: Period.month,
                   ),
         ),
       )
     );
 
-    expect(find.text('4'), findsOneWidget);
+    expect(find.text('2'), findsOneWidget);
+    expect(find.text('5'), findsOneWidget);
+    expect(find.text('8'), findsOneWidget);
     expect(find.text('11'), findsOneWidget);
-    expect(find.text('18'), findsOneWidget);
-    expect(find.text('25'), findsOneWidget);
+    expect(find.text('14'), findsOneWidget);
+    expect(find.text('17'), findsOneWidget);
+    expect(find.text('20'), findsOneWidget);
+    expect(find.text('23'), findsOneWidget);
+    expect(find.text('26'), findsOneWidget);
+    expect(find.text('29'), findsOneWidget);
 
     }
   );

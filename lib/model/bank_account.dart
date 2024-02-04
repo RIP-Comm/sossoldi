@@ -147,7 +147,8 @@ class BankAccountMethods extends SossoldiDatabase {
     final db = await database;
 
     final orderByASC = '${BankAccountFields.createdAt} ASC';
-    final where = '${BankAccountFields.active} = 1 AND (${TransactionFields.recurring} = 0 OR ${TransactionFields.recurring} = NULL)';
+
+    final where = '${BankAccountFields.active} = 1 AND (t.${TransactionFields.recurring} = 0 OR t.${TransactionFields.recurring} is NULL)';
 
     final result = await db.rawQuery('''
       SELECT b.*, (b.${BankAccountFields.startingValue} +

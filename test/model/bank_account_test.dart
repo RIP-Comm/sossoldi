@@ -8,7 +8,7 @@ import 'package:sossoldi/model/bank_account.dart';
 import 'package:sossoldi/model/base_entity.dart';
 import 'package:sossoldi/model/transaction.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
-import 'package:sqflite_common_ffi/sqflite_ffi.dart' as sqfliteFfi;
+import 'package:sqflite_common_ffi/sqflite_ffi.dart' as sqflite_ffi;
 
 import '../test_utils/sql_utils.dart';
 
@@ -89,10 +89,9 @@ void main() {
     late sqflite.Database db;
 
     setUpAll(() async {
-      if(Platform.isWindows | Platform.isLinux){
-        sqfliteFfi.sqfliteFfiInit();
-        sqfliteFfi.databaseFactory = sqfliteFfi.databaseFactoryFfi;
-      }      
+      sqflite_ffi.sqfliteFfiInit();
+      sqflite_ffi.databaseFactory = sqflite_ffi.databaseFactoryFfi;
+
       sossoldiDatabase = SossoldiDatabase(dbName: 'test.db');
       db = await sossoldiDatabase.database;
       await sossoldiDatabase.clearDatabase();
@@ -107,7 +106,7 @@ void main() {
     });
 
     test("selectAll", () async {
-      await sossoldiDatabase.fillDemoData();
+      await sossoldiDatabase.fillDemoData(countOfGeneratedTransaction: 2000);
 
       try{
         await db.transaction((txn) async {
@@ -173,7 +172,7 @@ void main() {
     });
 
     test("accountDailyBalance", () async {
-      await sossoldiDatabase.fillDemoData();
+      await sossoldiDatabase.fillDemoData(countOfGeneratedTransaction: 2000);
 
       try{
         await db.transaction((txn) async {

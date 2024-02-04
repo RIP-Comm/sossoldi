@@ -25,6 +25,6 @@ jobs:
 
       - run: |
           flutter pub get
-          flutter test
+          flutter test --concurrency=1
           flutter build apk
           flutter build appbundle
