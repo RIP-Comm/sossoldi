@@ -49,6 +49,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
       body: Stack(
         children: [
           SingleChildScrollView(
+            padding: EdgeInsets.only(bottom: 120),
             child: Column(
               children: [
                 Container(
