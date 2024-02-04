@@ -49,7 +49,7 @@ See here.
 
 ## Avoid Copy/Paste:
 
-Do not copy and paste code blocks without proper understanding. Instead of duplicating code, consider creating a shared function or method and if you do so add a line in the [Reusable Widget List](contributing/widget-list.md).
+Do not copy and paste code blocks without proper understanding. Instead of duplicating code, consider creating a shared function or method and if you do so add a line in the [Reusable Widget List](widget-list.md).
 
 ## File Structure:
 
