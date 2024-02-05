@@ -7,7 +7,7 @@ has_children: true
 # GitHub for beginners
 
 So you want to partecipate in our project but you don't know how? Don't worry, this guide is here for you.
-In the next steps we will assume that you already completed the environment setup. If you haven't, make sure to follow *the first 3 steps* of [this guide](setup.md) first.
+In the next steps we will assume that you already completed the environment setup. If you haven't, make sure to follow *the first 3 steps* of [this guide](../setup/setup.html) first.
 
 ## Step 1: Download GitHub Desktop
 

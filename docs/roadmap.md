@@ -49,7 +49,7 @@ Sossoldi is an open-source project driven by a singular ambition – **to empowe
 
 ### 3. Google Sheets Integration
 
-- Integrate with Google Sheets to provide users with a more in-depht environment for financial planning.
+- Integrate with Google Sheets to provide users with a more in-depth environment for financial planning.
 - Develop a free template for users to import their data into Google Sheets seamlessly.
 
 ## Phase 3: Investments Tracking (Stocks, ETFs, Bonds, Crypto, Real Estate) + Cloud Backup (Optional)

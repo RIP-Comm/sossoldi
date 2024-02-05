@@ -1,13 +1,13 @@
 ---
 title: How to contribute to the documentation
 layout: default
-nav_order: 
+nav_order: 5
 ---
 # How to contribute to the documentation
 
 For our documentation we use GitHub Pages and this allows us to have a static page with all the info about the repo. This is very useful for use because it makes the docs easy to read and mantain by just using .md files that will then be converted to HTML.
 If you want you can read more about GitHub Pages in the [official documentation](https://pages.github.com/), you can also read more about markdown files [here](https://www.markdownguide.org/getting-started/).
-In the next steps we will assume that you already completed the setup. If you haven't, make sure to follow [this guide](setup.md) first.
+In the next steps we will assume that you already completed the setup. If you haven't, make sure to follow [this guide](setup/setup.html) first.
 
 ## Step 1: Enable GitHub Pages inside your fork
 
@@ -40,4 +40,4 @@ Once you've finished making all the changes you can create a commit to your fork
 If everything went to plan now you should be able to create a PR explaining the changes that you made, in order to facilitate the review process make sure to explain what you have done and add useful screenshots (if you prefer you can just share the link *{your-username}.github.io/sossoldi/*).
 After the review process your PR will be merged and your changes should be online!
 
-*Don't know how to open a PR? Don't worry, you can read the [guide](PR-guide.md)*
+*Don't know how to open a PR? Don't worry, you can read the [guide](contributing/PR-guide.html)*
