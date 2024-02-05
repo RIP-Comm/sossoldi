@@ -1,3 +1,10 @@
+---
+title: Linux Setup Guide
+layout: default
+nav_order: 4
+parent: Setup Guide
+---
+
 # Linux Dev Environment Configuration
 
 The instructions below provide guidance on configuring the development environment for a Flutter application
@@ -223,7 +230,7 @@ flutter config --android-sdk /path/of/installation/Android/Sdk
 4. Go to **SDK Tools**.
 5. Check the box for **Android SDK Command-line Tools (latest)**.
 
-![Screenshot_Intellij_cmdline-tools.png](assets/Screenshot_Intellij_cmdline-tools.png)
+![Screenshot_Intellij_cmdline-tools.png](../assets/Screenshot_Intellij_cmdline-tools.png)
 
 ## STEP 7: Accept licence
 
