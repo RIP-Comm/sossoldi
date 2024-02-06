@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:workmanager/workmanager.dart';
+import 'package:sossoldi/utils/worker_manager.dart';
 
+import 'pages/notifications/notifications_service.dart';
 import 'providers/theme_provider.dart';
 import 'routes.dart';
 import 'utils/app_theme.dart';
 
-void main() {
-  initializeDateFormatting('it_IT', null)
-      .then((_) => runApp(const ProviderScope(child: Launcher())));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  requestNotificationPermissions();
+  initializeNotifications();
+  Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
+  initializeDateFormatting('it_IT', null).then((_) => runApp(const ProviderScope(child: Launcher())));
 }
 
 class Launcher extends ConsumerWidget {
