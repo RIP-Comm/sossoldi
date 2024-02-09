@@ -31,6 +31,12 @@ void callbackDispatcher() async {
   });
 }
 
+void toggleTransactionReminder(bool toActive) async {
+  if(!toActive){
+    await Workmanager().cancelByUniqueName("sossoldi#reminder");
+  }
+}
+
 void scheduleTransactionReminder(NotificationReminderType type) async {
   await Workmanager().cancelByUniqueName("sossoldi#reminder");
   await Workmanager().registerPeriodicTask("sossoldi#reminder", taskShowNotification, frequency: Duration(days: type == NotificationReminderType.daily ? 1 : type == NotificationReminderType.weekly ? 7 : 30));

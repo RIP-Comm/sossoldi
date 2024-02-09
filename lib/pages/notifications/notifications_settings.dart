@@ -93,6 +93,7 @@ class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
                           .read(transactionReminderSwitchProvider.notifier)
                           .state = value;
                       ref.read(settingsProvider.notifier).updateNotifications();
+                      toggleTransactionReminder(value);
                     },
                   ),
                 ],
