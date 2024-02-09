@@ -7,6 +7,7 @@ import "../providers/settings_provider.dart";
 //tasks
 const taskShowNotification = "showNotification";
 
+@pragma('vm:entry-point') // Mandatory if the App is obfuscated or using Flutter 3.1+
 void callbackDispatcher() async {
   Workmanager().executeTask((task, inputData) async {
     switch (task) {
@@ -40,6 +41,6 @@ void scheduleAlertRecursiveTransaction() {
   //TODO
   Workmanager().cancelByUniqueName("#alert").then((value) => {
         Workmanager().registerPeriodicTask("#alert", taskShowNotification,
-            frequency: Duration(days: 1))
+            frequency: const Duration(days: 30))
       });
 }

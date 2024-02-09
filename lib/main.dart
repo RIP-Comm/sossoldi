@@ -13,7 +13,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   requestNotificationPermissions();
   initializeNotifications();
-  Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
+  Workmanager().initialize(callbackDispatcher);
   initializeDateFormatting('it_IT', null).then((_) => runApp(const ProviderScope(child: Launcher())));
 }
 
