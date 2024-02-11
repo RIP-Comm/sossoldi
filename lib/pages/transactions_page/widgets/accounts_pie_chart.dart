@@ -6,6 +6,7 @@ import '../../../constants/constants.dart';
 import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
 import '../../../model/bank_account.dart';
+import '../../../providers/currency_provider.dart';
 import 'accounts_tab.dart';
 
 class AccountsPieChart extends ConsumerWidget with Functions {
@@ -23,6 +24,7 @@ class AccountsPieChart extends ConsumerWidget with Functions {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedAccountIndex = ref.watch(selectedAccountIndexProvider);
+    final currencyState = ref.watch(currencyStateNotifier);
     return SizedBox(
       height: 200,
       child: Stack(
@@ -68,8 +70,8 @@ class AccountsPieChart extends ConsumerWidget with Functions {
                   : const SizedBox(),
               Text(
                 (selectedAccountIndex != -1)
-                    ? "${amounts[accounts[selectedAccountIndex].id]!.toStringAsFixed(2)} €"
-                    : "${total.toStringAsFixed(2)} €",
+                    ? "${amounts[accounts[selectedAccountIndex].id]!.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}"
+                    : "${total.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}",
                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                     color: ((selectedAccountIndex != -1 &&
                                 amounts[accounts[selectedAccountIndex].id]! > 0) ||

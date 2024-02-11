@@ -9,6 +9,7 @@ import '../constants/style.dart';
 import '../custom_widgets/line_chart.dart';
 import '../model/bank_account.dart';
 import '../providers/accounts_provider.dart';
+import '../providers/currency_provider.dart';
 
 class StatsPage extends ConsumerStatefulWidget {
   const StatsPage({super.key});
@@ -22,6 +23,7 @@ class _StatsPageState extends ConsumerState<StatsPage> with Functions {
   Widget build(BuildContext context) {
     final accountList = ref.watch(accountsProvider);
     final curretYearMontlyTransactions = ref.watch(currentYearMontlyTransactionsProvider);
+    final currencyState = ref.watch(currencyStateNotifier);
 
     return ListView(
       children: [
@@ -59,7 +61,7 @@ class _StatsPageState extends ConsumerState<StatsPage> with Functions {
                                 ?.copyWith(color: blue4),
                           ),
                           TextSpan(
-                              text: "€",
+                              text: currencyState.selectedCurrency.symbol,
                               style: Theme.of(context)
                                   .textTheme
                                   .labelLarge
@@ -180,7 +182,7 @@ class _StatsPageState extends ConsumerState<StatsPage> with Functions {
                                       ),
                                       Expanded(
                                         child: Text(
-                                          "${account.startingValue}€",
+                                          "${account.startingValue}${currencyState.selectedCurrency.symbol}",
                                           textAlign: TextAlign.right,
                                           style: Theme.of(context)
                                               .textTheme

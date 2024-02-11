@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
+import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../utils/formatted_date_range.dart';
 
@@ -18,6 +19,7 @@ class MonthSelector extends ConsumerWidget with Functions {
     final totalAmount = ref.watch(totalAmountProvider);
     final startDate = ref.watch(filterDateStartProvider);
     final endDate = ref.watch(filterDateEndProvider);
+    final currencyState = ref.watch(currencyStateNotifier);
     return GestureDetector(
       onTap: () async {
         // pick range of dates
@@ -89,7 +91,7 @@ class MonthSelector extends ConsumerWidget with Functions {
                             .copyWith(color: totalAmount >= 0 ? green : red),
                       ),
                       TextSpan(
-                        text: "€",
+                        text: currencyState.selectedCurrency.symbol,
                         style: Theme.of(context)
                             .textTheme
                             .labelLarge!

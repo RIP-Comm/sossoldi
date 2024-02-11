@@ -6,6 +6,7 @@ import '../../../constants/constants.dart';
 import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
 import '../../../model/category_transaction.dart';
+import '../../../providers/currency_provider.dart';
 import 'categories_tab.dart';
 
 class CategoriesPieChart extends ConsumerWidget with Functions {
@@ -25,6 +26,7 @@ class CategoriesPieChart extends ConsumerWidget with Functions {
     final selectedCategoryIndex = ref.watch(selectedCategoryIndexProvider);
     final selectedCategory =
         (selectedCategoryIndex >= 0) ? categories[selectedCategoryIndex] : null;
+    final currencyState = ref.watch(currencyStateNotifier);
     return SizedBox(
       height: 200,
       child: Stack(
@@ -69,8 +71,8 @@ class CategoriesPieChart extends ConsumerWidget with Functions {
                   : const SizedBox(),
               Text(
                 (selectedCategory != null)
-                    ? "${amounts[selectedCategory.id]!.toStringAsFixed(2)} €"
-                    : "${total.toStringAsFixed(2)} €",
+                    ? "${amounts[selectedCategory.id]!.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}"
+                    : "${total.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}",
                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                     color: ((selectedCategory != null && amounts[selectedCategory.id]! > 0) ||
                             (selectedCategory == null && total > 0))

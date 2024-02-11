@@ -9,6 +9,7 @@ import '../custom_widgets/line_chart.dart';
 import '../custom_widgets/transactions_list.dart';
 import '../model/bank_account.dart';
 import '../providers/accounts_provider.dart';
+import '../providers/currency_provider.dart';
 import '../providers/dashboard_provider.dart';
 import '../providers/transactions_provider.dart';
 
@@ -24,6 +25,8 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
   Widget build(BuildContext context) {
     final accountList = ref.watch(accountsProvider);
     final lastTransactions = ref.watch(lastTransactionsProvider);
+    final currencyState = ref.watch(currencyStateNotifier);
+  
     return Container(
       color: Theme.of(context).colorScheme.tertiary,
       child: ListView(
@@ -35,6 +38,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                   final total = income + expense;
                   final currentMonthList = ref.watch(currentMonthListProvider);
                   final lastMonthList = ref.watch(lastMonthListProvider);
+
                   return Column(
                     children: [
                       const SizedBox(height: 24),
@@ -62,7 +66,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                                           ?.copyWith(color: Theme.of(context).colorScheme.primary),
                                     ),
                                     TextSpan(
-                                      text: "€",
+                                      text: currencyState.selectedCurrency.symbol,
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyLarge
@@ -92,7 +96,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                                           ?.copyWith(color: green),
                                     ),
                                     TextSpan(
-                                      text: "€",
+                                      text: currencyState.selectedCurrency.symbol,
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelLarge
@@ -122,7 +126,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                                           ?.copyWith(color: red),
                                     ),
                                     TextSpan(
-                                      text: "€",
+                                      text: currencyState.selectedCurrency.symbol,
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelLarge

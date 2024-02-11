@@ -3,13 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../constants/style.dart';
+import '../../model/currency.dart';
+import '../../providers/currency_provider.dart';
 import '../../providers/theme_provider.dart';
+import 'widgets/currency_selector.dart';
 
 class GeneralSettingsPage extends ConsumerStatefulWidget {
   const GeneralSettingsPage({super.key});
 
   @override
-  ConsumerState<GeneralSettingsPage> createState() => _GeneralSettingsPageState();
+  ConsumerState<GeneralSettingsPage> createState() =>
+      _GeneralSettingsPageState();
 }
 
 class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
@@ -25,17 +29,13 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
     ["🇩🇪", "Deutsch"]
   ];
 
-  List<List<String>> currencies = [
-    ["£", "British Pound"],
-    ["€", "Euro"],
-    ["\$", "US Dollar"],
-    ["CHF", "Swiss Franc"],
-    ["¥", "Yuan"],
-  ];
+  Future<List<Currency>> currencyList = CurrencyMethods().selectAll();
 
   @override
   Widget build(BuildContext context) {
     final appThemeState = ref.watch(appThemeStateNotifier);
+    final currencyState = ref.watch(currencyStateNotifier);
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -58,10 +58,8 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
             Row(
               children: [
                 Text("Appearance",
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(color: Theme.of(context).colorScheme.primary)),
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        color: Theme.of(context).colorScheme.primary)),
                 const Spacer(),
                 CircleAvatar(
                     radius: 30.0,
@@ -71,13 +69,19 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                       onPressed: () {
                         // Toggle dark mode using the provider
                         if (appThemeState.isDarkModeEnabled) {
-                          ref.read(appThemeStateNotifier.notifier).setLightTheme();
+                          ref
+                              .read(appThemeStateNotifier.notifier)
+                              .setLightTheme();
                         } else {
-                          ref.read(appThemeStateNotifier.notifier).setDarkTheme();
+                          ref
+                              .read(appThemeStateNotifier.notifier)
+                              .setDarkTheme();
                         }
                       },
                       icon: Icon(
-                        appThemeState.isDarkModeEnabled ? Icons.dark_mode : Icons.light_mode,
+                        appThemeState.isDarkModeEnabled
+                            ? Icons.dark_mode
+                            : Icons.light_mode,
                         size: 25.0,
                         color: Theme.of(context).colorScheme.background,
                       ),
@@ -88,23 +92,24 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
             Row(
               children: [
                 Text("Currency",
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(color: Theme.of(context).colorScheme.primary)),
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        color: Theme.of(context).colorScheme.primary)),
                 const Spacer(),
                 GestureDetector(
                     onTap: () {
-                      selectCurrency();
+                      setState(() {
+                        CurrencySelectorDialog.selectCurrencyDialog(context, currencyState, currencyList);
+                      });
                     },
                     child: CircleAvatar(
                         radius: 30.0,
                         backgroundColor: blue5,
                         child: Center(
                             child: Text(
-                          NumberFormat().simpleCurrencySymbol(selectedCurrency),
+                          currencyState.selectedCurrency.symbol,
                           style: TextStyle(
-                              color: Theme.of(context).colorScheme.background, fontSize: 25),
+                              color: Theme.of(context).colorScheme.background,
+                              fontSize: 25),
                         )))),
               ],
             ),
@@ -162,47 +167,6 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                               style: const TextStyle(fontSize: 30)),
                           title: Text(
                             languages.elementAt(index)[1],
-                            textAlign: TextAlign.center,
-                          ),
-                        ));
-                  }),
-            )));
-  }
-
-  selectCurrency() {
-    showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-            title: Text('Select a currency',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(color: Theme.of(context).colorScheme.primary)),
-            content: SizedBox(
-              height: 220,
-              width: 220,
-              child: ListView.builder(
-                  itemCount: currencies.length,
-                  physics: const BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (BuildContext context, int index) {
-                    return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            selectedCurrency = currencies.elementAt(index)[0];
-                          });
-                          Navigator.pop(context);
-                        },
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            radius: 22,
-                            backgroundColor: blue5,
-                            child: Text(currencies.elementAt(index)[0],
-                                style: TextStyle(
-                                    color: Theme.of(context).colorScheme.background, fontSize: 20)),
-                          ),
-                          title: Text(
-                            currencies.elementAt(index)[1],
                             textAlign: TextAlign.center,
                           ),
                         ));

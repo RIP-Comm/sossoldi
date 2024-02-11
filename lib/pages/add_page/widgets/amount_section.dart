@@ -4,6 +4,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import '../../../constants/functions.dart';
 import "../../../constants/style.dart";
 import '../../../model/transaction.dart';
+import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import 'account_selector.dart';
 import 'type_tab.dart';
@@ -42,6 +43,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
   Widget build(BuildContext context) {
     final trsncTypeList = ref.watch(transactionTypeList);
     final selectedType = ref.watch(transactionTypeProvider);
+    final currencyState = ref.watch(currencyStateNotifier);
 
     return Container(
       color: Theme.of(context).colorScheme.surface,
@@ -274,7 +276,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                 hintText: "0",
                 border: InputBorder.none,
                 prefixText: ' ', // set to center the amount
-                suffixText: '€',
+                suffixText: currencyState.selectedCurrency.symbol,
                 suffixStyle: Theme.of(context)
                     .textTheme
                     .headlineMedium!
