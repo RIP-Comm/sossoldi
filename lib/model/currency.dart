@@ -76,7 +76,14 @@ class CurrencyMethods extends SossoldiDatabase {
     if (maps.isNotEmpty) {
       return Currency.fromJson(maps.first);
     } else {
-      throw Exception('No valid currency found');
+      //fallback
+      return const Currency(
+        id: 2,
+        symbol: '\$',
+        code: 'USD',
+        name: "United States Dollar",
+        mainCurrency: true
+      );
     }
   }
 

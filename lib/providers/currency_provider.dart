@@ -9,7 +9,14 @@ final currencyStateNotifier = ChangeNotifierProvider(
 );
 
 class CurrencyState extends ChangeNotifier {
-  late Currency selectedCurrency;
+  //Initial currency selected
+  Currency selectedCurrency = const Currency(
+    id: 2,
+    symbol: '\$',
+    code: 'USD',
+    name: "United States Dollar",
+    mainCurrency: true
+  );
 
   CurrencyState() {
     _initializeState();
