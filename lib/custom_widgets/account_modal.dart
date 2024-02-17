@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+
 import '../constants/functions.dart';
 import 'line_chart.dart';
 
@@ -57,7 +58,7 @@ class AccountDialog extends StatelessWidget with Functions {
                   padding: EdgeInsets.all(8.0),
                 ),
                 LineChartWidget(
-                  line1Data: [
+                  lineData: [
                     FlSpot(0, 3),
                     FlSpot(1, 1.3),
                     FlSpot(2, -2),
@@ -76,9 +77,9 @@ class AccountDialog extends StatelessWidget with Functions {
                     FlSpot(15, -4.5),
                     FlSpot(16, 2.5),
                   ],
-                  colorLine1Data: Color(0xffffffff),
+                  lineColor: Color(0xffffffff),
                   line2Data: <FlSpot>[],
-                  colorLine2Data: Color(0xffffffff),
+                  line2Color: Color(0xffffffff),
                   colorBackground: Color(0xff356CA3),
                   period: Period.month,
                 ),
