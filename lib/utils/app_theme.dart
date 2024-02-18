@@ -123,6 +123,7 @@ class AppTheme {
       color: darkBlue1,
     ),
 
+    disabledColor: darkGrey2,
     //Text style
     fontFamily: 'SF Pro Text',
     textTheme: const TextTheme(

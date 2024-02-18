@@ -1,4 +1,3 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -47,10 +46,7 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: LineChartWidget(
-                      line1Data: accountTransactions,
-                      colorLine1Data: const Color(0xffffffff),
-                      line2Data: const <FlSpot>[],
-                      colorLine2Data: const Color(0xffffffff),
+                      lineData: accountTransactions,
                       colorBackground: blue5,
                       period: Period.month,
                       minY: 0,

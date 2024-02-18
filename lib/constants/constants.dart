@@ -40,7 +40,6 @@ const categoryColorList = [
   category7,
   category8,
   category9,
-  category10,
 ];
 
 const darkCategoryColorList = [
