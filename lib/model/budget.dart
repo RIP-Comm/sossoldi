@@ -85,6 +85,35 @@ class BudgetMethods extends SossoldiDatabase {
     return item.copy(id: id);
   }
 
+  Future<Budget> insertOrUpdate(Budget item) async {
+    final db = await database;
+
+    final exists = await checkIfExists(item);
+    if (exists) {
+      print("UPDATE ${item.toJson()}");
+      await db.rawQuery("UPDATE $budgetTable SET amountLimit = ${item.amountLimit} WHERE idCategory = ${item.idCategory}");
+    } else {
+      print("INSERT ${item.toJson()}");
+      await db.insert(budgetTable, item.toJson());
+    }
+
+    return item.copy(id: item.id);
+  }
+
+  Future<bool> checkIfExists(Budget item) async {
+    final db = await database;
+
+    try {
+      final exists = await db.rawQuery("SELECT * FROM ${budgetTable} WHERE ${item.idCategory} = idCategory");
+      if(exists.isNotEmpty) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
   Future<Budget> selectById(int id) async {
     final db = await database;
 
@@ -134,5 +163,17 @@ class BudgetMethods extends SossoldiDatabase {
     final db = await database;
 
     return await db.delete(budgetTable, where: '${BudgetFields.id} = ?', whereArgs: [id]);
+  }
+
+  Future<int> deleteByCategory(int id) async {
+    final db = await database;
+
+    return await db.delete(budgetTable, where: '${BudgetFields.idCategory} = ?', whereArgs: [id]);
+  }
+
+  //PER TEST
+  Future<int> deleteAll() async {
+    final db = await database;
+    return await db.rawDelete("DELETE FROM $budgetTable");
   }
 }

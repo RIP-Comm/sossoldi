@@ -7,31 +7,36 @@ class AsyncBudgetsNotifier extends AsyncNotifier<List<Budget>> {
     return _getBudgets();
   }
 
+  Future<List<Budget>> getBudgets() async {
+    final budgets = await BudgetMethods().selectAllActive();
+    return budgets;
+  }
+
   Future<List<Budget>> _getBudgets() async {
-    final account = await BudgetMethods().selectAllActive();
-    return account;
+    final budgets = await BudgetMethods().selectAllActive();
+    return budgets;
   }
 
-  Future<void> addAccount(Budget account) async {
+  Future<void> addBudget(Budget budget) async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
-      await BudgetMethods().insert(account);
+      await BudgetMethods().insert(budget);
       return _getBudgets();
     });
   }
 
-  Future<void> updateAccount(Budget account) async {
+  Future<void> updateBudget(Budget budget) async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
-      await BudgetMethods().updateItem(account);
+      await BudgetMethods().updateItem(budget);
       return _getBudgets();
     });
   }
 
-  Future<void> removeAccount(int accountId) async {
+  Future<void> removeBudget(int budgetId) async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
-      await BudgetMethods().deleteById(accountId);
+      await BudgetMethods().deleteById(budgetId);
       return _getBudgets();
     });
   }

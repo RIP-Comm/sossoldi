@@ -65,6 +65,10 @@ class AsyncCategoriesNotifier extends AsyncNotifier<List<CategoryTransaction>> {
     ref.invalidate(categoryIconProvider);
     ref.invalidate(categoryColorProvider);
   }
+
+  Future<List<CategoryTransaction>> getCategories() async {
+    return _getCategories();
+  }
 }
 
 final categoriesProvider = AsyncNotifierProvider<AsyncCategoriesNotifier, List<CategoryTransaction>>(() {

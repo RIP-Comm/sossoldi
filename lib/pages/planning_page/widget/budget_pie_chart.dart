@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
+import '../../../constants/constants.dart';
 import '../../../model/budget.dart';
 
 class BudgetPieChart extends StatefulWidget {
@@ -49,7 +50,7 @@ class BudgetPieChartState extends State<BudgetPieChart> {
       double value = (budget.amountLimit / totalBudget) * 100;
 
       return PieChartSectionData(
-        color: i == 0 ? Colors.deepPurple : Colors.blue,
+        color: categoryColorList[i],
         value: value,
         title: "",
         radius: 20,
