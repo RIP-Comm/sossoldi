@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sossoldi/model/budget.dart';
 import 'package:sossoldi/model/category_transaction.dart';
 
-import '../../../providers/categories_provider.dart';
+import '../../../constants/constants.dart';
 
 class BudgetCategorySelector extends ConsumerStatefulWidget {
   final List<CategoryTransaction> categories;
@@ -69,8 +69,12 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
                         isExpanded: true,
                         items: widget.categories
                             .map((CategoryTransaction category) {
+                          IconData? icon = iconList[category.symbol];
                           return DropdownMenuItem<CategoryTransaction>(
-                              value: category, child: Text(category.name));
+                              value: category,
+                              child: Row(
+                                children: [Icon(icon), const SizedBox(width: 15,), Text(category.name)],
+                              ));
                         }).toList(),
                         onChanged: (CategoryTransaction? newValue) {
                           setState(() {
