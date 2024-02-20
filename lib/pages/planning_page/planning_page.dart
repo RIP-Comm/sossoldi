@@ -60,8 +60,8 @@ class _PlanningPageState extends State<PlanningPage> {
                       child: Row(children: [
                         Text("MANAGE",
                             style: Theme.of(context).textTheme.labelLarge),
-                        SizedBox(width: 5),
-                        Icon(Icons.edit, size: 13)
+                        const SizedBox(width: 5),
+                        const Icon(Icons.edit, size: 13)
                       ]))
                 ],
               ),

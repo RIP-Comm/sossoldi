@@ -28,7 +28,10 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
   }
 
   void updateBudget(Budget updatedBudget, int index) {
-    budgets[index] = updatedBudget;
+    setState(() {
+      deletedBudgets.add(budgets[index]);
+      budgets[index] = updatedBudget;
+    });
   }
 
   void deleteBudget(Budget removedBudget, int index) {
@@ -138,12 +141,12 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
             child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     for (var item in deletedBudgets) {
-                      BudgetMethods().deleteByCategory(item.idCategory);
+                      await BudgetMethods().deleteByCategory(item.idCategory);
                     }
                     for (var item in budgets) {
-                      BudgetMethods().insertOrUpdate(item);
+                      await BudgetMethods().insertOrUpdate(item);
                     }
                     setState(() {
                       widget.onRefreshBudgets();
