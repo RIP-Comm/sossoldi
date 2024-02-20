@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sossoldi/providers/budgets_provider.dart';
 
+import '../../constants/style.dart';
 import '../../model/budget.dart';
 import '../../model/category_transaction.dart';
 import 'widget/budget_category_selector.dart';
@@ -27,7 +28,6 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
   }
 
   void updateBudget(Budget updatedBudget, int index) {
-    //deletedBudgets.add(budgets[index]);
     budgets[index] = updatedBudget;
   }
 
@@ -68,58 +68,71 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
               ],
             )),
         Expanded(
-            child: ListView.builder(
-          itemCount: budgets.length,
-          itemBuilder: (context, index) {
-            return Dismissible(
-                key: Key(budgets[index].idCategory.toString()),
-                background: Container(
-                  padding: const EdgeInsets.only(right: 20.0),
-                  alignment: Alignment.centerRight,
-                  color: Colors.red,
-                  child: const Text(
-                    'Delete',
-                    textAlign: TextAlign.right,
-                    style: TextStyle(color: Colors.white),
+            child: Column(children: [
+          ListView.builder(
+            shrinkWrap: true,
+            itemCount: budgets.length,
+            itemBuilder: (context, index) {
+              return Dismissible(
+                  key: Key(budgets[index].idCategory.toString()),
+                  background: Container(
+                    padding: const EdgeInsets.only(right: 20.0),
+                    alignment: Alignment.centerRight,
+                    color: Colors.red,
+                    child: const Text(
+                      'Delete',
+                      textAlign: TextAlign.right,
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
-                ),
-                onDismissed: (direction) {
-                  deleteBudget(budgets[index], index);
-                },
-                child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                    child: BudgetCategorySelector(
-                      categories: categories,
-                      budget: budgets[index],
-                      initSelectedCategory: categories
-                              .where((element) =>
-                                  element.id == budgets[index].idCategory)
-                              .isEmpty
-                          ? categories[0]
-                          : categories
-                              .where((element) =>
-                                  element.id == budgets[index].idCategory)
-                              .first,
-                      onBudgetChanged: (updatedBudget) {
-                        updateBudget(updatedBudget, index);
-                      },
-                    )));
-          },
-        )),
-        ListTile(
-          leading: const Icon(Icons.add_box),
-          title: const Text("Add category budget"),
-          onTap: () {
-            setState(() {
-              budgets.add(Budget(
-                  active: true,
-                  amountLimit: 100,
-                  idCategory: categories[0].id!,
-                  name: categories[0].name));
-            });
-          },
-        ),
+                  onDismissed: (direction) {
+                    deleteBudget(budgets[index], index);
+                  },
+                  child: BudgetCategorySelector(
+                    categories: categories,
+                    budget: budgets[index],
+                    initSelectedCategory: categories
+                            .where((element) =>
+                                element.id == budgets[index].idCategory)
+                            .isEmpty
+                        ? categories[0]
+                        : categories
+                            .where((element) =>
+                                element.id == budgets[index].idCategory)
+                            .first,
+                    onBudgetChanged: (updatedBudget) {
+                      updateBudget(updatedBudget, index);
+                    },
+                  ));
+            },
+          ),
+          TextButton.icon(
+              icon: Icon(
+                Icons.add_circle,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+              onPressed: () {
+                setState(() {
+                  budgets.add(Budget(
+                      active: true,
+                      amountLimit: 100,
+                      idCategory: categories[0].id!,
+                      name: categories[0].name));
+                });
+              },
+              label: Text(
+                "Add category budget",
+                style: Theme.of(context)
+                    .textTheme
+                    .titleSmall!
+                    .apply(color: Theme.of(context).colorScheme.secondary),
+              )),
+        ])),
+        const SizedBox(height: 10),
+        Text(
+            "Your monthly budget will be: ${budgets.isEmpty ? 0 : budgets.fold(0, (sum, e) => sum + e.amountLimit.toInt())}€"),
+        const SizedBox(height: 10),
+        const Divider(height: 1, color: grey2),
         Padding(
             padding: const EdgeInsets.all(8),
             child: SizedBox(

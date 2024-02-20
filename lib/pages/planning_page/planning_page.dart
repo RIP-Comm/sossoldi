@@ -29,8 +29,8 @@ class _PlanningPageState extends State<PlanningPage> {
     return Container(
         key: _key,
         color: Colors.white,
+        padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
         child: ListView(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 45),
             children: [
               Row(
                 children: [
@@ -67,11 +67,6 @@ class _PlanningPageState extends State<PlanningPage> {
               ),
               const SizedBox(height: 10),
               BudgetCard(_forceRefresh),
-              IconButton(
-                  icon: Icon(Icons.remove),
-                  onPressed: () {
-                    BudgetMethods().deleteAll();
-                  }),
               const SizedBox(height: 20),
               Text("Recurring payments",
                   style: Theme.of(context).textTheme.titleLarge),

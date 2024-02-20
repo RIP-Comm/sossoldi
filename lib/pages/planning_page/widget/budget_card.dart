@@ -135,10 +135,20 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                               onPressed: () {
                                 showModalBottomSheet(
                                   context: context,
+                                  isScrollControlled: true,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(20.0),
+                                      topRight: Radius.circular(20.0),
+                                    ),
+                                  ),
+                                  elevation: 10,
                                   builder: (BuildContext context) {
-                                    return ManageBudgetPage(
-                                        onRefreshBudgets:
-                                            widget.onRefreshBudgets);
+                                    return FractionallySizedBox(
+                                        heightFactor: 0.9,
+                                        child: ManageBudgetPage(
+                                            onRefreshBudgets:
+                                                widget.onRefreshBudgets));
                                   },
                                 );
                               },
