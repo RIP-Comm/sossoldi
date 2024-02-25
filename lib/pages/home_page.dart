@@ -141,11 +141,8 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                       ),
                       const SizedBox(height: 16),
                       LineChartWidget(
-                        line1Data: currentMonthList,
-                        colorLine1Data: const Color(0xff00152D),
+                        lineData: currentMonthList,
                         line2Data: lastMonthList,
-                        colorLine2Data: const Color(0xffB9BABC), //da modificare in darkMode
-                        colorBackground: Theme.of(context).colorScheme.tertiary,
                       ),
                       Row(
                         children: [
