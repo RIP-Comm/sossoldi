@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
 import '../../../constants/style.dart';
 import '../../../model/category_transaction.dart';
+import '../../../providers/currency_provider.dart';
 import 'categories_tab.dart';
 
 class CategoryListTile extends ConsumerWidget {
@@ -25,6 +26,7 @@ class CategoryListTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedCategoryIndex = ref.watch(selectedCategoryIndexProvider);
+    final currencyState = ref.watch(currencyStateNotifier);
     final nTransactions = transactions.length;
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -72,7 +74,7 @@ class CategoryListTile extends ConsumerWidget {
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           Text(
-                            "${amount.toStringAsFixed(2)} €",
+                            "${amount.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyLarge
@@ -142,6 +144,7 @@ class TransactionRow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final currencyState = ref.watch(currencyStateNotifier);
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 8.0,
@@ -162,7 +165,7 @@ class TransactionRow extends ConsumerWidget {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(
-                      "${transaction['amount'].toStringAsFixed(2)} €",
+                      "${transaction['amount'].toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}",
                       style: Theme.of(context)
                           .textTheme
                           .bodyLarge

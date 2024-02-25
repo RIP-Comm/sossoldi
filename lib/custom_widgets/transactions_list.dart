@@ -5,6 +5,7 @@ import '../constants/constants.dart';
 import '../constants/functions.dart';
 import '../constants/style.dart';
 import '../model/transaction.dart';
+import '../providers/currency_provider.dart';
 import '../providers/transactions_provider.dart';
 import '../utils/date_helper.dart';
 import 'default_container.dart';
@@ -99,7 +100,7 @@ class _TransactionsListState extends State<TransactionsList> with Functions {
   }
 }
 
-class TransactionTitle extends StatelessWidget with Functions {
+class TransactionTitle extends ConsumerWidget with Functions {
   final DateTime date;
   final num total;
   final bool first;
@@ -112,7 +113,8 @@ class TransactionTitle extends StatelessWidget with Functions {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currencyState = ref.watch(currencyStateNotifier);
     final color = total < 0 ? red : (total > 0 ? green : blue3);
     return Padding(
       padding: EdgeInsets.only(top: first ? 0 : 24),
@@ -136,7 +138,7 @@ class TransactionTitle extends StatelessWidget with Functions {
                       style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: color),
                     ),
                     TextSpan(
-                      text: "€",
+                      text: currencyState.selectedCurrency.symbol,
                       style: Theme.of(context)
                           .textTheme
                           .labelMedium!
@@ -163,6 +165,8 @@ class TransactionRow extends ConsumerWidget with Functions {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final currencyState = ref.watch(currencyStateNotifier);
+    
     return Column(
       children: [
         Material(
@@ -233,7 +237,7 @@ class TransactionRow extends ConsumerWidget with Functions {
                                         .copyWith(color: typeToColor(transaction.type)),
                                   ),
                                   TextSpan(
-                                    text: "€",
+                                    text: currencyState.selectedCurrency.symbol,
                                     style: Theme.of(context)
                                         .textTheme
                                         .labelSmall!

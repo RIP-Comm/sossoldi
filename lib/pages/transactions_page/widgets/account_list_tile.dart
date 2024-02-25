@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/style.dart';
+import '../../../providers/currency_provider.dart';
 import 'accounts_tab.dart';
 
 class AccountListTile extends ConsumerWidget {
@@ -29,6 +30,7 @@ class AccountListTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedAccountIndex = ref.watch(selectedAccountIndexProvider);
+    final currencyState = ref.watch(currencyStateNotifier);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -75,7 +77,7 @@ class AccountListTile extends ConsumerWidget {
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           Text(
-                            "${amount.toStringAsFixed(2)} €",
+                            "${amount.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyLarge
@@ -135,7 +137,7 @@ class AccountListTile extends ConsumerWidget {
   }
 }
 
-class TransactionRow extends StatelessWidget {
+class TransactionRow extends ConsumerWidget {
   const TransactionRow({
     super.key,
     required this.transaction,
@@ -144,7 +146,8 @@ class TransactionRow extends StatelessWidget {
   final Map<String, dynamic> transaction;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currencyState = ref.watch(currencyStateNotifier);
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 8.0,
@@ -165,7 +168,7 @@ class TransactionRow extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(
-                      "${transaction['amount'].toStringAsFixed(2)} €",
+                      "${transaction['amount'].toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}",
                       style: Theme.of(context)
                           .textTheme
                           .bodyLarge

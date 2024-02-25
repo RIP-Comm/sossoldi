@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/style.dart';
 import '../../../model/budget.dart';
 import '../../../providers/budgets_provider.dart';
+import '../../../providers/currency_provider.dart';
 import 'budget_pie_chart.dart';
 
 class BudgetCard extends ConsumerStatefulWidget {
@@ -17,6 +18,7 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
   @override
   Widget build(BuildContext context) {
     final budgets = ref.watch(budgetsProvider);
+    final currencyState = ref.watch(currencyStateNotifier);
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
@@ -52,7 +54,7 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                                   ),
                                   const Spacer(),
                                   Text(
-                                    "$spent/${budget.amountLimit}€",
+                                    "$spent/${budget.amountLimit}${currencyState.selectedCurrency.symbol}",
                                     style: const TextStyle(fontWeight: FontWeight.normal),
                                   ),
                                 ],
