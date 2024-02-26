@@ -6,13 +6,15 @@ import 'package:fl_chart/fl_chart.dart';
 final mainAccountProvider = StateProvider<BankAccount?>((ref) => null);
 
 final selectedAccountProvider = StateProvider<BankAccount?>((ref) => null);
-final accountIconProvider = StateProvider<String>((ref) => accountIconList.keys.first);
+final accountIconProvider =
+    StateProvider<String>((ref) => accountIconList.keys.first);
 final accountColorProvider = StateProvider<int>((ref) => 0);
 final accountMainSwitchProvider = StateProvider<bool>((ref) => false);
 final countNetWorthSwitchProvider = StateProvider<bool>((ref) => true);
-final selectedAccountCurrentMonthDailyBalanceProvider = StateProvider<List<FlSpot>>((ref) => const []);
+final selectedAccountCurrentMonthDailyBalanceProvider =
+    StateProvider<List<FlSpot>>((ref) => const []);
+final selectedAccountLastTransactions = StateProvider<List>((ref) => const []);
 final filterAccountProvider = StateProvider<Map<int, bool>>((ref) => {});
-
 
 class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
   @override
@@ -56,17 +58,17 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
 
   Future<void> updateAccount(String name) async {
     BankAccount account = ref.read(selectedAccountProvider)!.copy(
-      name: name,
-      symbol: ref.read(accountIconProvider),
-      color: ref.read(accountColorProvider),
-      active: ref.read(countNetWorthSwitchProvider),
-      mainAccount: ref.read(accountMainSwitchProvider),
-    );
+          name: name,
+          symbol: ref.read(accountIconProvider),
+          color: ref.read(accountColorProvider),
+          active: ref.read(countNetWorthSwitchProvider),
+          mainAccount: ref.read(accountMainSwitchProvider),
+        );
 
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       await BankAccountMethods().updateItem(account);
-      if(account.mainAccount) {
+      if (account.mainAccount) {
         ref.read(mainAccountProvider.notifier).state = account;
       }
       return _getAccounts();
@@ -79,18 +81,22 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
     ref.read(accountColorProvider.notifier).state = account.color;
     ref.read(accountMainSwitchProvider.notifier).state = account.mainAccount;
 
-    final currentMonthDailyBalance = await BankAccountMethods()
-        .accountDailyBalance(
-          account.id!,
-          dateRangeStart: DateTime(DateTime.now().year, DateTime.now().month, 1), // beginnig of current month
-          dateRangeEnd: DateTime(DateTime.now().year, DateTime.now().month + 1, 1) // beginnig of next month
-        ); 
+    final currentMonthDailyBalance = await BankAccountMethods().accountDailyBalance(
+        account.id!,
+        dateRangeStart: DateTime(DateTime.now().year, DateTime.now().month,
+            1), // beginnig of current month
+        dateRangeEnd: DateTime(DateTime.now().year, DateTime.now().month + 1,
+            1) // beginnig of next month
+        );
 
     ref.read(selectedAccountCurrentMonthDailyBalanceProvider.notifier).state =
         currentMonthDailyBalance.map((e) {
       return FlSpot(double.parse(e['day'].substring(8)) - 1,
           double.parse(e['balance'].toStringAsFixed(2)));
     }).toList();
+
+    ref.read(selectedAccountLastTransactions.notifier).state =
+        await BankAccountMethods().getTransactions(account.id!, 50);
   }
 
   Future<void> removeAccount(int accountId) async {
@@ -111,6 +117,7 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
   }
 }
 
-final accountsProvider = AsyncNotifierProvider<AsyncAccountsNotifier, List<BankAccount>>(() {
+final accountsProvider =
+    AsyncNotifierProvider<AsyncAccountsNotifier, List<BankAccount>>(() {
   return AsyncAccountsNotifier();
 });

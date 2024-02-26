@@ -4,7 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../constants/functions.dart';
 import '../../constants/style.dart';
 import '../../custom_widgets/line_chart.dart';
+import '../../custom_widgets/transactions_list.dart';
 import '../../providers/accounts_provider.dart';
+import '../../model/transaction.dart';
 
 class AccountPage extends ConsumerStatefulWidget {
   const AccountPage({super.key});
@@ -17,14 +19,17 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
   @override
   Widget build(BuildContext context) {
     final account = ref.read(selectedAccountProvider);
-    final accountTransactions = ref.watch(selectedAccountCurrentMonthDailyBalanceProvider);
+    final accountTransactions =
+        ref.watch(selectedAccountCurrentMonthDailyBalanceProvider);
+    final transactions = ref.watch(selectedAccountLastTransactions);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(account?.name ?? "", style: const TextStyle(color: white)),
-        backgroundColor: blue5,
-        elevation: 0,
-      ),
+          title:
+              Text(account?.name ?? "", style: const TextStyle(color: white)),
+          backgroundColor: blue5,
+          elevation: 0,
+          iconTheme: const IconThemeData(color: Colors.white)),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -55,7 +60,12 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                 ],
               ),
             ),
-            // TODO: add list of transactions
+            Container(
+                padding: const EdgeInsets.only(top: 40.0),
+                child: TransactionsList(
+                    transactions: transactions
+                        .map((json) => Transaction.fromJson(json))
+                        .toList())),
           ],
         ),
       ),
