@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sossoldi/model/budget.dart';
 import 'manage_budget_page.dart';
 import 'widget/budget_card.dart';
 import 'widget/recurring_payments_card.dart';

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sossoldi/model/budget.dart';
-import 'package:sossoldi/model/category_transaction.dart';
 
 import '../../../constants/constants.dart';
+import '../../../model/budget.dart';
+import '../../../model/category_transaction.dart';
 
 class BudgetCategorySelector extends ConsumerStatefulWidget {
   final List<CategoryTransaction> categories;

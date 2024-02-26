@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sossoldi/providers/budgets_provider.dart';
 
 import '../../constants/style.dart';
 import '../../model/budget.dart';
 import '../../model/category_transaction.dart';
 import 'widget/budget_category_selector.dart';
 import '../../../providers/categories_provider.dart';
+import '../../../providers/budgets_provider.dart';
 
 class ManageBudgetPage extends ConsumerStatefulWidget {
   final Function() onRefreshBudgets;

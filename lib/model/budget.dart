@@ -170,10 +170,4 @@ class BudgetMethods extends SossoldiDatabase {
 
     return await db.delete(budgetTable, where: '${BudgetFields.idCategory} = ?', whereArgs: [id]);
   }
-
-  //PER TEST
-  Future<int> deleteAll() async {
-    final db = await database;
-    return await db.rawDelete("DELETE FROM $budgetTable");
-  }
 }

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sossoldi/pages/planning_page/manage_budget_page.dart';
-import 'package:sossoldi/providers/transactions_provider.dart';
 
 import '../../../constants/constants.dart';
-import '../../../constants/style.dart';
 import '../../../model/budget.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/budgets_provider.dart';
+import '../../../providers/transactions_provider.dart';
+import '../manage_budget_page.dart';
 import 'budget_pie_chart.dart';
 
 class BudgetCard extends ConsumerStatefulWidget {
