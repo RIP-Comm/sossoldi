@@ -32,7 +32,7 @@ class LabelListTile extends StatelessWidget {
           ),
           const SizedBox(width: 16),
           Text(
-            "Label",
+            "Description",
             style: Theme.of(context)
                 .textTheme
                 .titleLarge!
@@ -42,7 +42,8 @@ class LabelListTile extends StatelessWidget {
           Expanded(
             child: TextField(
               controller: labelController,
-              decoration: const InputDecoration(border: InputBorder.none),
+              decoration: const InputDecoration(
+                  border: InputBorder.none, hintText: "Add a description"),
               textAlign: TextAlign.end,
               style: Theme.of(context).textTheme.bodySmall!.copyWith(color: grey1),
             ),
