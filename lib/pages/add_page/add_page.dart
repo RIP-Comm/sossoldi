@@ -51,7 +51,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
         amountController.text.replaceAll(RegExp(r'[^0-9\.]'), '');
 
     // Remove leading zeros
-    return cleanNumberString.replaceFirst(RegExp(r'0'), '');
+    return cleanNumberString.replaceAll(RegExp(r'^[0\.]+(?=.)'), '');
   }
 
   void _updateAmount() {
