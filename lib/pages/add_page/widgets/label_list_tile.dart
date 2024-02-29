@@ -45,7 +45,10 @@ class LabelListTile extends StatelessWidget {
               decoration: const InputDecoration(
                   border: InputBorder.none, hintText: "Add a description"),
               textAlign: TextAlign.end,
-              style: Theme.of(context).textTheme.bodySmall!.copyWith(color: grey1),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall!
+                  .copyWith(color: Theme.of(context).colorScheme.secondary),
             ),
           ),
         ],
