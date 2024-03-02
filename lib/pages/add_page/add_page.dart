@@ -114,10 +114,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
     final selectedType = ref.watch(transactionTypeProvider);
     final selectedTransaction = ref.watch(selectedTransactionUpdateProvider);
 
-    ref.listen(transactionTypeProvider, (previous, next) {
-      // update the amount text when the transaction type changes
-      _updateAmount();
-    });
+    _updateAmount();
 
     return Scaffold(
       appBar: AppBar(
