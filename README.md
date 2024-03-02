@@ -71,9 +71,8 @@ If you want to help with this project you are more than welcome! Sossoldi is com
 
 Also, you can refer to internal docs:
 
--   [Setup Guide](./docs/setup/setup.md)
--   [Contribution Guide](./docs/contribution/contribution.md)
--   [Code of Conduct](./docs/contribution/code_of_conduct.md)
+-   [Setup Guide](https://rip-comm.github.io/sossoldi/setup/setup.html)
+-   [PR Guide](https://rip-comm.github.io/sossoldi/contributing/PR-guide.html)
 
 ### Useful links to get started
 -   [Github Repo](https://github.com/RIP-Comm/sossoldi)
