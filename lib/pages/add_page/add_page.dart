@@ -28,8 +28,13 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
 
   @override
   void initState() {
-    amountController.text = numToCurrency(ref.read(selectedTransactionUpdateProvider)?.amount);
-    noteController.text = ref.read(selectedTransactionUpdateProvider)?.note ?? '';
+    amountController.text =
+        numToCurrency(ref.read(selectedTransactionUpdateProvider)?.amount);
+    noteController.text =
+        ref.read(selectedTransactionUpdateProvider)?.note ?? '';
+
+    amountController.addListener(_updateAmount);
+
     super.initState();
   }
 
@@ -40,10 +45,76 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
     super.dispose();
   }
 
+  String getCleanAmountString() {
+    // Remove all non-numeric characters
+    var cleanNumberString =
+        amountController.text.replaceAll(RegExp(r'[^0-9\.]'), '');
+
+    // Remove leading zeros
+    return cleanNumberString.replaceAll(RegExp(r'^[0\.]+(?=.)'), '');
+  }
+
+  void _updateAmount() {
+    final selectedType = ref.read(transactionTypeProvider);
+
+    var toBeWritten = getCleanAmountString();
+
+    if (selectedType == TransactionType.expense) {
+      // apply the minus sign if it's an expense
+      if (toBeWritten.isNotEmpty) {
+        toBeWritten = "-$toBeWritten";
+      }
+    }
+
+    if (toBeWritten != amountController.text) {
+      // only update the controller if the value is different
+      amountController.text = toBeWritten;
+      amountController.selection = TextSelection.fromPosition(
+        TextPosition(offset: toBeWritten.length),
+      );
+    }
+  }
+
+  void _createOrUpdateTransaction() {
+    final selectedType = ref.read(transactionTypeProvider);
+    final selectedTransaction = ref.read(selectedTransactionUpdateProvider);
+
+    final cleanAmount = getCleanAmountString();
+
+    // Check that an amount it's inserted
+    if (cleanAmount != '') {
+      if (selectedTransaction != null) {
+        ref
+            .read(transactionsProvider.notifier)
+            .updateTransaction(currencyToNum(cleanAmount), noteController.text)
+            .whenComplete(() => Navigator.of(context).pop());
+      } else {
+        if (selectedType == TransactionType.transfer) {
+          if (ref.read(bankAccountTransferProvider) != null) {
+            ref
+                .read(transactionsProvider.notifier)
+                .addTransaction(currencyToNum(cleanAmount), noteController.text)
+                .whenComplete(() => Navigator.of(context).pop());
+          }
+        } else {
+          // It's an income or an expense
+          if (ref.read(categoryProvider) != null) {
+            ref
+                .read(transactionsProvider.notifier)
+                .addTransaction(currencyToNum(cleanAmount), noteController.text)
+                .whenComplete(() => Navigator.of(context).pop());
+          }
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final selectedType = ref.watch(transactionTypeProvider);
     final selectedTransaction = ref.watch(selectedTransactionUpdateProvider);
+
+    _updateAmount();
 
     return Scaffold(
       appBar: AppBar(
@@ -232,34 +303,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: TextButton(
-                  onPressed: () async {
-                    // Check that an amount it's inserted
-                    if (amountController.text != '') {
-                      if (selectedTransaction != null) {
-                        ref
-                            .read(transactionsProvider.notifier)
-                            .updateTransaction(currencyToNum(amountController.text), noteController.text)
-                            .whenComplete(() => Navigator.of(context).pop());
-                      } else {
-                        if (selectedType == TransactionType.transfer) {
-                          if (ref.read(bankAccountTransferProvider) != null) {
-                            ref
-                                .read(transactionsProvider.notifier)
-                                .addTransaction(currencyToNum(amountController.text), noteController.text)
-                                .whenComplete(() => Navigator.of(context).pop());
-                          }
-                        } else {
-                          // It's an income or an expense
-                          if (ref.read(categoryProvider) != null) {
-                            ref
-                                .read(transactionsProvider.notifier)
-                                .addTransaction(currencyToNum(amountController.text), noteController.text)
-                                .whenComplete(() => Navigator.of(context).pop());
-                          }
-                        }
-                      }
-                    }
-                  },
+                  onPressed: _createOrUpdateTransaction,
                   style: TextButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.secondary,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

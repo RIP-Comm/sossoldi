@@ -69,6 +69,11 @@ The pages that will be implemented are:
 
 If you want to help with this project you are more than welcome! Sossoldi is completely free and open source, the best place to start is from the issue tab and look for something that seems interesting to you. If are unsure on where to start feel free to reach out to us on [Discord](https://discord.com/channels/919139369774891088/1013368203575038012), we will be more than happy to help you find what's best for you!
 
+Also, you can refer to internal docs:
+
+-   [Setup Guide](https://rip-comm.github.io/sossoldi/setup/setup.html)
+-   [PR Guide](https://rip-comm.github.io/sossoldi/contributing/PR-guide.html)
+
 ### Useful links to get started
 -   [Github Repo](https://github.com/RIP-Comm/sossoldi)
 -   [Discord](http://mr.rip/discord)
