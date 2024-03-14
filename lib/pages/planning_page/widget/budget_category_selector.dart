@@ -9,6 +9,7 @@ import '../../../model/category_transaction.dart';
 class BudgetCategorySelector extends ConsumerStatefulWidget {
   final List<CategoryTransaction> categories;
   final Budget budget;
+  final List<String> categoriesAlreadyUsed;
   final CategoryTransaction initSelectedCategory;
   final Function(Budget) onBudgetChanged;
 
@@ -17,7 +18,8 @@ class BudgetCategorySelector extends ConsumerStatefulWidget {
       required this.categories,
       required this.budget,
       required this.initSelectedCategory,
-      required this.onBudgetChanged});
+      required this.onBudgetChanged,
+      required this.categoriesAlreadyUsed});
 
   @override
   ConsumerState<BudgetCategorySelector> createState() =>
@@ -33,9 +35,8 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
         idCategory: selectedCategory.id!,
         name: selectedCategory.name,
         active: true,
-        amountLimit:
-            _controller.text.isNotEmpty ? double.parse(_controller.text) : 0);
-
+        amountLimit: _controller.text.isNotEmpty ? double.parse(_controller.text) : 0
+      );
     widget.onBudgetChanged(updatedBudget);
   }
 
@@ -68,12 +69,13 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
                         underline: const SizedBox(),
                         isExpanded: true,
                         items: widget.categories
+                          .where((e) => e.name == selectedCategory.name || !widget.categoriesAlreadyUsed.contains(e.name))
                             .map((CategoryTransaction category) {
                           IconData? icon = iconList[category.symbol];
                           return DropdownMenuItem<CategoryTransaction>(
                               value: category,
                               child: Row(
-                                children: [Icon(icon), const SizedBox(width: 15,), Text(category.name)],
+                                children: [Icon(icon), const SizedBox(width: 15), Text(category.name)],
                               ));
                         }).toList(),
                         onChanged: (CategoryTransaction? newValue) {

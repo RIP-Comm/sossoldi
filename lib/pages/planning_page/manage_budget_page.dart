@@ -93,6 +93,7 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
                   },
                   child: BudgetCategorySelector(
                     categories: categories,
+                    categoriesAlreadyUsed: categories.where((element) => budgets.map((e) => e.name).contains(element.name)).map((e) => e.name).toList(),
                     budget: budgets[index],
                     initSelectedCategory: categories
                             .where((element) =>

@@ -74,6 +74,7 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                                               fontWeight: FontWeight.normal),
                                         ),
                                         const Spacer(),
+                                        spent >= (budget.amountLimit * 0.9) ? const Icon(Icons.error_outline, color: Colors.red) : Container(),
                                         Text(
                                           "$spent/${budget.amountLimit}€",
                                           style: const TextStyle(
