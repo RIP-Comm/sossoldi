@@ -63,6 +63,11 @@ var collaborators = const [
     "Backend Dev",
     "github.com/sainzrow",
   ],
+  [
+    "Alessandro Guerra",
+    "Full Stack Dev",
+    "github.com/K-w-e",
+  ]
 ];
 
 
