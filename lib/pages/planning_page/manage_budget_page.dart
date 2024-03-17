@@ -110,6 +110,7 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
                   ));
             },
           ),
+          Text("Swipe left to delete", style: Theme.of(context).textTheme.bodySmall),
           TextButton.icon(
               icon: Icon(
                 Icons.add_circle,
@@ -138,24 +139,38 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
         const SizedBox(height: 10),
         const Divider(height: 1, color: grey2),
         Padding(
-            padding: const EdgeInsets.all(8),
-            child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    for (var item in deletedBudgets) {
-                      await BudgetMethods().deleteByCategory(item.idCategory);
-                    }
-                    for (var item in budgets) {
-                      await BudgetMethods().insertOrUpdate(item);
-                    }
-                    setState(() {
-                      widget.onRefreshBudgets();
-                      Navigator.of(context).pop();
-                    });
-                  },
-                  child: const Text("Save budget"),
-                )))
+          padding: const EdgeInsets.all(16.0),
+          child: SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () async {
+                for (var item in deletedBudgets) {
+                  await BudgetMethods().deleteByCategory(item.idCategory);
+                }
+                for (var item in budgets) {
+                  await BudgetMethods().insertOrUpdate(item);
+                }
+                setState(() {
+                  widget.onRefreshBudgets();
+                  Navigator.of(context).pop();
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.all(12.0),
+                primary: Theme.of(context).colorScheme.secondary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: Text(
+                "SAVE BUDGET",
+                style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      color: Theme.of(context).colorScheme.background,
+                    ),
+              ),
+            ),
+          ),
+        )
       ],
     );
   }
