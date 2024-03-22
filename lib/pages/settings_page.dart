@@ -2,6 +2,8 @@
 
 // ignore_for_file: unused_result
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sossoldi/providers/statistics_provider.dart';
@@ -23,7 +25,7 @@ class SettingsPage extends ConsumerStatefulWidget {
   ConsumerState<SettingsPage> createState() => _SettingsPageState();
 }
 
-var settingsOptions = const [
+var settingsOptions = [
   [
     Icons.settings,
     "General Settings",
@@ -58,7 +60,7 @@ var settingsOptions = const [
     Icons.notifications_active,
     "Notifications",
     "Manage your notifications settings",
-    "/notifications-settings",
+    Platform.isAndroid ? "/notifications-settings" : null,
   ],
   [
     Icons.info,
@@ -109,14 +111,16 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 ],
               ),
             ),
-            ListView.separated(
+            ListView.builder(
               itemCount: settingsOptions.length,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              separatorBuilder: (context, index) => const SizedBox(height: 16),
               itemBuilder: (context, i) {
                 List setting = settingsOptions[i];
-                return DefaultCard(
+                if (setting[3] == null) return Container();
+                return Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: DefaultCard(
                   onTap: () {
                     if (setting[3] != null) {
                       Navigator.of(context).pushNamed(setting[3] as String);
@@ -163,7 +167,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       ),
                     ],
                   ),
-                );
+                ));
               },
             ),
           ],
