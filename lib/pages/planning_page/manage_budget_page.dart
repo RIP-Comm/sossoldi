@@ -142,7 +142,7 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
           padding: const EdgeInsets.all(16.0),
           child: SizedBox(
             width: double.infinity,
-            child: ElevatedButton(
+            child: TextButton(
               onPressed: () async {
                 for (var item in deletedBudgets) {
                   await BudgetMethods().deleteByCategory(item.idCategory);
@@ -156,17 +156,15 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
                 });
               },
               style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.all(12.0),
-                primary: Theme.of(context).colorScheme.secondary,
+                padding: const EdgeInsets.all(12.0),
+                backgroundColor: Theme.of(context).colorScheme.secondary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
               child: Text(
                 "SAVE BUDGET",
-                style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                      color: Theme.of(context).colorScheme.background,
-                    ),
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Theme.of(context).colorScheme.background),
               ),
             ),
           ),
