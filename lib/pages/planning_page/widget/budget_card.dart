@@ -27,9 +27,6 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
     final transactions =
         ref.watch(transactionsProvider.notifier).getMonthlyTransactions();
 
-    final budgets = ref.watch(budgetsProvider);
-    final currencyState = ref.watch(currencyStateNotifier);
-
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
