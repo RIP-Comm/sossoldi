@@ -5,6 +5,7 @@ import '../constants/constants.dart';
 import '../constants/functions.dart';
 import '../constants/style.dart';
 import '../model/transaction.dart';
+import '../providers/currency_provider.dart';
 import '../providers/transactions_provider.dart';
 import '../utils/date_helper.dart';
 import 'default_container.dart';
@@ -63,15 +64,17 @@ class _TransactionsListState extends State<TransactionsList> with Functions {
   Widget build(BuildContext context) {
     return transactions.isNotEmpty
         ? SingleChildScrollView(
-          padding: widget.padding,
-          child: DefaultContainer(
+            padding: widget.padding,
+            child: DefaultContainer(
               child: Column(
                 children: transactions.map((transaction) {
                   int index = transactions.indexOf(transaction);
-                  bool first =
-                      index == 0 || !transaction.date.isSameDate(transactions[index - 1].date);
+                  bool first = index == 0 ||
+                      !transaction.date
+                          .isSameDate(transactions[index - 1].date);
                   bool last = index == transactions.length - 1 ||
-                      !transaction.date.isSameDate(transactions[index + 1].date);
+                      !transaction.date
+                          .isSameDate(transactions[index + 1].date);
 
                   return Column(
                     children: [
@@ -87,7 +90,7 @@ class _TransactionsListState extends State<TransactionsList> with Functions {
                 }).toList(),
               ),
             ),
-        )
+          )
         : Container(
             padding: const EdgeInsets.all(16),
             margin: const EdgeInsets.all(16),
@@ -99,7 +102,7 @@ class _TransactionsListState extends State<TransactionsList> with Functions {
   }
 }
 
-class TransactionTitle extends StatelessWidget with Functions {
+class TransactionTitle extends ConsumerWidget with Functions {
   final DateTime date;
   final num total;
   final bool first;
@@ -112,7 +115,8 @@ class TransactionTitle extends StatelessWidget with Functions {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currencyState = ref.watch(currencyStateNotifier);
     final color = total < 0 ? red : (total > 0 ? green : blue3);
     return Padding(
       padding: EdgeInsets.only(top: first ? 0 : 24),
@@ -133,10 +137,13 @@ class TransactionTitle extends StatelessWidget with Functions {
                   children: [
                     TextSpan(
                       text: numToCurrency(total),
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: color),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge!
+                          .copyWith(color: color),
                     ),
                     TextSpan(
-                      text: "€",
+                      text: currencyState.selectedCurrency.symbol,
                       style: Theme.of(context)
                           .textTheme
                           .labelMedium!
@@ -155,7 +162,8 @@ class TransactionTitle extends StatelessWidget with Functions {
 }
 
 class TransactionRow extends ConsumerWidget with Functions {
-  const TransactionRow(this.transaction, {this.first = false, this.last = false, super.key});
+  const TransactionRow(this.transaction,
+      {this.first = false, this.last = false, super.key});
 
   final Transaction transaction;
   final bool first;
@@ -163,6 +171,8 @@ class TransactionRow extends ConsumerWidget with Functions {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final currencyState = ref.watch(currencyStateNotifier);
+    
     return Column(
       children: [
         Material(
@@ -176,7 +186,8 @@ class TransactionRow extends ConsumerWidget with Functions {
               ref
                   .read(transactionsProvider.notifier)
                   .transactionUpdateState(transaction)
-                  .whenComplete(() => Navigator.of(context).pushNamed("/add-page"));
+                  .whenComplete(
+                      () => Navigator.of(context).pushNamed("/add-page"));
             },
             borderRadius: BorderRadius.vertical(
               top: first ? const Radius.circular(8) : Radius.zero,
@@ -216,8 +227,12 @@ class TransactionRow extends ConsumerWidget with Functions {
                             if (transaction.note != null)
                               Text(
                                 transaction.note!,
-                                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                                      color: Theme.of(context).colorScheme.primary,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge!
+                                    .copyWith(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     ),
                               ),
                             const Spacer(),
@@ -230,14 +245,18 @@ class TransactionRow extends ConsumerWidget with Functions {
                                     style: Theme.of(context)
                                         .textTheme
                                         .labelLarge!
-                                        .copyWith(color: typeToColor(transaction.type)),
+                                        .copyWith(
+                                            color:
+                                                typeToColor(transaction.type)),
                                   ),
                                   TextSpan(
-                                    text: "€",
+                                    text: currencyState.selectedCurrency.symbol,
                                     style: Theme.of(context)
                                         .textTheme
                                         .labelSmall!
-                                        .copyWith(color: typeToColor(transaction.type)),
+                                        .copyWith(
+                                            color:
+                                                typeToColor(transaction.type)),
                                   ),
                                 ],
                               ),
@@ -250,17 +269,25 @@ class TransactionRow extends ConsumerWidget with Functions {
                             if (transaction.categoryName != null)
                               Text(
                                 transaction.categoryName!,
-                                style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                                      color: Theme.of(context).colorScheme.primary,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelMedium!
+                                    .copyWith(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     ),
                               ),
                             const Spacer(),
                             Text(
                               transaction.type == TransactionType.transfer
-                                  ? "${transaction.bankAccountName}→${transaction.bankAccountTransferName}"
-                                  : transaction.bankAccountName!,
-                              style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                                    color: Theme.of(context).colorScheme.primary,
+                                  ? "${transaction.bankAccountName ?? ''}→${transaction.bankAccountTransferName ?? ''}"
+                                  : transaction.bankAccountName ?? '',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelMedium!
+                                  .copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                   ),
                             ),
                           ],

@@ -1,10 +1,12 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
 import '../../../model/budget.dart';
+import '../../../providers/currency_provider.dart';
 
-class BudgetPieChart extends StatefulWidget {
+class BudgetPieChart extends ConsumerStatefulWidget {
   BudgetPieChart({super.key, required this.budgets});
 
   final List<Budget> budgets;
@@ -13,11 +15,12 @@ class BudgetPieChart extends StatefulWidget {
   BudgetPieChartState createState() => BudgetPieChartState();
 }
 
-class BudgetPieChartState extends State<BudgetPieChart> {
+class BudgetPieChartState extends ConsumerState<BudgetPieChart> {
   double totalBudget = 0;
 
   @override
   Widget build(BuildContext context) {
+    final currencyState = ref.watch(currencyStateNotifier);
     totalBudget = 0;
     for (Budget budget in widget.budgets) {
       totalBudget += budget.amountLimit;
@@ -35,7 +38,7 @@ class BudgetPieChartState extends State<BudgetPieChart> {
       ),
       Column(
         children: [
-          Text("${totalBudget.round()}€", style: const TextStyle(fontSize: 25)),
+          Text("${totalBudget.round()}${currencyState.selectedCurrency.symbol}", style: const TextStyle(fontSize: 25)),
           const SizedBox(height: 5),
           const Text("PLANNED", style: TextStyle(fontWeight: FontWeight.normal))
         ],

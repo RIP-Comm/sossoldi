@@ -194,8 +194,26 @@ class TransactionMethods extends SossoldiDatabase {
 
   Future<Transaction> selectById(int id) async {
     final db = await database;
-    final maps = await db.rawQuery('SELECT t.*, c.${CategoryTransactionFields.name} as ${TransactionFields.categoryName}, c.${CategoryTransactionFields.color} as ${TransactionFields.categoryColor}, c.${CategoryTransactionFields.symbol} as ${TransactionFields.categorySymbol}, b1.${BankAccountFields.name} as ${TransactionFields.bankAccountName}, b2.${BankAccountFields.name} as ${TransactionFields.bankAccountTransferName} FROM $transactionTable as t LEFT JOIN $categoryTransactionTable as c ON t.${TransactionFields.idCategory} = c.${CategoryTransactionFields.id} LEFT JOIN $bankAccountTable as b1 ON t.${TransactionFields.idBankAccount} = b1.${BankAccountFields.id} LEFT JOIN $bankAccountTable as b2 ON t.${TransactionFields.idBankAccountTransfer} = b2.${BankAccountFields.id} WHERE t.${TransactionFields.id} = ?', [id]);
 
+    final maps = await db.rawQuery('''
+      SELECT t.*, 
+        c.${CategoryTransactionFields.name} as ${TransactionFields.categoryName}, 
+        c.${CategoryTransactionFields.color} as ${TransactionFields.categoryColor}, 
+        c.${CategoryTransactionFields.symbol} as ${TransactionFields.categorySymbol}, 
+        b1.${BankAccountFields.name} as ${TransactionFields.bankAccountName}, 
+        b2.${BankAccountFields.name} as ${TransactionFields.bankAccountTransferName} 
+      FROM 
+        '$transactionTable' as t 
+      LEFT JOIN 
+        $categoryTransactionTable as c ON t.${TransactionFields.idCategory} = c.${CategoryTransactionFields.id} 
+      LEFT JOIN 
+        $bankAccountTable as b1 ON t.${TransactionFields.idBankAccount} = b1.${BankAccountFields.id} 
+      LEFT JOIN 
+        $bankAccountTable as b2 ON t.${TransactionFields.idBankAccountTransfer} = b2.${BankAccountFields.id} 
+      WHERE 
+        t.${TransactionFields.id} = ?
+    ''', [id]);
+    
     if (maps.isNotEmpty) {
       return Transaction.fromJson(maps.first);
     } else {
@@ -223,24 +241,26 @@ class TransactionMethods extends SossoldiDatabase {
           "${where != null ? '$where and ' : ''}strftime('%Y-%m-%d', ${TransactionFields.date}) BETWEEN '${dateRangeStart.toString().substring(0, 10)}' and '${dateRangeEnd.toIso8601String().substring(0, 10)}'";
     }
 
-    if(label != null && label.isNotEmpty) {
-      where = "${where != null ? '$where and ' : ''}t.note LIKE '%$label%' "; 
+    if (label != null && label.isNotEmpty) {
+      where = "${where != null ? '$where and ' : ''}t.note LIKE '%$label%' ";
     }
 
-    if(transactionType != null) {
+    if (transactionType != null) {
       final transactionTypeList = transactionType.map((e) => "'$e'").toList();
-      where = "${where != null ? '$where and ' : ''}t.type IN (${transactionTypeList.join(',')}) "; 
+      where = "${where != null ? '$where and ' : ''}t.type IN (${transactionTypeList.join(',')}) ";
     }
 
-    if(bankAccounts != null && !bankAccounts.entries.every((element) => element.value == false)) {
-      final bankAccountIds = bankAccounts.entries.where((bankAccount) => bankAccount.value).map((e) => "'${e.key}'");
-      where = "${where != null ? '$where and ' : ''}t.${TransactionFields.idBankAccount} IN (${bankAccountIds.join(',')}) "; 
+    if (bankAccounts != null && !bankAccounts.entries.every((element) => element.value == false)) {
+      final bankAccountIds =
+          bankAccounts.entries.where((bankAccount) => bankAccount.value).map((e) => "'${e.key}'");
+      where =
+          "${where != null ? '$where and ' : ''}t.${TransactionFields.idBankAccount} IN (${bankAccountIds.join(',')}) ";
     }
 
     final orderByDESC = '${TransactionFields.date} DESC';
 
-    final result =
-        await db.rawQuery('SELECT t.*, c.${CategoryTransactionFields.name} as ${TransactionFields.categoryName}, c.${CategoryTransactionFields.color} as ${TransactionFields.categoryColor}, c.${CategoryTransactionFields.symbol} as ${TransactionFields.categorySymbol}, b1.${BankAccountFields.name} as ${TransactionFields.bankAccountName}, b2.${BankAccountFields.name} as ${TransactionFields.bankAccountTransferName} FROM "$transactionTable" as t LEFT JOIN $categoryTransactionTable as c ON t.${TransactionFields.idCategory} = c.${CategoryTransactionFields.id} LEFT JOIN $bankAccountTable as b1 ON t.${TransactionFields.idBankAccount} = b1.${BankAccountFields.id} LEFT JOIN $bankAccountTable as b2 ON t.${TransactionFields.idBankAccountTransfer} = b2.${BankAccountFields.id} ${where != null ? "WHERE $where" : ""} ORDER BY $orderByDESC ${limit != null ? "LIMIT $limit" : ""}');
+    final result = await db.rawQuery(
+        'SELECT t.*, c.${CategoryTransactionFields.name} as ${TransactionFields.categoryName}, c.${CategoryTransactionFields.color} as ${TransactionFields.categoryColor}, c.${CategoryTransactionFields.symbol} as ${TransactionFields.categorySymbol}, b1.${BankAccountFields.name} as ${TransactionFields.bankAccountName}, b2.${BankAccountFields.name} as ${TransactionFields.bankAccountTransferName} FROM "$transactionTable" as t LEFT JOIN $categoryTransactionTable as c ON t.${TransactionFields.idCategory} = c.${CategoryTransactionFields.id} LEFT JOIN $bankAccountTable as b1 ON t.${TransactionFields.idBankAccount} = b1.${BankAccountFields.id} LEFT JOIN $bankAccountTable as b2 ON t.${TransactionFields.idBankAccountTransfer} = b2.${BankAccountFields.id} ${where != null ? "WHERE $where" : ""} ORDER BY $orderByDESC ${limit != null ? "LIMIT $limit" : ""}');
 
     return result.map((json) => Transaction.fromJson(json)).toList();
   }
@@ -251,13 +271,13 @@ class TransactionMethods extends SossoldiDatabase {
     String where = "";
     final orderByDESC = '${TransactionFields.date} DESC';
 
-    if(label != null){
+    if (label != null) {
       where = "t.note LIKE '%$label%' ";
     }
 
-    final result =
-        await db.rawQuery('SELECT DISTINCT LOWER(t.note) as note FROM "$transactionTable" as t LEFT JOIN $bankAccountTable as b1 ON t.${TransactionFields.idBankAccount} = b1.${BankAccountFields.id} LEFT JOIN $bankAccountTable as b2 ON t.${TransactionFields.idBankAccountTransfer} = b2.${BankAccountFields.id} ${where.isNotEmpty ? "WHERE $where" : ""} ORDER BY $orderByDESC');
-        
+    final result = await db.rawQuery(
+        'SELECT DISTINCT LOWER(t.note) as note FROM "$transactionTable" as t LEFT JOIN $bankAccountTable as b1 ON t.${TransactionFields.idBankAccount} = b1.${BankAccountFields.id} LEFT JOIN $bankAccountTable as b2 ON t.${TransactionFields.idBankAccountTransfer} = b2.${BankAccountFields.id} ${where.isNotEmpty ? "WHERE $where" : ""} ORDER BY $orderByDESC');
+
     return (result).map((x) => x["note"] as String).toList();
   }
 
@@ -269,11 +289,12 @@ class TransactionMethods extends SossoldiDatabase {
     final beginningCurrentMonth = DateTime(currentYear, currentMonth, 1);
     final beginningNextMonth = DateTime(currentYear, currentMonth + 1, 1);
 
-    return transactionByFrequencyAndPeriod(
-        accountId: accountId,
-        recurrence: Recurrence.daily,
-        dateRangeStart: beginningCurrentMonth,
-        dateRangeEnd: beginningNextMonth);
+    return _transactionByFrequencyAndPeriod(
+      accountId: accountId,
+      recurrence: Recurrence.daily,
+      dateRangeStart: beginningCurrentMonth,
+      dateRangeEnd: beginningNextMonth,
+    );
   }
 
   Future<List> lastMonthDailyTransactions() async {
@@ -284,10 +305,11 @@ class TransactionMethods extends SossoldiDatabase {
     final beginningCurrentMonth = DateTime(currentYear, currentMonth, 1);
     final beginningLastMonth = DateTime(currentYear, currentMonth - 1, 1);
 
-    return transactionByFrequencyAndPeriod(
-        recurrence: Recurrence.daily,
-        dateRangeStart: beginningLastMonth,
-        dateRangeEnd: beginningCurrentMonth);
+    return _transactionByFrequencyAndPeriod(
+      recurrence: Recurrence.daily,
+      dateRangeStart: beginningLastMonth,
+      dateRangeEnd: beginningCurrentMonth,
+    );
   }
 
   Future<List> currentYearMontlyTransactions() async {
@@ -297,13 +319,14 @@ class TransactionMethods extends SossoldiDatabase {
     final beginningCurrentYear = DateTime(currentYear, 1, 1);
     final beginningNextMonth = DateTime(currentYear + 1, 1, 1);
 
-    return transactionByFrequencyAndPeriod(
-        recurrence: Recurrence.monthly,
-        dateRangeStart: beginningCurrentYear,
-        dateRangeEnd: beginningNextMonth);
+    return _transactionByFrequencyAndPeriod(
+      recurrence: Recurrence.monthly,
+      dateRangeStart: beginningCurrentYear,
+      dateRangeEnd: beginningNextMonth,
+    );
   }
 
-  Future<List> transactionByFrequencyAndPeriod({
+  Future<List> _transactionByFrequencyAndPeriod({
     int? accountId,
     Recurrence recurrence = Recurrence.daily,
     DateTime? dateRangeStart,
@@ -328,9 +351,8 @@ class TransactionMethods extends SossoldiDatabase {
         throw ArgumentError("Query not implemented for frequency $recurrence");
     }
 
-    final accountFilter = accountId != null
-        ? "${TransactionFields.idBankAccount} = $accountId"
-        : "";
+    final accountFilter =
+        accountId != null ? "${TransactionFields.idBankAccount} = $accountId" : "";
     //var periodDateFormatter = "";
     final periodFilterStart = dateRangeStart != null
         ? "strftime('%Y-%m-%d', ${TransactionFields.date}) >= '${dateRangeStart.toString().substring(0, 10)}'"

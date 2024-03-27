@@ -3,6 +3,7 @@ import 'package:sqflite/sqflite.dart';
 import '../database/sossoldi_database.dart';
 import 'base_entity.dart';
 import 'transaction.dart';
+import 'category_transaction.dart';
 
 const String bankAccountTable = 'bankAccount';
 
@@ -93,8 +94,9 @@ class BankAccount extends BaseEntity {
         BankAccountFields.startingValue: startingValue,
         BankAccountFields.active: active ? 1 : 0,
         BankAccountFields.mainAccount: mainAccount ? 1 : 0,
-        BaseEntityFields.createdAt:
-            update ? createdAt?.toIso8601String() : DateTime.now().toIso8601String(),
+        BaseEntityFields.createdAt: update
+            ? createdAt?.toIso8601String()
+            : DateTime.now().toIso8601String(),
         BaseEntityFields.updatedAt: DateTime.now().toIso8601String(),
       };
 }
@@ -147,7 +149,8 @@ class BankAccountMethods extends SossoldiDatabase {
     final db = await database;
 
     final orderByASC = '${BankAccountFields.createdAt} ASC';
-    final where = '${BankAccountFields.active} = 1 AND (t.${TransactionFields.recurring} = 0 OR t.${TransactionFields.recurring} is NULL)';
+    final where =
+        '${BankAccountFields.active} = 1 AND (${TransactionFields.recurring} = 0 OR ${TransactionFields.recurring} is NULL)';
 
     final result = await db.rawQuery('''
       SELECT b.*, (b.${BankAccountFields.startingValue} +
@@ -199,17 +202,18 @@ class BankAccountMethods extends SossoldiDatabase {
   Future<int> deleteById(int id) async {
     final db = await database;
 
-    return await db.delete(bankAccountTable, where: '${BankAccountFields.id} = ?', whereArgs: [id]);
+    return await db.delete(bankAccountTable,
+        where: '${BankAccountFields.id} = ?', whereArgs: [id]);
   }
 
   Future<int> deactivateById(int id) async {
     final db = await database;
 
     return await db.update(
-        bankAccountTable,
-        {'active':0},
-        where: '${BankAccountFields.id} = ?',
-        whereArgs: [id],
+      bankAccountTable,
+      {'active': 0},
+      where: '${BankAccountFields.id} = ?',
+      whereArgs: [id],
     );
   }
 
@@ -217,14 +221,17 @@ class BankAccountMethods extends SossoldiDatabase {
     final db = await database;
 
     //get account infos first
-    final result = await db.query(bankAccountTable, where:'${BankAccountFields.id}  = $id', limit: 1);
+    final result = await db.query(bankAccountTable,
+        where: '${BankAccountFields.id}  = $id', limit: 1);
     final singleObject = result.isNotEmpty ? result[0] : null;
 
     if (singleObject != null) {
       num balance = singleObject[BankAccountFields.startingValue] as num;
 
       // get all transactions of that account
-      final transactionsResult = await db.query(transactionTable, where:'${TransactionFields.idBankAccount}  = $id OR ${TransactionFields.idBankAccountTransfer} = $id');
+      final transactionsResult = await db.query(transactionTable,
+          where:
+              '${TransactionFields.idBankAccount}  = $id OR ${TransactionFields.idBankAccountTransfer} = $id');
 
       for (var transaction in transactionsResult) {
         num amount = transaction[TransactionFields.amount] as num;
@@ -252,13 +259,40 @@ class BankAccountMethods extends SossoldiDatabase {
     }
   }
 
-  Future<List> accountDailyBalance(int accountId, {
+  Future<List> getTransactions(int accountId, int numTransactions) async {
+    final db = await database;
+
+    final accountFilter = "${TransactionFields.idBankAccount} = $accountId";
+
+    final resultQuery = await db.rawQuery('''
+      SELECT t.*,
+        c.${CategoryTransactionFields.name} as ${TransactionFields.categoryName}, 
+        c.${CategoryTransactionFields.color} as ${TransactionFields.categoryColor}, 
+        c.${CategoryTransactionFields.symbol} as ${TransactionFields.categorySymbol}
+      FROM 
+        "$transactionTable" as t
+      LEFT JOIN 
+        $categoryTransactionTable as c ON t.${TransactionFields.idCategory} = c.${CategoryTransactionFields.id} 
+      WHERE 
+        $accountFilter
+      ORDER BY
+        ${TransactionFields.date} DESC
+        LIMIT 
+          $numTransactions
+    ''');
+
+    return resultQuery;
+  }
+
+  Future<List> accountDailyBalance(
+    int accountId, {
     DateTime? dateRangeStart,
     DateTime? dateRangeEnd,
   }) async {
     final db = await database;
 
-    final accountFilter = "(${TransactionFields.idBankAccount} = $accountId OR ${TransactionFields.idBankAccountTransfer} = $accountId)";
+    final accountFilter =
+        "(${TransactionFields.idBankAccount} = $accountId OR ${TransactionFields.idBankAccountTransfer} = $accountId)";
     final recurrentFilter = "(${TransactionFields.recurring} = 0)";
     final periodFilterEnd = dateRangeEnd != null
         ? "strftime('%Y-%m-%d', ${TransactionFields.date}) < '${dateRangeEnd.toString().substring(0, 10)}'"
@@ -276,29 +310,28 @@ class BankAccountMethods extends SossoldiDatabase {
       GROUP BY day
     ''');
 
-    final statritngValue = await db.rawQuery(
-      '''
+    final statritngValue = await db.rawQuery('''
       SELECT ${BankAccountFields.startingValue} as Value
       FROM $bankAccountTable
       WHERE ${BankAccountFields.id} = $accountId
-    '''
-    );
+    ''');
 
     double runningTotal = statritngValue[0]['Value'] as double;
 
     var result = resultQuery.map((e) {
-        runningTotal += double.parse(e['income'].toString()) - double.parse(e['expense'].toString());
-        return {
-          "day": e["day"], 
-          "balance": runningTotal
-          };
-      }).toList();
+      runningTotal += double.parse(e['income'].toString()) -
+          double.parse(e['expense'].toString());
+      return {"day": e["day"], "balance": runningTotal};
+    }).toList();
 
-    if(dateRangeStart != null){
-      return result.where((element) => dateRangeStart.isBefore(DateTime.parse(element["day"].toString()).add(const Duration(days: 1)))).toList();
+    if (dateRangeStart != null) {
+      return result
+          .where((element) => dateRangeStart.isBefore(
+              DateTime.parse(element["day"].toString())
+                  .add(const Duration(days: 1))))
+          .toList();
     }
 
     return result;
   }
-
 }

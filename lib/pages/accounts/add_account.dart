@@ -6,6 +6,7 @@ import '../../providers/accounts_provider.dart';
 import '../../constants/constants.dart';
 import '../../constants/functions.dart';
 import '../../constants/style.dart';
+import '../../providers/currency_provider.dart';
 
 final showAccountIconsProvider = StateProvider.autoDispose<bool>((ref) => false);
 
@@ -42,6 +43,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
     final showAccountIcons = ref.watch(showAccountIconsProvider);
     final accountMainSwitch = ref.watch(accountMainSwitchProvider);
     final countNetWorth = ref.watch(countNetWorthSwitchProvider);
+    final currencyState = ref.watch(currencyStateNotifier);
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
@@ -255,7 +257,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                           controller: startingValueController,
                           decoration: InputDecoration(
                             hintText: "Initial balance",
-                            suffixText: "€",
+                            suffixText: currencyState.selectedCurrency.symbol,
                             hintStyle: Theme.of(context)
                                 .textTheme
                                 .titleLarge!

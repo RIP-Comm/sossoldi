@@ -2,17 +2,22 @@ import 'dart:ui';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../constants/functions.dart';
+import '../providers/currency_provider.dart';
 import 'line_chart.dart';
 
-class AccountDialog extends StatelessWidget with Functions {
+class AccountDialog extends ConsumerWidget with Functions {
   final String accountName;
   final num amount;
 
   const AccountDialog({super.key, required this.accountName, required this.amount});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currencyState = ref.watch(currencyStateNotifier);
+    
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -57,7 +62,7 @@ class AccountDialog extends StatelessWidget with Functions {
                   padding: EdgeInsets.all(8.0),
                 ),
                 LineChartWidget(
-                  line1Data: [
+                  lineData: [
                     FlSpot(0, 3),
                     FlSpot(1, 1.3),
                     FlSpot(2, -2),
@@ -76,9 +81,9 @@ class AccountDialog extends StatelessWidget with Functions {
                     FlSpot(15, -4.5),
                     FlSpot(16, 2.5),
                   ],
-                  colorLine1Data: Color(0xffffffff),
+                  lineColor: Color(0xffffffff),
                   line2Data: <FlSpot>[],
-                  colorLine2Data: Color(0xffffffff),
+                  line2Color: Color(0xffffffff),
                   colorBackground: Color(0xff356CA3),
                   period: Period.month,
                 ),
@@ -107,7 +112,7 @@ class AccountDialog extends StatelessWidget with Functions {
                               TextSpan(
                                   text: "-285,99", style: Theme.of(context).textTheme.labelSmall),
                               TextSpan(
-                                text: "€",
+                                text: currencyState.selectedCurrency.symbol,
                                 style: Theme.of(context)
                                     .textTheme
                                     .headlineSmall
@@ -153,7 +158,7 @@ class AccountDialog extends StatelessWidget with Functions {
                                               text: "-280,00",
                                               style: Theme.of(context).textTheme.labelSmall),
                                           TextSpan(
-                                            text: "€",
+                                            text: currencyState.selectedCurrency.symbol,
                                             style: Theme.of(context).textTheme.headlineSmall?.apply(
                                               fontFeatures: [const FontFeature.subscripts()],
                                             ),
@@ -227,7 +232,7 @@ class AccountDialog extends StatelessWidget with Functions {
                                             style: Theme.of(context).textTheme.labelSmall,
                                           ),
                                           TextSpan(
-                                            text: "€",
+                                            text: currencyState.selectedCurrency.symbol,
                                             style: Theme.of(context).textTheme.headlineSmall?.apply(
                                               fontFeatures: [const FontFeature.subscripts()],
                                             ),
@@ -302,7 +307,7 @@ class AccountDialog extends StatelessWidget with Functions {
                                             style: Theme.of(context).textTheme.labelSmall,
                                           ),
                                           TextSpan(
-                                            text: "€",
+                                            text: currencyState.selectedCurrency.symbol,
                                             style: Theme.of(context).textTheme.headlineSmall?.apply(
                                               fontFeatures: [const FontFeature.subscripts()],
                                             ),

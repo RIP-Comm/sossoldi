@@ -1,11 +1,13 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import '../constants/functions.dart';
+import '../providers/currency_provider.dart';
 
 /// This class shows account summaries in dashboard
-class BudgetCircularIndicator extends StatelessWidget with Functions {
+class BudgetCircularIndicator extends ConsumerWidget with Functions {
   final String title;
   final num amount;
   final double perc;
@@ -20,7 +22,9 @@ class BudgetCircularIndicator extends StatelessWidget with Functions {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currencyState = ref.watch(currencyStateNotifier);
+
     return Column(
       children: [
         CircularPercentIndicator(
@@ -43,7 +47,7 @@ class BudgetCircularIndicator extends StatelessWidget with Functions {
                           .copyWith(color: Theme.of(context).colorScheme.primary),
                     ),
                     TextSpan(
-                      text: "€",
+                      text: currencyState.selectedCurrency.symbol,
                       style: Theme.of(context)
                           .textTheme
                           .labelMedium!

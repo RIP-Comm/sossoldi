@@ -62,13 +62,36 @@ class Currency extends BaseEntity {
       };
 }
 
-class BudgetMethods extends SossoldiDatabase {
+class CurrencyMethods extends SossoldiDatabase {
+  Future<Currency> getSelectedCurrency() async {
+    final db = await database;
+
+    final maps = await db.query(
+      currencyTable,
+      columns: CurrencyFields.allFields,
+      where: '${CurrencyFields.mainCurrency} = ?',
+      whereArgs: [1],
+    );
+
+    if (maps.isNotEmpty) {
+      return Currency.fromJson(maps.first);
+    } else {
+      //fallback
+      return const Currency(
+        id: 2,
+        symbol: '\$',
+        code: 'USD',
+        name: "United States Dollar",
+        mainCurrency: true
+      );
+    }
+  }
+
   Future<Currency> insert(Currency item) async {
     final db = await database;
     final id = await db.insert(currencyTable, item.toJson());
     return item.copy(id: id);
   }
-
 
   Future<Currency> selectById(int id) async {
     final db = await database;
@@ -100,7 +123,6 @@ class BudgetMethods extends SossoldiDatabase {
   Future<int> updateItem(Currency item) async {
     final db = await database;
 
-    // You can use `rawUpdate` to write the query in SQL
     return db.update(
       currencyTable,
       item.toJson(),
@@ -117,6 +139,13 @@ class BudgetMethods extends SossoldiDatabase {
         where:
         '${CurrencyFields.id} = ?',
         whereArgs: [id]);
+  }
+
+  void changeMainCurrency(int id) async {
+    final db = await database;
+
+    db.rawUpdate("UPDATE currency SET mainCurrency = 0");
+    db.rawUpdate("UPDATE currency SET mainCurrency = 1 WHERE id = $id");
   }
 
 }

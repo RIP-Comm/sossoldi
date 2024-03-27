@@ -5,8 +5,10 @@ import '../../../constants/constants.dart';
 import '../../../model/budget.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/budgets_provider.dart';
+
 import '../../../providers/transactions_provider.dart';
 import '../manage_budget_page.dart';
+
 import 'budget_pie_chart.dart';
 
 class BudgetCard extends ConsumerStatefulWidget {
@@ -20,9 +22,14 @@ class BudgetCard extends ConsumerStatefulWidget {
 class _BudgetCardState extends ConsumerState<BudgetCard> {
   @override
   Widget build(BuildContext context) {
+
     final budgets = ref.watch(budgetsProvider.notifier).getBudgets();
     final transactions =
         ref.watch(transactionsProvider.notifier).getMonthlyTransactions();
+
+    final budgets = ref.watch(budgetsProvider);
+    final currencyState = ref.watch(currencyStateNotifier);
+
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
@@ -141,6 +148,7 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                                       topLeft: Radius.circular(20.0),
                                       topRight: Radius.circular(20.0),
                                     ),
+
                                   ),
                                   elevation: 10,
                                   builder: (BuildContext context) {

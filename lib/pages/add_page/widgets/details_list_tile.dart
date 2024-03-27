@@ -48,7 +48,10 @@ class DetailsListTile extends ConsumerWidget {
           Text(
             value ?? '',
             style:
-                Theme.of(context).textTheme.bodySmall!.copyWith(color: grey1),
+                Theme.of(context)
+                .textTheme
+                .bodySmall!
+                .copyWith(color: Theme.of(context).colorScheme.secondary),
           ),
           const SizedBox(width: 6.0),
           const Icon(Icons.chevron_right, color: grey1),
