@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../constants/constants.dart';
 import '../../../model/budget.dart';
 import '../../../providers/currency_provider.dart';
 
@@ -52,7 +53,7 @@ class BudgetPieChartState extends ConsumerState<BudgetPieChart> {
       double value = (budget.amountLimit / totalBudget) * 100;
 
       return PieChartSectionData(
-        color: i == 0 ? Colors.deepPurple : Colors.blue,
+        color: categoryColorList[i],
         value: value,
         title: "",
         radius: 20,

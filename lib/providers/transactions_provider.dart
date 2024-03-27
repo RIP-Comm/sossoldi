@@ -75,6 +75,14 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
     return transactions;
   }
 
+  Future<List<Transaction>> getMonthlyTransactions() async {
+    final now = DateTime.now();
+    final firstDayOfMonth = DateTime(now.year, now.month, 1);
+    final transactions = await TransactionMethods().selectAll(dateRangeStart: firstDayOfMonth, dateRangeEnd: now);
+
+    return transactions;
+  }
+
   Future<void> filterTransactions() async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
