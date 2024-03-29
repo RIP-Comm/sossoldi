@@ -275,10 +275,10 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
               ],
             ),
           ),
-          Container(
+          Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              width: double.infinity,
+              width: MediaQuery.sizeOf(context).width,
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
                 boxShadow: [
@@ -289,7 +289,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                   )
                 ],
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              padding: const EdgeInsets.only(left:24 ,right: 24, top: 16, bottom: 30),
               child: Container(
                 decoration: BoxDecoration(
                   boxShadow: [defaultShadow],
@@ -297,16 +297,18 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                 ),
                 child: TextButton(
                   onPressed: () async {
-                    if (selectedCategory != null) {
-                      ref
-                          .read(categoriesProvider.notifier)
-                          .updateCategory(nameController.text)
-                          .whenComplete(() => Navigator.of(context).pop());
-                    } else {
-                      ref
-                          .read(categoriesProvider.notifier)
-                          .addCategory(nameController.text)
-                          .whenComplete(() => Navigator.of(context).pop());
+                    if(nameController.text.isNotEmpty) {
+                      if (selectedCategory != null) {
+                        ref
+                            .read(categoriesProvider.notifier)
+                            .updateCategory(nameController.text)
+                            .whenComplete(() => Navigator.of(context).pop());
+                      } else {
+                        ref
+                            .read(categoriesProvider.notifier)
+                            .addCategory(nameController.text)
+                            .whenComplete(() => Navigator.of(context).pop());
+                      }
                     }
                   },
                   style: TextButton.styleFrom(

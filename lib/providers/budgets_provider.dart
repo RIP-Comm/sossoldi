@@ -20,7 +20,7 @@ class AsyncBudgetsNotifier extends AsyncNotifier<List<Budget>> {
   Future<void> addBudget(Budget budget) async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
-      await BudgetMethods().insert(budget);
+      await BudgetMethods().insertOrUpdate(budget);
       return _getBudgets();
     });
   }
