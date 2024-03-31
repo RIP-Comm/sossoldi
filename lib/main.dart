@@ -44,8 +44,7 @@ class Launcher extends ConsumerWidget {
       themeMode:
           appThemeState.isDarkModeEnabled ? ThemeMode.dark : ThemeMode.light,
       onGenerateRoute: makeRoute,
-      //initialRoute: _isFirstLogin == null  || _isFirstLogin! ? '/onboarding' : '/',
-      initialRoute: '/onboarding', //TODO: comment this line and uncomment the other
+      initialRoute: _isFirstLogin == null || _isFirstLogin! ? '/onboarding' : '/',
     );
   }
 }

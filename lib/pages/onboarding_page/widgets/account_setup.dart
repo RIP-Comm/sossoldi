@@ -1,6 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:sossoldi/model/currency.dart';
+import 'package:sossoldi/providers/currency_provider.dart';
 import '../../../constants/constants.dart';
 import '../../../providers/accounts_provider.dart';
 import '/constants/style.dart';
@@ -25,16 +27,14 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
   // Function to validate amount
   void validateAmount(String value) {
     setState(() {
-      // Check if value contains only digits and has at least 2 digits
-      _validAmount = RegExp(r'^\d{1,}$').hasMatch(value);
+      _validAmount = RegExp(r'^\d*\.?\d{0,2}$').hasMatch(value);
     });
   }
 
-  // Function to validate account name
+// Function to validate name
   void validateName(String value) {
     setState(() {
-      // Check if value is not empty and has more than 3 characters
-      _validName = value.isNotEmpty && value.length > 3;
+      _validName = RegExp(r'^[a-zA-Z\s]{3,}$').hasMatch(value);
     });
   }
 
@@ -112,16 +112,22 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                             onChanged: validateName,
                             autofocus: true,
                             inputFormatters: [
-                              FilteringTextInputFormatter.deny(RegExp('[ ]')),
+                              FilteringTextInputFormatter.deny(RegExp(r'^[a-zA-Z]{10,}$')),
                             ],
                             decoration: InputDecoration(
                               hintText: "Main Account",
                               errorStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 10, color: red),
-                              hintStyle: Theme.of(context).textTheme.bodyLarge,
+                              hintStyle: Theme.of(context).textTheme.bodySmall,
                               border: const UnderlineInputBorder(
                                 borderSide: BorderSide(color: grey2, width: 0.2),
                               ),
                             ),
+                            onTapOutside: (_){
+                              FocusScopeNode currentFocus = FocusScope.of(context);
+                              if (!currentFocus.hasPrimaryFocus) {
+                                currentFocus.unfocus();
+                              }
+                            },
                           ),
                           const SizedBox(height: 15),
                           Row(
@@ -138,9 +144,10 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                           TextField(
                             textAlign: TextAlign.center,
                             controller: amountController,
+                            keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                             onChanged: validateAmount,
                             inputFormatters: [
-                              FilteringTextInputFormatter.deny(RegExp('[ ]')),
+                              FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
                             ],
                             decoration: InputDecoration(
                               hintText: "e.g 1300 €",
@@ -151,6 +158,12 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                                 borderSide:BorderSide(color: grey2, width: 0.2),
                               ),
                             ),
+                            onTapOutside: (_){
+                              FocusScopeNode currentFocus = FocusScope.of(context);
+                              if (!currentFocus.hasPrimaryFocus) {
+                                currentFocus.unfocus();
+                              }
+                            },
                           ),
                           const SizedBox(height: 8),
                           Row(
@@ -273,6 +286,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                     const SizedBox(height: 10),
                     ElevatedButton(
                       onPressed: () {
+                        ref.watch(currencyStateNotifier.notifier).insertAll();
                         Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
                       },
                       style: ElevatedButton.styleFrom(
@@ -313,6 +327,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                           onPressed: () {
                             if(_validName && _validAmount){
                               ref.watch(accountsProvider.notifier).addAccount(accountNameController.text, num.tryParse(amountController.text));
+                              ref.watch(currencyStateNotifier.notifier).insertAll();
                               Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
                             }
                           },

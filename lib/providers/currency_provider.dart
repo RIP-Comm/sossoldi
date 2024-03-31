@@ -26,6 +26,17 @@ class CurrencyState extends ChangeNotifier {
     notifyListeners();
   }
 
+  void insertAll() {
+    Currency euro = const Currency(symbol: "€", code: "EUR", name: "Euro", mainCurrency: true);
+    Currency dollar = const Currency(symbol: "\$", code: "USD", name: "United States Dollar", mainCurrency: false);
+    Currency franc = const Currency(symbol: "CHF", code: "CHF", name: "Switzerland Franc", mainCurrency: false);
+    Currency pound = const Currency(symbol: "£", code: "GBP", name: "United Kingdom Pound", mainCurrency: false);
+
+    List<Currency> list = [euro, dollar, franc, pound];
+    CurrencyMethods().insertAll(list);
+    notifyListeners();
+  }
+
   void setSelectedCurrency(Currency currency) {
       selectedCurrency = currency;
       CurrencyMethods().changeMainCurrency(currency.id!);

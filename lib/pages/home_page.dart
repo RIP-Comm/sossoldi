@@ -217,7 +217,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                       physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, i) {
-                        if (i == accounts.length) {
+                        if (i == accounts.length || accounts.isEmpty) {
                           return Padding(
                             padding: const EdgeInsets.fromLTRB(0, 4, 0, 16),
                             child: Container(
@@ -264,10 +264,11 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                               ),
                             ),
                           );
-                        } else {
+                        } else if(accounts.isNotEmpty) {
                           BankAccount account = accounts[i];
                           return AccountsSum(account: account);
                         }
+
                       },
                     ),
                     loading: () => const SizedBox(),

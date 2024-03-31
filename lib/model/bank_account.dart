@@ -141,7 +141,7 @@ class BankAccountMethods extends SossoldiDatabase {
     if (maps.isNotEmpty) {
       return BankAccount.fromJson(maps.first);
     } else {
-      throw Exception('Main Account not found');
+      return null;
     }
   }
 
