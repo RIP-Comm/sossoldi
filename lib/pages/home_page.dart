@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../pages/home_widget/budgets_home.dart';
 import '../constants/functions.dart';
 import '../constants/style.dart';
 import '../custom_widgets/accounts_sum.dart';
-import '../custom_widgets/budget_circular_indicator.dart';
 import '../custom_widgets/line_chart.dart';
 import '../custom_widgets/transactions_list.dart';
 import '../model/bank_account.dart';
@@ -290,44 +290,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                   error: (err, stack) => Text('Error: $err'),
                 ),
                 const SizedBox(height: 28),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 16),
-                    child: Text(
-                      "Your budgets",
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Container(
-                  margin: const EdgeInsets.only(left: 16.0, right: 16.0),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      BudgetCircularIndicator(
-                        title: "TOTALE",
-                        amount: 320,
-                        perc: 0.25,
-                        color: Color(0xFFEBC35F),
-                      ),
-                      BudgetCircularIndicator(
-                        title: "SPESE",
-                        amount: 500,
-                        perc: 0.5,
-                        color: Color(0xFFD336B6),
-                      ),
-                      BudgetCircularIndicator(
-                        title: "SVAGO",
-                        amount: 178.67,
-                        perc: 0.88,
-                        color: Color(0xFF8E5FEB),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 50),
+                BudgetsSection()
               ],
             ),
           ),

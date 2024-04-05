@@ -17,6 +17,11 @@ class AsyncBudgetsNotifier extends AsyncNotifier<List<Budget>> {
     return budgets;
   }
 
+  Future<List<BudgetStats>> getMonthlyBudgetsStats() async {
+    final budgets = await BudgetMethods().selectMonthlyBudgetsStats();
+    return budgets;
+  }
+
   Future<void> addBudget(Budget budget) async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
