@@ -6,6 +6,7 @@ import '../../../model/budget.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/budgets_provider.dart';
 
+import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../manage_budget_page.dart';
 
@@ -24,8 +25,8 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
   Widget build(BuildContext context) {
 
     final budgets = ref.watch(budgetsProvider.notifier).getBudgets();
-    final transactions =
-        ref.watch(transactionsProvider.notifier).getMonthlyTransactions();
+    final transactions = ref.watch(transactionsProvider.notifier).getMonthlyTransactions();
+    final currencyState = ref.watch(currencyStateNotifier);
 
     return Container(
       decoration: BoxDecoration(
@@ -50,23 +51,20 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Composition",
-                                style: Theme.of(context).textTheme.titleLarge),
+                            Text("Composition", style: Theme.of(context).textTheme.titleLarge),
                             BudgetPieChart(budgets: budgets as List<Budget>),
-                            Text("Progress",
-                                style: Theme.of(context).textTheme.titleLarge),
+                            Text("Progress", style: Theme.of(context).textTheme.titleLarge),
                             const SizedBox(height: 10),
                             ListView.separated(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: budgets.length,
                               itemBuilder: (BuildContext context, int index) {
-                                int spent = (transactions as List<Transaction>)
-                                    .where((t) =>
-                                        t.idCategory ==
-                                        budgets[index].idCategory)
-                                    .fold(
-                                        0, (sum, t) => sum + t.amount.toInt());
+                                num spent = num.parse(
+                                    (transactions as List<Transaction>)
+                                        .where((t) => t.idCategory == budgets[index].idCategory)
+                                        .fold(0.0, (sum, t) => sum + t.amount)
+                                        .toStringAsFixed(2));
                                 Budget budget = budgets.elementAt(index);
                                 return Column(
                                   children: [
@@ -80,7 +78,7 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                                         const Spacer(),
                                         spent >= (budget.amountLimit * 0.9) ? const Icon(Icons.error_outline, color: Colors.red) : Container(),
                                         Text(
-                                          "$spent/${budget.amountLimit}€",
+                                          "${spent}${currencyState.selectedCurrency.symbol}/${budget.amountLimit} ${currencyState.selectedCurrency.symbol}",
                                           style: const TextStyle(
                                               fontWeight: FontWeight.normal),
                                         ),
@@ -106,8 +104,7 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                                   ],
                                 );
                               },
-                              separatorBuilder:
-                                  (BuildContext context, int index) {
+                              separatorBuilder: (BuildContext context, int index) {
                                 return const SizedBox(height: 15);
                               },
                             ),
