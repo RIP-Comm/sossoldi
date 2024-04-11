@@ -2,8 +2,10 @@ import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
+import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
 import '../../../model/category_transaction.dart';
+import '../../../model/transaction.dart';
 import '../../../providers/currency_provider.dart';
 import 'categories_tab.dart';
 
@@ -19,7 +21,7 @@ class CategoryListTile extends ConsumerWidget {
 
   final CategoryTransaction category;
   final double amount;
-  final List<Map<String, dynamic>> transactions;
+  final List<Transaction> transactions;
   final double percent;
   final int index;
 
@@ -134,13 +136,13 @@ class CategoryListTile extends ConsumerWidget {
   }
 }
 
-class TransactionRow extends ConsumerWidget {
+class TransactionRow extends ConsumerWidget with Functions {
   const TransactionRow({
     super.key,
     required this.transaction,
   });
 
-  final Map<String, dynamic> transaction;
+  final Transaction transaction;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -161,15 +163,15 @@ class TransactionRow extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      transaction['title'],
+                      transaction.note ?? "",
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(
-                      "${transaction['amount'].toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}",
+                      "${numToCurrency(transaction.amount)} ${currencyState.selectedCurrency.symbol}",
                       style: Theme.of(context)
                           .textTheme
                           .bodyLarge
-                          ?.copyWith(color: (transaction['amount'] > 0) ? green : red),
+                          ?.copyWith(color: (transaction.amount > 0) ? green : red),
                     ),
                   ],
                 ),
@@ -177,11 +179,11 @@ class TransactionRow extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      transaction['category'].toUpperCase(),
+                      transaction.categoryName?.toUpperCase() ?? "",
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     Text(
-                      transaction['account'].toUpperCase(),
+                      transaction.bankAccountName?.toUpperCase() ?? "",
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                   ],

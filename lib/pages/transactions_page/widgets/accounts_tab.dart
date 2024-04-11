@@ -32,24 +32,18 @@ class _AccountsTabState extends ConsumerState<AccountsTab> with Functions {
 
     // create a map to link each accounts with a list of its transactions
     // stored as Map<String, dynamic> to be passed to AccountListTile
-    Map<int, List<Map<String, dynamic>>> accountToTransactionsIncome = {},
+    Map<int, List<Transaction>> accountToTransactionsIncome = {},
         accountToTransactionsExpense = {};
     Map<int, double> accountToAmountIncome = {}, accountToAmountExpense = {};
     double totalIncome = 0, totalExpense = 0;
 
     for (Transaction transaction in transactions.value ?? []) {
       final accountId = transaction.idBankAccount;
-      final updateValue = {
-        "account": transaction.idBankAccount.toString(),
-        "amount": transaction.amount,
-        "category": accountId.toString(),
-        "title": transaction.note,
-      };
       if (transaction.type == TransactionType.income) {
         if (accountToTransactionsIncome.containsKey(accountId)) {
-          accountToTransactionsIncome[accountId]?.add(updateValue);
+          accountToTransactionsIncome[accountId]?.add(transaction);
         } else {
-          accountToTransactionsIncome.putIfAbsent(accountId, () => [updateValue]);
+          accountToTransactionsIncome.putIfAbsent(accountId, () => [transaction]);
         }
 
         // update total amount for the account
@@ -62,9 +56,9 @@ class _AccountsTabState extends ConsumerState<AccountsTab> with Functions {
         }
       } else if (transaction.type == TransactionType.expense) {
         if (accountToTransactionsExpense.containsKey(accountId)) {
-          accountToTransactionsExpense[accountId]?.add(updateValue);
+          accountToTransactionsExpense[accountId]?.add(transaction);
         } else {
-          accountToTransactionsExpense.putIfAbsent(accountId, () => [updateValue]);
+          accountToTransactionsExpense.putIfAbsent(accountId, () => [transaction]);
         }
 
         // update total amount for the account
