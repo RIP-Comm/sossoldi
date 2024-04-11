@@ -71,7 +71,12 @@ class BudgetCircularIndicator extends ConsumerWidget with Functions {
           progressColor: color,
         ),
         const SizedBox(height: 10),
-        Text(title, style: Theme.of(context).textTheme.labelMedium),
+        Row(
+          children: [
+            perc >= 0.9 ? const Icon(Icons.error_outline, color: Colors.red, size: 15) : Container(),
+            const SizedBox(width: 3),
+            Text(title, style: Theme.of(context).textTheme.bodyLarge),
+        ])
       ],
     );
   }
