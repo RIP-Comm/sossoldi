@@ -30,8 +30,8 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> with Functions {
     final transactionType = ref.watch(selectedTransactionTypeProvider);
 
     // create a map to link each categories with a list of its transactions
-    // stored as Map<String, dynamic> to be passed to CategoryListTile
-    Map<int, List<Map<String, dynamic>>> categoryToTransactionsIncome = {},
+    // stored as Transaction to be passed to CategoryListTile
+    Map<int, List<Transaction>> categoryToTransactionsIncome = {},
         categoryToTransactionsExpense = {};
     Map<int, double> categoryToAmountIncome = {}, categoryToAmountExpense = {};
     double totalIncome = 0, totalExpense = 0;
@@ -39,17 +39,11 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> with Functions {
     for (Transaction transaction in transactions.value ?? []) {
       final categoryId = transaction.idCategory;
       if (categoryId != null) {
-        final updateValue = {
-          "account": transaction.idBankAccount.toString(),
-          "amount": transaction.amount,
-          "category": categoryId.toString(),
-          "title": transaction.note,
-        };
         if (transaction.type == TransactionType.income) {
           if (categoryToTransactionsIncome.containsKey(categoryId)) {
-            categoryToTransactionsIncome[categoryId]?.add(updateValue);
+            categoryToTransactionsIncome[categoryId]?.add(transaction);
           } else {
-            categoryToTransactionsIncome.putIfAbsent(categoryId, () => [updateValue]);
+            categoryToTransactionsIncome.putIfAbsent(categoryId, () => [transaction]);
           }
 
           // update total amount for the category
@@ -62,9 +56,9 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> with Functions {
           }
         } else if (transaction.type == TransactionType.expense) {
           if (categoryToTransactionsExpense.containsKey(categoryId)) {
-            categoryToTransactionsExpense[categoryId]?.add(updateValue);
+            categoryToTransactionsExpense[categoryId]?.add(transaction);
           } else {
-            categoryToTransactionsExpense.putIfAbsent(categoryId, () => [updateValue]);
+            categoryToTransactionsExpense.putIfAbsent(categoryId, () => [transaction]);
           }
 
           // update total amount for the category
