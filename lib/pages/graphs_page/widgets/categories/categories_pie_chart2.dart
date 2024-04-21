@@ -28,8 +28,7 @@ class CategoriesPieChart2 extends ConsumerWidget {
     final currencyState = ref.watch(currencyStateNotifier);
 
     List<PieChartSectionData> sections = categoryMap.entries.map((entry) {
-      bool isSelected =
-          selectedCategory != null && selectedCategory.id == entry.key.id;
+      bool isSelected = selectedCategory != null && selectedCategory.id == entry.key.id;
       return PieChartSectionData(
         color: categoryColorList[entry.key.color],
         value: 360 * entry.value / total, // Normalize value for pie chart
@@ -56,14 +55,10 @@ class CategoriesPieChart2 extends ConsumerWidget {
                     return;
                   }
                   if (pieTouchResponse?.touchedSection != null) {
-                    int touchedIndex =
-                        pieTouchResponse!.touchedSection!.touchedSectionIndex;
-                    if (touchedIndex >= 0 &&
-                        touchedIndex < categoryMap.length) {
-                      CategoryTransaction touchedCategory =
-                          categoryMap.keys.elementAt(touchedIndex);
-                      ref.read(selectedCategoryProvider.notifier).state =
-                          touchedCategory;
+                    int touchedIndex = pieTouchResponse!.touchedSection!.touchedSectionIndex;
+                    if (touchedIndex >= 0 && touchedIndex < categoryMap.length) {
+                      CategoryTransaction touchedCategory = categoryMap.keys.elementAt(touchedIndex);
+                      ref.read(selectedCategoryProvider.notifier).state = touchedCategory;
                     } else {
                       ref.read(selectedCategoryProvider.notifier).state = null;
                     }
@@ -80,22 +75,11 @@ class CategoriesPieChart2 extends ConsumerWidget {
     );
   }
 
-  Widget _categoryInfo(BuildContext context,
-      CategoryTransaction? selectedCategory, CurrencyState currencyState) {
-    final bool hasSelection = selectedCategory != null;
-    final TextStyle? headlineStyle =
-        Theme.of(context).textTheme.headlineLarge?.copyWith(
-              color: hasSelection ? green : red,
-            );
-
-    double displayAmount =
-        hasSelection ? categoryMap[selectedCategory] ?? 0 : total;
-    String displayText = hasSelection ? selectedCategory.name : "Total";
-
+  Widget _categoryInfo(BuildContext context, CategoryTransaction? selectedCategory, CurrencyState currencyState) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (hasSelection)
+        if (selectedCategory != null)
           Container(
             padding: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
@@ -103,15 +87,21 @@ class CategoriesPieChart2 extends ConsumerWidget {
               color: categoryColorList[selectedCategory.color],
             ),
             child: Icon(
-              iconList[selectedCategory.symbol],
+              iconList[selectedCategory.symbol] ?? Icons.swap_horiz_rounded,
               color: Colors.white,
             ),
           ),
         Text(
-          "${displayAmount.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}",
-          style: headlineStyle,
+          (selectedCategory != null)
+              ? "${categoryMap[selectedCategory]?.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}"
+              : "${total.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}",
+          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+              color: ((selectedCategory != null && categoryMap[selectedCategory]! > 0) ||
+                      (selectedCategory == null && total > 0))
+                  ? green
+                  : red),
         ),
-        Text(displayText),
+        (selectedCategory != null) ? Text(selectedCategory.name) : const Text("Total"),
       ],
     );
   }

@@ -76,32 +76,26 @@ class CategoryTransaction extends BaseEntity {
           createdAt: createdAt ?? this.createdAt,
           updatedAt: updatedAt ?? this.updatedAt);
 
-  static CategoryTransaction fromJson(Map<String, Object?> json) =>
-      CategoryTransaction(
-          id: json[BaseEntityFields.id] as int?,
-          name: json[CategoryTransactionFields.name] as String,
-          type:
-              categoryTypeMap[json[CategoryTransactionFields.type] as String]!,
-          symbol: json[CategoryTransactionFields.symbol] as String,
-          color: json[CategoryTransactionFields.color] as int,
-          note: json[CategoryTransactionFields.note] as String?,
-          parent: json[CategoryTransactionFields.parent] as int?,
-          createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
-          updatedAt:
-              DateTime.parse(json[BaseEntityFields.updatedAt] as String));
+  static CategoryTransaction fromJson(Map<String, Object?> json) => CategoryTransaction(
+      id: json[BaseEntityFields.id] as int?,
+      name: json[CategoryTransactionFields.name] as String,
+      type: categoryTypeMap[json[CategoryTransactionFields.type] as String]!,
+      symbol: json[CategoryTransactionFields.symbol] as String,
+      color: json[CategoryTransactionFields.color] as int,
+      note: json[CategoryTransactionFields.note] as String?,
+      parent: json[CategoryTransactionFields.parent] as int?,
+      createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
+      updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String));
 
   Map<String, Object?> toJson({bool update = false}) => {
         BaseEntityFields.id: id,
         CategoryTransactionFields.name: name,
-        CategoryTransactionFields.type:
-            categoryTypeMap.keys.firstWhere((k) => categoryTypeMap[k] == type),
+        CategoryTransactionFields.type: categoryTypeMap.keys.firstWhere((k) => categoryTypeMap[k] == type),
         CategoryTransactionFields.symbol: symbol,
         CategoryTransactionFields.color: color,
         CategoryTransactionFields.note: note,
         CategoryTransactionFields.parent: parent,
-        BaseEntityFields.createdAt: update
-            ? createdAt?.toIso8601String()
-            : DateTime.now().toIso8601String(),
+        BaseEntityFields.createdAt: update ? createdAt?.toIso8601String() : DateTime.now().toIso8601String(),
         BaseEntityFields.updatedAt: DateTime.now().toIso8601String(),
       };
 }
@@ -135,18 +129,15 @@ class CategoryTransactionMethods extends SossoldiDatabase {
   Future<List<CategoryTransaction>> selectAll() async {
     final db = await database;
 
-    final result =
-        await db.query(categoryTransactionTable, orderBy: orderByASC);
+    final result = await db.query(categoryTransactionTable, orderBy: orderByASC);
 
     return result.map((json) => CategoryTransaction.fromJson(json)).toList();
   }
 
-  Future<List<CategoryTransaction>> selectCategoriesByType(
-      CategoryTransactionType type) async {
+  Future<List<CategoryTransaction>> selectCategoriesByType(CategoryTransactionType type) async {
     final db = await database;
 
-    var key =
-        categoryTypeMap.entries.firstWhere((entry) => entry.value == type).key;
+    var key = categoryTypeMap.entries.firstWhere((entry) => entry.value == type).key;
 
     final result = await db.query(categoryTransactionTable,
         columns: CategoryTransactionFields.allFields,
@@ -176,8 +167,7 @@ class CategoryTransactionMethods extends SossoldiDatabase {
   Future<int> deleteById(int id) async {
     final db = await database;
 
-    return await db.delete(categoryTransactionTable,
-        where: '${CategoryTransactionFields.id} = ?', whereArgs: [id]);
+    return await db.delete(categoryTransactionTable, where: '${CategoryTransactionFields.id} = ?', whereArgs: [id]);
   }
 
   CategoryTransactionType? transactionToCategoryType(TransactionType type) {
@@ -200,31 +190,26 @@ class CategoryTransactionMethods extends SossoldiDatabase {
     }
   }
 
-  Future<Map<CategoryTransaction, double>> mapCategoriesWithAmountByType(
-      CategoryTransactionType type) async {
+  Future<Map<CategoryTransaction, double>> mapCategoriesWithAmountByType(CategoryTransactionType type) async {
     final categories = await selectCategoriesByType(type);
 
     final transactionType = categoryToTransactionType(type);
 
-    final transactionTypeList = typeMap.entries
-        .where((entry) => entry.value == transactionType)
-        .map((entry) => entry.key)
-        .toList();
+    final transactionTypeList =
+        typeMap.entries.where((entry) => entry.value == transactionType).map((entry) => entry.key).toList();
 
-    final transactions = await TransactionMethods()
-        .selectAll(transactionType: transactionTypeList);
+    final transactions = await TransactionMethods().selectAll(transactionType: transactionTypeList);
 
     Map<CategoryTransaction, double> categoriesMap = {};
 
     for (var category in categories) {
       final sum = transactions
           .where((transaction) => transaction.idCategory == category.id)
-          .fold(
-              0.0,
-              (previousValue, transaction) =>
-                  previousValue + transaction.amount);
+          .fold(0.0, (previousValue, transaction) => previousValue + transaction.amount);
 
-      categoriesMap[category] = double.parse(sum.toStringAsFixed(2));
+      categoriesMap[category] = type == CategoryTransactionType.income
+          ? double.parse(sum.toStringAsFixed(2))
+          : -double.parse(sum.toStringAsFixed(2));
     }
 
     return categoriesMap;
@@ -233,19 +218,16 @@ class CategoryTransactionMethods extends SossoldiDatabase {
   Future<double> getTotalAmountByType(CategoryTransactionType type) async {
     final transactionType = categoryToTransactionType(type);
 
-    List<String> transactionTypeList = typeMap.entries
-        .where((entry) => entry.value == transactionType)
-        .map((entry) => entry.key)
-        .toList();
+    List<String> transactionTypeList =
+        typeMap.entries.where((entry) => entry.value == transactionType).map((entry) => entry.key).toList();
 
-    final transactions = await TransactionMethods()
-        .selectAll(transactionType: transactionTypeList);
+    final transactions = await TransactionMethods().selectAll(transactionType: transactionTypeList);
 
     final totalAmount = transactions.fold<double>(
       0,
       (previousValue, transaction) => previousValue + transaction.amount,
     );
 
-    return totalAmount;
+    return type == CategoryTransactionType.income ? totalAmount : -totalAmount;
   }
 }

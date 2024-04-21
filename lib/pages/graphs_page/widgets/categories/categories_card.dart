@@ -10,7 +10,6 @@ import '../../../../model/category_transaction.dart';
 import '../../../../providers/categories_provider.dart';
 import '../../../../providers/currency_provider.dart';
 import '../../../../providers/transactions_provider.dart';
-import '../../../transactions_page/widgets/categories_pie_chart.dart';
 import '../linear_progress_bar.dart';
 import 'categories_pie_chart2.dart';
 import 'category_label.dart';
@@ -22,20 +21,13 @@ class CategoriesCard extends ConsumerStatefulWidget {
   ConsumerState<CategoriesCard> createState() => _CategoriesCardState();
 }
 
-class _CategoriesCardState extends ConsumerState<CategoriesCard>
-    with Functions {
+class _CategoriesCardState extends ConsumerState<CategoriesCard> with Functions {
   @override
   Widget build(BuildContext context) {
-    final currencyState = ref.watch(currencyStateNotifier);
-
-    final transactions = ref.watch(transactionsProvider);
-    final transactionType = ref.watch(selectedTransactionTypeProvider);
-
     final categoryType = ref.watch(categoryTypeProvider);
     final categoryMap = ref.watch(categoryMapProvider(categoryType));
 
-    final categoryAmount =
-        ref.watch(categoryAmountProvider(ref.watch(categoryTypeProvider)));
+    final categoryAmount = ref.watch(categoryAmountProvider(ref.watch(categoryTypeProvider)));
 
     return Column(
       children: [
@@ -81,8 +73,7 @@ class _CategoriesCardState extends ConsumerState<CategoriesCard>
                               ),
                             );
                           } else {
-                            CategoryTransaction category =
-                                categories.keys.elementAt(i);
+                            CategoryTransaction category = categories.keys.elementAt(i);
                             double amount = categories[category] ?? 0;
                             return SizedBox(
                               height: 50.0,
