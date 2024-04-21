@@ -21,13 +21,12 @@ class CategoriesPieChart2 extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedCategory = ref.watch(selectedCategoryProvider);
-    final currencyState = ref.watch(currencyStateNotifier);
 
     List<PieChartSectionData> sections = categoryMap.entries.map((entry) {
       bool isSelected = selectedCategory != null && selectedCategory.id == entry.key.id;
       return PieChartSectionData(
         color: categoryColorList[entry.key.color],
-        value: 360 * entry.value / total, // Normalize value for pie chart
+        value: 360 * entry.value / total,
         radius: isSelected ? 30.0 : 25.0,
         showTitle: false,
       );
@@ -65,13 +64,28 @@ class CategoriesPieChart2 extends ConsumerWidget {
               ),
             ),
           ),
-          _categoryInfo(context, selectedCategory, currencyState),
+          PieChartCategoryInfo(categoryMap: categoryMap, total: total),
         ],
       ),
     );
   }
+}
 
-  Widget _categoryInfo(BuildContext context, CategoryTransaction? selectedCategory, CurrencyState currencyState) {
+class PieChartCategoryInfo extends ConsumerWidget {
+  const PieChartCategoryInfo({
+    required this.categoryMap,
+    required this.total,
+    super.key,
+  });
+
+  final Map<CategoryTransaction, double> categoryMap;
+  final double total;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectedCategory = ref.watch(selectedCategoryProvider);
+    final currencyState = ref.watch(currencyStateNotifier);
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [

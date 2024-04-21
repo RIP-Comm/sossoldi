@@ -135,7 +135,7 @@ final categoryMapProvider =
   return categoriesMap;
 });
 
-final categoryAmountProvider = FutureProvider.family<double, CategoryTransactionType>((ref, type) async {
+final categoryTotalAmountProvider = FutureProvider.family<double, CategoryTransactionType>((ref, type) async {
   final dateStart = ref.watch(filterDateStartProvider);
   final dateEnd = ref.watch(filterDateEndProvider);
   final transactionType = CategoryTransactionMethods().categoryToTransactionType(type);

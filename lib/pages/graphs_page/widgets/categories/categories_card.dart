@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sossoldi/custom_widgets/category_type_button.dart';
-import 'package:sossoldi/custom_widgets/default_container.dart';
-import 'package:sossoldi/custom_widgets/transaction_type_button.dart';
-import 'package:sossoldi/pages/graphs_page/widgets/card_label.dart';
+import '../../../../custom_widgets/category_type_button.dart';
+import '../../../../custom_widgets/default_container.dart';
 import '../../../../constants/functions.dart';
 import '../../../../constants/style.dart';
 import '../../../../model/category_transaction.dart';
 import '../../../../providers/categories_provider.dart';
-import '../../../../providers/currency_provider.dart';
-import '../../../../providers/transactions_provider.dart';
+import '../card_label.dart';
 import '../linear_progress_bar.dart';
+import 'categories_bar_chart.dart';
 import 'categories_pie_chart2.dart';
 import 'category_label.dart';
 
@@ -27,7 +25,7 @@ class _CategoriesCardState extends ConsumerState<CategoriesCard> with Functions 
     final categoryType = ref.watch(categoryTypeProvider);
     final categoryMap = ref.watch(categoryMapProvider(categoryType));
 
-    final categoryAmount = ref.watch(categoryAmountProvider(ref.watch(categoryTypeProvider)));
+    final categoryTotalAmount = ref.watch(categoryTotalAmountProvider(ref.watch(categoryTypeProvider)));
 
     return Column(
       children: [
@@ -42,7 +40,7 @@ class _CategoriesCardState extends ConsumerState<CategoriesCard> with Functions 
                 const SizedBox(height: 20),
                 CategoriesPieChart2(
                   categoryMap: categories,
-                  total: categoryAmount.value ?? 0,
+                  total: categoryTotalAmount.value ?? 0,
                 ),
                 const SizedBox(height: 20),
                 categories.isEmpty
@@ -83,13 +81,13 @@ class _CategoriesCardState extends ConsumerState<CategoriesCard> with Functions 
                                   CategoryLabel(
                                     category: category,
                                     amount: amount,
-                                    total: categoryAmount.value ?? 0,
+                                    total: categoryTotalAmount.value ?? 0,
                                   ),
                                   const SizedBox(height: 4.0),
                                   LinearProgressBar(
                                     type: BarType.category,
                                     amount: amount,
-                                    total: categoryAmount.value ?? 0,
+                                    total: categoryTotalAmount.value ?? 0,
                                     colorIndex: category.color,
                                   )
                                 ],
@@ -98,7 +96,8 @@ class _CategoriesCardState extends ConsumerState<CategoriesCard> with Functions 
                           }
                         },
                       ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 30),
+                const CategoriesBarChart()
               ],
             );
           },
