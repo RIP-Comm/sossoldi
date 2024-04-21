@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sossoldi/providers/currency_provider.dart';
+import '../../../../providers/currency_provider.dart';
 
 import '../../../../constants/style.dart';
 import '../../../../model/category_transaction.dart';
