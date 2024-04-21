@@ -189,45 +189,4 @@ class CategoryTransactionMethods extends SossoldiDatabase {
         return TransactionType.expense;
     }
   }
-
-  Future<Map<CategoryTransaction, double>> mapCategoriesWithAmountByType(CategoryTransactionType type) async {
-    final categories = await selectCategoriesByType(type);
-
-    final transactionType = categoryToTransactionType(type);
-
-    final transactionTypeList =
-        typeMap.entries.where((entry) => entry.value == transactionType).map((entry) => entry.key).toList();
-
-    final transactions = await TransactionMethods().selectAll(transactionType: transactionTypeList);
-
-    Map<CategoryTransaction, double> categoriesMap = {};
-
-    for (var category in categories) {
-      final sum = transactions
-          .where((transaction) => transaction.idCategory == category.id)
-          .fold(0.0, (previousValue, transaction) => previousValue + transaction.amount);
-
-      categoriesMap[category] = type == CategoryTransactionType.income
-          ? double.parse(sum.toStringAsFixed(2))
-          : -double.parse(sum.toStringAsFixed(2));
-    }
-
-    return categoriesMap;
-  }
-
-  Future<double> getTotalAmountByType(CategoryTransactionType type) async {
-    final transactionType = categoryToTransactionType(type);
-
-    List<String> transactionTypeList =
-        typeMap.entries.where((entry) => entry.value == transactionType).map((entry) => entry.key).toList();
-
-    final transactions = await TransactionMethods().selectAll(transactionType: transactionTypeList);
-
-    final totalAmount = transactions.fold<double>(
-      0,
-      (previousValue, transaction) => previousValue + transaction.amount,
-    );
-
-    return type == CategoryTransactionType.income ? totalAmount : -totalAmount;
-  }
 }
