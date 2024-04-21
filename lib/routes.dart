@@ -8,6 +8,7 @@ import 'pages/add_page/add_page.dart';
 import 'pages/categories/add_category.dart';
 import 'pages/categories/category_list.dart';
 import 'pages/general_options/general_settings.dart';
+import 'pages/graphs_page/graphs_page.dart';
 import 'pages/home_page.dart';
 import 'pages/more_info_page/collaborators_page.dart';
 import 'pages/more_info_page/more_info.dart';
@@ -16,7 +17,6 @@ import 'pages/notifications/notifications_settings.dart';
 import 'pages/planning_page/planning_page.dart';
 import 'pages/search_page/search_page.dart';
 import 'pages/settings_page.dart';
-import 'pages/statistics_page.dart';
 import 'pages/structure.dart';
 import 'pages/transactions_page/transactions_page.dart';
 
@@ -49,7 +49,7 @@ Route<dynamic> makeRoute(RouteSettings settings) {
     case '/planning':
       return _materialPageRoute(settings.name, const PlanningPage());
     case '/graphs':
-      return _materialPageRoute(settings.name, const StatsPage());
+      return _materialPageRoute(settings.name, const GraphsPage());
     case '/settings':
       return _noTransitionPageRoute(settings.name, const SettingsPage());
     case '/general-settings':
