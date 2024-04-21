@@ -8,6 +8,7 @@ void main() {
     CategoryTransaction c = CategoryTransaction(
         id: 2,
         name: "name",
+        type: CategoryTransactionType.expense,
         symbol: 'symbol',
         color: 0,
         createdAt: DateTime.utc(2022),
@@ -17,6 +18,7 @@ void main() {
 
     assert(cCopy.id == 10);
     assert(cCopy.name == c.name);
+    assert(cCopy.type == c.type);
     assert(cCopy.symbol == c.symbol);
     assert(cCopy.color == c.color);
     assert(cCopy.createdAt == c.createdAt);
@@ -49,16 +51,19 @@ void main() {
 
   test("Test toJson Category Transaction", () {
     CategoryTransaction c = const CategoryTransaction(
-        id: 2,
-        name: "name",
-        symbol: "symbol",
-        color: 0,
-        note: "note");
+      id: 2,
+      name: "name",
+      type: CategoryTransactionType.expense,
+      symbol: "symbol",
+      color: 0,
+      note: "note",
+    );
 
     Map<String, Object?> json = c.toJson();
 
     assert(c.id == json[BaseEntityFields.id]);
     assert(c.name == json[CategoryTransactionFields.name]);
+    assert(c.type == json[CategoryTransactionFields.type]);
     assert(c.symbol == json[CategoryTransactionFields.symbol]);
     assert(c.color == json[CategoryTransactionFields.color]);
     assert(c.note == json[CategoryTransactionFields.note]);
