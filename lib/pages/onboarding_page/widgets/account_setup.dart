@@ -1,10 +1,9 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
-import 'package:sossoldi/model/currency.dart';
-import 'package:sossoldi/providers/currency_provider.dart';
 import '../../../constants/constants.dart';
 import '../../../providers/accounts_provider.dart';
+import '../../../providers/currency_provider.dart';
 import '/constants/style.dart';
 
 final showAccountIconsProvider = StateProvider.autoDispose<bool>((ref) => false);

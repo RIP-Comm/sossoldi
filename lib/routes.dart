@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sossoldi/pages/onboarding_page/onboarding_page.dart';
 
 import 'pages/account_page/account_page.dart';
 import 'pages/accounts/account_list.dart';
@@ -14,6 +13,7 @@ import 'pages/more_info_page/collaborators_page.dart';
 import 'pages/more_info_page/more_info.dart';
 import 'pages/more_info_page/privacy_policy.dart';
 import 'pages/notifications/notifications_settings.dart';
+import 'pages/onboarding_page/onboarding_page.dart';
 import 'pages/planning_page/planning_page.dart';
 import 'pages/search_page/search_page.dart';
 import 'pages/settings_page.dart';

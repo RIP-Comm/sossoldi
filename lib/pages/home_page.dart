@@ -217,7 +217,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                       physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, i) {
-                        if (i == accounts.length || accounts.isEmpty) {
+                        if (i == accounts.length) {
                           return Padding(
                             padding: const EdgeInsets.fromLTRB(0, 4, 0, 16),
                             child: Container(

@@ -1,11 +1,8 @@
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sossoldi/pages/onboarding_page/widgets/add_category_button.dart';
-import 'package:sossoldi/pages/onboarding_page/widgets/category_button.dart';
 
 import '/constants/constants.dart';
 import '/constants/style.dart';
@@ -14,6 +11,8 @@ import '/pages/onboarding_page/widgets/account_setup.dart';
 import '/pages/onboarding_page/widgets/add_budget.dart';
 import '/providers/budgets_provider.dart';
 import '/providers/categories_provider.dart';
+import 'add_category_button.dart';
+import 'category_button.dart';
 
 class BudgetSetup extends ConsumerStatefulWidget {
   const BudgetSetup({Key? key}) : super(key: key);
