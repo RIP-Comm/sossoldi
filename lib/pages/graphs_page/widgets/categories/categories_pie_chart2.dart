@@ -1,12 +1,8 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:fl_chart/fl_chart.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../constants/constants.dart';
-import '../../../../constants/functions.dart';
 import '../../../../constants/style.dart';
 import '../../../../model/category_transaction.dart';
 import '../../../../providers/categories_provider.dart';
@@ -99,7 +95,8 @@ class CategoriesPieChart2 extends ConsumerWidget {
               color: ((selectedCategory != null && categoryMap[selectedCategory]! > 0) ||
                       (selectedCategory == null && total > 0))
                   ? green
-                  : red),
+                  : red,
+              fontSize: 18),
         ),
         (selectedCategory != null) ? Text(selectedCategory.name) : const Text("Total"),
       ],
