@@ -6,6 +6,7 @@ import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
 import '../../../model/category_transaction.dart';
 import '../../../model/transaction.dart';
+import '../../../providers/categories_provider.dart';
 import '../../../providers/currency_provider.dart';
 import 'categories_tab.dart';
 
@@ -77,10 +78,7 @@ class CategoryListTile extends ConsumerWidget {
                           ),
                           Text(
                             "${amount.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.copyWith(color: (amount > 0) ? green : red),
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: (amount > 0) ? green : red),
                           ),
                         ],
                       ),

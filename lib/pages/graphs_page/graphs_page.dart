@@ -1,0 +1,140 @@
+// Satistics page.
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sossoldi/pages/graphs_page/widgets/accounts/accounts_card.dart';
+
+import '../../constants/functions.dart';
+import '../../constants/style.dart';
+import '../../custom_widgets/default_container.dart';
+import '../../custom_widgets/line_chart.dart';
+import '../../custom_widgets/transaction_type_button.dart';
+import '../../providers/currency_provider.dart';
+import '../../providers/statistics_provider.dart';
+import 'widgets/categories/categories_card.dart';
+
+class GraphsPage extends ConsumerStatefulWidget {
+  const GraphsPage({super.key});
+
+  @override
+  ConsumerState<GraphsPage> createState() => _GraphsPageState();
+}
+
+class _GraphsPageState extends ConsumerState<GraphsPage> with Functions {
+  @override
+  Widget build(BuildContext context) {
+    final currentYearMonthlyTransactions =
+        ref.watch(currentYearMontlyTransactionsProvider);
+    final currencyState = ref.watch(currencyStateNotifier);
+
+    return ListView(
+      children: [
+        const SizedBox(height: 16),
+        ref.watch(statisticsProvider).when(
+              data: (value) {
+                double percentGainLoss = 0;
+                if (currentYearMonthlyTransactions.length > 1) {
+                  percentGainLoss = ((currentYearMonthlyTransactions.last.y -
+                              currentYearMonthlyTransactions[
+                                      currentYearMonthlyTransactions.length - 2]
+                                  .y) /
+                          currentYearMonthlyTransactions[
+                                  currentYearMonthlyTransactions.length - 2]
+                              .y) *
+                      100;
+                }
+                return Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(16.0),
+                      color: Theme.of(context).colorScheme.tertiary,
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                "Available liquidity",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.copyWith(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                              ),
+                              RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: numToCurrency(
+                                          currentYearMonthlyTransactions
+                                              .last.y),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineLarge
+                                          ?.copyWith(color: blue4),
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          currencyState.selectedCurrency.symbol,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge
+                                          ?.copyWith(color: blue4),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color:
+                                      Theme.of(context).colorScheme.background,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                padding: const EdgeInsets.all(4.0),
+                                child: Text(
+                                  "${numToCurrency(percentGainLoss)}%",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                        color:
+                                            percentGainLoss < 0 ? red : green,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                ),
+                              ),
+                              Text(
+                                " VS last month",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge
+                                    ?.copyWith(fontWeight: FontWeight.w300),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    LineChartWidget(lineData: currentYearMonthlyTransactions),
+                  ],
+                );
+              },
+              loading: () => const SizedBox(),
+              error: (err, stack) => Text('Error: $err'),
+            ),
+        const SizedBox(height: 24),
+        const AccountsCard(),
+        const SizedBox(height: 24),
+        const CategoriesCard(),
+        const SizedBox(height: 24),
+      ],
+    );
+  }
+}
