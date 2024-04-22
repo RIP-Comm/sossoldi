@@ -6,7 +6,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sossoldi/providers/statistics_provider.dart';
 
 import '../constants/style.dart';
 import '../custom_widgets/alert_dialog.dart';
@@ -16,6 +15,7 @@ import '../providers/accounts_provider.dart';
 import '../providers/budgets_provider.dart';
 import '../providers/categories_provider.dart';
 import '../providers/dashboard_provider.dart';
+import '../providers/statistics_provider.dart';
 import '../providers/transactions_provider.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
@@ -121,53 +121,53 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 return Padding(
                     padding: const EdgeInsets.only(bottom: 16),
                     child: DefaultCard(
-                  onTap: () {
-                    if (setting[3] != null) {
-                      Navigator.of(context).pushNamed(setting[3] as String);
-                    }
-                  },
-                  child: Row(
-                    children: [
-                      Container(
-                        decoration: const BoxDecoration(
-                          color: blue5,
-                          shape: BoxShape.circle,
-                        ),
-                        padding: const EdgeInsets.all(10.0),
-                        child: Icon(
-                          setting[0] as IconData,
-                          size: 30.0,
-                          color: white,
-                        ),
-                      ),
-                      const SizedBox(width: 12.0),
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              setting[1].toString(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge!
-                                  .copyWith(color: Theme.of(context).colorScheme.primary),
+                      onTap: () {
+                        if (setting[3] != null) {
+                          Navigator.of(context).pushNamed(setting[3] as String);
+                        }
+                      },
+                      child: Row(
+                        children: [
+                          Container(
+                            decoration: const BoxDecoration(
+                              color: blue5,
+                              shape: BoxShape.circle,
                             ),
-                            Text(
-                              setting[2].toString(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall!
-                                  .copyWith(color: Theme.of(context).colorScheme.primary),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
+                            padding: const EdgeInsets.all(10.0),
+                            child: Icon(
+                              setting[0] as IconData,
+                              size: 30.0,
+                              color: white,
                             ),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(width: 12.0),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  setting[1].toString(),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge!
+                                      .copyWith(color: Theme.of(context).colorScheme.primary),
+                                ),
+                                Text(
+                                  setting[2].toString(),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall!
+                                      .copyWith(color: Theme.of(context).colorScheme.primary),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ));
+                    ));
               },
             ),
           ],

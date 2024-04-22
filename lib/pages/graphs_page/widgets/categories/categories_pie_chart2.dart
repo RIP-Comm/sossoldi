@@ -106,7 +106,7 @@ class PieChartCategoryInfo extends ConsumerWidget {
               ? "${categoryMap[selectedCategory]?.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}"
               : "${total.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}",
           style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-              color: ((selectedCategory != null && categoryMap[selectedCategory]! > 0) ||
+              color: ((selectedCategory != null && categoryMap[selectedCategory]! >= 0) ||
                       (selectedCategory == null && total > 0))
                   ? green
                   : red,

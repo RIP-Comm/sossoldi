@@ -17,6 +17,8 @@ final categoryIconProvider = StateProvider<String>((ref) => iconList.keys.first)
 
 final categoryColorProvider = StateProvider<int>((ref) => 0);
 
+final selectedCategoryIndexProvider = StateProvider.autoDispose<int>((ref) => -1);
+
 class AsyncCategoriesNotifier extends AsyncNotifier<List<CategoryTransaction>> {
   @override
   Future<List<CategoryTransaction>> build() async {
@@ -154,4 +156,10 @@ final categoryTotalAmountProvider = FutureProvider.family<double, CategoryTransa
   return type == CategoryTransactionType.income ? totalAmount : -totalAmount;
 });
 
-final selectedCategoryIndexProvider = StateProvider.autoDispose<int>((ref) => -1);
+final transactionToCategoryProvider = Provider.family<CategoryTransactionType?, TransactionType>((ref, type) {
+  return CategoryTransactionMethods().transactionToCategoryType(type);
+});
+
+final categoryToTransactionProvider = Provider.family<TransactionType?, CategoryTransactionType>((ref, type) {
+  return CategoryTransactionMethods().categoryToTransactionType(type);
+});
