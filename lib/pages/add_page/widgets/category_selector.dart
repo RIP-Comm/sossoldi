@@ -23,7 +23,9 @@ class CategorySelector extends ConsumerStatefulWidget {
 class _CategorySelectorState extends ConsumerState<CategorySelector> with Functions {
   @override
   Widget build(BuildContext context) {
-    final categoriesList = ref.watch(categoriesProvider);
+    final transactionType = ref.watch(transactionTypeProvider);
+    final categoryType = ref.watch(transactionToCategoryProvider(transactionType));
+    final categoriesList = ref.watch(categoriesByTypeProvider(categoryType));
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -48,10 +50,8 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> with Functi
                   padding: const EdgeInsets.only(left: 16, top: 32, bottom: 8),
                   child: Text(
                     "MORE FREQUENT",
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelLarge!
-                        .copyWith(color: Theme.of(context).colorScheme.primary),
+                    style:
+                        Theme.of(context).textTheme.labelLarge!.copyWith(color: Theme.of(context).colorScheme.primary),
                   ),
                 ),
                 Container(
@@ -60,7 +60,7 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> with Functi
                   width: double.infinity,
                   child: categoriesList.when(
                     data: (categories) => ListView.builder(
-                      itemCount: 4,
+                      itemCount: categories.length,
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
                       itemBuilder: (context, i) {
@@ -69,8 +69,7 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> with Functi
                         Color? color = categoryColorListTheme[category.color];
                         return GestureDetector(
                           onTap: () => {
-                            ref.read(categoryProvider.notifier).state =
-                                category,
+                            ref.read(categoryProvider.notifier).state = category,
                             Navigator.of(context).pop(),
                           },
                           child: Padding(
@@ -114,10 +113,8 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> with Functi
                   padding: const EdgeInsets.only(left: 16, top: 32, bottom: 8),
                   child: Text(
                     "ALL CATEGORIES",
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelLarge!
-                        .copyWith(color: Theme.of(context).colorScheme.primary),
+                    style:
+                        Theme.of(context).textTheme.labelLarge!.copyWith(color: Theme.of(context).colorScheme.primary),
                   ),
                 ),
                 categoriesList.when(
