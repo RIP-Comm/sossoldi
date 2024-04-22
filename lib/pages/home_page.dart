@@ -264,10 +264,11 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                               ),
                             ),
                           );
-                        } else {
+                        } else if(accounts.isNotEmpty) {
                           BankAccount account = accounts[i];
                           return AccountsSum(account: account);
                         }
+
                       },
                     ),
                     loading: () => const SizedBox(),
