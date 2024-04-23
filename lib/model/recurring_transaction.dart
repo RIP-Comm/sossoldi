@@ -5,18 +5,24 @@ const String recurringTransactionTable = 'recurringTransaction';
 
 class RecurringTransactionFields extends BaseEntityFields {
   static String id = BaseEntityFields.getId;
-  static String from = 'from';
-  static String to = 'to';
+  static String fromDate = 'fromDate';
+  static String toDate = 'toDate';
   static String amount = 'amount';
+  static String note = 'note';
+  static String recurrency = 'recurrency';
+  static String idCategory = 'idCategory';
   static String lastInsertion = 'lastInsertion';
   static String createdAt = BaseEntityFields.getCreatedAt;
   static String updatedAt = BaseEntityFields.getUpdatedAt;
 
   static final List<String> allFields = [
     BaseEntityFields.id,
-    from,
-    to,
+    fromDate,
+    toDate,
     amount,
+    note,
+    recurrency,
+    idCategory,
     lastInsertion,
     BaseEntityFields.createdAt,
     BaseEntityFields.updatedAt
@@ -24,16 +30,22 @@ class RecurringTransactionFields extends BaseEntityFields {
 }
 
 class RecurringTransaction extends BaseEntity {
-  final DateTime from;
-  final DateTime to;
+  final DateTime fromDate;
+  final DateTime? toDate;
   final num amount;
+  final String note;
+  final String recurrency;
+  final num idCategory;
   final DateTime? lastInsertion;
 
   const RecurringTransaction(
       {int? id,
-      required this.from,
-      required this.to,
+      required this.fromDate,
+      this.toDate,
       required this.amount,
+      required this.note,
+      required this.recurrency,
+      required this.idCategory,
       this.lastInsertion,
       DateTime? createdAt,
       DateTime? updatedAt})
@@ -41,17 +53,23 @@ class RecurringTransaction extends BaseEntity {
 
   RecurringTransaction copy(
           {int? id,
-          DateTime? from,
-          DateTime? to,
+          DateTime? fromDate,
+          DateTime? toDate,
           num? amount,
+          String? note,
+          String? recurrency,
+          num? idCategory,
           DateTime? lastInsertion,
           DateTime? createdAt,
           DateTime? updatedAt}) =>
       RecurringTransaction(
           id: id ?? this.id,
-          from: from ?? this.from,
-          to: to ?? this.to,
+          fromDate: fromDate ?? this.fromDate,
+          toDate: toDate ?? this.toDate,
           amount: amount ?? this.amount,
+          note: note ?? this.note,
+          recurrency: recurrency ?? this.recurrency,
+          idCategory: idCategory ?? this.idCategory,
           lastInsertion: lastInsertion ?? this.lastInsertion,
           createdAt: createdAt ?? this.createdAt,
           updatedAt: updatedAt ?? this.updatedAt);
@@ -59,23 +77,30 @@ class RecurringTransaction extends BaseEntity {
   static RecurringTransaction fromJson(Map<String, Object?> json) =>
       RecurringTransaction(
           id: json[BaseEntityFields.id] as int?,
-          from: DateTime.parse(
-              json[RecurringTransactionFields.from] as String),
-          to: DateTime.parse(
-              json[RecurringTransactionFields.to] as String),
+          fromDate: DateTime.parse(
+              json[RecurringTransactionFields.fromDate] as String),
+          toDate: json[RecurringTransactionFields.toDate] != null
+              ? DateTime.parse(json[RecurringTransactionFields.toDate] as String)
+              : null,
           amount: json[RecurringTransactionFields.amount] as num,
-          lastInsertion:
-              json[RecurringTransactionFields.lastInsertion]
-                  as DateTime,
+          note: json[RecurringTransactionFields.note] as String,
+          recurrency: json[RecurringTransactionFields.recurrency] as String,
+          idCategory: json[RecurringTransactionFields.idCategory] as num,
+          lastInsertion: json[RecurringTransactionFields.lastInsertion] != null
+              ? DateTime.parse(json[RecurringTransactionFields.lastInsertion] as String)
+              : null,
           createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
           updatedAt:
               DateTime.parse(json[BaseEntityFields.updatedAt] as String));
 
   Map<String, Object?> toJson() => {
         BaseEntityFields.id: id,
-        RecurringTransactionFields.from: from.toIso8601String(),
-        RecurringTransactionFields.to: to.toIso8601String(),
+        RecurringTransactionFields.fromDate: fromDate.toIso8601String(),
+        RecurringTransactionFields.toDate: toDate?.toIso8601String(),
         RecurringTransactionFields.amount: amount,
+        RecurringTransactionFields.note: note,
+        RecurringTransactionFields.recurrency: recurrency,
+        RecurringTransactionFields.idCategory: idCategory,
         RecurringTransactionFields.lastInsertion: lastInsertion?.toIso8601String(),
         BaseEntityFields.createdAt: createdAt?.toIso8601String(),
         BaseEntityFields.updatedAt: updatedAt?.toIso8601String(),
