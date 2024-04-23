@@ -81,7 +81,7 @@ class MonthSelector extends ConsumerWidget with Functions {
               children: [
                 Text(
                   getFormattedDateRange(startDate, endDate),
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(color: darkWhite),
                 ),
                 RichText(
                   text: TextSpan(

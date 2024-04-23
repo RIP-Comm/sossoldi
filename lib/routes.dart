@@ -13,6 +13,7 @@ import 'pages/more_info_page/collaborators_page.dart';
 import 'pages/more_info_page/more_info.dart';
 import 'pages/more_info_page/privacy_policy.dart';
 import 'pages/notifications/notifications_settings.dart';
+import 'pages/onboarding_page/onboarding_page.dart';
 import 'pages/planning_page/planning_page.dart';
 import 'pages/search_page/search_page.dart';
 import 'pages/settings_page.dart';
@@ -24,6 +25,8 @@ Route<dynamic> makeRoute(RouteSettings settings) {
   switch (settings.name) {
     case '/':
       return _materialPageRoute(settings.name, const Structure());
+    case '/onboarding':
+      return _materialPageRoute(settings.name, const Onboarding());
     case '/dashboard':
       return _materialPageRoute(settings.name, const HomePage());
     case '/add-page':

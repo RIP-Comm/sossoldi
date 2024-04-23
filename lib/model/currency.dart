@@ -93,6 +93,13 @@ class CurrencyMethods extends SossoldiDatabase {
     return item.copy(id: id);
   }
 
+  Future<void> insertAll(List<Currency> list) async {
+    final db = await database;
+    for(Currency currency in list){
+      await db.insert(currencyTable, currency.toJson());
+    }
+  }
+
   Future<Currency> selectById(int id) async {
     final db = await database;
 
