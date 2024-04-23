@@ -5,8 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workmanager/workmanager.dart';
-import 'package:sossoldi/utils/worker_manager.dart';
 
+import 'model/recurring_transaction.dart';
+import 'utils/worker_manager.dart';
 import 'pages/notifications/notifications_service.dart';
 import 'providers/theme_provider.dart';
 import 'routes.dart';
@@ -16,18 +17,40 @@ bool? _isFirstLogin = true;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   if(Platform.isAndroid){
     requestNotificationPermissions();
     initializeNotifications();
     Workmanager().initialize(callbackDispatcher);
   }
+
   SharedPreferences preferences = await SharedPreferences.getInstance();
 
   bool? getPref =  preferences.getBool('is_first_login');
   getPref == null ? await preferences.setBool('is_first_login', false) : null;
   _isFirstLogin = getPref;
 
+  // perform recurring transactions checks
+  DateTime? lastCheckGetPref = preferences.getString('last_recurring_transactions_check') != null ? DateTime.parse(preferences.getString('last_recurring_transactions_check')!) : null;
+  DateTime? lastRecurringTransactionsCheck = lastCheckGetPref;
+
+  if(lastRecurringTransactionsCheck == null || DateTime.now().difference(lastRecurringTransactionsCheck).inDays >= 1){
+    checkRecurringTransactions();
+    // update last recurring transactions runtime
+    await preferences.setString('last_recurring_transactions_check', DateTime.now().toIso8601String());
+  }
+
   initializeDateFormatting('it_IT', null).then((_) => runApp(const ProviderScope(child: Launcher())));
+}
+
+// put here the function to check recurring transactions
+void checkRecurringTransactions() async {
+  // get all recurring transactions
+  final accounts = await RecurringTransactionMethods().selectAll();
+  // check if the recurring transaction is due
+  // if it is due, insert a new transaction
+  // update the last insertion date
+  // update the recurring transaction
 }
 
 class Launcher extends ConsumerWidget {
