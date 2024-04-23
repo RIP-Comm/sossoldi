@@ -27,7 +27,7 @@ class _PlanningPageState extends State<PlanningPage> {
   Widget build(BuildContext context) {
     return Container(
         key: _key,
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.background,
         padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
         child: ListView(
             children: [

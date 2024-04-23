@@ -114,7 +114,7 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
           TextButton.icon(
               icon: Icon(
                 Icons.add_circle,
-                color: Theme.of(context).colorScheme.secondary,
+                color: Theme.of(context).colorScheme.primary,
               ),
               onPressed: () {
                 setState(() {
@@ -130,7 +130,7 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
                 style: Theme.of(context)
                     .textTheme
                     .titleSmall!
-                    .apply(color: Theme.of(context).colorScheme.secondary),
+                    .apply(color: Theme.of(context).colorScheme.primary),
               )),
         ])),
         const SizedBox(height: 10),
@@ -164,7 +164,7 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
               ),
               child: Text(
                 "SAVE BUDGET",
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Theme.of(context).colorScheme.background),
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.white),
               ),
             ),
           ),

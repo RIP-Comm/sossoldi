@@ -12,7 +12,7 @@ class MonthSelector extends ConsumerWidget with Functions {
     super.key,
   });
 
-  final double height = 60;
+  final double height = 70;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -34,7 +34,9 @@ class MonthSelector extends ConsumerWidget with Functions {
           ),
           builder: (context, child) => Theme(
             data: Theme.of(context).copyWith(
-              appBarTheme: Theme.of(context).appBarTheme.copyWith(backgroundColor: blue1),
+              appBarTheme: Theme.of(context)
+                  .appBarTheme
+                  .copyWith(backgroundColor: blue1),
             ),
             child: child!,
           ),
@@ -47,9 +49,9 @@ class MonthSelector extends ConsumerWidget with Functions {
       child: Container(
         clipBehavior: Clip.antiAlias, // force rounded corners on children
         height: height,
-        decoration: const BoxDecoration(
-          color: blue7,
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.tertiary,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -57,8 +59,8 @@ class MonthSelector extends ConsumerWidget with Functions {
             GestureDetector(
               onTap: () {
                 // move to previous month
-                ref.read(filterDateStartProvider.notifier).state =
-                    DateTime(startDate.year, startDate.month - 1, startDate.day);
+                ref.read(filterDateStartProvider.notifier).state = DateTime(
+                    startDate.year, startDate.month - 1, startDate.day);
                 ref.read(filterDateEndProvider.notifier).state =
                     DateTime(startDate.year, startDate.month, 0);
                 ref.read(transactionsProvider.notifier).filterTransactions();
@@ -67,9 +69,10 @@ class MonthSelector extends ConsumerWidget with Functions {
                 height: height,
                 width: height,
                 color: Theme.of(context).colorScheme.primary,
-                child:  Icon(
+                child: Icon(
+                  size: 40,
                   Icons.chevron_left,
-                  color: Theme.of(context).colorScheme.primaryContainer,
+                  color: Theme.of(context).colorScheme.tertiary,
                 ),
               ),
             ),
@@ -91,12 +94,11 @@ class MonthSelector extends ConsumerWidget with Functions {
                             .copyWith(color: totalAmount >= 0 ? green : red),
                       ),
                       TextSpan(
-                        text: currencyState.selectedCurrency.symbol,
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelLarge!
-                            .copyWith(color: totalAmount >= 0 ? green : red)
-                      ),
+                          text: currencyState.selectedCurrency.symbol,
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelLarge!
+                              .copyWith(color: totalAmount >= 0 ? green : red)),
                     ],
                   ),
                 ),
@@ -105,8 +107,8 @@ class MonthSelector extends ConsumerWidget with Functions {
             GestureDetector(
               onTap: () {
                 // move to next month
-                ref.read(filterDateStartProvider.notifier).state =
-                    DateTime(startDate.year, startDate.month + 1, startDate.day);
+                ref.read(filterDateStartProvider.notifier).state = DateTime(
+                    startDate.year, startDate.month + 1, startDate.day);
                 ref.read(filterDateEndProvider.notifier).state =
                     DateTime(startDate.year, startDate.month + 2, 0);
                 ref.read(transactionsProvider.notifier).filterTransactions();
@@ -116,8 +118,9 @@ class MonthSelector extends ConsumerWidget with Functions {
                 width: height,
                 color: Theme.of(context).colorScheme.primary,
                 child: Icon(
+                  size: 40,
                   Icons.chevron_right,
-                  color: Theme.of(context).colorScheme.primaryContainer,
+                  color: Theme.of(context).colorScheme.tertiary,
                 ),
               ),
             ),

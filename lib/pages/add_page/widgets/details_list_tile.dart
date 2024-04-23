@@ -32,7 +32,7 @@ class DetailsListTile extends ConsumerWidget {
         child: Icon(
           icon,
           size: 24.0,
-          color: Theme.of(context).colorScheme.background,
+          color: Colors.white,
         ),
       ),
       title: Text(
@@ -51,7 +51,7 @@ class DetailsListTile extends ConsumerWidget {
                 Theme.of(context)
                 .textTheme
                 .bodySmall!
-                .copyWith(color: Theme.of(context).colorScheme.secondary),
+                .copyWith(color: Theme.of(context).colorScheme.primary),
           ),
           const SizedBox(width: 6.0),
           const Icon(Icons.chevron_right, color: grey1),

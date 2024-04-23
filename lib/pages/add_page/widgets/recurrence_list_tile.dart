@@ -25,12 +25,12 @@ class RecurrenceListTile extends ConsumerWidget {
               shape: BoxShape.circle,
               color: Theme.of(context).colorScheme.secondary,
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
+            child: const Padding(
+              padding: EdgeInsets.all(10.0),
               child: Icon(
                 Icons.autorenew,
                 size: 24.0,
-                color: Theme.of(context).colorScheme.background,
+                color: Colors.white,
               ),
             ),
           ),
@@ -43,6 +43,8 @@ class RecurrenceListTile extends ConsumerWidget {
           ),
           trailing: Switch.adaptive(
             value: isRecurring,
+            activeColor: Theme.of(context).colorScheme.primary,
+            inactiveThumbColor: Theme.of(context).colorScheme.background,
             onChanged: (select) =>
                 ref.read(selectedRecurringPayProvider.notifier).state = select,
           ),
@@ -78,12 +80,12 @@ class RecurrenceListTile extends ConsumerWidget {
                   Text(
                     recurrenceMap[ref.watch(intervalProvider)]!,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: Theme.of(context).colorScheme.secondary),
+                        color: Theme.of(context).colorScheme.primary),
                   ),
                   const SizedBox(width: 6),
                   Icon(
                     Icons.chevron_right,
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ],
               ),
@@ -113,12 +115,12 @@ class RecurrenceListTile extends ConsumerWidget {
                   Text(
                     "Never",
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: Theme.of(context).colorScheme.secondary),
+                        color: Theme.of(context).colorScheme.primary),
                   ),
                   const SizedBox(width: 6),
                   Icon(
                     Icons.chevron_right,
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ],
               ),
