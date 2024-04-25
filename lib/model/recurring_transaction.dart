@@ -1,4 +1,5 @@
 import '../database/sossoldi_database.dart';
+import 'transaction.dart';
 import 'base_entity.dart';
 
 const String recurringTransactionTable = 'recurringTransaction';
@@ -28,6 +29,44 @@ class RecurringTransactionFields extends BaseEntityFields {
     BaseEntityFields.updatedAt
   ];
 }
+
+Map<String, dynamic> recurrenciesMap = {
+  'DAILY': {
+      'label': 'Daily',
+      'entity': 'days',
+      'amount': 1
+    },
+  'WEEKLY': {
+      'label': 'Weekly',
+      'entity': 'days',
+      'amount': 7
+    },
+  'MONTHLY': {
+      'label': 'Monthly',
+      'entity': 'months',
+      'amount': 1
+    },
+  'BIMONTHLY': {
+      'label': 'Bimonthly',
+      'entity': 'months',
+      'amount': 2
+    },
+  'QUARTERLY': {
+      'label': 'Quarterly',
+      'entity': 'months',
+      'amount': 3
+    },
+  'SEMESTER': {
+      'label': 'Semester',
+      'entity': 'months',
+      'amount': 6
+    },
+  'YEARLY': {
+      'label': 'Yearly',
+      'entity': 'months',
+      'amount': 12
+    },
+};
 
 class RecurringTransaction extends BaseEntity {
   final DateTime fromDate;
@@ -142,6 +181,21 @@ class RecurringTransactionMethods extends SossoldiDatabase {
     return result.map((json) => RecurringTransaction.fromJson(json)).toList();
   }
 
+  Future<List<RecurringTransaction>> selectAllActive() async {
+    final db = await database;
+
+    final orderByASC = '${RecurringTransactionFields.createdAt} ASC';
+
+    final result = await db.query(
+      recurringTransactionTable,
+      orderBy: orderByASC,
+      where: '${RecurringTransactionFields.toDate} IS NULL OR ${RecurringTransactionFields.toDate} > ?',
+      whereArgs: [DateTime.now().toIso8601String()],
+    );
+
+    return result.map((json) => RecurringTransaction.fromJson(json)).toList();
+  }
+
   Future<int> updateItem(RecurringTransaction item) async {
     final db = await database;
 
@@ -162,6 +216,137 @@ class RecurringTransactionMethods extends SossoldiDatabase {
         where:
         '${RecurringTransactionFields.id} = ?',
         whereArgs: [id]);
+  }
+
+
+  Future<void> checkRecurringTransactions() async {
+    // get all recurring transactions active
+    final transactions = await selectAllActive();
+
+    if (transactions.isEmpty) {
+      return;
+    }
+
+    for (var transaction in transactions) {
+      print("-------- transaction: ${transaction.note} -----------");
+
+      DateTime lastTransactionDate;
+
+      try {
+        lastTransactionDate = await _getLastRecurringTransactionInsertion(transaction.id ?? 0);
+      } catch (e) {
+        lastTransactionDate = transaction.fromDate;
+      }
+
+      String entity = recurrenciesMap[transaction.recurrency]?['entity'] ?? 'UNMAPPED';
+      int entityAmt = recurrenciesMap[transaction.recurrency]?['amount'] ?? 0;
+
+      print(recurrenciesMap[transaction.recurrency]);
+
+      try {
+        if (entityAmt == 0) {
+          throw Exception('No amount provided for entity "$entity"');
+        }
+
+        populateRecurringTransaction(entity, lastTransactionDate, transaction, entityAmt);
+
+      } catch (e) {
+        // TODO show an error to the user?
+        print("ERROR TRYING TO POPULATE RECURRING TRANSACTIONS: ${e.toString()}");
+      }
+    }
+  }
+
+  Future<DateTime> _getLastRecurringTransactionInsertion(int tid) async {
+    if (tid == 0) {
+      throw Exception('No transaction ID provided');
+    }
+
+    final db = await database;
+
+    final orderByASC = '${TransactionFields.date} ASC';
+
+    final result = await db.query(
+      transactionTable,
+      orderBy: orderByASC,
+      where: '${TransactionFields.idRecurringTransaction} = ?',
+      whereArgs: [tid],
+      limit: 1,
+    );
+
+    if (result.isEmpty) {
+      throw Exception('No transaction found for ID $tid');
+    }
+
+    return Transaction.fromJson(result.first).date;
+  }
+
+  void populateRecurringTransaction(String scope, DateTime lastTransactionDate, RecurringTransaction transaction, int amount) {
+
+    if (amount == 0) {
+      throw Exception('No amount provided for entity "$scope"');
+    }
+
+    DateTime now = DateTime.now();
+
+    // create a list to store the months
+    List<DateTime> transactions2Add = [];
+
+    // calculate the number of periods between the current date and the last transaction insertion
+    int periods;
+
+    switch (scope) {
+      case 'days':
+        periods = now.difference(lastTransactionDate).inDays;
+        break;
+      case 'months':
+        periods = (((now.year - lastTransactionDate.year) * 12 + now.month - lastTransactionDate.month)/amount).floor();
+        break;
+      default:
+        throw Exception('No scope provided');
+    }
+
+    print("periods: $periods");
+
+    // for each period passed, insert a new transaction
+    for (int i = 0; i < periods; i++) {
+      switch (scope) {
+        case 'days':
+          lastTransactionDate = DateTime(lastTransactionDate.year, lastTransactionDate.month, lastTransactionDate.day + amount);
+          break;
+        case 'months':
+          // get the last day of the next period
+          int lastDayOfNextPeriod = DateTime(lastTransactionDate.year, (lastTransactionDate.month + amount + 1), 0).day;
+          int dayOfInsertion = transaction.fromDate.day;
+
+          // if the next period's month has fewer days than the day of the last transaction insertion, adjust the day
+          if (transaction.fromDate.day > lastDayOfNextPeriod) {
+            dayOfInsertion = lastDayOfNextPeriod;
+          }
+
+          lastTransactionDate = DateTime(lastTransactionDate.year, lastTransactionDate.month + amount, dayOfInsertion);
+
+          break;
+        default:
+        //nothing to do
+          return;
+      }
+
+      if (transaction.toDate?.isAfter(lastTransactionDate) ?? true) {
+        transactions2Add.add(lastTransactionDate);
+      }
+
+    }
+
+    for (var tr in transactions2Add) {
+      // insert a new transaction
+      print(tr);
+
+    }
+
+    // update the last insertion date
+    // update the recurring transaction
+
   }
 
 }
