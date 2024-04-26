@@ -91,6 +91,7 @@ class SossoldiDatabase {
         `${RecurringTransactionFields.note}` $textNotNull,
         `${RecurringTransactionFields.recurrency}` $textNotNull,
         `${RecurringTransactionFields.idCategory}` $integerNotNull,
+        `${RecurringTransactionFields.idBankAccount}` $integerNotNull,
         `${RecurringTransactionFields.lastInsertion}` $text,
         `${RecurringTransactionFields.createdAt}` $textNotNull,
         `${RecurringTransactionFields.updatedAt}` $textNotNull
@@ -176,10 +177,10 @@ class SossoldiDatabase {
 
     // Add fake recurring transactions
     await _database?.execute('''
-      INSERT INTO recurringTransaction(fromDate, toDate, amount, note, recurrency, idCategory, createdAt, updatedAt) VALUES
-        ("2024-02-23", null, 10.99, "Spotify", "MONTHLY", 14, '${DateTime.now()}', '${DateTime.now()}'),
-        ("2023-12-13", null, 4.97, "ETF Consultant Parcel", "DAILY", 14, '${DateTime.now()}', '${DateTime.now()}'),
-        ("2023-02-11", "2028-02-11", 1193.40, "Car Loan", "QUARTERLY", 16, '${DateTime.now()}', '${DateTime.now()}');
+      INSERT INTO recurringTransaction(fromDate, toDate, amount, note, recurrency, idCategory, idBankAccount, createdAt, updatedAt) VALUES
+        ("2024-02-23", null, 10.99, "Spotify", "MONTHLY", 14, 70, '${DateTime.now()}', '${DateTime.now()}'),
+        ("2023-12-13", null, 4.97, "ETF Consultant Parcel", "DAILY", 14, 70, '${DateTime.now()}', '${DateTime.now()}'),
+        ("2023-02-11", "2028-02-11", 1193.40, "Car Loan", "QUARTERLY", 16, 72, '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
     // Add fake transactions
