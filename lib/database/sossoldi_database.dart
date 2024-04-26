@@ -245,13 +245,28 @@ class SossoldiDatabase {
       demoTransactions.add('''('$salaryDateTime', $fakeSalary, 'IN', 'Salary', 15, 70, null, 0, null, '$salaryDateTime', '$salaryDateTime')''');
     }
 
-    // add some recurring payment too
-    // TODO TODO TODO TODO TODO TODO TODO
-    // demoTransactions.add('''(null, 7.99, 'OUT', 'Netflix', 14, 71, null, 1, 'monthly', 19, '2022-11-14', null, '2022-11-14 03:33:36.048611', '2022-11-14 03:33:36.048611')''');
-    // demoTransactions.add('''(null, 292.39, 'OUT', 'Car Loan', 13, 70, null, 1, 'monthly', 27, '2019-10-03', '2024-10-02', '2022-10-04 03:33:36.048611', '2022-10-04 03:33:36.048611')''');
-
     // finalize query and write!
     await _database?.execute("$insertDemoTransactionsQuery ${demoTransactions.join(",")};");
+  }
+
+  Future resetDatabase() async {
+    // delete database
+    try{
+      await _database?.transaction((txn) async {
+        var batch = txn.batch();
+        // drop tables
+        batch.execute('DROP TABLE IF EXISTS $bankAccountTable');
+        batch.execute('DROP TABLE IF EXISTS `$transactionTable`');
+        batch.execute('DROP TABLE IF EXISTS $recurringTransactionTable');
+        batch.execute('DROP TABLE IF EXISTS $categoryTransactionTable');
+        batch.execute('DROP TABLE IF EXISTS $budgetTable');
+        batch.execute('DROP TABLE IF EXISTS $currencyTable');
+        await batch.commit();
+      });
+    } catch(error){
+      throw Exception('DbBase.resetDatabase: $error');
+    }
+    await _createDB(_database!, 1);
   }
 
   Future clearDatabase() async {
@@ -267,7 +282,7 @@ class SossoldiDatabase {
         await batch.commit();
       });
     } catch(error){
-      throw Exception('DbBase.cleanDatabase: $error');
+      // throw Exception('DbBase.cleanDatabase: $error');
     }
   }
 
@@ -279,7 +294,7 @@ class SossoldiDatabase {
   // WARNING: FOR DEV/TEST PURPOSES ONLY!!
   Future<void> deleteDatabase() async {
     final databasePath = await getDatabasesPath();
-    final path = join(databasePath, 'sossoldi.db');
+    final path = join(databasePath, dbName);
     databaseFactory.deleteDatabase(path);
   }
 }
