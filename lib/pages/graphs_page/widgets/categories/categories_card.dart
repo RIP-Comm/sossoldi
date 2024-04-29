@@ -34,27 +34,17 @@ class _CategoriesCardState extends ConsumerState<CategoriesCard> with Functions 
         DefaultContainer(
             child: categoryMap.when(
           data: (categories) {
-            return Column(
-              children: [
-                const CategoryTypeButton(),
-                const SizedBox(height: 20),
-                CategoriesPieChart2(
-                  categoryMap: categories,
-                  total: categoryTotalAmount.value ?? 0,
-                ),
-                const SizedBox(height: 20),
-                categories.isEmpty
-                    ? SizedBox(
-                        height: 200,
-                        child: Center(
-                          child: Text(
-                            "After you add some transactions, some outstanding graphs will appear here... almost by magic!",
-                            style: Theme.of(context).textTheme.bodySmall,
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      )
-                    : ListView.builder(
+            return categoryTotalAmount.value! != 0
+                ? Column(
+                    children: [
+                      const CategoryTypeButton(),
+                      const SizedBox(height: 20),
+                      CategoriesPieChart2(
+                        categoryMap: categories,
+                        total: categoryTotalAmount.value ?? 0,
+                      ),
+                      const SizedBox(height: 20),
+                      ListView.builder(
                         itemCount: categories.length,
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
@@ -96,15 +86,40 @@ class _CategoriesCardState extends ConsumerState<CategoriesCard> with Functions 
                           }
                         },
                       ),
-                const SizedBox(height: 30),
-                const CategoriesBarChart()
-              ],
-            );
+                      const SizedBox(height: 30),
+                      const CategoriesBarChart()
+                    ],
+                  )
+                : const Column(
+                    children: [
+                      CategoryTypeButton(),
+                      SizedBox(height: 20),
+                      NoTransactionsMessage(),
+                    ],
+                  );
           },
           loading: () => Container(),
           error: (e, s) => Text('Error: $e'),
         ))
       ],
+    );
+  }
+}
+
+class NoTransactionsMessage extends StatelessWidget {
+  const NoTransactionsMessage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 200,
+      child: Center(
+        child: Text(
+          "After you add some transactions, some outstanding graphs will appear here... almost by magic!",
+          style: Theme.of(context).textTheme.bodySmall,
+          textAlign: TextAlign.center,
+        ),
+      ),
     );
   }
 }
