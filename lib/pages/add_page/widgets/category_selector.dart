@@ -64,7 +64,7 @@ class _CategorySelectorState extends ConsumerState<CategorySelector>
                   width: double.infinity,
                   child: categoriesList.when(
                     data: (categories) => ListView.builder(
-                      itemCount: categories.length,
+                      itemCount: categories.length, // to prevent range error
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
                       itemBuilder: (context, i) {
