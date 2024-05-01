@@ -6,6 +6,7 @@ import '../../../../constants/functions.dart';
 import '../../../../constants/style.dart';
 import '../../../../model/category_transaction.dart';
 import '../../../../providers/categories_provider.dart';
+import '../../../transactions_page/widgets/month_selector.dart';
 import '../card_label.dart';
 import '../linear_progress_bar.dart';
 import 'categories_bar_chart.dart';
@@ -37,6 +38,8 @@ class _CategoriesCardState extends ConsumerState<CategoriesCard> with Functions 
             return categoryTotalAmount.value! != 0
                 ? Column(
                     children: [
+                      const MonthSelector(type: MonthSelectorType.simple),
+                      const SizedBox(height: 30),
                       const CategoryTypeButton(),
                       const SizedBox(height: 20),
                       CategoriesPieChart2(
@@ -92,6 +95,8 @@ class _CategoriesCardState extends ConsumerState<CategoriesCard> with Functions 
                   )
                 : const Column(
                     children: [
+                      MonthSelector(type: MonthSelectorType.simple),
+                      SizedBox(height: 20),
                       CategoryTypeButton(),
                       SizedBox(height: 20),
                       NoTransactionsMessage(),
