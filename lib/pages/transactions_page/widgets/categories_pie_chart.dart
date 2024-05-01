@@ -8,7 +8,6 @@ import '../../../constants/style.dart';
 import '../../../model/category_transaction.dart';
 import '../../../providers/categories_provider.dart';
 import '../../../providers/currency_provider.dart';
-import 'categories_tab.dart';
 
 class CategoriesPieChart extends ConsumerWidget with Functions {
   const CategoriesPieChart({
