@@ -8,8 +8,8 @@ import 'recurrence_selector.dart';
 
 class RecurrenceListTile extends ConsumerWidget {
   const RecurrenceListTile({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -76,7 +76,7 @@ class RecurrenceListTile extends ConsumerWidget {
                   ),
                   const Spacer(),
                   Text(
-                    recurrenceMap[ref.watch(intervalProvider)]!,
+                    recurrenceMap[ref.watch(intervalProvider)]!.label,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: Theme.of(context).colorScheme.secondary),
                   ),
