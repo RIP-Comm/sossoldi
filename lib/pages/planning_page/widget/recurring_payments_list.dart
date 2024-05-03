@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sossoldi/pages/planning_page/widget/recurring_payment_card.dart';
+import 'package:sossoldi/providers/transactions_provider.dart';
 
 import '../../../model/recurring_transaction.dart';
+import '../../../model/transaction.dart';
 
-class RecurringPaymentSection extends StatefulWidget {
+class RecurringPaymentSection extends ConsumerStatefulWidget {
   const RecurringPaymentSection({super.key});
 
   @override
-  State<RecurringPaymentSection> createState() =>
+  ConsumerState<RecurringPaymentSection> createState() =>
       _RecurringPaymentSectionState();
 }
 
-class _RecurringPaymentSectionState extends State<RecurringPaymentSection> {
+class _RecurringPaymentSectionState
+    extends ConsumerState<RecurringPaymentSection> {
   Future<List<RecurringTransaction>> recurringTransactions =
       RecurringTransactionMethods().selectAllActive();
 
@@ -49,8 +53,8 @@ class _RecurringPaymentSectionState extends State<RecurringPaymentSection> {
                     itemCount: transactions!.length,
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemBuilder: (context, index) =>
-                        RecurringPaymentCard(transaction: transactions[index]),
+                    itemBuilder: (context, index) => RecurringPaymentCard(
+                            transaction: transactions[index]),
                     separatorBuilder: (context, index) => const Divider(),
                   );
                 }
@@ -58,10 +62,22 @@ class _RecurringPaymentSectionState extends State<RecurringPaymentSection> {
             ),
             ElevatedButton.icon(
               icon: Icon(
+                Icons.textsms_sharp,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+              onPressed: () async => {RecurringTransactionMethods().test()},
+              label: const Text("Test"),
+            ),
+            ElevatedButton.icon(
+              icon: Icon(
                 Icons.add_circle,
                 color: Theme.of(context).colorScheme.secondary,
               ),
-              onPressed: addRecurringPayment,
+              onPressed: () => {
+                ref.read(selectedRecurringPayProvider.notifier).state = true,
+                ref.read(repetitionProvider.notifier).state = Recurrence.weekly,
+                Navigator.of(context).pushNamed("/add-page")
+              },
               label: Text(
                 "Add recurring payment",
                 style: Theme.of(context)

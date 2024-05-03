@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../model/bank_account.dart';
 import '../model/category_transaction.dart';
+import '../model/recurring_transaction.dart';
 import '../model/transaction.dart';
 import 'accounts_provider.dart';
 import 'dashboard_provider.dart';
@@ -113,6 +114,34 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
 
     state = await AsyncValue.guard(() async {
       await TransactionMethods().insert(transaction);
+      return _getTransactions(update: true);
+    });
+  }
+
+  Future<void> addRecurringTransaction(num amount, String label) async {
+    state = const AsyncValue.loading();
+
+    final date = ref.read(dateProvider);
+    final toDate = date.add(const Duration(days: 10));
+    final bankAccount = ref.read(bankAccountProvider)!;
+    final category = ref.read(categoryProvider);
+    final recurrency = ref.read(intervalProvider.notifier).state;
+
+    RecurringTransaction transaction = RecurringTransaction(
+      amount: amount,
+      fromDate: date,
+      toDate: toDate,
+      note: label,
+      idBankAccount: bankAccount.id!,
+      idCategory: category!.id!,
+      recurrency: recurrency.name.toUpperCase(),
+      createdAt: date,
+      updatedAt: date,
+      lastInsertion: date
+    );
+
+    state = await AsyncValue.guard(() async {
+      await RecurringTransactionMethods().insert(transaction);
       return _getTransactions(update: true);
     });
   }

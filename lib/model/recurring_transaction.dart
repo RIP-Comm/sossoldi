@@ -81,7 +81,7 @@ class RecurringTransaction extends BaseEntity {
   final DateTime? lastInsertion;
 
   const RecurringTransaction(
-      {int? id,
+      {super.id,
       required this.fromDate,
       this.toDate,
       required this.amount,
@@ -90,9 +90,8 @@ class RecurringTransaction extends BaseEntity {
       required this.idCategory,
       required this.idBankAccount,
       this.lastInsertion,
-      DateTime? createdAt,
-      DateTime? updatedAt})
-      : super(id: id, createdAt: createdAt, updatedAt: updatedAt);
+      super.createdAt,
+      super.updatedAt});
 
   RecurringTransaction copy(
           {int? id,
@@ -155,10 +154,15 @@ class RecurringTransaction extends BaseEntity {
 }
 
 class RecurringTransactionMethods extends SossoldiDatabase {
-  Future<RecurringTransaction> insert(RecurringTransaction item) async {
+  Future<RecurringTransaction?> insert(RecurringTransaction item) async {
+    try{
     final db = await database;
     final id = await db.insert(recurringTransactionTable, item.toJson());
     return item.copy(id: id);
+    } catch (e){
+      print(e);
+    }
+    return null; 
   }
 
 
@@ -202,6 +206,16 @@ class RecurringTransactionMethods extends SossoldiDatabase {
     );
 
     return result.map((json) => RecurringTransaction.fromJson(json)).toList();
+  }
+
+  void test() async {
+    final db = await database;
+
+    final orderBy = '${RecurringTransactionFields.createdAt} ASC';
+
+    final result = await db.rawQuery("SELECT * FROM $recurringTransactionTable");
+
+    result.map((json) => RecurringTransaction.fromJson(json)).toList().forEach((element) { print(element.toJson()); });
   }
 
   Future<int> updateItem(RecurringTransaction item) async {
