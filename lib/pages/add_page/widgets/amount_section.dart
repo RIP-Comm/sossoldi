@@ -285,7 +285,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
               ),
               keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
               inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
+                FilteringTextInputFormatter.allow(RegExp(r'\d*\.?\d{0,2}')),
               ],
               // inputFormatters: [DecimalTextInputFormatter(decimalDigits: 2)],
               autofocus: false,
