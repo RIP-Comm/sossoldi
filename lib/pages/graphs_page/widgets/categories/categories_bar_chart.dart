@@ -85,7 +85,6 @@ class CategoriesBarChart extends ConsumerWidget {
                     if (response != null && response.spot != null && event is FlTapUpEvent) {
                       final x = response.spot!.touchedBarGroup.x;
                       ref.read(highlightedMonthProvider.notifier).state = x;
-
                       DateTime selectedMonth = DateTime(DateTime.now().year, x + 1, 1);
                       ref.read(filterDateStartProvider.notifier).state =
                           DateTime(selectedMonth.year, selectedMonth.month, 1);
