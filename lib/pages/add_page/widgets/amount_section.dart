@@ -7,6 +7,7 @@ import "../../../constants/style.dart";
 import '../../../model/transaction.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
+import '../../../pages/add_page/widgets/amount_widget.dart';
 import 'account_selector.dart';
 import 'type_tab.dart';
 
@@ -269,41 +270,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                 ),
               ),
             ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-            child: TextField(
-              controller: widget.amountController,
-              decoration: InputDecoration(
-                hintText: "0",
-                border: InputBorder.none,
-                prefixText: ' ', // set to center the amount
-                suffixText: currencyState.selectedCurrency.symbol,
-                suffixStyle: Theme.of(context)
-                    .textTheme
-                    .headlineMedium!
-                    .copyWith(color: typeToColor(selectedType)),
-              ),
-              keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'\d*\.?\d{0,2}')),
-              ],
-              // inputFormatters: [DecimalTextInputFormatter(decimalDigits: 2)],
-              autofocus: false,
-              textAlign: TextAlign.center,
-              cursorColor: grey1,
-              style: TextStyle(
-                color: typeToColor(selectedType),
-                fontSize: 58,
-                fontWeight: FontWeight.bold,
-              ),
-              onTapOutside: (_){
-                FocusScopeNode currentFocus = FocusScope.of(context);
-                if (!currentFocus.hasPrimaryFocus) {
-                  currentFocus.unfocus();
-                }
-              },
-            ),
-          ),
+            AmountWidget(widget.amountController),
         ],
       ),
     );

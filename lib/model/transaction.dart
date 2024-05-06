@@ -257,7 +257,7 @@ class TransactionMethods extends SossoldiDatabase {
   Future<List<Transaction>> getRecurrenceTransactionsById({int? id}) async  {
     final db = await database; 
 
-    final result = await db.rawQuery('SELECT * FROM "$transactionTable" as t WHERE t.${TransactionFields.idRecurringTransaction} = $id');
+    final result = await db.rawQuery('SELECT * FROM "$transactionTable" as t WHERE t.${TransactionFields.idRecurringTransaction} = $id ORDER BY ${TransactionFields.date} DESC');
 
     return result.map((json) => Transaction.fromJson(json)).toList();
   }

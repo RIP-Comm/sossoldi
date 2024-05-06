@@ -41,8 +41,8 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
     return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(4),
-          //color: categoryColorList[cat.color].withAlpha(50),
-          //boxShadow: [defaultShadow],
+          color: categoryColorList[cat!.color].withOpacity(0.1),
+          boxShadow: [defaultShadow],
         ),
         padding: const EdgeInsets.symmetric(
           horizontal: 8.0,
@@ -58,7 +58,7 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Icon(
-                  iconList[cat?.symbol],
+                  iconList[cat.symbol],
                   size: 25.0,
                   color: const Color(0xFFFFFFFF),
                 ),
@@ -79,10 +79,7 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
                         style: const TextStyle(
                             fontWeight: FontWeight.w900, fontSize: 16)),
                     const SizedBox(height: 10),
-                    Text(categories!
-                        .firstWhere(
-                            (element) => element.id == transaction.idCategory)
-                        .name),
+                    Text(cat.name),
                   ],
                 )),
             Expanded(
@@ -91,7 +88,7 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text("Next in ${getNextText()}"),
+                    Text("In ${getNextText()} days"),
                     const SizedBox(height: 10),
                     Text(
                         "-${transaction.amount}${currencyState.selectedCurrency.symbol}",
@@ -106,44 +103,58 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
           ]),
           Row(
             children: [
-              ElevatedButton(
-                  onPressed: () => {
-                        showModalBottomSheet(
-                          context: context,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20.0),
-                              topRight: Radius.circular(20.0),
-                            ),
+              Expanded(
+                  flex: 4,
+                  child: Container(
+                      alignment: Alignment.centerLeft,
+                      child: ElevatedButton(
+                          onPressed: () => {
+                                showModalBottomSheet(
+                                  context: context,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(20.0),
+                                      topRight: Radius.circular(20.0),
+                                    ),
+                                  ),
+                                  elevation: 10,
+                                  builder: (BuildContext context) {
+                                    return ListView(
+                                        scrollDirection: Axis.vertical,
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 20, horizontal: 10),
+                                        children: [
+                                          OlderRecurringPayments(
+                                              transaction: transaction)
+                                        ]);
+                                  },
+                                )
+                              },
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            padding: const EdgeInsets.all(8),
+                            backgroundColor: Colors.white,
                           ),
-                          elevation: 10,
-                          builder: (BuildContext context) {
-                            return ListView(
-                                scrollDirection: Axis.vertical,
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 20, horizontal: 10),
-                                children: [
-                                  OlderRecurringPayments(
-                                      transaction: transaction)
-                                ]);
-                          },
-                        )
-                      },
-                  style: ElevatedButton.styleFrom(
-                    elevation: 0,
-                    padding: const EdgeInsets.all(8),
-                    backgroundColor: Colors.white,
-                  ),
-                  child: const Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        Icon(Icons.checklist_rtl_outlined, color: blue4),
-                        SizedBox(width: 10),
-                        Text(
-                          "See older payments",
-                          style: TextStyle(color: blue4, fontSize: 14),
-                        ),
-                      ])),
+                          child: const Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: [
+                                Icon(Icons.checklist_rtl_outlined, color: blue4),
+                                SizedBox(width: 10),
+                                Text(
+                                  "See older payments",
+                                  style: TextStyle(color: blue4, fontSize: 14),
+                                ),
+                              ])))),
+              transaction.toDate != null
+                  ? Expanded(
+                      flex: 2,
+                      child: Container(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            "Until ${dateToString(transaction.toDate!)}",
+                            style: const TextStyle(fontSize: 8),
+                          )))
+                  : Container(),
             ],
           )
         ]));

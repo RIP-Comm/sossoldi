@@ -35,6 +35,16 @@ class _BudgetCardState extends ConsumerState<OlderRecurringPayments> {
   @override
   Widget build(BuildContext context) {
     final currencyState = ref.watch(currencyStateNotifier);
+    Map<int, List<Transaction>> transactionsByYear = {};
+    if (transactions != null) {
+      for (var transaction in transactions!) {
+        int year = transaction.date.year;
+        if (!transactionsByYear.containsKey(year)) {
+          transactionsByYear[year] = [];
+        }
+        transactionsByYear[year]!.add(transaction);
+      }
+    }
 
     return Column(children: [
       Row(children: [
@@ -71,25 +81,45 @@ class _BudgetCardState extends ConsumerState<OlderRecurringPayments> {
         SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: transactions!.map((transaction) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                child: Row(
-                  children: [
-                    Text(
-                      DateFormat('d MMMM').format(transaction.date),
+            children: transactionsByYear.entries.map((entry) {
+              int year = entry.key;
+              List<Transaction> transactionsOfYear = entry.value;
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Text(
+                      year.toString(),
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                    const Expanded(child: SizedBox.shrink()),
-                    Text(
-                      "-${transaction.amount.toString()}${currencyState.selectedCurrency.symbol}",
-                      style: const TextStyle(fontSize: 14, color: Colors.red)
-                    ),
-                  ],
-                ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: transactionsOfYear.map((transaction) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                        child: Row(
+                          children: [
+                            Text(
+                              DateFormat('d MMMM').format(transaction.date),
+                            ),
+                            const Expanded(child: SizedBox.shrink()),
+                            Text(
+                              "-${transaction.amount.toString()}${currencyState.selectedCurrency.symbol}",
+                              style: const TextStyle(fontSize: 14, color: Colors.red),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ],
               );
             }).toList(),
           ),
-        ),
+        )
     ]);
   }
 }

@@ -14,13 +14,11 @@ class RecurringPaymentSection extends ConsumerStatefulWidget {
       _RecurringPaymentSectionState();
 }
 
-class _RecurringPaymentSectionState
-    extends ConsumerState<RecurringPaymentSection> {
-  Future<List<RecurringTransaction>> recurringTransactions =
-      RecurringTransactionMethods().selectAllActive();
+class _RecurringPaymentSectionState extends ConsumerState<RecurringPaymentSection> {
+  Future<List<RecurringTransaction>> recurringTransactions = RecurringTransactionMethods().selectAllActive();
 
-  void addRecurringPayment() {
-    print("addRecurringPayment");
+  _refreshData() {
+    recurringTransactions = RecurringTransactionMethods().selectAllActive();
   }
 
   @override
@@ -53,21 +51,23 @@ class _RecurringPaymentSectionState
                     itemCount: transactions!.length,
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemBuilder: (context, index) => RecurringPaymentCard(
-                            transaction: transactions[index]),
+                    itemBuilder: (context, index) => InkWell(
+                        onTap: () {
+                          ref
+                              .read(transactionsProvider.notifier)
+                              .transactionUpdateState(transactions[index])
+                              .whenComplete(() {
+                                Navigator.of(context).pushNamed("/edit-recurring-transaction").then((value) => setState(() { _refreshData(); }));
+                              });
+                        },
+                        child: RecurringPaymentCard(
+                            transaction: transactions[index])),
                     separatorBuilder: (context, index) => const Divider(),
                   );
                 }
               },
             ),
-            ElevatedButton.icon(
-              icon: Icon(
-                Icons.textsms_sharp,
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-              onPressed: () async => {RecurringTransactionMethods().test()},
-              label: const Text("Test"),
-            ),
+            const SizedBox(height: 30),
             ElevatedButton.icon(
               icon: Icon(
                 Icons.add_circle,
@@ -75,8 +75,8 @@ class _RecurringPaymentSectionState
               ),
               onPressed: () => {
                 ref.read(selectedRecurringPayProvider.notifier).state = true,
-                ref.read(repetitionProvider.notifier).state = Recurrence.weekly,
-                Navigator.of(context).pushNamed("/add-page")
+                ref.read(intervalProvider.notifier).state = Recurrence.weekly,
+                Navigator.of(context).pushNamed("/add-page").then((value) => setState(() { _refreshData(); }))
               },
               label: Text(
                 "Add recurring payment",
@@ -89,7 +89,8 @@ class _RecurringPaymentSectionState
                 backgroundColor: Colors.white,
                 fixedSize: const Size(330, 50),
               ),
-            )
+            ),
+            const SizedBox(height: 30),
           ],
         ),
       ),

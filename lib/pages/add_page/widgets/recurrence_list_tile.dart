@@ -1,12 +1,16 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
+import '../../../constants/functions.dart';
 import "../../../constants/style.dart";
 import '../../../providers/transactions_provider.dart';
 import '../../../model/transaction.dart';
 import 'recurrence_selector.dart';
 
-class RecurrenceListTile extends ConsumerWidget {
+class RecurrenceListTile extends ConsumerWidget with Functions {
   const RecurrenceListTile({
     super.key,
   });
@@ -98,7 +102,35 @@ class RecurrenceListTile extends ConsumerWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(4)),
               ),
-              onPressed: () {},
+              onPressed: () async {
+                FocusManager.instance.primaryFocus?.unfocus();
+                if (Platform.isIOS) {
+                  showCupertinoModalPopup(
+                    context: context,
+                    builder: (_) => Container(
+                      height: 300,
+                      color: white,
+                      child: CupertinoDatePicker(
+                        initialDateTime: ref.watch(endDateProvider),
+                        minimumYear: 2015,
+                        maximumYear: 2050,
+                        mode: CupertinoDatePickerMode.date,
+                        onDateTimeChanged: (date) => ref.read(endDateProvider.notifier).state = date,
+                      ),
+                    ),
+                  );
+                } else if (Platform.isAndroid) {
+                  final DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: ref.watch(endDateProvider),
+                    firstDate: DateTime(2015),
+                    lastDate: DateTime(2050),
+                  );
+                  if (pickedDate != null) {
+                    ref.read(endDateProvider.notifier).state = pickedDate;
+                  }
+                }
+              },
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -111,7 +143,7 @@ class RecurrenceListTile extends ConsumerWidget {
                   ),
                   const Spacer(),
                   Text(
-                    "Never",
+                    dateToString(ref.read(endDateProvider.notifier).state),
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: Theme.of(context).colorScheme.secondary),
                   ),
