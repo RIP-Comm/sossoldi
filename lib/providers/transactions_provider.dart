@@ -26,10 +26,11 @@ final categoryProvider = StateProvider<CategoryTransaction?>((ref) => null);
 // Recurring Payment
 final selectedRecurringPayProvider = StateProvider<bool>((ref) => false);
 final intervalProvider = StateProvider<Recurrence>((ref) => Recurrence.monthly);
-final repetitionProvider = StateProvider<dynamic>((ref) => null);
+final endDateProvider = StateProvider<DateTime>((ref) => DateTime.now().add(const Duration(days: 1)));
 
 // Set when a transaction is selected for update
 final selectedTransactionUpdateProvider = StateProvider<Transaction?>((ref) => null);
+final selectedRecurringTransactionUpdateProvider = StateProvider<RecurringTransaction?>((ref) => null);
 
 // Amount total for the transactions filtered
 final totalAmountProvider = StateProvider<num>((ref) => 0);
@@ -172,31 +173,72 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
     });
   }
 
-  Future<void> transactionUpdateState(Transaction transaction) async {
-    ref.read(selectedTransactionUpdateProvider.notifier).state = transaction;
-    final accountList = ref.watch(accountsProvider);
-    if (transaction.type != TransactionType.transfer) {
-      if (transaction.idCategory != null) {
-        ref.read(categoryProvider.notifier).state =
-            await CategoryTransactionMethods().selectById(transaction.idCategory!);
+  Future<void> updateRecurringTransaction(num amount, String label) async {
+    final bankAccount = ref.read(bankAccountProvider)!;
+    final recurrency = ref.read(intervalProvider.notifier).state;
+    final category = ref.read(categoryProvider);
+
+    RecurringTransaction transaction =
+        ref.read(selectedRecurringTransactionUpdateProvider)!.copy(
+              fromDate: ref.read(dateProvider),
+              toDate: ref.read(dateProvider).add(const Duration(days: 10)),
+              recurrency: recurrency.name.toUpperCase(),
+              amount: amount,
+              note: label,
+              idBankAccount: bankAccount.id!,
+              idCategory: category?.id,
+              updatedAt: DateTime.now()
+            );
+
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      await RecurringTransactionMethods().updateItem(transaction);
+      return _getTransactions(update: true);
+    });
+  }
+
+  Future<void> transactionUpdateState(dynamic transaction) async {
+    if(transaction is Transaction) {
+      ref.read(selectedTransactionUpdateProvider.notifier).state = transaction;
+      ref.read(selectedRecurringPayProvider.notifier).state = false;
+      final accountList = ref.watch(accountsProvider);
+      if (transaction.type != TransactionType.transfer) {
+        if (transaction.idCategory != null) {
+          ref.read(categoryProvider.notifier).state =
+              await CategoryTransactionMethods().selectById(transaction.idCategory!);
+        }
       }
+      ref.read(bankAccountProvider.notifier).state =
+          accountList.value!.firstWhere((element) => element.id == transaction.idBankAccount);
+      ref.read(bankAccountTransferProvider.notifier).state =
+          transaction.type == TransactionType.transfer
+              ? accountList.value!
+                  .firstWhere((element) => element.id == transaction.idBankAccountTransfer)
+              : null;
+      ref.read(transactionTypeProvider.notifier).state = transaction.type;
+      ref.read(dateProvider.notifier).state = transaction.date;
+      ref.read(selectedRecurringPayProvider.notifier).state = transaction.recurring;
+    } else if(transaction is RecurringTransaction) {
+      ref.read(selectedRecurringTransactionUpdateProvider.notifier).state = transaction;
+      ref.read(selectedRecurringPayProvider.notifier).state = true;
+      ref.read(categoryProvider.notifier).state = await CategoryTransactionMethods().selectById(transaction.idCategory);
+      ref.read(bankAccountProvider.notifier).state = ref.watch(accountsProvider).value!.firstWhere((element) => element.id == transaction.idBankAccount);
+      ref.read(intervalProvider.notifier).state = parseRecurrence(transaction.recurrency);
     }
-    ref.read(bankAccountProvider.notifier).state =
-        accountList.value!.firstWhere((element) => element.id == transaction.idBankAccount);
-    ref.read(bankAccountTransferProvider.notifier).state =
-        transaction.type == TransactionType.transfer
-            ? accountList.value!
-                .firstWhere((element) => element.id == transaction.idBankAccountTransfer)
-            : null;
-    ref.read(transactionTypeProvider.notifier).state = transaction.type;
-    ref.read(dateProvider.notifier).state = transaction.date;
-    ref.read(selectedRecurringPayProvider.notifier).state = transaction.recurring;
   }
 
   Future<void> deleteTransaction(int transactionId) async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       await TransactionMethods().deleteById(transactionId);
+      return _getTransactions(update: true);
+    });
+  }
+
+  Future<void> deleteRecurringTransaction(int transactionId) async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      await RecurringTransactionMethods().deleteById(transactionId);
       return _getTransactions(update: true);
     });
   }
@@ -218,7 +260,6 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
     ref.invalidate(categoryProvider);
     ref.invalidate(selectedRecurringPayProvider);
     ref.invalidate(intervalProvider);
-    ref.invalidate(repetitionProvider);
     ref.invalidate(transactionTypeProvider);
   }
 }
