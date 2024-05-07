@@ -59,7 +59,7 @@ Map<String, dynamic> recurrenciesMap = {
       'amount': 3
     },
   'SEMESTER': {
-      'label': 'Semester',
+      'label': 'Half Yearly',
       'entity': 'months',
       'amount': 6
     },
@@ -350,8 +350,7 @@ class RecurringTransactionMethods extends SossoldiDatabase {
           return;
       }
 
-      if (transaction.toDate?.isAfter(lastTransactionDate) ?? true) {
-        // TODO no future dates
+      if ((transaction.toDate?.isAfter(lastTransactionDate) ?? true) && lastTransactionDate.isBefore(DateTime.now())) {
         transactions2Add.add(lastTransactionDate);
       }
 

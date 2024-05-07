@@ -94,7 +94,7 @@ void main() {
 
       sossoldiDatabase = SossoldiDatabase(dbName: 'test.db');
       db = await sossoldiDatabase.database;
-      await sossoldiDatabase.clearDatabase();
+      await sossoldiDatabase.resetDatabase();
     });
 
     tearDown(() async => {
@@ -121,7 +121,7 @@ void main() {
       var transactions = await db.rawQuery("SELECT * FROM `transaction`");
       expect(0, transactions.length);
 
-      const insertDemoTransactionsQuery = '''INSERT INTO `transaction` (date, amount, type, note, idCategory, idBankAccount, idBankAccountTransfer, recurring, recurrencyType, recurrencyPayDay, recurrencyFrom, recurrencyTo, createdAt, updatedAt) VALUES ''';
+      const insertDemoTransactionsQuery = '''INSERT INTO `transaction` (date, amount, type, note, idCategory, idBankAccount, idBankAccountTransfer, recurring, idRecurringTransaction, createdAt, updatedAt) VALUES ''';
       final List<String> demoTransactions = [];
 
       final today = DateTime.now();
@@ -187,7 +187,7 @@ void main() {
       var transactions = await db.rawQuery("SELECT * FROM `transaction`");
       expect(0, transactions.length);
 
-      const insertDemoTransactionsQuery = '''INSERT INTO `transaction` (date, amount, type, note, idCategory, idBankAccount, idBankAccountTransfer, recurring, recurrencyType, recurrencyPayDay, recurrencyFrom, recurrencyTo, createdAt, updatedAt) VALUES ''';
+      const insertDemoTransactionsQuery = '''INSERT INTO `transaction` (date, amount, type, note, idCategory, idBankAccount, idBankAccountTransfer, recurring, idRecurringTransaction, createdAt, updatedAt) VALUES ''';
       final List<String> demoTransactions = [];
 
       final today = DateTime.now();
