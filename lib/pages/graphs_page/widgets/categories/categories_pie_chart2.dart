@@ -86,10 +86,15 @@ class PieChartCategoryInfo extends ConsumerWidget {
     final selectedCategory = ref.watch(selectedCategoryProvider);
     final currencyState = ref.watch(currencyStateNotifier);
 
+    double? categoryValue;
+    if (selectedCategory != null && categoryMap.containsKey(selectedCategory)) {
+      categoryValue = categoryMap[selectedCategory];
+    }
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (selectedCategory != null)
+        if (selectedCategory != null && categoryValue != null)
           Container(
             padding: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
@@ -102,17 +107,16 @@ class PieChartCategoryInfo extends ConsumerWidget {
             ),
           ),
         Text(
-          (selectedCategory != null)
-              ? "${categoryMap[selectedCategory]?.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}"
+          categoryValue != null
+              ? "${categoryValue.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}"
               : "${total.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}",
           style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-              color: ((selectedCategory != null && categoryMap[selectedCategory]! >= 0) ||
-                      (selectedCategory == null && total > 0))
+              color: (categoryValue != null && categoryValue >= 0) || (selectedCategory == null && total > 0)
                   ? green
                   : red,
               fontSize: 18),
         ),
-        (selectedCategory != null) ? Text(selectedCategory.name) : const Text("Total"),
+        if (selectedCategory != null) Text(selectedCategory.name) else const Text("Total"),
       ],
     );
   }
