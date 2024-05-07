@@ -10,7 +10,8 @@ String createInsertSqlTransaction({
     int idBankAccount = 70, // Revolut
     int? idBankTransfert,
     bool recurring = false,
-    Recurrence? recurrencyType, 
+    int? idRecurringTransaction,
+    Recurrence? recurrencyType,
     int? recurrencyPayDay, 
     DateTime? recurrencyFrom,
     DateTime? recurrencyTo, 
@@ -20,5 +21,5 @@ String createInsertSqlTransaction({
         createdAt = date;
         updatedAt = date;
         int recurringInt = recurring ? 1 : 0;
-        return '''('$date', $amount, '$type', '$note', $idCategory, $idBankAccount, $idBankTransfert, $recurringInt, $recurrencyType, $recurrencyPayDay, $recurrencyFrom, $recurrencyTo, '$createdAt', '$updatedAt')''';
+        return '''('$date', $amount, '$type', '$note', $idCategory, $idBankAccount, $idBankTransfert, $recurringInt, $idRecurringTransaction, '$createdAt', '$updatedAt')''';
     }

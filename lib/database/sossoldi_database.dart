@@ -156,7 +156,7 @@ class SossoldiDatabase {
         (13, "Shopping", "shopping_cart", 3, '', null, '${DateTime.now()}', '${DateTime.now()}'),
         (14, "Leisure", "subscriptions", 4, '', null, '${DateTime.now()}', '${DateTime.now()}'),
         (15, "Salary", "work", 5, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (16, "Transports", "directions_car", 6, '', null, '${DateTime.now()}', '${DateTime.now()}');
+        (16, "Transports", "directions_car_rounded", 6, '', null, '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
     // Add currencies
@@ -171,14 +171,14 @@ class SossoldiDatabase {
     // Add fake budgets
     await _database?.execute('''
       INSERT INTO budget(idCategory, name, amountLimit, active, createdAt, updatedAt) VALUES
-        (13, "Grocery", 400.00, 1, '${DateTime.now()}', '${DateTime.now()}'),
+        (13, "Grocery", 900.00, 1, '${DateTime.now()}', '${DateTime.now()}'),
         (11, "Home", 123.45, 0, '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
     // Add fake recurring transactions
     await _database?.execute('''
       INSERT INTO recurringTransaction(fromDate, toDate, amount, note, recurrency, idCategory, idBankAccount, createdAt, updatedAt) VALUES
-        ("2024-02-23", null, 10.99, "Spotify", "MONTHLY", 14, 70, '${DateTime.now()}', '${DateTime.now()}'),
+        ("2024-02-23", null, 10.99, "404 Books", "MONTHLY", 14, 70, '${DateTime.now()}', '${DateTime.now()}'),
         ("2023-12-13", null, 4.97, "ETF Consultant Parcel", "DAILY", 14, 70, '${DateTime.now()}', '${DateTime.now()}'),
         ("2023-02-11", "2028-02-11", 1193.40, "Car Loan", "QUARTERLY", 16, 72, '${DateTime.now()}', '${DateTime.now()}');
     ''');
@@ -187,7 +187,7 @@ class SossoldiDatabase {
     // First initialize some config stuff
     final rnd = Random();
     var accounts = [70,71,72];
-    var outNotes = ['Grocery', 'Tolls', 'Toys', 'ETF Consultant Parcel', 'Concert', 'Clothing', 'Pizza', 'Drugs', 'Laundry', 'Taxes', 'Health insurance', 'Furniture', 'Car Fuel', 'Train', 'Amazon', 'Delivery', 'CHEK dividends', 'Babysitter', 'sono.pove.ro Fees', 'Quingentole trip'];
+    var outNotes = ['Grocery', 'Tolls', 'Toys', 'Boardgames', 'Concert', 'Clothing', 'Pizza', 'Drugs', 'Laundry', 'Taxes', 'Health insurance', 'Furniture', 'Car Fuel', 'Train', 'Amazon', 'Delivery', 'CHEK dividends', 'Babysitter', 'sono.pove.ro Fees', 'Quingentole trip'];
     var categories = [10,11,12,13,14];
     double maxAmountOfSingleTransaction = 250.00;
     int dateInPastMaxRange = (countOfGeneratedTransaction / 90 ).round() * 30; // we want simulate about 90 transactions per month
@@ -282,7 +282,7 @@ class SossoldiDatabase {
         await batch.commit();
       });
     } catch(error){
-      // throw Exception('DbBase.cleanDatabase: $error');
+      throw Exception('DbBase.cleanDatabase: $error');
     }
   }
 
