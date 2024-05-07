@@ -9,7 +9,7 @@ void main() {
         id: 2,
         name: "name",
         type: CategoryTransactionType.expense,
-        symbol: 'symbol',
+        symbol: "symbol",
         color: 0,
         createdAt: DateTime.utc(2022),
         updatedAt: DateTime.utc(2022));
@@ -29,6 +29,7 @@ void main() {
     Map<String, Object?> json = {
       BaseEntityFields.id: 0,
       CategoryTransactionFields.name: "name",
+      CategoryTransactionFields.type: "OUT",
       CategoryTransactionFields.symbol: "symbol",
       CategoryTransactionFields.color: 0,
       CategoryTransactionFields.note: "note",
@@ -40,13 +41,12 @@ void main() {
 
     assert(c.id == json[BaseEntityFields.id]);
     assert(c.name == json[CategoryTransactionFields.name]);
+    assert(c.type == categoryTypeMap[json[CategoryTransactionFields.type]]);
     assert(c.symbol == json[CategoryTransactionFields.symbol]);
     assert(c.color == json[CategoryTransactionFields.color]);
     assert(c.note == json[CategoryTransactionFields.note]);
-    assert(c.createdAt?.toUtc().toIso8601String() ==
-        json[BaseEntityFields.createdAt]);
-    assert(c.updatedAt?.toUtc().toIso8601String() ==
-        json[BaseEntityFields.updatedAt]);
+    assert(c.createdAt?.toUtc().toIso8601String() == json[BaseEntityFields.createdAt]);
+    assert(c.updatedAt?.toUtc().toIso8601String() == json[BaseEntityFields.updatedAt]);
   });
 
   test("Test toJson Category Transaction", () {
@@ -63,7 +63,7 @@ void main() {
 
     assert(c.id == json[BaseEntityFields.id]);
     assert(c.name == json[CategoryTransactionFields.name]);
-    assert(c.type == json[CategoryTransactionFields.type]);
+    assert(c.type == categoryTypeMap[json[CategoryTransactionFields.type]]);
     assert(c.symbol == json[CategoryTransactionFields.symbol]);
     assert(c.color == json[CategoryTransactionFields.color]);
     assert(c.note == json[CategoryTransactionFields.note]);

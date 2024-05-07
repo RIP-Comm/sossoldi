@@ -44,16 +44,16 @@ class CategoryTransaction extends BaseEntity {
   final int? parent;
 
   const CategoryTransaction({
-    int? id,
+    super.id,
     required this.name,
     required this.type,
     required this.symbol,
     required this.color,
     this.note,
     this.parent,
-    DateTime? createdAt,
-    DateTime? updatedAt,
-  }) : super(id: id, createdAt: createdAt, updatedAt: updatedAt);
+    super.createdAt,
+    super.updatedAt,
+  });
 
   CategoryTransaction copy(
           {int? id,
