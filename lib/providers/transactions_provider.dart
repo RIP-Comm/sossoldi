@@ -153,7 +153,6 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
     final bankAccount = ref.read(bankAccountProvider)!;
     final bankAccountTransfer = ref.read(bankAccountTransferProvider);
     final category = ref.read(categoryProvider);
-    final recurring = ref.read(selectedRecurringPayProvider);
 
     Transaction transaction = ref.read(selectedTransactionUpdateProvider)!.copy(
           date: date,
@@ -163,7 +162,6 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
           idBankAccount: bankAccount.id!,
           idBankAccountTransfer: bankAccountTransfer?.id,
           idCategory: category?.id,
-          recurring: recurring,
         );
 
     state = const AsyncValue.loading();
@@ -217,13 +215,15 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
               : null;
       ref.read(transactionTypeProvider.notifier).state = transaction.type;
       ref.read(dateProvider.notifier).state = transaction.date;
-      ref.read(selectedRecurringPayProvider.notifier).state = transaction.recurring;
     } else if(transaction is RecurringTransaction) {
       ref.read(selectedRecurringTransactionUpdateProvider.notifier).state = transaction;
       ref.read(selectedRecurringPayProvider.notifier).state = true;
       ref.read(categoryProvider.notifier).state = await CategoryTransactionMethods().selectById(transaction.idCategory);
       ref.read(bankAccountProvider.notifier).state = ref.watch(accountsProvider).value!.firstWhere((element) => element.id == transaction.idBankAccount);
       ref.read(intervalProvider.notifier).state = parseRecurrence(transaction.recurrency);
+      if(transaction.toDate != null) {
+        ref.read(endDateProvider.notifier).state = transaction.toDate!;
+      }
     }
   }
 
