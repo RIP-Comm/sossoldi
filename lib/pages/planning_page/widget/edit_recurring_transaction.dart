@@ -7,7 +7,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
 import '../../../providers/transactions_provider.dart';
+import '../../add_page/widgets/account_selector.dart';
 import '../../add_page/widgets/amount_widget.dart';
+import '../../add_page/widgets/category_selector.dart';
 import '../../add_page/widgets/details_list_tile.dart';
 import '../../add_page/widgets/label_list_tile.dart';
 import '../../add_page/widgets/recurrence_list_tile.dart';
@@ -28,7 +30,7 @@ class _EditRecurringTransactionState
   @override
   void initState() {
     amountController.text = numToCurrency(ref.read(selectedRecurringTransactionUpdateProvider)?.amount);
-    noteController.text = ref.read(selectedRecurringTransactionUpdateProvider)?.note ?? '';
+    noteController.text =ref.read(selectedRecurringTransactionUpdateProvider)?.note ?? '';
 
     super.initState();
   }
@@ -92,6 +94,67 @@ class _EditRecurringTransactionState
                   child: Column(
                     children: [
                       LabelListTile(noteController),
+                      const Divider(height: 1, color: grey1),
+                      DetailsListTile(
+                        title: "Account",
+                        icon: Icons.account_balance_wallet,
+                        value: ref.watch(bankAccountProvider)?.name,
+                        callback: () {
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          showModalBottomSheet(
+                            context: context,
+                            clipBehavior: Clip.antiAliasWithSaveLayer,
+                            isScrollControlled: true,
+                            useSafeArea: true,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10.0),
+                                topRight: Radius.circular(10.0),
+                              ),
+                            ),
+                            builder: (_) => DraggableScrollableSheet(
+                              expand: false,
+                              minChildSize: 0.5,
+                              initialChildSize: 0.7,
+                              maxChildSize: 0.9,
+                              builder: (_, controller) => AccountSelector(
+                                provider: bankAccountProvider,
+                                scrollController: controller,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      const Divider(height: 1, color: grey1),
+                      DetailsListTile(
+                        title: "Category",
+                        icon: Icons.list_alt,
+                        value: ref.watch(categoryProvider)?.name,
+                        callback: () {
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          showModalBottomSheet(
+                            context: context,
+                            clipBehavior: Clip.antiAliasWithSaveLayer,
+                            isScrollControlled: true,
+                            useSafeArea: true,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10.0),
+                                topRight: Radius.circular(10.0),
+                              ),
+                            ),
+                            builder: (_) => DraggableScrollableSheet(
+                              expand: false,
+                              minChildSize: 0.5,
+                              initialChildSize: 0.7,
+                              maxChildSize: 0.9,
+                              builder: (_, controller) => CategorySelector(
+                                scrollController: controller,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                       const Divider(height: 1, color: grey1),
                       DetailsListTile(
                         title: "Date",
