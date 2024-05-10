@@ -74,8 +74,12 @@ class _RecurringPaymentSectionState extends ConsumerState<RecurringPaymentSectio
                 color: Theme.of(context).colorScheme.secondary,
               ),
               onPressed: () => {
+                ref.read(selectedTransactionUpdateProvider.notifier).state = null,
                 ref.read(selectedRecurringPayProvider.notifier).state = true,
-                ref.read(intervalProvider.notifier).state = Recurrence.weekly,
+                ref.read(bankAccountProvider.notifier).state = null,
+                ref.read(categoryProvider.notifier).state = null,
+                ref.read(intervalProvider.notifier).state = Recurrence.monthly,
+                ref.read(endDateProvider.notifier).state = null,
                 Navigator.of(context).pushNamed("/add-page").then((value) => setState(() { _refreshData(); }))
               },
               label: Text(

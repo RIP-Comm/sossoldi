@@ -26,7 +26,7 @@ final categoryProvider = StateProvider<CategoryTransaction?>((ref) => null);
 // Recurring Payment
 final selectedRecurringPayProvider = StateProvider<bool>((ref) => false);
 final intervalProvider = StateProvider<Recurrence>((ref) => Recurrence.monthly);
-final endDateProvider = StateProvider<DateTime>((ref) => DateTime.now().add(const Duration(days: 1)));
+final endDateProvider = StateProvider<DateTime?>((ref) => null);
 
 // Set when a transaction is selected for update
 final selectedTransactionUpdateProvider = StateProvider<Transaction?>((ref) => null);
@@ -179,7 +179,7 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
     RecurringTransaction transaction =
         ref.read(selectedRecurringTransactionUpdateProvider)!.copy(
               fromDate: ref.read(dateProvider),
-              toDate: ref.read(dateProvider).add(const Duration(days: 10)),
+              toDate: ref.read(endDateProvider),
               recurrency: recurrency.name.toUpperCase(),
               amount: amount,
               note: label,
@@ -221,9 +221,7 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
       ref.read(categoryProvider.notifier).state = await CategoryTransactionMethods().selectById(transaction.idCategory);
       ref.read(bankAccountProvider.notifier).state = ref.watch(accountsProvider).value!.firstWhere((element) => element.id == transaction.idBankAccount);
       ref.read(intervalProvider.notifier).state = parseRecurrence(transaction.recurrency);
-      if(transaction.toDate != null) {
-        ref.read(endDateProvider.notifier).state = transaction.toDate!;
-      }
+      ref.read(endDateProvider.notifier).state = transaction.toDate;
     }
   }
 
