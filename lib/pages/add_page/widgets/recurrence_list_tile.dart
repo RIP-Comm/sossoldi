@@ -18,6 +18,7 @@ class RecurrenceListTile extends ConsumerWidget with Functions {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isRecurring = ref.watch(selectedRecurringPayProvider);
+    final endDate = ref.watch(endDateProvider);
 
     return Column(
       children: [
@@ -102,35 +103,13 @@ class RecurrenceListTile extends ConsumerWidget with Functions {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(4)),
               ),
-              onPressed: () async {
-                FocusManager.instance.primaryFocus?.unfocus();
-                if (Platform.isIOS) {
-                  showCupertinoModalPopup(
-                    context: context,
-                    builder: (_) => Container(
-                      height: 300,
-                      color: white,
-                      child: CupertinoDatePicker(
-                        initialDateTime: ref.watch(endDateProvider),
-                        minimumYear: 2015,
-                        maximumYear: 2050,
-                        mode: CupertinoDatePickerMode.date,
-                        onDateTimeChanged: (date) => ref.read(endDateProvider.notifier).state = date,
-                      ),
-                    ),
-                  );
-                } else if (Platform.isAndroid) {
-                  final DateTime? pickedDate = await showDatePicker(
-                    context: context,
-                    initialDate: ref.watch(endDateProvider),
-                    firstDate: DateTime(2015),
-                    lastDate: DateTime(2050),
-                  );
-                  if (pickedDate != null) {
-                    ref.read(endDateProvider.notifier).state = pickedDate;
-                  }
-                }
-              },
+              onPressed: () => showModalBottomSheet(
+                context: context,
+                elevation: 10,
+                builder: (BuildContext context) {
+                  return const EndDateSelector();
+                },
+              ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -143,7 +122,7 @@ class RecurrenceListTile extends ConsumerWidget with Functions {
                   ),
                   const Spacer(),
                   Text(
-                    dateToString(ref.read(endDateProvider.notifier).state),
+                    endDate != null ? dateToString(endDate) : "Never",
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: Theme.of(context).colorScheme.secondary),
                   ),
@@ -159,5 +138,71 @@ class RecurrenceListTile extends ConsumerWidget with Functions {
         ]
       ],
     );
+  }
+}
+
+class EndDateSelector extends ConsumerWidget with Functions {
+  const EndDateSelector({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Scaffold(
+        appBar: AppBar(),
+        body: ListView(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          children: [
+            ListTile(
+              visualDensity: const VisualDensity(vertical: -3),
+              trailing: ref.watch(endDateProvider) != null
+                  ? null
+                  : const Icon(Icons.check),
+              title: const Text(
+                "Never",
+              ),
+              onTap: () => {
+                ref.read(endDateProvider.notifier).state = null,
+                Navigator.pop(context)
+              },
+            ),
+            ListTile(
+                visualDensity: const VisualDensity(vertical: -3),
+                title: const Text("On a date"),
+                trailing: ref.watch(endDateProvider) != null
+                    ? const Icon(Icons.check)
+                    : null,
+                    subtitle: Text(ref.read(endDateProvider) != null ? dateToString(ref.read(endDateProvider.notifier).state!) : ''),
+                onTap: () async {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  if (Platform.isIOS) {
+                    showCupertinoModalPopup(
+                      context: context,
+                      builder: (_) => Container(
+                        height: 300,
+                        color: white,
+                        child: CupertinoDatePicker(
+                          initialDateTime: ref.watch(endDateProvider),
+                          minimumYear: 2015,
+                          maximumYear: 2050,
+                          mode: CupertinoDatePickerMode.date,
+                          onDateTimeChanged: (date) =>
+                              ref.read(endDateProvider.notifier).state = date,
+                        ),
+                      ),
+                    );
+                  } else if (Platform.isAndroid) {
+                    final DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: ref.watch(endDateProvider),
+                      firstDate: DateTime(2015),
+                      lastDate: DateTime(2050),
+                    );
+                    if (pickedDate != null) {
+                      ref.read(endDateProvider.notifier).state = pickedDate;
+                    }
+                  }
+                })
+          ],
+        ));
   }
 }

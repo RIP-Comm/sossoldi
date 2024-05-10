@@ -108,7 +108,7 @@ class RecurringTransaction extends BaseEntity {
       RecurringTransaction(
           id: id ?? this.id,
           fromDate: fromDate ?? this.fromDate,
-          toDate: toDate ?? this.toDate,
+          toDate: toDate,
           amount: amount ?? this.amount,
           note: note ?? this.note,
           recurrency: recurrency ?? this.recurrency,
