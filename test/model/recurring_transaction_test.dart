@@ -5,10 +5,11 @@ import 'package:sossoldi/model/base_entity.dart';
 
 void main() {
   test('Test Copy Recurring Transaction Amount', () {
+    DateTime toDateValue = DateTime.utc(2023);
     RecurringTransaction t = RecurringTransaction(
         id: 2,
         fromDate: DateTime.utc(2022),
-        toDate: DateTime.utc(2023),
+        toDate: toDateValue,
         amount: 14,
         note: 'Test Transaction',
         recurrency: 'MONTHLY',
@@ -18,11 +19,11 @@ void main() {
         updatedAt: DateTime.utc(2022)
     );
 
-    RecurringTransaction tCopy = t.copy(id: 10);
+    RecurringTransaction tCopy = t.copy(id: 10, toDate: toDateValue);
 
     assert(tCopy.id == 10);
     assert(tCopy.fromDate == t.fromDate);
-    assert(tCopy.toDate == t.toDate);
+    assert(tCopy.toDate == toDateValue);
     assert(tCopy.amount == t.amount);
     assert(tCopy.note == t.note);
     assert(tCopy.recurrency == t.recurrency);
