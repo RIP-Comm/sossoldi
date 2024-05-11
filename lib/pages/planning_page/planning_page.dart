@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'manage_budget_page.dart';
 import 'widget/budget_card.dart';
-import 'widget/recurring_payments_card.dart';
+import 'widget/recurring_payments_list.dart';
 
 class PlanningPage extends StatefulWidget {
   const PlanningPage({super.key});
@@ -27,7 +27,6 @@ class _PlanningPageState extends State<PlanningPage> {
   Widget build(BuildContext context) {
     return Container(
         key: _key,
-        color: Colors.white,
         padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
         child: ListView(
             children: [
@@ -70,7 +69,7 @@ class _PlanningPageState extends State<PlanningPage> {
               Text("Recurring payments",
                   style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(height: 10),
-              RecurringPaymentCard()
+              const RecurringPaymentSection()
             ]));
   }
 }

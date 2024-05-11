@@ -8,7 +8,7 @@ import '../model/bank_account.dart';
 import '../model/budget.dart';
 import '../model/category_transaction.dart';
 import '../model/currency.dart';
-import '../model/recurring_transaction_amount.dart';
+import '../model/recurring_transaction.dart';
 import '../model/transaction.dart';
 
 class SossoldiDatabase {
@@ -75,10 +75,7 @@ class SossoldiDatabase {
         `${TransactionFields.idBankAccount}` $integerNotNull,
         `${TransactionFields.idBankAccountTransfer}` $integer,
         `${TransactionFields.recurring}` $integerNotNull CHECK (${TransactionFields.recurring} IN (0, 1)),
-        `${TransactionFields.recurrencyType}` $text,
-        `${TransactionFields.recurrencyPayDay}` $integer,
-        `${TransactionFields.recurrencyFrom}` $text,
-        `${TransactionFields.recurrencyTo}` $text,
+        `${TransactionFields.idRecurringTransaction}` $integer,
         `${TransactionFields.createdAt}` $textNotNull,
         `${TransactionFields.updatedAt}` $textNotNull
       )
@@ -86,14 +83,18 @@ class SossoldiDatabase {
 
     // Recurring Transactions Amount Table
     await database.execute('''
-      CREATE TABLE `$recurringTransactionAmountTable`(
-        `${RecurringTransactionAmountFields.id}` $integerPrimaryKeyAutoincrement,
-        `${RecurringTransactionAmountFields.from}` $textNotNull,
-        `${RecurringTransactionAmountFields.to}` $textNotNull,
-        `${RecurringTransactionAmountFields.amount}` $realNotNull,
-        `${RecurringTransactionAmountFields.idTransaction}` $integerNotNull,
-        `${RecurringTransactionAmountFields.createdAt}` $textNotNull,
-        `${RecurringTransactionAmountFields.updatedAt}` $textNotNull
+      CREATE TABLE `$recurringTransactionTable`(
+        `${RecurringTransactionFields.id}` $integerPrimaryKeyAutoincrement,
+        `${RecurringTransactionFields.fromDate}` $textNotNull,
+        `${RecurringTransactionFields.toDate}` $text,
+        `${RecurringTransactionFields.amount}` $realNotNull,
+        `${RecurringTransactionFields.note}` $textNotNull,
+        `${RecurringTransactionFields.recurrency}` $textNotNull,
+        `${RecurringTransactionFields.idCategory}` $integerNotNull,
+        `${RecurringTransactionFields.idBankAccount}` $integerNotNull,
+        `${RecurringTransactionFields.lastInsertion}` $text,
+        `${RecurringTransactionFields.createdAt}` $textNotNull,
+        `${RecurringTransactionFields.updatedAt}` $textNotNull
       )
     ''');
 
@@ -154,7 +155,8 @@ class SossoldiDatabase {
         (12, "Furniture", "home", 2, '', 11, '${DateTime.now()}', '${DateTime.now()}'),
         (13, "Shopping", "shopping_cart", 3, '', null, '${DateTime.now()}', '${DateTime.now()}'),
         (14, "Leisure", "subscriptions", 4, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (15, "Salary", "work", 5, '', null, '${DateTime.now()}', '${DateTime.now()}');
+        (15, "Salary", "work", 5, '', null, '${DateTime.now()}', '${DateTime.now()}'),
+        (16, "Transports", "directions_car_rounded", 6, '', null, '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
     // Add currencies
@@ -169,15 +171,23 @@ class SossoldiDatabase {
     // Add fake budgets
     await _database?.execute('''
       INSERT INTO budget(idCategory, name, amountLimit, active, createdAt, updatedAt) VALUES
-        (13, "Grocery", 400.00, 1, '${DateTime.now()}', '${DateTime.now()}'),
+        (13, "Grocery", 900.00, 1, '${DateTime.now()}', '${DateTime.now()}'),
         (11, "Home", 123.45, 0, '${DateTime.now()}', '${DateTime.now()}');
+    ''');
+
+    // Add fake recurring transactions
+    await _database?.execute('''
+      INSERT INTO recurringTransaction(fromDate, toDate, amount, note, recurrency, idCategory, idBankAccount, createdAt, updatedAt) VALUES
+        ("2024-02-23", null, 10.99, "404 Books", "MONTHLY", 14, 70, '${DateTime.now()}', '${DateTime.now()}'),
+        ("2023-12-13", null, 4.97, "ETF Consultant Parcel", "DAILY", 14, 70, '${DateTime.now()}', '${DateTime.now()}'),
+        ("2023-02-11", "2028-02-11", 1193.40, "Car Loan", "QUARTERLY", 16, 72, '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
     // Add fake transactions
     // First initialize some config stuff
     final rnd = Random();
     var accounts = [70,71,72];
-    var outNotes = ['Grocery', 'Tolls', 'Toys', 'ETF Consultant Parcel', 'Concert', 'Clothing', 'Pizza', 'Drugs', 'Laundry', 'Taxes', 'Health insurance', 'Furniture', 'Car Fuel', 'Train', 'Amazon', 'Delivery', 'CHEK dividends', 'Babysitter', 'sono.pove.ro Fees', 'Quingentole trip'];
+    var outNotes = ['Grocery', 'Tolls', 'Toys', 'Boardgames', 'Concert', 'Clothing', 'Pizza', 'Drugs', 'Laundry', 'Taxes', 'Health insurance', 'Furniture', 'Car Fuel', 'Train', 'Amazon', 'Delivery', 'CHEK dividends', 'Babysitter', 'sono.pove.ro Fees', 'Quingentole trip'];
     var categories = [10,11,12,13,14];
     double maxAmountOfSingleTransaction = 250.00;
     int dateInPastMaxRange = (countOfGeneratedTransaction / 90 ).round() * 30; // we want simulate about 90 transactions per month
@@ -185,7 +195,7 @@ class SossoldiDatabase {
     DateTime now = DateTime.now();
 
     // start building mega-query
-    const insertDemoTransactionsQuery = '''INSERT INTO `transaction` (date, amount, type, note, idCategory, idBankAccount, idBankAccountTransfer, recurring, recurrencyType, recurrencyPayDay, recurrencyFrom, recurrencyTo, createdAt, updatedAt) VALUES ''';
+    const insertDemoTransactionsQuery = '''INSERT INTO `transaction` (date, amount, type, note, idCategory, idBankAccount, idBankAccountTransfer, recurring, idRecurringTransaction, createdAt, updatedAt) VALUES ''';
 
     // init a List with transaction values
     final List<String> demoTransactions = [];
@@ -224,7 +234,7 @@ class SossoldiDatabase {
       }
 
       // put generated transaction in our list
-      demoTransactions.add('''('$randomDate', ${randomAmount.toStringAsFixed(2)}, '$randomType', '$randomNote', $randomCategory, $randomAccount, $idBankAccountTransfer, 0, null, null, null, null, '$randomDate', '$randomDate')''');
+      demoTransactions.add('''('$randomDate', ${randomAmount.toStringAsFixed(2)}, '$randomType', '$randomNote', $randomCategory, $randomAccount, $idBankAccountTransfer, 0, null, '$randomDate', '$randomDate')''');
     }
 
     // add salary every month
@@ -232,15 +242,31 @@ class SossoldiDatabase {
       DateTime randomDate =  now.subtract(Duration(days: 30*i));
       var time = randomDate.toLocal();
       DateTime salaryDateTime = DateTime(time.year, time.month, 27, time.hour, time.minute, time.second, time.millisecond, time.microsecond);
-      demoTransactions.add('''('$salaryDateTime', $fakeSalary, 'IN', 'Salary', 15, 70, null, 0, null, null, null, null, '$salaryDateTime', '$salaryDateTime')''');
+      demoTransactions.add('''('$salaryDateTime', $fakeSalary, 'IN', 'Salary', 15, 70, null, 0, null, '$salaryDateTime', '$salaryDateTime')''');
     }
-
-    // add some recurring payment too
-    demoTransactions.add('''(null, 7.99, 'OUT', 'Netflix', 14, 71, null, 1, 'monthly', 19, '2022-11-14', null, '2022-11-14 03:33:36.048611', '2022-11-14 03:33:36.048611')''');
-    demoTransactions.add('''(null, 292.39, 'OUT', 'Car Loan', 13, 70, null, 1, 'monthly', 27, '2019-10-03', '2024-10-02', '2022-10-04 03:33:36.048611', '2022-10-04 03:33:36.048611')''');
 
     // finalize query and write!
     await _database?.execute("$insertDemoTransactionsQuery ${demoTransactions.join(",")};");
+  }
+
+  Future resetDatabase() async {
+    // delete database
+    try{
+      await _database?.transaction((txn) async {
+        var batch = txn.batch();
+        // drop tables
+        batch.execute('DROP TABLE IF EXISTS $bankAccountTable');
+        batch.execute('DROP TABLE IF EXISTS `$transactionTable`');
+        batch.execute('DROP TABLE IF EXISTS $recurringTransactionTable');
+        batch.execute('DROP TABLE IF EXISTS $categoryTransactionTable');
+        batch.execute('DROP TABLE IF EXISTS $budgetTable');
+        batch.execute('DROP TABLE IF EXISTS $currencyTable');
+        await batch.commit();
+      });
+    } catch(error){
+      throw Exception('DbBase.resetDatabase: $error');
+    }
+    await _createDB(_database!, 1);
   }
 
   Future clearDatabase() async {
@@ -249,7 +275,7 @@ class SossoldiDatabase {
         var batch = txn.batch();
         batch.delete(bankAccountTable);
         batch.delete(transactionTable);
-        batch.delete(recurringTransactionAmountTable);
+        batch.delete(recurringTransactionTable);
         batch.delete(categoryTransactionTable);
         batch.delete(budgetTable);
         batch.delete(currencyTable);
@@ -268,7 +294,7 @@ class SossoldiDatabase {
   // WARNING: FOR DEV/TEST PURPOSES ONLY!!
   Future<void> deleteDatabase() async {
     final databasePath = await getDatabasesPath();
-    final path = join(databasePath, 'sossoldi.db');
+    final path = join(databasePath, dbName);
     databaseFactory.deleteDatabase(path);
   }
 }

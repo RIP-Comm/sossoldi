@@ -224,6 +224,8 @@ class TransactionRow extends ConsumerWidget with Functions {
                         const SizedBox(height: 11),
                         Row(
                           children: [
+                            if (transaction.recurring) // Check if the transaction is recurring
+                              const Icon(Icons.repeat, color: Colors.blueAccent), // Add an icon for recurring transactions
                             if (transaction.note != null)
                               Text(
                                 transaction.note!,
