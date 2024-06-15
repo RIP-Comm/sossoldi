@@ -77,9 +77,9 @@ class MonthSelector extends ConsumerWidget with Functions {
                 height: currentHeight,
                 width: height,
                 color: Theme.of(context).colorScheme.primary,
-                child: const Icon(
+                child:  Icon(
                   Icons.chevron_left,
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.primaryContainer,
                 ),
               ),
             ),
@@ -88,7 +88,7 @@ class MonthSelector extends ConsumerWidget with Functions {
               children: [
                 Text(
                   getFormattedDateRange(startDate, endDate),
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(color: darkWhite),
                 ),
                 type == MonthSelectorType.advanced
                     ? RichText(
@@ -127,9 +127,9 @@ class MonthSelector extends ConsumerWidget with Functions {
                 height: currentHeight,
                 width: height,
                 color: Theme.of(context).colorScheme.primary,
-                child: const Icon(
+                child: Icon(
                   Icons.chevron_right,
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.primaryContainer,
                 ),
               ),
             ),

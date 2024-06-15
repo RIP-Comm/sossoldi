@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
 import '../../../constants/functions.dart';
@@ -162,7 +163,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                                     ),
                                     const Spacer(),
                                     Text(
-                                      ref.watch(bankAccountProvider)!.name,
+                                      ref.watch(bankAccountProvider)?.name ?? "",
                                       style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                             color: grey1,
                                           ),
@@ -282,7 +283,10 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                     .headlineMedium!
                     .copyWith(color: typeToColor(selectedType)),
               ),
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
+              ],
               // inputFormatters: [DecimalTextInputFormatter(decimalDigits: 2)],
               autofocus: false,
               textAlign: TextAlign.center,
@@ -292,6 +296,12 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                 fontSize: 58,
                 fontWeight: FontWeight.bold,
               ),
+              onTapOutside: (_){
+                FocusScopeNode currentFocus = FocusScope.of(context);
+                if (!currentFocus.hasPrimaryFocus) {
+                  currentFocus.unfocus();
+                }
+              },
             ),
           ),
         ],
