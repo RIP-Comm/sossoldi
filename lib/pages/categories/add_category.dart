@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../constants/constants.dart';
 import '../../constants/functions.dart';
 import '../../constants/style.dart';
+import '../../model/category_transaction.dart';
 import '../../providers/categories_provider.dart';
 
 final showCategoryIconsProvider = StateProvider.autoDispose<bool>((ref) => false);
@@ -32,6 +33,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
   @override
   Widget build(BuildContext context) {
     final selectedCategory = ref.watch(selectedCategoryProvider);
+    final categoryType = ref.watch(categoryTypeProvider);
     final categoryIcon = ref.watch(categoryIconProvider);
     final categoryColor = ref.watch(categoryColorProvider);
     final showCategoryIcons = ref.watch(showCategoryIconsProvider);
@@ -45,7 +47,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
               children: [
                 Container(
                   width: double.infinity,
-                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.surface,
@@ -76,7 +78,47 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                 ),
                 Container(
                   width: double.infinity,
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surface,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "TYPE",
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelLarge!
+                            .copyWith(color: Theme.of(context).colorScheme.primary),
+                      ),
+                      DropdownButton<CategoryTransactionType>(
+                        value: categoryType,
+                        underline: const SizedBox(),
+                        isExpanded: true,
+                        items: CategoryTransactionType.values.map((CategoryTransactionType type) {
+                          return DropdownMenuItem<CategoryTransactionType>(
+                            value: type,
+                            child: Text(
+                              capitalizeFirstLetter(type.toString().split('.').last),
+                              style: Theme.of(context).textTheme.titleLarge!.copyWith(color: grey1),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (CategoryTransactionType? newType) {
+                          if (newType != categoryType) {
+                            ref.watch(categoryTypeProvider.notifier).state = newType!;
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.surface,
@@ -133,8 +175,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                               Align(
                                 alignment: Alignment.topRight,
                                 child: TextButton(
-                                  onPressed: () =>
-                                      ref.read(showCategoryIconsProvider.notifier).state = false,
+                                  onPressed: () => ref.read(showCategoryIconsProvider.notifier).state = false,
                                   child: Text(
                                     "Done",
                                     style: Theme.of(context)
@@ -148,14 +189,12 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                                 itemCount: iconList.length,
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
-                                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 6),
+                                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 6),
                                 itemBuilder: (context, index) {
                                   IconData categoryIconData = iconList.values.elementAt(index);
                                   String categoryIconName = iconList.keys.elementAt(index);
                                   return GestureDetector(
-                                    onTap: () => ref.read(categoryIconProvider.notifier).state =
-                                        categoryIconName,
+                                    onTap: () => ref.read(categoryIconProvider.notifier).state = categoryIconName,
                                     child: Container(
                                       margin: const EdgeInsets.all(12),
                                       decoration: BoxDecoration(
@@ -226,10 +265,8 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                   padding: const EdgeInsets.only(left: 16, top: 32, bottom: 8),
                   child: Text(
                     "SUBCATEGORY",
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelLarge!
-                        .copyWith(color: Theme.of(context).colorScheme.primary),
+                    style:
+                        Theme.of(context).textTheme.labelLarge!.copyWith(color: Theme.of(context).colorScheme.primary),
                   ),
                 ),
                 Material(
@@ -310,6 +347,9 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                             .whenComplete(() => Navigator.of(context).pop());
                       }
                     }
+
+                    ref.invalidate(selectedCategoryProvider);
+                    ref.invalidate(categoryMapProvider);
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.secondary,

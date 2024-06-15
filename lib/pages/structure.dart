@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/transactions_provider.dart';
+import 'graphs_page/graphs_page.dart';
 import 'home_page.dart';
 import 'planning_page/planning_page.dart';
-import 'statistics_page.dart';
 import 'transactions_page/transactions_page.dart';
 
 final StateProvider selectedIndexProvider = StateProvider<int>((ref) => 0);
@@ -32,7 +32,7 @@ class _StructureState extends ConsumerState<Structure> {
     const TransactionsPage(),
     const SizedBox(),
     const PlanningPage(),
-    const StatsPage(),
+    const GraphsPage(),
   ];
 
   @override
@@ -42,7 +42,8 @@ class _StructureState extends ConsumerState<Structure> {
       // Prevent the fab moving up when the keyboard is opened
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: selectedIndex == 0 ? Theme.of(context).colorScheme.tertiary : Theme.of(context).colorScheme.background,
+        backgroundColor:
+            selectedIndex == 0 ? Theme.of(context).colorScheme.tertiary : Theme.of(context).colorScheme.background,
         title: Text(
           _pagesTitle.elementAt(selectedIndex),
         ),
@@ -89,17 +90,14 @@ class _StructureState extends ConsumerState<Structure> {
         selectedFontSize: 8,
         unselectedFontSize: 8,
         currentIndex: selectedIndex,
-        onTap: (index) =>
-            index != 2 ? ref.read(selectedIndexProvider.notifier).state = index : null,
+        onTap: (index) => index != 2 ? ref.read(selectedIndexProvider.notifier).state = index : null,
         items: [
           BottomNavigationBarItem(
             icon: Icon(selectedIndex == 0 ? Icons.home : Icons.home_outlined),
             label: "DASHBOARD",
           ),
           BottomNavigationBarItem(
-            icon: Icon(selectedIndex == 1
-                ? Icons.swap_horizontal_circle
-                : Icons.swap_horizontal_circle_outlined),
+            icon: Icon(selectedIndex == 1 ? Icons.swap_horizontal_circle : Icons.swap_horizontal_circle_outlined),
             label: "TRANSACTIONS",
           ),
           const BottomNavigationBarItem(icon: Text(""), label: ""),
@@ -108,8 +106,7 @@ class _StructureState extends ConsumerState<Structure> {
             label: "PLANNING",
           ),
           BottomNavigationBarItem(
-            icon:
-                Icon(selectedIndex == 4 ? Icons.data_exploration : Icons.data_exploration_outlined),
+            icon: Icon(selectedIndex == 4 ? Icons.data_exploration : Icons.data_exploration_outlined),
             label: "GRAPHS",
           ),
         ],

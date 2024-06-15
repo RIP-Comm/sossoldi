@@ -6,8 +6,8 @@ import '../../../constants/constants.dart';
 import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
 import '../../../model/category_transaction.dart';
+import '../../../providers/categories_provider.dart';
 import '../../../providers/currency_provider.dart';
-import 'categories_tab.dart';
 
 class CategoriesPieChart extends ConsumerWidget with Functions {
   const CategoriesPieChart({
@@ -24,8 +24,7 @@ class CategoriesPieChart extends ConsumerWidget with Functions {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedCategoryIndex = ref.watch(selectedCategoryIndexProvider);
-    final selectedCategory =
-        (selectedCategoryIndex >= 0) ? categories[selectedCategoryIndex] : null;
+    final selectedCategory = (selectedCategoryIndex >= 0) ? categories[selectedCategoryIndex] : null;
     final currencyState = ref.watch(currencyStateNotifier);
     return SizedBox(
       height: 200,

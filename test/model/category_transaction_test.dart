@@ -8,7 +8,8 @@ void main() {
     CategoryTransaction c = CategoryTransaction(
         id: 2,
         name: "name",
-        symbol: 'symbol',
+        type: CategoryTransactionType.expense,
+        symbol: "symbol",
         color: 0,
         createdAt: DateTime.utc(2022),
         updatedAt: DateTime.utc(2022));
@@ -17,6 +18,7 @@ void main() {
 
     assert(cCopy.id == 10);
     assert(cCopy.name == c.name);
+    assert(cCopy.type == c.type);
     assert(cCopy.symbol == c.symbol);
     assert(cCopy.color == c.color);
     assert(cCopy.createdAt == c.createdAt);
@@ -27,6 +29,7 @@ void main() {
     Map<String, Object?> json = {
       BaseEntityFields.id: 0,
       CategoryTransactionFields.name: "name",
+      CategoryTransactionFields.type: "OUT",
       CategoryTransactionFields.symbol: "symbol",
       CategoryTransactionFields.color: 0,
       CategoryTransactionFields.note: "note",
@@ -38,27 +41,29 @@ void main() {
 
     assert(c.id == json[BaseEntityFields.id]);
     assert(c.name == json[CategoryTransactionFields.name]);
+    assert(c.type == categoryTypeMap[json[CategoryTransactionFields.type]]);
     assert(c.symbol == json[CategoryTransactionFields.symbol]);
     assert(c.color == json[CategoryTransactionFields.color]);
     assert(c.note == json[CategoryTransactionFields.note]);
-    assert(c.createdAt?.toUtc().toIso8601String() ==
-        json[BaseEntityFields.createdAt]);
-    assert(c.updatedAt?.toUtc().toIso8601String() ==
-        json[BaseEntityFields.updatedAt]);
+    assert(c.createdAt?.toUtc().toIso8601String() == json[BaseEntityFields.createdAt]);
+    assert(c.updatedAt?.toUtc().toIso8601String() == json[BaseEntityFields.updatedAt]);
   });
 
   test("Test toJson Category Transaction", () {
     CategoryTransaction c = const CategoryTransaction(
-        id: 2,
-        name: "name",
-        symbol: "symbol",
-        color: 0,
-        note: "note");
+      id: 2,
+      name: "name",
+      type: CategoryTransactionType.expense,
+      symbol: "symbol",
+      color: 0,
+      note: "note",
+    );
 
     Map<String, Object?> json = c.toJson();
 
     assert(c.id == json[BaseEntityFields.id]);
     assert(c.name == json[CategoryTransactionFields.name]);
+    assert(c.type == categoryTypeMap[json[CategoryTransactionFields.type]]);
     assert(c.symbol == json[CategoryTransactionFields.symbol]);
     assert(c.color == json[CategoryTransactionFields.color]);
     assert(c.note == json[CategoryTransactionFields.note]);

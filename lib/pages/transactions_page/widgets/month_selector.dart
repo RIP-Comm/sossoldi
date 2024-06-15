@@ -6,12 +6,17 @@ import '../../../constants/style.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../utils/formatted_date_range.dart';
+import '../../graphs_page/widgets/categories/categories_bar_chart.dart';
+
+enum MonthSelectorType { simple, advanced } //advanced = with amount
 
 class MonthSelector extends ConsumerWidget with Functions {
   const MonthSelector({
+    required this.type,
     super.key,
   });
 
+  final MonthSelectorType type;
   final double height = 60;
 
   @override
@@ -20,6 +25,9 @@ class MonthSelector extends ConsumerWidget with Functions {
     final startDate = ref.watch(filterDateStartProvider);
     final endDate = ref.watch(filterDateEndProvider);
     final currencyState = ref.watch(currencyStateNotifier);
+
+    double currentHeight = type == MonthSelectorType.advanced ? 60 : 30;
+
     return GestureDetector(
       onTap: () async {
         // pick range of dates
@@ -42,11 +50,12 @@ class MonthSelector extends ConsumerWidget with Functions {
         if (range != null) {
           ref.read(filterDateStartProvider.notifier).state = range.start;
           ref.read(filterDateEndProvider.notifier).state = range.end;
+          ref.read(highlightedMonthProvider.notifier).state = range.start.month - 1;
         }
       },
       child: Container(
         clipBehavior: Clip.antiAlias, // force rounded corners on children
-        height: height,
+        height: currentHeight,
         decoration: const BoxDecoration(
           color: blue7,
           borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -57,14 +66,15 @@ class MonthSelector extends ConsumerWidget with Functions {
             GestureDetector(
               onTap: () {
                 // move to previous month
-                ref.read(filterDateStartProvider.notifier).state =
-                    DateTime(startDate.year, startDate.month - 1, startDate.day);
-                ref.read(filterDateEndProvider.notifier).state =
-                    DateTime(startDate.year, startDate.month, 0);
+                DateTime newStartDate = DateTime(startDate.year, startDate.month - 1, 1);
+                DateTime newEndDate = DateTime(newStartDate.year, newStartDate.month + 1, 0);
+                ref.read(filterDateStartProvider.notifier).state = newStartDate;
+                ref.read(filterDateEndProvider.notifier).state = newEndDate;
                 ref.read(transactionsProvider.notifier).filterTransactions();
+                ref.read(highlightedMonthProvider.notifier).state = newStartDate.month - 1;
               },
               child: Container(
-                height: height,
+                height: currentHeight,
                 width: height,
                 color: Theme.of(context).colorScheme.primary,
                 child:  Icon(
@@ -80,39 +90,41 @@ class MonthSelector extends ConsumerWidget with Functions {
                   getFormattedDateRange(startDate, endDate),
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(color: darkWhite),
                 ),
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: numToCurrency(totalAmount),
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyLarge!
-                            .copyWith(color: totalAmount >= 0 ? green : red),
-                      ),
-                      TextSpan(
-                        text: currencyState.selectedCurrency.symbol,
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelLarge!
-                            .copyWith(color: totalAmount >= 0 ? green : red)
-                      ),
-                    ],
-                  ),
-                ),
+                type == MonthSelectorType.advanced
+                    ? RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: numToCurrency(totalAmount),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(color: totalAmount >= 0 ? green : red),
+                            ),
+                            TextSpan(
+                                text: currencyState.selectedCurrency.symbol,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge!
+                                    .copyWith(color: totalAmount >= 0 ? green : red)),
+                          ],
+                        ),
+                      )
+                    : const SizedBox.shrink(),
               ],
             ),
             GestureDetector(
               onTap: () {
                 // move to next month
-                ref.read(filterDateStartProvider.notifier).state =
-                    DateTime(startDate.year, startDate.month + 1, startDate.day);
-                ref.read(filterDateEndProvider.notifier).state =
-                    DateTime(startDate.year, startDate.month + 2, 0);
+                DateTime newStartDate = DateTime(startDate.year, startDate.month + 1, 1);
+                DateTime newEndDate = DateTime(newStartDate.year, newStartDate.month + 1, 0);
+                ref.read(filterDateStartProvider.notifier).state = newStartDate;
+                ref.read(filterDateEndProvider.notifier).state = newEndDate;
                 ref.read(transactionsProvider.notifier).filterTransactions();
+                ref.read(highlightedMonthProvider.notifier).state = newStartDate.month - 1;
               },
               child: Container(
-                height: height,
+                height: currentHeight,
                 width: height,
                 color: Theme.of(context).colorScheme.primary,
                 child: Icon(

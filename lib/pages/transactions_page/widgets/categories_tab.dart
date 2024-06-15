@@ -11,8 +11,6 @@ import '../../../providers/transactions_provider.dart';
 import 'categories_pie_chart.dart';
 import 'category_list_tile.dart';
 
-final selectedCategoryIndexProvider = StateProvider.autoDispose<int>((ref) => -1);
-
 class CategoriesTab extends ConsumerStatefulWidget {
   const CategoriesTab({
     super.key,
@@ -31,8 +29,7 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> with Functions {
 
     // create a map to link each categories with a list of its transactions
     // stored as Transaction to be passed to CategoryListTile
-    Map<int, List<Transaction>> categoryToTransactionsIncome = {},
-        categoryToTransactionsExpense = {};
+    Map<int, List<Transaction>> categoryToTransactionsIncome = {}, categoryToTransactionsExpense = {};
     Map<int, double> categoryToAmountIncome = {}, categoryToAmountExpense = {};
     double totalIncome = 0, totalExpense = 0;
 
@@ -49,8 +46,7 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> with Functions {
           // update total amount for the category
           totalIncome += transaction.amount;
           if (categoryToAmountIncome.containsKey(categoryId)) {
-            categoryToAmountIncome[categoryId] =
-                categoryToAmountIncome[categoryId]! + transaction.amount.toDouble();
+            categoryToAmountIncome[categoryId] = categoryToAmountIncome[categoryId]! + transaction.amount.toDouble();
           } else {
             categoryToAmountIncome.putIfAbsent(categoryId, () => transaction.amount.toDouble());
           }
@@ -64,8 +60,7 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> with Functions {
           // update total amount for the category
           totalExpense -= transaction.amount;
           if (categoryToAmountExpense.containsKey(categoryId)) {
-            categoryToAmountExpense[categoryId] =
-                categoryToAmountExpense[categoryId]! - transaction.amount.toDouble();
+            categoryToAmountExpense[categoryId] = categoryToAmountExpense[categoryId]! - transaction.amount.toDouble();
           } else {
             categoryToAmountExpense.putIfAbsent(categoryId, () => -transaction.amount.toDouble());
           }
@@ -82,12 +77,10 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> with Functions {
             const SizedBox(height: 16),
             categories.when(
               data: (data) {
-                List<CategoryTransaction> categoryIncomeList = data
-                    .where((category) => categoryToAmountIncome.containsKey(category.id))
-                    .toList();
-                List<CategoryTransaction> categoryExpenseList = data
-                    .where((category) => categoryToAmountExpense.containsKey(category.id))
-                    .toList();
+                List<CategoryTransaction> categoryIncomeList =
+                    data.where((category) => categoryToAmountIncome.containsKey(category.id)).toList();
+                List<CategoryTransaction> categoryExpenseList =
+                    data.where((category) => categoryToAmountExpense.containsKey(category.id)).toList();
                 return transactionType == TransactionType.income
                     ? categoryIncomeList.isEmpty
                         ? const SizedBox(
@@ -115,9 +108,7 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> with Functions {
                                     category: category,
                                     transactions: categoryToTransactionsIncome[category.id] ?? [],
                                     amount: categoryToAmountIncome[category.id] ?? 0,
-                                    percent: (categoryToAmountIncome[category.id] ?? 0) /
-                                        totalIncome *
-                                        100,
+                                    percent: (categoryToAmountIncome[category.id] ?? 0) / totalIncome * 100,
                                     index: index,
                                   );
                                 },
@@ -150,9 +141,7 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> with Functions {
                                     category: category,
                                     transactions: categoryToTransactionsExpense[category.id] ?? [],
                                     amount: categoryToAmountExpense[category.id] ?? 0,
-                                    percent: (categoryToAmountExpense[category.id] ?? 0) /
-                                        totalExpense *
-                                        100,
+                                    percent: (categoryToAmountExpense[category.id] ?? 0) / totalExpense * 100,
                                     index: index,
                                   );
                                 },

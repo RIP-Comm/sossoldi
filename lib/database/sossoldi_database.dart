@@ -17,7 +17,7 @@ class SossoldiDatabase {
   static String dbName = 'sossoldi.db';
 
   // Zero args constructor needed to extend this class
-  SossoldiDatabase({String? dbName}){
+  SossoldiDatabase({String? dbName}) {
     dbName = dbName ?? 'sossoldi.db';
   }
 
@@ -102,6 +102,7 @@ class SossoldiDatabase {
       CREATE TABLE `$categoryTransactionTable`(
         `${CategoryTransactionFields.id}` $integerPrimaryKeyAutoincrement,
         `${CategoryTransactionFields.name}` $textNotNull,
+        `${CategoryTransactionFields.type}` $textNotNull,
         `${CategoryTransactionFields.symbol}` $textNotNull,
         `${CategoryTransactionFields.color}` $integerNotNull,
         `${CategoryTransactionFields.note}` $text,
@@ -134,7 +135,6 @@ class SossoldiDatabase {
         `${CurrencyFields.mainCurrency}` $integerNotNull CHECK (${CurrencyFields.mainCurrency} IN (0, 1))
       )
       ''');
-
   }
 
   Future fillDemoData({int countOfGeneratedTransaction = 10000}) async {
@@ -148,13 +148,13 @@ class SossoldiDatabase {
 
     // Add fake categories
     await _database?.execute('''
-      INSERT INTO categoryTransaction(id, name, symbol, color, note, parent, createdAt, updatedAt) VALUES
-        (10, "Out", "restaurant", 0, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (11, "Home", "home", 1, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (12, "Furniture", "home", 2, '', 11, '${DateTime.now()}', '${DateTime.now()}'),
-        (13, "Shopping", "shopping_cart", 3, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (14, "Leisure", "subscriptions", 4, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (15, "Salary", "work", 5, '', null, '${DateTime.now()}', '${DateTime.now()}');
+      INSERT INTO categoryTransaction(id, name, type, symbol, color, note, parent, createdAt, updatedAt) VALUES
+        (10, "Out", "OUT", "restaurant", 0, '', null, '${DateTime.now()}', '${DateTime.now()}'),
+        (11, "Home", "OUT", "home", 1, '', null, '${DateTime.now()}', '${DateTime.now()}'),
+        (12, "Furniture","OUT", "home", 2, '', 11, '${DateTime.now()}', '${DateTime.now()}'),
+        (13, "Shopping", "OUT", "shopping_cart", 3, '', null, '${DateTime.now()}', '${DateTime.now()}'),
+        (14, "Leisure", "OUT", "subscriptions", 4, '', null, '${DateTime.now()}', '${DateTime.now()}'),
+        (15, "Salary", "IN", "work", 5, '', null, '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
     // Add currencies
@@ -176,16 +176,39 @@ class SossoldiDatabase {
     // Add fake transactions
     // First initialize some config stuff
     final rnd = Random();
-    var accounts = [70,71,72];
-    var outNotes = ['Grocery', 'Tolls', 'Toys', 'ETF Consultant Parcel', 'Concert', 'Clothing', 'Pizza', 'Drugs', 'Laundry', 'Taxes', 'Health insurance', 'Furniture', 'Car Fuel', 'Train', 'Amazon', 'Delivery', 'CHEK dividends', 'Babysitter', 'sono.pove.ro Fees', 'Quingentole trip'];
-    var categories = [10,11,12,13,14];
+    var accounts = [70, 71, 72];
+    var outNotes = [
+      'Grocery',
+      'Tolls',
+      'Toys',
+      'ETF Consultant Parcel',
+      'Concert',
+      'Clothing',
+      'Pizza',
+      'Drugs',
+      'Laundry',
+      'Taxes',
+      'Health insurance',
+      'Furniture',
+      'Car Fuel',
+      'Train',
+      'Amazon',
+      'Delivery',
+      'CHEK dividends',
+      'Babysitter',
+      'sono.pove.ro Fees',
+      'Quingentole trip'
+    ];
+    var categories = [10, 11, 12, 13, 14];
     double maxAmountOfSingleTransaction = 250.00;
-    int dateInPastMaxRange = (countOfGeneratedTransaction / 90 ).round() * 30; // we want simulate about 90 transactions per month
+    int dateInPastMaxRange =
+        (countOfGeneratedTransaction / 90).round() * 30; // we want simulate about 90 transactions per month
     num fakeSalary = 5000;
     DateTime now = DateTime.now();
 
     // start building mega-query
-    const insertDemoTransactionsQuery = '''INSERT INTO `transaction` (date, amount, type, note, idCategory, idBankAccount, idBankAccountTransfer, recurring, recurrencyType, recurrencyPayDay, recurrencyFrom, recurrencyTo, createdAt, updatedAt) VALUES ''';
+    const insertDemoTransactionsQuery =
+        '''INSERT INTO `transaction` (date, amount, type, note, idCategory, idBankAccount, idBankAccountTransfer, recurring, recurrencyType, recurrencyPayDay, recurrencyFrom, recurrencyTo, createdAt, updatedAt) VALUES ''';
 
     // init a List with transaction values
     final List<String> demoTransactions = [];
@@ -206,16 +229,17 @@ class SossoldiDatabase {
       var randomNote = outNotes[rnd.nextInt(outNotes.length)];
       var randomCategory = categories[rnd.nextInt(categories.length)];
       var idBankAccountTransfer;
-      DateTime randomDate =  now.subtract(Duration(days: rnd.nextInt(dateInPastMaxRange), hours: rnd.nextInt(20), minutes: rnd.nextInt(50)));
+      DateTime randomDate = now
+          .subtract(Duration(days: rnd.nextInt(dateInPastMaxRange), hours: rnd.nextInt(20), minutes: rnd.nextInt(50)));
 
-      if (i % (countOfGeneratedTransaction/100) == 0) {
+      if (i % (countOfGeneratedTransaction / 100) == 0) {
         // simulating a transfer every 1% of total iterations
         randomType = 'TRSF';
         randomNote = 'Transfer';
         randomAccount = 70; // sender account is hardcoded with the one that receives our fake salary
         randomCategory = 0; // no category for transfers
         idBankAccountTransfer = accounts[rnd.nextInt(accounts.length)];
-        randomAmount = (fakeSalary/100)*70;
+        randomAmount = (fakeSalary / 100) * 70;
 
         // be sure our FROM/TO accounts are not the same
         while (idBankAccountTransfer == randomAccount) {
@@ -224,27 +248,32 @@ class SossoldiDatabase {
       }
 
       // put generated transaction in our list
-      demoTransactions.add('''('$randomDate', ${randomAmount.toStringAsFixed(2)}, '$randomType', '$randomNote', $randomCategory, $randomAccount, $idBankAccountTransfer, 0, null, null, null, null, '$randomDate', '$randomDate')''');
+      demoTransactions.add(
+          '''('$randomDate', ${randomAmount.toStringAsFixed(2)}, '$randomType', '$randomNote', $randomCategory, $randomAccount, $idBankAccountTransfer, 0, null, null, null, null, '$randomDate', '$randomDate')''');
     }
 
     // add salary every month
-    for (int i = 1; i < dateInPastMaxRange/30; i++) {
-      DateTime randomDate =  now.subtract(Duration(days: 30*i));
+    for (int i = 1; i < dateInPastMaxRange / 30; i++) {
+      DateTime randomDate = now.subtract(Duration(days: 30 * i));
       var time = randomDate.toLocal();
-      DateTime salaryDateTime = DateTime(time.year, time.month, 27, time.hour, time.minute, time.second, time.millisecond, time.microsecond);
-      demoTransactions.add('''('$salaryDateTime', $fakeSalary, 'IN', 'Salary', 15, 70, null, 0, null, null, null, null, '$salaryDateTime', '$salaryDateTime')''');
+      DateTime salaryDateTime =
+          DateTime(time.year, time.month, 27, time.hour, time.minute, time.second, time.millisecond, time.microsecond);
+      demoTransactions.add(
+          '''('$salaryDateTime', $fakeSalary, 'IN', 'Salary', 15, 70, null, 0, null, null, null, null, '$salaryDateTime', '$salaryDateTime')''');
     }
 
     // add some recurring payment too
-    demoTransactions.add('''(null, 7.99, 'OUT', 'Netflix', 14, 71, null, 1, 'monthly', 19, '2022-11-14', null, '2022-11-14 03:33:36.048611', '2022-11-14 03:33:36.048611')''');
-    demoTransactions.add('''(null, 292.39, 'OUT', 'Car Loan', 13, 70, null, 1, 'monthly', 27, '2019-10-03', '2024-10-02', '2022-10-04 03:33:36.048611', '2022-10-04 03:33:36.048611')''');
+    demoTransactions.add(
+        '''(null, 7.99, 'OUT', 'Netflix', 14, 71, null, 1, 'monthly', 19, '2022-11-14', null, '2022-11-14 03:33:36.048611', '2022-11-14 03:33:36.048611')''');
+    demoTransactions.add(
+        '''(null, 292.39, 'OUT', 'Car Loan', 13, 70, null, 1, 'monthly', 27, '2019-10-03', '2024-10-02', '2022-10-04 03:33:36.048611', '2022-10-04 03:33:36.048611')''');
 
     // finalize query and write!
     await _database?.execute("$insertDemoTransactionsQuery ${demoTransactions.join(",")};");
   }
 
   Future clearDatabase() async {
-    try{
+    try {
       await _database?.transaction((txn) async {
         var batch = txn.batch();
         batch.delete(bankAccountTable);
@@ -255,7 +284,7 @@ class SossoldiDatabase {
         batch.delete(currencyTable);
         await batch.commit();
       });
-    } catch(error){
+    } catch (error) {
       throw Exception('DbBase.cleanDatabase: $error');
     }
   }
