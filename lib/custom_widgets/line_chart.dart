@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../constants/functions.dart';
 
 enum Period { month, year }
 
@@ -16,7 +17,8 @@ class LineChartWidget extends StatefulWidget {
 
   // Used to decide the bottom label
   final Period period;
-  final int currentMonthDays = DateUtils.getDaysInMonth(DateTime.now().year, DateTime.now().month);
+  final int currentMonthDays =
+      DateUtils.getDaysInMonth(DateTime.now().year, DateTime.now().month);
   final int nXLabel = 10;
   final double minY;
 
@@ -45,7 +47,7 @@ class LineChartWidget extends StatefulWidget {
   State<LineChartWidget> createState() => _LineChartSample2State();
 }
 
-class _LineChartSample2State extends State<LineChartWidget> {
+class _LineChartSample2State extends State<LineChartWidget> with Functions {
   _LineChartSample2State();
 
   @override
@@ -63,7 +65,8 @@ class _LineChartSample2State extends State<LineChartWidget> {
               padding: const EdgeInsets.only(top: 24),
               child: Builder(
                 builder: (context) {
-                  if (widget.lineData.length < 2 && widget.line2Data.length < 2) {
+                  if (widget.lineData.length < 2 &&
+                      widget.line2Data.length < 2) {
                     return Center(
                       child: Text(
                         "We are sorry but there are not\nenough data to make the graph...",
@@ -132,7 +135,8 @@ class _LineChartSample2State extends State<LineChartWidget> {
         break;
       case Period.month:
         int step = (widget.currentMonthDays / widget.nXLabel).round();
-        if (value.toInt() % step == 1 && value.toInt() != widget.currentMonthDays) {
+        if (value.toInt() % step == 1 &&
+            value.toInt() != widget.currentMonthDays) {
           text = Text(
             (value + 1).toStringAsFixed(0),
             style: style,
@@ -178,7 +182,8 @@ class _LineChartSample2State extends State<LineChartWidget> {
       ),
       gridData: const FlGridData(show: false),
       lineTouchData: LineTouchData(
-        getTouchedSpotIndicator: (LineChartBarData barData, List<int> spotIndexes) {
+        getTouchedSpotIndicator:
+            (LineChartBarData barData, List<int> spotIndexes) {
           bool allSameX = spotIndexes.toSet().length == 1;
 
           if (!allSameX) {
@@ -186,14 +191,17 @@ class _LineChartSample2State extends State<LineChartWidget> {
           }
           return spotIndexes.map((spotIndex) {
             return TouchedSpotIndicatorData(
-              const FlLine(
-                color: Colors.blueGrey,
+              FlLine(
+                color: themeData.colorScheme.primary,
                 strokeWidth: 2,
               ),
               FlDotData(
                 getDotPainter: (spot, percent, barData, index) {
                   return FlDotCirclePainter(
-                      radius: 2, color: Colors.grey, strokeWidth: 2, strokeColor: Colors.blueGrey);
+                      radius: 2,
+                      color: themeData.colorScheme.primary,
+                      strokeWidth: 2,
+                      strokeColor: themeData.colorScheme.primary);
                 },
               ),
             );
@@ -201,6 +209,8 @@ class _LineChartSample2State extends State<LineChartWidget> {
         },
         touchTooltipData: LineTouchTooltipData(
           fitInsideHorizontally: true,
+          tooltipPadding: const EdgeInsets.all(4.0),
+          tooltipBgColor: themeData.colorScheme.onBackground,
           getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
             bool allSameX = touchedBarSpots.map((e) => e.x).toSet().length == 1;
 
@@ -210,7 +220,8 @@ class _LineChartSample2State extends State<LineChartWidget> {
 
             double x = touchedBarSpots[0].x;
             DateTime date = widget.period == Period.month
-                ? DateTime(DateTime.now().year, DateTime.now().month, (x + 1).toInt())
+                ? DateTime(
+                    DateTime.now().year, DateTime.now().month, (x + 1).toInt())
                 : DateTime(DateTime.now().year, (x + 1).toInt(), 1);
             String dateFormat = widget.period == Period.month
                 ? DateFormat(DateFormat.ABBR_MONTH_DAY).format(date)
@@ -219,15 +230,17 @@ class _LineChartSample2State extends State<LineChartWidget> {
             LineTooltipItem first = LineTooltipItem(
               '$dateFormat \n\n',
               TextStyle(
-                color: Theme.of(context).colorScheme.onBackground,
+                color: themeData.colorScheme.onPrimary,
                 fontWeight: FontWeight.bold,
+                fontSize: themeData.textTheme.labelMedium?.fontSize
               ),
               children: [
                 TextSpan(
                   text: touchedBarSpots[0].y.toString(),
                   style: TextStyle(
-                    color: line2Color,
+                    color: themeData.colorScheme.onPrimary,
                     fontWeight: FontWeight.w900,
+                    fontSize: themeData.textTheme.labelMedium?.fontSize
                   ),
                 ),
               ],
@@ -245,8 +258,9 @@ class _LineChartSample2State extends State<LineChartWidget> {
                   TextSpan(
                     text: flSpot.y.toString(),
                     style: TextStyle(
-                      color: lineColor,
+                      color: themeData.colorScheme.onPrimary,
                       fontWeight: FontWeight.w900,
+                      fontSize: themeData.textTheme.labelMedium?.fontSize
                     ),
                   ),
                 ],
@@ -260,7 +274,8 @@ class _LineChartSample2State extends State<LineChartWidget> {
 
       borderData: FlBorderData(
         border: const Border(
-          bottom: BorderSide(color: Colors.grey, width: 1.0, style: BorderStyle.solid),
+          bottom: BorderSide(
+              color: Colors.grey, width: 1.0, style: BorderStyle.solid),
         ),
       ),
       minX: 0,
@@ -279,9 +294,8 @@ class _LineChartSample2State extends State<LineChartWidget> {
           dotData: const FlDotData(
             show: false,
           ),
-          belowBarData: BarAreaData(
-              show: true,
-              color: lineColor.withOpacity(0.3)),
+          belowBarData:
+              BarAreaData(show: true, color: lineColor.withOpacity(0.3)),
         ),
         LineChartBarData(
           spots: widget.line2Data,

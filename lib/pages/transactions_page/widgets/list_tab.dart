@@ -20,6 +20,7 @@ class _ListTabState extends ConsumerState<ListTab> with Functions {
     final asyncTransactions = ref.watch(transactionsProvider);
 
     return Container(
+      color: Theme.of(context).colorScheme.primaryContainer,
       child: asyncTransactions.when(
         data: (transactions) {
           return TransactionsList(

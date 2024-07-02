@@ -21,12 +21,12 @@ class LabelListTile extends StatelessWidget {
               shape: BoxShape.circle,
               color: Theme.of(context).colorScheme.secondary,
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
+            child: const Padding(
+              padding: EdgeInsets.all(10.0),
               child: Icon(
                 Icons.description,
                 size: 24.0,
-                color: Theme.of(context).colorScheme.background,
+                color: Colors.white,
               ),
             ),
           ),
@@ -42,13 +42,15 @@ class LabelListTile extends StatelessWidget {
           Expanded(
             child: TextField(
               controller: labelController,
-              decoration: const InputDecoration(
-                  border: InputBorder.none, hintText: "Add a description"),
+              decoration: InputDecoration(
+                  border: InputBorder.none, hintText: "Add a description", hintStyle: TextStyle(
+                color: Theme.of(context).colorScheme.primary
+              )),
               textAlign: TextAlign.end,
               style: Theme.of(context)
                   .textTheme
                   .bodySmall!
-                  .copyWith(color: Theme.of(context).colorScheme.secondary),
+                  .copyWith(color: Theme.of(context).colorScheme.primary),
             ),
           ),
         ],

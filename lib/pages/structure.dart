@@ -86,6 +86,8 @@ class _StructureState extends ConsumerState<Structure> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
+        selectedItemColor: Theme.of(context).colorScheme.primary,
+        unselectedItemColor: Theme.of(context).colorScheme.primary.withOpacity(0.5),
         selectedFontSize: 8,
         unselectedFontSize: 8,
         currentIndex: selectedIndex,
@@ -117,7 +119,7 @@ class _StructureState extends ConsumerState<Structure> {
       floatingActionButton: FloatingActionButton(
         elevation: 4,
         highlightElevation: 0,
-        backgroundColor: Theme.of(context).colorScheme.secondary,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         child: Icon(
           Icons.add_rounded,
           size: 55,
