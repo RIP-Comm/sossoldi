@@ -99,10 +99,17 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
         } else {
           // It's an income or an expense
           if (ref.read(categoryProvider) != null) {
-            ref
+            if(ref.read(selectedRecurringPayProvider)) {
+              ref
+                .read(transactionsProvider.notifier)
+                .addRecurringTransaction(currencyToNum(cleanAmount), noteController.text)
+                .whenComplete(() => Navigator.of(context).pop());
+            } else {
+              ref
                 .read(transactionsProvider.notifier)
                 .addTransaction(currencyToNum(cleanAmount), noteController.text)
                 .whenComplete(() => Navigator.of(context).pop());
+            }        
           }
         }
       }

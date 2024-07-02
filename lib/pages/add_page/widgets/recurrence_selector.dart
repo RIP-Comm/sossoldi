@@ -5,7 +5,7 @@ import '../../../constants/functions.dart';
 import '../../../providers/transactions_provider.dart';
 
 class RecurrenceSelector extends ConsumerStatefulWidget {
-  const RecurrenceSelector({Key? key}) : super(key: key);
+  const RecurrenceSelector({super.key});
 
   @override
   ConsumerState<RecurrenceSelector> createState() => _RecurrenceSelectorState();
@@ -27,7 +27,7 @@ class _RecurrenceSelectorState extends ConsumerState<RecurrenceSelector> with Fu
             late Map<Recurrence, String> recurrence;
             recurrenceMap.forEach((key, value) {
               if (j == i) {
-                recurrence = {key: value};
+                recurrence = {key: value.label};
               }
               j++;
             });

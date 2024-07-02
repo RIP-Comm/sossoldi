@@ -194,9 +194,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               textAlign: TextAlign.center,
             ),
             ElevatedButton(
-              child: const Text('CLEAR DB'),
+              child: const Text('RESET DB'),
               onPressed: () async {
-                await SossoldiDatabase.instance.clearDatabase().then((v) {
+                await SossoldiDatabase.instance.resetDatabase().then((v) {
                   ref.refresh(accountsProvider);
                   ref.refresh(categoriesProvider);
                   ref.refresh(transactionsProvider);
