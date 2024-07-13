@@ -12,24 +12,6 @@ PODS:
   - sqflite (0.0.3):
     - Flutter
     - FlutterMacOS
-  - "sqlite3 (3.46.0+1)":
-    - "sqlite3/common (= 3.46.0+1)"
-  - "sqlite3/common (3.46.0+1)"
-  - "sqlite3/dbstatvtab (3.46.0+1)":
-    - sqlite3/common
-  - "sqlite3/fts5 (3.46.0+1)":
-    - sqlite3/common
-  - "sqlite3/perf-threadsafe (3.46.0+1)":
-    - sqlite3/common
-  - "sqlite3/rtree (3.46.0+1)":
-    - sqlite3/common
-  - sqlite3_flutter_libs (0.0.1):
-    - Flutter
-    - "sqlite3 (~> 3.46.0+1)"
-    - sqlite3/dbstatvtab
-    - sqlite3/fts5
-    - sqlite3/perf-threadsafe
-    - sqlite3/rtree
   - url_launcher_ios (0.0.1):
     - Flutter
   - workmanager (0.0.1):
@@ -42,13 +24,8 @@ DEPENDENCIES:
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sqflite (from `.symlinks/plugins/sqflite/darwin`)
-  - sqlite3_flutter_libs (from `.symlinks/plugins/sqlite3_flutter_libs/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - workmanager (from `.symlinks/plugins/workmanager/ios`)
-
-SPEC REPOS:
-  trunk:
-    - sqlite3
 
 EXTERNAL SOURCES:
   Flutter:
@@ -63,8 +40,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
   sqflite:
     :path: ".symlinks/plugins/sqflite/darwin"
-  sqlite3_flutter_libs:
-    :path: ".symlinks/plugins/sqlite3_flutter_libs/ios"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
   workmanager:
@@ -77,8 +52,6 @@ SPEC CHECKSUMS:
   permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   sqflite: 673a0e54cc04b7d6dba8d24fb8095b31c3a99eec
-  sqlite3: 292c3e1bfe89f64e51ea7fc7dab9182a017c8630
-  sqlite3_flutter_libs: c00457ebd31e59fa6bb830380ddba24d44fbcd3b
   url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
   workmanager: 0afdcf5628bbde6924c21af7836fed07b42e30e6
 
