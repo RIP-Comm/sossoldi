@@ -1,7 +1,9 @@
 import 'dart:math'; // used for random number generation in demo data
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 
 // Models
 import '../model/bank_account.dart';
@@ -31,11 +33,13 @@ class SossoldiDatabase {
   }
 
   Future<Database> _initDB(String filePath) async {
-    // On Android, it is typically data/data//databases.
-    // On iOS and MacOS, it is the Documents directory.
+    if (kIsWeb) {
+      // We need to change default factory on the web
+      databaseFactory = databaseFactoryFfiWeb;
+    } 
+    
+    // On Android, it is typically data/data//databases, on iOS and MacOS, it is the Documents directory.
     final databasePath = await getDatabasesPath();
-    // Directory databasePath = await getApplicationDocumentsDirectory();
-
     final path = join(databasePath, filePath);
     return await openDatabase(path, version: 1, onCreate: _createDB);
   }

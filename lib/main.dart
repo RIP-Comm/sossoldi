@@ -1,5 +1,6 @@
-import 'dart:io';
+import 'dart:io' as io if (dart.library.html) 'dart:html';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -16,7 +17,7 @@ bool? _isFirstLogin = true;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if(Platform.isAndroid){
+  if(!kIsWeb && io.Platform.isAndroid){
     requestNotificationPermissions();
     initializeNotifications();
     Workmanager().initialize(callbackDispatcher);

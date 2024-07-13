@@ -44,6 +44,7 @@ dependencies:
   # Database storage
   sqflite: ^2.2.2
   sqflite_common_ffi: ^2.2.0+1
+  sqflite_common_ffi_web: '>=0.1.0-dev.1'
 
   # iOS, Android and MacOS
   sqlite3_flutter_libs:
