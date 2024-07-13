@@ -46,7 +46,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
     final currencyState = ref.watch(currencyStateNotifier);
 
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(title: Text("${selectedAccount == null ? "New" : "Edit"} account")),
       body: Stack(
         children: [
@@ -119,7 +119,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                             child: Icon(
                               accountIconList[accountIcon],
                               size: 48,
-                              color: Theme.of(context).colorScheme.background,
+                              color: Theme.of(context).colorScheme.surface,
                             ),
                           ),
                         ),
@@ -401,7 +401,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                     style: Theme.of(context)
                         .textTheme
                         .bodyLarge!
-                        .copyWith(color: Theme.of(context).colorScheme.background),
+                        .copyWith(color: Theme.of(context).colorScheme.surface),
                   ),
                 ),
               ),

@@ -40,7 +40,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.background,
+        color: Theme.of(context).colorScheme.surface,
         border: const Border(
           bottom: BorderSide(width: 1.0, color: grey2),
         ),

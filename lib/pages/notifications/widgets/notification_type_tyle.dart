@@ -9,14 +9,13 @@ class NotificationTypeTile extends ConsumerStatefulWidget {
   final VoidCallback setNotificationTypeCallback;
 
   const NotificationTypeTile(
-      {Key? key, required this.type, required this.setNotificationTypeCallback})
-      : super(key: key);
+      {super.key, required this.type, required this.setNotificationTypeCallback});
 
   @override
-  _NotificationTypeTileState createState() => _NotificationTypeTileState();
+  NotificationTypeTileState createState() => NotificationTypeTileState();
 }
 
-class _NotificationTypeTileState extends ConsumerState<NotificationTypeTile> {
+class NotificationTypeTileState extends ConsumerState<NotificationTypeTile> {
   late SharedPreferences prefs;
   bool isPrefInizialized = false;
 
@@ -38,7 +37,7 @@ class _NotificationTypeTileState extends ConsumerState<NotificationTypeTile> {
     if (!isPrefInizialized) return Container();
 
     NotificationReminderType? notificationReminderType =
-        NotificationReminderType?.values?.firstWhere((e) =>
+        NotificationReminderType.values.firstWhere((e) =>
             e.toString().split('.').last ==
             prefs.getString('transaction-reminder-cadence'));
 

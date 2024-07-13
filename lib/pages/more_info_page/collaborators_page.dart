@@ -76,7 +76,7 @@ class _CollaboratorsPageState extends ConsumerState<CollaboratorsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
@@ -100,14 +100,14 @@ class _CollaboratorsPageState extends ConsumerState<CollaboratorsPage> {
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child:
-          Padding(padding: EdgeInsets.all(8.0),
+          Padding(padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
                 ListView.separated(
                   itemCount: collaborators.length,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  separatorBuilder: (context, index) => Divider(),
+                  separatorBuilder: (context, index) => const Divider(),
                   itemBuilder: (context, i) {
                     List option = collaborators[i];
                     return InkWell(

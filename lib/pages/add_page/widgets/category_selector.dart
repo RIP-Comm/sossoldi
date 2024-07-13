@@ -88,7 +88,7 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> with Functi
                                       ? Icon(
                                           icon,
                                           size: 24.0,
-                                          color: Theme.of(context).colorScheme.background,
+                                          color: Theme.of(context).colorScheme.surface,
                                         )
                                       : const SizedBox(),
                                 ),
@@ -143,7 +143,7 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> with Functi
                               ? Icon(
                                   icon,
                                   size: 24.0,
-                                  color: Theme.of(context).colorScheme.background,
+                                  color: Theme.of(context).colorScheme.surface,
                                 )
                               : const SizedBox(),
                         ),

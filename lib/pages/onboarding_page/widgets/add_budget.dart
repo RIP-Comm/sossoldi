@@ -9,7 +9,7 @@ import '../../../providers/budgets_provider.dart';
 class AddBudget extends ConsumerStatefulWidget {
   final CategoryTransaction category;
 
-  const AddBudget(this.category, {Key? key}) : super(key: key);
+  const AddBudget(this.category, {super.key});
 
   @override
   ConsumerState<AddBudget> createState() => _AddBudgetState();

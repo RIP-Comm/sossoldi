@@ -9,7 +9,7 @@ import '/constants/style.dart';
 final showAccountIconsProvider = StateProvider.autoDispose<bool>((ref) => false);
 
 class AccountSetup extends ConsumerStatefulWidget {
-  const AccountSetup({Key? key}) : super(key: key);
+  const AccountSetup({super.key});
 
   @override
   ConsumerState<AccountSetup> createState() => _AccountSetupState();
@@ -191,7 +191,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                                 child: Icon(
                                   accountIconList[accountIcon],
                                   size: 36,
-                                  color: Theme.of(context).colorScheme.background,
+                                  color: Theme.of(context).colorScheme.surface,
                                 ),
                               ),
                             ),

@@ -5,7 +5,7 @@ import '../../../constants/functions.dart';
 import '../../../providers/transactions_provider.dart';
 
 class RecurrenceSelector extends ConsumerStatefulWidget {
-  const RecurrenceSelector({Key? key}) : super(key: key);
+  const RecurrenceSelector({super.key});
 
   @override
   ConsumerState<RecurrenceSelector> createState() => _RecurrenceSelectorState();

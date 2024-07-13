@@ -26,12 +26,11 @@ class Currency extends BaseEntity {
   final bool mainCurrency;
 
   const Currency(
-      {int? id,
+      {super.id,
       required this.symbol,
       required this.code,
       required this.name,
-      required this.mainCurrency})
-      : super(id: id);
+      required this.mainCurrency});
 
   Currency copy(
           {int? id,

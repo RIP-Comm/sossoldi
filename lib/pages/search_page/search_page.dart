@@ -18,10 +18,7 @@ class _SearchPage extends ConsumerState<SearchPage> {
   String? labelFilter;
 
   void _updateFutureTransactions() {
-    Map<int, bool> filterAccountList = Map.fromIterable(
-        ref.read(filterAccountProvider).entries,
-        key: (element) => element.key,
-        value: (element) => element.value);
+    Map<int, bool> filterAccountList = { for (var element in ref.read(filterAccountProvider).entries) element.key : element.value };
     setState(() {
       futureTransactions = TransactionMethods().selectAll(
           limit: 100,

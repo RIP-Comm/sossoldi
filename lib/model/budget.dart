@@ -32,14 +32,13 @@ class Budget extends BaseEntity {
   final bool active;
 
   const Budget(
-      {int? id,
+      {super.id,
       required this.idCategory,
       this.name,
       required this.amountLimit,
       required this.active,
-      DateTime? createdAt,
-      DateTime? updatedAt})
-      : super(id: id, createdAt: createdAt, updatedAt: updatedAt);
+      super.createdAt,
+      super.updatedAt});
 
   Budget copy(
           {int? id,
@@ -125,7 +124,7 @@ class BudgetMethods extends SossoldiDatabase {
     final db = await database;
 
     try {
-      final exists = await db.rawQuery("SELECT * FROM ${budgetTable} WHERE ${item.idCategory} = idCategory");
+      final exists = await db.rawQuery("SELECT * FROM $budgetTable WHERE ${item.idCategory} = idCategory");
       if(exists.isNotEmpty) {
         return true;
       }

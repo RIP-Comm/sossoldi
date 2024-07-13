@@ -70,7 +70,7 @@ class _PlanningPageState extends State<PlanningPage> {
               Text("Recurring payments",
                   style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(height: 10),
-              RecurringPaymentCard()
+              const RecurringPaymentCard()
             ]));
   }
 }

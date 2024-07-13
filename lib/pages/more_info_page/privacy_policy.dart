@@ -36,7 +36,7 @@ class _PrivacyPolicyPageState extends ConsumerState<PrivacyPolicyPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
@@ -60,7 +60,7 @@ class _PrivacyPolicyPageState extends ConsumerState<PrivacyPolicyPage> {
       body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
                 Text(

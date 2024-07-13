@@ -209,7 +209,7 @@ class SossoldiDatabase {
       var randomAccount = accounts[rnd.nextInt(accounts.length)];
       var randomNote = outNotes[rnd.nextInt(outNotes.length)];
       var randomCategory = categories[rnd.nextInt(categories.length)];
-      var idBankAccountTransfer;
+      int? idBankAccountTransfer;
       DateTime randomDate =  now.subtract(Duration(days: rnd.nextInt(dateInPastMaxRange), hours: rnd.nextInt(20), minutes: rnd.nextInt(50)));
 
       if (i % (countOfGeneratedTransaction/100) == 0) {
@@ -228,7 +228,11 @@ class SossoldiDatabase {
       }
 
       // put generated transaction in our list
-      demoTransactions.add('''('$randomDate', ${randomAmount.toStringAsFixed(2)}, '$randomType', '$randomNote', $randomCategory, $randomAccount, $idBankAccountTransfer, 0, null, null, null, null, '$randomDate', '$randomDate')''');
+      demoTransactions.add('''
+        ('$randomDate', ${randomAmount.toStringAsFixed(2)}, '$randomType', 
+         '$randomNote', $randomCategory, $randomAccount, $idBankAccountTransfer, 
+          0, null, null, null, null, '$randomDate', '$randomDate')
+      ''');
     }
 
     // add salary every month

@@ -313,7 +313,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                     style: Theme.of(context)
                         .textTheme
                         .bodyLarge!
-                        .copyWith(color: Theme.of(context).colorScheme.background),
+                        .copyWith(color: Theme.of(context).colorScheme.surface),
                   ),
                 ),
               ),

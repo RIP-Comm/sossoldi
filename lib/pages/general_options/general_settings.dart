@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 import '../../constants/style.dart';
 import '../../model/currency.dart';
@@ -83,7 +82,7 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                             ? Icons.dark_mode
                             : Icons.light_mode,
                         size: 25.0,
-                        color: Theme.of(context).colorScheme.background,
+                        color: Theme.of(context).colorScheme.surface,
                       ),
                     )),
               ],
@@ -108,7 +107,7 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                             child: Text(
                           currencyState.selectedCurrency.symbol,
                           style: TextStyle(
-                              color: Theme.of(context).colorScheme.background,
+                              color: Theme.of(context).colorScheme.surface,
                               fontSize: 25),
                         )))),
               ],

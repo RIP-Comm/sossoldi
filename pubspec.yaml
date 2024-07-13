@@ -63,6 +63,8 @@ dependencies:
   permission_handler: 11.2.0
   workmanager: 0.5.2
 
+  path: any
+  collection: any
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -48,7 +48,7 @@ class CurrencySelectorDialog {
                                             style: TextStyle(
                                                 color: Theme.of(context)
                                                     .colorScheme
-                                                    .background,
+                                                    .surface,
                                                 fontSize: 20)),
                                       ),
                                       title: Text(

@@ -303,7 +303,7 @@ class TransactionRow extends ConsumerWidget with Functions {
         ),
         if (!last)
           Container(
-            color: Theme.of(context).colorScheme.background,
+            color: Theme.of(context).colorScheme.surface,
             child: Divider(
               height: 1,
               indent: 12,
