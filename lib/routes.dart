@@ -20,6 +20,7 @@ import 'pages/settings_page.dart';
 import 'pages/statistics_page.dart';
 import 'pages/structure.dart';
 import 'pages/transactions_page/transactions_page.dart';
+import 'pages/google_drive_settings_page/google_drive_settings.dart';
 
 Route<dynamic> makeRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -59,6 +60,8 @@ Route<dynamic> makeRoute(RouteSettings settings) {
       return _cupertinoPageRoute(settings.name, const GeneralSettingsPage());
     case '/notifications-settings':
       return _cupertinoPageRoute(settings.name, const NotificationsSettings());
+    case '/google-drive':
+      return _cupertinoPageRoute(settings.name, const GoogleDriveSettings());
     case '/search':
       return _materialPageRoute(settings.name, const SearchPage());
     default:

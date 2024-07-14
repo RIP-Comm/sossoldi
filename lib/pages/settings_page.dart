@@ -51,6 +51,12 @@ var settingsOptions = [
     null,
   ],
   [
+    Icons.add_to_drive,
+    "Google Drive",
+    "Connect to Google Drive",
+    "/google-drive",
+  ],
+  [
     Icons.download_for_offline,
     "Import/Export",
     "Import or export data from a CSV file",
