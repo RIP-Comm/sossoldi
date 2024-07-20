@@ -3,6 +3,7 @@ import 'dart:io' show Platform;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sossoldi/providers/accounts_provider.dart';
 
 import '../../constants/functions.dart';
 import '../../constants/style.dart';
@@ -106,6 +107,8 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
           }
         }
       }
+      // ignore: unused_result
+      ref.refresh(accountsProvider);
     }
   }
 

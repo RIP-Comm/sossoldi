@@ -207,6 +207,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   ref.refresh(categoriesProvider);
                   ref.refresh(transactionsProvider);
                   ref.refresh(budgetsProvider);
+                  ref.refresh(dashboardProvider);
+                  ref.refresh(lastTransactionsProvider);
+                  ref.refresh(statisticsProvider);
                   showSuccessDialog(context, "DB Cleared");
                 });
               },

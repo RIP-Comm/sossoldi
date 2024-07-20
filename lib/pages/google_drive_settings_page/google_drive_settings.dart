@@ -54,15 +54,15 @@ class _GoogleDriveSettingsPageState extends ConsumerState<GoogleDriveSettings> {
                     backgroundColor: blue5,
                     child: IconButton(
                       color: blue5,
-                      onPressed: () {
+                      onPressed: () async {
                         if (googleDriveState.isGoogleDriveConnected) {
-                          ref
+                          await ref
                               .read(googleDriveNotifier.notifier)
                               .disconnectDrive();
                         } else {
-                          ref
+                          await ref
                               .read(googleDriveNotifier.notifier)
-                              .connectDrive();
+                              .connectDrive(ref);
                         }
                       },
                       icon: Icon(
@@ -99,37 +99,7 @@ class _GoogleDriveSettingsPageState extends ConsumerState<GoogleDriveSettings> {
                       children: [
                         Row(
                           children: [
-                            Text("Automatic Sync",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge!
-                                    .copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary)),
-                            const Spacer(),
-                            Switch(
-                              value: googleDriveState.isGoogleDriveSyncing,
-                              onChanged: (value) {
-                                if (value) {
-                                  ref
-                                      .read(googleDriveNotifier.notifier)
-                                      .syncDrive();
-                                } else {
-                                  ref
-                                      .read(googleDriveNotifier.notifier)
-                                      .stopSyncDrive();
-                                }
-                              },
-                              activeColor:
-                                  Theme.of(context).colorScheme.primary,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          children: [
-                            Text("Sync Now",
+                            Text("Push your data to Google Drive",
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleLarge!
@@ -143,21 +113,49 @@ class _GoogleDriveSettingsPageState extends ConsumerState<GoogleDriveSettings> {
                                 backgroundColor: blue5,
                                 child: IconButton(
                                   color: blue5,
-                                  onPressed: () {
-                                    ref
+                                  onPressed: () async {
+                                    await ref
                                         .read(googleDriveNotifier.notifier)
-                                        .syncNow();
+                                        .syncToDrive();
                                   },
                                   icon: Icon(
-                                    Icons.sync_outlined,
+                                    Icons.upload_outlined,
                                     size: 25.0,
-                                    color:
-                                        Theme.of(context).colorScheme.surface,
+                                    color: Theme.of(context).colorScheme.surface,
                                   ),
                                 )),
                           ],
                         ),
                         const SizedBox(height: 20),
+                        Row(
+                          children: [
+                            Text("Pull your data from Google Drive",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge!
+                                    .copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary)),
+                            const Spacer(),
+                            CircleAvatar(
+                                radius: 30.0,
+                                backgroundColor: blue5,
+                                child: IconButton(
+                                  color: blue5,
+                                  onPressed: () async {
+                                    await ref
+                                        .read(googleDriveNotifier.notifier)
+                                        .syncFromDrive(ref);
+                                  },
+                                  icon: Icon(
+                                    Icons.download_outlined,
+                                    size: 25.0,
+                                    color: Theme.of(context).colorScheme.surface,
+                                  ),
+                                )),
+                          ],
+                        ),
                       ],
                     )
                   : const SizedBox.shrink(key: ValueKey('disconnected')),
