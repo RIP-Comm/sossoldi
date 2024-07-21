@@ -280,7 +280,7 @@ class SossoldiDatabase {
   }
 
   Future reset() async {
-    // Reopen the database previosuly closed
+    // Reopen the database previoulsy closed
     _database = await _initDB();
   }
 

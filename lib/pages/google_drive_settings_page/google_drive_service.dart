@@ -101,6 +101,11 @@ class DriveService {
   final dbFile = drive.File();
   dbFile.name = SossoldiDatabase.dbName;
 
+  if (kIsWeb) {
+    // TODO
+    return;
+  }
+
   final media = drive.Media(
     Stream.fromIterable([await io.File(dbPath).readAsBytes()]),
     await io.File(dbPath).length(),
