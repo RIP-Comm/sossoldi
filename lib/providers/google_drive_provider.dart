@@ -18,6 +18,7 @@ final googleDriveNotifier = ChangeNotifierProvider(
 
 class GoogleDriveState extends ChangeNotifier {
   bool isGoogleDriveConnected = false;
+  bool isLoading = false;
   late AuthService _authService;
   late DriveService driveService;
 
@@ -34,24 +35,37 @@ class GoogleDriveState extends ChangeNotifier {
   }
   
   Future<void> connectDrive(WidgetRef ref) async {
+    isLoading = true;
+    notifyListeners();
+
     bool connect = await driveService.initialize();
     if (!connect) {
       print('Failed to connect to Google Drive');
+      isLoading = false;
+      notifyListeners();
       return;
     }
+
     await syncFromDrive(ref);
+    isLoading = false;
     isGoogleDriveConnected = true;
     notifyListeners();
   }
 
   Future<void> disconnectDrive() async {
+    isLoading = true;
+    notifyListeners();
+
     await _authService.signOut();
     isGoogleDriveConnected = false;
+    isLoading = false;
     notifyListeners();
   }
 
   Future<void> syncToDrive() async {
-    return driveService.uploadDatabase();
+    return driveService.uploadDatabase().onError((error, stackTrace) {
+      print('Failed to sync to Google Drive: $error');
+    });
   }
 
   Future<void> syncFromDrive(WidgetRef? ref) async {
@@ -67,6 +81,8 @@ class GoogleDriveState extends ChangeNotifier {
       ref.refresh(dashboardProvider);
       ref.refresh(lastTransactionsProvider);
       ref.refresh(statisticsProvider);
+    }).onError((error, stackTrace) {
+      print('Failed to sync from Google Drive: $error');
     });
   }
 }

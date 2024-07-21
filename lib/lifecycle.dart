@@ -30,7 +30,8 @@ class AppLifecycleManagerState extends State<AppLifecycleManager> with WidgetsBi
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused) {
+    print(state);
+    if (state == AppLifecycleState.inactive) {
       _handleAppPaused();
     }
   }

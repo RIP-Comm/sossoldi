@@ -56,16 +56,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
   }
 
   void _updateAmount() {
-    final selectedType = ref.read(transactionTypeProvider);
-
     var toBeWritten = getCleanAmountString();
-
-    if (selectedType == TransactionType.expense) {
-      // apply the minus sign if it's an expense
-      if (toBeWritten.isNotEmpty) {
-        toBeWritten = "-$toBeWritten";
-      }
-    }
 
     if (toBeWritten != amountController.text) {
       // only update the controller if the value is different

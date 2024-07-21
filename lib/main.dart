@@ -41,7 +41,6 @@ void main() async {
   });
 }
 
-// ignore: must_be_immutable
 class Launcher extends ConsumerWidget {
   const Launcher({super.key});
 

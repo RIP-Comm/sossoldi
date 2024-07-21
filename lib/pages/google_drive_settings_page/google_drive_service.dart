@@ -1,5 +1,6 @@
 import 'dart:io' as io;
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:googleapis/drive/v3.dart';
@@ -7,15 +8,26 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sossoldi/database/sossoldi_database.dart';
 
+final scopes = [drive.DriveApi.driveFileScope];
+
 class AuthService {
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: [drive.DriveApi.driveFileScope],
-  );
+  final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: scopes);
 
   Future<GoogleSignInAccount?> signInWithGoogle(bool silently) async {
     try {
-      final account = await (silently? _googleSignIn.signInSilently() : _googleSignIn.signIn());
+      final account = await (silently? _googleSignIn.signInSilently() : _googleSignIn.signIn()).onError((error, stackTrace) {
+        print('Sign in failed: $error');
+        return null;
+      });
       if (account == null) return null;
+
+      print("Signed in as ${account.displayName}");
+      if (kIsWeb) {
+        final bool isAuthorized = await _googleSignIn.requestScopes(scopes);
+        if (!isAuthorized) {
+          return null;
+        }
+      }
 
       final authHeaders = await account.authHeaders;
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -29,7 +41,10 @@ class AuthService {
   }
 
   Future<void> signOut() async {
-    await _googleSignIn.signOut();
+    await _googleSignIn.signOut().onError((error, stackTrace) {
+      print('Sign out failed: $error');
+      return null;
+    });
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('accessToken');
   }
@@ -57,7 +72,7 @@ class DriveService {
     _driveApi = driveApi;
   }
 
-  void _initializeDriveApi(Map<String, String> authHeaders) async {
+  void _initializeDriveApi(Map<String, String> authHeaders) {
     final authenticateClient = AuthenticatedClient(
       http.Client(),
       Map<String, String>.from(authHeaders),
@@ -116,6 +131,7 @@ class DriveService {
       uploadMedia: media,
     );
   }
+  print('Database uploaded');
 }
 
   Future<void> downloadDatabase() async {
@@ -134,9 +150,13 @@ class DriveService {
         ) as Media;
 
         await SossoldiDatabase.instance.close();
-        await fileStream.stream.pipe(io.File(dbPath).openWrite());
-        print('Database downloaded');
+        if (kIsWeb) {
+          // TODO: Implement web download
+        } else {
+          await fileStream.stream.pipe(io.File(dbPath).openWrite());
+        }
         await SossoldiDatabase.instance.reset();
+        print('Database downloaded');
       }
     } else {
       print('Database file not found');

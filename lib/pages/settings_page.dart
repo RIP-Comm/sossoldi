@@ -2,8 +2,9 @@
 
 // ignore_for_file: unused_result
 
-import 'dart:io';
+import 'dart:io' as io if (dart.library.html) 'dart:html';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sossoldi/providers/statistics_provider.dart';
@@ -66,7 +67,7 @@ var settingsOptions = [
     Icons.notifications_active,
     "Notifications",
     "Manage your notifications settings",
-    Platform.isAndroid ? "/notifications-settings" : null,
+    !kIsWeb && io.Platform.isAndroid ? "/notifications-settings" : null,
   ],
   [
     Icons.info,
