@@ -88,6 +88,10 @@ dev_dependencies:
   # Flutter test
   test: ^1.5.1
 
+  # For mockings
+  build_runner: ^2.1.2
+  mockito: ^5.0.17
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

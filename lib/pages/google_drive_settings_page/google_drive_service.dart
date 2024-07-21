@@ -53,6 +53,10 @@ class DriveService {
 
   DriveService(this._authService);
 
+  set driveApi(drive.DriveApi driveApi) {
+    _driveApi = driveApi;
+  }
+
   void _initializeDriveApi(Map<String, String> authHeaders) async {
     final authenticateClient = AuthenticatedClient(
       http.Client(),
