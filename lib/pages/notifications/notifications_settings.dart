@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../constants/style.dart';
 import '../../providers/settings_provider.dart';
 import '../../utils/worker_manager.dart';
-import 'widgets/NotificationTypeTile.dart';
+import 'widgets/notification_type_tyle.dart';
 
 class NotificationsSettings extends ConsumerStatefulWidget {
   const NotificationsSettings({super.key});
@@ -28,7 +28,7 @@ class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
   @override
   Widget build(BuildContext context) {
     final isReminderEnabled = ref.watch(transactionReminderSwitchProvider);
-    final notificationSettings = ref.watch(settingsProvider);
+    final _ = ref.watch(settingsProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -55,7 +55,7 @@ class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
                     child: Icon(
                       Icons.notifications_active,
                       size: 24.0,
-                      color: Theme.of(context).colorScheme.background,
+                      color: Theme.of(context).colorScheme.surface,
                     ),
                   ),
                   const SizedBox(width: 12.0),

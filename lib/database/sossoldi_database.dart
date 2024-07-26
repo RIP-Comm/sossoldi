@@ -1,7 +1,9 @@
 import 'dart:math'; // used for random number generation in demo data
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 
 // Models
 import '../model/bank_account.dart';
@@ -12,9 +14,17 @@ import '../model/recurring_transaction_amount.dart';
 import '../model/transaction.dart';
 
 class SossoldiDatabase {
-  static final SossoldiDatabase instance = SossoldiDatabase._init();
+  static SossoldiDatabase instance = SossoldiDatabase._init();
   static Database? _database;
   static String dbName = 'sossoldi.db';
+
+  static Future<String> getPath() async {
+    // On Android, it is typically data/data//databases, on iOS and MacOS, it is the Documents directory.
+    final databasePath = await getDatabasesPath();
+    final path = join(databasePath, dbName);
+
+    return path;
+  }
 
   // Zero args constructor needed to extend this class
   SossoldiDatabase({String? dbName}){
@@ -26,17 +36,17 @@ class SossoldiDatabase {
   Future<Database> get database async {
     if (_database != null) return _database!;
 
-    _database = await _initDB(dbName);
+    _database = await _initDB();
     return _database!;
   }
 
-  Future<Database> _initDB(String filePath) async {
-    // On Android, it is typically data/data//databases.
-    // On iOS and MacOS, it is the Documents directory.
-    final databasePath = await getDatabasesPath();
-    // Directory databasePath = await getApplicationDocumentsDirectory();
-
-    final path = join(databasePath, filePath);
+  Future<Database> _initDB() async {
+    if (kIsWeb) {
+      // We need to change default factory on the web
+      databaseFactory = databaseFactoryFfiWeb;
+    } 
+    final path = await getPath();
+    
     return await openDatabase(path, version: 1, onCreate: _createDB);
   }
 
@@ -205,7 +215,7 @@ class SossoldiDatabase {
       var randomAccount = accounts[rnd.nextInt(accounts.length)];
       var randomNote = outNotes[rnd.nextInt(outNotes.length)];
       var randomCategory = categories[rnd.nextInt(categories.length)];
-      var idBankAccountTransfer;
+      int? idBankAccountTransfer;
       DateTime randomDate =  now.subtract(Duration(days: rnd.nextInt(dateInPastMaxRange), hours: rnd.nextInt(20), minutes: rnd.nextInt(50)));
 
       if (i % (countOfGeneratedTransaction/100) == 0) {
@@ -224,7 +234,11 @@ class SossoldiDatabase {
       }
 
       // put generated transaction in our list
-      demoTransactions.add('''('$randomDate', ${randomAmount.toStringAsFixed(2)}, '$randomType', '$randomNote', $randomCategory, $randomAccount, $idBankAccountTransfer, 0, null, null, null, null, '$randomDate', '$randomDate')''');
+      demoTransactions.add('''
+        ('$randomDate', ${randomAmount.toStringAsFixed(2)}, '$randomType', 
+         '$randomNote', $randomCategory, $randomAccount, $idBankAccountTransfer, 
+          0, null, null, null, null, '$randomDate', '$randomDate')
+      ''');
     }
 
     // add salary every month
@@ -263,6 +277,11 @@ class SossoldiDatabase {
   Future close() async {
     final database = await instance.database;
     database.close();
+  }
+
+  Future reset() async {
+    // Reopen the database previoulsy closed
+    _database = await _initDB();
   }
 
   // WARNING: FOR DEV/TEST PURPOSES ONLY!!

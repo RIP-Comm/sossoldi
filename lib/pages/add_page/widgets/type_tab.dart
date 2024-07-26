@@ -6,8 +6,8 @@ class TypeTab extends StatelessWidget {
     this.selectedType,
     this.title,
     this.color, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final bool selectedType;
   final String title;

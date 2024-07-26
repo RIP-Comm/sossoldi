@@ -92,9 +92,7 @@ enum AlertDialogType { info, success, warning, error }
 
 class _AlertDialog extends StatelessWidget {
   const _AlertDialog(
-      this._dialogType, this._text, this._primaryActionText, this._primaryActionFunction, this._secondaryActionText, this._secondaryActionFunction,
-      {Key? key})
-      : super(key: key);
+      this._dialogType, this._text, this._primaryActionText, this._primaryActionFunction, this._secondaryActionText, this._secondaryActionFunction);
 
   final AlertDialogType _dialogType;
   final String _text;

@@ -227,10 +227,10 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                               ),
                               child: TextButton.icon(
                                 style: ButtonStyle(
-                                  maximumSize: MaterialStateProperty.all(const Size(130, 48)),
-                                  backgroundColor: MaterialStateProperty.all(
+                                  maximumSize: WidgetStateProperty.all(const Size(130, 48)),
+                                  backgroundColor: WidgetStateProperty.all(
                                       Theme.of(context).colorScheme.surface),
-                                  shape: MaterialStateProperty.all(
+                                  shape: WidgetStateProperty.all(
                                     RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(8.0),
                                     ),
@@ -268,6 +268,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                           BankAccount account = accounts[i];
                           return AccountsSum(account: account);
                         }
+                        return null;
 
                       },
                     ),
@@ -291,7 +292,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                   error: (err, stack) => Text('Error: $err'),
                 ),
                 const SizedBox(height: 28),
-                BudgetsSection()
+                const BudgetsSection()
               ],
             ),
           ),

@@ -13,7 +13,7 @@ class BudgetCategorySelector extends ConsumerStatefulWidget {
   final CategoryTransaction initSelectedCategory;
   final Function(Budget) onBudgetChanged;
 
-  BudgetCategorySelector(
+  const BudgetCategorySelector(
       {super.key,
       required this.categories,
       required this.budget,

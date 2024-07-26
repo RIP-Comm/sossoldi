@@ -36,7 +36,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
     final categoryColor = ref.watch(categoryColorProvider);
     final showCategoryIcons = ref.watch(showCategoryIconsProvider);
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(title: Text("${selectedCategory == null ? "New" : "Edit"} Category")),
       body: Stack(
         children: [
@@ -109,7 +109,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                             child: Icon(
                               iconList[categoryIcon],
                               size: 48,
-                              color: Theme.of(context).colorScheme.background,
+                              color: Theme.of(context).colorScheme.surface,
                             ),
                           ),
                         ),
@@ -321,7 +321,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                     style: Theme.of(context)
                         .textTheme
                         .bodyLarge!
-                        .copyWith(color: Theme.of(context).colorScheme.background),
+                        .copyWith(color: Theme.of(context).colorScheme.surface),
                   ),
                 ),
               ),

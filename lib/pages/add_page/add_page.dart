@@ -3,6 +3,7 @@ import 'dart:io' show Platform;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sossoldi/providers/accounts_provider.dart';
 
 import '../../constants/functions.dart';
 import '../../constants/style.dart';
@@ -55,16 +56,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
   }
 
   void _updateAmount() {
-    final selectedType = ref.read(transactionTypeProvider);
-
     var toBeWritten = getCleanAmountString();
-
-    if (selectedType == TransactionType.expense) {
-      // apply the minus sign if it's an expense
-      if (toBeWritten.isNotEmpty) {
-        toBeWritten = "-$toBeWritten";
-      }
-    }
 
     if (toBeWritten != amountController.text) {
       // only update the controller if the value is different
@@ -106,6 +98,8 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
           }
         }
       }
+      // ignore: unused_result
+      ref.refresh(accountsProvider);
     }
   }
 
@@ -313,7 +307,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                     style: Theme.of(context)
                         .textTheme
                         .bodyLarge!
-                        .copyWith(color: Theme.of(context).colorScheme.background),
+                        .copyWith(color: Theme.of(context).colorScheme.surface),
                   ),
                 ),
               ),

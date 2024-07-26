@@ -85,7 +85,7 @@ class _StatsPageState extends ConsumerState<StatsPage> with Functions {
                             children: [
                               Container(
                                 decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.background,
+                                  color: Theme.of(context).colorScheme.surface,
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                                 padding: const EdgeInsets.all(4.0),

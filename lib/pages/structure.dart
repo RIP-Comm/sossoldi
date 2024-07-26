@@ -42,7 +42,7 @@ class _StructureState extends ConsumerState<Structure> {
       // Prevent the fab moving up when the keyboard is opened
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: selectedIndex == 0 ? Theme.of(context).colorScheme.tertiary : Theme.of(context).colorScheme.background,
+        backgroundColor: selectedIndex == 0 ? Theme.of(context).colorScheme.tertiary : Theme.of(context).colorScheme.surface,
         title: Text(
           _pagesTitle.elementAt(selectedIndex),
         ),
@@ -58,7 +58,7 @@ class _StructureState extends ConsumerState<Structure> {
             ),
             child: Icon(
               Icons.search,
-              color: Theme.of(context).colorScheme.background,
+              color: Theme.of(context).colorScheme.surface,
             ),
           ),
         ),
@@ -75,7 +75,7 @@ class _StructureState extends ConsumerState<Structure> {
               ),
               child: Icon(
                 Icons.settings,
-                color: Theme.of(context).colorScheme.background,
+                color: Theme.of(context).colorScheme.surface,
               ),
             ),
           ),
@@ -121,7 +121,7 @@ class _StructureState extends ConsumerState<Structure> {
         child: Icon(
           Icons.add_rounded,
           size: 55,
-          color: Theme.of(context).colorScheme.background,
+          color: Theme.of(context).colorScheme.surface,
         ),
         onPressed: () {
           ref.read(transactionsProvider.notifier).reset();

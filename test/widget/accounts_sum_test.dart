@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:flutter/material.dart';
 import "dart:math";
@@ -45,7 +44,7 @@ void main() {
             } else {
               final accountSum = snapshot.data ?? 0;
               // TODO need to test total amount with some transactions too
-              expect(find.text("${accountSum.toStringAsFixed(2).replaceAll('.', ',')}", findRichText: true), findsOneWidget);
+              expect(find.text(accountSum.toStringAsFixed(2).replaceAll('.', ','), findRichText: true), findsOneWidget);
               return const Text('Ok!');
             }
           }

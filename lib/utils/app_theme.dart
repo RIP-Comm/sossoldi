@@ -205,12 +205,10 @@ ColorScheme customColorScheme = const ColorScheme(
   secondary: blue5,
   tertiary: blue7,
   surface: grey3,
-  background: white,
   error: red,
   onPrimary: white,
   onSecondary: white,
   onSurface: blue1,
-  onBackground: blue1,
   onError: black,
   brightness: Brightness.light,
 );
@@ -220,13 +218,11 @@ ColorScheme darkCustomColorScheme = const ColorScheme(
   primaryContainer: darkGrey4,
   secondary: darkBlue5,
   tertiary: darkBlue7,
-  surface: darkBlue7, //darkBlue3
-  background: darkWhite,
+  surface: darkBlue7,
   error: darkRed,
   onPrimary: darkWhite,
   onSecondary: darkWhite,
   onSurface: darkBlue1,
-  onBackground: darkBlue1,
   onError: darkBlack,
   brightness: Brightness.dark,
 );

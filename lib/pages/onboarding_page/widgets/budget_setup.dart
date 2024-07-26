@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +14,7 @@ import 'add_category_button.dart';
 import 'category_button.dart';
 
 class BudgetSetup extends ConsumerStatefulWidget {
-  const BudgetSetup({Key? key}) : super(key: key);
+  const BudgetSetup({super.key});
 
   @override
   ConsumerState<BudgetSetup> createState() => _BudgetSetupState();

@@ -2,20 +2,16 @@ import 'package:circular_menu/circular_menu.dart';
 import 'package:flutter/material.dart';
 
 class CircularMenuItemWrap extends CircularMenuItem {
-  final VoidCallback onTap;
   final String text;
-  final Color? iconColor;
-  final Color? color;
-  final IconData? icon;
 
-  CircularMenuItemWrap({
-    required this.onTap,
-    this.color,
+  CircularMenuItemWrap({super.key,
+    required super.onTap,
+    super.color,
     required this.text,
-    this.icon,
-    this.iconColor,
-  }) : super(onTap: onTap, icon: icon, iconColor: iconColor, color: color);
-
+    super.icon,
+    super.iconColor,  
+  });
+        
   @override
   Widget build(BuildContext context) {
     return Column(

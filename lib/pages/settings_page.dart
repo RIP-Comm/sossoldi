@@ -2,8 +2,9 @@
 
 // ignore_for_file: unused_result
 
-import 'dart:io';
+import 'dart:io' as io if (dart.library.html) 'dart:html';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sossoldi/providers/statistics_provider.dart';
@@ -51,6 +52,12 @@ var settingsOptions = [
     null,
   ],
   [
+    Icons.add_to_drive,
+    "Google Drive",
+    "Connect to Google Drive",
+    "/google-drive",
+  ],
+  [
     Icons.download_for_offline,
     "Import/Export",
     "Import or export data from a CSV file",
@@ -60,7 +67,7 @@ var settingsOptions = [
     Icons.notifications_active,
     "Notifications",
     "Manage your notifications settings",
-    Platform.isAndroid ? "/notifications-settings" : null,
+    !kIsWeb && io.Platform.isAndroid ? "/notifications-settings" : null,
   ],
   [
     Icons.info,
@@ -97,7 +104,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                     child: Icon(
                       Icons.settings,
                       size: 28.0,
-                      color: Theme.of(context).colorScheme.background,
+                      color: Theme.of(context).colorScheme.surface,
                     ),
                   ),
                   const SizedBox(width: 12.0),
@@ -201,6 +208,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   ref.refresh(categoriesProvider);
                   ref.refresh(transactionsProvider);
                   ref.refresh(budgetsProvider);
+                  ref.refresh(dashboardProvider);
+                  ref.refresh(lastTransactionsProvider);
+                  ref.refresh(statisticsProvider);
                   showSuccessDialog(context, "DB Cleared");
                 });
               },

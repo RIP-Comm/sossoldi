@@ -219,7 +219,7 @@ class _LineChartSample2State extends State<LineChartWidget> {
             LineTooltipItem first = LineTooltipItem(
               '$dateFormat \n\n',
               TextStyle(
-                color: Theme.of(context).colorScheme.onBackground,
+                color: Theme.of(context).colorScheme.onSurface,
                 fontWeight: FontWeight.bold,
               ),
               children: [

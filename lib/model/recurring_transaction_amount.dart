@@ -30,14 +30,13 @@ class RecurringTransactionAmount extends BaseEntity {
   final int? idTransaction;
 
   const RecurringTransactionAmount(
-      {int? id,
+      {super.id,
       required this.from,
       required this.to,
       required this.amount,
       required this.idTransaction,
-      DateTime? createdAt,
-      DateTime? updatedAt})
-      : super(id: id, createdAt: createdAt, updatedAt: updatedAt);
+      super.createdAt,
+      super.updatedAt});
 
   RecurringTransactionAmount copy(
           {int? id,

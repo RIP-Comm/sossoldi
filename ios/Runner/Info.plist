@@ -49,5 +49,21 @@
 		<true/>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<!-- Google Sign-in Section -->
+		<key>GIDClientID</key>
+		<string>228827034667-iic4ese3m78q7enpiv8p9oqma7qknoof.apps.googleusercontent.com</string>
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<!-- TODO Replace this value: -->
+					<string>com.googleusercontent.apps.228827034667-iic4ese3m78q7enpiv8p9oqma7qknoof</string>
+				</array>
+			</dict>
+		</array>
+		<!-- End of the Google Sign-in Section -->
 	</dict>
 </plist>

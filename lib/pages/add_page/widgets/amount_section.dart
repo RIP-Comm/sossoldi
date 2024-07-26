@@ -54,7 +54,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
           Container(
             height: 30,
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.background,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: const BorderRadius.all(Radius.circular(4)),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 2),

@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +61,7 @@ class AccountDialog extends ConsumerWidget with Functions {
                   padding: EdgeInsets.all(8.0),
                 ),
                 LineChartWidget(
-                  lineData: [
+                  lineData: const [
                     FlSpot(0, 3),
                     FlSpot(1, 1.3),
                     FlSpot(2, -2),
@@ -81,10 +80,10 @@ class AccountDialog extends ConsumerWidget with Functions {
                     FlSpot(15, -4.5),
                     FlSpot(16, 2.5),
                   ],
-                  lineColor: Color(0xffffffff),
-                  line2Data: <FlSpot>[],
-                  line2Color: Color(0xffffffff),
-                  colorBackground: Color(0xff356CA3),
+                  lineColor: const Color(0xffffffff),
+                  line2Data: const <FlSpot>[],
+                  line2Color: const Color(0xffffffff),
+                  colorBackground: const Color(0xff356CA3),
                   period: Period.month,
                 ),
                 const Padding(

@@ -7,7 +7,7 @@ import '../../../model/budget.dart';
 import '../../../providers/currency_provider.dart';
 
 class BudgetPieChart extends ConsumerStatefulWidget {
-  BudgetPieChart({super.key, required this.budgets});
+  const BudgetPieChart({super.key, required this.budgets});
 
   final List<Budget> budgets;
 

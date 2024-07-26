@@ -3,7 +3,7 @@ import '/pages/onboarding_page/widgets/budget_setup.dart';
 import '/constants/style.dart';
 
 class Onboarding extends StatefulWidget {
-  const Onboarding({Key? key}) : super(key: key);
+  const Onboarding({super.key});
 
   @override
   State<Onboarding> createState() => _OnboardingState();
