@@ -19,7 +19,6 @@ void main() {
     late DriveService driveService;
 
     setUp(() {
-      sqfliteFfiInit();
       databaseFactory = databaseFactoryFfi;
       // Initialize database with mock data
       SossoldiDatabase.instance.fillDemoData(countOfGeneratedTransaction: 100);
