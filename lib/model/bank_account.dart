@@ -149,8 +149,8 @@ class BankAccountMethods extends SossoldiDatabase {
     final db = await database;
 
     final orderByASC = '${BankAccountFields.createdAt} ASC';
-    final where =
-        '${BankAccountFields.active} = 1 AND (${TransactionFields.recurring} = 0 OR ${TransactionFields.recurring} is NULL)';
+    final where = '${BankAccountFields.active} = 1 ';
+    final recurringFilter = '(t.${TransactionFields.recurring} = 0 OR t.${TransactionFields.recurring} IS NULL)';
 
     final result = await db.rawQuery('''
       SELECT b.*, (b.${BankAccountFields.startingValue} +
@@ -160,7 +160,10 @@ class BankAccountMethods extends SossoldiDatabase {
                ELSE 0 END)
     ) as ${BankAccountFields.total}
       FROM $bankAccountTable as b
-      LEFT JOIN "$transactionTable" as t ON t.${TransactionFields.idBankAccount} = b.${BankAccountFields.id} OR t.${TransactionFields.idBankAccountTransfer} = b.${BankAccountFields.id}
+      LEFT JOIN "$transactionTable" as t
+             ON (t.${TransactionFields.idBankAccount} = b.${BankAccountFields.id} OR
+                 t.${TransactionFields.idBankAccountTransfer} = b.${BankAccountFields.id})
+             AND $recurringFilter
       WHERE $where
       GROUP BY b.${BankAccountFields.id}
       ORDER BY $orderByASC
