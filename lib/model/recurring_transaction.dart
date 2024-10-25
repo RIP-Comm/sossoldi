@@ -108,7 +108,7 @@ class RecurringTransaction extends BaseEntity {
       RecurringTransaction(
           id: id ?? this.id,
           fromDate: fromDate ?? this.fromDate,
-          toDate: toDate,
+          toDate: toDate ?? this.toDate,
           amount: amount ?? this.amount,
           note: note ?? this.note,
           recurrency: recurrency ?? this.recurrency,
@@ -156,13 +156,13 @@ class RecurringTransaction extends BaseEntity {
 class RecurringTransactionMethods extends SossoldiDatabase {
   Future<RecurringTransaction?> insert(RecurringTransaction item) async {
     try{
-    final db = await database;
-    final id = await db.insert(recurringTransactionTable, item.toJson());
-    return item.copy(id: id);
+      final db = await database;
+      final id = await db.insert(recurringTransactionTable, item.toJson());
+      return item.copy(id: id);
     } catch (e){
       print(e);
     }
-    return null; 
+    return null;
   }
 
 
@@ -208,16 +208,6 @@ class RecurringTransactionMethods extends SossoldiDatabase {
     return result.map((json) => RecurringTransaction.fromJson(json)).toList();
   }
 
-  void test() async {
-    final db = await database;
-
-    final orderBy = '${RecurringTransactionFields.createdAt} ASC';
-
-    final result = await db.rawQuery("SELECT * FROM $recurringTransactionTable");
-
-    result.map((json) => RecurringTransaction.fromJson(json)).toList().forEach((element) { print(element.toJson()); });
-  }
-
   Future<int> updateItem(RecurringTransaction item) async {
     final db = await database;
 
@@ -248,8 +238,6 @@ class RecurringTransactionMethods extends SossoldiDatabase {
     }
 
     for (var transaction in transactions) {
-      print("-------- transaction: ${transaction.note} -----------");
-
       DateTime lastTransactionDate;
 
       try {
@@ -261,8 +249,6 @@ class RecurringTransactionMethods extends SossoldiDatabase {
       String entity = recurrenciesMap[transaction.recurrency]?['entity'] ?? 'UNMAPPED';
       int entityAmt = recurrenciesMap[transaction.recurrency]?['amount'] ?? 0;
 
-      print(recurrenciesMap[transaction.recurrency]);
-
       try {
         if (entityAmt == 0) {
           throw Exception('No amount provided for entity "$entity"');
@@ -272,7 +258,6 @@ class RecurringTransactionMethods extends SossoldiDatabase {
 
       } catch (e) {
         // TODO show an error to the user?
-        print("ERROR TRYING TO POPULATE RECURRING TRANSACTIONS: ${e.toString()}");
       }
     }
   }
@@ -324,8 +309,6 @@ class RecurringTransactionMethods extends SossoldiDatabase {
         throw Exception('No scope provided');
     }
 
-    print("periods: $periods");
-
     // for each period passed, insert a new transaction
     for (int i = 0; i < periods; i++) {
       switch (scope) {
@@ -358,7 +341,6 @@ class RecurringTransactionMethods extends SossoldiDatabase {
 
     for (var tr in transactions2Add) {
       // insert a new transaction
-      print(tr);
 
       Transaction addTr = Transaction(
         date: tr,

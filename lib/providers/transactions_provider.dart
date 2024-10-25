@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../model/bank_account.dart';
@@ -119,11 +121,11 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
     });
   }
 
-  Future<void> addRecurringTransaction(num amount, String label) async {
+  Future<RecurringTransaction?> addRecurringTransaction(num amount, String label) async {
     state = const AsyncValue.loading();
 
     final date = ref.read(dateProvider);
-    final toDate = date.add(const Duration(days: 10));
+    final toDate = ref.read(endDateProvider);
     final bankAccount = ref.read(bankAccountProvider)!;
     final category = ref.read(categoryProvider);
     final recurrency = ref.read(intervalProvider.notifier).state;
@@ -141,13 +143,18 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
       lastInsertion: date
     );
 
+    // Here we need the recurringTransaction just inserted, to get and return a model with also his ID
+    RecurringTransaction? insertedTransaction;
+
     state = await AsyncValue.guard(() async {
-      await RecurringTransactionMethods().insert(transaction);
+      insertedTransaction = await RecurringTransactionMethods().insert(transaction);
       return _getTransactions(update: true);
     });
+
+    return insertedTransaction;
   }
 
-  Future<void> updateTransaction(num amount, String label) async {
+  Future<void> updateTransaction(num amount, String label, [int? recurringTransactionId]) async {
     final type = ref.read(transactionTypeProvider);
     final date = ref.read(dateProvider);
     final bankAccount = ref.read(bankAccountProvider)!;
@@ -162,6 +169,8 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
           idBankAccount: bankAccount.id!,
           idBankAccountTransfer: bankAccountTransfer?.id,
           idCategory: category?.id,
+          idRecurringTransaction: recurringTransactionId,
+          recurring: recurringTransactionId != null ? true:false
         );
 
     state = const AsyncValue.loading();
@@ -194,11 +203,15 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
       return _getTransactions(update: true);
     });
   }
+  Future<void> addRecurringDataToTransaction(num idTransaction, num idRecurringTransaction) async {
+
+  }
 
   Future<void> transactionUpdateState(dynamic transaction) async {
     if(transaction is Transaction) {
       ref.read(selectedTransactionUpdateProvider.notifier).state = transaction;
-      ref.read(selectedRecurringPayProvider.notifier).state = false;
+      ref.read(selectedRecurringPayProvider.notifier).state = transaction.recurring;
+
       final accountList = ref.watch(accountsProvider);
       if (transaction.type != TransactionType.transfer) {
         if (transaction.idCategory != null) {

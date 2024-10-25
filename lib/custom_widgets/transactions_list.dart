@@ -187,7 +187,10 @@ class TransactionRow extends ConsumerWidget with Functions {
                   .read(transactionsProvider.notifier)
                   .transactionUpdateState(transaction)
                   .whenComplete(
-                      () => Navigator.of(context).pushNamed("/add-page"));
+                      () => Navigator.of(context).pushNamed(
+                          "/add-page",
+                          arguments: {'recurrencyEditingPermitted': !transaction.recurring}
+                      ));
             },
             borderRadius: BorderRadius.vertical(
               top: first ? const Radius.circular(8) : Radius.zero,

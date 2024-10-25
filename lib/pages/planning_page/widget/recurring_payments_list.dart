@@ -80,7 +80,10 @@ class _RecurringPaymentSectionState extends ConsumerState<RecurringPaymentSectio
                 ref.read(categoryProvider.notifier).state = null,
                 ref.read(intervalProvider.notifier).state = Recurrence.monthly,
                 ref.read(endDateProvider.notifier).state = null,
-                Navigator.of(context).pushNamed("/add-page").then((value) => setState(() { _refreshData(); }))
+                Navigator.of(context).pushNamed(
+                    "/add-page",
+                    arguments: {'recurrencyEditingPermitted': false},
+                ).then((value) => setState(() { _refreshData(); }))
               },
               label: Text(
                 "Add recurring payment",

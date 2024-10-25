@@ -9,10 +9,10 @@ import '../../../constants/style.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../add_page/widgets/account_selector.dart';
 import '../../add_page/widgets/amount_widget.dart';
-import '../../add_page/widgets/category_selector.dart';
 import '../../add_page/widgets/details_list_tile.dart';
+import '../../add_page/widgets/details_list_disabled_tile.dart';
 import '../../add_page/widgets/label_list_tile.dart';
-import '../../add_page/widgets/recurrence_list_tile.dart';
+import '../../add_page/widgets/recurrence_list_tile_edit.dart';
 
 class EditRecurringTransaction extends ConsumerStatefulWidget {
   const EditRecurringTransaction({super.key});
@@ -41,14 +41,17 @@ class _EditRecurringTransactionState
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Editing recurring transaction"),
-        leadingWidth: 100,
+        title: const Text(
+            "Edit recurring transaction",
+            style: TextStyle(fontSize: 20.0),
+        ),
+        leadingWidth: 75,
         leading: TextButton(
           onPressed: () => Navigator.pop(context),
           child: Text(
             'Cancel',
             style:
-                Theme.of(context).textTheme.titleMedium!.copyWith(color: blue5),
+                Theme.of(context).textTheme.titleSmall!.copyWith(color: blue5),
           ),
         ),
         actions: [
@@ -82,7 +85,7 @@ class _EditRecurringTransactionState
                   alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.only(left: 16, top: 32, bottom: 8),
                   child: Text(
-                    "DETAILS",
+                    "DETAILS (any change will affect only future transactions)",
                     style: Theme.of(context)
                         .textTheme
                         .labelLarge!
@@ -126,74 +129,18 @@ class _EditRecurringTransactionState
                         },
                       ),
                       const Divider(height: 1, color: grey1),
-                      DetailsListTile(
+                      NonEditableDetailsListTile(
                         title: "Category",
                         icon: Icons.list_alt,
-                        value: ref.watch(categoryProvider)?.name,
-                        callback: () {
-                          FocusManager.instance.primaryFocus?.unfocus();
-                          showModalBottomSheet(
-                            context: context,
-                            clipBehavior: Clip.antiAliasWithSaveLayer,
-                            isScrollControlled: true,
-                            useSafeArea: true,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10.0),
-                                topRight: Radius.circular(10.0),
-                              ),
-                            ),
-                            builder: (_) => DraggableScrollableSheet(
-                              expand: false,
-                              minChildSize: 0.5,
-                              initialChildSize: 0.7,
-                              maxChildSize: 0.9,
-                              builder: (_, controller) => CategorySelector(
-                                scrollController: controller,
-                              ),
-                            ),
-                          );
-                        },
+                        value: ref.watch(categoryProvider)?.name
                       ),
                       const Divider(height: 1, color: grey1),
-                      DetailsListTile(
-                        title: "Date",
+                      NonEditableDetailsListTile(
+                        title: "Date Start",
                         icon: Icons.calendar_month,
-                        value: dateToString(ref.watch(dateProvider)),
-                        callback: () async {
-                          FocusManager.instance.primaryFocus?.unfocus();
-                          if (Platform.isIOS) {
-                            showCupertinoModalPopup(
-                              context: context,
-                              builder: (_) => Container(
-                                height: 300,
-                                color: white,
-                                child: CupertinoDatePicker(
-                                  initialDateTime: ref.watch(dateProvider),
-                                  minimumYear: 2015,
-                                  maximumYear: 2050,
-                                  mode: CupertinoDatePickerMode.date,
-                                  onDateTimeChanged: (date) => ref
-                                      .read(dateProvider.notifier)
-                                      .state = date,
-                                ),
-                              ),
-                            );
-                          } else if (Platform.isAndroid) {
-                            final DateTime? pickedDate = await showDatePicker(
-                              context: context,
-                              initialDate: ref.watch(dateProvider),
-                              firstDate: DateTime(2015),
-                              lastDate: DateTime(2050),
-                            );
-                            if (pickedDate != null) {
-                              ref.read(dateProvider.notifier).state =
-                                  pickedDate;
-                            }
-                          }
-                        },
+                        value: dateToString(ref.watch(dateProvider))
                       ),
-                      const RecurrenceListTile(),
+                      const RecurrenceListTileEdit(),
                     ],
                   ),
                 ),

@@ -16,7 +16,9 @@ import 'widgets/label_list_tile.dart';
 import 'widgets/recurrence_list_tile.dart';
 
 class AddPage extends ConsumerStatefulWidget {
-  const AddPage({super.key});
+  final bool recurrencyEditingPermitted;
+
+  const AddPage({super.key, this.recurrencyEditingPermitted = true});
 
   @override
   ConsumerState<AddPage> createState() => _AddPageState();
@@ -25,6 +27,7 @@ class AddPage extends ConsumerStatefulWidget {
 class _AddPageState extends ConsumerState<AddPage> with Functions {
   final TextEditingController amountController = TextEditingController();
   final TextEditingController noteController = TextEditingController();
+  bool? recurrencyEditingPermittedFromRoute;
 
   @override
   void initState() {
@@ -36,6 +39,18 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
     amountController.addListener(_updateAmount);
 
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Check if arguments are being passed
+    final args = ModalRoute.of(context)?.settings.arguments;
+
+    if (recurrencyEditingPermittedFromRoute == null) {
+      final argsMap = args as Map<String, dynamic>?;
+      recurrencyEditingPermittedFromRoute = argsMap?['recurrencyEditingPermitted'] ?? widget.recurrencyEditingPermitted;
+    }
   }
 
   @override
@@ -81,13 +96,31 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
 
     final cleanAmount = getCleanAmountString();
 
-    // Check that an amount it's inserted
+    // Check that an amount has been provided
     if (cleanAmount != '') {
       if (selectedTransaction != null) {
-        ref
-            .read(transactionsProvider.notifier)
-            .updateTransaction(currencyToNum(cleanAmount), noteController.text)
-            .whenComplete(() => Navigator.of(context).pop());
+        // if the original transaction is not recurrent, but user sets a recurrency, add the corrispondent record
+        // and edit the original transaction
+        if(ref.read(selectedRecurringPayProvider) && !selectedTransaction.recurring) {
+          ref
+              .read(transactionsProvider.notifier)
+              .addRecurringTransaction(currencyToNum(cleanAmount), noteController.text)
+              .then((value) {
+                if (value != null) {
+                  ref
+                      .read(transactionsProvider.notifier)
+                      .updateTransaction(currencyToNum(cleanAmount), noteController.text, value.id)
+                      .whenComplete(() => Navigator.of(context).pop());
+                }
+              });
+        } else {
+          ref
+              .read(transactionsProvider.notifier)
+              .updateTransaction(currencyToNum(cleanAmount), noteController.text)
+              .whenComplete(() => Navigator.of(context).pop());
+        }
+
+
       } else {
         if (selectedType == TransactionType.transfer) {
           if (ref.read(bankAccountTransferProvider) != null) {
@@ -109,7 +142,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                 .read(transactionsProvider.notifier)
                 .addTransaction(currencyToNum(cleanAmount), noteController.text)
                 .whenComplete(() => Navigator.of(context).pop());
-            }        
+            }
           }
         }
       }
@@ -279,7 +312,10 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                         },
                       ),
                       if (selectedType == TransactionType.expense) ...[
-                        const RecurrenceListTile(),
+                        RecurrenceListTile(
+                            recurrencyEditingPermitted: widget.recurrencyEditingPermitted,
+                            selectedTransaction: ref.read(selectedTransactionUpdateProvider)
+                        )
                       ],
                     ],
                   ),

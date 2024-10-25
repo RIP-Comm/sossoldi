@@ -31,7 +31,11 @@ Route<dynamic> makeRoute(RouteSettings settings) {
     case '/dashboard':
       return _materialPageRoute(settings.name, const HomePage());
     case '/add-page':
-      return _materialPageRoute(settings.name, const AddPage());
+      final args = settings.arguments as Map<String, dynamic>?;
+      return _materialPageRoute(
+        settings.name,
+        AddPage(recurrencyEditingPermitted: args?['recurrencyEditingPermitted'] ?? true),
+      );
     case '/edit-recurring-transaction':
       return _materialPageRoute(settings.name, const EditRecurringTransaction());
     case '/transactions':

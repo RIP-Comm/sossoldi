@@ -11,14 +11,20 @@ import '../../../model/transaction.dart';
 import 'recurrence_selector.dart';
 
 class RecurrenceListTile extends ConsumerWidget with Functions {
+  final bool recurrencyEditingPermitted;
+  final Transaction? selectedTransaction;
+
   const RecurrenceListTile({
     super.key,
+    required this.recurrencyEditingPermitted,
+    required this.selectedTransaction, // Add this line
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isRecurring = ref.watch(selectedRecurringPayProvider);
     final endDate = ref.watch(endDateProvider);
+    bool isSnackBarVisible = false;
 
     return Column(
       children: [
@@ -46,95 +52,158 @@ class RecurrenceListTile extends ConsumerWidget with Functions {
                 .titleLarge!
                 .copyWith(color: Theme.of(context).colorScheme.primary),
           ),
-          trailing: Switch.adaptive(
-            value: isRecurring,
-            onChanged: (select) =>
-                ref.read(selectedRecurringPayProvider.notifier).state = select,
-          ),
+          trailing: recurrencyEditingPermitted
+              ? Switch.adaptive(
+                value: isRecurring,
+                onChanged: (select) =>
+                    ref.read(selectedRecurringPayProvider.notifier).state = select,
+              )
+              : GestureDetector(
+                  onTap: () {
+                    if (!isSnackBarVisible) {
+                      isSnackBarVisible = true;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Switch is disabled'),
+                          duration: Duration(milliseconds: 800),
+                        ),
+                      ).closed.then((_) {
+                        isSnackBarVisible = false;
+                      });
+                    }
+                  },
+                  child: Tooltip(
+                    message: 'Switch is disabled',
+                    child: Switch(
+                      value: isRecurring,
+                      onChanged: null, // This makes the switch read-only
+                    ),
+                  ),
+                )
         ),
         if (isRecurring) ...[
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.background,
-                padding: const EdgeInsets.all(16),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4)),
-              ),
-              onPressed: () {
-                FocusManager.instance.primaryFocus?.unfocus();
-                showModalBottomSheet(
-                  context: context,
-                  builder: (_) => const RecurrenceSelector(),
-                );
-              },
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "Interval",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(color: Theme.of(context).colorScheme.primary),
-                  ),
-                  const Spacer(),
-                  Text(
-                    recurrenceMap[ref.watch(intervalProvider)]!.label,
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: Theme.of(context).colorScheme.secondary),
-                  ),
-                  const SizedBox(width: 6),
-                  Icon(
-                    Icons.chevron_right,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                ],
+            child: Opacity(
+              opacity: selectedTransaction == null || recurrencyEditingPermitted ? 1.0 : 0.5,
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.background,
+                  padding: const EdgeInsets.all(16),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4)),
+                ),
+                onPressed: selectedTransaction == null || recurrencyEditingPermitted
+                    ? () {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (_) => const RecurrenceSelector(),
+                  );
+                }
+                    : null,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      "Interval",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(color: Theme.of(context).colorScheme.primary),
+                    ),
+                    const Spacer(),
+                    Text(
+                      recurrenceMap[ref.watch(intervalProvider)]!.label,
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Theme.of(context).colorScheme.secondary),
+                    ),
+                    const SizedBox(width: 6),
+                    Icon(
+                      Icons.chevron_right,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(16),
-            child: TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.background,
-                padding: const EdgeInsets.all(16),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4)),
-              ),
-              onPressed: () => showModalBottomSheet(
-                context: context,
-                elevation: 10,
-                builder: (BuildContext context) {
-                  return const EndDateSelector();
-                },
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "End repetition",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(color: Theme.of(context).colorScheme.primary),
-                  ),
-                  const Spacer(),
-                  Text(
-                    endDate != null ? dateToString(endDate) : "Never",
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: Theme.of(context).colorScheme.secondary),
-                  ),
-                  const SizedBox(width: 6),
-                  Icon(
-                    Icons.chevron_right,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                ],
+            child: Opacity(
+              opacity: selectedTransaction == null || recurrencyEditingPermitted ? 1.0 : 0.5,
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.background,
+                  padding: const EdgeInsets.all(16),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4)),
+                ),
+                onPressed: selectedTransaction == null || recurrencyEditingPermitted
+                    ? () => showModalBottomSheet(
+                  context: context,
+                  elevation: 10,
+                  builder: (BuildContext context) {
+                    return const EndDateSelector();
+                  },
+                )
+                    : null,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      "End repetition",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(color: Theme.of(context).colorScheme.primary),
+                    ),
+                    const Spacer(),
+                    Text(
+                      endDate != null ? dateToString(endDate) : "Never",
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Theme.of(context).colorScheme.secondary),
+                    ),
+                    const SizedBox(width: 6),
+                    Icon(
+                      Icons.chevron_right,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
+          if (selectedTransaction != null && !recurrencyEditingPermitted) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: TextButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed("/planning");
+                },
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.warning,
+                      color: Colors.orange,
+                    ),
+                    SizedBox(width: 8),
+                    Flexible(
+                      child: Text(
+                        'This is a recurring transaction, any change here will affect this single transaction.\nTo change all future transactions options, or recurrency options, TAP HERE to go on the planning page',
+                        style: TextStyle(
+                          color: darkBlue5,
+                          fontSize: 13,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ]
       ],
     );
