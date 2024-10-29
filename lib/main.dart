@@ -30,13 +30,6 @@ void main() async {
   getPref == null ? await preferences.setBool('is_first_login', false) : null;
   _isFirstLogin = getPref;
 
-
-
-  // TODO PENDING FIXME remove this line
-  preferences.remove('last_recurring_transactions_check');
-
-
-
   // perform recurring transactions checks
   DateTime? lastCheckGetPref = preferences.getString('last_recurring_transactions_check') != null ? DateTime.parse(preferences.getString('last_recurring_transactions_check')!) : null;
   DateTime? lastRecurringTransactionsCheck = lastCheckGetPref;
