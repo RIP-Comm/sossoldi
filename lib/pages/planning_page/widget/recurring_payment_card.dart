@@ -22,9 +22,8 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
 
   String getNextText() {
     final now = DateTime.now();
-    final daysPassed = now.difference(transaction.lastInsertion!).inDays;
-    final daysInterval =
-        recurrenceMap[parseRecurrence(transaction.recurrency)]!.days;
+    final daysPassed = now.difference(transaction.lastInsertion ?? transaction.fromDate).inDays;
+    final daysInterval = recurrenceMap[parseRecurrence(transaction.recurrency)]!.days;
     final daysUntilNextTransaction = daysInterval - (daysPassed % daysInterval);
     return daysUntilNextTransaction.toString();
   }

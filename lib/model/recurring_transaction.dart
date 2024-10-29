@@ -165,7 +165,6 @@ class RecurringTransactionMethods extends SossoldiDatabase {
     return null;
   }
 
-
   Future<RecurringTransaction> selectById(int id) async {
     final db = await database;
 
@@ -227,7 +226,6 @@ class RecurringTransactionMethods extends SossoldiDatabase {
         where: '${RecurringTransactionFields.id} = ?',
         whereArgs: [id]);
   }
-
 
   Future<void> checkRecurringTransactions() async {
     // get all recurring transactions active

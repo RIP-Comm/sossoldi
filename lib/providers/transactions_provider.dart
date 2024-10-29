@@ -151,6 +151,23 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
       return _getTransactions(update: true);
     });
 
+    // check if fromDate is today, and add the first recurrence of the transaction
+    DateTime now = DateTime.now();
+
+    if (date.year == now.year && date.month == now.month && date.day == now.day) {
+      final transaction = Transaction(
+        date: date,
+        amount: amount,
+        type: TransactionType.expense,
+        note: label,
+        idBankAccount: bankAccount.id!,
+        idCategory: category.id!,
+        idRecurringTransaction: insertedTransaction!.id,
+        recurring: true,
+      );
+      await TransactionMethods().insert(transaction);
+    }
+
     return insertedTransaction;
   }
 

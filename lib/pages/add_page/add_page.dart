@@ -116,7 +116,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
         } else {
           ref
               .read(transactionsProvider.notifier)
-              .updateTransaction(currencyToNum(cleanAmount), noteController.text)
+              .updateTransaction(currencyToNum(cleanAmount), noteController.text, selectedTransaction.idRecurringTransaction)
               .whenComplete(() => Navigator.of(context).pop());
         }
 
