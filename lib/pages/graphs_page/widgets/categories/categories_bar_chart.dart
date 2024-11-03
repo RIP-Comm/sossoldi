@@ -7,98 +7,136 @@ import '../../../../constants/style.dart';
 import '../../../../providers/categories_provider.dart';
 import '../../../../providers/transactions_provider.dart';
 
-final highlightedMonthProvider = StateProvider<int>((ref) => DateTime.now().month - 1);
+final highlightedMonthProvider =
+    StateProvider<int>((ref) => DateTime.now().month - 1);
 
 class CategoriesBarChart extends ConsumerWidget {
   const CategoriesBarChart({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final int highlightedMonth = ref.watch(highlightedMonthProvider);
-    final categoryTotalAmount = ref.watch(categoryTotalAmountProvider(ref.watch(categoryTypeProvider)));
+    final highlightedMonth = ref.watch(highlightedMonthProvider);
+    final monthlyTotals =
+        ref.watch(monthlyTotalsProvider(ref.watch(categoryTypeProvider)));
+    final currentYear = DateTime.now().year;
 
-    const rodBorderRadius = BorderRadius.only(
-      topLeft: Radius.circular(5),
-      topRight: Radius.circular(5),
-      bottomLeft: Radius.zero,
-      bottomRight: Radius.zero,
-    );
-
-    List<BarChartGroupData> generateBarGroups() {
-      return List.generate(12, (index) {
-        bool isHighlighted = index == highlightedMonth;
-        return BarChartGroupData(
-          x: index,
-          barRods: [
-            BarChartRodData(
-              toY: categoryTotalAmount.value!.abs() * 10.0,
-              width: 40,
-              borderRadius: rodBorderRadius,
-              color: isHighlighted ? blue2 : grey2,
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(
+              '$currentYear',
+              style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
-        );
-      });
-    }
-
-    return SizedBox(
-      height: 200,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: 12, //only 12 months (temporary)
-        itemBuilder: (context, index) {
-          return SizedBox(
-            width: MediaQuery.of(context).size.width / 6,
+        ),
+        monthlyTotals.when(
+          data: (totals) => SizedBox(
+            height: 200,
             child: BarChart(
               BarChartData(
-                barGroups: [generateBarGroups()[index]],
-                titlesData: FlTitlesData(
-                  show: true,
-                  bottomTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      getTitlesWidget: (value, meta) {
-                        return Padding(
-                          padding: const EdgeInsets.only(top: 6.0),
-                          child: Text(
-                            DateFormat('MMM').format(DateTime(0, value.toInt() + 1)),
-                            style: const TextStyle(color: Colors.black, fontSize: 12),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  leftTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                  rightTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                  topTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                ),
-                barTouchData: BarTouchData(
-                  enabled: true,
-                  handleBuiltInTouches: true,
-                  touchCallback: (event, response) {
-                    if (response != null && response.spot != null && event is FlTapUpEvent) {
-                      final x = response.spot!.touchedBarGroup.x;
-                      ref.read(highlightedMonthProvider.notifier).state = x;
-                      DateTime selectedMonth = DateTime(DateTime.now().year, x + 1, 1);
-                      ref.read(filterDateStartProvider.notifier).state =
-                          DateTime(selectedMonth.year, selectedMonth.month, 1);
-                      ref.read(filterDateEndProvider.notifier).state =
-                          DateTime(selectedMonth.year, selectedMonth.month + 1, 0);
-                    }
-                  },
-                ),
+                barGroups: _generateBarGroups(totals, highlightedMonth),
+                titlesData: _titlesData(),
+                barTouchData: _barTouchData(ref, currentYear),
                 borderData: FlBorderData(show: false),
               ),
             ),
-          );
-        },
+          ),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, _) => Text('Error: $error'),
+        ),
+      ],
+    );
+  }
+
+  List<BarChartGroupData> _generateBarGroups(
+      List<double> totals, int highlightedMonth) {
+    const rodBorderRadius = BorderRadius.only(
+      topLeft: Radius.circular(5),
+      topRight: Radius.circular(5),
+    );
+
+    final maxAmount =
+        totals.isNotEmpty ? totals.reduce((a, b) => a > b ? a : b) : 1.0;
+
+    return List.generate(12, (index) {
+      final barHeight =
+          maxAmount > 0 ? (totals[index] / maxAmount) * 200.0 : 0.0;
+      final isHighlighted = index == highlightedMonth;
+
+      return BarChartGroupData(
+        x: index,
+        barRods: [
+          BarChartRodData(
+            toY: barHeight,
+            width: 20,
+            borderRadius: rodBorderRadius,
+            color: isHighlighted ? blue2 : grey2,
+          ),
+        ],
+      );
+    });
+  }
+
+  FlTitlesData _titlesData() {
+    return FlTitlesData(
+      show: true,
+      bottomTitles: AxisTitles(
+        sideTitles: SideTitles(
+          showTitles: true,
+          getTitlesWidget: (value, meta) {
+            return Padding(
+              padding: const EdgeInsets.only(top: 6.0),
+              child: Text(
+                DateFormat('MMM').format(DateTime(0, value.toInt() + 1)),
+                style: const TextStyle(color: Colors.black, fontSize: 10),
+              ),
+            );
+          },
+        ),
+      ),
+      leftTitles: const AxisTitles(
+        sideTitles: SideTitles(showTitles: false),
+      ),
+      rightTitles: const AxisTitles(
+        sideTitles: SideTitles(showTitles: false),
+      ),
+      topTitles: const AxisTitles(
+        sideTitles: SideTitles(showTitles: false),
       ),
     );
+  }
+
+  BarTouchData _barTouchData(WidgetRef ref, int currentYear) {
+    return BarTouchData(
+      enabled: true,
+      handleBuiltInTouches: true,
+      touchTooltipData: BarTouchTooltipData(
+        tooltipBgColor: Colors.transparent,
+        tooltipPadding: EdgeInsets.zero,
+        tooltipMargin: 0,
+        getTooltipItem: (group, groupIndex, rod, rodIndex) =>
+            null, // Hidden tooltip (it sucks!)
+      ),
+      touchCallback: (event, response) {
+        if (response != null &&
+            response.spot != null &&
+            event is FlTapUpEvent) {
+          final selectedMonthIndex = response.spot!.touchedBarGroup.x;
+          ref.read(highlightedMonthProvider.notifier).state =
+              selectedMonthIndex;
+          _updateSelectedMonth(ref, currentYear, selectedMonthIndex);
+        }
+      },
+    );
+  }
+
+  void _updateSelectedMonth(WidgetRef ref, int year, int monthIndex) {
+    final selectedMonth = DateTime(year, monthIndex + 1, 1);
+    ref.read(filterDateStartProvider.notifier).state =
+        DateTime(selectedMonth.year, selectedMonth.month, 1);
+    ref.read(filterDateEndProvider.notifier).state =
+        DateTime(selectedMonth.year, selectedMonth.month + 1, 0);
   }
 }

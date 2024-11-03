@@ -20,13 +20,15 @@ class CategoriesCard extends ConsumerStatefulWidget {
   ConsumerState<CategoriesCard> createState() => _CategoriesCardState();
 }
 
-class _CategoriesCardState extends ConsumerState<CategoriesCard> with Functions {
+class _CategoriesCardState extends ConsumerState<CategoriesCard>
+    with Functions {
   @override
   Widget build(BuildContext context) {
     final categoryType = ref.watch(categoryTypeProvider);
     final categoryMap = ref.watch(categoryMapProvider(categoryType));
 
-    final categoryTotalAmount = ref.watch(categoryTotalAmountProvider(ref.watch(categoryTypeProvider)));
+    final categoryTotalAmount =
+        ref.watch(categoryTotalAmountProvider(ref.watch(categoryTypeProvider)));
 
     return Column(
       children: [
@@ -64,7 +66,8 @@ class _CategoriesCardState extends ConsumerState<CategoriesCard> with Functions 
                               ),
                             );
                           } else {
-                            CategoryTransaction category = categories.keys.elementAt(i);
+                            CategoryTransaction category =
+                                categories.keys.elementAt(i);
                             double amount = categories[category] ?? 0;
                             return SizedBox(
                               height: 50.0,
