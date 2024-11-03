@@ -20,6 +20,7 @@ import 'pages/settings_page.dart';
 import 'pages/statistics_page.dart';
 import 'pages/structure.dart';
 import 'pages/transactions_page/transactions_page.dart';
+import 'pages/planning_page/widget/edit_recurring_transaction.dart';
 
 Route<dynamic> makeRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -30,7 +31,13 @@ Route<dynamic> makeRoute(RouteSettings settings) {
     case '/dashboard':
       return _materialPageRoute(settings.name, const HomePage());
     case '/add-page':
-      return _materialPageRoute(settings.name, const AddPage());
+      final args = settings.arguments as Map<String, dynamic>?;
+      return _materialPageRoute(
+        settings.name,
+        AddPage(recurrencyEditingPermitted: args?['recurrencyEditingPermitted'] ?? true),
+      );
+    case '/edit-recurring-transaction':
+      return _materialPageRoute(settings.name, const EditRecurringTransaction());
     case '/transactions':
       return _materialPageRoute(settings.name, const TransactionsPage());
     case '/category-list':

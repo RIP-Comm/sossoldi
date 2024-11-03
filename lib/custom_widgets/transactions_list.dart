@@ -187,7 +187,10 @@ class TransactionRow extends ConsumerWidget with Functions {
                   .read(transactionsProvider.notifier)
                   .transactionUpdateState(transaction)
                   .whenComplete(
-                      () => Navigator.of(context).pushNamed("/add-page"));
+                      () => Navigator.of(context).pushNamed(
+                          "/add-page",
+                          arguments: {'recurrencyEditingPermitted': !transaction.recurring}
+                      ));
             },
             borderRadius: BorderRadius.vertical(
               top: first ? const Radius.circular(8) : Radius.zero,
@@ -224,6 +227,8 @@ class TransactionRow extends ConsumerWidget with Functions {
                         const SizedBox(height: 11),
                         Row(
                           children: [
+                            if (transaction.recurring) // Check if the transaction is recurring
+                              const Icon(Icons.repeat, color: Colors.blueAccent), // Add an icon for recurring transactions
                             if (transaction.note != null)
                               Text(
                                 transaction.note!,

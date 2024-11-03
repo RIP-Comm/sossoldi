@@ -20,10 +20,7 @@ class TransactionFields extends BaseEntityFields {
   static String idBankAccountTransfer = 'idBankAccountTransfer';
   static String bankAccountTransferName = 'bankAccountTransferName';
   static String recurring = 'recurring';
-  static String recurrencyType = 'recurrencyType';
-  static String recurrencyPayDay = 'recurrencyPayDay';
-  static String recurrencyFrom = 'recurrencyFrom';
-  static String recurrencyTo = 'recurrencyTo';
+  static String idRecurringTransaction = 'idRecurringTransaction';
   static String createdAt = BaseEntityFields.getCreatedAt;
   static String updatedAt = BaseEntityFields.getUpdatedAt;
 
@@ -37,10 +34,7 @@ class TransactionFields extends BaseEntityFields {
     idBankAccount,
     idBankAccountTransfer,
     recurring,
-    recurrencyType,
-    recurrencyPayDay,
-    recurrencyFrom,
-    recurrencyTo,
+    idRecurringTransaction,
     BaseEntityFields.createdAt,
     BaseEntityFields.updatedAt
   ];
@@ -48,22 +42,39 @@ class TransactionFields extends BaseEntityFields {
 
 enum TransactionType { income, expense, transfer }
 
-enum Recurrence { daily, weekly, monthly, bimonthly, quarterly, semester, annual }
-
 Map<String, TransactionType> typeMap = {
   "IN": TransactionType.income,
   "OUT": TransactionType.expense,
   "TRSF": TransactionType.transfer,
 };
-Map<Recurrence, String> recurrenceMap = {
-  Recurrence.daily: "Daily",
-  Recurrence.weekly: "Weekly",
-  Recurrence.monthly: "Monthly",
-  Recurrence.bimonthly: "Bimonthly",
-  Recurrence.quarterly: "Quarterly",
-  Recurrence.semester: "Semester",
-  Recurrence.annual: "Annual",
+
+enum Recurrence { daily, weekly, monthly, bimonthly, quarterly, semester, annual }
+
+class RecurrenceData {
+  final Recurrence recurrence;
+  final String label;
+  final int days;
+
+  RecurrenceData({
+    required this.recurrence,
+    required this.label,
+    required this.days,
+  });
+}
+
+Map<Recurrence, RecurrenceData> recurrenceMap = {
+  Recurrence.daily: RecurrenceData(recurrence: Recurrence.daily, label: "Daily", days: 1),
+  Recurrence.weekly: RecurrenceData(recurrence: Recurrence.weekly, label: "Weekly", days: 7),
+  Recurrence.monthly: RecurrenceData(recurrence: Recurrence.monthly, label: "Monthly", days: 30),
+  Recurrence.bimonthly: RecurrenceData(recurrence: Recurrence.bimonthly, label: "Bimonthly", days: 60),
+  Recurrence.quarterly: RecurrenceData(recurrence: Recurrence.quarterly, label: "Quarterly", days: 90),
+  Recurrence.semester: RecurrenceData(recurrence: Recurrence.semester, label: "Semester", days: 180),
+  Recurrence.annual: RecurrenceData(recurrence: Recurrence.annual, label: "Annual", days: 365),
 };
+
+Recurrence parseRecurrence(String s) {
+  return recurrenceMap.entries.firstWhere((entry) => entry.value.label.toLowerCase() == s.toLowerCase()).key;
+}
 
 class Transaction extends BaseEntity {
   final DateTime date;
@@ -79,10 +90,7 @@ class Transaction extends BaseEntity {
   final int? idBankAccountTransfer;
   final String? bankAccountTransferName;
   final bool recurring;
-  final String? recurrencyType;
-  final int? recurrencyPayDay;
-  final DateTime? recurrencyFrom;
-  final DateTime? recurrencyTo;
+  final int? idRecurringTransaction;
 
   const Transaction(
       {super.id,
@@ -99,10 +107,7 @@ class Transaction extends BaseEntity {
       this.idBankAccountTransfer,
       this.bankAccountTransferName,
       required this.recurring,
-      this.recurrencyType,
-      this.recurrencyPayDay,
-      this.recurrencyFrom,
-      this.recurrencyTo,
+      this.idRecurringTransaction,
       super.createdAt,
       super.updatedAt});
 
@@ -116,10 +121,7 @@ class Transaction extends BaseEntity {
           int? idBankAccount,
           int? idBankAccountTransfer,
           bool? recurring,
-          String? recurrencyType,
-          int? recurrencyPayDay,
-          DateTime? recurrencyFrom,
-          DateTime? recurrencyTo,
+          int? idRecurringTransaction,
           DateTime? createdAt,
           DateTime? updatedAt}) =>
       Transaction(
@@ -132,10 +134,7 @@ class Transaction extends BaseEntity {
           idBankAccount: idBankAccount ?? this.idBankAccount,
           idBankAccountTransfer: idBankAccountTransfer ?? this.idBankAccountTransfer,
           recurring: recurring ?? this.recurring,
-          recurrencyType: recurrencyType ?? this.recurrencyType,
-          recurrencyPayDay: recurrencyPayDay ?? this.recurrencyPayDay,
-          recurrencyFrom: recurrencyFrom ?? this.recurrencyFrom,
-          recurrencyTo: recurrencyTo ?? this.recurrencyTo,
+          idRecurringTransaction: idRecurringTransaction ?? this.idRecurringTransaction,
           createdAt: createdAt ?? this.createdAt,
           updatedAt: updatedAt ?? this.updatedAt);
 
@@ -154,14 +153,7 @@ class Transaction extends BaseEntity {
       idBankAccountTransfer: json[TransactionFields.idBankAccountTransfer] as int?,
       bankAccountTransferName: json[TransactionFields.bankAccountTransferName] as String?,
       recurring: json[TransactionFields.recurring] == 1 ? true : false,
-      recurrencyType: json[TransactionFields.recurrencyType] as String?,
-      recurrencyPayDay: json[TransactionFields.recurrencyPayDay] as int?,
-      recurrencyFrom: json[TransactionFields.recurrencyFrom] != null
-          ? DateTime.parse(TransactionFields.recurrencyFrom)
-          : null,
-      recurrencyTo: json[TransactionFields.recurrencyTo] != null
-          ? DateTime.parse(TransactionFields.recurrencyTo)
-          : null,
+      idRecurringTransaction: json[TransactionFields.idRecurringTransaction] as int?,
       createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
       updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String));
 
@@ -175,10 +167,7 @@ class Transaction extends BaseEntity {
         TransactionFields.idBankAccount: idBankAccount,
         TransactionFields.idBankAccountTransfer: idBankAccountTransfer,
         TransactionFields.recurring: recurring ? 1 : 0,
-        TransactionFields.recurrencyType: recurrencyType,
-        TransactionFields.recurrencyPayDay: recurrencyPayDay,
-        TransactionFields.recurrencyFrom: recurrencyFrom,
-        TransactionFields.recurrencyTo: recurrencyTo,
+        TransactionFields.idRecurringTransaction: idRecurringTransaction,
         BaseEntityFields.createdAt:
             update ? createdAt?.toIso8601String() : DateTime.now().toIso8601String(),
         BaseEntityFields.updatedAt: DateTime.now().toIso8601String(),
@@ -261,6 +250,14 @@ class TransactionMethods extends SossoldiDatabase {
 
     final result = await db.rawQuery(
         'SELECT t.*, c.${CategoryTransactionFields.name} as ${TransactionFields.categoryName}, c.${CategoryTransactionFields.color} as ${TransactionFields.categoryColor}, c.${CategoryTransactionFields.symbol} as ${TransactionFields.categorySymbol}, b1.${BankAccountFields.name} as ${TransactionFields.bankAccountName}, b2.${BankAccountFields.name} as ${TransactionFields.bankAccountTransferName} FROM "$transactionTable" as t LEFT JOIN $categoryTransactionTable as c ON t.${TransactionFields.idCategory} = c.${CategoryTransactionFields.id} LEFT JOIN $bankAccountTable as b1 ON t.${TransactionFields.idBankAccount} = b1.${BankAccountFields.id} LEFT JOIN $bankAccountTable as b2 ON t.${TransactionFields.idBankAccountTransfer} = b2.${BankAccountFields.id} ${where != null ? "WHERE $where" : ""} ORDER BY $orderByDESC ${limit != null ? "LIMIT $limit" : ""}');
+
+    return result.map((json) => Transaction.fromJson(json)).toList();
+  }
+
+  Future<List<Transaction>> getRecurrenceTransactionsById({int? id}) async  {
+    final db = await database; 
+
+    final result = await db.rawQuery('SELECT * FROM "$transactionTable" as t WHERE t.${TransactionFields.idRecurringTransaction} = $id ORDER BY ${TransactionFields.date} DESC');
 
     return result.map((json) => Transaction.fromJson(json)).toList();
   }

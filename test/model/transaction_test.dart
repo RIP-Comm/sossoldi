@@ -22,13 +22,11 @@ void main() {
         idBankAccount: 0,
         idBankAccountTransfer: null,
         recurring: false,
-        recurrencyType: null,
-        recurrencyPayDay: null,
-        recurrencyFrom: null,
-        recurrencyTo: null,
+        idRecurringTransaction: null,
         idCategory: 1,
         createdAt: DateTime.utc(2022),
-        updatedAt: DateTime.utc(2022));
+        updatedAt: DateTime.utc(2022)
+    );
 
     Transaction tCopy = t.copy(id: 10);
 
@@ -36,16 +34,13 @@ void main() {
     assert(tCopy.date == t.date);
     assert(tCopy.amount == t.amount);
     assert(tCopy.date == t.date);
-    assert(tCopy.note == t.note);
     assert(tCopy.type == t.type);
+    assert(tCopy.note == t.note);
     assert(tCopy.idBankAccount == t.idBankAccount);
     assert(tCopy.idCategory == t.idCategory);
     assert(tCopy.idBankAccountTransfer == t.idBankAccountTransfer);
     assert(tCopy.recurring == t.recurring);
-    assert(tCopy.recurrencyType == t.recurrencyType);
-    assert(tCopy.recurrencyPayDay == t.recurrencyPayDay);
-    assert(tCopy.recurrencyFrom == t.recurrencyFrom);
-    assert(tCopy.recurrencyTo == t.recurrencyTo);
+    assert(tCopy.idRecurringTransaction == t.idRecurringTransaction);
     assert(tCopy.createdAt == t.createdAt);
     assert(tCopy.updatedAt == t.updatedAt);
   });
@@ -61,10 +56,7 @@ void main() {
       TransactionFields.idCategory: 0,
       TransactionFields.idBankAccountTransfer: null,
       TransactionFields.recurring: false,
-      TransactionFields.recurrencyType: null,
-      TransactionFields.recurrencyPayDay: null,
-      TransactionFields.recurrencyFrom: null,
-      TransactionFields.recurrencyTo: null,
+      TransactionFields.idRecurringTransaction: null,
       BaseEntityFields.createdAt: DateTime.utc(2022).toIso8601String(),
       BaseEntityFields.updatedAt: DateTime.utc(2022).toIso8601String(),
     };
@@ -79,10 +71,7 @@ void main() {
     assert(t.idBankAccount == json[TransactionFields.idBankAccount]);
     assert(t.idBankAccountTransfer == json[TransactionFields.idBankAccountTransfer]);
     assert(t.recurring == json[TransactionFields.recurring]);
-    assert(t.recurrencyType == json[TransactionFields.recurrencyType]);
-    assert(t.recurrencyPayDay == json[TransactionFields.recurrencyPayDay]);
-    assert(t.recurrencyFrom == json[TransactionFields.recurrencyFrom]);
-    assert(t.recurrencyTo == json[TransactionFields.recurrencyTo]);
+    assert(t.idRecurringTransaction == json[TransactionFields.idRecurringTransaction]);
     assert(t.idCategory == json[TransactionFields.idCategory]);
     assert(t.createdAt?.toUtc().toIso8601String() ==
         json[BaseEntityFields.createdAt]);
@@ -101,10 +90,7 @@ void main() {
         idBankAccount: 0,
         idBankAccountTransfer: null,
         recurring: false,
-        recurrencyType: null,
-        recurrencyPayDay: null,
-        recurrencyFrom: null,
-        recurrencyTo: null
+        idRecurringTransaction: null
     );
 
     Map<String, Object?> json = t.toJson();
@@ -118,10 +104,7 @@ void main() {
     assert(t.idBankAccount == json[TransactionFields.idBankAccount]);
     assert(t.idBankAccountTransfer == json[TransactionFields.idBankAccountTransfer]);
     assert((t.recurring ? 1 : 0) == json[TransactionFields.recurring]);
-    assert(t.recurrencyType == json[TransactionFields.recurrencyType]);
-    assert(t.recurrencyPayDay == json[TransactionFields.recurrencyPayDay]);
-    assert(t.recurrencyFrom == json[TransactionFields.recurrencyFrom]);
-    assert(t.recurrencyTo == json[TransactionFields.recurrencyTo]);
+    assert(t.idRecurringTransaction == json[TransactionFields.idRecurringTransaction]);
   });
 
   group("Transaction Methods", () { 
@@ -158,7 +141,7 @@ void main() {
         throw Exception('DbBase.cleanDatabase: $error');
       }
 
-      const insertDemoTransactionsQuery = '''INSERT INTO `transaction` (date, amount, type, note, idCategory, idBankAccount, idBankAccountTransfer, recurring, recurrencyType, recurrencyPayDay, recurrencyFrom, recurrencyTo, createdAt, updatedAt) VALUES ''';
+      const insertDemoTransactionsQuery = '''INSERT INTO `transaction` (date, amount, type, note, idCategory, idBankAccount, idBankAccountTransfer, recurring, idRecurringTransaction, createdAt, updatedAt) VALUES ''';
       final List<String> demoTransactions = [];
 
       final today = DateTime.now();
@@ -211,7 +194,7 @@ void main() {
         throw Exception('DbBase.cleanDatabase: $error');
       }
 
-      const insertDemoTransactionsQuery = '''INSERT INTO `transaction` (date, amount, type, note, idCategory, idBankAccount, idBankAccountTransfer, recurring, recurrencyType, recurrencyPayDay, recurrencyFrom, recurrencyTo, createdAt, updatedAt) VALUES ''';
+      const insertDemoTransactionsQuery = '''INSERT INTO `transaction` (date, amount, type, note, idCategory, idBankAccount, idBankAccountTransfer, recurring, idRecurringTransaction, createdAt, updatedAt) VALUES ''';
       final List<String> demoTransactions = [];
 
       final today = DateTime.now();
@@ -264,7 +247,7 @@ void main() {
         throw Exception('DbBase.cleanDatabase: $error');
       }
 
-      const insertDemoTransactionsQuery = '''INSERT INTO `transaction` (date, amount, type, note, idCategory, idBankAccount, idBankAccountTransfer, recurring, recurrencyType, recurrencyPayDay, recurrencyFrom, recurrencyTo, createdAt, updatedAt) VALUES ''';
+      const insertDemoTransactionsQuery = '''INSERT INTO `transaction` (date, amount, type, note, idCategory, idBankAccount, idBankAccountTransfer, recurring, idRecurringTransaction, createdAt, updatedAt) VALUES ''';
       final List<String> demoTransactions = [];
 
       final today = DateTime.now();
@@ -322,7 +305,7 @@ void main() {
         throw Exception('DbBase.cleanDatabase: $error');
       }
 
-      const insertDemoTransactionsQuery = '''INSERT INTO `transaction` (date, amount, type, note, idCategory, idBankAccount, idBankAccountTransfer, recurring, recurrencyType, recurrencyPayDay, recurrencyFrom, recurrencyTo, createdAt, updatedAt) VALUES ''';
+      const insertDemoTransactionsQuery = '''INSERT INTO `transaction` (date, amount, type, note, idCategory, idBankAccount, idBankAccountTransfer, recurring, idRecurringTransaction, createdAt, updatedAt) VALUES ''';
       final List<String> demoTransactions = [];
 
       final today = DateTime.now();
