@@ -200,11 +200,10 @@ final monthlyTotalsProvider =
     FutureProvider.family<List<double>, CategoryTransactionType>(
         (ref, type) async {
   final dateStart = ref.watch(filterDateStartProvider);
-  final dateEnd = ref.watch(filterDateEndProvider);
+  //final dateEnd = ref.watch(filterDateEndProvider);
 
   List<double> monthlyTotals = List.generate(12, (_) => 0.0);
 
-  final now = DateTime.now();
   final startOfYear = DateTime(dateStart.year, 1, 1);
   final endOfYear = DateTime(dateStart.year, 12, 31);
 
@@ -225,7 +224,5 @@ final monthlyTotalsProvider =
     int month = transaction.date.month - 1;
     monthlyTotals[month] += transaction.amount.abs();
   }
-  print('Monthly totals: $monthlyTotals');
-
   return monthlyTotals;
 });
