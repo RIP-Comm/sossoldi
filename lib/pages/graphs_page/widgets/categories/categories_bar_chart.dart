@@ -18,7 +18,9 @@ class CategoriesBarChart extends ConsumerWidget {
     final highlightedMonth = ref.watch(highlightedMonthProvider);
     final monthlyTotals =
         ref.watch(monthlyTotalsProvider(ref.watch(categoryTypeProvider)));
-    final currentYear = DateTime.now().year;
+    final startDate = ref.watch(filterDateStartProvider);
+
+    final currentYear = startDate.year;
 
     return Column(
       children: [
@@ -32,19 +34,45 @@ class CategoriesBarChart extends ConsumerWidget {
           ],
         ),
         monthlyTotals.when(
-          data: (totals) => SizedBox(
-            height: 200,
-            child: BarChart(
-              BarChartData(
-                barGroups: _generateBarGroups(totals, highlightedMonth),
-                titlesData: _titlesData(),
-                barTouchData: _barTouchData(ref, currentYear),
-                borderData: FlBorderData(show: false),
+          data: (totals) {
+            final maxAmount = totals.isNotEmpty
+                ? totals.reduce((a, b) => a > b ? a : b)
+                : 1.0;
+
+            final average =
+                totals.isNotEmpty ? totals.reduce((a, b) => a + b) / 12 : 0.0;
+
+            return SizedBox(
+              height: 200,
+              child: BarChart(
+                BarChartData(
+                  barGroups: _generateBarGroups(totals, highlightedMonth),
+                  titlesData: _titlesData(),
+                  barTouchData: _barTouchData(ref, currentYear),
+                  borderData: FlBorderData(show: false),
+                  extraLinesData: ExtraLinesData(horizontalLines: [
+                    HorizontalLine(
+                      y: (average / maxAmount) * 200.0,
+                      color: blue2,
+                      strokeWidth: 2,
+                      dashArray: [5, 5],
+                      label: HorizontalLineLabel(
+                        show: true,
+                        labelResolver: (line) => "avg",
+                        alignment: Alignment.topRight,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall
+                            ?.copyWith(color: blue2),
+                      ),
+                    ),
+                  ]),
+                ),
               ),
-            ),
-          ),
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, _) => Text('Error: $error'),
+            );
+          },
+          loading: () => const SizedBox.shrink(),
+          error: (error, stack) => Text('$error'),
         ),
       ],
     );
@@ -117,7 +145,7 @@ class CategoriesBarChart extends ConsumerWidget {
         tooltipPadding: EdgeInsets.zero,
         tooltipMargin: 0,
         getTooltipItem: (group, groupIndex, rod, rodIndex) =>
-            null, // Hidden tooltip (it sucks!)
+            null, // Hidden tooltip
       ),
       touchCallback: (event, response) {
         if (response != null &&

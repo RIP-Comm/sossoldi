@@ -123,6 +123,9 @@ final categoryMapProvider = FutureProvider.family<
     CategoryTransactionType>((ref, type) async {
   final dateStart = ref.watch(filterDateStartProvider);
   final dateEnd = ref.watch(filterDateEndProvider);
+
+  Map<CategoryTransaction, double> categoriesMap = {};
+
   final categories =
       await CategoryTransactionMethods().selectCategoriesByType(type);
 
@@ -135,11 +138,14 @@ final categoryMapProvider = FutureProvider.family<
       .toList();
 
   final transactions = await TransactionMethods().selectAll(
-      transactionType: transactionTypeList,
-      dateRangeStart: dateStart,
-      dateRangeEnd: dateEnd);
+    transactionType: transactionTypeList,
+    dateRangeStart: dateStart,
+    dateRangeEnd: dateEnd,
+  );
 
-  Map<CategoryTransaction, double> categoriesMap = {};
+  if (transactions.isEmpty) {
+    return {};
+  }
 
   for (var category in categories) {
     final sum = transactions

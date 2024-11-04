@@ -65,9 +65,13 @@ class _GraphsPageState extends ConsumerState<GraphsPage> with Functions {
                                 text: TextSpan(
                                   children: [
                                     TextSpan(
-                                      text: numToCurrency(
-                                          currentYearMonthlyTransactions
-                                              .last.y),
+                                      text: currentYearMonthlyTransactions
+                                              .isNotEmpty
+                                          ? numToCurrency(
+                                              currentYearMonthlyTransactions
+                                                      .last.y ??
+                                                  0)
+                                          : '0',
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineLarge
@@ -91,8 +95,7 @@ class _GraphsPageState extends ConsumerState<GraphsPage> with Functions {
                             children: [
                               Container(
                                 decoration: BoxDecoration(
-                                  color:
-                                      Theme.of(context).colorScheme.background,
+                                  color: Theme.of(context).colorScheme.surface,
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                                 padding: const EdgeInsets.all(4.0),
@@ -125,7 +128,7 @@ class _GraphsPageState extends ConsumerState<GraphsPage> with Functions {
                 );
               },
               loading: () => const SizedBox(),
-              error: (err, stack) => Text('Error: $err'),
+              error: (error, stack) => Text('Error: $error'),
             ),
         const SizedBox(height: 24),
         const AccountsCard(),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sossoldi/pages/graphs_page/widgets/linear_progress_bar.dart';
+import '../linear_progress_bar.dart';
 import '../../../../constants/functions.dart';
 import '../../../../constants/style.dart';
 import '../../../../custom_widgets/default_container.dart';
@@ -92,8 +92,8 @@ class AccountsCard extends ConsumerWidget with Functions {
                 }
               },
             ),
-            error: (e, s) => Text('Error: $e'),
             loading: () => const SizedBox.shrink(),
+            error: (e, s) => Text('Error: $e'),
           ),
         ),
       ],
