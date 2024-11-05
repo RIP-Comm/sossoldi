@@ -155,8 +155,9 @@ class SossoldiDatabase {
         (12, "Furniture","OUT", "home", 2, '', 11, '${DateTime.now()}', '${DateTime.now()}'),
         (13, "Shopping", "OUT", "shopping_cart", 3, '', null, '${DateTime.now()}', '${DateTime.now()}'),
         (14, "Leisure", "OUT", "subscriptions", 4, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (15, "Salary", "IN", "work", 5, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (16, "Transports", "OUT", "directions_car_rounded", 6, '', null, '${DateTime.now()}', '${DateTime.now()}');
+        (15, "Transports", "OUT", "directions_car_rounded", 6, '', null, '${DateTime.now()}', '${DateTime.now()}');
+        (16, "Salary", "IN", "work", 5, '', null, '${DateTime.now()}', '${DateTime.now()}'),
+        
     ''');
 
     // Add currencies
@@ -180,7 +181,7 @@ class SossoldiDatabase {
       INSERT INTO recurringTransaction(fromDate, toDate, amount, note, recurrency, idCategory, idBankAccount, createdAt, updatedAt) VALUES
         ("2024-02-23", null, 10.99, "404 Books", "MONTHLY", 14, 70, '${DateTime.now()}', '${DateTime.now()}'),
         ("2023-12-13", null, 4.97, "ETF Consultant Parcel", "DAILY", 14, 70, '${DateTime.now()}', '${DateTime.now()}'),
-        ("2023-02-11", "2028-02-11", 1193.40, "Car Loan", "QUARTERLY", 16, 72, '${DateTime.now()}', '${DateTime.now()}');
+        ("2023-02-11", "2028-02-11", 1193.40, "Car Loan", "QUARTERLY", 15, 72, '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
     // Add fake transactions
@@ -273,7 +274,7 @@ class SossoldiDatabase {
       DateTime salaryDateTime = DateTime(time.year, time.month, 27, time.hour,
           time.minute, time.second, time.millisecond, time.microsecond);
       demoTransactions.add(
-          '''('$salaryDateTime', $fakeSalary, 'IN', 'Salary', 15, 70, null, 0, null, '$salaryDateTime', '$salaryDateTime')''');
+          '''('$salaryDateTime', $fakeSalary, 'IN', 'Salary', 16, 70, null, 0, null, '$salaryDateTime', '$salaryDateTime')''');
     }
 
     // finalize query and write!
