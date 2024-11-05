@@ -191,7 +191,7 @@ class SossoldiDatabase {
       'Grocery',
       'Tolls',
       'Toys',
-      'ETF Consultant Parcel',
+      'Boardgames',
       'Concert',
       'Clothing',
       'Pizza',
@@ -218,7 +218,7 @@ class SossoldiDatabase {
 
     // start building mega-query
     const insertDemoTransactionsQuery =
-        '''INSERT INTO `transaction` (date, amount, type, note, idCategory, idBankAccount, idBankAccountTransfer, recurring, recurrencyType, recurrencyPayDay, recurrencyFrom, recurrencyTo, createdAt, updatedAt) VALUES ''';
+        '''INSERT INTO `transaction` (date, amount, type, note, idCategory, idBankAccount, idBankAccountTransfer, recurring, idRecurringTransaction, createdAt, updatedAt) VALUES ''';
 
     // init a List with transaction values
     final List<String> demoTransactions = [];
@@ -263,8 +263,6 @@ class SossoldiDatabase {
 
       // put generated transaction in our list
       demoTransactions.add(
-          '''('$randomDate', ${randomAmount.toStringAsFixed(2)}, '$randomType', '$randomNote', $randomCategory, $randomAccount, $idBankAccountTransfer, 0, null, null, null, null, '$randomDate', '$randomDate')''');
-      demoTransactions.add(
           '''('$randomDate', ${randomAmount.toStringAsFixed(2)}, '$randomType', '$randomNote', $randomCategory, $randomAccount, $idBankAccountTransfer, 0, null, '$randomDate', '$randomDate')''');
     }
 
@@ -275,14 +273,8 @@ class SossoldiDatabase {
       DateTime salaryDateTime = DateTime(time.year, time.month, 27, time.hour,
           time.minute, time.second, time.millisecond, time.microsecond);
       demoTransactions.add(
-          '''('$salaryDateTime', $fakeSalary, 'IN', 'Salary', 15, 70, null, 0, null, null, null, null, '$salaryDateTime', '$salaryDateTime')''');
+          '''('$salaryDateTime', $fakeSalary, 'IN', 'Salary', 15, 70, null, 0, null, '$salaryDateTime', '$salaryDateTime')''');
     }
-
-    // add some recurring payment too
-    demoTransactions.add(
-        '''(null, 7.99, 'OUT', 'Netflix', 14, 71, null, 1, 'monthly', 19, '2022-11-14', null, '2022-11-14 03:33:36.048611', '2022-11-14 03:33:36.048611')''');
-    demoTransactions.add(
-        '''(null, 292.39, 'OUT', 'Car Loan', 13, 70, null, 1, 'monthly', 27, '2019-10-03', '2024-10-02', '2022-10-04 03:33:36.048611', '2022-10-04 03:33:36.048611')''');
 
     // finalize query and write!
     await _database?.execute(
