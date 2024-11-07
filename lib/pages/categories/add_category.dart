@@ -260,6 +260,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                     ],
                   ),
                 ),
+                /* temporary hided, see #178
                 Container(
                   alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.only(left: 16, top: 32, bottom: 8),
@@ -289,6 +290,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                     ),
                   ),
                 ),
+                */
                 if (selectedCategory != null)
                   Container(
                     width: double.infinity,
