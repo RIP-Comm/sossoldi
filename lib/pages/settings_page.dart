@@ -6,6 +6,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../constants/style.dart';
 import '../custom_widgets/alert_dialog.dart';
@@ -55,6 +56,12 @@ var settingsOptions = [
     "Notifications",
     "Manage your notifications settings",
     Platform.isAndroid ? "/notifications-settings" : null,
+  ],
+  [
+    Icons.feedback,
+    "Leave a feedback",
+    "Complete a small form to report a bug or leave a feedback",
+    "https://feedback.sossoldi.com",
   ],
   [
     Icons.info,
@@ -163,7 +170,13 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                     child: DefaultCard(
                       onTap: () {
                         if (setting[3] != null) {
-                          Navigator.of(context).pushNamed(setting[3] as String);
+                          final link = setting[3] as String;
+                          if(link.startsWith("http")) {
+                            Uri url = Uri.parse(link);
+                            launchUrl(url);
+                          } else {
+                            Navigator.of(context).pushNamed(link);
+                          }
                         }
                       },
                       child: Row(
