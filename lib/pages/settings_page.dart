@@ -18,12 +18,6 @@ import '../providers/dashboard_provider.dart';
 import '../providers/statistics_provider.dart';
 import '../providers/transactions_provider.dart';
 
-class SettingsPage extends ConsumerStatefulWidget {
-  const SettingsPage({super.key});
-
-  @override
-  ConsumerState<SettingsPage> createState() => _SettingsPageState();
-}
 
 var settingsOptions = [
   [
@@ -70,7 +64,50 @@ var settingsOptions = [
   ],
 ];
 
+class SettingsPage extends ConsumerStatefulWidget {
+  const SettingsPage({super.key});
+
+  @override
+  ConsumerState<SettingsPage> createState() => _SettingsPageState();
+}
+
+
 class _SettingsPageState extends ConsumerState<SettingsPage> {
+  bool _isDeveloperOptionsActive = false;
+  int _tapCount = 0;
+
+  void _onSettingsTap() {
+    _tapCount++;
+
+    if (_tapCount == 4) {
+      setState(() {
+        _isDeveloperOptionsActive = !_isDeveloperOptionsActive;
+      });
+      _tapCount = 0; // Reset the tap counter
+
+      if (_isDeveloperOptionsActive) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text("Developer options activated."),
+            content: const Text("WARNING: tapping on any button on the red bar, erases permanently your data. Do it at your own risk"),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text("OK"),
+              ),
+            ],
+          ),
+        );
+      }
+    }
+
+    // Reset the tap count if too much time passes between taps (optional)
+    Future.delayed(const Duration(seconds: 1), () {
+      _tapCount = 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,29 +123,32 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
-              child: Row(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Theme.of(context).colorScheme.primary,
+              child: GestureDetector(
+                onTap: _onSettingsTap,
+                child: Row(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      padding: const EdgeInsets.all(5.0),
+                      child: Icon(
+                        Icons.settings,
+                        size: 28.0,
+                        color: Theme.of(context).colorScheme.background,
+                      ),
                     ),
-                    padding: const EdgeInsets.all(5.0),
-                    child: Icon(
-                      Icons.settings,
-                      size: 28.0,
-                      color: Theme.of(context).colorScheme.background,
+                    const SizedBox(width: 12.0),
+                    Text(
+                      "Settings",
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineLarge!
+                          .copyWith(color: Theme.of(context).colorScheme.primary),
                     ),
-                  ),
-                  const SizedBox(width: 12.0),
-                  Text(
-                    "Settings",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineLarge!
-                        .copyWith(color: Theme.of(context).colorScheme.primary),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             ListView.builder(
@@ -173,7 +213,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           ],
         ),
       ),
-      bottomSheet: Container(
+      bottomSheet: _isDeveloperOptionsActive
+          ? Container(
         color: Colors.deepOrangeAccent,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -223,7 +264,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             ),
           ],
         ),
-      ),
+      )
+          : null,
     );
   }
 }
+
