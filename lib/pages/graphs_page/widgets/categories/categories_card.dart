@@ -25,8 +25,7 @@ class CategoriesCardState extends ConsumerState<CategoriesCard> {
   Widget build(BuildContext context) {
     final categoryType = ref.watch(categoryTypeProvider);
     final categoryMap = ref.watch(categoryMapProvider(categoryType));
-    final categoryTotalAmount =
-        ref.watch(categoryTotalAmountProvider(categoryType)).value ?? 0;
+    final categoryTotalAmount = ref.watch(categoryTotalAmountProvider(categoryType)).value ?? 0;
 
     return Column(
       children: [
@@ -39,7 +38,9 @@ class CategoriesCardState extends ConsumerState<CategoriesCard> {
 
               return categoryTotalAmount != 0
                   ? CategoriesContent(
-                      categories: categories, totalAmount: categoryTotalAmount)
+                      categories: categories,
+                      totalAmount: categoryTotalAmount,
+                    )
                   : const NoTransactionsContent();
             },
             loading: () => LoadingContentWidget(previousCategoriesCount: _categoriesCount),
@@ -52,8 +53,11 @@ class CategoriesCardState extends ConsumerState<CategoriesCard> {
 }
 
 class CategoriesContent extends StatelessWidget {
-  const CategoriesContent(
-      {required this.categories, required this.totalAmount, super.key});
+  const CategoriesContent({
+    required this.categories,
+    required this.totalAmount,
+    super.key,
+  });
 
   final Map<CategoryTransaction, double> categories;
   final double totalAmount;
@@ -79,7 +83,10 @@ class CategoriesContent extends StatelessWidget {
             final category = categories.keys.elementAt(i);
             final amount = categories[category] ?? 0;
             return CategoryItem(
-                category: category, amount: amount, totalAmount: totalAmount);
+              category: category,
+              amount: amount,
+              totalAmount: totalAmount,
+            );
           },
         ),
         const SizedBox(height: 30),
