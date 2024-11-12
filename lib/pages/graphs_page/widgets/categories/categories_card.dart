@@ -11,15 +11,21 @@ import 'categories_bar_chart.dart';
 import 'categories_pie_chart2.dart';
 import 'category_label.dart';
 
-class CategoriesCard extends ConsumerWidget {
+class CategoriesCard extends ConsumerStatefulWidget {
   const CategoriesCard({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<CategoriesCard> createState() => CategoriesCardState();
+}
+
+class CategoriesCardState extends ConsumerState<CategoriesCard> {
+  int _categoriesCount = 0;
+
+  @override
+  Widget build(BuildContext context) {
     final categoryType = ref.watch(categoryTypeProvider);
     final categoryMap = ref.watch(categoryMapProvider(categoryType));
-    final categoryTotalAmount =
-        ref.watch(categoryTotalAmountProvider(categoryType)).value ?? 0;
+    final categoryTotalAmount = ref.watch(categoryTotalAmountProvider(categoryType)).value ?? 0;
 
     return Column(
       children: [
@@ -28,12 +34,16 @@ class CategoriesCard extends ConsumerWidget {
         DefaultContainer(
           child: categoryMap.when(
             data: (categories) {
+              _categoriesCount = categories.length;
+
               return categoryTotalAmount != 0
                   ? CategoriesContent(
-                      categories: categories, totalAmount: categoryTotalAmount)
+                      categories: categories,
+                      totalAmount: categoryTotalAmount,
+                    )
                   : const NoTransactionsContent();
             },
-            loading: () => const SizedBox.shrink(),
+            loading: () => LoadingContentWidget(previousCategoriesCount: _categoriesCount),
             error: (e, s) => Text("Error: $e"),
           ),
         ),
@@ -43,8 +53,11 @@ class CategoriesCard extends ConsumerWidget {
 }
 
 class CategoriesContent extends StatelessWidget {
-  const CategoriesContent(
-      {required this.categories, required this.totalAmount, super.key});
+  const CategoriesContent({
+    required this.categories,
+    required this.totalAmount,
+    super.key,
+  });
 
   final Map<CategoryTransaction, double> categories;
   final double totalAmount;
@@ -70,7 +83,10 @@ class CategoriesContent extends StatelessWidget {
             final category = categories.keys.elementAt(i);
             final amount = categories[category] ?? 0;
             return CategoryItem(
-                category: category, amount: amount, totalAmount: totalAmount);
+              category: category,
+              amount: amount,
+              totalAmount: totalAmount,
+            );
           },
         ),
         const SizedBox(height: 30),
@@ -113,6 +129,32 @@ class CategoryItem extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class LoadingContentWidget extends StatelessWidget {
+  final int previousCategoriesCount;
+
+  const LoadingContentWidget({
+    super.key,
+    required this.previousCategoriesCount,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const MonthSelector(type: MonthSelectorType.simple),
+        const SizedBox(height: 20),
+        const CategoryTypeButton(),
+        const SizedBox(height: 20),
+        const SizedBox(height: 200), // height of CategoriesPieChart2
+        const SizedBox(height: 20),
+        SizedBox(height: 50.0 * previousCategoriesCount), // Height of CategoryItem's list
+        const SizedBox(height: 30),
+        const SizedBox(height: 200), // Height of CategoriesBarChart
+      ],
     );
   }
 }
