@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace "com.example.sossoldi"
+    namespace "com.ripsters.sossoldi"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -19,7 +19,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.sossoldi"
+        applicationId = "com.ripsters.sossoldi"
         minSdkVersion = flutter.minSdkVersion
         targetSdkVersion = flutter.targetSdkVersion
         versionCode = flutter.versionCode

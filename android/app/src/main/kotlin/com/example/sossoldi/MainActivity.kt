@@ -1,4 +1,4 @@
-package com.example.sossoldi
+package com.ripsters.sossoldi
 
 import io.flutter.embedding.android.FlutterActivity
 

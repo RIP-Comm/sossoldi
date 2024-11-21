@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.sossoldi">
+    package="com.ripsters.sossoldi">
 
 		<!-- Permissions for scheduled notifications-->
 		<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
