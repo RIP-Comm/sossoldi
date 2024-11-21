@@ -91,7 +91,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> with Function
                                       ? Icon(
                                           icon,
                                           size: 24.0,
-                                          color: Theme.of(context).colorScheme.background,
+                                          color: Theme.of(context).colorScheme.onPrimary,
                                         )
                                       : const SizedBox(),
                                 ),
@@ -147,7 +147,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> with Function
                               ? Icon(
                                   icon,
                                   size: 24.0,
-                                  color: Theme.of(context).colorScheme.background,
+                                  color: Theme.of(context).colorScheme.onPrimary,
                                 )
                               : const SizedBox(),
                         ),

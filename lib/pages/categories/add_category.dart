@@ -38,7 +38,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
     final categoryColor = ref.watch(categoryColorProvider);
     final showCategoryIcons = ref.watch(showCategoryIconsProvider);
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.onPrimary,
       appBar: AppBar(title: Text("${selectedCategory == null ? "New" : "Edit"} Category")),
       body: Stack(
         children: [
@@ -151,7 +151,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                             child: Icon(
                               iconList[categoryIcon],
                               size: 48,
-                              color: Theme.of(context).colorScheme.background,
+                              color: Theme.of(context).colorScheme.onPrimary,
                             ),
                           ),
                         ),
@@ -328,7 +328,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                   )
                 ],
               ),
-              padding: const EdgeInsets.only(left:24 ,right: 24, top: 16, bottom: 30),
+              padding: const EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 30),
               child: Container(
                 decoration: BoxDecoration(
                   boxShadow: [defaultShadow],
@@ -336,7 +336,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                 ),
                 child: TextButton(
                   onPressed: () async {
-                    if(nameController.text.isNotEmpty) {
+                    if (nameController.text.isNotEmpty) {
                       if (selectedCategory != null) {
                         ref
                             .read(categoriesProvider.notifier)
@@ -363,7 +363,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                     style: Theme.of(context)
                         .textTheme
                         .bodyLarge!
-                        .copyWith(color: Theme.of(context).colorScheme.background),
+                        .copyWith(color: Theme.of(context).colorScheme.onPrimary),
                   ),
                 ),
               ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sossoldi/pages/planning_page/widget/recurring_payment_card.dart';
-import 'package:sossoldi/providers/transactions_provider.dart';
+import 'recurring_payment_card.dart';
+import '../../../providers/transactions_provider.dart';
 
 import '../../../model/recurring_transaction.dart';
 import '../../../model/transaction.dart';

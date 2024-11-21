@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import "../../../constants/style.dart";
-
 class LabelListTile extends StatelessWidget {
   const LabelListTile(
     this.labelController, {
@@ -26,7 +24,7 @@ class LabelListTile extends StatelessWidget {
               child: Icon(
                 Icons.description,
                 size: 24.0,
-                color: Theme.of(context).colorScheme.background,
+                color: Theme.of(context).colorScheme.onPrimary,
               ),
             ),
           ),
@@ -42,8 +40,8 @@ class LabelListTile extends StatelessWidget {
           Expanded(
             child: TextField(
               controller: labelController,
-              decoration: const InputDecoration(
-                  border: InputBorder.none, hintText: "Add a description"),
+              decoration:
+                  const InputDecoration(border: InputBorder.none, hintText: "Add a description"),
               textAlign: TextAlign.end,
               style: Theme.of(context)
                   .textTheme

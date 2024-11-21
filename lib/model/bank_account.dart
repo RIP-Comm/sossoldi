@@ -41,17 +41,18 @@ class BankAccount extends BaseEntity {
   final bool mainAccount;
   final num? total;
 
-  const BankAccount(
-      {super.id,
-      required this.name,
-      required this.symbol,
-      required this.color,
-      required this.startingValue,
-      required this.active,
-      required this.mainAccount,
-      this.total,
-      super.createdAt,
-      super.updatedAt});
+  const BankAccount({
+    super.id,
+    required this.name,
+    required this.symbol,
+    required this.color,
+    required this.startingValue,
+    required this.active,
+    required this.mainAccount,
+    this.total,
+    super.createdAt,
+    super.updatedAt,
+  });
 
   BankAccount copy(
           {int? id,
@@ -94,9 +95,8 @@ class BankAccount extends BaseEntity {
         BankAccountFields.startingValue: startingValue,
         BankAccountFields.active: active ? 1 : 0,
         BankAccountFields.mainAccount: mainAccount ? 1 : 0,
-        BaseEntityFields.createdAt: update
-            ? createdAt?.toIso8601String()
-            : DateTime.now().toIso8601String(),
+        BaseEntityFields.createdAt:
+            update ? createdAt?.toIso8601String() : DateTime.now().toIso8601String(),
         BaseEntityFields.updatedAt: DateTime.now().toIso8601String(),
       };
 }
@@ -205,8 +205,7 @@ class BankAccountMethods extends SossoldiDatabase {
   Future<int> deleteById(int id) async {
     final db = await database;
 
-    return await db.delete(bankAccountTable,
-        where: '${BankAccountFields.id} = ?', whereArgs: [id]);
+    return await db.delete(bankAccountTable, where: '${BankAccountFields.id} = ?', whereArgs: [id]);
   }
 
   Future<int> deactivateById(int id) async {
@@ -224,8 +223,8 @@ class BankAccountMethods extends SossoldiDatabase {
     final db = await database;
 
     //get account infos first
-    final result = await db.query(bankAccountTable,
-        where: '${BankAccountFields.id}  = $id', limit: 1);
+    final result =
+        await db.query(bankAccountTable, where: '${BankAccountFields.id}  = $id', limit: 1);
     final singleObject = result.isNotEmpty ? result[0] : null;
 
     if (singleObject != null) {
@@ -269,18 +268,18 @@ class BankAccountMethods extends SossoldiDatabase {
 
     final resultQuery = await db.rawQuery('''
       SELECT t.*,
-        c.${CategoryTransactionFields.name} as ${TransactionFields.categoryName}, 
-        c.${CategoryTransactionFields.color} as ${TransactionFields.categoryColor}, 
+        c.${CategoryTransactionFields.name} as ${TransactionFields.categoryName},
+        c.${CategoryTransactionFields.color} as ${TransactionFields.categoryColor},
         c.${CategoryTransactionFields.symbol} as ${TransactionFields.categorySymbol}
-      FROM 
+      FROM
         "$transactionTable" as t
-      LEFT JOIN 
-        $categoryTransactionTable as c ON t.${TransactionFields.idCategory} = c.${CategoryTransactionFields.id} 
-      WHERE 
+      LEFT JOIN
+        $categoryTransactionTable as c ON t.${TransactionFields.idCategory} = c.${CategoryTransactionFields.id}
+      WHERE
         $accountFilter
       ORDER BY
         ${TransactionFields.date} DESC
-        LIMIT 
+        LIMIT
           $numTransactions
     ''');
 
@@ -322,16 +321,14 @@ class BankAccountMethods extends SossoldiDatabase {
     double runningTotal = statritngValue[0]['Value'] as double;
 
     var result = resultQuery.map((e) {
-      runningTotal += double.parse(e['income'].toString()) -
-          double.parse(e['expense'].toString());
+      runningTotal += double.parse(e['income'].toString()) - double.parse(e['expense'].toString());
       return {"day": e["day"], "balance": runningTotal};
     }).toList();
 
     if (dateRangeStart != null) {
       return result
-          .where((element) => dateRangeStart.isBefore(
-              DateTime.parse(element["day"].toString())
-                  .add(const Duration(days: 1))))
+          .where((element) => dateRangeStart
+              .isBefore(DateTime.parse(element["day"].toString()).add(const Duration(days: 1))))
           .toList();
     }
 

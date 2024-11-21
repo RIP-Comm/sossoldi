@@ -69,12 +69,10 @@ class _TransactionsListState extends State<TransactionsList> with Functions {
               child: Column(
                 children: transactions.map((transaction) {
                   int index = transactions.indexOf(transaction);
-                  bool first = index == 0 ||
-                      !transaction.date
-                          .isSameDate(transactions[index - 1].date);
+                  bool first =
+                      index == 0 || !transaction.date.isSameDate(transactions[index - 1].date);
                   bool last = index == transactions.length - 1 ||
-                      !transaction.date
-                          .isSameDate(transactions[index + 1].date);
+                      !transaction.date.isSameDate(transactions[index + 1].date);
 
                   return Column(
                     children: [
@@ -137,17 +135,11 @@ class TransactionTitle extends ConsumerWidget with Functions {
                   children: [
                     TextSpan(
                       text: numToCurrency(total),
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge!
-                          .copyWith(color: color),
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: color),
                     ),
                     TextSpan(
                       text: currencyState.selectedCurrency.symbol,
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelMedium!
-                          .copyWith(color: color),
+                      style: Theme.of(context).textTheme.labelMedium!.copyWith(color: color),
                     ),
                   ],
                 ),
@@ -162,8 +154,7 @@ class TransactionTitle extends ConsumerWidget with Functions {
 }
 
 class TransactionRow extends ConsumerWidget with Functions {
-  const TransactionRow(this.transaction,
-      {this.first = false, this.last = false, super.key});
+  const TransactionRow(this.transaction, {this.first = false, this.last = false, super.key});
 
   final Transaction transaction;
   final bool first;
@@ -172,7 +163,7 @@ class TransactionRow extends ConsumerWidget with Functions {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currencyState = ref.watch(currencyStateNotifier);
-    
+
     return Column(
       children: [
         Material(
@@ -232,12 +223,8 @@ class TransactionRow extends ConsumerWidget with Functions {
                             if (transaction.note != null)
                               Text(
                                 transaction.note!,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge!
-                                    .copyWith(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
+                                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                                      color: Theme.of(context).colorScheme.primary,
                                     ),
                               ),
                             const Spacer(),
@@ -250,18 +237,14 @@ class TransactionRow extends ConsumerWidget with Functions {
                                     style: Theme.of(context)
                                         .textTheme
                                         .labelLarge!
-                                        .copyWith(
-                                            color:
-                                                typeToColor(transaction.type)),
+                                        .copyWith(color: typeToColor(transaction.type)),
                                   ),
                                   TextSpan(
                                     text: currencyState.selectedCurrency.symbol,
                                     style: Theme.of(context)
                                         .textTheme
                                         .labelSmall!
-                                        .copyWith(
-                                            color:
-                                                typeToColor(transaction.type)),
+                                        .copyWith(color: typeToColor(transaction.type)),
                                   ),
                                 ],
                               ),
@@ -274,12 +257,8 @@ class TransactionRow extends ConsumerWidget with Functions {
                             if (transaction.categoryName != null)
                               Text(
                                 transaction.categoryName!,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelMedium!
-                                    .copyWith(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
+                                style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                                      color: Theme.of(context).colorScheme.primary,
                                     ),
                               ),
                             const Spacer(),
@@ -287,12 +266,8 @@ class TransactionRow extends ConsumerWidget with Functions {
                               transaction.type == TransactionType.transfer
                                   ? "${transaction.bankAccountName ?? ''}→${transaction.bankAccountTransferName ?? ''}"
                                   : transaction.bankAccountName ?? '',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelMedium!
-                                  .copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
+                              style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                                    color: Theme.of(context).colorScheme.primary,
                                   ),
                             ),
                           ],
@@ -308,7 +283,7 @@ class TransactionRow extends ConsumerWidget with Functions {
         ),
         if (!last)
           Container(
-            color: Theme.of(context).colorScheme.background,
+            color: Theme.of(context).colorScheme.onPrimary,
             child: Divider(
               height: 1,
               indent: 12,

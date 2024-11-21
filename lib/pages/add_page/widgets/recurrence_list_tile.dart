@@ -41,7 +41,7 @@ class RecurrenceListTile extends ConsumerWidget with Functions {
               child: Icon(
                 Icons.autorenew,
                 size: 24.0,
-                color: Theme.of(context).colorScheme.background,
+                color: Theme.of(context).colorScheme.onPrimary,
               ),
             ),
           ),
@@ -88,7 +88,7 @@ class RecurrenceListTile extends ConsumerWidget with Functions {
               opacity: selectedTransaction == null || recurrencyEditingPermitted ? 1.0 : 0.5,
               child: TextButton(
                 style: TextButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.background,
+                  backgroundColor: Theme.of(context).colorScheme.onPrimary,
                   padding: const EdgeInsets.all(16),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(4)),
@@ -134,7 +134,7 @@ class RecurrenceListTile extends ConsumerWidget with Functions {
               opacity: selectedTransaction == null || recurrencyEditingPermitted ? 1.0 : 0.5,
               child: TextButton(
                 style: TextButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.background,
+                  backgroundColor: Theme.of(context).colorScheme.onPrimary,
                   padding: const EdgeInsets.all(16),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(4)),

@@ -157,7 +157,7 @@ class SossoldiDatabase {
         (14, "Leisure", "OUT", "subscriptions", 4, '', null, '${DateTime.now()}', '${DateTime.now()}'),
         (15, "Transports", "OUT", "directions_car_rounded", 6, '', null, '${DateTime.now()}', '${DateTime.now()}'),
         (16, "Salary", "IN", "work", 5, '', null, '${DateTime.now()}', '${DateTime.now()}');
-        
+
     ''');
 
     // Add currencies
@@ -240,7 +240,7 @@ class SossoldiDatabase {
       var randomAccount = accounts[rnd.nextInt(accounts.length)];
       var randomNote = outNotes[rnd.nextInt(outNotes.length)];
       var randomCategory = categories[rnd.nextInt(categories.length)];
-      var idBankAccountTransfer;
+      int? idBankAccountTransfer;
       DateTime randomDate = now.subtract(Duration(
           days: rnd.nextInt(dateInPastMaxRange),
           hours: rnd.nextInt(20),

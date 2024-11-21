@@ -93,16 +93,17 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
                   },
                   child: BudgetCategorySelector(
                     categories: categories,
-                    categoriesAlreadyUsed: categories.where((element) => budgets.map((e) => e.name).contains(element.name)).map((e) => e.name).toList(),
+                    categoriesAlreadyUsed: categories
+                        .where((element) => budgets.map((e) => e.name).contains(element.name))
+                        .map((e) => e.name)
+                        .toList(),
                     budget: budgets[index],
                     initSelectedCategory: categories
-                            .where((element) =>
-                                element.id == budgets[index].idCategory)
+                            .where((element) => element.id == budgets[index].idCategory)
                             .isEmpty
                         ? categories[0]
                         : categories
-                            .where((element) =>
-                                element.id == budgets[index].idCategory)
+                            .where((element) => element.id == budgets[index].idCategory)
                             .first,
                     onBudgetChanged: (updatedBudget) {
                       updateBudget(updatedBudget, index);
@@ -164,7 +165,10 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
               ),
               child: Text(
                 "SAVE BUDGET",
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Theme.of(context).colorScheme.background),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge!
+                    .copyWith(color: Theme.of(context).colorScheme.onPrimary),
               ),
             ),
           ),

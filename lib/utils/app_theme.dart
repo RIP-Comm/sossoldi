@@ -8,7 +8,7 @@ class AppTheme {
     scaffoldBackgroundColor: white,
     useMaterial3: false,
     appBarTheme: const AppBarTheme(
-      color: grey3,
+      color: white,
       elevation: 0,
       centerTitle: true,
       iconTheme: IconThemeData(color: blue5),
@@ -205,12 +205,10 @@ ColorScheme customColorScheme = const ColorScheme(
   secondary: blue5,
   tertiary: blue7,
   surface: grey3,
-  background: white,
   error: red,
   onPrimary: white,
   onSecondary: white,
   onSurface: blue1,
-  onBackground: blue1,
   onError: black,
   brightness: Brightness.light,
 );
@@ -221,12 +219,10 @@ ColorScheme darkCustomColorScheme = const ColorScheme(
   secondary: darkBlue5,
   tertiary: darkBlue7,
   surface: darkBlue7, //darkBlue3
-  background: darkWhite,
   error: darkRed,
   onPrimary: darkWhite,
   onSecondary: darkWhite,
   onSurface: darkBlue1,
-  onBackground: darkBlue1,
   onError: darkBlack,
   brightness: Brightness.dark,
 );

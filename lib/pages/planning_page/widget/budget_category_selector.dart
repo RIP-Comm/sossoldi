@@ -13,7 +13,7 @@ class BudgetCategorySelector extends ConsumerStatefulWidget {
   final CategoryTransaction initSelectedCategory;
   final Function(Budget) onBudgetChanged;
 
-  BudgetCategorySelector(
+  const BudgetCategorySelector(
       {super.key,
       required this.categories,
       required this.budget,
@@ -22,8 +22,7 @@ class BudgetCategorySelector extends ConsumerStatefulWidget {
       required this.categoriesAlreadyUsed});
 
   @override
-  ConsumerState<BudgetCategorySelector> createState() =>
-      _BudgetCategorySelector();
+  ConsumerState<BudgetCategorySelector> createState() => _BudgetCategorySelector();
 }
 
 class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
@@ -35,8 +34,7 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
         idCategory: selectedCategory.id!,
         name: selectedCategory.name,
         active: true,
-        amountLimit: _controller.text.isNotEmpty ? double.parse(_controller.text) : 0
-      );
+        amountLimit: _controller.text.isNotEmpty ? double.parse(_controller.text) : 0);
     widget.onBudgetChanged(updatedBudget);
   }
 
@@ -62,20 +60,25 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
                   child: Container(
                       padding: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8)),
+                          color: Colors.white, borderRadius: BorderRadius.circular(8)),
                       child: DropdownButton<CategoryTransaction>(
                         value: selectedCategory,
                         underline: const SizedBox(),
                         isExpanded: true,
                         items: widget.categories
-                          .where((e) => e.name == selectedCategory.name || !widget.categoriesAlreadyUsed.contains(e.name))
+                            .where((e) =>
+                                e.name == selectedCategory.name ||
+                                !widget.categoriesAlreadyUsed.contains(e.name))
                             .map((CategoryTransaction category) {
                           IconData? icon = iconList[category.symbol];
                           return DropdownMenuItem<CategoryTransaction>(
                               value: category,
                               child: Row(
-                                children: [Icon(icon), const SizedBox(width: 15), Text(category.name)],
+                                children: [
+                                  Icon(icon),
+                                  const SizedBox(width: 15),
+                                  Text(category.name)
+                                ],
                               ));
                         }).toList(),
                         onChanged: (CategoryTransaction? newValue) {

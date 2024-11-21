@@ -1,32 +1,28 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:workmanager/workmanager.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 import 'model/recurring_transaction.dart';
-import 'utils/worker_manager.dart';
-import 'pages/notifications/notifications_service.dart';
 import 'providers/theme_provider.dart';
 import 'routes.dart';
 import 'utils/app_theme.dart';
+import 'utils/notifications_service.dart';
 
 bool? _isFirstLogin = true;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  if(Platform.isAndroid){
-    requestNotificationPermissions();
-    initializeNotifications();
-    Workmanager().initialize(callbackDispatcher);
-  }
+  NotificationService().requestNotificationPermissions();
+  NotificationService().initializeNotifications();
+  tz.initializeTimeZones();
+  tz.setLocalLocation(tz.local);
 
   SharedPreferences preferences = await SharedPreferences.getInstance();
 
-  bool? getPref =  preferences.getBool('is_first_login');
+  bool? getPref = preferences.getBool('is_first_login');
   getPref == null ? await preferences.setBool('is_first_login', false) : null;
   _isFirstLogin = getPref;
 
@@ -54,8 +50,7 @@ class Launcher extends ConsumerWidget {
       title: 'Sossoldi',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode:
-          appThemeState.isDarkModeEnabled ? ThemeMode.dark : ThemeMode.light,
+      themeMode: appThemeState.isDarkModeEnabled ? ThemeMode.dark : ThemeMode.light,
       onGenerateRoute: makeRoute,
       initialRoute: _isFirstLogin == null || _isFirstLogin! ? '/onboarding' : '/',
     );

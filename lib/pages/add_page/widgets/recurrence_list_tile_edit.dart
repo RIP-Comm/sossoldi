@@ -35,7 +35,7 @@ class RecurrenceListTileEdit extends ConsumerWidget with Functions {
               child: Icon(
                 Icons.autorenew,
                 size: 24.0,
-                color: Theme.of(context).colorScheme.background,
+                color: Theme.of(context).colorScheme.onPrimary,
               ),
             ),
           ),
@@ -52,7 +52,7 @@ class RecurrenceListTileEdit extends ConsumerWidget with Functions {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: TextButton(
               style: TextButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.background,
+                backgroundColor: Theme.of(context).colorScheme.onPrimary,
                 padding: const EdgeInsets.all(16),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(4)),
@@ -93,7 +93,7 @@ class RecurrenceListTileEdit extends ConsumerWidget with Functions {
             padding: const EdgeInsets.all(16),
             child: TextButton(
               style: TextButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.background,
+                backgroundColor: Theme.of(context).colorScheme.onPrimary,
                 padding: const EdgeInsets.all(16),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(4)),

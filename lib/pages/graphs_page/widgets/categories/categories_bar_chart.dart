@@ -141,7 +141,6 @@ class CategoriesBarChart extends ConsumerWidget {
       enabled: true,
       handleBuiltInTouches: true,
       touchTooltipData: BarTouchTooltipData(
-        tooltipBgColor: Colors.transparent,
         tooltipPadding: EdgeInsets.zero,
         tooltipMargin: 0,
         getTooltipItem: (group, groupIndex, rod, rodIndex) =>

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sossoldi/constants/constants.dart';
-import 'package:sossoldi/model/recurring_transaction.dart';
-import 'package:sossoldi/pages/planning_page/widget/older_recurring_payments.dart';
-import 'package:sossoldi/providers/accounts_provider.dart';
-import 'package:sossoldi/providers/currency_provider.dart';
+import '../../../constants/constants.dart';
+import '../../../model/recurring_transaction.dart';
+import 'older_recurring_payments.dart';
+import '../../../providers/accounts_provider.dart';
+import '../../../providers/currency_provider.dart';
 
 import '../../../constants/functions.dart';
 import '../../../constants/style.dart';

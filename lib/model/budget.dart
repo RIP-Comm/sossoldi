@@ -31,15 +31,15 @@ class Budget extends BaseEntity {
   final num amountLimit;
   final bool active;
 
-  const Budget(
-      {int? id,
-      required this.idCategory,
-      this.name,
-      required this.amountLimit,
-      required this.active,
-      DateTime? createdAt,
-      DateTime? updatedAt})
-      : super(id: id, createdAt: createdAt, updatedAt: updatedAt);
+  const Budget({
+    super.id,
+    required this.idCategory,
+    this.name,
+    required this.amountLimit,
+    required this.active,
+    super.createdAt,
+    super.updatedAt,
+  });
 
   Budget copy(
           {int? id,
@@ -85,12 +85,16 @@ class BudgetStats extends BaseEntity {
   final num amountLimit;
   final num spent;
 
-  BudgetStats({required this.idCategory, required this.name, required this.amountLimit, required this.spent});
+  BudgetStats(
+      {required this.idCategory,
+      required this.name,
+      required this.amountLimit,
+      required this.spent});
 
   static BudgetStats fromJson(Map<String, Object?> json) => BudgetStats(
       idCategory: json[BudgetFields.idCategory] as int,
       name: json[BudgetFields.name] as String?,
-      amountLimit: json[BudgetFields.amountLimit] as num, 
+      amountLimit: json[BudgetFields.amountLimit] as num,
       spent: json['spent'] as num);
 
   Map<String, Object?> toJson() => {
@@ -113,7 +117,8 @@ class BudgetMethods extends SossoldiDatabase {
 
     final exists = await checkIfExists(item);
     if (exists) {
-      await db.rawQuery("UPDATE $budgetTable SET amountLimit = ${item.amountLimit} WHERE idCategory = ${item.idCategory}");
+      await db.rawQuery(
+          "UPDATE $budgetTable SET amountLimit = ${item.amountLimit} WHERE idCategory = ${item.idCategory}");
     } else {
       await db.insert(budgetTable, item.toJson());
     }
@@ -125,8 +130,9 @@ class BudgetMethods extends SossoldiDatabase {
     final db = await database;
 
     try {
-      final exists = await db.rawQuery("SELECT * FROM ${budgetTable} WHERE ${item.idCategory} = idCategory");
-      if(exists.isNotEmpty) {
+      final exists =
+          await db.rawQuery("SELECT * FROM $budgetTable WHERE ${item.idCategory} = idCategory");
+      if (exists.isNotEmpty) {
         return true;
       }
       return false;
@@ -170,11 +176,8 @@ class BudgetMethods extends SossoldiDatabase {
 
   Future<List<BudgetStats>> selectMonthlyBudgetsStats() async {
     final db = await database;
-    var query = "SELECT bt.*, SUM(t.amount) as spent FROM $budgetTable as bt "
-    + " LEFT JOIN $categoryTransactionTable as ct ON bt.${BudgetFields.idCategory} = ct.${CategoryTransactionFields.id} "
-    + " LEFT JOIN '$transactionTable' as t ON t.${TransactionFields.idCategory} = ct.${CategoryTransactionFields.id} " 
-    + " WHERE bt.active = 1 AND strftime('%m', t.date) = strftime('%m', 'now') AND strftime('%Y', t.date) = strftime('%Y', 'now') "
-    + " GROUP BY bt.${BudgetFields.idCategory};";
+    var query =
+        "SELECT bt.*, SUM(t.amount) as spent FROM $budgetTable as bt  LEFT JOIN $categoryTransactionTable as ct ON bt.${BudgetFields.idCategory} = ct.${CategoryTransactionFields.id}  LEFT JOIN '$transactionTable' as t ON t.${TransactionFields.idCategory} = ct.${CategoryTransactionFields.id}  WHERE bt.active = 1 AND strftime('%m', t.date) = strftime('%m', 'now') AND strftime('%Y', t.date) = strftime('%Y', 'now')  GROUP BY bt.${BudgetFields.idCategory};";
     final result = await db.rawQuery(query);
     return result.map((json) => BudgetStats.fromJson(json)).toList();
   }

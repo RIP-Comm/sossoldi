@@ -1,6 +1,3 @@
-import 'dart:io' show Platform;
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -186,7 +183,7 @@ class _EditRecurringTransactionState
                   child: Text(
                     "UPDATE TRANSACTION",
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        color: Theme.of(context).colorScheme.background),
+                        color: Theme.of(context).colorScheme.onPrimary),
                   ),
                 ),
               ),

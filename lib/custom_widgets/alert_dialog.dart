@@ -58,7 +58,8 @@ class AlertDialogBuilder {
     showDialog(
         context: context,
         builder: (context) {
-          return _AlertDialog(dialogType, text, primaryActionText, primaryActionFunction, secondaryActionText, secondaryActionFunction);
+          return _AlertDialog(dialogType, text, primaryActionText, primaryActionFunction,
+              secondaryActionText, secondaryActionFunction);
         },
         barrierDismissible: isDismissible);
   }
@@ -68,33 +69,41 @@ class AlertDialogBuilder {
 /// Shows an info dialog with given text
 ///
 void showInfoDialog(BuildContext context, String text) =>
-    AlertDialogBuilder(text: text, dialogType: AlertDialogType.info, primaryActionText: "OK").show(context);
+    AlertDialogBuilder(text: text, dialogType: AlertDialogType.info, primaryActionText: "OK")
+        .show(context);
 
 ///
 /// Shows a success dialog with given text
 ///
 void showSuccessDialog(BuildContext context, String text) =>
-    AlertDialogBuilder(text: text, dialogType: AlertDialogType.success, primaryActionText: "OK").show(context);
+    AlertDialogBuilder(text: text, dialogType: AlertDialogType.success, primaryActionText: "OK")
+        .show(context);
 
 ///
 /// Shows a warning dialog with given text
 ///
 void showWarningDialog(BuildContext context, String text) =>
-    AlertDialogBuilder(text: text, dialogType: AlertDialogType.warning, primaryActionText: "OK").show(context);
+    AlertDialogBuilder(text: text, dialogType: AlertDialogType.warning, primaryActionText: "OK")
+        .show(context);
 
 ///
 /// Shows an error dialog with given text
 ///
 void showErrorDialog(BuildContext context, String text) =>
-    AlertDialogBuilder(text: text, dialogType: AlertDialogType.error, primaryActionText: "OK").show(context);
+    AlertDialogBuilder(text: text, dialogType: AlertDialogType.error, primaryActionText: "OK")
+        .show(context);
 
 enum AlertDialogType { info, success, warning, error }
 
 class _AlertDialog extends StatelessWidget {
   const _AlertDialog(
-      this._dialogType, this._text, this._primaryActionText, this._primaryActionFunction, this._secondaryActionText, this._secondaryActionFunction,
-      {Key? key})
-      : super(key: key);
+    this._dialogType,
+    this._text,
+    this._primaryActionText,
+    this._primaryActionFunction,
+    this._secondaryActionText,
+    this._secondaryActionFunction,
+  );
 
   final AlertDialogType _dialogType;
   final String _text;
@@ -134,19 +143,21 @@ class _AlertDialog extends StatelessWidget {
     // Secondary action comes first, since actions are displayed on screen left to right //
     if (_secondaryActionText != null) {
       actionWidgets.add(TextButton(
-          onPressed: () {
-            _secondaryActionFunction?.call();
-            Navigator.of(context).pop();
-          },
-          child: Text(_secondaryActionText!)));
+        onPressed: () {
+          _secondaryActionFunction?.call();
+          Navigator.of(context).pop();
+        },
+        child: Text(_secondaryActionText),
+      ));
     }
 
     actionWidgets.add(TextButton(
-        onPressed: () {
-          _primaryActionFunction?.call();
-          Navigator.of(context).pop();
-        },
-        child: Text(_primaryActionText)));
+      onPressed: () {
+        _primaryActionFunction?.call();
+        Navigator.of(context).pop();
+      },
+      child: Text(_primaryActionText),
+    ));
 
     return actionWidgets;
   }
