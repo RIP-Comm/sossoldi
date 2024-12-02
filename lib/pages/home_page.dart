@@ -26,7 +26,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
     final accountList = ref.watch(accountsProvider);
     final lastTransactions = ref.watch(lastTransactionsProvider);
     final currencyState = ref.watch(currencyStateNotifier);
-  
+
     return Container(
       color: Theme.of(context).colorScheme.tertiary,
       child: ListView(
@@ -227,10 +227,10 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                               ),
                               child: TextButton.icon(
                                 style: ButtonStyle(
-                                  maximumSize: MaterialStateProperty.all(const Size(130, 48)),
-                                  backgroundColor: MaterialStateProperty.all(
+                                  maximumSize: WidgetStateProperty.all(const Size(130, 48)),
+                                  backgroundColor: WidgetStateProperty.all(
                                       Theme.of(context).colorScheme.surface),
-                                  shape: MaterialStateProperty.all(
+                                  shape: WidgetStateProperty.all(
                                     RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(8.0),
                                     ),
@@ -264,11 +264,9 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                               ),
                             ),
                           );
-                        } else if(accounts.isNotEmpty) {
-                          BankAccount account = accounts[i];
-                          return AccountsSum(account: account);
                         }
-
+                        BankAccount account = accounts[i];
+                        return AccountsSum(account: account);
                       },
                     ),
                     loading: () => const SizedBox(),
@@ -291,7 +289,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                   error: (err, stack) => Text('Error: $err'),
                 ),
                 const SizedBox(height: 28),
-                BudgetsSection()
+                const BudgetsSection(),
               ],
             ),
           ),

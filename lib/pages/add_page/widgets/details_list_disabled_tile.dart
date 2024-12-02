@@ -1,21 +1,16 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
-import "../../../constants/style.dart";
 import "details_list_tile.dart";
 
 class NonEditableDetailsListTile extends DetailsListTile {
   NonEditableDetailsListTile({
-    required String title,
-    required IconData icon,
-    required String? value,
-    Key? key,
+    required super.title,
+    required super.icon,
+    required super.value,
+    super.key,
   }) : super(
-    title: title,
-    icon: icon,
-    value: value,
-    callback: () {}, // Override the callback to make it non-editable
-    key: key,
+    callback: () {},
   );
 
   @override
@@ -33,7 +28,7 @@ class NonEditableDetailsListTile extends DetailsListTile {
         child: Icon(
           icon,
           size: 24.0,
-          color: Theme.of(context).colorScheme.background,
+          color: Theme.of(context).colorScheme.onPrimary,
         ),
       ),
       title: Text(

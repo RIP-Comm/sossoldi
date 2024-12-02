@@ -43,7 +43,7 @@ class _StructureState extends ConsumerState<Structure> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor:
-            selectedIndex == 0 ? Theme.of(context).colorScheme.tertiary : Theme.of(context).colorScheme.background,
+            selectedIndex == 0 ? Theme.of(context).colorScheme.tertiary : null,
         title: Text(
           _pagesTitle.elementAt(selectedIndex),
         ),
@@ -59,7 +59,7 @@ class _StructureState extends ConsumerState<Structure> {
             ),
             child: Icon(
               Icons.search,
-              color: Theme.of(context).colorScheme.background,
+              color: Theme.of(context).colorScheme.onPrimary,
             ),
           ),
         ),
@@ -76,7 +76,7 @@ class _StructureState extends ConsumerState<Structure> {
               ),
               child: Icon(
                 Icons.settings,
-                color: Theme.of(context).colorScheme.background,
+                color: Theme.of(context).colorScheme.onPrimary,
               ),
             ),
           ),
@@ -118,7 +118,7 @@ class _StructureState extends ConsumerState<Structure> {
         child: Icon(
           Icons.add_rounded,
           size: 55,
-          color: Theme.of(context).colorScheme.background,
+          color: Theme.of(context).colorScheme.onPrimary,
         ),
         onPressed: () {
           ref.read(transactionsProvider.notifier).reset();

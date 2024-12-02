@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,7 +13,7 @@ import 'add_category_button.dart';
 import 'category_button.dart';
 
 class BudgetSetup extends ConsumerStatefulWidget {
-  const BudgetSetup({Key? key}) : super(key: key);
+  const BudgetSetup({super.key});
 
   @override
   ConsumerState<BudgetSetup> createState() => _BudgetSetupState();
@@ -30,8 +28,7 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
   @override
   Widget build(BuildContext context) {
     budgetsList = ref.watch(budgetsProvider).value;
-    totalBudget = budgetsList?.fold<num>(
-            0, (total, budget) => total + budget.amountLimit) ?? 0;
+    totalBudget = budgetsList?.fold<num>(0, (total, budget) => total + budget.amountLimit) ?? 0;
     final categoriesGrid = ref.watch(categoriesProvider);
     return Scaffold(
       backgroundColor: blue7,
@@ -40,25 +37,18 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
           padding: const EdgeInsets.only(left: 16.0, right: 16),
           child: Column(
             children: [
-              Text("STEP 1 OF 2",
-                  style: Theme.of(context).textTheme.labelSmall),
+              Text("STEP 1 OF 2", style: Theme.of(context).textTheme.labelSmall),
               const SizedBox(height: 20),
               Text(
                 "Set up your monthly\nbudgets",
                 textAlign: TextAlign.center,
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineLarge
-                    ?.copyWith(color: blue1),
+                style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: blue1),
               ),
               const SizedBox(height: 30),
               Text(
                 "Choose which categories you want to set a budget for",
                 textAlign: TextAlign.center,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
-                    ?.copyWith(color: blue1),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: blue1),
               ),
               const SizedBox(height: 16),
               Expanded(
@@ -80,23 +70,21 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                       itemBuilder: (context, i) {
                         if (i < categories.length) {
                           return GestureDetector(
-                            onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) =>
-                                    AddBudget(categories.elementAt(i)),
-                              );
-                            },
-                            child: CategoryButton(
-                              categoryColor: categoryColorList[categories.elementAt(i).color],
-                              categoryName: categories.elementAt(i).name,
-                              budget: budgetsList?.firstWhereOrNull((budget) => budget.idCategory == categories.elementAt(i).id),
-                            )
-                          );
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AddBudget(categories.elementAt(i)),
+                                );
+                              },
+                              child: CategoryButton(
+                                categoryColor: categoryColorList[categories.elementAt(i).color],
+                                categoryName: categories.elementAt(i).name,
+                                budget: budgetsList?.firstWhereOrNull(
+                                    (budget) => budget.idCategory == categories.elementAt(i).id),
+                              ));
                         } else {
                           return GestureDetector(
-                            onTap: () => Navigator.of(context)
-                                .pushNamed('/add-category'),
+                            onTap: () => Navigator.of(context).pushNamed('/add-category'),
                             child: const AddCategoryButton(),
                           );
                         }
@@ -124,18 +112,12 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                               children: [
                                 TextSpan(
                                   text: totalBudget.toString(),
-                                  style:
-                                      Theme.of(context).textTheme.displayMedium,
+                                  style: Theme.of(context).textTheme.displayMedium,
                                 ),
                                 TextSpan(
                                   text: "€",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.apply(
-                                    fontFeatures: [
-                                      const FontFeature.subscripts()
-                                    ],
+                                  style: Theme.of(context).textTheme.bodyMedium?.apply(
+                                    fontFeatures: [const FontFeature.subscripts()],
                                   ),
                                 ),
                               ],
@@ -149,9 +131,7 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const AccountSetup()),
+                                  MaterialPageRoute(builder: (context) => const AccountSetup()),
                                 );
                               },
                               style: ElevatedButton.styleFrom(
@@ -174,8 +154,7 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => const AccountSetup()),
+                          MaterialPageRoute(builder: (context) => const AccountSetup()),
                         );
                       },
                       style: ElevatedButton.styleFrom(
@@ -193,8 +172,7 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                                       .textTheme
                                       .bodyMedium
                                       ?.copyWith(color: blue1)),
-                              const Icon(Icons.arrow_forward,
-                                  size: 15, color: blue1),
+                              const Icon(Icons.arrow_forward, size: 15, color: blue1),
                             ],
                           ),
                           SizedBox(
@@ -215,5 +193,3 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
     );
   }
 }
-
-

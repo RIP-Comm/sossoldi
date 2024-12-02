@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
 import '../../../constants/functions.dart';
 import "../../../constants/style.dart";
 import '../../../model/transaction.dart';
-import '../../../providers/currency_provider.dart';
+// import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../pages/add_page/widgets/amount_widget.dart';
 import 'account_selector.dart';
@@ -45,7 +44,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
   Widget build(BuildContext context) {
     final trsncTypeList = ref.watch(transactionTypeList);
     final selectedType = ref.watch(transactionTypeProvider);
-    final currencyState = ref.watch(currencyStateNotifier);
+    // final currencyState = ref.watch(currencyStateNotifier);
 
     return Container(
       color: Theme.of(context).colorScheme.surface,
@@ -55,7 +54,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
           Container(
             height: 30,
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.background,
+              color: Theme.of(context).colorScheme.onPrimary,
               borderRadius: const BorderRadius.all(Radius.circular(4)),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 2),

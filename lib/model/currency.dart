@@ -25,20 +25,15 @@ class Currency extends BaseEntity {
   final String name;
   final bool mainCurrency;
 
-  const Currency(
-      {int? id,
-      required this.symbol,
-      required this.code,
-      required this.name,
-      required this.mainCurrency})
-      : super(id: id);
+  const Currency({
+    super.id,
+    required this.symbol,
+    required this.code,
+    required this.name,
+    required this.mainCurrency,
+  });
 
-  Currency copy(
-          {int? id,
-          String? symbol,
-          String? code,
-          String? name,
-          bool? mainCurrency,t}) =>
+  Currency copy({int? id, String? symbol, String? code, String? name, bool? mainCurrency, t}) =>
       Currency(
           id: id ?? this.id,
           symbol: symbol ?? this.symbol,
@@ -78,12 +73,7 @@ class CurrencyMethods extends SossoldiDatabase {
     } else {
       //fallback
       return const Currency(
-        id: 2,
-        symbol: '\$',
-        code: 'USD',
-        name: "United States Dollar",
-        mainCurrency: true
-      );
+          id: 2, symbol: '\$', code: 'USD', name: "United States Dollar", mainCurrency: true);
     }
   }
 
@@ -95,7 +85,7 @@ class CurrencyMethods extends SossoldiDatabase {
 
   Future<void> insertAll(List<Currency> list) async {
     final db = await database;
-    for(Currency currency in list){
+    for (Currency currency in list) {
       await db.insert(currencyTable, currency.toJson());
     }
   }
@@ -133,8 +123,7 @@ class CurrencyMethods extends SossoldiDatabase {
     return db.update(
       currencyTable,
       item.toJson(),
-      where:
-      '${CurrencyFields.id} = ?',
+      where: '${CurrencyFields.id} = ?',
       whereArgs: [item.id],
     );
   }
@@ -142,10 +131,7 @@ class CurrencyMethods extends SossoldiDatabase {
   Future<int> deleteById(int id) async {
     final db = await database;
 
-    return await db.delete(currencyTable,
-        where:
-        '${CurrencyFields.id} = ?',
-        whereArgs: [id]);
+    return await db.delete(currencyTable, where: '${CurrencyFields.id} = ?', whereArgs: [id]);
   }
 
   void changeMainCurrency(int id) async {
@@ -154,5 +140,4 @@ class CurrencyMethods extends SossoldiDatabase {
     db.rawUpdate("UPDATE currency SET mainCurrency = 0");
     db.rawUpdate("UPDATE currency SET mainCurrency = 1 WHERE id = $id");
   }
-
 }

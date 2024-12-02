@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sossoldi/model/transaction.dart';
+import '../../../model/transaction.dart';
 import 'package:intl/intl.dart';
 
 import '../../../model/recurring_transaction.dart';

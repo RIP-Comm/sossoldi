@@ -219,7 +219,7 @@ class _LineChartSample2State extends State<LineChartWidget> {
             LineTooltipItem first = LineTooltipItem(
               '$dateFormat \n\n',
               TextStyle(
-                color: Theme.of(context).colorScheme.onBackground,
+                color: Theme.of(context).colorScheme.onSurface,
                 fontWeight: FontWeight.bold,
               ),
               children: [
@@ -279,9 +279,7 @@ class _LineChartSample2State extends State<LineChartWidget> {
           dotData: const FlDotData(
             show: false,
           ),
-          belowBarData: BarAreaData(
-              show: true,
-              color: lineColor.withOpacity(0.3)),
+          belowBarData: BarAreaData(show: true, color: lineColor.withOpacity(0.3)),
         ),
         LineChartBarData(
           spots: widget.line2Data,

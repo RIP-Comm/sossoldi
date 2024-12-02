@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../model/budget.dart';
 
 class AsyncBudgetsNotifier extends AsyncNotifier<List<Budget>> {

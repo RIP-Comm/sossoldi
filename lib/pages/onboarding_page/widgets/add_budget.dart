@@ -9,7 +9,7 @@ import '../../../providers/budgets_provider.dart';
 class AddBudget extends ConsumerStatefulWidget {
   final CategoryTransaction category;
 
-  const AddBudget(this.category, {Key? key}) : super(key: key);
+  const AddBudget(this.category, {super.key});
 
   @override
   ConsumerState<AddBudget> createState() => _AddBudgetState();
@@ -24,17 +24,19 @@ class _AddBudgetState extends ConsumerState<AddBudget> with Functions {
     super.didChangeDependencies();
     // Initialize the text controller with the current budget amount
     budgetsList = ref.watch(budgetsProvider).value;
-    const Budget defaultBudget = Budget(idCategory: 99999, name: '', amountLimit: 9999, active: false);
+    const Budget defaultBudget =
+        Budget(idCategory: 99999, name: '', amountLimit: 9999, active: false);
 
-    final Budget? budget = budgetsList?.firstWhere((element) => element.idCategory == widget.category.id, orElse: () => defaultBudget);
+    final Budget? budget = budgetsList?.firstWhere(
+        (element) => element.idCategory == widget.category.id,
+        orElse: () => defaultBudget);
 
     if (budget != null) {
       amountController.text = budget.amountLimit.toString();
     }
-    if(budget == defaultBudget){
+    if (budget == defaultBudget) {
       amountController.text = "";
     }
-
   }
 
   @override
@@ -62,14 +64,16 @@ class _AddBudgetState extends ConsumerState<AddBudget> with Functions {
         ),
         ElevatedButton(
           onPressed: () async {
-            await ref.watch(budgetsProvider.notifier).addBudget(
-                Budget(
+            await ref
+                .watch(budgetsProvider.notifier)
+                .addBudget(Budget(
                   name: widget.category.name,
                   createdAt: DateTime.now(),
                   idCategory: widget.category.id!,
                   amountLimit: num.tryParse(amountController.text) ?? 0,
                   active: true,
-                )).whenComplete(() => Navigator.pop(context));
+                ))
+                .whenComplete(() => Navigator.pop(context));
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: blue5,

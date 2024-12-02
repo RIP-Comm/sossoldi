@@ -31,10 +31,8 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
 
   @override
   void initState() {
-    amountController.text =
-        numToCurrency(ref.read(selectedTransactionUpdateProvider)?.amount);
-    noteController.text =
-        ref.read(selectedTransactionUpdateProvider)?.note ?? '';
+    amountController.text = numToCurrency(ref.read(selectedTransactionUpdateProvider)?.amount);
+    noteController.text = ref.read(selectedTransactionUpdateProvider)?.note ?? '';
 
     amountController.addListener(_updateAmount);
 
@@ -62,8 +60,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
 
   String getCleanAmountString() {
     // Remove all non-numeric characters
-    var cleanNumberString =
-        amountController.text.replaceAll(RegExp(r'[^0-9\.]'), '');
+    var cleanNumberString = amountController.text.replaceAll(RegExp(r'[^0-9\.]'), '');
 
     // Remove leading zeros
     return cleanNumberString.replaceAll(RegExp(r'^[0\.]+(?=.)'), '');
@@ -356,7 +353,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                     style: Theme.of(context)
                         .textTheme
                         .bodyLarge!
-                        .copyWith(color: Theme.of(context).colorScheme.background),
+                        .copyWith(color: Theme.of(context).colorScheme.onPrimary),
                   ),
                 ),
               ),

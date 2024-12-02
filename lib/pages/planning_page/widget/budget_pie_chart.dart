@@ -7,7 +7,7 @@ import '../../../model/budget.dart';
 import '../../../providers/currency_provider.dart';
 
 class BudgetPieChart extends ConsumerStatefulWidget {
-  BudgetPieChart({super.key, required this.budgets});
+  const BudgetPieChart({super.key, required this.budgets});
 
   final List<Budget> budgets;
 
@@ -38,7 +38,8 @@ class BudgetPieChartState extends ConsumerState<BudgetPieChart> {
       ),
       Column(
         children: [
-          Text("${totalBudget.round()}${currencyState.selectedCurrency.symbol}", style: const TextStyle(fontSize: 25)),
+          Text("${totalBudget.round()}${currencyState.selectedCurrency.symbol}",
+              style: const TextStyle(fontSize: 25)),
           const SizedBox(height: 5),
           const Text("PLANNED", style: TextStyle(fontWeight: FontWeight.normal))
         ],

@@ -52,7 +52,7 @@ class _CategoryListState extends ConsumerState<CategoryList> with Functions {
                     child: Icon(
                       Icons.list_alt,
                       size: 24.0,
-                      color: Theme.of(context).colorScheme.background,
+                      color: Theme.of(context).colorScheme.onPrimary,
                     ),
                   ),
                   const SizedBox(width: 12.0),
@@ -93,7 +93,7 @@ class _CategoryListState extends ConsumerState<CategoryList> with Functions {
                               ? Icon(
                                   icon,
                                   size: 30.0,
-                                  color: Theme.of(context).colorScheme.background,
+                                  color: Theme.of(context).colorScheme.onPrimary,
                                 )
                               : const SizedBox(),
                         ),

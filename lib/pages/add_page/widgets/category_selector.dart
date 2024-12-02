@@ -73,8 +73,7 @@ class _CategorySelectorState extends ConsumerState<CategorySelector>
                         Color? color = categoryColorListTheme[category.color];
                         return GestureDetector(
                           onTap: () => {
-                            ref.read(categoryProvider.notifier).state =
-                                category,
+                            ref.read(categoryProvider.notifier).state = category,
                             Navigator.of(context).pop(),
                           },
                           child: Padding(
@@ -157,7 +156,7 @@ class _CategorySelectorState extends ConsumerState<CategorySelector>
                                   icon,
                                   size: 24.0,
                                   color:
-                                      Theme.of(context).colorScheme.background,
+                                      Theme.of(context).colorScheme.surface,
                                 )
                               : const SizedBox(),
                         ),

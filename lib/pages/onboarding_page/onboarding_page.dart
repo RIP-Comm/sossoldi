@@ -3,14 +3,13 @@ import '/pages/onboarding_page/widgets/budget_setup.dart';
 import '/constants/style.dart';
 
 class Onboarding extends StatefulWidget {
-  const Onboarding({Key? key}) : super(key: key);
+  const Onboarding({super.key});
 
   @override
   State<Onboarding> createState() => _OnboardingState();
 }
 
 class _OnboardingState extends State<Onboarding> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,21 +23,18 @@ class _OnboardingState extends State<Onboarding> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  height: MediaQuery.sizeOf(context).height/9,
+                  height: MediaQuery.sizeOf(context).height / 9,
                 ),
                 Text(
                   'Set up the app',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineLarge
-                      ?.copyWith(color: blue1),
+                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: blue1),
                 ),
                 const SizedBox(
                   height: 80,
                 ),
                 Image.asset(
                   'assets/openVault.png',
-                  height: MediaQuery.sizeOf(context).height/3.7,
+                  height: MediaQuery.sizeOf(context).height / 3.7,
                 ),
                 const SizedBox(
                   height: 74,
@@ -46,12 +42,9 @@ class _OnboardingState extends State<Onboarding> {
                 Text(
                   'In a few steps you\'ll be ready to start keeping\ntrack of your personal finances (almost) like\nMr. Rip',
                   textAlign: TextAlign.center,
-                  style:
-                      Theme.of(context).textTheme.bodySmall?.copyWith(color: blue1),
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(color: blue1),
                 ),
-
               ],
-
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
@@ -75,10 +68,7 @@ class _OnboardingState extends State<Onboarding> {
                   ),
                   child: Text(
                     'START THE SET UP',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(color: white),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: white),
                   ),
                 ),
               ),

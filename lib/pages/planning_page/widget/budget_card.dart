@@ -5,11 +5,9 @@ import '../../../constants/constants.dart';
 import '../../../model/budget.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/budgets_provider.dart';
-
 import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../manage_budget_page.dart';
-
 import 'budget_pie_chart.dart';
 
 class BudgetCard extends ConsumerStatefulWidget {
@@ -78,7 +76,7 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                                         const Spacer(),
                                         spent >= (budget.amountLimit * 0.9) ? const Icon(Icons.error_outline, color: Colors.red) : Container(),
                                         Text(
-                                          "${spent}${currencyState.selectedCurrency.symbol}/${budget.amountLimit}${currencyState.selectedCurrency.symbol}",
+                                          "$spent${currencyState.selectedCurrency.symbol}/${budget.amountLimit}${currencyState.selectedCurrency.symbol}",
                                           style: const TextStyle(
                                               fontWeight: FontWeight.normal),
                                         ),

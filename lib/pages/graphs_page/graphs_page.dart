@@ -69,8 +69,7 @@ class _GraphsPageState extends ConsumerState<GraphsPage> with Functions {
                                               .isNotEmpty
                                           ? numToCurrency(
                                               currentYearMonthlyTransactions
-                                                      .last.y ??
-                                                  0)
+                                                      .last.y)
                                           : '0',
                                       style: Theme.of(context)
                                           .textTheme

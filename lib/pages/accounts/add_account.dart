@@ -46,7 +46,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
     final currencyState = ref.watch(currencyStateNotifier);
 
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.onPrimary,
       appBar: AppBar(title: Text("${selectedAccount == null ? "New" : "Edit"} account")),
       body: Column(
         children: [
@@ -120,7 +120,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                                 child: Icon(
                                   accountIconList[accountIcon],
                                   size: 48,
-                                  color: Theme.of(context).colorScheme.background,
+                                  color: Theme.of(context).colorScheme.onPrimary,
                                 ),
                               ),
                             ),
@@ -390,7 +390,11 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                     } else {
                       ref
                           .read(accountsProvider.notifier)
-                          .addAccount(nameController.text, startingValueController.text.isEmpty ? null : currencyToNum(startingValueController.text))
+                          .addAccount(
+                              nameController.text,
+                              startingValueController.text.isEmpty
+                                  ? null
+                                  : currencyToNum(startingValueController.text))
                           .whenComplete(() => Navigator.of(context).pop());
                     }
                   },
@@ -403,7 +407,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                     style: Theme.of(context)
                         .textTheme
                         .bodyLarge!
-                        .copyWith(color: Theme.of(context).colorScheme.background),
+                        .copyWith(color: Theme.of(context).colorScheme.onPrimary),
                   ),
                 ),
               ),

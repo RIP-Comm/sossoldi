@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -62,7 +60,10 @@ class BudgetCircularIndicator extends ConsumerWidget with Functions {
               const SizedBox(height: 6),
               Text(
                 "LEFT",
-                style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Theme.of(context).colorScheme.primary),
+                style: Theme.of(context)
+                    .textTheme
+                    .labelLarge!
+                    .copyWith(color: Theme.of(context).colorScheme.primary),
               ),
             ],
           ),
@@ -71,11 +72,10 @@ class BudgetCircularIndicator extends ConsumerWidget with Functions {
           progressColor: color,
         ),
         const SizedBox(height: 10),
-        Row(
-          children: [
-            perc >= 0.9 ? const Icon(Icons.error_outline, color: Colors.red, size: 15) : Container(),
-            const SizedBox(width: 3),
-            Text(title, style: Theme.of(context).textTheme.bodyLarge),
+        Row(children: [
+          perc >= 0.9 ? const Icon(Icons.error_outline, color: Colors.red, size: 15) : Container(),
+          const SizedBox(width: 3),
+          Text(title, style: Theme.of(context).textTheme.bodyLarge),
         ])
       ],
     );

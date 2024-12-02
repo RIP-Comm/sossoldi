@@ -9,8 +9,8 @@ class DetailsListTile extends ConsumerWidget {
     required this.icon,
     required this.value,
     required this.callback,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String title;
   final IconData icon;
@@ -32,7 +32,7 @@ class DetailsListTile extends ConsumerWidget {
         child: Icon(
           icon,
           size: 24.0,
-          color: Theme.of(context).colorScheme.background,
+          color: Theme.of(context).colorScheme.onPrimary,
         ),
       ),
       title: Text(
@@ -47,8 +47,7 @@ class DetailsListTile extends ConsumerWidget {
         children: [
           Text(
             value ?? '',
-            style:
-                Theme.of(context)
+            style: Theme.of(context)
                 .textTheme
                 .bodySmall!
                 .copyWith(color: Theme.of(context).colorScheme.secondary),
