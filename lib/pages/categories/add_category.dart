@@ -9,7 +9,9 @@ import '../../providers/categories_provider.dart';
 final showCategoryIconsProvider = StateProvider.autoDispose<bool>((ref) => false);
 
 class AddCategory extends ConsumerStatefulWidget {
-  const AddCategory({super.key});
+  final bool hideIncome;
+
+  const AddCategory({super.key, this.hideIncome = false});
 
   @override
   ConsumerState<AddCategory> createState() => _AddCategoryState();
@@ -98,7 +100,10 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                         value: categoryType,
                         underline: const SizedBox(),
                         isExpanded: true,
-                        items: CategoryTransactionType.values.map((CategoryTransactionType type) {
+                        items: (widget.hideIncome
+                                ? [CategoryTransactionType.expense] // Only show 'expense' if true
+                                : CategoryTransactionType.values) // Otherwise, show all values
+                            .map((CategoryTransactionType type) {
                           return DropdownMenuItem<CategoryTransactionType>(
                             value: type,
                             child: Text(

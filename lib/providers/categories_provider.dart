@@ -12,7 +12,7 @@ final selectedCategoryProvider =
     StateProvider<CategoryTransaction?>((ref) => null);
 
 final categoryTypeProvider = StateProvider<CategoryTransactionType>(
-    (ref) => CategoryTransactionType.income); //default as 'Income'
+    (ref) => CategoryTransactionType.expense); //default as 'Expense'
 
 final categoryIconProvider =
     StateProvider<String>((ref) => iconList.keys.first);
