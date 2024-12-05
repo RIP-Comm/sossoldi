@@ -23,6 +23,7 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
 
   void _loadCategories() async {
     categories = await ref.read(categoriesProvider.notifier).getCategories();
+    categories.removeWhere((element) => element.type == CategoryTransactionType.income);
     budgets = await ref.read(budgetsProvider.notifier).getBudgets();
     setState(() {});
   }

@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../categories/add_category.dart';
 import '/constants/constants.dart';
 import '/constants/style.dart';
 import '/model/budget.dart';
@@ -84,7 +85,14 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                               ));
                         } else {
                           return GestureDetector(
-                            onTap: () => Navigator.of(context).pushNamed('/add-category'),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => AddCategory(hideIncome: true),
+                                ),
+                              );
+                            },
                             child: const AddCategoryButton(),
                           );
                         }
