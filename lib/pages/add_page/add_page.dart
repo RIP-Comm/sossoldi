@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../constants/functions.dart';
 import '../../constants/style.dart';
 import '../../model/transaction.dart';
+import '../../providers/accounts_provider.dart';
 import '../../providers/transactions_provider.dart';
 import "widgets/account_selector.dart";
 import 'widgets/amount_section.dart';
@@ -87,6 +88,12 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
     }
   }
 
+  void _updateAccount() {
+    ref
+        .read(accountsProvider.notifier)
+        .updateAccount(ref.watch(bankAccountProvider)!.name);
+  }
+
   void _createOrUpdateTransaction() {
     final selectedType = ref.read(transactionTypeProvider);
     final selectedTransaction = ref.read(selectedTransactionUpdateProvider);
@@ -143,7 +150,18 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
           }
         }
       }
+
+      _updateAccount();
     }
+  }
+
+  void _deleteTransaction() {
+    final selectedTransaction = ref.read(selectedTransactionUpdateProvider);
+    ref
+        .read(transactionsProvider.notifier)
+        .deleteTransaction(selectedTransaction!.id!)
+        .whenComplete(() => Navigator.pop(context));
+    _updateAccount();
   }
 
   @override
@@ -175,12 +193,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                       Icons.delete_outline,
                       color: Theme.of(context).colorScheme.error,
                     ),
-                    onPressed: () async {
-                      ref
-                          .read(transactionsProvider.notifier)
-                          .deleteTransaction(selectedTransaction.id!)
-                          .whenComplete(() => Navigator.pop(context));
-                    },
+                    onPressed: _deleteTransaction,
                   ),
                 )
               : const SizedBox(),
