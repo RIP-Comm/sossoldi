@@ -101,7 +101,8 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
                   child: TextField(
                       controller: _controller,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      onEditingComplete: () {
+                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      onChanged: (_) {
                         setState(() {
                           _modifyBudget();
                         });
