@@ -62,8 +62,16 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
     // Remove all non-numeric characters
     var cleanNumberString = amountController.text.replaceAll(RegExp(r'[^0-9\.]'), '');
 
-    // Remove leading zeros
-    return cleanNumberString.replaceAll(RegExp(r'^[0\.]+(?=.)'), '');
+    // Remove leading zeros only if the number does not start with "0."
+    if (!cleanNumberString.startsWith('0.')) {
+      cleanNumberString = cleanNumberString.replaceAll(RegExp(r'^0+(?!\.)'), '');
+    }
+
+    if (cleanNumberString.startsWith('.')) {
+      cleanNumberString = '0$cleanNumberString';
+    }
+
+    return cleanNumberString;
   }
 
   void _updateAmount() {
