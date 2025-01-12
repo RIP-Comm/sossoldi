@@ -49,7 +49,7 @@ var settingsOptions = [
     Icons.download_for_offline,
     "Import/Export",
     "Import or export data from a CSV file",
-    null,
+    "/backup-page",
   ],
   [
     Icons.notifications_active,

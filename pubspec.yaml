@@ -41,6 +41,10 @@ dependencies:
   timezone: ^0.9.4
   url_launcher: ^6.3.1
   workmanager: ^0.5.2
+  csv: ^6.0.0
+  path_provider: ^2.1.5
+  file_picker: ^8.1.7
+  device_info_plus: ^11.2.0
 
 dev_dependencies:
   flutter_test:
