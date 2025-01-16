@@ -56,6 +56,11 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
     });
   }
 
+  Future<void> selectAndUpdateAccount(BankAccount account) async {
+    await selectedAccount(account);
+    await updateAccount(account.name);
+  }
+
   Future<void> updateAccount(String name) async {
     BankAccount account = ref.read(selectedAccountProvider)!.copy(
           name: name,
