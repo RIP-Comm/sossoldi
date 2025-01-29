@@ -8,11 +8,13 @@ enum Period { month, year }
 
 //This class can be used when we need to draw a line chart with one or two lines
 class LineChartWidget extends StatefulWidget {
-  final List<FlSpot> lineData; //this should be a list of Flspot(x,y)
+  final List<FlSpot> lineData; // this should be a list of Flspot(x,y)
   final Color? lineColor;
 
-  final List<FlSpot> line2Data; //this should be a list of Flspot(x,y)
+  final List<FlSpot> line2Data; // this should be a list of Flspot(x,y)
   final Color? line2Color;
+
+  final bool enableGapFilling;
 
   // Used to decide the bottom label
   final Period period;
@@ -21,17 +23,21 @@ class LineChartWidget extends StatefulWidget {
   final double minY;
 
   final Color? colorBackground;
+
   LineChartWidget({
     super.key,
-    required this.lineData,
+    required List<FlSpot> lineData,
     this.lineColor,
-    this.line2Data = const [],
+    List<FlSpot> line2Data = const [],
     this.line2Color,
     this.colorBackground,
+    this.enableGapFilling = true,
     this.period = Period.month,
     int nXLabel = 10,
     double? minY,
-  }) : minY = minY ?? calculateMinY(lineData, line2Data);
+  })  : lineData = enableGapFilling ? fillGaps(lineData) : lineData,
+        line2Data = enableGapFilling ? fillGaps(line2Data) : line2Data,
+        minY = minY ?? calculateMinY(lineData, line2Data);
 
   static double calculateMinY(List<FlSpot> line1Data, List<FlSpot> line2Data) {
     if (line1Data.isEmpty && line2Data.isEmpty) {
@@ -39,6 +45,24 @@ class LineChartWidget extends StatefulWidget {
     }
 
     return [...line1Data, ...line2Data].map((e) => e.y).reduce(min);
+  }
+
+  static List<FlSpot> fillGaps(List<FlSpot> lineData) {
+    if (lineData.isEmpty) return [];
+
+    List<FlSpot> filledData = [];
+    double lastY = lineData.first.y;
+
+    for (int i = 0; i <= lineData.last.x.toInt(); i++) {
+      if (lineData.any((spot) => spot.x == i)) {
+        lastY = lineData.firstWhere((spot) => spot.x == i).y;
+        filledData.add(FlSpot(i.toDouble(), lastY));
+      } else {
+        filledData.add(FlSpot(i.toDouble(), lastY));
+      }
+    }
+
+    return filledData;
   }
 
   @override
