@@ -30,62 +30,67 @@ class RecurrenceListTile extends ConsumerWidget with Functions {
       children: [
         const Divider(height: 1, color: grey1),
         ListTile(
-          contentPadding: const EdgeInsets.all(16),
-          leading: Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Theme.of(context).colorScheme.secondary,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Icon(
-                Icons.autorenew,
-                size: 24.0,
-                color: Theme.of(context).colorScheme.onPrimary,
+            contentPadding: const EdgeInsets.all(16),
+            leading: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Icon(
+                  Icons.autorenew,
+                  size: 24.0,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
               ),
             ),
-          ),
-          title: Text(
-            "Recurring payment",
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge!
-                .copyWith(color: Theme.of(context).colorScheme.primary),
-          ),
-          trailing: recurrencyEditingPermitted
-              ? Switch.adaptive(
-                value: isRecurring,
-                onChanged: (select) =>
-                    ref.read(selectedRecurringPayProvider.notifier).state = select,
-              )
-              : GestureDetector(
-                  onTap: () {
-                    if (!isSnackBarVisible) {
-                      isSnackBarVisible = true;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Switch is disabled'),
-                          duration: Duration(milliseconds: 800),
-                        ),
-                      ).closed.then((_) {
-                        isSnackBarVisible = false;
-                      });
-                    }
-                  },
-                  child: Tooltip(
-                    message: 'Switch is disabled',
-                    child: Switch(
-                      value: isRecurring,
-                      onChanged: null, // This makes the switch read-only
+            title: Text(
+              "Recurring payment",
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!
+                  .copyWith(color: Theme.of(context).colorScheme.primary),
+            ),
+            trailing: recurrencyEditingPermitted
+                ? Switch.adaptive(
+                    value: isRecurring,
+                    onChanged: (select) => ref
+                        .read(selectedRecurringPayProvider.notifier)
+                        .state = select,
+                  )
+                : GestureDetector(
+                    onTap: () {
+                      if (!isSnackBarVisible) {
+                        isSnackBarVisible = true;
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(
+                              const SnackBar(
+                                content: Text('Switch is disabled'),
+                                duration: Duration(milliseconds: 800),
+                              ),
+                            )
+                            .closed
+                            .then((_) {
+                          isSnackBarVisible = false;
+                        });
+                      }
+                    },
+                    child: Tooltip(
+                      message: 'Switch is disabled',
+                      child: Switch(
+                        value: isRecurring,
+                        onChanged: null, // This makes the switch read-only
+                      ),
                     ),
-                  ),
-                )
-        ),
+                  )),
         if (isRecurring) ...[
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Opacity(
-              opacity: selectedTransaction == null || recurrencyEditingPermitted ? 1.0 : 0.5,
+              opacity: selectedTransaction == null || recurrencyEditingPermitted
+                  ? 1.0
+                  : 0.5,
               child: TextButton(
                 style: TextButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -93,24 +98,23 @@ class RecurrenceListTile extends ConsumerWidget with Functions {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(4)),
                 ),
-                onPressed: selectedTransaction == null || recurrencyEditingPermitted
-                    ? () {
-                  FocusManager.instance.primaryFocus?.unfocus();
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (_) => const RecurrenceSelector(),
-                  );
-                }
-                    : null,
+                onPressed:
+                    selectedTransaction == null || recurrencyEditingPermitted
+                        ? () {
+                            FocusManager.instance.primaryFocus?.unfocus();
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (_) => const RecurrenceSelector(),
+                            );
+                          }
+                        : null,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       "Interval",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .copyWith(color: Theme.of(context).colorScheme.primary),
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Theme.of(context).colorScheme.primary),
                     ),
                     const Spacer(),
                     Text(
@@ -131,7 +135,9 @@ class RecurrenceListTile extends ConsumerWidget with Functions {
           Padding(
             padding: const EdgeInsets.all(16),
             child: Opacity(
-              opacity: selectedTransaction == null || recurrencyEditingPermitted ? 1.0 : 0.5,
+              opacity: selectedTransaction == null || recurrencyEditingPermitted
+                  ? 1.0
+                  : 0.5,
               child: TextButton(
                 style: TextButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -139,24 +145,23 @@ class RecurrenceListTile extends ConsumerWidget with Functions {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(4)),
                 ),
-                onPressed: selectedTransaction == null || recurrencyEditingPermitted
-                    ? () => showModalBottomSheet(
-                  context: context,
-                  elevation: 10,
-                  builder: (BuildContext context) {
-                    return const EndDateSelector();
-                  },
-                )
-                    : null,
+                onPressed:
+                    selectedTransaction == null || recurrencyEditingPermitted
+                        ? () => showModalBottomSheet(
+                              context: context,
+                              elevation: 10,
+                              builder: (BuildContext context) {
+                                return const EndDateSelector();
+                              },
+                            )
+                        : null,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       "End repetition",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .copyWith(color: Theme.of(context).colorScheme.primary),
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Theme.of(context).colorScheme.primary),
                     ),
                     const Spacer(),
                     Text(
@@ -179,10 +184,16 @@ class RecurrenceListTile extends ConsumerWidget with Functions {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: TextButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamed(
+                  Navigator.of(context)
+                      .pushNamed(
                     "/edit-recurring-transaction",
                     arguments: selectedTransaction,
-                  ).then((value) => Navigator.of(context).pop());
+                  )
+                      .then((value) {
+                    if (context.mounted) {
+                      Navigator.of(context).pop();
+                    }
+                  });
                 },
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -243,7 +254,9 @@ class EndDateSelector extends ConsumerWidget with Functions {
                 trailing: ref.watch(endDateProvider) != null
                     ? const Icon(Icons.check)
                     : null,
-                    subtitle: Text(ref.read(endDateProvider) != null ? dateToString(ref.read(endDateProvider.notifier).state!) : ''),
+                subtitle: Text(ref.read(endDateProvider) != null
+                    ? dateToString(ref.read(endDateProvider.notifier).state!)
+                    : ''),
                 onTap: () async {
                   FocusManager.instance.primaryFocus?.unfocus();
                   if (Platform.isIOS) {

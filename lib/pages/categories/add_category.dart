@@ -6,8 +6,6 @@ import '../../constants/style.dart';
 import '../../model/category_transaction.dart';
 import '../../providers/categories_provider.dart';
 
-final showCategoryIconsProvider = StateProvider.autoDispose<bool>((ref) => false);
-
 class AddCategory extends ConsumerStatefulWidget {
   final bool hideIncome;
 
@@ -19,10 +17,21 @@ class AddCategory extends ConsumerStatefulWidget {
 
 class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
   final TextEditingController nameController = TextEditingController();
+  CategoryTransactionType categoryType = CategoryTransactionType.income;
+  String categoryIcon = iconList.keys.first;
+  int categoryColor = 0;
+
+  bool showCategoryIcons = false;
 
   @override
   void initState() {
-    nameController.text = ref.read(selectedCategoryProvider)?.name ?? '';
+    final selectedCategory = ref.read(selectedCategoryProvider);
+    if (selectedCategory != null) {
+      nameController.text = selectedCategory.name;
+      categoryType = selectedCategory.type;
+      categoryIcon = selectedCategory.symbol;
+      categoryColor = selectedCategory.color;
+    }
     super.initState();
   }
 
@@ -35,13 +44,10 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
   @override
   Widget build(BuildContext context) {
     final selectedCategory = ref.watch(selectedCategoryProvider);
-    final categoryType = ref.watch(categoryTypeProvider);
-    final categoryIcon = ref.watch(categoryIconProvider);
-    final categoryColor = ref.watch(categoryColorProvider);
-    final showCategoryIcons = ref.watch(showCategoryIconsProvider);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.onPrimary,
-      appBar: AppBar(title: Text("${selectedCategory == null ? "New" : "Edit"} Category")),
+      appBar: AppBar(
+          title: Text("${selectedCategory == null ? "New" : "Edit"} Category")),
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -49,7 +55,8 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
               children: [
                 Container(
                   width: double.infinity,
-                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.surface,
@@ -60,27 +67,32 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                     children: [
                       Text(
                         "NAME",
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelLarge!
-                            .copyWith(color: Theme.of(context).colorScheme.primary),
+                        style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                            color: Theme.of(context).colorScheme.primary),
                       ),
                       TextField(
                         controller: nameController,
                         decoration: InputDecoration(
                           hintText: "Category name",
-                          hintStyle: Theme.of(context).textTheme.titleLarge!.copyWith(color: grey2),
+                          hintStyle: Theme.of(context)
+                              .textTheme
+                              .titleLarge!
+                              .copyWith(color: grey2),
                           border: InputBorder.none,
                           contentPadding: const EdgeInsets.all(0),
                         ),
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(color: grey1),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge!
+                            .copyWith(color: grey1),
                       )
                     ],
                   ),
                 ),
                 Container(
                   width: double.infinity,
-                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.surface,
@@ -91,30 +103,35 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                     children: [
                       Text(
                         "TYPE",
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelLarge!
-                            .copyWith(color: Theme.of(context).colorScheme.primary),
+                        style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                            color: Theme.of(context).colorScheme.primary),
                       ),
                       DropdownButton<CategoryTransactionType>(
                         value: categoryType,
                         underline: const SizedBox(),
                         isExpanded: true,
                         items: (widget.hideIncome
-                                ? [CategoryTransactionType.expense] // Only show 'expense' if true
-                                : CategoryTransactionType.values) // Otherwise, show all values
+                                ? [
+                                    CategoryTransactionType.expense
+                                  ] // Only show 'expense' if true
+                                : CategoryTransactionType
+                                    .values) // Otherwise, show all values
                             .map((CategoryTransactionType type) {
                           return DropdownMenuItem<CategoryTransactionType>(
                             value: type,
                             child: Text(
-                              capitalizeFirstLetter(type.toString().split('.').last),
-                              style: Theme.of(context).textTheme.titleLarge!.copyWith(color: grey1),
+                              capitalizeFirstLetter(
+                                  type.toString().split('.').last),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge!
+                                  .copyWith(color: grey1),
                             ),
                           );
                         }).toList(),
                         onChanged: (CategoryTransactionType? newType) {
                           if (newType != categoryType) {
-                            ref.watch(categoryTypeProvider.notifier).state = newType!;
+                            setState(() => categoryType = newType!);
                           }
                         },
                       ),
@@ -123,8 +140,10 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                 ),
                 Container(
                   width: double.infinity,
-                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.surface,
                     borderRadius: BorderRadius.circular(4),
@@ -138,15 +157,17 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                           style: Theme.of(context)
                               .textTheme
                               .labelLarge!
-                              .copyWith(color: Theme.of(context).colorScheme.primary),
+                              .copyWith(
+                                  color: Theme.of(context).colorScheme.primary),
                         ),
                       ),
                       const SizedBox(height: 20),
                       Material(
                         color: Colors.transparent,
                         child: InkWell(
-                          borderRadius: const BorderRadius.all(Radius.circular(90)),
-                          onTap: () => ref.read(showCategoryIconsProvider.notifier).state = true,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(90)),
+                          onTap: () => setState(() => showCategoryIcons = true),
                           child: Ink(
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
@@ -167,26 +188,33 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                         style: Theme.of(context)
                             .textTheme
                             .labelMedium!
-                            .copyWith(color: Theme.of(context).colorScheme.primary),
+                            .copyWith(
+                                color: Theme.of(context).colorScheme.primary),
                       ),
                       const SizedBox(height: 12),
-                      if (showCategoryIcons) const Divider(height: 1, color: grey1),
+                      if (showCategoryIcons)
+                        const Divider(height: 1, color: grey1),
                       if (showCategoryIcons)
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
                           color: Theme.of(context).colorScheme.surface,
                           child: Column(
                             children: [
                               Align(
                                 alignment: Alignment.topRight,
                                 child: TextButton(
-                                  onPressed: () => ref.read(showCategoryIconsProvider.notifier).state = false,
+                                  onPressed: () =>
+                                      setState(() => showCategoryIcons = false),
                                   child: Text(
                                     "Done",
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyLarge!
-                                        .copyWith(color: Theme.of(context).colorScheme.secondary),
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary),
                                   ),
                                 ),
                               ),
@@ -194,25 +222,39 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                                 itemCount: iconList.length,
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
-                                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 6),
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 6),
                                 itemBuilder: (context, index) {
-                                  IconData categoryIconData = iconList.values.elementAt(index);
-                                  String categoryIconName = iconList.keys.elementAt(index);
+                                  IconData categoryIconData =
+                                      iconList.values.elementAt(index);
+                                  String categoryIconName =
+                                      iconList.keys.elementAt(index);
                                   return GestureDetector(
-                                    onTap: () => ref.read(categoryIconProvider.notifier).state = categoryIconName,
+                                    onTap: () => setState(
+                                        () => categoryIcon = categoryIconName),
                                     child: Container(
                                       margin: const EdgeInsets.all(12),
                                       decoration: BoxDecoration(
-                                        color: iconList[categoryIcon] == categoryIconData
-                                            ? Theme.of(context).colorScheme.secondary
-                                            : Theme.of(context).colorScheme.surface,
-                                        borderRadius: const BorderRadius.all(Radius.circular(4)),
+                                        color: iconList[categoryIcon] ==
+                                                categoryIconData
+                                            ? Theme.of(context)
+                                                .colorScheme
+                                                .secondary
+                                            : Theme.of(context)
+                                                .colorScheme
+                                                .surface,
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(4)),
                                       ),
                                       child: Icon(
                                         categoryIconData,
-                                        color: iconList[categoryIcon] == categoryIconData
+                                        color: iconList[categoryIcon] ==
+                                                categoryIconData
                                             ? Colors.white
-                                            : Theme.of(context).colorScheme.primary,
+                                            : Theme.of(context)
+                                                .colorScheme
+                                                .primary,
                                         size: 24,
                                       ),
                                     ),
@@ -230,23 +272,33 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                           scrollDirection: Axis.horizontal,
                           physics: const BouncingScrollPhysics(),
                           padding: const EdgeInsets.symmetric(horizontal: 16),
-                          separatorBuilder: (context, index) => const SizedBox(width: 16),
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(width: 16),
                           itemBuilder: (context, index) {
                             Color color = categoryColorListTheme[index];
                             return GestureDetector(
-                              onTap: () => ref.read(categoryColorProvider.notifier).state = index,
+                              onTap: () =>
+                                  setState(() => categoryColor = index),
                               child: Container(
-                                height: categoryColorListTheme[categoryColor] == color ? 38 : 32,
-                                width: categoryColorListTheme[categoryColor] == color ? 38 : 32,
+                                height: categoryColorListTheme[categoryColor] ==
+                                        color
+                                    ? 38
+                                    : 32,
+                                width: categoryColorListTheme[categoryColor] ==
+                                        color
+                                    ? 38
+                                    : 32,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: color,
-                                  border: categoryColorListTheme[categoryColor] == color
-                                      ? Border.all(
-                                          color: grey1,
-                                          width: 3,
-                                        )
-                                      : null,
+                                  border:
+                                      categoryColorListTheme[categoryColor] ==
+                                              color
+                                          ? Border.all(
+                                              color: grey1,
+                                              width: 3,
+                                            )
+                                          : null,
                                 ),
                               ),
                             );
@@ -260,7 +312,8 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                         style: Theme.of(context)
                             .textTheme
                             .labelMedium!
-                            .copyWith(color: Theme.of(context).colorScheme.primary),
+                            .copyWith(
+                                color: Theme.of(context).colorScheme.primary),
                       ),
                     ],
                   ),
@@ -299,12 +352,16 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                 if (selectedCategory != null)
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    padding: const EdgeInsets.all(16),
                     child: TextButton.icon(
                       onPressed: () => ref
                           .read(categoriesProvider.notifier)
                           .removeCategory(selectedCategory.id!)
-                          .whenComplete(() => Navigator.of(context).pop()),
+                          .whenComplete(() {
+                        if (context.mounted) {
+                          Navigator.of(context).pop();
+                        }
+                      }),
                       style: TextButton.styleFrom(
                         padding: const EdgeInsets.all(16),
                         side: const BorderSide(color: red, width: 1),
@@ -312,7 +369,10 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                       icon: const Icon(Icons.delete_outlined, color: red),
                       label: Text(
                         "Delete category",
-                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: red),
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge!
+                            .copyWith(color: red),
                       ),
                     ),
                   ),
@@ -327,13 +387,18 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                 color: Theme.of(context).colorScheme.surface,
                 boxShadow: [
                   BoxShadow(
-                    color: blue1.withOpacity(0.15),
+                    color: blue1.withValues(alpha: 0.15),
                     blurRadius: 5.0,
                     offset: const Offset(0, -1.0),
                   )
                 ],
               ),
-              padding: const EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 30),
+              padding: const EdgeInsets.only(
+                left: 24,
+                right: 24,
+                top: 16,
+                bottom: 30,
+              ),
               child: Container(
                 decoration: BoxDecoration(
                   boxShadow: [defaultShadow],
@@ -343,32 +408,38 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                   onPressed: () async {
                     if (nameController.text.isNotEmpty) {
                       if (selectedCategory != null) {
-                        ref
+                        await ref
                             .read(categoriesProvider.notifier)
-                            .updateCategory(nameController.text)
-                            .whenComplete(() => Navigator.of(context).pop());
+                            .updateCategory(
+                              name: nameController.text,
+                              type: categoryType,
+                              icon: categoryIcon,
+                              color: categoryColor,
+                            );
                       } else {
-                        ref
-                            .read(categoriesProvider.notifier)
-                            .addCategory(nameController.text)
-                            .whenComplete(() => Navigator.of(context).pop());
+                        await ref.read(categoriesProvider.notifier).addCategory(
+                              name: nameController.text,
+                              type: categoryType,
+                              icon: categoryIcon,
+                              color: categoryColor,
+                            );
                       }
+                      ref.invalidate(selectedCategoryProvider);
+                      ref.invalidate(categoryMapProvider);
+                      if (context.mounted) Navigator.of(context).pop();
                     }
-
-                    ref.invalidate(selectedCategoryProvider);
-                    ref.invalidate(categoryMapProvider);
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.secondary,
                     padding: const EdgeInsets.all(16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                   child: Text(
                     "${selectedCategory == null ? "CREATE" : "UPDATE"} CATEGORY",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        color: Theme.of(context).colorScheme.onPrimary),
                   ),
                 ),
               ),

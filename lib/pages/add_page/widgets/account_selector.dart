@@ -6,27 +6,29 @@ import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
 import '../../../model/bank_account.dart';
 import '../../../providers/accounts_provider.dart';
+import '../../../providers/transactions_provider.dart';
 
 class AccountSelector extends ConsumerStatefulWidget {
   const AccountSelector({
-    required this.provider,
     required this.scrollController,
-    this.fromAccount,
+    this.transfer = false,
     super.key,
   });
 
-  final StateProvider provider;
   final ScrollController scrollController;
-  final int? fromAccount;
+  final bool transfer;
 
   @override
   ConsumerState<AccountSelector> createState() => _AccountSelectorState();
 }
 
-class _AccountSelectorState extends ConsumerState<AccountSelector> with Functions {
+class _AccountSelectorState extends ConsumerState<AccountSelector>
+    with Functions {
   @override
   Widget build(BuildContext context) {
     final accountsList = ref.watch(accountsProvider);
+    final fromAccount = ref.watch(bankAccountProvider);
+    final toAccount = ref.watch(bankAccountTransferProvider);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -71,44 +73,68 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> with Function
                         BankAccount account = accounts[i];
                         IconData? icon = accountIconList[account.symbol];
                         Color? color = accountColorListTheme[account.color];
+                        bool enabled = (widget.transfer &&
+                                account.id != fromAccount?.id) ||
+                            (!widget.transfer && account.id != toAccount?.id);
                         return GestureDetector(
-                          onTap: () => {
-                            ref.read(widget.provider.notifier).state = account,
-                            Navigator.of(context).pop(),
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: color,
+                          onTap: enabled
+                              ? () {
+                                  if (widget.transfer) {
+                                    ref
+                                        .read(bankAccountTransferProvider
+                                            .notifier)
+                                        .state = account;
+                                  } else {
+                                    ref
+                                        .read(bankAccountProvider.notifier)
+                                        .state = account;
+                                  }
+                                  Navigator.pop(context);
+                                }
+                              : null,
+                          child: Opacity(
+                            opacity: enabled ? 1.0 : 0.5,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: color,
+                                    ),
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: icon != null
+                                        ? Icon(
+                                            icon,
+                                            size: 24.0,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary,
+                                          )
+                                        : const SizedBox(),
                                   ),
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: icon != null
-                                      ? Icon(
-                                          icon,
-                                          size: 24.0,
-                                          color: Theme.of(context).colorScheme.onPrimary,
-                                        )
-                                      : const SizedBox(),
-                                ),
-                                Text(
-                                  account.name,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelLarge!
-                                      .copyWith(color: Theme.of(context).colorScheme.primary),
-                                ),
-                              ],
+                                  Text(
+                                    account.name,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelLarge!
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         );
                       },
                     ),
-                    loading: () => const Center(child: CircularProgressIndicator()),
+                    loading: () =>
+                        const Center(child: CircularProgressIndicator()),
                     error: (err, stack) => Text('Error: $err'),
                   ),
                 ),
@@ -129,30 +155,43 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> with Function
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    separatorBuilder: (context, index) => const Divider(height: 1, color: grey1),
+                    separatorBuilder: (context, index) =>
+                        const Divider(height: 1, color: grey1),
                     itemBuilder: (context, i) {
                       BankAccount account = accounts[i];
-                      IconData? icon = accountIconList[account.symbol];
-                      Color? color = accountColorListTheme[account.color];
+                      IconData icon = accountIconList[account.symbol]!;
+                      Color color = accountColorListTheme[account.color];
+                      bool enabled =
+                          (widget.transfer && account.id != fromAccount?.id) ||
+                              (!widget.transfer && account.id != toAccount?.id);
                       return ListTile(
-                        onTap: () => ref.read(widget.provider.notifier).state = account,
-                        enabled: account.id != widget.fromAccount,
+                        onTap: () {
+                          if (widget.transfer) {
+                            ref
+                                .read(bankAccountTransferProvider.notifier)
+                                .state = account;
+                          } else {
+                            ref.read(bankAccountProvider.notifier).state =
+                                account;
+                          }
+                          Navigator.pop(context);
+                        },
+                        enabled: enabled,
                         leading: Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: color,
                           ),
                           padding: const EdgeInsets.all(10.0),
-                          child: icon != null
-                              ? Icon(
+                          child: Icon(
                                   icon,
                                   size: 24.0,
-                                  color: Theme.of(context).colorScheme.onPrimary,
-                                )
-                              : const SizedBox(),
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                ),
                         ),
                         title: Text(account.name),
-                        trailing: (ref.watch(widget.provider)?.id == account.id)
+                        trailing: (fromAccount?.id == account.id || toAccount?.id == account.id)
                             ? Icon(
                                 Icons.done,
                                 color: Theme.of(context).colorScheme.secondary,
@@ -161,7 +200,8 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> with Function
                       );
                     },
                   ),
-                  loading: () => const Center(child: CircularProgressIndicator()),
+                  loading: () =>
+                      const Center(child: CircularProgressIndicator()),
                   error: (err, stack) => Text('Error: $err'),
                 ),
               ],

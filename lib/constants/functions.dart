@@ -30,8 +30,6 @@ mixin Functions {
         return red;
       case TransactionType.transfer:
         return blue3;
-      default:
-        return blue3;
     }
   }
 

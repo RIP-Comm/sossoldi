@@ -10,10 +10,12 @@ class RecurringPaymentSection extends ConsumerStatefulWidget {
   const RecurringPaymentSection({super.key});
 
   @override
-  ConsumerState<RecurringPaymentSection> createState() => _RecurringPaymentSectionState();
+  ConsumerState<RecurringPaymentSection> createState() =>
+      _RecurringPaymentSectionState();
 }
 
-class _RecurringPaymentSectionState extends ConsumerState<RecurringPaymentSection> {
+class _RecurringPaymentSectionState
+    extends ConsumerState<RecurringPaymentSection> {
   Future<List<RecurringTransaction>> recurringTransactions =
       RecurringTransactionMethods().selectAllActive();
 
@@ -49,16 +51,19 @@ class _RecurringPaymentSectionState extends ConsumerState<RecurringPaymentSectio
                         .read(transactionsProvider.notifier)
                         .transactionUpdateState(transactions[index])
                         .whenComplete(() {
-                      Navigator.of(context)
-                          .pushNamed("/edit-recurring-transaction")
-                          .then((value) => setState(() {
-                                _refreshData();
-                              }));
+                      if (context.mounted) {
+                        Navigator.of(context)
+                            .pushNamed("/edit-recurring-transaction")
+                            .then((value) => setState(() {
+                                  _refreshData();
+                                }));
+                      }
                     });
                   },
                   child: RecurringPaymentCard(transaction: transactions[index]),
                 ),
-                separatorBuilder: (context, index) => const SizedBox(height: 16),
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 16),
               );
             }
           },

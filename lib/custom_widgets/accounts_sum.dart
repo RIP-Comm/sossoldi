@@ -30,7 +30,7 @@ class AccountsSum extends ConsumerWidget with Functions {
       ),
       child: Container(
         decoration: BoxDecoration(
-          color: accountColorListTheme[account.color].withOpacity(0.2),
+          color: accountColorListTheme[account.color].withValues(alpha: 0.2),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Material(
@@ -40,9 +40,12 @@ class AccountsSum extends ConsumerWidget with Functions {
             onTap: () async {
               await ref
                   .read(accountsProvider.notifier)
-                  .selectedAccount(account)
-                  .whenComplete(
-                      () => Navigator.of(context).pushNamed('/account'));
+                  .refreshAccount(account)
+                  .whenComplete(() {
+                if (context.mounted) {
+                  Navigator.of(context).pushNamed('/account');
+                }
+              });
             },
             child: Container(
               padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),

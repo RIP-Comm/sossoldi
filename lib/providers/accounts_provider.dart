@@ -1,16 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../constants/constants.dart';
-import '../model/bank_account.dart';
 import 'package:fl_chart/fl_chart.dart';
+
+import '../model/bank_account.dart';
 
 final mainAccountProvider = StateProvider<BankAccount?>((ref) => null);
 
 final selectedAccountProvider = StateProvider<BankAccount?>((ref) => null);
-final accountIconProvider =
-    StateProvider<String>((ref) => accountIconList.keys.first);
-final accountColorProvider = StateProvider<int>((ref) => 0);
-final accountMainSwitchProvider = StateProvider<bool>((ref) => false);
-final countNetWorthSwitchProvider = StateProvider<bool>((ref) => true);
 final selectedAccountCurrentMonthDailyBalanceProvider =
     StateProvider<List<FlSpot>>((ref) => const []);
 final selectedAccountLastTransactions = StateProvider<List>((ref) => const []);
@@ -39,14 +34,21 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
     return account;
   }
 
-  Future<void> addAccount(String name, num? startingValue) async {
+  Future<void> addAccount({
+    required String name,
+    required String icon,
+    required int color,
+    bool active = true,
+    bool mainAccount = false,
+    num startingValue = 0,
+  }) async {
     BankAccount account = BankAccount(
       name: name,
-      symbol: ref.read(accountIconProvider),
-      color: ref.read(accountColorProvider),
-      startingValue: startingValue ?? 0,
-      active: ref.read(countNetWorthSwitchProvider),
-      mainAccount: ref.read(accountMainSwitchProvider),
+      symbol: icon,
+      color: color,
+      startingValue: startingValue,
+      active: active,
+      mainAccount: mainAccount,
     );
 
     state = const AsyncValue.loading();
@@ -56,18 +58,19 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
     });
   }
 
-  Future<void> selectAndUpdateAccount(BankAccount account) async {
-    await selectedAccount(account);
-    await updateAccount(account.name);
-  }
-
-  Future<void> updateAccount(String name) async {
+  Future<void> updateAccount({
+    required String name,
+    required String icon,
+    required int color,
+    bool active = true,
+    bool mainAccount = false,
+  }) async {
     BankAccount account = ref.read(selectedAccountProvider)!.copy(
           name: name,
-          symbol: ref.read(accountIconProvider),
-          color: ref.read(accountColorProvider),
-          active: ref.read(countNetWorthSwitchProvider),
-          mainAccount: ref.read(accountMainSwitchProvider),
+          symbol: icon,
+          color: color,
+          active: active,
+          mainAccount: mainAccount,
         );
 
     state = const AsyncValue.loading();
@@ -80,11 +83,8 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
     });
   }
 
-  Future<void> selectedAccount(BankAccount account) async {
+  Future<void> refreshAccount(BankAccount account) async {
     ref.read(selectedAccountProvider.notifier).state = account;
-    ref.read(accountIconProvider.notifier).state = account.symbol;
-    ref.read(accountColorProvider.notifier).state = account.color;
-    ref.read(accountMainSwitchProvider.notifier).state = account.mainAccount;
 
     final currentMonthDailyBalance = await BankAccountMethods().accountDailyBalance(
         account.id!,
@@ -115,10 +115,6 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
   void reset() {
     ref.invalidate(selectedAccountProvider);
     ref.invalidate(selectedAccountCurrentMonthDailyBalanceProvider);
-    ref.invalidate(accountIconProvider);
-    ref.invalidate(accountColorProvider);
-    ref.invalidate(accountMainSwitchProvider);
-    ref.invalidate(countNetWorthSwitchProvider);
   }
 }
 

@@ -101,10 +101,11 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
     }
   }
 
+  // TODO: This should be inside addTransaction
   void _refreshAccountAndNavigateBack() {
     ref
         .read(accountsProvider.notifier)
-        .selectAndUpdateAccount(ref.read(bankAccountProvider)!)
+        .refreshAccount(ref.read(bankAccountProvider)!)
         .whenComplete(() => Navigator.of(context).pop());
   }
 
@@ -267,7 +268,6 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                                 initialChildSize: 0.7,
                                 maxChildSize: 0.9,
                                 builder: (_, controller) => AccountSelector(
-                                  provider: bankAccountProvider,
                                   scrollController: controller,
                                 ),
                               ),
@@ -364,7 +364,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                 color: Theme.of(context).colorScheme.surface,
                 boxShadow: [
                   BoxShadow(
-                    color: blue1.withOpacity(0.15),
+                    color: blue1.withValues(alpha: 0.15),
                     blurRadius: 5.0,
                     offset: const Offset(0, -1.0),
                   )

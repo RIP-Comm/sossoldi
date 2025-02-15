@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../constants/constants.dart';
 import '../model/category_transaction.dart';
 import '../model/transaction.dart';
 import 'transactions_provider.dart';
@@ -13,11 +12,6 @@ final selectedCategoryProvider =
 
 final categoryTypeProvider = StateProvider<CategoryTransactionType>(
     (ref) => CategoryTransactionType.expense); //default as 'Expense'
-
-final categoryIconProvider =
-    StateProvider<String>((ref) => iconList.keys.first);
-
-final categoryColorProvider = StateProvider<int>((ref) => 0);
 
 final selectedCategoryIndexProvider =
     StateProvider.autoDispose<int>((ref) => -1);
@@ -33,12 +27,17 @@ class AsyncCategoriesNotifier extends AsyncNotifier<List<CategoryTransaction>> {
     return categories;
   }
 
-  Future<void> addCategory(String name) async {
+  Future<void> addCategory({
+    required String name,
+    required CategoryTransactionType type,
+    required String icon,
+    required int color,
+  }) async {
     CategoryTransaction category = CategoryTransaction(
       name: name,
-      symbol: ref.read(categoryIconProvider),
-      type: ref.read(categoryTypeProvider),
-      color: ref.read(categoryColorProvider),
+      symbol: icon,
+      type: type,
+      color: color,
     );
 
     state = const AsyncValue.loading();
@@ -48,12 +47,17 @@ class AsyncCategoriesNotifier extends AsyncNotifier<List<CategoryTransaction>> {
     });
   }
 
-  Future<void> updateCategory(String name) async {
+  Future<void> updateCategory({
+    required String name,
+    required CategoryTransactionType type,
+    required String icon,
+    required int color,
+  }) async {
     CategoryTransaction category = ref.read(selectedCategoryProvider)!.copy(
           name: name,
-          symbol: ref.read(categoryIconProvider),
-          type: ref.read(categoryTypeProvider),
-          color: ref.read(categoryColorProvider),
+          type: type,
+          symbol: icon,
+          color: color,
         );
 
     state = const AsyncValue.loading();
@@ -61,13 +65,6 @@ class AsyncCategoriesNotifier extends AsyncNotifier<List<CategoryTransaction>> {
       await CategoryTransactionMethods().updateItem(category);
       return _getCategories();
     });
-  }
-
-  void selectedCategory(CategoryTransaction category) {
-    ref.read(selectedCategoryProvider.notifier).state = category;
-    ref.read(categoryIconProvider.notifier).state = category.symbol;
-    ref.read(categoryTypeProvider.notifier).state = category.type;
-    ref.read(categoryColorProvider.notifier).state = category.color;
   }
 
   Future<void> removeCategory(int categoryId) async {
@@ -78,30 +75,8 @@ class AsyncCategoriesNotifier extends AsyncNotifier<List<CategoryTransaction>> {
     });
   }
 
-  void reset() {
-    ref.invalidate(selectedCategoryProvider);
-    ref.invalidate(categoryIconProvider);
-    ref.invalidate(categoryTypeProvider);
-    ref.invalidate(categoryColorProvider);
-  }
-
   Future<List<CategoryTransaction>> getCategories() async {
     return _getCategories();
-  }
-}
-
-class AsyncCategoriesByTypeNotifier extends FamilyAsyncNotifier<
-    List<CategoryTransaction>, CategoryTransactionType?> {
-  @override
-  Future<List<CategoryTransaction>> build(CategoryTransactionType? arg) {
-    return _getCategoriesByType(arg!);
-  }
-
-  Future<List<CategoryTransaction>> _getCategoriesByType(
-      CategoryTransactionType type) async {
-    final categories =
-        await CategoryTransactionMethods().selectCategoriesByType(type);
-    return categories;
   }
 }
 
@@ -111,11 +86,15 @@ final categoriesProvider =
   return AsyncCategoriesNotifier();
 });
 
-final categoriesByTypeProvider = AsyncNotifierProviderFamily<
-    AsyncCategoriesByTypeNotifier,
-    List<CategoryTransaction>,
-    CategoryTransactionType?>(() {
-  return AsyncCategoriesByTypeNotifier();
+final categoriesByTypeProvider =
+    FutureProvider.family<List<CategoryTransaction>, CategoryTransactionType?>(
+        (ref, type) async {
+  List<CategoryTransaction> categories = [];
+  if (type != null) {
+    categories =
+        await CategoryTransactionMethods().selectCategoriesByType(type);
+  }
+  return categories;
 });
 
 final categoryMapProvider = FutureProvider.family<

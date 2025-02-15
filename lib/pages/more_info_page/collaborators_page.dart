@@ -75,7 +75,6 @@ var collaborators = const [
   ]
 ];
 
-
 class _CollaboratorsPageState extends ConsumerState<CollaboratorsPage> {
   @override
   Widget build(BuildContext context) {
@@ -89,10 +88,7 @@ class _CollaboratorsPageState extends ConsumerState<CollaboratorsPage> {
             Icons.arrow_back_ios_new,
             color: Color(0XFF7DA1C4),
           ),
-          onPressed: () {
-            Navigator.pop(context);
-            // Return to previous page
-          },
+          onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           'Collaborators',
@@ -102,56 +98,53 @@ class _CollaboratorsPageState extends ConsumerState<CollaboratorsPage> {
               .copyWith(color: Theme.of(context).colorScheme.primary),
         ),
       ),
-      body: SingleChildScrollView(
+      body: ListView.separated(
         physics: const BouncingScrollPhysics(),
-        child:
-          Padding(padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                ListView.separated(
-                  itemCount: collaborators.length,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  separatorBuilder: (context, index) => const Divider(),
-                  itemBuilder: (context, i) {
-                    List option = collaborators[i];
-                    return InkWell(
-                      onTap: () {
-                        Uri url = Uri.parse("https://${option[2]}");
-                        launchUrl(url);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              option[0].toString(),
-                              style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Theme.of(context).colorScheme.primary),
-                              textAlign: TextAlign.left,
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              option[1].toString(),
-                              style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.primary),
-                              textAlign: TextAlign.left,
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              option[2].toString(),
-                              style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).colorScheme.primary),
-                              textAlign: TextAlign.left,
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-
-              ],
+        itemCount: collaborators.length,
+        separatorBuilder: (context, index) => const Divider(height: 1),
+        itemBuilder: (context, i) {
+          List option = collaborators[i];
+          return InkWell(
+            onTap: () {
+              Uri url = Uri.parse("https://${option[2]}");
+              launchUrl(url);
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    option[0].toString(),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge!
+                        .copyWith(color: Theme.of(context).colorScheme.primary),
+                    textAlign: TextAlign.left,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    option[1].toString(),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium!
+                        .copyWith(color: Theme.of(context).colorScheme.primary),
+                    textAlign: TextAlign.left,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    option[2].toString(),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall!
+                        .copyWith(color: Theme.of(context).colorScheme.primary),
+                    textAlign: TextAlign.left,
+                  ),
+                ],
+              ),
             ),
-          )
+          );
+        },
       ),
     );
   }
