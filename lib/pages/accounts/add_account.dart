@@ -339,10 +339,36 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                         width: double.infinity,
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                         child: TextButton.icon(
-                          onPressed: () => ref
-                              .read(accountsProvider.notifier)
-                              .removeAccount(selectedAccount.id!)
-                              .whenComplete(() => Navigator.of(context).pop()),
+                          onPressed: () {
+                            // Show confirmation dialog before deleting
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text('Confirm Deletion'),
+                                content: Text('Are you sure you want to delete this account?'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      // Close the dialog and do nothing
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text('Cancel'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () async {
+                                      // Perform the delete action and close the dialog
+                                      await ref
+                                          .read(accountsProvider.notifier)
+                                          .removeAccount(selectedAccount.id!);
+                                      Navigator.of(context).pop();  // Close the dialog
+                                      Navigator.of(context).pop();  // Go back to the previous screen
+                                    },
+                                    child: Text('Delete'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                           style: TextButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             side: const BorderSide(color: red, width: 1),

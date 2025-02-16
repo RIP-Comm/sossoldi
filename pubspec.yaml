@@ -35,12 +35,13 @@ dependencies:
   percent_indicator: ^4.2.3
   permission_handler: ^11.3.1
   shared_preferences: ^2.3.3
-  sqflite: ^2.4.1
-  sqflite_common_ffi: ^2.3.4
+  sqflite: ^2.0.0+3
+  sqflite_common_ffi: ^2.0.0+3
   sqlite3_flutter_libs:
   timezone: ^0.9.4
   url_launcher: ^6.3.1
   workmanager: ^0.5.2
+  path_provider: ^2.1.2
 
 dev_dependencies:
   flutter_test:
