@@ -4,6 +4,8 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'model/recurring_transaction.dart';
 import 'providers/theme_provider.dart';
@@ -13,8 +15,23 @@ import 'utils/notifications_service.dart';
 
 bool? _isFirstLogin = true;
 
-void main() async {
+// Function to initialize the database properly
+Future<void> initializeDatabase() async {
+  databaseFactory = databaseFactoryFfi; // Set FFI database factory
+
   WidgetsFlutterBinding.ensureInitialized();
+
+  final dir = await getApplicationDocumentsDirectory();
+  final dbPath = '${dir.path}/sossoldi.db';
+
+  var db = await databaseFactory.openDatabase(dbPath);
+  await db.close(); // Ensure database is closed to prevent locks
+}
+
+void main() async {
+  await initializeDatabase(); // Initialize database properly
+
+  //WidgetsFlutterBinding.ensureInitialized();
   NotificationService().requestNotificationPermissions();
   NotificationService().initializeNotifications();
   tz.initializeTimeZones();
