@@ -25,6 +25,9 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
 
   @override
   void initState() {
+    if (widget.hideIncome) {
+      categoryType = CategoryTransactionType.expense;
+    }
     final selectedCategory = ref.read(selectedCategoryProvider);
     if (selectedCategory != null) {
       nameController.text = selectedCategory.name;
