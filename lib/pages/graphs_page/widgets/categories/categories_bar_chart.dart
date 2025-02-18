@@ -40,7 +40,7 @@ class CategoriesBarChart extends ConsumerWidget {
                 : 1.0;
 
             final average =
-                totals.isNotEmpty ? totals.reduce((a, b) => a + b) / 12 : 0.0;
+                totals.isNotEmpty ? totals.reduce((a, b) => a + b) / totals.where((total) => total > 0).length : 0.0;
 
             return SizedBox(
               height: 200,

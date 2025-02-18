@@ -36,7 +36,7 @@ var collaborators = const [
   [
     "Federico Pozzato",
     "UX/UI Designer",
-    "github.com/federicopozzato",
+    "federicopozzato.it",
   ],
   [
     "GBergatto",
