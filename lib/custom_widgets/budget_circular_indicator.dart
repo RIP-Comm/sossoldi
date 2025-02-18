@@ -68,7 +68,7 @@ class BudgetCircularIndicator extends ConsumerWidget with Functions {
             ],
           ),
           circularStrokeCap: CircularStrokeCap.butt,
-          backgroundColor: color.withOpacity(0.3),
+          backgroundColor: color.withValues(alpha: 0.3),
           progressColor: color,
         ),
         const SizedBox(height: 10),

@@ -70,6 +70,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                     newSelection.add(false);
                   }
                 }
+                ref.invalidate(bankAccountTransferProvider);
                 setState(() => _typeToggleState = newSelection);
               },
               borderRadius: const BorderRadius.all(Radius.circular(4)),
@@ -107,7 +108,10 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                           const SizedBox(height: 8),
                           Text(
                             "FROM:",
-                            style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelMedium!
+                                .copyWith(
                                   color: grey1,
                                 ),
                           ),
@@ -134,7 +138,6 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                                     maxChildSize: 0.9,
                                     builder: (_, controller) => AccountSelector(
                                       // from
-                                      provider: bankAccountProvider,
                                       scrollController: controller,
                                     ),
                                   ),
@@ -152,7 +155,9 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                                     Container(
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
-                                        color: Theme.of(context).colorScheme.secondary,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
                                       ),
                                       padding: const EdgeInsets.all(4.0),
                                       child: const Icon(
@@ -163,8 +168,12 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                                     ),
                                     const Spacer(),
                                     Text(
-                                      ref.watch(bankAccountProvider)?.name ?? "",
-                                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                      ref.watch(bankAccountProvider)?.name ??
+                                          "",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall!
+                                          .copyWith(
                                             color: grey1,
                                           ),
                                     ),
@@ -178,13 +187,17 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () => ref.read(transactionsProvider.notifier).switchAccount(),
+                      onTap: () => ref
+                          .read(transactionsProvider.notifier)
+                          .switchAccount(),
                       child: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Expanded(child: VerticalDivider(width: 1, color: grey2)),
+                          Expanded(
+                              child: VerticalDivider(width: 1, color: grey2)),
                           Padding(
-                            padding: EdgeInsets.symmetric(vertical: 2, horizontal: 20),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 2, horizontal: 20),
                             child: Icon(
                               Icons.change_circle,
                               size: 32,
@@ -204,7 +217,10 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                           const SizedBox(height: 8),
                           Text(
                             "TO:",
-                            style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelMedium!
+                                .copyWith(
                                   color: grey1,
                                 ),
                           ),
@@ -231,9 +247,8 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                                     maxChildSize: 0.9,
                                     builder: (_, controller) => AccountSelector(
                                       // to
-                                      provider: bankAccountTransferProvider,
                                       scrollController: controller,
-                                      fromAccount: ref.watch(bankAccountProvider)?.id,
+                                      transfer: true,
                                     ),
                                   ),
                                 );
@@ -250,9 +265,15 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                                     const Icon(Icons.sort, color: grey2),
                                     const Spacer(),
                                     Text(
-                                      ref.watch(bankAccountTransferProvider)?.name ??
+                                      ref
+                                              .watch(
+                                                  bankAccountTransferProvider)
+                                              ?.name ??
                                           "Select account",
-                                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall!
+                                          .copyWith(
                                             color: grey1,
                                           ),
                                     ),
@@ -269,7 +290,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                 ),
               ),
             ),
-            AmountWidget(widget.amountController),
+          AmountWidget(widget.amountController),
         ],
       ),
     );

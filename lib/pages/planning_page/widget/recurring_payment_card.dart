@@ -22,8 +22,11 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
 
   String getNextText() {
     final now = DateTime.now();
-    final daysPassed = now.difference(transaction.lastInsertion ?? transaction.fromDate).inDays;
-    final daysInterval = recurrenceMap[parseRecurrence(transaction.recurrency)]!.days;
+    final daysPassed = now
+        .difference(transaction.lastInsertion ?? transaction.fromDate)
+        .inDays;
+    final daysInterval =
+        recurrenceMap[parseRecurrence(transaction.recurrency)]!.days;
     final daysUntilNextTransaction = daysInterval - (daysPassed % daysInterval);
     return daysUntilNextTransaction.toString();
   }
@@ -34,7 +37,8 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
     final accounts = ref.watch(accountsProvider).value;
     final currencyState = ref.watch(currencyStateNotifier);
 
-    var cat = categories?.firstWhere((element) => element.id == transaction.idCategory);
+    var cat = categories
+        ?.firstWhere((element) => element.id == transaction.idCategory);
 
     return cat != null
         ? Container(
@@ -44,9 +48,10 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
               boxShadow: [defaultShadow],
             ),
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
               decoration: BoxDecoration(
-                color: categoryColorList[cat.color].withOpacity(0.2),
+                color: categoryColorList[cat.color].withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Column(
@@ -74,13 +79,21 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Text(transaction.recurrency,
-                                  style:
-                                      const TextStyle(fontWeight: FontWeight.w200, fontSize: 10)),
+                              Text(
+                                transaction.recurrency,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w200,
+                                  fontSize: 10,
+                                ),
+                              ),
                               const SizedBox(height: 10),
-                              Text(transaction.note,
-                                  style:
-                                      const TextStyle(fontWeight: FontWeight.w900, fontSize: 16)),
+                              Text(
+                                transaction.note,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 16,
+                                ),
+                              ),
                               const SizedBox(height: 10),
                               Text(cat.name),
                             ],
@@ -93,11 +106,13 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
                           children: [
                             Text("In ${getNextText()} days"),
                             const SizedBox(height: 10),
-                            Text("-${transaction.amount}${currencyState.selectedCurrency.symbol}",
+                            Text(
+                                "-${transaction.amount}${currencyState.selectedCurrency.symbol}",
                                 style: const TextStyle(color: Colors.red)),
                             const SizedBox(height: 10),
                             Text(accounts!
-                                .firstWhere((element) => element.id == transaction.idBankAccount)
+                                .firstWhere((element) =>
+                                    element.id == transaction.idBankAccount)
                                 .name)
                           ],
                         ),
@@ -124,10 +139,11 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
                                 builder: (BuildContext context) {
                                   return ListView(
                                     scrollDirection: Axis.vertical,
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 20, horizontal: 10),
                                     children: [
-                                      OlderRecurringPayments(transaction: transaction),
+                                      OlderRecurringPayments(
+                                          transaction: transaction),
                                     ],
                                   );
                                 },
@@ -141,7 +157,8 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
                             child: const Wrap(
                               crossAxisAlignment: WrapCrossAlignment.center,
                               children: [
-                                Icon(Icons.checklist_rtl_outlined, color: blue4),
+                                Icon(Icons.checklist_rtl_outlined,
+                                    color: blue4),
                                 SizedBox(width: 10),
                                 Text(
                                   "See older payments",
@@ -152,18 +169,17 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
                           ),
                         ),
                       ),
-                      transaction.toDate != null
-                          ? Expanded(
-                              flex: 2,
-                              child: Container(
-                                alignment: Alignment.centerRight,
-                                child: Text(
-                                  "Until ${dateToString(transaction.toDate!)}",
-                                  style: const TextStyle(fontSize: 8),
-                                ),
-                              ),
-                            )
-                          : Container(),
+                      if (transaction.toDate != null)
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              "Until ${dateToString(transaction.toDate!)}",
+                              style: const TextStyle(fontSize: 8),
+                            ),
+                          ),
+                        ),
                     ],
                   ),
                 ],

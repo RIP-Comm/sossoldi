@@ -12,7 +12,7 @@ const TextStyle labelLight = TextStyle(
 );
 
 BoxShadow defaultShadow = BoxShadow(
-  color: blue1.withOpacity(0.20),
+  color: blue1.withValues(alpha: 0.20),
   blurRadius: 2.0,
   offset: const Offset(1.0, 1.0),
 );
