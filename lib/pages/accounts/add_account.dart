@@ -324,7 +324,8 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                             keyboardType: TextInputType.number,
                             inputFormatters: <TextInputFormatter>[
                               FilteringTextInputFormatter.allow(
-                                RegExp(r'[0-9,]')),
+                                RegExp(r'^\d*\.?\d{0,2}'),
+                              ),
                             ],
                             style: Theme.of(context)
                                 .textTheme
