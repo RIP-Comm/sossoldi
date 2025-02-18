@@ -24,8 +24,8 @@ class TransactionTypeButton extends ConsumerWidget {
     final width = (MediaQuery.of(context).size.width - 64) * 0.5;
     return Container(
       height: 28,
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primaryContainer,
         borderRadius: BorderRadius.all(
           Radius.circular(5.0),
         ),
@@ -65,7 +65,7 @@ class TransactionTypeButton extends ConsumerWidget {
                   style: Theme.of(context)
                       .textTheme
                       .bodyLarge
-                      ?.copyWith(color: (transactionType == TransactionType.income) ? white : blue2),
+                      ?.copyWith(color: (transactionType == TransactionType.income) ? white : Theme.of(context).colorScheme.onPrimaryContainer),
                 ),
               ),
             ),
@@ -85,7 +85,7 @@ class TransactionTypeButton extends ConsumerWidget {
                   style: Theme.of(context)
                       .textTheme
                       .bodyLarge
-                      ?.copyWith(color: (transactionType == TransactionType.expense) ? white : blue2),
+                      ?.copyWith(color: (transactionType == TransactionType.expense) ? white : Theme.of(context).colorScheme.onPrimaryContainer),
                 ),
               ),
             ),

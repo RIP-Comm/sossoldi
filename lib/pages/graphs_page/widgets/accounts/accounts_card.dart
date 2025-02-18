@@ -62,7 +62,7 @@ class AccountsCard extends ConsumerWidget with Functions {
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodySmall
-                                        ?.copyWith(color: blue1),
+                                        ?.copyWith(color: Theme.of(context).colorScheme.primary),
                                   ),
                                 ],
                               ),
@@ -74,7 +74,7 @@ class AccountsCard extends ConsumerWidget with Functions {
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodySmall
-                                    ?.copyWith(color: blue1),
+                                    ?.copyWith(color: Theme.of(context).colorScheme.primary),
                               ),
                             ),
                           ],

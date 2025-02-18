@@ -39,31 +39,34 @@ class CategoriesBarChart extends ConsumerWidget {
                 ? totals.reduce((a, b) => a > b ? a : b)
                 : 1.0;
 
-            final average =
-                totals.isNotEmpty ? totals.reduce((a, b) => a + b) / totals.where((total) => total > 0).length : 0.0;
+            final average = totals.isNotEmpty
+                ? totals.reduce((a, b) => a + b) /
+                    totals.where((total) => total > 0).length
+                : 0.0;
 
             return SizedBox(
               height: 200,
               child: BarChart(
                 BarChartData(
-                  barGroups: _generateBarGroups(totals, highlightedMonth),
-                  titlesData: _titlesData(),
+                  barGroups: _generateBarGroups(
+                    context,
+                    totals,
+                    highlightedMonth,
+                  ),
+                  titlesData: _titlesData(context),
                   barTouchData: _barTouchData(ref, currentYear),
                   borderData: FlBorderData(show: false),
                   extraLinesData: ExtraLinesData(horizontalLines: [
                     HorizontalLine(
                       y: (average / maxAmount) * 200.0,
-                      color: blue2,
+                      color: Theme.of(context).colorScheme.secondary,
                       strokeWidth: 2,
                       dashArray: [5, 5],
                       label: HorizontalLineLabel(
                         show: true,
                         labelResolver: (line) => "avg",
                         alignment: Alignment.topRight,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall
-                            ?.copyWith(color: blue2),
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ),
                   ]),
@@ -79,7 +82,10 @@ class CategoriesBarChart extends ConsumerWidget {
   }
 
   List<BarChartGroupData> _generateBarGroups(
-      List<double> totals, int highlightedMonth) {
+    BuildContext context,
+    List<double> totals,
+    int highlightedMonth,
+  ) {
     const rodBorderRadius = BorderRadius.only(
       topLeft: Radius.circular(5),
       topRight: Radius.circular(5),
@@ -100,14 +106,15 @@ class CategoriesBarChart extends ConsumerWidget {
             toY: barHeight,
             width: 20,
             borderRadius: rodBorderRadius,
-            color: isHighlighted ? blue2 : grey2,
+            color:
+                isHighlighted ? Theme.of(context).colorScheme.secondary : grey2,
           ),
         ],
       );
     });
   }
 
-  FlTitlesData _titlesData() {
+  FlTitlesData _titlesData(BuildContext context) {
     return FlTitlesData(
       show: true,
       bottomTitles: AxisTitles(
@@ -118,7 +125,8 @@ class CategoriesBarChart extends ConsumerWidget {
               padding: const EdgeInsets.only(top: 6.0),
               child: Text(
                 DateFormat('MMM').format(DateTime(0, value.toInt() + 1)),
-                style: const TextStyle(color: Colors.black, fontSize: 10),
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary, fontSize: 10),
               ),
             );
           },

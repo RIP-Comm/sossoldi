@@ -25,26 +25,36 @@ class CategoriesCardState extends ConsumerState<CategoriesCard> {
   Widget build(BuildContext context) {
     final categoryType = ref.watch(categoryTypeProvider);
     final categoryMap = ref.watch(categoryMapProvider(categoryType));
-    final categoryTotalAmount = ref.watch(categoryTotalAmountProvider(categoryType)).value ?? 0;
+    final categoryTotalAmount =
+        ref.watch(categoryTotalAmountProvider(categoryType)).value ?? 0;
 
     return Column(
       children: [
         const CardLabel(label: "Categories"),
         const SizedBox(height: 10),
         DefaultContainer(
-          child: categoryMap.when(
-            data: (categories) {
-              _categoriesCount = categories.length;
+          child: Column(
+            children: [
+              const MonthSelector(type: MonthSelectorType.simple),
+              const SizedBox(height: 30),
+              const CategoryTypeButton(),
+              const SizedBox(height: 20),
+              categoryMap.when(
+                data: (categories) {
+                  _categoriesCount = categories.length;
 
-              return categoryTotalAmount != 0
-                  ? CategoriesContent(
-                      categories: categories,
-                      totalAmount: categoryTotalAmount,
-                    )
-                  : const NoTransactionsContent();
-            },
-            loading: () => LoadingContentWidget(previousCategoriesCount: _categoriesCount),
-            error: (e, s) => Text("Error: $e"),
+                  return categoryTotalAmount != 0
+                      ? CategoriesContent(
+                          categories: categories,
+                          totalAmount: categoryTotalAmount,
+                        )
+                      : const NoTransactionsContent();
+                },
+                loading: () => LoadingContentWidget(
+                    previousCategoriesCount: _categoriesCount),
+                error: (e, s) => Text("Error: $e"),
+              ),
+            ],
           ),
         ),
       ],
@@ -66,10 +76,6 @@ class CategoriesContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const MonthSelector(type: MonthSelectorType.simple),
-        const SizedBox(height: 30),
-        const CategoryTypeButton(),
-        const SizedBox(height: 20),
         CategoriesPieChart2(
           categoryMap: categories,
           total: totalAmount,
@@ -145,15 +151,14 @@ class LoadingContentWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const MonthSelector(type: MonthSelectorType.simple),
+        // height of CategoriesPieChart2
+        const SizedBox(height: 200),
         const SizedBox(height: 20),
-        const CategoryTypeButton(),
-        const SizedBox(height: 20),
-        const SizedBox(height: 200), // height of CategoriesPieChart2
-        const SizedBox(height: 20),
-        SizedBox(height: 50.0 * previousCategoriesCount), // Height of CategoryItem's list
+        // Height of CategoryItem's list
+        SizedBox(height: 50.0 * previousCategoriesCount),
         const SizedBox(height: 30),
-        const SizedBox(height: 200), // Height of CategoriesBarChart
+        // Height of CategoriesBarChart
+        const SizedBox(height: 200),
       ],
     );
   }
@@ -161,23 +166,6 @@ class LoadingContentWidget extends StatelessWidget {
 
 class NoTransactionsContent extends StatelessWidget {
   const NoTransactionsContent({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Column(
-      children: [
-        MonthSelector(type: MonthSelectorType.simple),
-        SizedBox(height: 20),
-        CategoryTypeButton(),
-        SizedBox(height: 20),
-        NoTransactionsMessage(),
-      ],
-    );
-  }
-}
-
-class NoTransactionsMessage extends StatelessWidget {
-  const NoTransactionsMessage({super.key});
 
   @override
   Widget build(BuildContext context) {

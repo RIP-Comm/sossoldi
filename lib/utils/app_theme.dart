@@ -22,8 +22,34 @@ class AppTheme {
       backgroundColor: grey3,
       unselectedItemColor: grey1,
     ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: blue5,
+    ),
+    tabBarTheme: TabBarTheme(
+      indicator: BoxDecoration(
+        borderRadius: BorderRadius.circular(50),
+        color: blue5,
+      ),
+      labelColor: white,
+      unselectedLabelColor: blue5,
+    ),
     iconTheme: const IconThemeData(
       color: blue1,
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: ButtonStyle(
+        padding: WidgetStatePropertyAll(EdgeInsets.all(16)),
+        shape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+        textStyle: WidgetStatePropertyAll(
+          TextStyle(
+            fontSize: 14.0,
+            fontWeight: FontWeight.w700,
+            color: white,
+          ),
+        ),
+      ),
     ),
     listTileTheme: const ListTileThemeData(
       tileColor: grey3,
@@ -99,7 +125,7 @@ class AppTheme {
 
   static final darkTheme = ThemeData(
     colorScheme: darkCustomColorScheme,
-    scaffoldBackgroundColor: darkBlue7,
+    scaffoldBackgroundColor: darkGrey4,
     useMaterial3: false,
     appBarTheme: const AppBarTheme(
       color: darkGrey3,
@@ -115,19 +141,50 @@ class AppTheme {
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: darkBlue7,
       unselectedItemColor: darkGrey1,
+      selectedItemColor: darkBlue1,
     ),
-
-    tabBarTheme: const TabBarTheme(indicator: BoxDecoration(color: darkBlue5)),
-
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: darkBlue1,
+    ),
+    tabBarTheme: TabBarTheme(
+      indicator: BoxDecoration(
+        borderRadius: BorderRadius.circular(50),
+        color: darkBlue5,
+      ),
+      labelColor: white,
+      unselectedLabelColor: grey2,
+    ),
     iconTheme: const IconThemeData(
       color: darkBlue1,
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: ButtonStyle(
+        shape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+        textStyle: WidgetStatePropertyAll(
+          TextStyle(
+            fontSize: 14.0,
+            fontWeight: FontWeight.w700,
+            color: white,
+          ),
+        ),
+      ),
+    ),
+    listTileTheme: const ListTileThemeData(
+      tileColor: darkBlue7,
+      contentPadding: EdgeInsets.all(16),
     ),
 
     disabledColor: darkGrey2,
     //Text style
     fontFamily: 'SF Pro Text',
     textTheme: const TextTheme(
-      displayLarge: TextStyle(fontSize: 34.0, fontWeight: FontWeight.w700, color: darkBlack),
+      displayLarge: TextStyle(
+        fontSize: 34.0,
+        fontWeight: FontWeight.w700,
+        color: darkBlack,
+      ),
       displayMedium: TextStyle(
         fontSize: 34.0,
         fontWeight: FontWeight.w600,
@@ -202,6 +259,7 @@ class AppTheme {
 ColorScheme customColorScheme = const ColorScheme(
   primary: blue1,
   primaryContainer: white,
+  onPrimaryContainer: blue2,
   secondary: blue5,
   tertiary: blue7,
   surface: grey3,
@@ -216,6 +274,7 @@ ColorScheme customColorScheme = const ColorScheme(
 ColorScheme darkCustomColorScheme = const ColorScheme(
   primary: darkBlue1,
   primaryContainer: darkGrey4,
+  onPrimaryContainer: darkBlue1,
   secondary: darkBlue5,
   tertiary: darkBlue7,
   surface: darkBlue7, //darkBlue3

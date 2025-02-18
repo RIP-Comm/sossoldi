@@ -32,7 +32,7 @@ class DetailsListTile extends ConsumerWidget {
         child: Icon(
           icon,
           size: 24.0,
-          color: Theme.of(context).colorScheme.onPrimary,
+          color: white,
         ),
       ),
       title: Text(

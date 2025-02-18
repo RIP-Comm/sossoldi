@@ -114,7 +114,6 @@ class _StructureState extends ConsumerState<Structure> {
       floatingActionButton: FloatingActionButton(
         elevation: 4,
         highlightElevation: 0,
-        backgroundColor: Theme.of(context).colorScheme.secondary,
         child: Icon(
           Icons.add_rounded,
           size: 55,

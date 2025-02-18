@@ -5,18 +5,11 @@ import '../../../constants/functions.dart';
 import '../../../custom_widgets/transactions_list.dart';
 import '../../../providers/transactions_provider.dart';
 
-class ListTab extends ConsumerStatefulWidget {
-  const ListTab({
-    super.key,
-  });
+class ListTab extends ConsumerWidget with Functions {
+  const ListTab({super.key});
 
   @override
-  ConsumerState<ListTab> createState() => _ListTabState();
-}
-
-class _ListTabState extends ConsumerState<ListTab> with Functions {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final asyncTransactions = ref.watch(transactionsProvider);
 
     return Container(
@@ -29,7 +22,7 @@ class _ListTabState extends ConsumerState<ListTab> with Functions {
         },
         loading: () {
           return Container(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.primaryContainer,
           );
         },
         error: (error, stackTrace) {

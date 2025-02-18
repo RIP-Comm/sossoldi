@@ -19,7 +19,7 @@ class TypeTab extends StatelessWidget {
       height: 26,
       width: (MediaQuery.of(context).size.width - 36) / 3,
       decoration: BoxDecoration(
-        color: selectedType ? color : white,
+        color: selectedType ? color : Theme.of(context).colorScheme.primaryContainer,
         borderRadius: const BorderRadius.all(Radius.circular(4)),
         boxShadow: selectedType ? [defaultShadow] : [],
       ),

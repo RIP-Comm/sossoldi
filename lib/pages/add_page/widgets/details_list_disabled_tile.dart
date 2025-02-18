@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
+import "../../../constants/style.dart";
 import "details_list_tile.dart";
 
 class NonEditableDetailsListTile extends DetailsListTile {
@@ -28,7 +29,7 @@ class NonEditableDetailsListTile extends DetailsListTile {
         child: Icon(
           icon,
           size: 24.0,
-          color: Theme.of(context).colorScheme.onPrimary,
+          color: white,
         ),
       ),
       title: Text(
