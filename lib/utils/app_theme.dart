@@ -38,6 +38,7 @@ class AppTheme {
     ),
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
+        foregroundColor: const WidgetStatePropertyAll(white),
         padding: WidgetStatePropertyAll(EdgeInsets.all(16)),
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -46,7 +47,6 @@ class AppTheme {
           TextStyle(
             fontSize: 14.0,
             fontWeight: FontWeight.w700,
-            color: white,
           ),
         ),
       ),
@@ -159,6 +159,8 @@ class AppTheme {
     ),
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
+        foregroundColor: const WidgetStatePropertyAll(white),
+        padding: WidgetStatePropertyAll(EdgeInsets.all(16)),
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
@@ -166,7 +168,6 @@ class AppTheme {
           TextStyle(
             fontSize: 14.0,
             fontWeight: FontWeight.w700,
-            color: white,
           ),
         ),
       ),
@@ -280,7 +281,7 @@ ColorScheme darkCustomColorScheme = const ColorScheme(
   surface: darkBlue7, //darkBlue3
   error: darkRed,
   onPrimary: darkWhite,
-  onSecondary: darkWhite,
+  onSecondary: white,
   onSurface: darkBlue1,
   onError: darkBlack,
   brightness: Brightness.dark,
