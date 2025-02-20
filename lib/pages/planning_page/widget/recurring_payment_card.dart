@@ -44,7 +44,7 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
         ? Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              color: white,
+              color: Theme.of(context).colorScheme.primaryContainer,
               boxShadow: [defaultShadow],
             ),
             child: Container(

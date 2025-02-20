@@ -19,7 +19,6 @@ import '../providers/dashboard_provider.dart';
 import '../providers/statistics_provider.dart';
 import '../providers/transactions_provider.dart';
 
-
 var settingsOptions = [
   [
     Icons.settings,
@@ -78,7 +77,6 @@ class SettingsPage extends ConsumerStatefulWidget {
   ConsumerState<SettingsPage> createState() => _SettingsPageState();
 }
 
-
 class _SettingsPageState extends ConsumerState<SettingsPage> {
   bool _isDeveloperOptionsActive = false;
   int _tapCount = 0;
@@ -97,11 +95,15 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           context: context,
           builder: (context) => AlertDialog(
             title: const Text("Developer options activated."),
-            content: const Text("WARNING: tapping on any button on the red bar, erases permanently your data. Do it at your own risk"),
+            content: const Text(
+                "WARNING: tapping on any button on the red bar, erases permanently your data. Do it at your own risk"),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text("OK"),
+                child: Text(
+                  "OK",
+                  style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                ),
               ),
             ],
           ),
@@ -171,7 +173,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       onTap: () {
                         if (setting[3] != null) {
                           final link = setting[3] as String;
-                          if(link.startsWith("http")) {
+                          if (link.startsWith("http")) {
                             Uri url = Uri.parse(link);
                             launchUrl(url);
                           } else {
@@ -228,58 +230,57 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       ),
       bottomSheet: _isDeveloperOptionsActive
           ? Container(
-        color: Colors.deepOrangeAccent,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            const Text(
-              '[DEV ONLY]\nDANGEROUS\nZONE',
-              style: TextStyle(
-                fontSize: 11,
-                color: Colors.yellowAccent,
-                shadows: <Shadow>[
-                  Shadow(
-                    offset: Offset(1.0, 1.0),
-                    blurRadius: 3.0,
-                    color: Color.fromARGB(255, 0, 0, 0),
+              color: Colors.deepOrangeAccent,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  const Text(
+                    '[DEV ONLY]\nDANGEROUS\nZONE',
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: Colors.yellowAccent,
+                      shadows: <Shadow>[
+                        Shadow(
+                          offset: Offset(1.0, 1.0),
+                          blurRadius: 3.0,
+                          color: Color.fromARGB(255, 0, 0, 0),
+                        ),
+                      ],
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  ElevatedButton(
+                    child: const Text('RESET DB'),
+                    onPressed: () async {
+                      await SossoldiDatabase.instance.resetDatabase().then((v) {
+                        ref.refresh(accountsProvider);
+                        ref.refresh(categoriesProvider);
+                        ref.refresh(transactionsProvider);
+                        ref.refresh(budgetsProvider);
+                        showSuccessDialog(context, "DB Cleared");
+                      });
+                    },
+                  ),
+                  ElevatedButton(
+                    child: const Text('CLEAR AND FILL DEMO DATA'),
+                    onPressed: () async {
+                      await SossoldiDatabase.instance.clearDatabase();
+                      await SossoldiDatabase.instance.fillDemoData().then((value) {
+                        ref.refresh(accountsProvider);
+                        ref.refresh(categoriesProvider);
+                        ref.refresh(transactionsProvider);
+                        ref.refresh(budgetsProvider);
+                        ref.refresh(dashboardProvider);
+                        ref.refresh(lastTransactionsProvider);
+                        ref.refresh(statisticsProvider);
+                        showSuccessDialog(context, "DB Cleared, and DEMO data added");
+                      });
+                    },
                   ),
                 ],
               ),
-              textAlign: TextAlign.center,
-            ),
-            ElevatedButton(
-              child: const Text('RESET DB'),
-              onPressed: () async {
-                await SossoldiDatabase.instance.resetDatabase().then((v) {
-                  ref.refresh(accountsProvider);
-                  ref.refresh(categoriesProvider);
-                  ref.refresh(transactionsProvider);
-                  ref.refresh(budgetsProvider);
-                  showSuccessDialog(context, "DB Cleared");
-                });
-              },
-            ),
-            ElevatedButton(
-              child: const Text('CLEAR AND FILL DEMO DATA'),
-              onPressed: () async {
-                await SossoldiDatabase.instance.clearDatabase();
-                await SossoldiDatabase.instance.fillDemoData().then((value) {
-                  ref.refresh(accountsProvider);
-                  ref.refresh(categoriesProvider);
-                  ref.refresh(transactionsProvider);
-                  ref.refresh(budgetsProvider);
-                  ref.refresh(dashboardProvider);
-                  ref.refresh(lastTransactionsProvider);
-                  ref.refresh(statisticsProvider);
-                  showSuccessDialog(context, "DB Cleared, and DEMO data added");
-                });
-              },
-            ),
-          ],
-        ),
-      )
+            )
           : null,
     );
   }
 }
-

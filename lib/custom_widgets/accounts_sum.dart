@@ -24,7 +24,7 @@ class AccountsSum extends ConsumerWidget with Functions {
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 4, 16, 6),
       decoration: BoxDecoration(
-        color: white,
+        color: Theme.of(context).colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(8),
         boxShadow: [defaultShadow],
       ),
@@ -74,8 +74,7 @@ class AccountsSum extends ConsumerWidget with Functions {
                         account.name,
                         style: Theme.of(context)
                             .textTheme
-                            .bodyLarge!
-                            .copyWith(color: darkBlue7),
+                            .bodyLarge,
                       ),
                       RichText(
                         text: TextSpan(
@@ -84,15 +83,14 @@ class AccountsSum extends ConsumerWidget with Functions {
                               text: numToCurrency(account.total),
                               style: Theme.of(context)
                                   .textTheme
-                                  .titleSmall!
-                                  .copyWith(color: darkBlue7),
+                                  .titleSmall,
                             ),
                             TextSpan(
                               text: currencyState.selectedCurrency.symbol,
                               style:
                                   Theme.of(context).textTheme.bodySmall?.apply(
                                 fontFeatures: [const FontFeature.subscripts()],
-                              ).copyWith(color: darkBlue7),
+                              ),
                             ),
                           ],
                         ),
