@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
 import "../../../constants/style.dart";
+import "../../../providers/theme_provider.dart";
 
 class DetailsListTile extends ConsumerWidget {
   const DetailsListTile({
@@ -19,9 +20,10 @@ class DetailsListTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isDarkMode = ref.watch(appThemeStateNotifier).isDarkModeEnabled;
+
     return ListTile(
       contentPadding: const EdgeInsets.all(16.0),
-      tileColor: Theme.of(context).colorScheme.surface,
       onTap: callback,
       leading: Container(
         decoration: BoxDecoration(
@@ -47,13 +49,16 @@ class DetailsListTile extends ConsumerWidget {
         children: [
           Text(
             value ?? '',
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall!
-                .copyWith(color: Theme.of(context).colorScheme.secondary),
+            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                color: isDarkMode
+                    ? grey3
+                    : Theme.of(context).colorScheme.secondary),
           ),
           const SizedBox(width: 6.0),
-          const Icon(Icons.chevron_right, color: grey1),
+          Icon(
+            Icons.chevron_right,
+            color: isDarkMode ? grey3 : Theme.of(context).colorScheme.secondary,
+          ),
         ],
       ),
     );

@@ -41,18 +41,11 @@ class _EditRecurringTransactionState
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Edit recurring transaction",
-          style: TextStyle(fontSize: 20.0),
-        ),
-        leadingWidth: 75,
+        title: const Text("Edit recurring transaction"),
+        leadingWidth: 100,
         leading: TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text(
-            'Cancel',
-            style:
-                Theme.of(context).textTheme.titleSmall!.copyWith(color: blue5),
-          ),
+          child: Text('Cancel'),
         ),
         actions: [
           selectedRecurringTransaction != null

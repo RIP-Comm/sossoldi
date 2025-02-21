@@ -168,11 +168,7 @@ class _CategorySelectorState extends ConsumerState<CategorySelector>
                             title: Text(category.name),
                             trailing: ref.watch(categoryProvider)?.id ==
                                     category.id
-                                ? Icon(
-                                    Icons.done,
-                                    color:
-                                        Theme.of(context).colorScheme.secondary,
-                                  )
+                                ? Icon(Icons.check)
                                 : null,
                           );
                         },

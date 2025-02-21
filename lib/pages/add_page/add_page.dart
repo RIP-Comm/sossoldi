@@ -70,7 +70,8 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
 
     // Remove leading zeros only if the number does not start with "0."
     if (!cleanNumberString.startsWith('0.')) {
-      cleanNumberString = cleanNumberString.replaceAll(RegExp(r'^0+(?!\.)'), '');
+      cleanNumberString =
+          cleanNumberString.replaceAll(RegExp(r'^0+(?!\.)'), '');
     }
 
     if (cleanNumberString.startsWith('.')) {
@@ -199,193 +200,189 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
         leadingWidth: 100,
         leading: TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text(
-            'Cancel',
-            style:
-                Theme.of(context).textTheme.titleMedium!.copyWith(color: blue5),
-          ),
+          child: Text('Cancel'),
         ),
         actions: [
-          selectedTransaction != null
-              ? Container(
-                  alignment: Alignment.centerRight,
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.delete_outline,
-                      color: Theme.of(context).colorScheme.error,
-                    ),
-                    onPressed: _deleteTransaction,
-                  ),
-                )
-              : const SizedBox(),
+          if (selectedTransaction != null)
+            Container(
+              alignment: Alignment.centerRight,
+              child: IconButton(
+                icon: Icon(
+                  Icons.delete_outline,
+                  color: Theme.of(context).colorScheme.error,
+                ),
+                onPressed: _deleteTransaction,
+              ),
+            ),
         ],
       ),
-      body: Stack(
+      body: Column(
         children: [
-          SingleChildScrollView(
-            padding: const EdgeInsets.only(bottom: 72),
-            child: Column(
-              children: [
-                AmountSection(amountController),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.only(left: 16, top: 32, bottom: 8),
-                  child: Text(
-                    "DETAILS",
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelLarge!
-                        .copyWith(color: Theme.of(context).colorScheme.primary),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.only(bottom: 72),
+              child: Column(
+                children: [
+                  AmountSection(amountController),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    padding:
+                        const EdgeInsets.only(left: 16, top: 32, bottom: 8),
+                    child: Text(
+                      "DETAILS",
+                      style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                          color: Theme.of(context).colorScheme.primary),
+                    ),
                   ),
-                ),
-                Container(
-                  color: Theme.of(context).colorScheme.surface,
-                  child: Column(
-                    children: [
-                      LabelListTile(noteController),
-                      const Divider(height: 1, color: grey1),
-                      if (selectedType != TransactionType.transfer) ...[
+                  Container(
+                    color: Theme.of(context).colorScheme.surface,
+                    child: Column(
+                      children: [
+                        LabelListTile(noteController),
+                        const Divider(),
+                        if (selectedType != TransactionType.transfer) ...[
+                          DetailsListTile(
+                            title: "Account",
+                            icon: Icons.account_balance_wallet,
+                            value: ref.watch(bankAccountProvider)?.name,
+                            callback: () {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                              showModalBottomSheet(
+                                context: context,
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                isScrollControlled: true,
+                                useSafeArea: true,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10.0),
+                                    topRight: Radius.circular(10.0),
+                                  ),
+                                ),
+                                builder: (_) => DraggableScrollableSheet(
+                                  expand: false,
+                                  minChildSize: 0.5,
+                                  initialChildSize: 0.7,
+                                  maxChildSize: 0.9,
+                                  builder: (_, controller) => AccountSelector(
+                                    scrollController: controller,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          const Divider(),
+                          DetailsListTile(
+                            title: "Category",
+                            icon: Icons.list_alt,
+                            value: ref.watch(categoryProvider)?.name,
+                            callback: () {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                              showModalBottomSheet(
+                                context: context,
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                isScrollControlled: true,
+                                useSafeArea: true,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10.0),
+                                    topRight: Radius.circular(10.0),
+                                  ),
+                                ),
+                                builder: (_) => DraggableScrollableSheet(
+                                  expand: false,
+                                  minChildSize: 0.5,
+                                  initialChildSize: 0.7,
+                                  maxChildSize: 0.9,
+                                  builder: (_, controller) => CategorySelector(
+                                    scrollController: controller,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          const Divider(),
+                        ],
                         DetailsListTile(
-                          title: "Account",
-                          icon: Icons.account_balance_wallet,
-                          value: ref.watch(bankAccountProvider)?.name,
-                          callback: () {
+                          title: "Date",
+                          icon: Icons.calendar_month,
+                          value: dateToString(ref.watch(dateProvider)),
+                          callback: () async {
                             FocusManager.instance.primaryFocus?.unfocus();
-                            showModalBottomSheet(
-                              context: context,
-                              clipBehavior: Clip.antiAliasWithSaveLayer,
-                              isScrollControlled: true,
-                              useSafeArea: true,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10.0),
-                                  topRight: Radius.circular(10.0),
+                            if (Platform.isIOS) {
+                              showCupertinoModalPopup(
+                                context: context,
+                                builder: (_) => Container(
+                                  height: 300,
+                                  color: white,
+                                  child: CupertinoDatePicker(
+                                    initialDateTime: ref.watch(dateProvider),
+                                    minimumYear: 2015,
+                                    maximumYear: 2050,
+                                    mode: CupertinoDatePickerMode.date,
+                                    onDateTimeChanged: (date) => ref
+                                        .read(dateProvider.notifier)
+                                        .state = date,
+                                  ),
                                 ),
-                              ),
-                              builder: (_) => DraggableScrollableSheet(
-                                expand: false,
-                                minChildSize: 0.5,
-                                initialChildSize: 0.7,
-                                maxChildSize: 0.9,
-                                builder: (_, controller) => AccountSelector(
-                                  scrollController: controller,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                        const Divider(height: 1, color: grey1),
-                        DetailsListTile(
-                          title: "Category",
-                          icon: Icons.list_alt,
-                          value: ref.watch(categoryProvider)?.name,
-                          callback: () {
-                            FocusManager.instance.primaryFocus?.unfocus();
-                            showModalBottomSheet(
-                              context: context,
-                              clipBehavior: Clip.antiAliasWithSaveLayer,
-                              isScrollControlled: true,
-                              useSafeArea: true,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10.0),
-                                  topRight: Radius.circular(10.0),
-                                ),
-                              ),
-                              builder: (_) => DraggableScrollableSheet(
-                                expand: false,
-                                minChildSize: 0.5,
-                                initialChildSize: 0.7,
-                                maxChildSize: 0.9,
-                                builder: (_, controller) => CategorySelector(
-                                  scrollController: controller,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                        const Divider(height: 1, color: grey1),
-                      ],
-                      DetailsListTile(
-                        title: "Date",
-                        icon: Icons.calendar_month,
-                        value: dateToString(ref.watch(dateProvider)),
-                        callback: () async {
-                          FocusManager.instance.primaryFocus?.unfocus();
-                          if (Platform.isIOS) {
-                            showCupertinoModalPopup(
-                              context: context,
-                              builder: (_) => Container(
-                                height: 300,
-                                color: white,
-                                child: CupertinoDatePicker(
-                                  initialDateTime: ref.watch(dateProvider),
-                                  minimumYear: 2015,
-                                  maximumYear: 2050,
-                                  mode: CupertinoDatePickerMode.date,
-                                  onDateTimeChanged: (date) => ref
-                                      .read(dateProvider.notifier)
-                                      .state = date,
-                                ),
-                              ),
-                            );
-                          } else if (Platform.isAndroid) {
-                            final DateTime? pickedDate = await showDatePicker(
-                              context: context,
-                              initialDate: ref.watch(dateProvider),
-                              firstDate: DateTime(2015),
-                              lastDate: DateTime(2050),
-                            );
-                            if (pickedDate != null) {
-                              ref.read(dateProvider.notifier).state =
-                                  pickedDate;
+                              );
+                            } else if (Platform.isAndroid) {
+                              final DateTime? pickedDate = await showDatePicker(
+                                context: context,
+                                initialDate: ref.watch(dateProvider),
+                                firstDate: DateTime(2015),
+                                lastDate: DateTime(2050),
+                              );
+                              if (pickedDate != null) {
+                                ref.read(dateProvider.notifier).state =
+                                    pickedDate;
+                              }
                             }
-                          }
-                        },
-                      ),
-                      if (selectedType == TransactionType.expense) ...[
-                        RecurrenceListTile(
+                          },
+                        ),
+                        if (selectedType == TransactionType.expense) ...[
+                          RecurrenceListTile(
                             recurrencyEditingPermitted:
                                 widget.recurrencyEditingPermitted,
                             selectedTransaction:
-                                ref.read(selectedTransactionUpdateProvider))
+                                ref.read(selectedTransactionUpdateProvider),
+                          )
+                        ],
                       ],
-                    ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           Container(
             alignment: Alignment.bottomCenter,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              boxShadow: [
+                BoxShadow(
+                  color: Theme.of(context)
+                      .colorScheme
+                      .primary
+                      .withValues(alpha: 0.15),
+                  blurRadius: 5.0,
+                  offset: const Offset(0, -1.0),
+                )
+              ],
+            ),
+            padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-                boxShadow: [
-                  BoxShadow(
-                    color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.15),
-                    blurRadius: 5.0,
-                    offset: const Offset(0, -1.0),
-                  )
-                ],
+                boxShadow: [defaultShadow],
+                borderRadius: BorderRadius.circular(8),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              child: Container(
-                height: 48,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.secondary,
-                  boxShadow: [defaultShadow],
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: TextButton(
-                  onPressed: _createOrUpdateTransaction,
-                  child: Text(
-                    selectedTransaction != null
-                        ? "UPDATE TRANSACTION"
-                        : "ADD TRANSACTION",
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
+              child: ElevatedButton(
+                onPressed: _createOrUpdateTransaction,
+                child: Text(
+                  selectedTransaction != null
+                      ? "UPDATE TRANSACTION"
+                      : "ADD TRANSACTION",
                 ),
               ),
             ),

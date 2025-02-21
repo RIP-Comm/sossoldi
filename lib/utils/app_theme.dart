@@ -6,10 +6,10 @@ class AppTheme {
   static final lightTheme = ThemeData(
     colorScheme: customColorScheme,
     scaffoldBackgroundColor: white,
-    useMaterial3: false,
     appBarTheme: const AppBarTheme(
       color: white,
       elevation: 0,
+      scrolledUnderElevation: 0,
       centerTitle: true,
       iconTheme: IconThemeData(color: blue5),
       titleTextStyle: TextStyle(
@@ -24,21 +24,50 @@ class AppTheme {
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: blue5,
+      shape: CircleBorder(),
     ),
     tabBarTheme: TabBarTheme(
       indicator: BoxDecoration(
         borderRadius: BorderRadius.circular(50),
         color: blue5,
       ),
+      dividerHeight: 0,
+      indicatorSize: TabBarIndicatorSize.tab,
       labelColor: white,
       unselectedLabelColor: blue5,
     ),
-    iconTheme: const IconThemeData(
-      color: blue1,
+    iconTheme: const IconThemeData(color: blue1),
+    dividerTheme: DividerThemeData(
+      color: grey1,
+      space: 0.5,
+      thickness: 0.5,
     ),
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
+        foregroundColor: const WidgetStatePropertyAll(blue5),
+        iconColor: const WidgetStatePropertyAll(blue5),
+        padding: const WidgetStatePropertyAll(EdgeInsets.all(12)),
+        shape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+        textStyle: const WidgetStatePropertyAll(
+          TextStyle(
+            fontSize: 18.0,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
         foregroundColor: const WidgetStatePropertyAll(white),
+        backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+          if (states.contains(WidgetState.disabled)) {
+            return grey2;
+          }
+          return blue5;
+        }),
+        elevation: WidgetStatePropertyAll(0),
         padding: WidgetStatePropertyAll(EdgeInsets.all(16)),
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -48,6 +77,15 @@ class AppTheme {
             fontSize: 14.0,
             fontWeight: FontWeight.w700,
           ),
+        ),
+      ),
+    ),
+    filledButtonTheme: FilledButtonThemeData(
+      style: ButtonStyle(
+        padding: WidgetStatePropertyAll(EdgeInsets.all(4)),
+        iconSize: WidgetStatePropertyAll(28),
+        shape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
       ),
     ),
@@ -126,10 +164,10 @@ class AppTheme {
   static final darkTheme = ThemeData(
     colorScheme: darkCustomColorScheme,
     scaffoldBackgroundColor: darkGrey4,
-    useMaterial3: false,
     appBarTheme: const AppBarTheme(
       color: darkGrey3,
       elevation: 0,
+      scrolledUnderElevation: 0,
       centerTitle: true,
       iconTheme: IconThemeData(color: darkBlue5),
       titleTextStyle: TextStyle(
@@ -145,21 +183,50 @@ class AppTheme {
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: darkBlue1,
+      shape: CircleBorder(),
     ),
     tabBarTheme: TabBarTheme(
       indicator: BoxDecoration(
         borderRadius: BorderRadius.circular(50),
         color: darkBlue5,
       ),
+      dividerHeight: 0,
+      indicatorSize: TabBarIndicatorSize.tab,
       labelColor: white,
       unselectedLabelColor: grey2,
     ),
-    iconTheme: const IconThemeData(
-      color: darkBlue1,
+    iconTheme: const IconThemeData(color: darkBlue1),
+    dividerTheme: DividerThemeData(
+      color: darkGrey1,
+      space: 0.5,
+      thickness: 0.5,
     ),
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
         foregroundColor: const WidgetStatePropertyAll(white),
+        iconColor: const WidgetStatePropertyAll(white),
+        padding: const WidgetStatePropertyAll(EdgeInsets.all(12)),
+        shape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+        textStyle: const WidgetStatePropertyAll(
+          TextStyle(
+            fontSize: 18.0,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        foregroundColor: const WidgetStatePropertyAll(white),
+        backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+          if (states.contains(WidgetState.disabled)) {
+            return grey2;
+          }
+          return darkBlue5;
+        }),
+        elevation: WidgetStatePropertyAll(0),
         padding: WidgetStatePropertyAll(EdgeInsets.all(16)),
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -169,6 +236,15 @@ class AppTheme {
             fontSize: 14.0,
             fontWeight: FontWeight.w700,
           ),
+        ),
+      ),
+    ),
+    filledButtonTheme: FilledButtonThemeData(
+      style: ButtonStyle(
+        padding: WidgetStatePropertyAll(EdgeInsets.all(4)),
+        iconSize: WidgetStatePropertyAll(28),
+        shape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
       ),
     ),

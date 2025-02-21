@@ -44,7 +44,7 @@ class _RecurrenceSelectorState extends ConsumerState<RecurrenceSelector> with Fu
                         .copyWith(color: Theme.of(context).colorScheme.primary),
                   ),
                   trailing: ref.watch(intervalProvider) == recurrence.keys.first
-                      ? Icon(Icons.done, color: Theme.of(context).colorScheme.secondary)
+                      ? Icon(Icons.check)
                       : null,
                 ),
               ),

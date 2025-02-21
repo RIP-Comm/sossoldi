@@ -249,7 +249,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  ElevatedButton(
+                  FilledButton(
                     child: const Text('RESET DB'),
                     onPressed: () async {
                       await SossoldiDatabase.instance.resetDatabase().then((v) {
@@ -261,7 +261,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       });
                     },
                   ),
-                  ElevatedButton(
+                  FilledButton(
                     child: const Text('CLEAR AND FILL DEMO DATA'),
                     onPressed: () async {
                       await SossoldiDatabase.instance.clearDatabase();

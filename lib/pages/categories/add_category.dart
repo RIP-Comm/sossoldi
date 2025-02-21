@@ -193,7 +193,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                               child: Icon(
                                 iconList[categoryIcon],
                                 size: 48,
-                                color: Theme.of(context).colorScheme.onPrimary,
+                                color: white,
                               ),
                             ),
                           ),
@@ -381,7 +381,6 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                           }
                         }),
                         style: TextButton.styleFrom(
-                          padding: const EdgeInsets.all(16),
                           side: const BorderSide(color: red, width: 1),
                         ),
                         icon: const Icon(Icons.delete_outlined, color: red),
@@ -405,7 +404,10 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
               color: Theme.of(context).colorScheme.surface,
               boxShadow: [
                 BoxShadow(
-                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.15),
+                  color: Theme.of(context)
+                      .colorScheme
+                      .primary
+                      .withValues(alpha: 0.15),
                   blurRadius: 5.0,
                   offset: const Offset(0, -1.0),
                 )
@@ -415,11 +417,10 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondary,
                 boxShadow: [defaultShadow],
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: TextButton(
+              child: ElevatedButton(
                 onPressed: () async {
                   if (nameController.text.isNotEmpty) {
                     if (selectedCategory != null) {
@@ -444,9 +445,6 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                     if (context.mounted) Navigator.of(context).pop();
                   }
                 },
-                style: TextButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.secondary,
-                ),
                 child: Text(
                   "${selectedCategory == null ? "CREATE" : "UPDATE"} CATEGORY",
                 ),

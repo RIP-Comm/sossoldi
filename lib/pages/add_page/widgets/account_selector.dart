@@ -196,10 +196,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
                             ),
                             title: Text(account.name),
                             trailing: (fromAccount?.id == account.id || toAccount?.id == account.id)
-                                ? Icon(
-                                    Icons.done,
-                                    color: Theme.of(context).colorScheme.secondary,
-                                  )
+                                ? Icon(Icons.check)
                                 : null,
                           );
                         },

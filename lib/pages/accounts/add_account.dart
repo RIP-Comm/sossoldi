@@ -144,7 +144,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                               child: Icon(
                                 accountIconList[accountIcon],
                                 size: 48,
-                                color: Theme.of(context).colorScheme.onPrimary,
+                                color: white,
                               ),
                             ),
                           ),
@@ -411,7 +411,6 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                           }
                         }),
                         style: TextButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
                           side: const BorderSide(color: red, width: 1),
                         ),
                         icon: const Icon(Icons.delete_outlined, color: red),
@@ -435,7 +434,10 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
               color: Theme.of(context).colorScheme.surface,
               boxShadow: [
                 BoxShadow(
-                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.15),
+                  color: Theme.of(context)
+                      .colorScheme
+                      .primary
+                      .withValues(alpha: 0.15),
                   blurRadius: 5.0,
                   offset: const Offset(0, -1.0),
                 )
@@ -445,11 +447,10 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondary,
                 boxShadow: [defaultShadow],
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: TextButton(
+              child: ElevatedButton(
                 onPressed: () async {
                   if (selectedAccount != null) {
                     await ref.read(accountsProvider.notifier).updateAccount(
@@ -472,9 +473,6 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                   }
                   if (context.mounted) Navigator.of(context).pop();
                 },
-                style: TextButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.secondary,
-                ),
                 child: Text(
                   "${selectedAccount == null ? "CREATE" : "UPDATE"} ACCOUNT",
                 ),
