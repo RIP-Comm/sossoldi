@@ -50,6 +50,7 @@ class AccountsSum extends ConsumerWidget with Functions {
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                spacing: 8,
                 children: [
                   Container(
                     decoration: BoxDecoration(
