@@ -58,6 +58,7 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Column(
+                spacing: 16,
                 children: [
                   Row(
                     children: [
