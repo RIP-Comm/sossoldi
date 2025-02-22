@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../constants/constants.dart';
 import '../../../../constants/style.dart';
+import '../../../../custom_widgets/rounded_icon.dart';
 import '../../../../model/category_transaction.dart';
 import '../../../../providers/categories_provider.dart';
 import '../../../../providers/currency_provider.dart';
@@ -95,16 +96,10 @@ class PieChartCategoryInfo extends ConsumerWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (selectedCategory != null && categoryValue != null)
-          Container(
+          RoundedIcon(
+            icon: iconList[selectedCategory.symbol] ?? Icons.swap_horiz_rounded,
+            backgroundColor: categoryColorList[selectedCategory.color],
             padding: const EdgeInsets.all(8.0),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: categoryColorList[selectedCategory.color],
-            ),
-            child: Icon(
-              iconList[selectedCategory.symbol] ?? Icons.swap_horiz_rounded,
-              color: Colors.white,
-            ),
           ),
         Text(
           categoryValue != null

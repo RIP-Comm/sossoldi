@@ -164,7 +164,9 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                         if (showAccountIcons)
                           Container(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 8),
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
                             color: Theme.of(context).colorScheme.surface,
                             child: Column(
                               children: [
@@ -191,7 +193,8 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                                   physics: const NeverScrollableScrollPhysics(),
                                   gridDelegate:
                                       const SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 6),
+                                    crossAxisCount: 6,
+                                  ),
                                   itemBuilder: (context, index) {
                                     IconData accountIconData =
                                         accountIconList.values.elementAt(index);
@@ -203,17 +206,16 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                                       child: Container(
                                         margin: const EdgeInsets.all(4),
                                         decoration: BoxDecoration(
-                                            color:
-                                                accountIconList[accountIcon] ==
-                                                        accountIconData
-                                                    ? Theme.of(context)
-                                                        .colorScheme
-                                                        .secondary
-                                                    : Theme.of(context)
-                                                        .colorScheme
-                                                        .surface,
-                                            // borderRadius: const BorderRadius.all(Radius.circular(4)),
-                                            shape: BoxShape.circle),
+                                          color: accountIconList[accountIcon] ==
+                                                  accountIconData
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .surface,
+                                          shape: BoxShape.circle,
+                                        ),
                                         child: Icon(
                                           accountIconData,
                                           color: accountIconList[accountIcon] ==

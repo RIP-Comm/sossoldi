@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
 import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
+import '../../../custom_widgets/rounded_icon.dart';
 import '../../../model/bank_account.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/transactions_provider.dart';
@@ -39,7 +40,8 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
             title: const Text("Account"),
             actions: [
               IconButton(
-                onPressed: () => Navigator.of(context).pushNamed('/add-account'),
+                onPressed: () =>
+                    Navigator.of(context).pushNamed('/add-account'),
                 icon: const Icon(Icons.add_circle),
                 splashRadius: 28,
               ),
@@ -53,13 +55,12 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
                 children: [
                   Container(
                     alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.only(left: 16, top: 32, bottom: 8),
+                    padding:
+                        const EdgeInsets.only(left: 16, top: 32, bottom: 8),
                     child: Text(
                       "MORE FREQUENT",
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelLarge!
-                          .copyWith(color: Theme.of(context).colorScheme.primary),
+                      style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                          color: Theme.of(context).colorScheme.primary),
                     ),
                   ),
                   Container(
@@ -73,8 +74,6 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
                         shrinkWrap: true,
                         itemBuilder: (context, i) {
                           BankAccount account = accounts[i];
-                          IconData? icon = accountIconList[account.symbol];
-                          Color? color = accountColorListTheme[account.color];
                           bool enabled = (widget.transfer &&
                                   account.id != fromAccount?.id) ||
                               (!widget.transfer && account.id != toAccount?.id);
@@ -97,26 +96,15 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
                             child: Opacity(
                               opacity: enabled ? 1.0 : 0.5,
                               child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 16.0),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: color,
-                                      ),
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: icon != null
-                                          ? Icon(
-                                              icon,
-                                              size: 24.0,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary,
-                                            )
-                                          : const SizedBox(),
+                                    RoundedIcon(
+                                      icon: accountIconList[account.symbol],
+                                      backgroundColor:
+                                          accountColorListTheme[account.color],
                                     ),
                                     Text(
                                       account.name,
@@ -142,13 +130,12 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
                   ),
                   Container(
                     alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.only(left: 16, top: 32, bottom: 8),
+                    padding:
+                        const EdgeInsets.only(left: 16, top: 32, bottom: 8),
                     child: Text(
                       "ALL ACCOUNTS",
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelLarge!
-                          .copyWith(color: Theme.of(context).colorScheme.primary),
+                      style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                          color: Theme.of(context).colorScheme.primary),
                     ),
                   ),
                   accountsList.when(
@@ -163,11 +150,9 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
                             const Divider(height: 1, color: grey1),
                         itemBuilder: (context, i) {
                           BankAccount account = accounts[i];
-                          IconData icon = accountIconList[account.symbol]!;
-                          Color color = accountColorListTheme[account.color];
-                          bool enabled =
-                              (widget.transfer && account.id != fromAccount?.id) ||
-                                  (!widget.transfer && account.id != toAccount?.id);
+                          bool enabled = (widget.transfer &&
+                                  account.id != fromAccount?.id) ||
+                              (!widget.transfer && account.id != toAccount?.id);
                           return ListTile(
                             onTap: () {
                               if (widget.transfer) {
@@ -181,18 +166,11 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
                               Navigator.pop(context);
                             },
                             enabled: enabled,
-                            leading: Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: color,
-                              ),
-                              padding: const EdgeInsets.all(10.0),
-                              child: Icon(
-                                      icon,
-                                      size: 24.0,
-                                      color:
-                                          Theme.of(context).colorScheme.onPrimary,
-                                    ),
+                            leading: RoundedIcon(
+                              icon: accountIconList[account.symbol],
+                              backgroundColor:
+                                  accountColorListTheme[account.color],
+                              size: 30,
                             ),
                             title: Text(account.name),
                             trailing: (fromAccount?.id == account.id || toAccount?.id == account.id)

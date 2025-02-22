@@ -14,8 +14,8 @@ class LinearProgressBar extends StatelessWidget {
   });
 
   final BarType type;
-  final double amount;
-  final double total;
+  final num amount;
+  final num total;
   final int colorIndex;
 
   @override

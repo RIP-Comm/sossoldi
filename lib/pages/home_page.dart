@@ -6,6 +6,7 @@ import '../constants/functions.dart';
 import '../constants/style.dart';
 import '../custom_widgets/accounts_sum.dart';
 import '../custom_widgets/line_chart.dart';
+import '../custom_widgets/rounded_icon.dart';
 import '../custom_widgets/transactions_list.dart';
 import '../model/bank_account.dart';
 import '../providers/accounts_provider.dart';
@@ -237,19 +238,10 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                                 padding:
                                   const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                               ),
-                              icon: Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Theme.of(context).colorScheme.secondary,
-                                ),
-                                child: const Padding(
+                              icon: RoundedIcon(
+                                  icon: Icons.add_rounded,
+                                  backgroundColor: blue5,
                                   padding: EdgeInsets.all(5.0),
-                                  child: Icon(
-                                    Icons.add_rounded,
-                                    size: 24.0,
-                                    color: white,
-                                  ),
-                                ),
                               ),
                               label: Text(
                                 "New Account",

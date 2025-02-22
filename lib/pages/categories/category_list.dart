@@ -5,8 +5,8 @@ import '../../../constants/constants.dart';
 import '../../../constants/functions.dart';
 import '../../../model/category_transaction.dart';
 import '../../../providers/categories_provider.dart';
-import '../../constants/style.dart';
 import '../../custom_widgets/default_card.dart';
+import '../../custom_widgets/rounded_icon.dart';
 
 class CategoryList extends ConsumerStatefulWidget {
   const CategoryList({super.key});
@@ -77,8 +77,6 @@ class _CategoryListState extends ConsumerState<CategoryList> with Functions {
                     const SizedBox(height: 16),
                 itemBuilder: (context, i) {
                   CategoryTransaction category = categorys[i];
-                  IconData? icon = iconList[category.symbol];
-                  Color? color = categoryColorListTheme[category.color];
                   return DefaultCard(
                     onTap: () {
                       ref.read(selectedCategoryProvider.notifier).state =
@@ -87,19 +85,10 @@ class _CategoryListState extends ConsumerState<CategoryList> with Functions {
                     },
                     child: Row(
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: color,
-                          ),
-                          padding: const EdgeInsets.all(10.0),
-                          child: icon != null
-                              ? Icon(
-                                  icon,
-                                  size: 30.0,
-                                  color: white,
-                                )
-                              : const SizedBox(),
+                        RoundedIcon(
+                          icon: iconList[category.symbol],
+                          backgroundColor: categoryColorListTheme[category.color],
+                          size: 30,
                         ),
                         const SizedBox(width: 12.0),
                         Text(

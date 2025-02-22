@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants/constants.dart';
 import '../../constants/functions.dart';
-import '../../constants/style.dart';
 import '../../custom_widgets/default_card.dart';
+import '../../custom_widgets/rounded_icon.dart';
 import '../../model/bank_account.dart';
 import '../../providers/accounts_provider.dart';
 
@@ -77,8 +77,6 @@ class _AccountListState extends ConsumerState<AccountList> with Functions {
                     const SizedBox(height: 16),
                 itemBuilder: (context, i) {
                   BankAccount account = accounts[i];
-                  IconData? icon = accountIconList[account.symbol];
-                  Color? color = accountColorListTheme[account.color];
                   return DefaultCard(
                     onTap: () {
                       ref.read(selectedAccountProvider.notifier).state =
@@ -87,19 +85,10 @@ class _AccountListState extends ConsumerState<AccountList> with Functions {
                     },
                     child: Row(
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: color,
-                          ),
-                          padding: const EdgeInsets.all(10.0),
-                          child: icon != null
-                              ? Icon(
-                                  icon,
-                                  size: 30.0,
-                                  color: white,
-                                )
-                              : const SizedBox(),
+                        RoundedIcon(
+                          icon: accountIconList[account.symbol],
+                          backgroundColor: accountColorListTheme[account.color],
+                          size: 30,
                         ),
                         const SizedBox(width: 12.0),
                         Text(

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../constants/constants.dart';
 import '../../../custom_widgets/default_container.dart';
 import '../../../model/budget.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/budgets_provider.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
+import '../../graphs_page/widgets/linear_progress_bar.dart';
 import '../manage_budget_page.dart';
 import 'budget_pie_chart.dart';
 
@@ -77,22 +77,18 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                                 ],
                               ),
                               const SizedBox(height: 4),
-                              ClipRRect(
-                                borderRadius: const BorderRadius.all(Radius.circular(16)),
-                                child: LinearProgressIndicator(
-                                  value: (spent == 0 || budget.amountLimit == 0)
+                              LinearProgressBar(
+                                type: BarType.category,
+                                colorIndex: index,
+                                amount: (spent == 0 || budget.amountLimit == 0)
                                       ? 0
-                                      : spent / budget.amountLimit,
-                                  minHeight: 16,
-                                  valueColor:
-                                      AlwaysStoppedAnimation<Color>(categoryColorList[index]),
-                                  borderRadius: const BorderRadius.all(Radius.circular(16)),
-                                ),
+                                      : spent,
+                                total: budget.amountLimit
                               ),
                             ],
                           );
                         },
-                        separatorBuilder: (BuildContext context, int index) {
+                        separatorBuilder: (context, index) {
                           return const SizedBox(height: 15);
                         },
                       ),

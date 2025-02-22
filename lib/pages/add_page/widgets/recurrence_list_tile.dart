@@ -6,6 +6,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 
 import '../../../constants/functions.dart';
 import "../../../constants/style.dart";
+import '../../../custom_widgets/rounded_icon.dart';
 import '../../../providers/theme_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../model/transaction.dart';
@@ -32,19 +33,9 @@ class RecurrenceListTile extends ConsumerWidget with Functions {
       children: [
         const Divider(),
         ListTile(
-          leading: Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Theme.of(context).colorScheme.secondary,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Icon(
-                Icons.autorenew,
-                size: 24.0,
-                color: white,
-              ),
-            ),
+          leading: RoundedIcon(
+            icon: Icons.autorenew,
+            backgroundColor: Theme.of(context).colorScheme.secondary,
           ),
           title: Text(
             "Recurring payment",
