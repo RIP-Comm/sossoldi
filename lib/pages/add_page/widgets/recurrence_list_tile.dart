@@ -79,7 +79,7 @@ class RecurrenceListTile extends ConsumerWidget with Functions {
                   },
                   child: Tooltip(
                     message: 'Switch is disabled',
-                    child: Switch(
+                    child: Switch.adaptive(
                       value: isRecurring,
                       onChanged: null, // This makes the switch read-only
                     ),
