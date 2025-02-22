@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants/constants.dart';
 import '../../constants/functions.dart';
+import '../../constants/style.dart';
 import '../../custom_widgets/default_card.dart';
 import '../../model/bank_account.dart';
 import '../../providers/accounts_provider.dart';
@@ -96,8 +97,7 @@ class _AccountListState extends ConsumerState<AccountList> with Functions {
                               ? Icon(
                                   icon,
                                   size: 30.0,
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
+                                  color: white,
                                 )
                               : const SizedBox(),
                         ),

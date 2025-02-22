@@ -5,6 +5,7 @@ import '../../../constants/constants.dart';
 import '../../../constants/functions.dart';
 import '../../../model/category_transaction.dart';
 import '../../../providers/categories_provider.dart';
+import '../../constants/style.dart';
 import '../../custom_widgets/default_card.dart';
 
 class CategoryList extends ConsumerStatefulWidget {
@@ -96,8 +97,7 @@ class _CategoryListState extends ConsumerState<CategoryList> with Functions {
                               ? Icon(
                                   icon,
                                   size: 30.0,
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
+                                  color: white,
                                 )
                               : const SizedBox(),
                         ),

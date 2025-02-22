@@ -147,7 +147,10 @@ class _AlertDialog extends StatelessWidget {
           _secondaryActionFunction?.call();
           Navigator.of(context).pop();
         },
-        child: Text(_secondaryActionText),
+        child: Text(
+          _secondaryActionText,
+          style: TextStyle(color: Theme.of(context).colorScheme.primary),
+        ),
       ));
     }
 
@@ -156,7 +159,10 @@ class _AlertDialog extends StatelessWidget {
         _primaryActionFunction?.call();
         Navigator.of(context).pop();
       },
-      child: Text(_primaryActionText),
+      child: Text(
+        _primaryActionText,
+        style: TextStyle(color: Theme.of(context).colorScheme.primary),
+      ),
     ));
 
     return actionWidgets;

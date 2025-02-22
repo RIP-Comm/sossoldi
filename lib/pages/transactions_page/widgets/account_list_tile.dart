@@ -114,15 +114,13 @@ class AccountListTile extends ConsumerWidget {
         ExpandedSection(
           expand: selectedAccountIndex == index,
           child: Container(
-            color: white,
+            color: Theme.of(context).colorScheme.primaryContainer,
             height: 70.0 * nTransactions,
             child: ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: nTransactions,
               separatorBuilder: (context, index) => const Divider(
-                height: 1,
-                thickness: 1,
                 indent: 15,
                 endIndent: 15,
               ),

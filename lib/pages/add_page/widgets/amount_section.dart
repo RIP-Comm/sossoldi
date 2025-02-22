@@ -54,7 +54,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
           Container(
             height: 30,
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.onPrimary,
+              color: Theme.of(context).colorScheme.primaryContainer,
               borderRadius: const BorderRadius.all(Radius.circular(4)),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 2),
@@ -112,7 +112,10 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                                 .textTheme
                                 .labelMedium!
                                 .copyWith(
-                                  color: grey1,
+                                  color: Theme.of(context).brightness ==
+                                          Brightness.light
+                                      ? grey1
+                                      : darkGrey1,
                                 ),
                           ),
                           const SizedBox(height: 2),
@@ -221,7 +224,10 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                                 .textTheme
                                 .labelMedium!
                                 .copyWith(
-                                  color: grey1,
+                                  color: Theme.of(context).brightness ==
+                                          Brightness.light
+                                      ? grey1
+                                      : darkGrey1,
                                 ),
                           ),
                           const SizedBox(height: 2),

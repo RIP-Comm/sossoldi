@@ -5,7 +5,7 @@ import '../constants/constants.dart';
 import '../model/bank_account.dart';
 import '../constants/functions.dart';
 import '../constants/style.dart';
-import '../../../providers/accounts_provider.dart';
+import '../providers/accounts_provider.dart';
 import '../providers/currency_provider.dart';
 
 /// This class shows account summaries in the dashboard
@@ -22,9 +22,8 @@ class AccountsSum extends ConsumerWidget with Functions {
     final currencyState = ref.watch(currencyStateNotifier);
 
     return Container(
-      margin: const EdgeInsets.fromLTRB(0, 4, 16, 6),
       decoration: BoxDecoration(
-        color: white,
+        color: Theme.of(context).colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(8),
         boxShadow: [defaultShadow],
       ),
@@ -48,7 +47,7 @@ class AccountsSum extends ConsumerWidget with Functions {
               });
             },
             child: Container(
-              padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -74,8 +73,7 @@ class AccountsSum extends ConsumerWidget with Functions {
                         account.name,
                         style: Theme.of(context)
                             .textTheme
-                            .bodyLarge!
-                            .copyWith(color: darkBlue7),
+                            .bodyLarge,
                       ),
                       RichText(
                         text: TextSpan(
@@ -84,15 +82,14 @@ class AccountsSum extends ConsumerWidget with Functions {
                               text: numToCurrency(account.total),
                               style: Theme.of(context)
                                   .textTheme
-                                  .titleSmall!
-                                  .copyWith(color: darkBlue7),
+                                  .titleSmall,
                             ),
                             TextSpan(
                               text: currencyState.selectedCurrency.symbol,
                               style:
                                   Theme.of(context).textTheme.bodySmall?.apply(
                                 fontFeatures: [const FontFeature.subscripts()],
-                              ).copyWith(color: darkBlue7),
+                              ),
                             ),
                           ],
                         ),

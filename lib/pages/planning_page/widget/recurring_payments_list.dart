@@ -20,7 +20,9 @@ class _RecurringPaymentSectionState
       RecurringTransactionMethods().selectAllActive();
 
   _refreshData() {
-    recurringTransactions = RecurringTransactionMethods().selectAllActive();
+    setState(() {
+      recurringTransactions = RecurringTransactionMethods().selectAllActive();
+    });
   }
 
   @override
@@ -54,9 +56,7 @@ class _RecurringPaymentSectionState
                       if (context.mounted) {
                         Navigator.of(context)
                             .pushNamed("/edit-recurring-transaction")
-                            .then((value) => setState(() {
-                                  _refreshData();
-                                }));
+                            .then((value) => _refreshData());
                       }
                     });
                   },
@@ -69,11 +69,8 @@ class _RecurringPaymentSectionState
           },
         ),
         const SizedBox(height: 30),
-        ElevatedButton.icon(
-          icon: Icon(
-            Icons.add_circle,
-            color: Theme.of(context).colorScheme.secondary,
-          ),
+        TextButton.icon(
+          icon: Icon(Icons.add_circle, size: 32),
           onPressed: () => {
             ref.read(selectedTransactionUpdateProvider.notifier).state = null,
             ref.read(selectedRecurringPayProvider.notifier).state = true,
@@ -84,21 +81,9 @@ class _RecurringPaymentSectionState
             Navigator.of(context).pushNamed(
               "/add-page",
               arguments: {'recurrencyEditingPermitted': false},
-            ).then((value) => setState(() {
-                  _refreshData();
-                }))
+            ).then((value) => _refreshData())
           },
-          label: Text(
-            "Add recurring payment",
-            style: Theme.of(context)
-                .textTheme
-                .titleSmall!
-                .apply(color: Theme.of(context).colorScheme.secondary),
-          ),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
-            fixedSize: const Size(330, 50),
-          ),
+          label: Text("Add recurring payment"),
         ),
         const SizedBox(height: 30),
       ],

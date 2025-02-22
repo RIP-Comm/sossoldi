@@ -40,7 +40,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.onPrimary,
+        color: Theme.of(context).colorScheme.primaryContainer,
         border: const Border(
           bottom: BorderSide(width: 1.0, color: grey2),
         ),
@@ -87,14 +87,8 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
                 TabBar(
                   controller: tabController,
                   tabs: myTabs,
-                  labelColor: Colors.white,
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  unselectedLabelColor: Theme.of(context).colorScheme.secondary,
                   splashBorderRadius: BorderRadius.circular(50),
-                  indicator: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
+                  indicatorPadding: EdgeInsets.symmetric(horizontal: 16),
                   // TODO: capitalize text of the selected label
                   // not possible from TextStyle https://github.com/flutter/flutter/issues/22695
                   labelStyle: Theme.of(context).textTheme.bodyLarge,

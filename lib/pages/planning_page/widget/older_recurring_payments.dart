@@ -11,10 +11,10 @@ class OlderRecurringPayments extends ConsumerStatefulWidget {
   const OlderRecurringPayments({super.key, required this.transaction});
 
   @override
-  ConsumerState<OlderRecurringPayments> createState() => _BudgetCardState();
+  ConsumerState<OlderRecurringPayments> createState() => _OlderRecurringPaymentsState();
 }
 
-class _BudgetCardState extends ConsumerState<OlderRecurringPayments> {
+class _OlderRecurringPaymentsState extends ConsumerState<OlderRecurringPayments> {
   List<Transaction>? transactions;
   num sum = 0.0;
 

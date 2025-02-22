@@ -214,10 +214,11 @@ class _LineChartSample2State extends State<LineChartWidget> {
               FlDotData(
                 getDotPainter: (spot, percent, barData, index) {
                   return FlDotCirclePainter(
-                      radius: 2,
-                      color: Colors.grey,
-                      strokeWidth: 2,
-                      strokeColor: Colors.blueGrey);
+                    radius: 2,
+                    color: Colors.grey,
+                    strokeWidth: 2,
+                    strokeColor: Colors.blueGrey,
+                  );
                 },
               ),
             );
@@ -286,14 +287,15 @@ class _LineChartSample2State extends State<LineChartWidget> {
       borderData: FlBorderData(
         border: const Border(
           bottom: BorderSide(
-              color: Colors.grey, width: 1.0, style: BorderStyle.solid),
+            color: Colors.grey,
+            width: 1.0,
+            style: BorderStyle.solid,
+          ),
         ),
       ),
       minX: 0,
-      maxX: widget.period == Period.year
-          ? 11
-          : widget.currentMonthDays -
-              1, // if year display 12 month, if mont display the number of days in the month
+      // if year display 12 month, if month display the number of days in it
+      maxX: widget.period == Period.year ? 11 : widget.currentMonthDays - 1,
       minY: widget.minY,
       lineBarsData: [
         LineChartBarData(
@@ -302,11 +304,11 @@ class _LineChartSample2State extends State<LineChartWidget> {
           barWidth: 1.5,
           isStrokeCapRound: true,
           color: lineColor,
-          dotData: const FlDotData(
-            show: false,
+          dotData: const FlDotData(show: false),
+          belowBarData: BarAreaData(
+            show: true,
+            color: lineColor.withValues(alpha: 0.2),
           ),
-          belowBarData:
-              BarAreaData(show: true, color: lineColor.withValues(alpha: 0.3)),
         ),
         LineChartBarData(
           spots: widget.line2Data,
@@ -314,9 +316,7 @@ class _LineChartSample2State extends State<LineChartWidget> {
           barWidth: 1,
           isStrokeCapRound: true,
           color: line2Color,
-          dotData: const FlDotData(
-            show: false,
-          ),
+          dotData: const FlDotData(show: false),
         ),
       ],
     );
