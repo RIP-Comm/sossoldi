@@ -5,6 +5,7 @@ import '../../../constants/constants.dart';
 import '../../../constants/functions.dart';
 import '../../../model/category_transaction.dart';
 import '../../../providers/categories_provider.dart';
+import '../../constants/style.dart';
 import '../../custom_widgets/default_card.dart';
 
 class CategoryList extends ConsumerStatefulWidget {
@@ -27,7 +28,7 @@ class _CategoryListState extends ConsumerState<CategoryList> with Functions {
         actions: [
           IconButton(
             onPressed: () {
-              ref.read(categoriesProvider.notifier).reset();
+              ref.invalidate(selectedCategoryProvider);
               Navigator.of(context).pushNamed('/add-category');
             },
             icon: const Icon(Icons.add_circle),
@@ -40,7 +41,8 @@ class _CategoryListState extends ConsumerState<CategoryList> with Functions {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
               child: Row(
                 children: [
                   Container(
@@ -71,14 +73,16 @@ class _CategoryListState extends ConsumerState<CategoryList> with Functions {
                 itemCount: categorys.length,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                separatorBuilder: (context, index) => const SizedBox(height: 16),
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 16),
                 itemBuilder: (context, i) {
                   CategoryTransaction category = categorys[i];
                   IconData? icon = iconList[category.symbol];
                   Color? color = categoryColorListTheme[category.color];
                   return DefaultCard(
                     onTap: () {
-                      ref.read(categoriesProvider.notifier).selectedCategory(category);
+                      ref.read(selectedCategoryProvider.notifier).state =
+                          category;
                       Navigator.of(context).pushNamed('/add-category');
                     },
                     child: Row(
@@ -93,7 +97,7 @@ class _CategoryListState extends ConsumerState<CategoryList> with Functions {
                               ? Icon(
                                   icon,
                                   size: 30.0,
-                                  color: Theme.of(context).colorScheme.onPrimary,
+                                  color: white,
                                 )
                               : const SizedBox(),
                         ),
@@ -103,7 +107,8 @@ class _CategoryListState extends ConsumerState<CategoryList> with Functions {
                           style: Theme.of(context)
                               .textTheme
                               .titleLarge!
-                              .copyWith(color: Theme.of(context).colorScheme.primary),
+                              .copyWith(
+                                  color: Theme.of(context).colorScheme.primary),
                         ),
                       ],
                     ),

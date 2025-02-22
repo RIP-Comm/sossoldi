@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../providers/currency_provider.dart';
 
-import '../../../../constants/style.dart';
 import '../../../../model/category_transaction.dart';
 
 class CategoryLabel extends ConsumerWidget {
@@ -26,22 +25,31 @@ class CategoryLabel extends ConsumerWidget {
       children: [
         Text(
           category.name,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: blue1),
+          style: Theme.of(context)
+              .textTheme
+              .bodySmall
+              ?.copyWith(color: Theme.of(context).colorScheme.primary),
         ),
         RichText(
-          text: TextSpan(children: [
-            TextSpan(
-              text: "${amount.toStringAsFixed(2)}${currencyState.selectedCurrency.symbol}    ",
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: blue1),
-            ),
-            TextSpan(
-              text: "${((amount / total) * 100).abs().toStringAsFixed(2)}%",
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: blue1,
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-          ]),
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text:
+                    "${amount.toStringAsFixed(2)}${currencyState.selectedCurrency.symbol}    ",
+                style: Theme.of(context)
+                    .textTheme
+                    .bodySmall
+                    ?.copyWith(color: Theme.of(context).colorScheme.primary),
+              ),
+              TextSpan(
+                text: "${((amount / total) * 100).abs().toStringAsFixed(2)}%",
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+            ],
+          ),
         ),
       ],
     );

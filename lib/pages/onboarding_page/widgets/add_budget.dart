@@ -73,7 +73,11 @@ class _AddBudgetState extends ConsumerState<AddBudget> with Functions {
                   amountLimit: num.tryParse(amountController.text) ?? 0,
                   active: true,
                 ))
-                .whenComplete(() => Navigator.pop(context));
+                .whenComplete(() {
+              if (context.mounted) {
+                Navigator.pop(context);
+              }
+            });
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: blue5,

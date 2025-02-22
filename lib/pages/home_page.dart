@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../pages/home_widget/budgets_home.dart';
+import 'home_widget/budgets_home.dart';
 import '../constants/functions.dart';
 import '../constants/style.dart';
 import '../custom_widgets/accounts_sum.dart';
@@ -11,6 +11,7 @@ import '../model/bank_account.dart';
 import '../providers/accounts_provider.dart';
 import '../providers/currency_provider.dart';
 import '../providers/dashboard_provider.dart';
+import '../providers/theme_provider.dart';
 import '../providers/transactions_provider.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -26,6 +27,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
     final accountList = ref.watch(accountsProvider);
     final lastTransactions = ref.watch(lastTransactionsProvider);
     final currencyState = ref.watch(currencyStateNotifier);
+    final isDarkMode = ref.watch(appThemeStateNotifier).isDarkModeEnabled;
 
     return Container(
       color: Theme.of(context).colorScheme.tertiary,
@@ -208,60 +210,58 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                   ),
                 ),
                 SizedBox(
-                  height: 86.0,
+                  height: 80.0,
                   child: accountList.when(
-                    data: (accounts) => ListView.builder(
+                    data: (accounts) => ListView.separated(
                       itemCount: accounts.length + 1,
                       shrinkWrap: true,
-                      padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 4,
+                      ),
                       physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
+                      separatorBuilder: (context, i) => const SizedBox(width: 16),
                       itemBuilder: (context, i) {
                         if (i == accounts.length) {
-                          return Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 4, 0, 16),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                boxShadow: [defaultShadow],
+                          return Container(
+                            constraints: const BoxConstraints(maxWidth: 140),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              boxShadow: [defaultShadow],
+                            ),
+                            child: ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.surface,
+                                padding:
+                                  const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                               ),
-                              child: TextButton.icon(
-                                style: ButtonStyle(
-                                  maximumSize: WidgetStateProperty.all(const Size(130, 48)),
-                                  backgroundColor: WidgetStateProperty.all(
-                                      Theme.of(context).colorScheme.surface),
-                                  shape: WidgetStateProperty.all(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
+                              icon: Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Theme.of(context).colorScheme.secondary,
+                                ),
+                                child: const Padding(
+                                  padding: EdgeInsets.all(5.0),
+                                  child: Icon(
+                                    Icons.add_rounded,
+                                    size: 24.0,
+                                    color: white,
                                   ),
                                 ),
-                                icon: Container(
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: blue5,
-                                  ),
-                                  child: const Padding(
-                                    padding: EdgeInsets.all(5.0),
-                                    child: Icon(
-                                      Icons.add_rounded,
-                                      size: 24.0,
-                                      color: white,
-                                    ),
-                                  ),
-                                ),
-                                label: Text(
-                                  "New Account",
-                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                        color: Theme.of(context).colorScheme.secondary,
-                                      ),
-                                  maxLines: 2,
-                                ),
-                                onPressed: () {
-                                  ref.read(accountsProvider.notifier).reset();
-                                  Navigator.of(context).pushNamed('/add-account');
-                                },
                               ),
+                              label: Text(
+                                "New Account",
+                                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                      color: isDarkMode ? grey3 : Theme.of(context).colorScheme.secondary,
+                                    ),
+                                maxLines: 2,
+                              ),
+                              onPressed: () {
+                                ref.read(accountsProvider.notifier).reset();
+                                Navigator.of(context).pushNamed('/add-account');
+                              },
                             ),
                           );
                         }

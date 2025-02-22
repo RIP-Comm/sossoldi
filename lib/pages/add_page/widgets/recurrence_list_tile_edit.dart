@@ -6,6 +6,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 
 import '../../../constants/functions.dart';
 import "../../../constants/style.dart";
+import '../../../providers/theme_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../model/transaction.dart';
 import 'recurrence_selector.dart';
@@ -17,12 +18,13 @@ class RecurrenceListTileEdit extends ConsumerWidget with Functions {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isDarkMode = ref.watch(appThemeStateNotifier).isDarkModeEnabled;
     final isRecurring = ref.watch(selectedRecurringPayProvider);
     final endDate = ref.watch(endDateProvider);
 
     return Column(
       children: [
-        const Divider(height: 1, color: grey1),
+        const Divider(),
         ListTile(
           contentPadding: const EdgeInsets.all(16),
           leading: Container(
@@ -35,7 +37,7 @@ class RecurrenceListTileEdit extends ConsumerWidget with Functions {
               child: Icon(
                 Icons.autorenew,
                 size: 24.0,
-                color: Theme.of(context).colorScheme.onPrimary,
+                color: white,
               ),
             ),
           ),
@@ -50,12 +52,10 @@ class RecurrenceListTileEdit extends ConsumerWidget with Functions {
         if (isRecurring) ...[
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.onPrimary,
+            child: FilledButton(
+              style: FilledButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
                 padding: const EdgeInsets.all(16),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4)),
               ),
               onPressed: () {
                 FocusManager.instance.primaryFocus?.unfocus();
@@ -78,12 +78,16 @@ class RecurrenceListTileEdit extends ConsumerWidget with Functions {
                   Text(
                     recurrenceMap[ref.watch(intervalProvider)]!.label,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: Theme.of(context).colorScheme.secondary),
+                        color: isDarkMode
+                            ? grey3
+                            : Theme.of(context).colorScheme.secondary),
                   ),
                   const SizedBox(width: 6),
                   Icon(
                     Icons.chevron_right,
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: isDarkMode
+                        ? grey3
+                        : Theme.of(context).colorScheme.secondary,
                   ),
                 ],
               ),
@@ -91,12 +95,10 @@ class RecurrenceListTileEdit extends ConsumerWidget with Functions {
           ),
           Padding(
             padding: const EdgeInsets.all(16),
-            child: TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.onPrimary,
+            child: FilledButton(
+              style: FilledButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
                 padding: const EdgeInsets.all(16),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4)),
               ),
               onPressed: () => showModalBottomSheet(
                 context: context,
@@ -119,12 +121,16 @@ class RecurrenceListTileEdit extends ConsumerWidget with Functions {
                   Text(
                     endDate != null ? dateToString(endDate) : "Never",
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: Theme.of(context).colorScheme.secondary),
+                        color: isDarkMode
+                            ? grey3
+                            : Theme.of(context).colorScheme.secondary),
                   ),
                   const SizedBox(width: 6),
                   Icon(
                     Icons.chevron_right,
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: isDarkMode
+                        ? grey3
+                        : Theme.of(context).colorScheme.secondary,
                   ),
                 ],
               ),
@@ -166,7 +172,9 @@ class EndDateSelector extends ConsumerWidget with Functions {
                 trailing: ref.watch(endDateProvider) != null
                     ? const Icon(Icons.check)
                     : null,
-                    subtitle: Text(ref.read(endDateProvider) != null ? dateToString(ref.read(endDateProvider.notifier).state!) : ''),
+                subtitle: Text(ref.read(endDateProvider) != null
+                    ? dateToString(ref.read(endDateProvider.notifier).state!)
+                    : ''),
                 onTap: () async {
                   FocusManager.instance.primaryFocus?.unfocus();
                   if (Platform.isIOS) {

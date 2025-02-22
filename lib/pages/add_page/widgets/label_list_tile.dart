@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LabelListTile extends StatelessWidget {
+import '../../../constants/style.dart';
+import '../../../providers/theme_provider.dart';
+
+class LabelListTile extends ConsumerWidget {
   const LabelListTile(
     this.labelController, {
     super.key,
@@ -9,7 +13,9 @@ class LabelListTile extends StatelessWidget {
   final TextEditingController labelController;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isDarkMode = ref.watch(appThemeStateNotifier).isDarkModeEnabled;
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 16, 32, 16),
       child: Row(
@@ -24,7 +30,7 @@ class LabelListTile extends StatelessWidget {
               child: Icon(
                 Icons.description,
                 size: 24.0,
-                color: Theme.of(context).colorScheme.onPrimary,
+                color: white,
               ),
             ),
           ),
@@ -40,13 +46,16 @@ class LabelListTile extends StatelessWidget {
           Expanded(
             child: TextField(
               controller: labelController,
-              decoration:
-                  const InputDecoration(border: InputBorder.none, hintText: "Add a description"),
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                hintText: "Add a description",
+              ),
               textAlign: TextAlign.end,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall!
-                  .copyWith(color: Theme.of(context).colorScheme.secondary),
+              style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                    color: isDarkMode
+                        ? grey3
+                        : Theme.of(context).colorScheme.secondary,
+                  ),
             ),
           ),
         ],

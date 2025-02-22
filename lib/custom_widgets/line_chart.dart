@@ -8,30 +8,37 @@ enum Period { month, year }
 
 //This class can be used when we need to draw a line chart with one or two lines
 class LineChartWidget extends StatefulWidget {
-  final List<FlSpot> lineData; //this should be a list of Flspot(x,y)
+  final List<FlSpot> lineData; // this should be a list of Flspot(x,y)
   final Color? lineColor;
 
-  final List<FlSpot> line2Data; //this should be a list of Flspot(x,y)
+  final List<FlSpot> line2Data; // this should be a list of Flspot(x,y)
   final Color? line2Color;
+
+  final bool enableGapFilling;
 
   // Used to decide the bottom label
   final Period period;
-  final int currentMonthDays = DateUtils.getDaysInMonth(DateTime.now().year, DateTime.now().month);
+  final int currentMonthDays =
+      DateUtils.getDaysInMonth(DateTime.now().year, DateTime.now().month);
   final int nXLabel = 10;
   final double minY;
 
   final Color? colorBackground;
+
   LineChartWidget({
     super.key,
-    required this.lineData,
+    required List<FlSpot> lineData,
     this.lineColor,
-    this.line2Data = const [],
+    List<FlSpot> line2Data = const [],
     this.line2Color,
     this.colorBackground,
+    this.enableGapFilling = true,
     this.period = Period.month,
     int nXLabel = 10,
     double? minY,
-  }) : minY = minY ?? calculateMinY(lineData, line2Data);
+  })  : lineData = enableGapFilling ? fillGaps(lineData) : lineData,
+        line2Data = enableGapFilling ? fillGaps(line2Data) : line2Data,
+        minY = minY ?? calculateMinY(lineData, line2Data);
 
   static double calculateMinY(List<FlSpot> line1Data, List<FlSpot> line2Data) {
     if (line1Data.isEmpty && line2Data.isEmpty) {
@@ -39,6 +46,24 @@ class LineChartWidget extends StatefulWidget {
     }
 
     return [...line1Data, ...line2Data].map((e) => e.y).reduce(min);
+  }
+
+  static List<FlSpot> fillGaps(List<FlSpot> lineData) {
+    if (lineData.isEmpty) return [];
+
+    List<FlSpot> filledData = [];
+    double lastY = lineData.first.y;
+
+    for (int i = 0; i <= lineData.last.x.toInt(); i++) {
+      if (lineData.any((spot) => spot.x == i)) {
+        lastY = lineData.firstWhere((spot) => spot.x == i).y;
+        filledData.add(FlSpot(i.toDouble(), lastY));
+      } else {
+        filledData.add(FlSpot(i.toDouble(), lastY));
+      }
+    }
+
+    return filledData;
   }
 
   @override
@@ -63,7 +88,8 @@ class _LineChartSample2State extends State<LineChartWidget> {
               padding: const EdgeInsets.only(top: 24),
               child: Builder(
                 builder: (context) {
-                  if (widget.lineData.length < 2 && widget.line2Data.length < 2) {
+                  if (widget.lineData.length < 2 &&
+                      widget.line2Data.length < 2) {
                     return Center(
                       child: Text(
                         "We are sorry but there are not\nenough data to make the graph...",
@@ -132,18 +158,12 @@ class _LineChartSample2State extends State<LineChartWidget> {
         break;
       case Period.month:
         int step = (widget.currentMonthDays / widget.nXLabel).round();
-        if (value.toInt() % step == 1 && value.toInt() != widget.currentMonthDays) {
-          text = Text(
-            (value + 1).toStringAsFixed(0),
-            style: style,
-          );
+        if (value.toInt() % step == 1 &&
+            value.toInt() != widget.currentMonthDays) {
+          text = Text((value + 1).toStringAsFixed(0), style: style);
         } else {
           text = Text('', style: style);
         }
-
-      default:
-        text = Text('', style: style);
-        break;
     }
 
     return SideTitleWidget(
@@ -178,7 +198,8 @@ class _LineChartSample2State extends State<LineChartWidget> {
       ),
       gridData: const FlGridData(show: false),
       lineTouchData: LineTouchData(
-        getTouchedSpotIndicator: (LineChartBarData barData, List<int> spotIndexes) {
+        getTouchedSpotIndicator:
+            (LineChartBarData barData, List<int> spotIndexes) {
           bool allSameX = spotIndexes.toSet().length == 1;
 
           if (!allSameX) {
@@ -193,7 +214,11 @@ class _LineChartSample2State extends State<LineChartWidget> {
               FlDotData(
                 getDotPainter: (spot, percent, barData, index) {
                   return FlDotCirclePainter(
-                      radius: 2, color: Colors.grey, strokeWidth: 2, strokeColor: Colors.blueGrey);
+                    radius: 2,
+                    color: Colors.grey,
+                    strokeWidth: 2,
+                    strokeColor: Colors.blueGrey,
+                  );
                 },
               ),
             );
@@ -210,7 +235,8 @@ class _LineChartSample2State extends State<LineChartWidget> {
 
             double x = touchedBarSpots[0].x;
             DateTime date = widget.period == Period.month
-                ? DateTime(DateTime.now().year, DateTime.now().month, (x + 1).toInt())
+                ? DateTime(
+                    DateTime.now().year, DateTime.now().month, (x + 1).toInt())
                 : DateTime(DateTime.now().year, (x + 1).toInt(), 1);
             String dateFormat = widget.period == Period.month
                 ? DateFormat(DateFormat.ABBR_MONTH_DAY).format(date)
@@ -260,14 +286,16 @@ class _LineChartSample2State extends State<LineChartWidget> {
 
       borderData: FlBorderData(
         border: const Border(
-          bottom: BorderSide(color: Colors.grey, width: 1.0, style: BorderStyle.solid),
+          bottom: BorderSide(
+            color: Colors.grey,
+            width: 1.0,
+            style: BorderStyle.solid,
+          ),
         ),
       ),
       minX: 0,
-      maxX: widget.period == Period.year
-          ? 11
-          : widget.currentMonthDays -
-              1, // if year display 12 month, if mont display the number of days in the month
+      // if year display 12 month, if month display the number of days in it
+      maxX: widget.period == Period.year ? 11 : widget.currentMonthDays - 1,
       minY: widget.minY,
       lineBarsData: [
         LineChartBarData(
@@ -276,10 +304,11 @@ class _LineChartSample2State extends State<LineChartWidget> {
           barWidth: 1.5,
           isStrokeCapRound: true,
           color: lineColor,
-          dotData: const FlDotData(
-            show: false,
+          dotData: const FlDotData(show: false),
+          belowBarData: BarAreaData(
+            show: true,
+            color: lineColor.withValues(alpha: 0.2),
           ),
-          belowBarData: BarAreaData(show: true, color: lineColor.withOpacity(0.3)),
         ),
         LineChartBarData(
           spots: widget.line2Data,
@@ -287,9 +316,7 @@ class _LineChartSample2State extends State<LineChartWidget> {
           barWidth: 1,
           isStrokeCapRound: true,
           color: line2Color,
-          dotData: const FlDotData(
-            show: false,
-          ),
+          dotData: const FlDotData(show: false),
         ),
       ],
     );

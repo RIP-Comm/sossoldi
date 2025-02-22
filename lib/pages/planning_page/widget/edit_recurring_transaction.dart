@@ -26,30 +26,26 @@ class _EditRecurringTransactionState
 
   @override
   void initState() {
-    amountController.text = numToCurrency(ref.read(selectedRecurringTransactionUpdateProvider)?.amount);
-    noteController.text =ref.read(selectedRecurringTransactionUpdateProvider)?.note ?? '';
+    amountController.text = numToCurrency(
+        ref.read(selectedRecurringTransactionUpdateProvider)?.amount);
+    noteController.text =
+        ref.read(selectedRecurringTransactionUpdateProvider)?.note ?? '';
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final selectedRecurringTransaction = ref.watch(selectedRecurringTransactionUpdateProvider);
+    final selectedRecurringTransaction =
+        ref.watch(selectedRecurringTransactionUpdateProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-            "Edit recurring transaction",
-            style: TextStyle(fontSize: 20.0),
-        ),
-        leadingWidth: 75,
+        title: const Text("Edit recurring transaction"),
+        leadingWidth: 100,
         leading: TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text(
-            'Cancel',
-            style:
-                Theme.of(context).textTheme.titleSmall!.copyWith(color: blue5),
-          ),
+          child: Text('Cancel'),
         ),
         actions: [
           selectedRecurringTransaction != null
@@ -63,8 +59,13 @@ class _EditRecurringTransactionState
                     onPressed: () async {
                       ref
                           .read(transactionsProvider.notifier)
-                          .deleteRecurringTransaction(selectedRecurringTransaction.id!)
-                          .whenComplete(() => Navigator.pop(context));
+                          .deleteRecurringTransaction(
+                              selectedRecurringTransaction.id!)
+                          .whenComplete(() {
+                        if (context.mounted) {
+                          Navigator.pop(context);
+                        }
+                      });
                     },
                   ),
                 )
@@ -118,7 +119,6 @@ class _EditRecurringTransactionState
                               initialChildSize: 0.7,
                               maxChildSize: 0.9,
                               builder: (_, controller) => AccountSelector(
-                                provider: bankAccountProvider,
                                 scrollController: controller,
                               ),
                             ),
@@ -127,16 +127,14 @@ class _EditRecurringTransactionState
                       ),
                       const Divider(height: 1, color: grey1),
                       NonEditableDetailsListTile(
-                        title: "Category",
-                        icon: Icons.list_alt,
-                        value: ref.watch(categoryProvider)?.name
-                      ),
+                          title: "Category",
+                          icon: Icons.list_alt,
+                          value: ref.watch(categoryProvider)?.name),
                       const Divider(height: 1, color: grey1),
                       NonEditableDetailsListTile(
-                        title: "Date Start",
-                        icon: Icons.calendar_month,
-                        value: dateToString(ref.watch(dateProvider))
-                      ),
+                          title: "Date Start",
+                          icon: Icons.calendar_month,
+                          value: dateToString(ref.watch(dateProvider))),
                       const RecurrenceListTileEdit(),
                     ],
                   ),
@@ -152,7 +150,7 @@ class _EditRecurringTransactionState
                 color: Theme.of(context).colorScheme.surface,
                 boxShadow: [
                   BoxShadow(
-                    color: blue1.withOpacity(0.15),
+                    color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.15),
                     blurRadius: 5.0,
                     offset: const Offset(0, -1.0),
                   )
@@ -167,13 +165,17 @@ class _EditRecurringTransactionState
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: TextButton(
-                  onPressed: () => {
+                  onPressed: () {
                     ref
                         .read(transactionsProvider.notifier)
                         .updateRecurringTransaction(
                             currencyToNum(amountController.text),
                             noteController.text)
-                        .whenComplete(() => Navigator.of(context).pop())
+                        .whenComplete(() {
+                      if (context.mounted) {
+                        Navigator.of(context).pop();
+                      }
+                    });
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.secondary,

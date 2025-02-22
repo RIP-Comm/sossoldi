@@ -122,7 +122,10 @@ class _GraphsPageState extends ConsumerState<GraphsPage> with Functions {
                         ],
                       ),
                     ),
-                    LineChartWidget(lineData: currentYearMonthlyTransactions),
+                    LineChartWidget(
+                      lineData: currentYearMonthlyTransactions,
+                      enableGapFilling: false,
+                    ),
                   ],
                 );
               },

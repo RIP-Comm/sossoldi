@@ -47,71 +47,85 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.all(8),
-        color: Colors.grey[200],
-        child: Row(children: [
+      padding: const EdgeInsets.all(16),
+      color: Theme.of(context).colorScheme.surface,
+      child: Row(
+        children: [
           Expanded(
+            child: Container(
+              height: 55,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(width: 1, color: Colors.grey),
+              ),
               child: Container(
-                  height: 55,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(width: 1, color: Colors.grey)),
-                  child: Container(
-                      padding: const EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                          color: Colors.white, borderRadius: BorderRadius.circular(8)),
-                      child: DropdownButton<CategoryTransaction>(
-                        value: selectedCategory,
-                        underline: const SizedBox(),
-                        isExpanded: true,
-                        items: widget.categories
-                            .where((e) =>
-                                e.name == selectedCategory.name ||
-                                !widget.categoriesAlreadyUsed.contains(e.name))
-                            .map((CategoryTransaction category) {
-                          IconData? icon = iconList[category.symbol];
-                          return DropdownMenuItem<CategoryTransaction>(
-                              value: category,
-                              child: Row(
-                                children: [
-                                  Icon(icon),
-                                  const SizedBox(width: 15),
-                                  Text(category.name)
-                                ],
-                              ));
-                        }).toList(),
-                        onChanged: (CategoryTransaction? newValue) {
-                          setState(() {
-                            selectedCategory = newValue!;
-                            _modifyBudget();
-                          });
-                        },
-                      )))),
+                padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primaryContainer,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: DropdownButton<CategoryTransaction>(
+                  value: selectedCategory,
+                  underline: const SizedBox(),
+                  isExpanded: true,
+                  items: widget.categories
+                      .where((e) =>
+                          e.name == selectedCategory.name ||
+                          !widget.categoriesAlreadyUsed.contains(e.name))
+                      .map((CategoryTransaction category) {
+                    IconData? icon = iconList[category.symbol];
+                    return DropdownMenuItem<CategoryTransaction>(
+                        value: category,
+                        child: Row(
+                          children: [
+                            Icon(icon),
+                            const SizedBox(width: 15),
+                            Text(category.name)
+                          ],
+                        ));
+                  }).toList(),
+                  onChanged: (CategoryTransaction? newValue) {
+                    setState(() {
+                      selectedCategory = newValue!;
+                      _modifyBudget();
+                    });
+                  },
+                ),
+              ),
+            ),
+          ),
           const SizedBox(width: 20),
           Container(
-              width: 100,
-              height: 55,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(width: 1, color: Colors.grey)),
-              child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: TextField(
-                      controller: _controller,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      onEditingComplete: () {
-                        setState(() {
-                          _modifyBudget();
-                        });
-                      },
-                      decoration: const InputDecoration(
-                        hintText: "-",
-                        border: InputBorder.none,
-                        prefixText: ' ', // set to center the amount
-                        suffixText: '€',
-                      ))))
-        ]));
+            width: 100,
+            height: 55,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primaryContainer,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(width: 1, color: Colors.grey),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: TextField(
+                controller: _controller,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                onChanged: (_) {
+                  setState(() {
+                    _modifyBudget();
+                  });
+                },
+                decoration: const InputDecoration(
+                  hintText: "-",
+                  border: InputBorder.none,
+                  prefixText: ' ', // set to center the amount
+                  suffixText: '€',
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

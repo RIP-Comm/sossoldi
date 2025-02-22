@@ -49,35 +49,19 @@ class _StructureState extends ConsumerState<Structure> {
         ),
         leading: Padding(
           padding: const EdgeInsets.only(left: 16),
-          child: ElevatedButton(
+          child: FilledButton(
             onPressed: () => Navigator.of(context).pushNamed('/search'),
-            style: ElevatedButton.styleFrom(
-              elevation: 0,
-              shape: const CircleBorder(),
-              padding: const EdgeInsets.all(8),
-              backgroundColor: Theme.of(context).colorScheme.primary,
-            ),
-            child: Icon(
-              Icons.search,
-              color: Theme.of(context).colorScheme.onPrimary,
-            ),
+            style: FilledButton.styleFrom(shape: const CircleBorder()),
+            child: Icon(Icons.search),
           ),
         ),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
+            child: FilledButton(
               onPressed: () => Navigator.of(context).pushNamed('/settings'),
-              style: ElevatedButton.styleFrom(
-                elevation: 0,
-                shape: const CircleBorder(),
-                padding: const EdgeInsets.all(8),
-                backgroundColor: Theme.of(context).colorScheme.primary,
-              ),
-              child: Icon(
-                Icons.settings,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
+              style: FilledButton.styleFrom(shape: const CircleBorder()),
+              child: Icon(Icons.settings),
             ),
           ),
         ],
@@ -114,7 +98,6 @@ class _StructureState extends ConsumerState<Structure> {
       floatingActionButton: FloatingActionButton(
         elevation: 4,
         highlightElevation: 0,
-        backgroundColor: Theme.of(context).colorScheme.secondary,
         child: Icon(
           Icons.add_rounded,
           size: 55,

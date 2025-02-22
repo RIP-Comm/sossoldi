@@ -56,8 +56,8 @@ class MonthSelector extends ConsumerWidget with Functions {
       child: Container(
         clipBehavior: Clip.antiAlias, // force rounded corners on children
         height: currentHeight,
-        decoration: const BoxDecoration(
-          color: blue7,
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.tertiary,
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         child: Row(
@@ -88,10 +88,10 @@ class MonthSelector extends ConsumerWidget with Functions {
               children: [
                 Text(
                   getFormattedDateRange(startDate, endDate),
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(color: darkWhite),
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
-                type == MonthSelectorType.advanced
-                    ? RichText(
+                if (type == MonthSelectorType.advanced)
+                    RichText(
                         text: TextSpan(
                           children: [
                             TextSpan(
@@ -109,8 +109,7 @@ class MonthSelector extends ConsumerWidget with Functions {
                                     .copyWith(color: totalAmount >= 0 ? green : red)),
                           ],
                         ),
-                      )
-                    : const SizedBox.shrink(),
+                      ),
               ],
             ),
             GestureDetector(
