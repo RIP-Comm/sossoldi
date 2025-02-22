@@ -42,6 +42,9 @@ class AppTheme {
       space: 0.5,
       thickness: 0.5,
     ),
+    bottomSheetTheme: BottomSheetThemeData(
+      backgroundColor: white,
+    ),
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
         foregroundColor: const WidgetStatePropertyAll(blue5),
@@ -200,6 +203,9 @@ class AppTheme {
       color: darkGrey1,
       space: 0.5,
       thickness: 0.5,
+    ),
+    bottomSheetTheme: BottomSheetThemeData(
+      backgroundColor: darkGrey4,
     ),
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
