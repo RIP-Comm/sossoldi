@@ -29,7 +29,7 @@ dependencies:
   sqlite3_flutter_libs:
   timezone: ^0.10.0
   url_launcher: ^6.3.1
-  workmanager: ^0.5.2
+  flutter_phoenix: ^1.1.1
   csv: ^6.0.0
   path_provider: ^2.1.5
   file_picker: ^8.1.7

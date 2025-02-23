@@ -70,7 +70,7 @@ Route<dynamic> makeRoute(RouteSettings settings) {
     case '/search':
       return _materialPageRoute(settings.name, const SearchPage());
     case '/backup-page':
-      return _materialPageRoute(settings.name, const BackupPage());
+      return _cupertinoPageRoute(settings.name, const BackupPage());
     default:
       throw 'Route is not defined';
   }

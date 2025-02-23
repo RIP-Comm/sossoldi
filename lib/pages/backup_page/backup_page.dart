@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../database/sossoldi_database.dart';
 import '../../utils/csv_file_picker.dart';
@@ -44,7 +45,7 @@ class _BackupPageState extends ConsumerState<BackupPage> {
     try {
       final file = await CSVFilePicker.pickCSVFile(context);
       if (file != null) {
-        CSVFilePicker.showLoading(context);
+        CSVFilePicker.showLoading(context, 'Importing data...');
         
         final results = await SossoldiDatabase.instance.importFromCSV(file.path);
         
@@ -52,7 +53,8 @@ class _BackupPageState extends ConsumerState<BackupPage> {
         CSVFilePicker.hideLoading(context);
         
         if (results.values.every((success) => success)) {
-          CSVFilePicker.showSuccess(context, 'Data imported successfully');
+          await CSVFilePicker.showSuccess(context, 'Data imported successfully');
+          Phoenix.rebirth(context);
         } else {
           final failedTables = results.entries
               .where((e) => !e.value)
@@ -82,7 +84,7 @@ class _BackupPageState extends ConsumerState<BackupPage> {
 
   Future<void> _handleExport() async {
     try {
-      CSVFilePicker.showLoading(context);
+      CSVFilePicker.showLoading(context, 'Exporting data...');
       
       final filePath = await SossoldiDatabase.instance.exportToCSV();
       
@@ -118,9 +120,6 @@ class _BackupPageState extends ConsumerState<BackupPage> {
   @override
   void initState() {
     super.initState();
-    // Assign handlers after initialization
-    options[0] = options[0].copyWith(action: _handleImport);
-    options[1] = options[1].copyWith(action: _handleExport);
   }
 
   @override
@@ -133,7 +132,6 @@ class _BackupPageState extends ConsumerState<BackupPage> {
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back_ios_new,
-            color: Color(0XFF7DA1C4),
           ),
           onPressed: () => Navigator.pop(context),
         ),
@@ -161,7 +159,35 @@ class _BackupPageState extends ConsumerState<BackupPage> {
                   return Card(
                     elevation: 2,
                     child: InkWell(
-                      onTap: option.action,
+                      onTap: () {
+                        if (i == 0) {
+                          // Show confirmation dialog for the first option
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text('Warning: Data Overwrite'),
+                              content: Text('Importing this file will permanently replace your existing data. This action cannot be undone. Ensure you have a backup before proceeding.'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                    _handleImport();
+                                  },
+                                  child: Text('Proceed with Import'),
+                                ),
+                              ],
+                            ),
+                          );
+                        } else {
+                          _handleExport();
+                        }
+                      },
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Row(
@@ -179,15 +205,15 @@ class _BackupPageState extends ConsumerState<BackupPage> {
                                   Text(
                                     option.title,
                                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                                      color: Theme.of(context).colorScheme.primary,
-                                    ),
+                                          color: Theme.of(context).colorScheme.primary,
+                                        ),
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
                                     option.description,
                                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                      color: Theme.of(context).colorScheme.primary,
-                                    ),
+                                          color: Theme.of(context).colorScheme.primary,
+                                        ),
                                   ),
                                 ],
                               ),
