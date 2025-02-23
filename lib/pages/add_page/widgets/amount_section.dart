@@ -3,6 +3,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 
 import '../../../constants/functions.dart';
 import "../../../constants/style.dart";
+import '../../../custom_widgets/rounded_icon.dart';
 import '../../../model/transaction.dart';
 // import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
@@ -155,19 +156,13 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                                 padding: const EdgeInsets.all(4),
                                 child: Row(
                                   children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
-                                      ),
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: const Icon(
-                                        Icons.account_balance,
-                                        color: white,
-                                        size: 16,
-                                      ),
+                                    RoundedIcon(
+                                      icon: Icons.account_balance,
+                                      backgroundColor: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                      size: 16,
+                                      padding: EdgeInsets.all(4.0),
                                     ),
                                     const Spacer(),
                                     Text(

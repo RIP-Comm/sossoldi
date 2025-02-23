@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
+import '../../../custom_widgets/rounded_icon.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/currency_provider.dart';
 import 'accounts_tab.dart';
@@ -56,16 +57,10 @@ class AccountListTile extends ConsumerWidget {
             child: Row(
               mainAxisSize: MainAxisSize.max,
               children: [
-                Container(
+                RoundedIcon(
+                  icon: icon,
+                  backgroundColor: color,
                   padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: color,
-                  ),
-                  child: Icon(
-                    icon,
-                    color: Colors.white,
-                  ),
                 ),
                 const SizedBox(width: 8.0),
                 Expanded(
@@ -105,7 +100,9 @@ class AccountListTile extends ConsumerWidget {
                 ),
                 const SizedBox(width: 8.0),
                 Icon(
-                  (selectedAccountIndex == index) ? Icons.expand_more : Icons.chevron_right,
+                  (selectedAccountIndex == index)
+                      ? Icons.expand_more
+                      : Icons.chevron_right,
                 ),
               ],
             ),
@@ -169,10 +166,8 @@ class TransactionRow extends ConsumerWidget with Functions {
                     ),
                     Text(
                       "${numToCurrency(transaction.amount)} ${currencyState.selectedCurrency.symbol}",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge
-                          ?.copyWith(color: (transaction.amount > 0) ? green : red),
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: (transaction.amount > 0) ? green : red),
                     ),
                   ],
                 ),
@@ -213,7 +208,8 @@ class ExpandedSection extends StatefulWidget {
   State<ExpandedSection> createState() => _ExpandedSectionState();
 }
 
-class _ExpandedSectionState extends State<ExpandedSection> with SingleTickerProviderStateMixin {
+class _ExpandedSectionState extends State<ExpandedSection>
+    with SingleTickerProviderStateMixin {
   late AnimationController expandController;
   late Animation<double> animation;
 

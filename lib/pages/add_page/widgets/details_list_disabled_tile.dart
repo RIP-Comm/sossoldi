@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
-import "../../../constants/style.dart";
+import "../../../custom_widgets/rounded_icon.dart";
 import "details_list_tile.dart";
 
 class NonEditableDetailsListTile extends DetailsListTile {
@@ -11,8 +11,8 @@ class NonEditableDetailsListTile extends DetailsListTile {
     required super.value,
     super.key,
   }) : super(
-    callback: () {},
-  );
+          callback: () {},
+        );
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -20,17 +20,9 @@ class NonEditableDetailsListTile extends DetailsListTile {
       contentPadding: const EdgeInsets.all(16.0),
       tileColor: Theme.of(context).colorScheme.surface,
       onTap: callback,
-      leading: Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Theme.of(context).colorScheme.secondary,
-        ),
-        padding: const EdgeInsets.all(10.0),
-        child: Icon(
-          icon,
-          size: 24.0,
-          color: white,
-        ),
+      leading: RoundedIcon(
+        icon: icon,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
       ),
       title: Text(
         title,
@@ -47,7 +39,7 @@ class NonEditableDetailsListTile extends DetailsListTile {
             style: Theme.of(context)
                 .textTheme
                 .bodySmall!
-                .copyWith(color: Colors.grey), // Make the text gray
+                .copyWith(color: Colors.grey),
           ),
           const SizedBox(width: 6.0)
         ],

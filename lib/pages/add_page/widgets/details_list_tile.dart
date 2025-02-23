@@ -3,6 +3,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 
 import "../../../constants/style.dart";
 import "../../../providers/theme_provider.dart";
+import "../../../custom_widgets/rounded_icon.dart";
 
 class DetailsListTile extends ConsumerWidget {
   const DetailsListTile({
@@ -25,17 +26,9 @@ class DetailsListTile extends ConsumerWidget {
     return ListTile(
       contentPadding: const EdgeInsets.all(16.0),
       onTap: callback,
-      leading: Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Theme.of(context).colorScheme.secondary,
-        ),
-        padding: const EdgeInsets.all(10.0),
-        child: Icon(
-          icon,
-          size: 24.0,
-          color: white,
-        ),
+      leading: RoundedIcon(
+        icon: icon,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
       ),
       title: Text(
         title,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../custom_widgets/rounded_icon.dart';
 import '../../../constants/style.dart';
 import '../../../providers/theme_provider.dart';
 
@@ -20,19 +21,9 @@ class LabelListTile extends ConsumerWidget {
       padding: const EdgeInsets.fromLTRB(16, 16, 32, 16),
       child: Row(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Theme.of(context).colorScheme.secondary,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Icon(
-                Icons.description,
-                size: 24.0,
-                color: white,
-              ),
-            ),
+          RoundedIcon(
+            icon: Icons.description,
+            backgroundColor: Theme.of(context).colorScheme.secondary,
           ),
           const SizedBox(width: 16),
           Text(

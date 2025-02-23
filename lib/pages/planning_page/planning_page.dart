@@ -31,7 +31,10 @@ class _PlanningPageState extends State<PlanningPage> {
         children: [
           Row(
             children: [
-              Text("Monthly budget", style: Theme.of(context).textTheme.titleLarge),
+              Text(
+                "Monthly budget",
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
               const Spacer(),
               GestureDetector(
                 onTap: () {
@@ -47,8 +50,9 @@ class _PlanningPageState extends State<PlanningPage> {
                     elevation: 10,
                     builder: (BuildContext context) {
                       return FractionallySizedBox(
-                          heightFactor: 0.9,
-                          child: ManageBudgetPage(onRefreshBudgets: _forceRefresh));
+                        heightFactor: 0.9,
+                        child: ManageBudgetPage(onRefreshBudgets: _forceRefresh),
+                      );
                     },
                   );
                 },

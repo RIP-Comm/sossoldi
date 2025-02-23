@@ -7,14 +7,15 @@ import '../constants/functions.dart';
 import '../constants/style.dart';
 import '../providers/accounts_provider.dart';
 import '../providers/currency_provider.dart';
+import 'rounded_icon.dart';
 
 /// This class shows account summaries in the dashboard
 class AccountsSum extends ConsumerWidget with Functions {
   final BankAccount account;
 
   const AccountsSum({
-    super.key,
     required this.account,
+    super.key,
   });
 
   @override
@@ -50,20 +51,13 @@ class AccountsSum extends ConsumerWidget with Functions {
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                spacing: 8,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: accountColorListTheme[account.color],
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: Icon(
-                        accountIconList[account.symbol],
-                        size: 20.0,
-                        color: white,
-                      ),
-                    ),
+                  RoundedIcon(
+                    icon: accountIconList[account.symbol],
+                    backgroundColor: accountColorListTheme[account.color],
+                    padding: const EdgeInsets.all(6.0),
+                    size: 20,
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,

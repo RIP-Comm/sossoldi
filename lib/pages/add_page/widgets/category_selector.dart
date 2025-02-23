@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
 import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
+import '../../../custom_widgets/rounded_icon.dart';
 import '../../../model/category_transaction.dart';
 import '../../../providers/categories_provider.dart';
 import '../../../providers/transactions_provider.dart';
@@ -71,8 +72,6 @@ class _CategorySelectorState extends ConsumerState<CategorySelector>
                         shrinkWrap: true,
                         itemBuilder: (context, i) {
                           CategoryTransaction category = categories[i];
-                          IconData? icon = iconList[category.symbol];
-                          Color? color = categoryColorListTheme[category.color];
                           return GestureDetector(
                             onTap: () => {
                               ref.read(categoryProvider.notifier).state =
@@ -85,21 +84,10 @@ class _CategorySelectorState extends ConsumerState<CategorySelector>
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: color,
-                                    ),
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: icon != null
-                                        ? Icon(
-                                            icon,
-                                            size: 24.0,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .surface,
-                                          )
-                                        : const SizedBox(),
+                                  RoundedIcon(
+                                    icon: iconList[category.symbol],
+                                    backgroundColor:
+                                        categoryColorListTheme[category.color],
                                   ),
                                   Text(
                                     category.name,
@@ -144,26 +132,14 @@ class _CategorySelectorState extends ConsumerState<CategorySelector>
                             const Divider(height: 1, color: grey1),
                         itemBuilder: (context, i) {
                           CategoryTransaction category = categories[i];
-                          IconData? icon = iconList[category.symbol];
-                          Color? color = categoryColorListTheme[category.color];
                           return ListTile(
                             onTap: () => ref
                                 .read(categoryProvider.notifier)
                                 .state = category,
-                            leading: Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: color,
-                              ),
-                              padding: const EdgeInsets.all(10.0),
-                              child: icon != null
-                                  ? Icon(
-                                      icon,
-                                      size: 24.0,
-                                      color:
-                                          Theme.of(context).colorScheme.surface,
-                                    )
-                                  : const SizedBox(),
+                            leading: RoundedIcon(
+                              icon: iconList[category.symbol],
+                              backgroundColor:
+                                  categoryColorListTheme[category.color],
                             ),
                             title: Text(category.name),
                             trailing: ref.watch(categoryProvider)?.id ==
