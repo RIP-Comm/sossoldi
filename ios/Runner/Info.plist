@@ -49,5 +49,13 @@
 		<true/>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<key>LSSupportsOpeningDocumentsInPlace</key>
+		<true/>
+		<key>UIFileSharingEnabled</key>
+		<true/>
+		<key>NSDocumentsUsageDescription</key>
+		<string>Access to documents is needed to import and export CSV files</string>
+		<key>UISupportsDocumentBrowser</key>
+		<true/>
 	</dict>
 </plist>

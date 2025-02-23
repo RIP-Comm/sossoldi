@@ -4,6 +4,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 import 'model/recurring_transaction.dart';
 import 'providers/theme_provider.dart';
@@ -36,7 +37,7 @@ void main() async {
     await preferences.setString('last_recurring_transactions_check', DateTime.now().toIso8601String());
   }
 
-  initializeDateFormatting('it_IT', null).then((_) => runApp(const ProviderScope(child: Launcher())));
+  initializeDateFormatting('it_IT', null).then((_) => runApp(Phoenix(child: const ProviderScope(child: Launcher()))));
 }
 
 class Launcher extends ConsumerWidget {
