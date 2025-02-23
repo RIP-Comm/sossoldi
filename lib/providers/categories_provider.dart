@@ -43,6 +43,7 @@ class AsyncCategoriesNotifier extends AsyncNotifier<List<CategoryTransaction>> {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       await CategoryTransactionMethods().insert(category);
+      ref.invalidate(categoriesByTypeProvider(category.type));
       return _getCategories();
     });
   }
