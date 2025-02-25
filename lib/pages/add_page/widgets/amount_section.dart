@@ -89,7 +89,10 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                 (index) => TypeTab(
                   _typeToggleState[index],
                   _titleList[index],
-                  typeToColor(trsncTypeList[index]),
+                  typeToColor(
+                    trsncTypeList[index],
+                    brightness: Theme.of(context).brightness,
+                  ),
                 ),
               ),
             ),
@@ -148,7 +151,9 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                               },
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.primaryContainer,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primaryContainer,
                                   borderRadius: BorderRadius.circular(4),
                                   boxShadow: [defaultShadow],
                                 ),
@@ -171,10 +176,11 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                                           .textTheme
                                           .bodySmall!
                                           .copyWith(
-                                            color: Theme.of(context).brightness ==
-                                          Brightness.light
-                                      ? grey1
-                                      : darkGrey1,
+                                            color:
+                                                Theme.of(context).brightness ==
+                                                        Brightness.light
+                                                    ? grey1
+                                                    : darkGrey1,
                                           ),
                                     ),
                                     const Spacer(),
@@ -258,7 +264,9 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                               },
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.primaryContainer,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primaryContainer,
                                   borderRadius: BorderRadius.circular(4),
                                   boxShadow: [defaultShadow],
                                 ),
@@ -277,10 +285,11 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                                           .textTheme
                                           .bodySmall!
                                           .copyWith(
-                                            color: Theme.of(context).brightness ==
-                                          Brightness.light
-                                      ? grey1
-                                      : darkGrey1,
+                                            color:
+                                                Theme.of(context).brightness ==
+                                                        Brightness.light
+                                                    ? grey1
+                                                    : darkGrey1,
                                           ),
                                     ),
                                     const Spacer(),
