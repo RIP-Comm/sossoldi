@@ -191,13 +191,8 @@ class SossoldiDatabase {
     
     // Convert to CSV string
     String csv = const ListToCsvConverter().convert(allData);
-    
-    // Save to file
-    final String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
-    final String filePath = join(csvDir, 'sossoldi_export_$timestamp.csv');
-    await File(filePath).writeAsString(csv);
-    
-    return filePath;
+
+    return csv;
   }
 
   Future<Map<String, bool>> importFromCSV(String csvFilePath) async {

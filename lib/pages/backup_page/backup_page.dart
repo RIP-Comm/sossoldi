@@ -86,12 +86,12 @@ class _BackupPageState extends ConsumerState<BackupPage> {
     try {
       CSVFilePicker.showLoading(context, 'Exporting data...');
       
-      final filePath = await SossoldiDatabase.instance.exportToCSV();
+      final csv = await SossoldiDatabase.instance.exportToCSV();
       
       if (!mounted) return;
       CSVFilePicker.hideLoading(context);
       
-      await CSVFilePicker.saveCSVFile(filePath, context);
+      await CSVFilePicker.saveCSVFile(csv, context);
     } catch (e) {
       if (!mounted) return;
       CSVFilePicker.hideLoading(context);

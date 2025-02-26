@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
@@ -54,7 +55,7 @@ class CSVFilePicker {
   }
 
   // Share exported CSV file
-  static Future<void> saveCSVFile(String filePath, BuildContext context) async {
+  static Future<void> saveCSVFile(String csv, BuildContext context) async {
     try {
       // Prompt the user to select a directory
       String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
@@ -62,18 +63,17 @@ class CSVFilePicker {
         // User canceled the picker
         return;
       }
-
-      // Define the new file path in the selected directory
-      final newFilePath = '$selectedDirectory/exported_database.csv';
-
-      // Copy the file to the selected location
-      final file = File(filePath);
-      final savedFile = await file.copy(newFilePath);
-
+      
+      final String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+      final String filePath = join(selectedDirectory, 'sossoldi_export_$timestamp.csv');
+      
+      // Write the CSV content directly to the file
+      final file = await File(filePath).writeAsString(csv);
+      
       // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('File saved to: ${savedFile.path}'),
+          content: Text('File saved to: ${file.path}'),
           backgroundColor: Colors.green,
         ),
       );
