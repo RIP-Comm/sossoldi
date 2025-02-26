@@ -206,11 +206,11 @@ class TransactionRow extends ConsumerWidget with Functions {
                 children: [
                   RoundedIcon(
                     icon: transaction.categorySymbol != null
-                            ? iconList[transaction.categorySymbol]
-                            : Icons.swap_horiz_rounded,
+                        ? iconList[transaction.categorySymbol]
+                        : Icons.swap_horiz_rounded,
                     backgroundColor: transaction.categoryColor != null
-                          ? categoryColorListTheme[transaction.categoryColor!]
-                          : Theme.of(context).colorScheme.secondary,
+                        ? categoryColorListTheme[transaction.categoryColor!]
+                        : Theme.of(context).colorScheme.secondary,
                     size: 25,
                     padding: const EdgeInsets.all(8.0),
                   ),
@@ -249,8 +249,12 @@ class TransactionRow extends ConsumerWidget with Functions {
                                         .textTheme
                                         .labelLarge!
                                         .copyWith(
-                                            color:
-                                                typeToColor(transaction.type)),
+                                          color: typeToColor(
+                                            transaction.type,
+                                            brightness:
+                                                Theme.of(context).brightness,
+                                          ),
+                                        ),
                                   ),
                                   TextSpan(
                                     text: currencyState.selectedCurrency.symbol,
@@ -258,8 +262,12 @@ class TransactionRow extends ConsumerWidget with Functions {
                                         .textTheme
                                         .labelSmall!
                                         .copyWith(
-                                            color:
-                                                typeToColor(transaction.type)),
+                                          color: typeToColor(
+                                            transaction.type,
+                                            brightness:
+                                                Theme.of(context).brightness,
+                                          ),
+                                        ),
                                   ),
                                 ],
                               ),

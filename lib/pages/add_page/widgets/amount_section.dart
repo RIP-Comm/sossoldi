@@ -45,7 +45,6 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
   Widget build(BuildContext context) {
     final trsncTypeList = ref.watch(transactionTypeList);
     final selectedType = ref.watch(transactionTypeProvider);
-    // final currencyState = ref.watch(currencyStateNotifier);
 
     return Container(
       color: Theme.of(context).colorScheme.surface,
@@ -90,7 +89,10 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                 (index) => TypeTab(
                   _typeToggleState[index],
                   _titleList[index],
-                  typeToColor(trsncTypeList[index]),
+                  typeToColor(
+                    trsncTypeList[index],
+                    brightness: Theme.of(context).brightness,
+                  ),
                 ),
               ),
             ),
@@ -149,7 +151,9 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                               },
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: white,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primaryContainer,
                                   borderRadius: BorderRadius.circular(4),
                                   boxShadow: [defaultShadow],
                                 ),
@@ -172,7 +176,11 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                                           .textTheme
                                           .bodySmall!
                                           .copyWith(
-                                            color: grey1,
+                                            color:
+                                                Theme.of(context).brightness ==
+                                                        Brightness.light
+                                                    ? grey1
+                                                    : darkGrey1,
                                           ),
                                     ),
                                     const Spacer(),
@@ -256,7 +264,9 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                               },
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: white,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primaryContainer,
                                   borderRadius: BorderRadius.circular(4),
                                   boxShadow: [defaultShadow],
                                 ),
@@ -275,7 +285,11 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                                           .textTheme
                                           .bodySmall!
                                           .copyWith(
-                                            color: grey1,
+                                            color:
+                                                Theme.of(context).brightness ==
+                                                        Brightness.light
+                                                    ? grey1
+                                                    : darkGrey1,
                                           ),
                                     ),
                                     const Spacer(),

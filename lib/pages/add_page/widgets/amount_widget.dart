@@ -32,12 +32,14 @@ class _AmountWidgetState extends ConsumerState<AmountWidget> with Functions {
         decoration: InputDecoration(
           hintText: "0",
           border: InputBorder.none,
-          prefixText: ' ', 
+          prefixText: ' ',
           suffixText: currencyState.selectedCurrency.symbol,
-          suffixStyle: Theme.of(context)
-              .textTheme
-              .headlineMedium!
-              .copyWith(color: typeToColor(selectedType)),
+          suffixStyle: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                color: typeToColor(
+                  selectedType,
+                  brightness: Theme.of(context).brightness,
+                ),
+              ),
         ),
         keyboardType:
             const TextInputType.numberWithOptions(decimal: true, signed: true),
@@ -48,7 +50,10 @@ class _AmountWidgetState extends ConsumerState<AmountWidget> with Functions {
         textAlign: TextAlign.center,
         cursorColor: grey1,
         style: TextStyle(
-          color: typeToColor(selectedType),
+          color: typeToColor(
+            selectedType,
+            brightness: Theme.of(context).brightness,
+          ),
           fontSize: 58,
           fontWeight: FontWeight.bold,
         ),
