@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
 import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
+import '../../../custom_widgets/rounded_icon.dart';
 import '../../../model/bank_account.dart';
 import '../../../providers/currency_provider.dart';
 import 'accounts_tab.dart';
@@ -55,17 +56,13 @@ class AccountsPieChart extends ConsumerWidget with Functions {
             mainAxisSize: MainAxisSize.min,
             children: [
               (selectedAccountIndex != -1)
-                  ? Container(
+                  ? RoundedIcon(
+                      icon: accountIconList[
+                              accounts[selectedAccountIndex].symbol] ??
+                          Icons.swap_horiz_rounded,
+                      backgroundColor: accountColorList[
+                          accounts[selectedAccountIndex].color],
                       padding: const EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: accountColorList[accounts[selectedAccountIndex].color],
-                      ),
-                      child: Icon(
-                        accountIconList[accounts[selectedAccountIndex].symbol] ??
-                            Icons.swap_horiz_rounded,
-                        color: Colors.white,
-                      ),
                     )
                   : const SizedBox(),
               Text(
@@ -74,7 +71,8 @@ class AccountsPieChart extends ConsumerWidget with Functions {
                     : "${total.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}",
                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                     color: ((selectedAccountIndex != -1 &&
-                                amounts[accounts[selectedAccountIndex].id]! > 0) ||
+                                amounts[accounts[selectedAccountIndex].id]! >
+                                    0) ||
                             (selectedAccountIndex == -1 && total > 0))
                         ? green
                         : red),

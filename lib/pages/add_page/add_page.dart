@@ -29,9 +29,13 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
   final TextEditingController amountController = TextEditingController();
   final TextEditingController noteController = TextEditingController();
   bool? recurrencyEditingPermittedFromRoute;
+  bool _isSaveEnabled = false;
 
   @override
   void initState() {
+    if (ref.read(selectedTransactionUpdateProvider) != null) {
+      _isSaveEnabled = true;
+    }
     amountController.text =
         numToCurrency(ref.read(selectedTransactionUpdateProvider)?.amount);
     noteController.text =
@@ -100,6 +104,13 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
         TextPosition(offset: toBeWritten.length),
       );
     }
+    final selectedAccount = ref.watch(bankAccountProvider) != null;
+    final selectedCategory = ref.watch(categoryProvider) != null;
+    setState(() {
+      _isSaveEnabled = selectedAccount &&
+          selectedCategory &&
+          amountController.text.isNotEmpty;
+    });
   }
 
   // TODO: This should be inside addTransaction
@@ -378,7 +389,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: ElevatedButton(
-                onPressed: _createOrUpdateTransaction,
+                onPressed: _isSaveEnabled ? _createOrUpdateTransaction : null,
                 child: Text(
                   selectedTransaction != null
                       ? "UPDATE TRANSACTION"

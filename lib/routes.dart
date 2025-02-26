@@ -62,7 +62,7 @@ Route<dynamic> makeRoute(RouteSettings settings) {
     case '/graphs':
       return _materialPageRoute(settings.name, const GraphsPage());
     case '/settings':
-      return _noTransitionPageRoute(settings.name, const SettingsPage());
+      return _cupertinoPageRoute(settings.name, const SettingsPage());
     case '/general-settings':
       return _cupertinoPageRoute(settings.name, const GeneralSettingsPage());
     case '/notifications-settings':
@@ -91,16 +91,5 @@ PageRoute _materialPageRoute(String? routeName, Widget viewToShow) {
       name: routeName,
     ),
     builder: (_) => viewToShow,
-  );
-}
-
-PageRoute _noTransitionPageRoute(String? routeName, Widget viewToShow) {
-  return PageRouteBuilder(
-    transitionDuration: const Duration(),
-    reverseTransitionDuration: const Duration(),
-    settings: RouteSettings(
-      name: routeName,
-    ),
-    pageBuilder: (_, __, ___) => viewToShow,
   );
 }

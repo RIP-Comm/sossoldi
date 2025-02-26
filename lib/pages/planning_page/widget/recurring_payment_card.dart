@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
+import '../../../custom_widgets/rounded_icon.dart';
 import '../../../model/recurring_transaction.dart';
 import '../../../providers/theme_provider.dart';
 import 'older_recurring_payments.dart';
@@ -51,28 +52,21 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
             ),
             child: Container(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
+                  const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
               decoration: BoxDecoration(
                 color: categoryColorList[cat.color].withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Column(
+                spacing: 16,
                 children: [
                   Row(
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: categoryColorList[cat.color],
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(
-                            iconList[cat.symbol],
-                            size: 25.0,
-                            color: white,
-                          ),
-                        ),
+                      RoundedIcon(
+                        icon: iconList[cat.symbol],
+                        backgroundColor: categoryColorList[cat.color],
+                        padding: const EdgeInsets.all(8.0),
+                        size: 25,
                       ),
                       const SizedBox(width: 10),
                       Expanded(

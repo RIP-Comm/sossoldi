@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../constants/functions.dart';
 import '../../constants/style.dart';
 import '../../custom_widgets/line_chart.dart';
+import '../../model/transaction.dart';
 import '../../providers/currency_provider.dart';
 import '../../providers/statistics_provider.dart';
 import 'widgets/categories/categories_card.dart';
@@ -69,12 +70,18 @@ class _GraphsPageState extends ConsumerState<GraphsPage> with Functions {
                                               .isNotEmpty
                                           ? numToCurrency(
                                               currentYearMonthlyTransactions
-                                                      .last.y)
+                                                  .last.y)
                                           : '0',
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineLarge
-                                          ?.copyWith(color: blue4),
+                                          ?.copyWith(
+                                            color: typeToColor(
+                                              TransactionType.transfer,
+                                              brightness:
+                                                  Theme.of(context).brightness,
+                                            ),
+                                          ),
                                     ),
                                     TextSpan(
                                       text:
@@ -82,7 +89,13 @@ class _GraphsPageState extends ConsumerState<GraphsPage> with Functions {
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelLarge
-                                          ?.copyWith(color: blue4),
+                                          ?.copyWith(
+                                            color: typeToColor(
+                                              TransactionType.transfer,
+                                              brightness:
+                                                  Theme.of(context).brightness,
+                                            ),
+                                          ),
                                     ),
                                   ],
                                 ),

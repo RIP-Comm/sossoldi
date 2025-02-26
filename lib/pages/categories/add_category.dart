@@ -313,7 +313,9 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                                         categoryColorListTheme[categoryColor] ==
                                                 color
                                             ? Border.all(
-                                                color: grey1,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
                                                 width: 3,
                                               )
                                             : null,

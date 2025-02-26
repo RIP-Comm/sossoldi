@@ -9,6 +9,7 @@ import '../providers/currency_provider.dart';
 import '../providers/transactions_provider.dart';
 import '../utils/date_helper.dart';
 import 'default_container.dart';
+import 'rounded_icon.dart';
 
 class TransactionsList extends StatefulWidget {
   const TransactionsList({
@@ -203,23 +204,15 @@ class TransactionRow extends ConsumerWidget with Functions {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: transaction.categoryColor != null
-                          ? categoryColorListTheme[transaction.categoryColor!]
-                          : Theme.of(context).colorScheme.secondary,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(
-                        transaction.categorySymbol != null
-                            ? iconList[transaction.categorySymbol]
-                            : Icons.swap_horiz_rounded,
-                        size: 25.0,
-                        color: white,
-                      ),
-                    ),
+                  RoundedIcon(
+                    icon: transaction.categorySymbol != null
+                        ? iconList[transaction.categorySymbol]
+                        : Icons.swap_horiz_rounded,
+                    backgroundColor: transaction.categoryColor != null
+                        ? categoryColorListTheme[transaction.categoryColor!]
+                        : Theme.of(context).colorScheme.secondary,
+                    size: 25,
+                    padding: const EdgeInsets.all(8.0),
                   ),
                   const SizedBox(width: 8),
                   Expanded(
@@ -256,8 +249,12 @@ class TransactionRow extends ConsumerWidget with Functions {
                                         .textTheme
                                         .labelLarge!
                                         .copyWith(
-                                            color:
-                                                typeToColor(transaction.type)),
+                                          color: typeToColor(
+                                            transaction.type,
+                                            brightness:
+                                                Theme.of(context).brightness,
+                                          ),
+                                        ),
                                   ),
                                   TextSpan(
                                     text: currencyState.selectedCurrency.symbol,
@@ -265,8 +262,12 @@ class TransactionRow extends ConsumerWidget with Functions {
                                         .textTheme
                                         .labelSmall!
                                         .copyWith(
-                                            color:
-                                                typeToColor(transaction.type)),
+                                          color: typeToColor(
+                                            transaction.type,
+                                            brightness:
+                                                Theme.of(context).brightness,
+                                          ),
+                                        ),
                                   ),
                                 ],
                               ),

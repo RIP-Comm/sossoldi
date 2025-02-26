@@ -3,6 +3,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 
 import '../../../constants/functions.dart';
 import "../../../constants/style.dart";
+import '../../../custom_widgets/rounded_icon.dart';
 import '../../../model/transaction.dart';
 // import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
@@ -44,7 +45,6 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
   Widget build(BuildContext context) {
     final trsncTypeList = ref.watch(transactionTypeList);
     final selectedType = ref.watch(transactionTypeProvider);
-    // final currencyState = ref.watch(currencyStateNotifier);
 
     return Container(
       color: Theme.of(context).colorScheme.surface,
@@ -89,7 +89,10 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                 (index) => TypeTab(
                   _typeToggleState[index],
                   _titleList[index],
-                  typeToColor(trsncTypeList[index]),
+                  typeToColor(
+                    trsncTypeList[index],
+                    brightness: Theme.of(context).brightness,
+                  ),
                 ),
               ),
             ),
@@ -148,26 +151,22 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                               },
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: white,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primaryContainer,
                                   borderRadius: BorderRadius.circular(4),
                                   boxShadow: [defaultShadow],
                                 ),
                                 padding: const EdgeInsets.all(4),
                                 child: Row(
                                   children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
-                                      ),
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: const Icon(
-                                        Icons.account_balance,
-                                        color: white,
-                                        size: 16,
-                                      ),
+                                    RoundedIcon(
+                                      icon: Icons.account_balance,
+                                      backgroundColor: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                      size: 16,
+                                      padding: EdgeInsets.all(4.0),
                                     ),
                                     const Spacer(),
                                     Text(
@@ -177,7 +176,11 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                                           .textTheme
                                           .bodySmall!
                                           .copyWith(
-                                            color: grey1,
+                                            color:
+                                                Theme.of(context).brightness ==
+                                                        Brightness.light
+                                                    ? grey1
+                                                    : darkGrey1,
                                           ),
                                     ),
                                     const Spacer(),
@@ -261,7 +264,9 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                               },
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: white,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primaryContainer,
                                   borderRadius: BorderRadius.circular(4),
                                   boxShadow: [defaultShadow],
                                 ),
@@ -280,7 +285,11 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                                           .textTheme
                                           .bodySmall!
                                           .copyWith(
-                                            color: grey1,
+                                            color:
+                                                Theme.of(context).brightness ==
+                                                        Brightness.light
+                                                    ? grey1
+                                                    : darkGrey1,
                                           ),
                                     ),
                                     const Spacer(),

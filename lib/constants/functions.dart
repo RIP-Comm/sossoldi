@@ -22,14 +22,18 @@ mixin Functions {
     return format.format(date);
   }
 
-  Color typeToColor(TransactionType type) {
+  Color typeToColor(TransactionType type,
+      {Brightness brightness = Brightness.light}) {
     switch (type) {
       case TransactionType.income:
         return green;
       case TransactionType.expense:
         return red;
       case TransactionType.transfer:
-        return blue3;
+        if (brightness == Brightness.light) {
+          return blue3;
+        }
+        return darkBlue6;
     }
   }
 
