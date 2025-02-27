@@ -19,6 +19,7 @@ class _CategoryListState extends ConsumerState<CategoryList> with Functions {
   @override
   Widget build(BuildContext context) {
     final categorysList = ref.watch(categoriesProvider);
+    ref.listen(selectedCategoryProvider, (_, __) {});
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -87,7 +88,8 @@ class _CategoryListState extends ConsumerState<CategoryList> with Functions {
                       children: [
                         RoundedIcon(
                           icon: iconList[category.symbol],
-                          backgroundColor: categoryColorListTheme[category.color],
+                          backgroundColor:
+                              categoryColorListTheme[category.color],
                           size: 30,
                         ),
                         const SizedBox(width: 12.0),

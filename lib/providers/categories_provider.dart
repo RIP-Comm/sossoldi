@@ -8,7 +8,7 @@ final categoryTransactionTypeList = Provider<List<CategoryTransactionType>>(
     (ref) => [CategoryTransactionType.income, CategoryTransactionType.expense]);
 
 final selectedCategoryProvider =
-    StateProvider<CategoryTransaction?>((ref) => null);
+    StateProvider.autoDispose<CategoryTransaction?>((ref) => null);
 
 final categoryTypeProvider = StateProvider<CategoryTransactionType>(
     (ref) => CategoryTransactionType.expense); //default as 'Expense'

@@ -40,8 +40,10 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
             title: const Text("Account"),
             actions: [
               IconButton(
-                onPressed: () =>
-                    Navigator.of(context).pushNamed('/add-account'),
+                onPressed: () {
+                  ref.invalidate(selectedAccountProvider);
+                  Navigator.of(context).pushNamed('/add-account');
+                },
                 icon: const Icon(Icons.add_circle),
                 splashRadius: 28,
               ),
@@ -173,7 +175,8 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
                               size: 30,
                             ),
                             title: Text(account.name),
-                            trailing: (fromAccount?.id == account.id || toAccount?.id == account.id)
+                            trailing: (fromAccount?.id == account.id ||
+                                    toAccount?.id == account.id)
                                 ? Icon(Icons.check)
                                 : null,
                           );

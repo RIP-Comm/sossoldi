@@ -5,7 +5,7 @@ import '../model/bank_account.dart';
 
 final mainAccountProvider = StateProvider<BankAccount?>((ref) => null);
 
-final selectedAccountProvider = StateProvider<BankAccount?>((ref) => null);
+final selectedAccountProvider = StateProvider.autoDispose<BankAccount?>((ref) => null);
 final selectedAccountCurrentMonthDailyBalanceProvider =
     StateProvider<List<FlSpot>>((ref) => const []);
 final selectedAccountLastTransactions = StateProvider<List>((ref) => const []);
