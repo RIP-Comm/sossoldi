@@ -21,6 +21,7 @@ import 'pages/settings_page.dart';
 import 'pages/structure.dart';
 import 'pages/transactions_page/transactions_page.dart';
 import 'pages/planning_page/widget/edit_recurring_transaction.dart';
+import 'pages/backup_page/backup_page.dart';
 
 Route<dynamic> makeRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -68,6 +69,8 @@ Route<dynamic> makeRoute(RouteSettings settings) {
       return _cupertinoPageRoute(settings.name, const NotificationsSettings());
     case '/search':
       return _materialPageRoute(settings.name, const SearchPage());
+    case '/backup-page':
+      return _cupertinoPageRoute(settings.name, const BackupPage());
     default:
       throw 'Route is not defined';
   }

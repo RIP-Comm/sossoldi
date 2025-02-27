@@ -29,6 +29,11 @@ dependencies:
   sqlite3_flutter_libs:
   timezone: ^0.10.0
   url_launcher: ^6.3.1
+  flutter_phoenix: ^1.1.1
+  csv: ^6.0.0
+  path_provider: ^2.1.5
+  file_picker: ^8.1.7
+  device_info_plus: ^11.2.0
 
 dev_dependencies:
   flutter_test:
