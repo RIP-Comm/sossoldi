@@ -79,27 +79,12 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                       children: [
                         Text(
                           "NAME",
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelLarge!
-                              .copyWith(
-                                  color: Theme.of(context).colorScheme.primary),
+                          style: Theme.of(context).textTheme.labelLarge,
                         ),
                         TextField(
                           controller: nameController,
-                          decoration: InputDecoration(
-                            hintText: "Account name",
-                            hintStyle: Theme.of(context)
-                                .textTheme
-                                .titleLarge!
-                                .copyWith(color: grey2),
-                            border: InputBorder.none,
-                            contentPadding: const EdgeInsets.all(0),
-                          ),
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge!
-                              .copyWith(color: grey1),
+                          decoration: InputDecoration(hintText: "Account name"),
+                          style: Theme.of(context).textTheme.titleLarge,
                         )
                       ],
                     ),
@@ -119,12 +104,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                           alignment: Alignment.centerLeft,
                           child: Text(
                             "ICON AND COLOR",
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelLarge!
-                                .copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.primary),
+                            style: Theme.of(context).textTheme.labelLarge,
                           ),
                         ),
                         const SizedBox(height: 20),
@@ -152,15 +132,10 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                         const SizedBox(height: 6),
                         Text(
                           "CHOOSE ICON",
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelMedium!
-                              .copyWith(
-                                  color: Theme.of(context).colorScheme.primary),
+                          style: Theme.of(context).textTheme.labelMedium,
                         ),
                         const SizedBox(height: 12),
-                        if (showAccountIcons)
-                          const Divider(height: 1, color: grey2),
+                        if (showAccountIcons) const Divider(color: grey2),
                         if (showAccountIcons)
                           Container(
                             padding: const EdgeInsets.symmetric(
@@ -220,7 +195,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                                           accountIconData,
                                           color: accountIconList[accountIcon] ==
                                                   accountIconData
-                                              ? Colors.white
+                                              ? white
                                               : Theme.of(context)
                                                   .colorScheme
                                                   .primary,
@@ -304,24 +279,13 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                         children: [
                           Text(
                             "STARTING VALUE",
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelLarge!
-                                .copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.primary),
+                            style: Theme.of(context).textTheme.labelLarge,
                           ),
                           TextField(
                             controller: startingValueController,
                             decoration: InputDecoration(
                               hintText: "Initial balance",
                               suffixText: currencyState.selectedCurrency.symbol,
-                              hintStyle: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge!
-                                  .copyWith(color: grey2),
-                              border: InputBorder.none,
-                              contentPadding: const EdgeInsets.all(0),
                             ),
                             keyboardType: TextInputType.number,
                             inputFormatters: <TextInputFormatter>[
@@ -329,10 +293,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                                 RegExp(r'^\d*\.?\d{0,2}'),
                               ),
                             ],
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge!
-                                .copyWith(color: grey1),
+                            style: Theme.of(context).textTheme.titleLarge,
                           ),
                         ],
                       ),
@@ -340,7 +301,9 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                   Container(
                     width: double.infinity,
                     margin: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 16),
+                      horizontal: 16,
+                      vertical: 16,
+                    ),
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
@@ -356,13 +319,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                             children: [
                               Text(
                                 "Set as main account",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary),
+                                style: Theme.of(context).textTheme.bodyLarge,
                               ),
                               CupertinoSwitch(
                                 value: mainAccount,
@@ -380,13 +337,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                             children: [
                               Text(
                                 "Counts for the net worth",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary),
+                                style: Theme.of(context).textTheme.bodyLarge,
                               ),
                               CupertinoSwitch(
                                 value: countNetWorth,

@@ -17,23 +17,11 @@ class _PrivacyPolicyPageState extends ConsumerState<PrivacyPolicyPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.onPrimary,
-        elevation: 0,
-        centerTitle: true,
         leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_new,
-            color: Color(0XFF7DA1C4),
-          ),
+          icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text(
-          'Privacy Policy',
-          style: Theme.of(context)
-              .textTheme
-              .headlineLarge!
-              .copyWith(color: Theme.of(context).colorScheme.primary),
-        ),
+        title: const Text('Privacy Policy'),
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),

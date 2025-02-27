@@ -40,13 +40,7 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text(
-          'General Settings',
-          style: Theme.of(context)
-              .textTheme
-              .headlineLarge!
-              .copyWith(color: Theme.of(context).colorScheme.primary),
-        ),
+        title: const Text('General Settings'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(left: 20, right: 20, top: 25),

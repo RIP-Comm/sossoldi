@@ -39,13 +39,7 @@ class _MoreInfoPageState extends ConsumerState<MoreInfoPage> {
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text(
-          'App Info',
-          style: Theme.of(context)
-              .textTheme
-              .headlineLarge!
-              .copyWith(color: Theme.of(context).colorScheme.primary),
-        ),
+        title: const Text('App Info'),
       ),
       body: ListView.separated(
         padding: const EdgeInsets.symmetric(vertical: 16.0),

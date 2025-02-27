@@ -25,17 +25,20 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
 
     return Scaffold(
       appBar: AppBar(
-          title:
-              Text(account?.name ?? "", style: const TextStyle(color: white)),
-          backgroundColor: blue5,
-          elevation: 0,
-          iconTheme: const IconThemeData(color: Colors.white)),
+        title: Text(
+          account?.name ?? "",
+          style: const TextStyle(color: white),
+        ),
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: white),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             Container(
               padding: const EdgeInsets.symmetric(vertical: 12.0),
-              color: blue5,
+              color: Theme.of(context).colorScheme.secondary,
               child: Column(
                 children: [
                   Text(
@@ -52,7 +55,7 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                     padding: const EdgeInsets.all(8.0),
                     child: LineChartWidget(
                       lineData: accountTransactions,
-                      colorBackground: blue5,
+                      colorBackground: Theme.of(context).colorScheme.secondary,
                       period: Period.month,
                       minY: 0,
                     ),
@@ -61,11 +64,13 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
               ),
             ),
             Container(
-                padding: const EdgeInsets.only(top: 40.0),
-                child: TransactionsList(
-                    transactions: transactions
-                        .map((json) => Transaction.fromJson(json))
-                        .toList())),
+              padding: const EdgeInsets.only(top: 40.0),
+              child: TransactionsList(
+                transactions: transactions
+                    .map((json) => Transaction.fromJson(json))
+                    .toList(),
+              ),
+            ),
           ],
         ),
       ),

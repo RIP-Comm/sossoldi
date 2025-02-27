@@ -14,7 +14,7 @@ class AppTheme {
       iconTheme: IconThemeData(color: blue5),
       titleTextStyle: TextStyle(
         color: blue1,
-        fontSize: 24,
+        fontSize: 18,
         fontWeight: FontWeight.w700,
       ),
     ),
@@ -161,6 +161,11 @@ class AppTheme {
         fontSize: 8.0,
         fontWeight: FontWeight.w700,
       ),
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      border: InputBorder.none,
+      contentPadding: const EdgeInsets.all(0),
+      hintStyle: TextStyle(color: grey2),
     ),
   );
 
@@ -335,6 +340,11 @@ class AppTheme {
         fontWeight: FontWeight.w700,
         color: darkBlack,
       ),
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      border: InputBorder.none,
+      contentPadding: const EdgeInsets.all(0),
+      hintStyle: TextStyle(color: grey2),
     ),
   );
 }
