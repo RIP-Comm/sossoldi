@@ -98,19 +98,19 @@ final categoriesByTypeProvider =
   return categories;
 });
 
-final categoryMapProvider = FutureProvider.family<
-    Map<CategoryTransaction, double>,
-    CategoryTransactionType>((ref, type) async {
+final categoryMapProvider =
+    FutureProvider<Map<CategoryTransaction, double>>((ref) async {
+  final categoryType = ref.watch(categoryTypeProvider);
   final dateStart = ref.watch(filterDateStartProvider);
   final dateEnd = ref.watch(filterDateEndProvider);
 
   Map<CategoryTransaction, double> categoriesMap = {};
 
   final categories =
-      await CategoryTransactionMethods().selectCategoriesByType(type);
+      await CategoryTransactionMethods().selectCategoriesByType(categoryType);
 
   final transactionType =
-      CategoryTransactionMethods().categoryToTransactionType(type);
+      CategoryTransactionMethods().categoryToTransactionType(categoryType);
 
   final transactionTypeList = typeMap.entries
       .where((entry) => entry.value == transactionType)
@@ -133,7 +133,7 @@ final categoryMapProvider = FutureProvider.family<
         .fold(0.0,
             (previousValue, transaction) => previousValue + transaction.amount);
 
-    categoriesMap[category] = type == CategoryTransactionType.income
+    categoriesMap[category] = categoryType == CategoryTransactionType.income
         ? double.parse(sum.toStringAsFixed(2))
         : -double.parse(sum.toStringAsFixed(2));
   }
@@ -141,12 +141,12 @@ final categoryMapProvider = FutureProvider.family<
   return categoriesMap;
 });
 
-final categoryTotalAmountProvider =
-    FutureProvider.family<double, CategoryTransactionType>((ref, type) async {
+final categoryTotalAmountProvider = FutureProvider<double>((ref) async {
+  final categoryType = ref.watch(categoryTypeProvider);
   final dateStart = ref.watch(filterDateStartProvider);
   final dateEnd = ref.watch(filterDateEndProvider);
   final transactionType =
-      CategoryTransactionMethods().categoryToTransactionType(type);
+      CategoryTransactionMethods().categoryToTransactionType(categoryType);
 
   List<String> transactionTypeList = typeMap.entries
       .where((entry) => entry.value == transactionType)
@@ -163,7 +163,9 @@ final categoryTotalAmountProvider =
     (previousValue, transaction) => previousValue + transaction.amount,
   );
 
-  return type == CategoryTransactionType.income ? totalAmount : -totalAmount;
+  return categoryType == CategoryTransactionType.income
+      ? totalAmount
+      : -totalAmount;
 });
 
 final transactionToCategoryProvider =
@@ -177,8 +179,9 @@ final categoryToTransactionProvider =
 });
 
 final monthlyTotalsProvider =
-    FutureProvider.family<List<double>, CategoryTransactionType>(
-        (ref, type) async {
+    FutureProvider<List<double>>(
+        (ref) async {
+  final categoryType = ref.watch(categoryTypeProvider);
   final dateStart = ref.watch(filterDateStartProvider);
   //final dateEnd = ref.watch(filterDateEndProvider);
 
@@ -188,7 +191,7 @@ final monthlyTotalsProvider =
   final endOfYear = DateTime(dateStart.year, 12, 31);
 
   final transactionType =
-      CategoryTransactionMethods().categoryToTransactionType(type);
+      CategoryTransactionMethods().categoryToTransactionType(categoryType);
 
   List<String> transactionTypeList = typeMap.entries
       .where((entry) => entry.value == transactionType)

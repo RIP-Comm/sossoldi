@@ -16,8 +16,7 @@ class CategoriesBarChart extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final highlightedMonth = ref.watch(highlightedMonthProvider);
-    final monthlyTotals =
-        ref.watch(monthlyTotalsProvider(ref.watch(categoryTypeProvider)));
+    final monthlyTotals = ref.watch(monthlyTotalsProvider);
     final startDate = ref.watch(filterDateStartProvider);
 
     final currentYear = startDate.year;

@@ -23,10 +23,9 @@ class CategoriesCardState extends ConsumerState<CategoriesCard> {
 
   @override
   Widget build(BuildContext context) {
-    final categoryType = ref.watch(categoryTypeProvider);
-    final categoryMap = ref.watch(categoryMapProvider(categoryType));
+    final categoryMap = ref.watch(categoryMapProvider);
     final categoryTotalAmount =
-        ref.watch(categoryTotalAmountProvider(categoryType)).value ?? 0;
+        ref.watch(categoryTotalAmountProvider).value ?? 0;
 
     return Column(
       children: [
