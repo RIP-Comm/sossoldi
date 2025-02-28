@@ -301,6 +301,7 @@ class _LineChartSample2State extends State<LineChartWidget> {
         LineChartBarData(
           spots: widget.lineData,
           isCurved: true,
+          curveSmoothness: 0.15,
           barWidth: 1.5,
           isStrokeCapRound: true,
           color: lineColor,
@@ -313,6 +314,7 @@ class _LineChartSample2State extends State<LineChartWidget> {
         LineChartBarData(
           spots: widget.line2Data,
           isCurved: true,
+          curveSmoothness: 0.15,
           barWidth: 1,
           isStrokeCapRound: true,
           color: line2Color,
