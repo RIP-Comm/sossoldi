@@ -5,6 +5,7 @@ import '../model/category_transaction.dart';
 import '../model/recurring_transaction.dart';
 import '../model/transaction.dart';
 import 'accounts_provider.dart';
+import 'budgets_provider.dart';
 import 'dashboard_provider.dart';
 import 'statistics_provider.dart';
 
@@ -59,6 +60,8 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
       ref.invalidate(lastTransactionsProvider);
       // Refresh the accounts list
       ref.invalidate(accountsProvider);
+      // Refresh the budgets list
+      ref.invalidate(monthlyBudgetsStatsProvider);
       // ignore: unused_result
       ref.refresh(dashboardProvider);
       // ignore: unused_result
