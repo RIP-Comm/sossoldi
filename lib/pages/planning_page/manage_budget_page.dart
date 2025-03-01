@@ -27,18 +27,20 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
     setState(() {});
   }
 
-  void updateBudget(Budget updatedBudget, int index) {
+  Future<void> updateBudget(Budget updatedBudget, int index) async {
     setState(() {
       deletedBudgets.add(budgets[index]);
       budgets[index] = updatedBudget;
     });
+    await ref.read(budgetsProvider.notifier).refreshBudgets();
   }
 
-  void deleteBudget(Budget removedBudget, int index) {
+  Future<void> deleteBudget(Budget removedBudget, int index) async {
     setState(() {
       budgets.removeAt(index);
       deletedBudgets.add(removedBudget);
     });
+    await ref.read(budgetsProvider.notifier).refreshBudgets();
   }
 
   @override
