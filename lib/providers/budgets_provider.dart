@@ -2,6 +2,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../model/budget.dart';
 
+final monthlyBudgetsStatsProvider = FutureProvider<List<BudgetStats>>((ref) async {
+  final budgets = await BudgetMethods().selectMonthlyBudgetsStats();
+  return budgets;
+});
+
 class AsyncBudgetsNotifier extends AsyncNotifier<List<Budget>> {
   @override
   Future<List<Budget>> build() async {
@@ -15,11 +20,6 @@ class AsyncBudgetsNotifier extends AsyncNotifier<List<Budget>> {
 
   Future<List<Budget>> _getBudgets() async {
     final budgets = await BudgetMethods().selectAllActive();
-    return budgets;
-  }
-
-  Future<List<BudgetStats>> getMonthlyBudgetsStats() async {
-    final budgets = await BudgetMethods().selectMonthlyBudgetsStats();
     return budgets;
   }
 

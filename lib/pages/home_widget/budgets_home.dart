@@ -7,18 +7,12 @@ import '../../custom_widgets/budget_circular_indicator.dart';
 import '../../model/budget.dart';
 import '../../providers/budgets_provider.dart';
 
-class BudgetsSection extends ConsumerStatefulWidget {
+class BudgetsSection extends ConsumerWidget with Functions {
   const BudgetsSection({super.key});
 
   @override
-  ConsumerState<BudgetsSection> createState() => _BudgetsSectionState();
-}
-
-class _BudgetsSectionState extends ConsumerState<BudgetsSection> with Functions {
-  @override
-  Widget build(BuildContext context) {
-    final budgets = ref.watch(budgetsProvider.notifier).getMonthlyBudgetsStats();
-
+  Widget build(BuildContext context, WidgetRef ref) {
+    final budgets = ref.watch(monthlyBudgetsStatsProvider.future);
     return Column(
       children: [
         Row(

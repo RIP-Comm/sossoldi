@@ -21,7 +21,7 @@ class AccountsSum extends ConsumerWidget with Functions {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currencyState = ref.watch(currencyStateNotifier);
-
+    ref.listen(selectedAccountProvider, (_, __) {});
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primaryContainer,

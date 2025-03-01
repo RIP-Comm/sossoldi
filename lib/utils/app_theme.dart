@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../constants/style.dart';
 
@@ -14,7 +15,7 @@ class AppTheme {
       iconTheme: IconThemeData(color: blue5),
       titleTextStyle: TextStyle(
         color: blue1,
-        fontSize: 24,
+        fontSize: 18,
         fontWeight: FontWeight.w700,
       ),
     ),
@@ -97,7 +98,7 @@ class AppTheme {
       contentPadding: EdgeInsets.all(16),
     ),
     disabledColor: grey2,
-    fontFamily: 'SF Pro Text',
+    fontFamily: GoogleFonts.nunitoSans().fontFamily,
     textTheme: const TextTheme(
       // display
       displayLarge: TextStyle(
@@ -161,6 +162,11 @@ class AppTheme {
         fontSize: 8.0,
         fontWeight: FontWeight.w700,
       ),
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      border: InputBorder.none,
+      contentPadding: const EdgeInsets.all(0),
+      hintStyle: TextStyle(color: grey2),
     ),
   );
 
@@ -261,7 +267,7 @@ class AppTheme {
 
     disabledColor: darkGrey2,
     //Text style
-    fontFamily: 'SF Pro Text',
+    fontFamily: GoogleFonts.nunitoSans().fontFamily,
     textTheme: const TextTheme(
       displayLarge: TextStyle(
         fontSize: 34.0,
@@ -335,6 +341,11 @@ class AppTheme {
         fontWeight: FontWeight.w700,
         color: darkBlack,
       ),
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      border: InputBorder.none,
+      contentPadding: const EdgeInsets.all(0),
+      hintStyle: TextStyle(color: grey2),
     ),
   );
 }

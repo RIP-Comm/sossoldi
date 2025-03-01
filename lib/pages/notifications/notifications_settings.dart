@@ -4,13 +4,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants/style.dart';
 import '../../providers/settings_provider.dart';
+import '../../utils/notifications_service.dart';
 import 'widgets/notification_type_tile.dart';
 
 class NotificationsSettings extends ConsumerStatefulWidget {
   const NotificationsSettings({super.key});
 
   @override
-  ConsumerState<NotificationsSettings> createState() => _NotificationsSettingsState();
+  ConsumerState<NotificationsSettings> createState() =>
+      _NotificationsSettingsState();
 }
 
 class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
@@ -31,7 +33,7 @@ class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
               child: Row(
                 children: [
                   Container(
@@ -76,10 +78,14 @@ class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ),
-                      CupertinoSwitch(
+                      Switch.adaptive(
                         value: isReminderEnabled,
-                        onChanged: (value) {
-                          ref.read(transactionReminderSwitchProvider.notifier).state = value;
+                        onChanged: (value) async {
+                          await NotificationService()
+                              .requestNotificationPermissions();
+                          ref
+                              .read(transactionReminderSwitchProvider.notifier)
+                              .state = value;
                           ref
                               .read(settingsProvider.notifier)
                               .updateNotificationReminder(active: value);
@@ -88,19 +94,26 @@ class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
                     ],
                   ),
                   AnimatedCrossFade(
-                    crossFadeState:
-                        isReminderEnabled ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                    crossFadeState: isReminderEnabled
+                        ? CrossFadeState.showSecond
+                        : CrossFadeState.showFirst,
                     duration: const Duration(milliseconds: 150),
                     firstChild: const SizedBox(),
                     secondChild: Column(
                       children: NotificationReminderType.values
-                          .where((type) => type != NotificationReminderType.none)
+                          .where(
+                              (type) => type != NotificationReminderType.none)
                           .map((type) {
                         return NotificationTypeTile(
                           type: type,
                           setNotificationTypeCallback: () {
-                            ref.watch(transactionReminderCadenceProvider.notifier).state = type;
-                            ref.read(settingsProvider.notifier).updateNotificationReminder();
+                            ref
+                                .watch(
+                                    transactionReminderCadenceProvider.notifier)
+                                .state = type;
+                            ref
+                                .read(settingsProvider.notifier)
+                                .updateNotificationReminder();
                           },
                         );
                       }).toList(),
@@ -114,7 +127,10 @@ class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
               padding: const EdgeInsets.only(left: 28, top: 24, bottom: 8),
               child: Text(
                 "RECURRING TRANSACTIONS",
-                style: Theme.of(context).textTheme.labelLarge!.copyWith(color: grey1),
+                style: Theme.of(context)
+                    .textTheme
+                    .labelLarge!
+                    .copyWith(color: grey1),
               ),
             ),
             Container(
@@ -136,10 +152,12 @@ class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ),
-                      CupertinoSwitch(
+                      Switch.adaptive(
                         value: ref.watch(transactionRecAddedSwitchProvider),
                         onChanged: (value) {
-                          ref.read(transactionRecAddedSwitchProvider.notifier).state = value;
+                          ref
+                              .read(transactionRecAddedSwitchProvider.notifier)
+                              .state = value;
                           ref
                               .read(settingsProvider.notifier)
                               .updateNotificationRecurring(active: value);
@@ -163,7 +181,7 @@ class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
                   //         style: Theme.of(context).textTheme.bodyMedium,
                   //       ),
                   //     ),
-                  //     CupertinoSwitch(
+                  //     Switch.adaptive(
                   //       value: ref.watch(transactionRecReminderSwitchProvider),
                   //       onChanged: (value) {
                   //         ref.read(transactionRecReminderSwitchProvider.notifier).state = value;
@@ -180,7 +198,10 @@ class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
               padding: const EdgeInsets.only(left: 28, top: 6),
               child: Text(
                 "Remind me before a recurring transaction is added",
-                style: Theme.of(context).textTheme.labelMedium!.copyWith(color: grey1),
+                style: Theme.of(context)
+                    .textTheme
+                    .labelMedium!
+                    .copyWith(color: grey1),
               ),
             ),
           ],

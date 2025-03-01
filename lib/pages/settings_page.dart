@@ -2,8 +2,6 @@
 
 // ignore_for_file: unused_result
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -54,7 +52,7 @@ var settingsOptions = [
     Icons.notifications_active,
     "Notifications",
     "Manage your notifications settings",
-    Platform.isAndroid ? "/notifications-settings" : null,
+    "/notifications-settings",
   ],
   [
     Icons.feedback,

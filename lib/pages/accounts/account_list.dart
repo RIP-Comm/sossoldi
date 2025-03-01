@@ -19,6 +19,7 @@ class _AccountListState extends ConsumerState<AccountList> with Functions {
   @override
   Widget build(BuildContext context) {
     final accountsList = ref.watch(accountsProvider);
+    ref.listen(selectedAccountProvider, (_, __) {});
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(

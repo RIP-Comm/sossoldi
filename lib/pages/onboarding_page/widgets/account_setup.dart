@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import '../../../constants/constants.dart';
 import '../../../providers/accounts_provider.dart';
-import '../../../providers/currency_provider.dart';
 import '/constants/style.dart';
 
 class AccountSetup extends ConsumerStatefulWidget {
@@ -307,7 +306,6 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                   const SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: () {
-                      ref.watch(currencyStateNotifier.notifier).insertAll();
                       Navigator.of(context)
                           .pushNamedAndRemoveUntil('/', (route) => false);
                     },
@@ -321,13 +319,18 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('START FROM 0  ',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(color: blue1)),
-                            const Icon(Icons.arrow_forward,
-                                size: 15, color: blue1),
+                            Text(
+                              'START FROM 0  ',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(color: blue1),
+                            ),
+                            const Icon(
+                              Icons.arrow_forward,
+                              size: 15,
+                              color: blue1,
+                            ),
                           ],
                         ),
                         SizedBox(
@@ -347,7 +350,6 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                     ),
                     child: SizedBox(
                       width: double.infinity,
-                      height: 48,
                       child: ElevatedButton(
                         onPressed: () {
                           if (_validAmount) {
@@ -359,25 +361,15 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                                   startingValue:
                                       num.tryParse(amountController.text) ?? 0,
                                 );
-                            ref
-                                .watch(currencyStateNotifier.notifier)
-                                .insertAll();
                             Navigator.of(context)
                                 .pushNamedAndRemoveUntil('/', (route) => false);
                           }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: _validAmount ? blue5 : grey2,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
                         ),
                         child: Text(
                           'START TRACKING YOUR EXPENSES',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(color: Colors.white),
                         ),
                       ),
                     ),

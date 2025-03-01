@@ -50,7 +50,6 @@ class _OnboardingState extends State<Onboarding> {
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
               child: SizedBox(
                 width: MediaQuery.sizeOf(context).width,
-                height: 48,
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -60,16 +59,7 @@ class _OnboardingState extends State<Onboarding> {
                       ),
                     );
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: blue5,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: Text(
-                    'START THE SET UP',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: white),
-                  ),
+                  child: Text('START THE SET UP'),
                 ),
               ),
             ),
