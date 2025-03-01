@@ -57,6 +57,8 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
   Future<List<Transaction>> _getTransactions({int? limit, bool update = false}) async {
     if (update) {
       ref.invalidate(lastTransactionsProvider);
+      // Refresh the accounts list
+      ref.invalidate(accountsProvider);
       // ignore: unused_result
       ref.refresh(dashboardProvider);
       // ignore: unused_result
