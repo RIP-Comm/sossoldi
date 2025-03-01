@@ -179,8 +179,28 @@ class BudgetMethods extends SossoldiDatabase {
     var query =
         "SELECT bt.*, SUM(t.amount) as spent FROM $budgetTable as bt  LEFT JOIN $categoryTransactionTable as ct ON bt.${BudgetFields.idCategory} = ct.${CategoryTransactionFields.id}  LEFT JOIN '$transactionTable' as t ON t.${TransactionFields.idCategory} = ct.${CategoryTransactionFields.id}  WHERE bt.active = 1 AND strftime('%m', t.date) = strftime('%m', 'now') AND strftime('%Y', t.date) = strftime('%Y', 'now')  GROUP BY bt.${BudgetFields.idCategory};";
     final result = await db.rawQuery(query);
-    return result.map((json) => BudgetStats.fromJson(json)).toList();
+
+    List<Budget> allBudgets = await selectAllActive();
+
+    List<BudgetStats> statsList = result.map((json) => BudgetStats.fromJson(json)).toList();
+
+    Set<int> resultBudgetIds = statsList.map((stats) => stats.idCategory).toSet();
+
+    // Check for missing budgets and add them with a spent amount of 0
+    for (var budget in allBudgets) {
+      if (!resultBudgetIds.contains(budget.idCategory)) {
+        statsList.add(BudgetStats(
+          idCategory: budget.idCategory,
+          name: budget.name,
+          spent: 0,
+          amountLimit: budget.amountLimit,
+        ));
+      }
+    }
+
+    return statsList;
   }
+
 
   Future<int> updateItem(Budget item) async {
     final db = await database;

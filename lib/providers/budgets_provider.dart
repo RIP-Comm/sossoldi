@@ -46,6 +46,10 @@ class AsyncBudgetsNotifier extends AsyncNotifier<List<Budget>> {
       return _getBudgets();
     });
   }
+
+  Future<void> refreshBudgets() async {
+    ref.invalidateSelf();
+  }
 }
 
 final budgetsProvider =

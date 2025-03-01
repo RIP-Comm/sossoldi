@@ -138,6 +138,7 @@ class _GraphsPageState extends ConsumerState<GraphsPage> with Functions {
                     LineChartWidget(
                       lineData: currentYearMonthlyTransactions,
                       enableGapFilling: false,
+                      period: Period.year,
                     ),
                   ],
                 );

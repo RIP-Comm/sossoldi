@@ -17,7 +17,7 @@ class BudgetsSection extends ConsumerStatefulWidget {
 class _BudgetsSectionState extends ConsumerState<BudgetsSection> with Functions {
   @override
   Widget build(BuildContext context) {
-    final budgets =ref.watch(budgetsProvider.notifier).getMonthlyBudgetsStats();
+    final budgets = ref.watch(budgetsProvider.notifier).getMonthlyBudgetsStats();
 
     return Column(
       children: [
@@ -47,23 +47,48 @@ class _BudgetsSectionState extends ConsumerState<BudgetsSection> with Functions 
                         ),
                       ),
                       const SizedBox(height: 16),
-                      SizedBox(
-                        height: 150,
-                        width: MediaQuery.of(context).size.width,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: budgets!.length,
-                          itemBuilder: (context, index) => Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 13),
-                            child: BudgetCircularIndicator(
-                              title: budgets[index].name!,
-                              amount: budgets[index].amountLimit - budgets[index].spent > 0 ? budgets[index].amountLimit - budgets[index].spent : 0,
-                              perc: budgets[index].spent / budgets[index].amountLimit > 1 ? 1 : budgets[index].spent / budgets[index].amountLimit,
-                              color: categoryColorList[index % categoryColorList.length],
+                      if (budgets == null || budgets.isEmpty)
+                        Container(
+                          height: 90,
+                          width: MediaQuery.of(context).size.width,
+                          alignment: Alignment.center,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "No budget set",
+                                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                      color: Colors.grey[600],
+                                    ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                "Create a budget to track your spending",
+                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: Colors.grey[500],
+                                    ),
+                              ),
+                            ],
+                          ),
+                        )
+                      else
+                        SizedBox(
+                          height: 150,
+                          width: MediaQuery.of(context).size.width,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: budgets.length,
+                            itemBuilder: (context, index) => Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 13),
+                              child: BudgetCircularIndicator(
+                                title: budgets[index].name!,
+                                amount: budgets[index].amountLimit - budgets[index].spent > 0 ? budgets[index].amountLimit - budgets[index].spent : 0,
+                                perc: budgets[index].spent / budgets[index].amountLimit > 1 ? 1 : budgets[index].spent / budgets[index].amountLimit,
+                                color: categoryColorList[index % categoryColorList.length],
+                              ),
                             ),
                           ),
                         ),
-                      ),
                     ],
                   );
                 }
