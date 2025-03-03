@@ -69,8 +69,8 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
     }
     final dateStart = ref.watch(filterDateStartProvider);
     final dateEnd = ref.watch(filterDateEndProvider);
-    final transactions = await TransactionMethods()
-        .selectAll(dateRangeStart: dateStart, dateRangeEnd: dateEnd, limit: limit);
+    final transactions =
+        await TransactionMethods().selectAll(dateRangeStart: dateStart, dateRangeEnd: dateEnd, limit: limit);
 
     ref.read(totalAmountProvider.notifier).state = transactions.fold<num>(
         0,
@@ -97,25 +97,19 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
     });
   }
 
-  Future<void> addTransaction(num amount, String label) async {
+  Future<void> addTransaction(num amount, String label,
+      {BankAccount? account, DateTime? date, TransactionType? type}) async {
     state = const AsyncValue.loading();
 
-    final type = ref.read(transactionTypeProvider);
-    final date = ref.read(dateProvider);
-    final bankAccount = ref.read(bankAccountProvider)!;
-    final bankAccountTransfer = ref.read(bankAccountTransferProvider);
-    final category = ref.read(categoryProvider);
-    final recurring = ref.read(selectedRecurringPayProvider);
-
     Transaction transaction = Transaction(
-      date: date,
+      date: date ?? ref.read(dateProvider),
       amount: amount,
-      type: type,
+      type: type ?? ref.read(transactionTypeProvider),
       note: label,
-      idBankAccount: bankAccount.id!,
-      idBankAccountTransfer: bankAccountTransfer?.id,
-      idCategory: category?.id,
-      recurring: recurring,
+      idBankAccount: (account ?? ref.read(bankAccountProvider))!.id!,
+      idBankAccountTransfer: account != null ? null : ref.read(bankAccountTransferProvider)?.id,
+      idCategory: account != null ? null : ref.read(categoryProvider)?.id,
+      recurring: account != null ? false : ref.read(selectedRecurringPayProvider),
     );
 
     state = await AsyncValue.guard(() async {
@@ -134,17 +128,16 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
     final recurrency = ref.read(intervalProvider.notifier).state;
 
     RecurringTransaction transaction = RecurringTransaction(
-      amount: amount,
-      fromDate: date,
-      toDate: toDate,
-      note: label,
-      idBankAccount: bankAccount.id!,
-      idCategory: category!.id!,
-      recurrency: recurrency.name.toUpperCase(),
-      createdAt: date,
-      updatedAt: date,
-      lastInsertion: date
-    );
+        amount: amount,
+        fromDate: date,
+        toDate: toDate,
+        note: label,
+        idBankAccount: bankAccount.id!,
+        idCategory: category!.id!,
+        recurrency: recurrency.name.toUpperCase(),
+        createdAt: date,
+        updatedAt: date,
+        lastInsertion: date);
 
     // Here we need the recurringTransaction just inserted, to get and return a model with also his ID
     RecurringTransaction? insertedTransaction;
@@ -182,16 +175,15 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
     final category = ref.read(categoryProvider);
 
     Transaction transaction = ref.read(selectedTransactionUpdateProvider)!.copy(
-          date: date,
-          amount: amount,
-          type: type,
-          note: label,
-          idBankAccount: bankAccount.id!,
-          idBankAccountTransfer: bankAccountTransfer?.id,
-          idCategory: category?.id,
-          idRecurringTransaction: recurringTransactionId,
-          recurring: recurringTransactionId != null ? true:false
-        );
+        date: date,
+        amount: amount,
+        type: type,
+        note: label,
+        idBankAccount: bankAccount.id!,
+        idBankAccountTransfer: bankAccountTransfer?.id,
+        idCategory: category?.id,
+        idRecurringTransaction: recurringTransactionId,
+        recurring: recurringTransactionId != null ? true : false);
 
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
@@ -205,17 +197,15 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
     final recurrency = ref.read(intervalProvider.notifier).state;
     final category = ref.read(categoryProvider);
 
-    RecurringTransaction transaction =
-        ref.read(selectedRecurringTransactionUpdateProvider)!.copy(
-              fromDate: ref.read(dateProvider),
-              toDate: ref.read(endDateProvider),
-              recurrency: recurrency.name.toUpperCase(),
-              amount: amount,
-              note: label,
-              idBankAccount: bankAccount.id!,
-              idCategory: category?.id,
-              updatedAt: DateTime.now()
-            );
+    RecurringTransaction transaction = ref.read(selectedRecurringTransactionUpdateProvider)!.copy(
+        fromDate: ref.read(dateProvider),
+        toDate: ref.read(endDateProvider),
+        recurrency: recurrency.name.toUpperCase(),
+        amount: amount,
+        note: label,
+        idBankAccount: bankAccount.id!,
+        idCategory: category?.id,
+        updatedAt: DateTime.now());
 
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
@@ -223,12 +213,11 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
       return _getTransactions(update: true);
     });
   }
-  Future<void> addRecurringDataToTransaction(num idTransaction, num idRecurringTransaction) async {
 
-  }
+  Future<void> addRecurringDataToTransaction(num idTransaction, num idRecurringTransaction) async {}
 
   Future<void> transactionUpdateState(dynamic transaction) async {
-    if(transaction is Transaction) {
+    if (transaction is Transaction) {
       ref.read(selectedTransactionUpdateProvider.notifier).state = transaction;
       ref.read(selectedRecurringPayProvider.notifier).state = transaction.recurring;
 
@@ -241,18 +230,17 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
       }
       ref.read(bankAccountProvider.notifier).state =
           accountList.value!.firstWhere((element) => element.id == transaction.idBankAccount);
-      ref.read(bankAccountTransferProvider.notifier).state =
-          transaction.type == TransactionType.transfer
-              ? accountList.value!
-                  .firstWhere((element) => element.id == transaction.idBankAccountTransfer)
-              : null;
+      ref.read(bankAccountTransferProvider.notifier).state = transaction.type == TransactionType.transfer
+          ? accountList.value!.firstWhere((element) => element.id == transaction.idBankAccountTransfer)
+          : null;
       ref.read(transactionTypeProvider.notifier).state = transaction.type;
       ref.read(dateProvider.notifier).state = transaction.date;
-    } else if(transaction is RecurringTransaction) {
+    } else if (transaction is RecurringTransaction) {
       ref.read(selectedRecurringTransactionUpdateProvider.notifier).state = transaction;
       ref.read(selectedRecurringPayProvider.notifier).state = true;
       ref.read(categoryProvider.notifier).state = await CategoryTransactionMethods().selectById(transaction.idCategory);
-      ref.read(bankAccountProvider.notifier).state = ref.watch(accountsProvider).value!.firstWhere((element) => element.id == transaction.idBankAccount);
+      ref.read(bankAccountProvider.notifier).state =
+          ref.watch(accountsProvider).value!.firstWhere((element) => element.id == transaction.idBankAccount);
       ref.read(intervalProvider.notifier).state = parseRecurrence(transaction.recurrency);
       ref.read(endDateProvider.notifier).state = transaction.toDate;
     }
@@ -295,7 +283,6 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
   }
 }
 
-final transactionsProvider =
-    AsyncNotifierProvider.autoDispose<AsyncTransactionsNotifier, List<Transaction>>(() {
+final transactionsProvider = AsyncNotifierProvider.autoDispose<AsyncTransactionsNotifier, List<Transaction>>(() {
   return AsyncTransactionsNotifier();
 });

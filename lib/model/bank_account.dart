@@ -63,7 +63,7 @@ class BankAccount extends BaseEntity {
           bool? active,
           bool? mainAccount,
           DateTime? createdAt,
-          DateTime? updatedAt}) =>
+          DateTime? updatedAt,}) =>
       BankAccount(
           id: id ?? this.id,
           name: name ?? this.name,
@@ -73,7 +73,9 @@ class BankAccount extends BaseEntity {
           active: active ?? this.active,
           mainAccount: mainAccount ?? this.mainAccount,
           createdAt: createdAt ?? this.createdAt,
-          updatedAt: updatedAt ?? this.updatedAt);
+          updatedAt: updatedAt ?? this.updatedAt,
+          total: total
+          );
 
   static BankAccount fromJson(Map<String, Object?> json) => BankAccount(
       id: json[BaseEntityFields.id] as int,
