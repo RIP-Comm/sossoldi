@@ -63,7 +63,6 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
     required String name,
     required String icon,
     required int color,
-    num? currentBalance,
     bool active = true,
     bool mainAccount = false,
   }) async {
@@ -74,8 +73,19 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
           active: active,
           mainAccount: mainAccount,
         );
-    if (currentBalance != null) {
-      final num difference = currentBalance - (account.total ?? 0);
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      await BankAccountMethods().updateItem(account);
+      if (account.mainAccount) {
+        ref.read(mainAccountProvider.notifier).state = account;
+      }
+      return _getAccounts();
+    });
+  }
+
+  Future<void> reconcileAccount(
+    {required num newBalance, required BankAccount account}) async {
+     final num difference = newBalance - (account.total ?? 0);
       if (difference != 0) {
         final transactionsNotifier = ref.read(transactionsProvider.notifier);
         await transactionsNotifier.addTransaction(
@@ -86,7 +96,6 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
           date: DateTime.now(),
         );
       }
-    }
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       await BankAccountMethods().updateItem(account);

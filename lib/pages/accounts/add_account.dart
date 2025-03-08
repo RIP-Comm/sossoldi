@@ -366,8 +366,13 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                           color: accountColor,
                           active: countNetWorth,
                           mainAccount: mainAccount,
-                          currentBalance: currencyToNum(balanceController.text),
                         );
+                    if (currencyToNum(balanceController.text) != selectedAccount.total) {
+                      await ref.read(accountsProvider.notifier).reconcileAccount(
+                            newBalance: currencyToNum(balanceController.text),
+                            account: selectedAccount,
+                          );
+                    }
                   } else {
                     await ref.read(accountsProvider.notifier).addAccount(
                           name: nameController.text,

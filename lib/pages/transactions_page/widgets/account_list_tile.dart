@@ -75,10 +75,7 @@ class AccountListTile extends ConsumerWidget {
                           ),
                           Text(
                             "${amount.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.copyWith(color: (amount > 0) ? green : red),
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: (amount > 0) ? green : red),
                           ),
                         ],
                       ),
@@ -100,9 +97,7 @@ class AccountListTile extends ConsumerWidget {
                 ),
                 const SizedBox(width: 8.0),
                 Icon(
-                  (selectedAccountIndex == index)
-                      ? Icons.expand_more
-                      : Icons.chevron_right,
+                  (selectedAccountIndex == index) ? Icons.expand_more : Icons.chevron_right,
                 ),
               ],
             ),
@@ -166,8 +161,10 @@ class TransactionRow extends ConsumerWidget with Functions {
                     ),
                     Text(
                       "${numToCurrency(transaction.amount)} ${currencyState.selectedCurrency.symbol}",
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: (transaction.amount > 0) ? green : red),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge
+                          ?.copyWith(color: (transaction.amount > 0) ? green : red),
                     ),
                   ],
                 ),
@@ -175,7 +172,7 @@ class TransactionRow extends ConsumerWidget with Functions {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      transaction.categoryName?.toUpperCase() ?? "",
+                      transaction.categoryName?.toUpperCase() ?? "Uncategorized",
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     Text(
@@ -208,8 +205,7 @@ class ExpandedSection extends StatefulWidget {
   State<ExpandedSection> createState() => _ExpandedSectionState();
 }
 
-class _ExpandedSectionState extends State<ExpandedSection>
-    with SingleTickerProviderStateMixin {
+class _ExpandedSectionState extends State<ExpandedSection> with SingleTickerProviderStateMixin {
   late AnimationController expandController;
   late Animation<double> animation;
 
