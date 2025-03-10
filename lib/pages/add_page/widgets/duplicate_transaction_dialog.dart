@@ -34,7 +34,11 @@ class DuplicateTransactionDialog extends ConsumerWidget {
               .read(transactionsProvider.notifier)
               .duplicateTransaction(transaction)
               .whenComplete(() {
-            if (context.mounted) Navigator.of(context).pop();
+            if (context.mounted) {
+              Navigator.of(context)
+                ..pop()
+                ..pop();
+            }
           }),
           child: const Text("Duplicate"),
         ),
