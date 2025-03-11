@@ -8,10 +8,10 @@ nav_order: 1
 
 <div align="center">
     <a href="https://ios.sossoldi.com">
-        <img src="./assets/app-store-badge.svg" height="50" alt="Download on the App Store">
+        <img src="./assets/app-store-badge.svg" width="150" height="50" alt="Download on the App Store">
     </a>
     <a href="https://android.sossoldi.com">
-        <img src="./assets/google-play-badge.png" height="50" alt="Get it on Google Play">
+        <img src="./assets/google-play-badge.png" width="150" height="50" alt="Get it on Google Play">
     </a>
 </div>
 
