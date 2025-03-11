@@ -6,18 +6,27 @@
 
 **Wealth management app**
 
-[![Discord](https://img.shields.io/discord/919139369774891088?style=flat&logo=discord)](https://discord.com/channels/919139369774891088/1013368203575038012)
+[![Discord](https://img.shields.io/discord/919139369774891088?style=flat&logo=discord)](https://discord.com/invite/PcaUZnvPzS)
 [![Shield: Contributions Welcome](https://img.shields.io/badge/contributions-welcome-blue)](#Contributing)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+<div align="center">
+    <a href="ios.sossoldi.com">
+        <img src="./docs/assets/app-store-badge.svg" height="50" alt="Download on the App Store">
+    </a>
+    <a href="android.sossoldi.com">
+        <img src="./docs/assets/google-play-badge.png" height="50" alt="Get it on Google Play">
+    </a>
+</div>
 
 # Sossoldi (Wealth management app)
 
 **Sossoldi** is a free and open source wealth management / personal finance / Net Worth tracking app, made with Flutter.
 
 
-
+<div align="center">
 <img src="./assets/sossoldi project cover.jpg" width="1000" alt="Sossoldi icon">
+</div>
 </div>
 
 

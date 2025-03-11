@@ -6,6 +6,15 @@ nav_order: 1
 
 **[Sossoldi](https://github.com/RIP-Comm/sossoldi)** is a free and open source wealth management / personal finance / Net Worth tracking app, made with Flutter.
 
+<div align="center">
+    <a href="ios.sossoldi.com">
+        <img src="./assets/app-store-badge.svg" height="50" alt="Download on the App Store">
+    </a>
+    <a href="android.sossoldi.com">
+        <img src="./assets/google-play-badge.png" height="50" alt="Get it on Google Play">
+    </a>
+</div>
+
 <div>
     <img src="./assets/sossoldi project cover.jpg" width="1000" alt="Sossoldi icon">
 </div>
@@ -45,7 +54,7 @@ What features do we want to implement?
 Here is a list of useful links if you want to contribute to the project:
 
 - [Github Repo](https://github.com/RIP-Comm/sossoldi)
-- [Discord](http://mr.rip/discord)
+- [Discord](discord.sossoldi.com)
 - [Design file](https://www.figma.com/file/6NyY9yqunpbU7HIkbNEAL3/Sossoldi-App?node-id=0%3A1)
 - [UX Research](https://www.federicopozzato.it/portfolio/sossoldi-personal-finance-app)
 - [Information architecture](https://www.figma.com/file/xjVHAaHznRW1OFAJvp8DXn/Sossoldi-App---Figjam?node-id=0%3A1)
