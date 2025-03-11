@@ -11,10 +11,10 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 <div align="center">
-    <a href="ios.sossoldi.com">
+    <a href="https://ios.sossoldi.com">
         <img src="./docs/assets/app-store-badge.svg" height="50" alt="Download on the App Store">
     </a>
-    <a href="android.sossoldi.com">
+    <a href="https://android.sossoldi.com">
         <img src="./docs/assets/google-play-badge.png" height="50" alt="Get it on Google Play">
     </a>
 </div>
