@@ -76,7 +76,7 @@ var collaborators = const [
   [
     "Alessandro Bongiovanni",
     "Flutter Dev",
-    "https://github.com/bongio94",
+    "github.com/bongio94",
   ],
 ];
 
