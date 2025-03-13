@@ -42,8 +42,7 @@ class _AccountListState extends ConsumerState<AccountList> with Functions {
         child: Column(
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
               child: Row(
                 children: [
                   Container(
@@ -74,14 +73,12 @@ class _AccountListState extends ConsumerState<AccountList> with Functions {
                 itemCount: accounts.length,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: 16),
+                separatorBuilder: (context, index) => const SizedBox(height: 16),
                 itemBuilder: (context, i) {
                   BankAccount account = accounts[i];
                   return DefaultCard(
                     onTap: () {
-                      ref.read(selectedAccountProvider.notifier).state =
-                          account;
+                      ref.read(selectedAccountProvider.notifier).state = account;
                       Navigator.of(context).pushNamed('/add-account');
                     },
                     child: Row(
@@ -97,8 +94,7 @@ class _AccountListState extends ConsumerState<AccountList> with Functions {
                           style: Theme.of(context)
                               .textTheme
                               .titleLarge!
-                              .copyWith(
-                                  color: Theme.of(context).colorScheme.primary),
+                              .copyWith(color: Theme.of(context).colorScheme.primary),
                         ),
                       ],
                     ),

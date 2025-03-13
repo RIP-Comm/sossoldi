@@ -23,8 +23,7 @@ class AccountSelector extends ConsumerStatefulWidget {
   ConsumerState<AccountSelector> createState() => _AccountSelectorState();
 }
 
-class _AccountSelectorState extends ConsumerState<AccountSelector>
-    with Functions {
+class _AccountSelectorState extends ConsumerState<AccountSelector> with Functions {
   @override
   Widget build(BuildContext context) {
     final accountsList = ref.watch(accountsProvider);
@@ -57,12 +56,13 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
                 children: [
                   Container(
                     alignment: Alignment.centerLeft,
-                    padding:
-                        const EdgeInsets.only(left: 16, top: 32, bottom: 8),
+                    padding: const EdgeInsets.only(left: 16, top: 32, bottom: 8),
                     child: Text(
                       "MORE FREQUENT",
-                      style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.primary),
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge!
+                          .copyWith(color: Theme.of(context).colorScheme.primary),
                     ),
                   ),
                   Container(
@@ -76,21 +76,16 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
                         shrinkWrap: true,
                         itemBuilder: (context, i) {
                           BankAccount account = accounts[i];
-                          bool enabled = (widget.transfer &&
-                                  account.id != fromAccount?.id) ||
+                          bool enabled = (widget.transfer && account.id != fromAccount?.id) ||
                               (!widget.transfer && account.id != toAccount?.id);
                           return GestureDetector(
                             onTap: enabled
                                 ? () {
                                     if (widget.transfer) {
-                                      ref
-                                          .read(bankAccountTransferProvider
-                                              .notifier)
-                                          .state = account;
+                                      ref.read(bankAccountTransferProvider.notifier).state =
+                                          account;
                                     } else {
-                                      ref
-                                          .read(bankAccountProvider.notifier)
-                                          .state = account;
+                                      ref.read(bankAccountProvider.notifier).state = account;
                                     }
                                     Navigator.pop(context);
                                   }
@@ -98,25 +93,20 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
                             child: Opacity(
                               opacity: enabled ? 1.0 : 0.5,
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16.0),
+                                padding: const EdgeInsets.symmetric(horizontal: 16.0),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     RoundedIcon(
                                       icon: accountIconList[account.symbol],
-                                      backgroundColor:
-                                          accountColorListTheme[account.color],
+                                      backgroundColor: accountColorListTheme[account.color],
                                     ),
                                     Text(
                                       account.name,
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelLarge!
-                                          .copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary),
+                                          .copyWith(color: Theme.of(context).colorScheme.primary),
                                     ),
                                   ],
                                 ),
@@ -125,19 +115,19 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
                           );
                         },
                       ),
-                      loading: () =>
-                          const Center(child: CircularProgressIndicator()),
+                      loading: () => const Center(child: CircularProgressIndicator()),
                       error: (err, stack) => Text('Error: $err'),
                     ),
                   ),
                   Container(
                     alignment: Alignment.centerLeft,
-                    padding:
-                        const EdgeInsets.only(left: 16, top: 32, bottom: 8),
+                    padding: const EdgeInsets.only(left: 16, top: 32, bottom: 8),
                     child: Text(
                       "ALL ACCOUNTS",
-                      style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.primary),
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge!
+                          .copyWith(color: Theme.of(context).colorScheme.primary),
                     ),
                   ),
                   accountsList.when(
@@ -152,39 +142,32 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
                             const Divider(height: 1, color: grey1),
                         itemBuilder: (context, i) {
                           BankAccount account = accounts[i];
-                          bool enabled = (widget.transfer &&
-                                  account.id != fromAccount?.id) ||
+                          bool enabled = (widget.transfer && account.id != fromAccount?.id) ||
                               (!widget.transfer && account.id != toAccount?.id);
                           return ListTile(
                             onTap: () {
                               if (widget.transfer) {
-                                ref
-                                    .read(bankAccountTransferProvider.notifier)
-                                    .state = account;
+                                ref.read(bankAccountTransferProvider.notifier).state = account;
                               } else {
-                                ref.read(bankAccountProvider.notifier).state =
-                                    account;
+                                ref.read(bankAccountProvider.notifier).state = account;
                               }
                               Navigator.pop(context);
                             },
                             enabled: enabled,
                             leading: RoundedIcon(
                               icon: accountIconList[account.symbol],
-                              backgroundColor:
-                                  accountColorListTheme[account.color],
+                              backgroundColor: accountColorListTheme[account.color],
                               size: 30,
                             ),
                             title: Text(account.name),
-                            trailing: (fromAccount?.id == account.id ||
-                                    toAccount?.id == account.id)
+                            trailing: (fromAccount?.id == account.id || toAccount?.id == account.id)
                                 ? Icon(Icons.check)
                                 : null,
                           );
                         },
                       ),
                     ),
-                    loading: () =>
-                        const Center(child: CircularProgressIndicator()),
+                    loading: () => const Center(child: CircularProgressIndicator()),
                     error: (err, stack) => Text('Error: $err'),
                   ),
                 ],

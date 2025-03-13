@@ -233,20 +233,20 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                             ),
                             child: ElevatedButton.icon(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.surface,
-                                padding:
-                                  const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                backgroundColor: Theme.of(context).colorScheme.surface,
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                               ),
                               icon: RoundedIcon(
-                                  icon: Icons.add_rounded,
-                                  backgroundColor: blue5,
-                                  padding: EdgeInsets.all(5.0),
+                                icon: Icons.add_rounded,
+                                backgroundColor: blue5,
+                                padding: EdgeInsets.all(5.0),
                               ),
                               label: Text(
                                 "New Account",
                                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                      color: isDarkMode ? grey3 : Theme.of(context).colorScheme.secondary,
+                                      color: isDarkMode
+                                          ? grey3
+                                          : Theme.of(context).colorScheme.secondary,
                                     ),
                                 maxLines: 2,
                               ),

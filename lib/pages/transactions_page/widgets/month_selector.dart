@@ -77,7 +77,7 @@ class MonthSelector extends ConsumerWidget with Functions {
                 height: currentHeight,
                 width: height,
                 color: Theme.of(context).colorScheme.primary,
-                child:  Icon(
+                child: Icon(
                   Icons.chevron_left,
                   color: Theme.of(context).colorScheme.primaryContainer,
                 ),
@@ -91,25 +91,25 @@ class MonthSelector extends ConsumerWidget with Functions {
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 if (type == MonthSelectorType.advanced)
-                    RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: numToCurrency(totalAmount),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge!
-                                  .copyWith(color: totalAmount >= 0 ? green : red),
-                            ),
-                            TextSpan(
-                                text: currencyState.selectedCurrency.symbol,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelLarge!
-                                    .copyWith(color: totalAmount >= 0 ? green : red)),
-                          ],
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: numToCurrency(totalAmount),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge!
+                              .copyWith(color: totalAmount >= 0 ? green : red),
                         ),
-                      ),
+                        TextSpan(
+                            text: currencyState.selectedCurrency.symbol,
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge!
+                                .copyWith(color: totalAmount >= 0 ? green : red)),
+                      ],
+                    ),
+                  ),
               ],
             ),
             GestureDetector(

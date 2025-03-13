@@ -47,9 +47,8 @@ class RecurrenceListTile extends ConsumerWidget with Functions {
           trailing: recurrencyEditingPermitted
               ? Switch.adaptive(
                   value: isRecurring,
-                  onChanged: (select) => ref
-                      .read(selectedRecurringPayProvider.notifier)
-                      .state = select,
+                  onChanged: (select) =>
+                      ref.read(selectedRecurringPayProvider.notifier).state = select,
                 )
               : GestureDetector(
                   onTap: () {
@@ -81,47 +80,41 @@ class RecurrenceListTile extends ConsumerWidget with Functions {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Opacity(
-              opacity: selectedTransaction == null || recurrencyEditingPermitted
-                  ? 1.0
-                  : 0.5,
+              opacity: selectedTransaction == null || recurrencyEditingPermitted ? 1.0 : 0.5,
               child: FilledButton(
                 style: FilledButton.styleFrom(
-                  backgroundColor:
-                      Theme.of(context).colorScheme.primaryContainer,
+                  backgroundColor: Theme.of(context).colorScheme.primaryContainer,
                   padding: const EdgeInsets.all(16),
                 ),
-                onPressed:
-                    selectedTransaction == null || recurrencyEditingPermitted
-                        ? () {
-                            FocusManager.instance.primaryFocus?.unfocus();
-                            showModalBottomSheet(
-                              context: context,
-                              builder: (_) => const RecurrenceSelector(),
-                            );
-                          }
-                        : null,
+                onPressed: selectedTransaction == null || recurrencyEditingPermitted
+                    ? () {
+                        FocusManager.instance.primaryFocus?.unfocus();
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (_) => const RecurrenceSelector(),
+                        );
+                      }
+                    : null,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       "Interval",
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.primary),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(color: Theme.of(context).colorScheme.primary),
                     ),
                     const Spacer(),
                     Text(
                       recurrenceMap[ref.watch(intervalProvider)]!.label,
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: isDarkMode
-                              ? grey3
-                              : Theme.of(context).colorScheme.secondary),
+                          color: isDarkMode ? grey3 : Theme.of(context).colorScheme.secondary),
                     ),
                     const SizedBox(width: 6),
                     Icon(
                       Icons.chevron_right,
-                      color: isDarkMode
-                          ? grey3
-                          : Theme.of(context).colorScheme.secondary,
+                      color: isDarkMode ? grey3 : Theme.of(context).colorScheme.secondary,
                     ),
                   ],
                 ),
@@ -131,47 +124,41 @@ class RecurrenceListTile extends ConsumerWidget with Functions {
           Padding(
             padding: const EdgeInsets.all(16),
             child: Opacity(
-              opacity: selectedTransaction == null || recurrencyEditingPermitted
-                  ? 1.0
-                  : 0.5,
+              opacity: selectedTransaction == null || recurrencyEditingPermitted ? 1.0 : 0.5,
               child: FilledButton(
                 style: FilledButton.styleFrom(
-                  backgroundColor:
-                      Theme.of(context).colorScheme.primaryContainer,
+                  backgroundColor: Theme.of(context).colorScheme.primaryContainer,
                   padding: const EdgeInsets.all(16),
                 ),
-                onPressed:
-                    selectedTransaction == null || recurrencyEditingPermitted
-                        ? () => showModalBottomSheet(
-                              context: context,
-                              elevation: 10,
-                              builder: (BuildContext context) {
-                                return const EndDateSelector();
-                              },
-                            )
-                        : null,
+                onPressed: selectedTransaction == null || recurrencyEditingPermitted
+                    ? () => showModalBottomSheet(
+                          context: context,
+                          elevation: 10,
+                          builder: (BuildContext context) {
+                            return const EndDateSelector();
+                          },
+                        )
+                    : null,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       "End repetition",
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.primary),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(color: Theme.of(context).colorScheme.primary),
                     ),
                     const Spacer(),
                     Text(
                       endDate != null ? dateToString(endDate) : "Never",
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: isDarkMode
-                              ? grey3
-                              : Theme.of(context).colorScheme.secondary),
+                          color: isDarkMode ? grey3 : Theme.of(context).colorScheme.secondary),
                     ),
                     const SizedBox(width: 6),
                     Icon(
                       Icons.chevron_right,
-                      color: isDarkMode
-                          ? grey3
-                          : Theme.of(context).colorScheme.secondary,
+                      color: isDarkMode ? grey3 : Theme.of(context).colorScheme.secondary,
                     ),
                   ],
                 ),
@@ -236,9 +223,7 @@ class EndDateSelector extends ConsumerWidget with Functions {
           children: [
             ListTile(
               visualDensity: const VisualDensity(vertical: -3),
-              trailing: ref.watch(endDateProvider) != null
-                  ? null
-                  : const Icon(Icons.check),
+              trailing: ref.watch(endDateProvider) != null ? null : const Icon(Icons.check),
               title: const Text("Never"),
               onTap: () {
                 ref.read(endDateProvider.notifier).state = null;
@@ -248,9 +233,7 @@ class EndDateSelector extends ConsumerWidget with Functions {
             ListTile(
                 visualDensity: const VisualDensity(vertical: -3),
                 title: const Text("On a date"),
-                trailing: ref.watch(endDateProvider) != null
-                    ? const Icon(Icons.check)
-                    : null,
+                trailing: ref.watch(endDateProvider) != null ? const Icon(Icons.check) : null,
                 subtitle: Text(ref.read(endDateProvider) != null
                     ? dateToString(ref.read(endDateProvider.notifier).state!)
                     : ''),

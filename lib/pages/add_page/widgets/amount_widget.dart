@@ -41,8 +41,7 @@ class _AmountWidgetState extends ConsumerState<AmountWidget> with Functions {
                 ),
               ),
         ),
-        keyboardType:
-            const TextInputType.numberWithOptions(decimal: true, signed: true),
+        keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(r'\d*\.?\d{0,2}')),
         ],

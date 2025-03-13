@@ -6,7 +6,8 @@ import '../../../constants/style.dart';
 import '../../../model/budget.dart';
 
 class CategoryButton extends StatelessWidget {
-  const CategoryButton({super.key, required this.categoryColor, required this.categoryName, this.budget});
+  const CategoryButton(
+      {super.key, required this.categoryColor, required this.categoryName, this.budget});
 
   final Color categoryColor;
   final String categoryName;
@@ -14,7 +15,7 @@ class CategoryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if(budget != null && budget!.active && budget!.amountLimit > 0) {
+    if (budget != null && budget!.active && budget!.amountLimit > 0) {
       return Container(
         decoration: BoxDecoration(
           border: Border.all(color: categoryColor, width: 2.5),
@@ -30,8 +31,7 @@ class CategoryButton extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               padding: const EdgeInsets.all(2),
-              child:
-              Icon(Icons.check_rounded, color: categoryColor, size: 22),
+              child: Icon(Icons.check_rounded, color: categoryColor, size: 22),
             ),
             const SizedBox(width: 10),
             Padding(
@@ -43,10 +43,7 @@ class CategoryButton extends StatelessWidget {
                   Text(
                     categoryName,
                     textAlign: TextAlign.left,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge
-                        ?.copyWith(color: white),
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: white),
                   ),
                   Text("BUDGET: ${budget?.amountLimit}€",
                       style: Theme.of(context)
@@ -73,8 +70,7 @@ class CategoryButton extends StatelessWidget {
           children: [
             const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Icon(Icons.add_circle_outline_outlined,
-                    size: 30, color: blue1)),
+                child: Icon(Icons.add_circle_outline_outlined, size: 30, color: blue1)),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Column(
@@ -86,8 +82,7 @@ class CategoryButton extends StatelessWidget {
                     textAlign: TextAlign.left,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                  Text("ADD BUDGET",
-                      style: Theme.of(context).textTheme.labelMedium),
+                  Text("ADD BUDGET", style: Theme.of(context).textTheme.labelMedium),
                 ],
               ),
             ),

@@ -34,8 +34,7 @@ class CategoryLabel extends ConsumerWidget {
           text: TextSpan(
             children: [
               TextSpan(
-                text:
-                    "${amount.toStringAsFixed(2)}${currencyState.selectedCurrency.symbol}    ",
+                text: "${amount.toStringAsFixed(2)}${currencyState.selectedCurrency.symbol}    ",
                 style: Theme.of(context)
                     .textTheme
                     .bodySmall

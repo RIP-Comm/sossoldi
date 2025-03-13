@@ -20,6 +20,7 @@ class _CategoryListState extends ConsumerState<CategoryList> with Functions {
   Widget build(BuildContext context) {
     final categorysList = ref.watch(categoriesProvider);
     ref.listen(selectedCategoryProvider, (_, __) {});
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -42,8 +43,10 @@ class _CategoryListState extends ConsumerState<CategoryList> with Functions {
         child: Column(
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(
+                vertical: 24.0,
+                horizontal: 16.0,
+              ),
               child: Row(
                 children: [
                   Container(
@@ -74,22 +77,19 @@ class _CategoryListState extends ConsumerState<CategoryList> with Functions {
                 itemCount: categorys.length,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: 16),
+                separatorBuilder: (_, __) => const SizedBox(height: 16),
                 itemBuilder: (context, i) {
                   CategoryTransaction category = categorys[i];
                   return DefaultCard(
                     onTap: () {
-                      ref.read(selectedCategoryProvider.notifier).state =
-                          category;
+                      ref.read(selectedCategoryProvider.notifier).state = category;
                       Navigator.of(context).pushNamed('/add-category');
                     },
                     child: Row(
                       children: [
                         RoundedIcon(
                           icon: iconList[category.symbol],
-                          backgroundColor:
-                              categoryColorListTheme[category.color],
+                          backgroundColor: categoryColorListTheme[category.color],
                           size: 30,
                         ),
                         const SizedBox(width: 12.0),
@@ -98,8 +98,7 @@ class _CategoryListState extends ConsumerState<CategoryList> with Functions {
                           style: Theme.of(context)
                               .textTheme
                               .titleLarge!
-                              .copyWith(
-                                  color: Theme.of(context).colorScheme.primary),
+                              .copyWith(color: Theme.of(context).colorScheme.primary),
                         ),
                       ],
                     ),

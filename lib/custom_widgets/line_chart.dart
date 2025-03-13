@@ -18,8 +18,7 @@ class LineChartWidget extends StatefulWidget {
 
   // Used to decide the bottom label
   final Period period;
-  final int currentMonthDays =
-      DateUtils.getDaysInMonth(DateTime.now().year, DateTime.now().month);
+  final int currentMonthDays = DateUtils.getDaysInMonth(DateTime.now().year, DateTime.now().month);
   final int nXLabel = 10;
   final double minY;
 
@@ -88,8 +87,7 @@ class _LineChartSample2State extends State<LineChartWidget> {
               padding: const EdgeInsets.only(top: 24),
               child: Builder(
                 builder: (context) {
-                  if (widget.lineData.length < 2 &&
-                      widget.line2Data.length < 2) {
+                  if (widget.lineData.length < 2 && widget.line2Data.length < 2) {
                     return Center(
                       child: Text(
                         "We are sorry but there are not\nenough data to make the graph...",
@@ -158,8 +156,7 @@ class _LineChartSample2State extends State<LineChartWidget> {
         break;
       case Period.month:
         int step = (widget.currentMonthDays / widget.nXLabel).round();
-        if (value.toInt() % step == 1 &&
-            value.toInt() != widget.currentMonthDays) {
+        if (value.toInt() % step == 1 && value.toInt() != widget.currentMonthDays) {
           text = Text((value + 1).toStringAsFixed(0), style: style);
         } else {
           text = Text('', style: style);
@@ -198,8 +195,7 @@ class _LineChartSample2State extends State<LineChartWidget> {
       ),
       gridData: const FlGridData(show: false),
       lineTouchData: LineTouchData(
-        getTouchedSpotIndicator:
-            (LineChartBarData barData, List<int> spotIndexes) {
+        getTouchedSpotIndicator: (LineChartBarData barData, List<int> spotIndexes) {
           bool allSameX = spotIndexes.toSet().length == 1;
 
           if (!allSameX) {
@@ -235,8 +231,7 @@ class _LineChartSample2State extends State<LineChartWidget> {
 
             double x = touchedBarSpots[0].x;
             DateTime date = widget.period == Period.month
-                ? DateTime(
-                    DateTime.now().year, DateTime.now().month, (x + 1).toInt())
+                ? DateTime(DateTime.now().year, DateTime.now().month, (x + 1).toInt())
                 : DateTime(DateTime.now().year, (x + 1).toInt(), 1);
             String dateFormat = widget.period == Period.month
                 ? DateFormat(DateFormat.ABBR_MONTH_DAY).format(date)

@@ -42,8 +42,7 @@ class _StructureState extends ConsumerState<Structure> {
       // Prevent the fab moving up when the keyboard is opened
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor:
-            selectedIndex == 0 ? Theme.of(context).colorScheme.tertiary : null,
+        backgroundColor: selectedIndex == 0 ? Theme.of(context).colorScheme.tertiary : null,
         title: Text(
           _pagesTitle.elementAt(selectedIndex),
         ),
@@ -74,14 +73,17 @@ class _StructureState extends ConsumerState<Structure> {
         selectedFontSize: 8,
         unselectedFontSize: 8,
         currentIndex: selectedIndex,
-        onTap: (index) => index != 2 ? ref.read(selectedIndexProvider.notifier).state = index : null,
+        onTap: (index) =>
+            index != 2 ? ref.read(selectedIndexProvider.notifier).state = index : null,
         items: [
           BottomNavigationBarItem(
             icon: Icon(selectedIndex == 0 ? Icons.home : Icons.home_outlined),
             label: "DASHBOARD",
           ),
           BottomNavigationBarItem(
-            icon: Icon(selectedIndex == 1 ? Icons.swap_horizontal_circle : Icons.swap_horizontal_circle_outlined),
+            icon: Icon(selectedIndex == 1
+                ? Icons.swap_horizontal_circle
+                : Icons.swap_horizontal_circle_outlined),
             label: "TRANSACTIONS",
           ),
           const BottomNavigationBarItem(icon: Text(""), label: ""),
@@ -90,7 +92,8 @@ class _StructureState extends ConsumerState<Structure> {
             label: "PLANNING",
           ),
           BottomNavigationBarItem(
-            icon: Icon(selectedIndex == 4 ? Icons.data_exploration : Icons.data_exploration_outlined),
+            icon:
+                Icon(selectedIndex == 4 ? Icons.data_exploration : Icons.data_exploration_outlined),
             label: "GRAPHS",
           ),
         ],

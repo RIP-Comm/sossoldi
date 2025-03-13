@@ -24,8 +24,7 @@ class CategoriesCardState extends ConsumerState<CategoriesCard> {
   @override
   Widget build(BuildContext context) {
     final categoryMap = ref.watch(categoryMapProvider);
-    final categoryTotalAmount =
-        ref.watch(categoryTotalAmountProvider).value ?? 0;
+    final categoryTotalAmount = ref.watch(categoryTotalAmountProvider).value ?? 0;
 
     return Column(
       children: [
@@ -49,8 +48,7 @@ class CategoriesCardState extends ConsumerState<CategoriesCard> {
                         )
                       : const NoTransactionsContent();
                 },
-                loading: () => LoadingContentWidget(
-                    previousCategoriesCount: _categoriesCount),
+                loading: () => LoadingContentWidget(previousCategoriesCount: _categoriesCount),
                 error: (e, s) => Text("Error: $e"),
               ),
             ],

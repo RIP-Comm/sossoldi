@@ -7,8 +7,7 @@ import '../../../../constants/style.dart';
 import '../../../../providers/categories_provider.dart';
 import '../../../../providers/transactions_provider.dart';
 
-final highlightedMonthProvider =
-    StateProvider<int>((ref) => DateTime.now().month - 1);
+final highlightedMonthProvider = StateProvider<int>((ref) => DateTime.now().month - 1);
 
 class CategoriesBarChart extends ConsumerWidget {
   const CategoriesBarChart({super.key});
@@ -34,13 +33,10 @@ class CategoriesBarChart extends ConsumerWidget {
         ),
         monthlyTotals.when(
           data: (totals) {
-            final maxAmount = totals.isNotEmpty
-                ? totals.reduce((a, b) => a > b ? a : b)
-                : 1.0;
+            final maxAmount = totals.isNotEmpty ? totals.reduce((a, b) => a > b ? a : b) : 1.0;
 
             final average = totals.isNotEmpty
-                ? totals.reduce((a, b) => a + b) /
-                    totals.where((total) => total > 0).length
+                ? totals.reduce((a, b) => a + b) / totals.where((total) => total > 0).length
                 : 0.0;
 
             return SizedBox(
@@ -74,7 +70,7 @@ class CategoriesBarChart extends ConsumerWidget {
             );
           },
           loading: () => const SizedBox.shrink(),
-          error: (error, stack) => Text('$error'),
+          error: (error, _) => Text('$error'),
         ),
       ],
     );
@@ -90,12 +86,10 @@ class CategoriesBarChart extends ConsumerWidget {
       topRight: Radius.circular(5),
     );
 
-    final maxAmount =
-        totals.isNotEmpty ? totals.reduce((a, b) => a > b ? a : b) : 1.0;
+    final maxAmount = totals.isNotEmpty ? totals.reduce((a, b) => a > b ? a : b) : 1.0;
 
     return List.generate(12, (index) {
-      final barHeight =
-          maxAmount > 0 ? (totals[index] / maxAmount) * 200.0 : 0.0;
+      final barHeight = maxAmount > 0 ? (totals[index] / maxAmount) * 200.0 : 0.0;
       final isHighlighted = index == highlightedMonth;
 
       return BarChartGroupData(
@@ -105,8 +99,7 @@ class CategoriesBarChart extends ConsumerWidget {
             toY: barHeight,
             width: 20,
             borderRadius: rodBorderRadius,
-            color:
-                isHighlighted ? Theme.of(context).colorScheme.secondary : grey2,
+            color: isHighlighted ? Theme.of(context).colorScheme.secondary : grey2,
           ),
         ],
       );
@@ -124,8 +117,7 @@ class CategoriesBarChart extends ConsumerWidget {
               padding: const EdgeInsets.only(top: 6.0),
               child: Text(
                 DateFormat('MMM').format(DateTime(0, value.toInt() + 1)),
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary, fontSize: 10),
+                style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 10),
               ),
             );
           },
@@ -150,16 +142,12 @@ class CategoriesBarChart extends ConsumerWidget {
       touchTooltipData: BarTouchTooltipData(
         tooltipPadding: EdgeInsets.zero,
         tooltipMargin: 0,
-        getTooltipItem: (group, groupIndex, rod, rodIndex) =>
-            null, // Hidden tooltip
+        getTooltipItem: (group, groupIndex, rod, rodIndex) => null, // Hidden tooltip
       ),
       touchCallback: (event, response) {
-        if (response != null &&
-            response.spot != null &&
-            event is FlTapUpEvent) {
+        if (response != null && response.spot != null && event is FlTapUpEvent) {
           final selectedMonthIndex = response.spot!.touchedBarGroup.x;
-          ref.read(highlightedMonthProvider.notifier).state =
-              selectedMonthIndex;
+          ref.read(highlightedMonthProvider.notifier).state = selectedMonthIndex;
           _updateSelectedMonth(ref, currentYear, selectedMonthIndex);
         }
       },

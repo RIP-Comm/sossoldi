@@ -59,10 +59,8 @@ class CategoriesPieChart extends ConsumerWidget with Functions {
             children: [
               (selectedCategory != null)
                   ? RoundedIcon(
-                      icon: iconList[selectedCategory.symbol] ??
-                          Icons.swap_horiz_rounded,
-                      backgroundColor:
-                          categoryColorList[selectedCategory.color],
+                      icon: iconList[selectedCategory.symbol] ?? Icons.swap_horiz_rounded,
+                      backgroundColor: categoryColorList[selectedCategory.color],
                       padding: const EdgeInsets.all(8.0),
                     )
                   : const SizedBox(),
@@ -71,15 +69,12 @@ class CategoriesPieChart extends ConsumerWidget with Functions {
                     ? "${amounts[selectedCategory.id]!.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}"
                     : "${total.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}",
                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                    color: ((selectedCategory != null &&
-                                amounts[selectedCategory.id]! > 0) ||
+                    color: ((selectedCategory != null && amounts[selectedCategory.id]! > 0) ||
                             (selectedCategory == null && total > 0))
                         ? green
                         : red),
               ),
-              (selectedCategory != null)
-                  ? Text(selectedCategory.name)
-                  : const Text("Total"),
+              (selectedCategory != null) ? Text(selectedCategory.name) : const Text("Total"),
             ],
           ),
         ],

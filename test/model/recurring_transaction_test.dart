@@ -16,8 +16,7 @@ void main() {
         idBankAccount: 34,
         idCategory: 24,
         createdAt: DateTime.utc(2022),
-        updatedAt: DateTime.utc(2022)
-    );
+        updatedAt: DateTime.utc(2022));
 
     RecurringTransaction tCopy = t.copy(id: 10, toDate: toDateValue);
 

@@ -36,10 +36,7 @@ class NonEditableDetailsListTile extends DetailsListTile {
         children: [
           Text(
             value ?? '',
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall!
-                .copyWith(color: Colors.grey),
+            style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.grey),
           ),
           const SizedBox(width: 6.0)
         ],

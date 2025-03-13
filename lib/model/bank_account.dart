@@ -54,16 +54,17 @@ class BankAccount extends BaseEntity {
     super.updatedAt,
   });
 
-  BankAccount copy(
-          {int? id,
-          String? name,
-          String? symbol,
-          int? color,
-          num? startingValue,
-          bool? active,
-          bool? mainAccount,
-          DateTime? createdAt,
-          DateTime? updatedAt,}) =>
+  BankAccount copy({
+    int? id,
+    String? name,
+    String? symbol,
+    int? color,
+    num? startingValue,
+    bool? active,
+    bool? mainAccount,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) =>
       BankAccount(
           id: id ?? this.id,
           name: name ?? this.name,
@@ -74,8 +75,7 @@ class BankAccount extends BaseEntity {
           mainAccount: mainAccount ?? this.mainAccount,
           createdAt: createdAt ?? this.createdAt,
           updatedAt: updatedAt ?? this.updatedAt,
-          total: total
-          );
+          total: total);
 
   static BankAccount fromJson(Map<String, Object?> json) => BankAccount(
       id: json[BaseEntityFields.id] as int,
@@ -152,7 +152,8 @@ class BankAccountMethods extends SossoldiDatabase {
 
     final orderByASC = '${BankAccountFields.createdAt} ASC';
     final where = '${BankAccountFields.active} = 1 ';
-    final recurringFilter = '(t.${TransactionFields.recurring} = 0 OR t.${TransactionFields.recurring} IS NULL)';
+    final recurringFilter =
+        '(t.${TransactionFields.recurring} = 0 OR t.${TransactionFields.recurring} IS NULL)';
 
     final result = await db.rawQuery('''
       SELECT b.*, (b.${BankAccountFields.startingValue} +

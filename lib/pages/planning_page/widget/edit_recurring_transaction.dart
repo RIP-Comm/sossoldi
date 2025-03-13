@@ -15,29 +15,26 @@ class EditRecurringTransaction extends ConsumerStatefulWidget {
   const EditRecurringTransaction({super.key});
 
   @override
-  ConsumerState<EditRecurringTransaction> createState() =>
-      _EditRecurringTransactionState();
+  ConsumerState<EditRecurringTransaction> createState() => _EditRecurringTransactionState();
 }
 
-class _EditRecurringTransactionState
-    extends ConsumerState<EditRecurringTransaction> with Functions {
+class _EditRecurringTransactionState extends ConsumerState<EditRecurringTransaction>
+    with Functions {
   final TextEditingController amountController = TextEditingController();
   final TextEditingController noteController = TextEditingController();
 
   @override
   void initState() {
-    amountController.text = numToCurrency(
-        ref.read(selectedRecurringTransactionUpdateProvider)?.amount);
-    noteController.text =
-        ref.read(selectedRecurringTransactionUpdateProvider)?.note ?? '';
+    amountController.text =
+        numToCurrency(ref.read(selectedRecurringTransactionUpdateProvider)?.amount);
+    noteController.text = ref.read(selectedRecurringTransactionUpdateProvider)?.note ?? '';
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final selectedRecurringTransaction =
-        ref.watch(selectedRecurringTransactionUpdateProvider);
+    final selectedRecurringTransaction = ref.watch(selectedRecurringTransactionUpdateProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -59,8 +56,7 @@ class _EditRecurringTransactionState
                     onPressed: () async {
                       ref
                           .read(transactionsProvider.notifier)
-                          .deleteRecurringTransaction(
-                              selectedRecurringTransaction.id!)
+                          .deleteRecurringTransaction(selectedRecurringTransaction.id!)
                           .whenComplete(() {
                         if (context.mounted) {
                           Navigator.pop(context);
@@ -169,8 +165,7 @@ class _EditRecurringTransactionState
                     ref
                         .read(transactionsProvider.notifier)
                         .updateRecurringTransaction(
-                            currencyToNum(amountController.text),
-                            noteController.text)
+                            currencyToNum(amountController.text), noteController.text)
                         .whenComplete(() {
                       if (context.mounted) {
                         Navigator.of(context).pop();
@@ -179,13 +174,14 @@ class _EditRecurringTransactionState
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.secondary,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   ),
                   child: Text(
                     "UPDATE TRANSACTION",
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimary),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge!
+                        .copyWith(color: Theme.of(context).colorScheme.onPrimary),
                   ),
                 ),
               ),

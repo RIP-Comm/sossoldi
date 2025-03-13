@@ -72,11 +72,13 @@ class _TransactionsListState extends State<TransactionsList> with Functions {
                 // Group transactions by month
                 final dates = totals.keys.toList()..sort((a, b) => b.compareTo(a));
                 final currentDate = dates[monthIndex];
-                final dateTransactions = transactions.where((t) => t.date.toYMD() == currentDate).toList();
+                final dateTransactions =
+                    transactions.where((t) => t.date.toYMD() == currentDate).toList();
 
                 return Column(
                   children: [
-                    TransactionTitle(date: DateTime.parse(currentDate), total: totals[currentDate] ?? 0),
+                    TransactionTitle(
+                        date: DateTime.parse(currentDate), total: totals[currentDate] ?? 0),
                     Container(
                       decoration: BoxDecoration(
                         color: Theme.of(context).scaffoldBackgroundColor,
@@ -89,7 +91,8 @@ class _TransactionsListState extends State<TransactionsList> with Functions {
                           separatorBuilder: (_, __) => Divider(
                                 color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.4),
                               ),
-                          itemBuilder: (context, index) => TransactionTile(transaction: dateTransactions[index])),
+                          itemBuilder: (context, index) =>
+                              TransactionTile(transaction: dateTransactions[index])),
                     ),
                   ],
                 );
@@ -115,15 +118,20 @@ class TransactionTile extends ConsumerWidget with Functions {
       dense: true,
       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       onTap: () {
-        ref.read(transactionsProvider.notifier).transactionUpdateState(transaction).whenComplete(() {
+        ref
+            .read(transactionsProvider.notifier)
+            .transactionUpdateState(transaction)
+            .whenComplete(() {
           if (context.mounted) {
-            Navigator.of(context)
-                .pushNamed("/add-page", arguments: {'recurrencyEditingPermitted': !transaction.recurring});
+            Navigator.of(context).pushNamed("/add-page",
+                arguments: {'recurrencyEditingPermitted': !transaction.recurring});
           }
         });
       },
       leading: RoundedIcon(
-        icon: transaction.categorySymbol != null ? iconList[transaction.categorySymbol] : Icons.swap_horiz_rounded,
+        icon: transaction.categorySymbol != null
+            ? iconList[transaction.categorySymbol]
+            : Icons.swap_horiz_rounded,
         backgroundColor: transaction.categoryColor != null
             ? categoryColorListTheme[transaction.categoryColor!]
             : Theme.of(context).colorScheme.secondary,
@@ -209,7 +217,10 @@ class TransactionTitle extends ConsumerWidget with Functions {
         children: [
           Text(
             dateToString(date),
-            style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).colorScheme.primary),
+            style: Theme.of(context)
+                .textTheme
+                .bodySmall!
+                .copyWith(color: Theme.of(context).colorScheme.primary),
           ),
           const Spacer(),
           Text(

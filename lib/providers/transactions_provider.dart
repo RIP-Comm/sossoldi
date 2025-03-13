@@ -31,7 +31,8 @@ final endDateProvider = StateProvider<DateTime?>((ref) => null);
 
 // Set when a transaction is selected for update
 final selectedTransactionUpdateProvider = StateProvider<Transaction?>((ref) => null);
-final selectedRecurringTransactionUpdateProvider = StateProvider<RecurringTransaction?>((ref) => null);
+final selectedRecurringTransactionUpdateProvider =
+    StateProvider<RecurringTransaction?>((ref) => null);
 
 // Amount total for the transactions filtered
 final totalAmountProvider = StateProvider<num>((ref) => 0);
@@ -69,8 +70,8 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
     }
     final dateStart = ref.watch(filterDateStartProvider);
     final dateEnd = ref.watch(filterDateEndProvider);
-    final transactions =
-        await TransactionMethods().selectAll(dateRangeStart: dateStart, dateRangeEnd: dateEnd, limit: limit);
+    final transactions = await TransactionMethods()
+        .selectAll(dateRangeStart: dateStart, dateRangeEnd: dateEnd, limit: limit);
 
     ref.read(totalAmountProvider.notifier).state = transactions.fold<num>(
         0,
@@ -85,7 +86,8 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
   Future<List<Transaction>> getMonthlyTransactions() async {
     final now = DateTime.now();
     final firstDayOfMonth = DateTime(now.year, now.month, 1);
-    final transactions = await TransactionMethods().selectAll(dateRangeStart: firstDayOfMonth, dateRangeEnd: now);
+    final transactions =
+        await TransactionMethods().selectAll(dateRangeStart: firstDayOfMonth, dateRangeEnd: now);
 
     return transactions;
   }
@@ -230,17 +232,22 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
       }
       ref.read(bankAccountProvider.notifier).state =
           accountList.value!.firstWhere((element) => element.id == transaction.idBankAccount);
-      ref.read(bankAccountTransferProvider.notifier).state = transaction.type == TransactionType.transfer
-          ? accountList.value!.firstWhere((element) => element.id == transaction.idBankAccountTransfer)
-          : null;
+      ref.read(bankAccountTransferProvider.notifier).state =
+          transaction.type == TransactionType.transfer
+              ? accountList.value!
+                  .firstWhere((element) => element.id == transaction.idBankAccountTransfer)
+              : null;
       ref.read(transactionTypeProvider.notifier).state = transaction.type;
       ref.read(dateProvider.notifier).state = transaction.date;
     } else if (transaction is RecurringTransaction) {
       ref.read(selectedRecurringTransactionUpdateProvider.notifier).state = transaction;
       ref.read(selectedRecurringPayProvider.notifier).state = true;
-      ref.read(categoryProvider.notifier).state = await CategoryTransactionMethods().selectById(transaction.idCategory);
-      ref.read(bankAccountProvider.notifier).state =
-          ref.watch(accountsProvider).value!.firstWhere((element) => element.id == transaction.idBankAccount);
+      ref.read(categoryProvider.notifier).state =
+          await CategoryTransactionMethods().selectById(transaction.idCategory);
+      ref.read(bankAccountProvider.notifier).state = ref
+          .watch(accountsProvider)
+          .value!
+          .firstWhere((element) => element.id == transaction.idBankAccount);
       ref.read(intervalProvider.notifier).state = parseRecurrence(transaction.recurrency);
       ref.read(endDateProvider.notifier).state = transaction.toDate;
     }
@@ -283,6 +290,7 @@ class AsyncTransactionsNotifier extends AutoDisposeAsyncNotifier<List<Transactio
   }
 }
 
-final transactionsProvider = AsyncNotifierProvider.autoDispose<AsyncTransactionsNotifier, List<Transaction>>(() {
+final transactionsProvider =
+    AsyncNotifierProvider.autoDispose<AsyncTransactionsNotifier, List<Transaction>>(() {
   return AsyncTransactionsNotifier();
 });

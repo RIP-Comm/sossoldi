@@ -115,7 +115,8 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                             keyboardType: TextInputType.number,
                             inputFormatters: <TextInputFormatter>[
                               FilteringTextInputFormatter.allow(
-                                RegExp(r'^\d*\.?\d{0,2}'),),
+                                RegExp(r'^\d*\.?\d{0,2}'),
+                              ),
                             ],
                           ),
                           const SizedBox(height: 16),
@@ -133,10 +134,10 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                                       backgroundColor: Colors.green),
                                   onPressed: () async {
                                     if (account != null) {
-                                        await ref.read(accountsProvider.notifier).reconcileAccount(
-                                          newBalance: currencyToNum(_newBalanceController.text), account: account
-                                        );
-                                        if (context.mounted) Navigator.of(context).pop();
+                                      await ref.read(accountsProvider.notifier).reconcileAccount(
+                                          newBalance: currencyToNum(_newBalanceController.text),
+                                          account: account);
+                                      if (context.mounted) Navigator.of(context).pop();
                                     }
                                   },
                                   label: const Text("Save"),

@@ -162,7 +162,8 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                                     crossAxisCount: 6,
                                   ),
                                   itemBuilder: (context, index) {
-                                    IconData accountIconData = accountIconList.values.elementAt(index);
+                                    IconData accountIconData =
+                                        accountIconList.values.elementAt(index);
                                     String accountIconName = accountIconList.keys.elementAt(index);
                                     return GestureDetector(
                                       onTap: () => setState(() => accountIcon = accountIconName),
@@ -317,8 +318,10 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                       width: double.infinity,
                       padding: const EdgeInsets.all(16),
                       child: TextButton.icon(
-                        onPressed: () =>
-                            ref.read(accountsProvider.notifier).removeAccount(selectedAccount.id!).whenComplete(() {
+                        onPressed: () => ref
+                            .read(accountsProvider.notifier)
+                            .removeAccount(selectedAccount.id!)
+                            .whenComplete(() {
                           if (context.mounted) {
                             Navigator.of(context).pop();
                           }

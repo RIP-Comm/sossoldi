@@ -23,9 +23,7 @@ class LinearProgressBar extends StatelessWidget {
     final brightness = Theme.of(context).brightness;
     final isDarkMode = brightness == Brightness.dark;
     final colorList = isDarkMode
-        ? (type == BarType.account
-            ? darkAccountColorList
-            : darkCategoryColorList)
+        ? (type == BarType.account ? darkAccountColorList : darkCategoryColorList)
         : (type == BarType.account ? accountColorList : categoryColorList);
 
     return ClipRRect(

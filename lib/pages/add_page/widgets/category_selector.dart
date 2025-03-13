@@ -21,13 +21,11 @@ class CategorySelector extends ConsumerStatefulWidget {
   ConsumerState<CategorySelector> createState() => _CategorySelectorState();
 }
 
-class _CategorySelectorState extends ConsumerState<CategorySelector>
-    with Functions {
+class _CategorySelectorState extends ConsumerState<CategorySelector> with Functions {
   @override
   Widget build(BuildContext context) {
     final transactionType = ref.watch(transactionTypeProvider);
-    final categoryType =
-        ref.watch(transactionToCategoryProvider(transactionType));
+    final categoryType = ref.watch(transactionToCategoryProvider(transactionType));
     final categoriesList = ref.watch(categoriesByTypeProvider(categoryType));
 
     return Container(
@@ -39,8 +37,7 @@ class _CategorySelectorState extends ConsumerState<CategorySelector>
             title: const Text("Category"),
             actions: [
               IconButton(
-                onPressed: () =>
-                    Navigator.of(context).pushNamed('/add-category'),
+                onPressed: () => Navigator.of(context).pushNamed('/add-category'),
                 icon: const Icon(Icons.add_circle),
                 splashRadius: 28,
               ),
@@ -53,12 +50,13 @@ class _CategorySelectorState extends ConsumerState<CategorySelector>
                 children: [
                   Container(
                     alignment: Alignment.centerLeft,
-                    padding:
-                        const EdgeInsets.only(left: 16, top: 32, bottom: 8),
+                    padding: const EdgeInsets.only(left: 16, top: 32, bottom: 8),
                     child: Text(
                       "MORE FREQUENT",
-                      style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.primary),
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge!
+                          .copyWith(color: Theme.of(context).colorScheme.primary),
                     ),
                   ),
                   Container(
@@ -74,30 +72,24 @@ class _CategorySelectorState extends ConsumerState<CategorySelector>
                           CategoryTransaction category = categories[i];
                           return GestureDetector(
                             onTap: () => {
-                              ref.read(categoryProvider.notifier).state =
-                                  category,
+                              ref.read(categoryProvider.notifier).state = category,
                               Navigator.of(context).pop(),
                             },
                             child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16.0),
+                              padding: const EdgeInsets.symmetric(horizontal: 16.0),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   RoundedIcon(
                                     icon: iconList[category.symbol],
-                                    backgroundColor:
-                                        categoryColorListTheme[category.color],
+                                    backgroundColor: categoryColorListTheme[category.color],
                                   ),
                                   Text(
                                     category.name,
                                     style: Theme.of(context)
                                         .textTheme
                                         .labelLarge!
-                                        .copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary),
+                                        .copyWith(color: Theme.of(context).colorScheme.primary),
                                   ),
                                 ],
                               ),
@@ -105,19 +97,19 @@ class _CategorySelectorState extends ConsumerState<CategorySelector>
                           );
                         },
                       ),
-                      loading: () =>
-                          const Center(child: CircularProgressIndicator()),
+                      loading: () => const Center(child: CircularProgressIndicator()),
                       error: (err, stack) => Text('Error: $err'),
                     ),
                   ),
                   Container(
                     alignment: Alignment.centerLeft,
-                    padding:
-                        const EdgeInsets.only(left: 16, top: 32, bottom: 8),
+                    padding: const EdgeInsets.only(left: 16, top: 32, bottom: 8),
                     child: Text(
                       "ALL CATEGORIES",
-                      style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.primary),
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge!
+                          .copyWith(color: Theme.of(context).colorScheme.primary),
                     ),
                   ),
                   categoriesList.when(
@@ -133,25 +125,20 @@ class _CategorySelectorState extends ConsumerState<CategorySelector>
                         itemBuilder: (context, i) {
                           CategoryTransaction category = categories[i];
                           return ListTile(
-                            onTap: () => ref
-                                .read(categoryProvider.notifier)
-                                .state = category,
+                            onTap: () => ref.read(categoryProvider.notifier).state = category,
                             leading: RoundedIcon(
                               icon: iconList[category.symbol],
-                              backgroundColor:
-                                  categoryColorListTheme[category.color],
+                              backgroundColor: categoryColorListTheme[category.color],
                             ),
                             title: Text(category.name),
-                            trailing: ref.watch(categoryProvider)?.id ==
-                                    category.id
+                            trailing: ref.watch(categoryProvider)?.id == category.id
                                 ? Icon(Icons.check)
                                 : null,
                           );
                         },
                       ),
                     ),
-                    loading: () =>
-                        const Center(child: CircularProgressIndicator()),
+                    loading: () => const Center(child: CircularProgressIndicator()),
                     error: (err, stack) => Text('Error: $err'),
                   ),
                 ],

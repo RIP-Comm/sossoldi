@@ -21,8 +21,7 @@ class GraphsPage extends ConsumerStatefulWidget {
 class _GraphsPageState extends ConsumerState<GraphsPage> with Functions {
   @override
   Widget build(BuildContext context) {
-    final currentYearMonthlyTransactions =
-        ref.watch(currentYearMontlyTransactionsProvider);
+    final currentYearMonthlyTransactions = ref.watch(currentYearMontlyTransactionsProvider);
     final currencyState = ref.watch(currencyStateNotifier);
 
     return ListView(
@@ -36,8 +35,7 @@ class _GraphsPageState extends ConsumerState<GraphsPage> with Functions {
                               currentYearMonthlyTransactions[
                                       currentYearMonthlyTransactions.length - 2]
                                   .y) /
-                          currentYearMonthlyTransactions[
-                                  currentYearMonthlyTransactions.length - 2]
+                          currentYearMonthlyTransactions[currentYearMonthlyTransactions.length - 2]
                               .y) *
                       100;
                 }
@@ -54,46 +52,30 @@ class _GraphsPageState extends ConsumerState<GraphsPage> with Functions {
                             children: [
                               Text(
                                 "Available liquidity",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge
-                                    ?.copyWith(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
+                                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                      color: Theme.of(context).colorScheme.primary,
                                     ),
                               ),
                               RichText(
                                 text: TextSpan(
                                   children: [
                                     TextSpan(
-                                      text: currentYearMonthlyTransactions
-                                              .isNotEmpty
-                                          ? numToCurrency(
-                                              currentYearMonthlyTransactions
-                                                  .last.y)
+                                      text: currentYearMonthlyTransactions.isNotEmpty
+                                          ? numToCurrency(currentYearMonthlyTransactions.last.y)
                                           : '0',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headlineLarge
-                                          ?.copyWith(
+                                      style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                                             color: typeToColor(
                                               TransactionType.transfer,
-                                              brightness:
-                                                  Theme.of(context).brightness,
+                                              brightness: Theme.of(context).brightness,
                                             ),
                                           ),
                                     ),
                                     TextSpan(
-                                      text:
-                                          currencyState.selectedCurrency.symbol,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelLarge
-                                          ?.copyWith(
+                                      text: currencyState.selectedCurrency.symbol,
+                                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
                                             color: typeToColor(
                                               TransactionType.transfer,
-                                              brightness:
-                                                  Theme.of(context).brightness,
+                                              brightness: Theme.of(context).brightness,
                                             ),
                                           ),
                                     ),
@@ -113,12 +95,8 @@ class _GraphsPageState extends ConsumerState<GraphsPage> with Functions {
                                 padding: const EdgeInsets.all(4.0),
                                 child: Text(
                                   "${numToCurrency(percentGainLoss)}%",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(
-                                        color:
-                                            percentGainLoss < 0 ? red : green,
+                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                        color: percentGainLoss < 0 ? red : green,
                                         fontWeight: FontWeight.w600,
                                       ),
                                 ),

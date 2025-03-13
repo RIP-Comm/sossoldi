@@ -142,7 +142,6 @@ class SossoldiDatabase {
         ("CHF", "CHF", "Switzerland Franc", 0),
         ("£", "GBP", "United Kingdom Pound", 0);
     ''');
-
   }
 
   Future<String> exportToCSV() async {
@@ -251,7 +250,8 @@ class SossoldiDatabase {
             for (int i = 1; i < tableRows.length; i++) {
               final Map<String, dynamic> row = {};
               for (int j = 0; j < headers.length; j++) {
-                if (j != tableNameIndex) { // Skip the table_name column
+                if (j != tableNameIndex) {
+                  // Skip the table_name column
                   final String header = headers[j];
                   final dynamic value = tableRows[i][j];
 
@@ -371,8 +371,7 @@ class SossoldiDatabase {
       if (rnd.nextInt(10) < 8) {
         randomAmount = rnd.nextDouble() * (19.99 - 1) + 1;
       } else {
-        randomAmount =
-            rnd.nextDouble() * (maxAmountOfSingleTransaction - 100) + 100;
+        randomAmount = rnd.nextDouble() * (maxAmountOfSingleTransaction - 100) + 100;
       }
 
       var randomType = 'OUT';
@@ -381,9 +380,7 @@ class SossoldiDatabase {
       var randomCategory = categories[rnd.nextInt(categories.length)];
       int? idBankAccountTransfer;
       DateTime randomDate = now.subtract(Duration(
-          days: rnd.nextInt(dateInPastMaxRange),
-          hours: rnd.nextInt(20),
-          minutes: rnd.nextInt(50)));
+          days: rnd.nextInt(dateInPastMaxRange), hours: rnd.nextInt(20), minutes: rnd.nextInt(50)));
 
       if (i % (countOfGeneratedTransaction / 100) == 0) {
         // simulating a transfer every 1% of total iterations
@@ -410,15 +407,14 @@ class SossoldiDatabase {
     for (int i = 1; i < dateInPastMaxRange / 30; i++) {
       DateTime randomDate = now.subtract(Duration(days: 30 * i));
       var time = randomDate.toLocal();
-      DateTime salaryDateTime = DateTime(time.year, time.month, 27, time.hour,
-          time.minute, time.second, time.millisecond, time.microsecond);
+      DateTime salaryDateTime = DateTime(time.year, time.month, 27, time.hour, time.minute,
+          time.second, time.millisecond, time.microsecond);
       demoTransactions.add(
           '''('$salaryDateTime', $fakeSalary, 'IN', 'Salary', 16, 70, null, 0, null, '$salaryDateTime', '$salaryDateTime')''');
     }
 
     // finalize query and write!
-    await _database?.execute(
-        "$insertDemoTransactionsQuery ${demoTransactions.join(",")};");
+    await _database?.execute("$insertDemoTransactionsQuery ${demoTransactions.join(",")};");
   }
 
   Future resetDatabase() async {

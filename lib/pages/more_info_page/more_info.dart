@@ -63,14 +63,18 @@ class _MoreInfoPageState extends ConsumerState<MoreInfoPage> {
                   children: [
                     Text(
                       option[0].toString(),
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.primary),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge!
+                          .copyWith(color: Theme.of(context).colorScheme.primary),
                       textAlign: TextAlign.left,
                     ),
                     Text(
                       option[1].toString(),
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                          color: Theme.of(context).colorScheme.primary),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall!
+                          .copyWith(color: Theme.of(context).colorScheme.primary),
                       textAlign: TextAlign.left,
                     ),
                   ],

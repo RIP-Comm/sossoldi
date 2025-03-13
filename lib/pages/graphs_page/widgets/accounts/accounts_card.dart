@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../linear_progress_bar.dart';
 import '../../../../constants/functions.dart';
 import '../../../../custom_widgets/default_container.dart';
+import '../../../../model/bank_account.dart';
 import '../../../../providers/accounts_provider.dart';
 import '../../../../providers/currency_provider.dart';
-import '../../../../model/bank_account.dart';
 import '../card_label.dart';
+import '../linear_progress_bar.dart';
 
 class AccountsCard extends ConsumerWidget with Functions {
   const AccountsCard({super.key});
@@ -28,13 +28,12 @@ class AccountsCard extends ConsumerWidget with Functions {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               scrollDirection: Axis.vertical,
-              separatorBuilder: (context, i) => const SizedBox(height: 4),
+              separatorBuilder: (_, __) => const SizedBox(height: 4),
               itemBuilder: (context, i) {
                 double total = accounts.isNotEmpty
                     ? accounts
                         .map((account) => account.total!.toDouble())
-                        .reduce(
-                            (first, second) => first > second ? first : second)
+                        .reduce((first, second) => first > second ? first : second)
                     : 0.0;
                 BankAccount account = accounts[i];
                 return SizedBox(
@@ -73,7 +72,7 @@ class AccountsCard extends ConsumerWidget with Functions {
               },
             ),
             loading: () => const SizedBox.shrink(),
-            error: (e, s) => Text('Error: $e'),
+            error: (e, _) => Text('Error: $e'),
           ),
         ),
       ],

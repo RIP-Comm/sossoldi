@@ -66,14 +66,19 @@ Map<Recurrence, RecurrenceData> recurrenceMap = {
   Recurrence.daily: RecurrenceData(recurrence: Recurrence.daily, label: "Daily", days: 1),
   Recurrence.weekly: RecurrenceData(recurrence: Recurrence.weekly, label: "Weekly", days: 7),
   Recurrence.monthly: RecurrenceData(recurrence: Recurrence.monthly, label: "Monthly", days: 30),
-  Recurrence.bimonthly: RecurrenceData(recurrence: Recurrence.bimonthly, label: "Bimonthly", days: 60),
-  Recurrence.quarterly: RecurrenceData(recurrence: Recurrence.quarterly, label: "Quarterly", days: 90),
-  Recurrence.semester: RecurrenceData(recurrence: Recurrence.semester, label: "Semester", days: 180),
+  Recurrence.bimonthly:
+      RecurrenceData(recurrence: Recurrence.bimonthly, label: "Bimonthly", days: 60),
+  Recurrence.quarterly:
+      RecurrenceData(recurrence: Recurrence.quarterly, label: "Quarterly", days: 90),
+  Recurrence.semester:
+      RecurrenceData(recurrence: Recurrence.semester, label: "Semester", days: 180),
   Recurrence.annual: RecurrenceData(recurrence: Recurrence.annual, label: "Annual", days: 365),
 };
 
 Recurrence parseRecurrence(String s) {
-  return recurrenceMap.entries.firstWhere((entry) => entry.value.label.toLowerCase() == s.toLowerCase()).key;
+  return recurrenceMap.entries
+      .firstWhere((entry) => entry.value.label.toLowerCase() == s.toLowerCase())
+      .key;
 }
 
 class Transaction extends BaseEntity {
@@ -202,7 +207,7 @@ class TransactionMethods extends SossoldiDatabase {
       WHERE 
         t.${TransactionFields.id} = ?
     ''', [id]);
-    
+
     if (maps.isNotEmpty) {
       return Transaction.fromJson(maps.first);
     } else {
@@ -254,10 +259,11 @@ class TransactionMethods extends SossoldiDatabase {
     return result.map((json) => Transaction.fromJson(json)).toList();
   }
 
-  Future<List<Transaction>> getRecurrenceTransactionsById({int? id}) async  {
-    final db = await database; 
+  Future<List<Transaction>> getRecurrenceTransactionsById({int? id}) async {
+    final db = await database;
 
-    final result = await db.rawQuery('SELECT * FROM "$transactionTable" as t WHERE t.${TransactionFields.idRecurringTransaction} = $id ORDER BY ${TransactionFields.date} DESC');
+    final result = await db.rawQuery(
+        'SELECT * FROM "$transactionTable" as t WHERE t.${TransactionFields.idRecurringTransaction} = $id ORDER BY ${TransactionFields.date} DESC');
 
     return result.map((json) => Transaction.fromJson(json)).toList();
   }

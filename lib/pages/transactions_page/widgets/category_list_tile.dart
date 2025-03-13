@@ -97,9 +97,7 @@ class CategoryListTile extends ConsumerWidget {
                 ),
                 const SizedBox(width: 8.0),
                 Icon(
-                  (selectedCategoryIndex == index)
-                      ? Icons.expand_more
-                      : Icons.chevron_right,
+                  (selectedCategoryIndex == index) ? Icons.expand_more : Icons.chevron_right,
                 ),
               ],
             ),
@@ -163,8 +161,10 @@ class TransactionRow extends ConsumerWidget with Functions {
                     ),
                     Text(
                       "${numToCurrency(transaction.amount)} ${currencyState.selectedCurrency.symbol}",
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: (transaction.amount > 0) ? green : red),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge
+                          ?.copyWith(color: (transaction.amount > 0) ? green : red),
                     ),
                   ],
                 ),
@@ -205,8 +205,7 @@ class ExpandedSection extends StatefulWidget {
   State<ExpandedSection> createState() => _ExpandedSectionState();
 }
 
-class _ExpandedSectionState extends State<ExpandedSection>
-    with SingleTickerProviderStateMixin {
+class _ExpandedSectionState extends State<ExpandedSection> with SingleTickerProviderStateMixin {
   late AnimationController expandController;
   late Animation<double> animation;
 

@@ -19,8 +19,7 @@ class _SearchPage extends ConsumerState<SearchPage> {
 
   void _updateFutureTransactions() {
     Map<int, bool> filterAccountList = {
-      for (var element in ref.read(filterAccountProvider).entries)
-        element.key: element.value
+      for (var element in ref.read(filterAccountProvider).entries) element.key: element.value
     };
     setState(() {
       futureTransactions = TransactionMethods().selectAll(
@@ -38,9 +37,7 @@ class _SearchPage extends ConsumerState<SearchPage> {
   @override
   void initState() {
     super.initState();
-    TransactionMethods()
-        .getAllLabels()
-        .then((List<String> value) => suggetions.addAll(value));
+    TransactionMethods().getAllLabels().then((List<String> value) => suggetions.addAll(value));
   }
 
   @override
@@ -72,8 +69,7 @@ class _SearchPage extends ConsumerState<SearchPage> {
                           return const Iterable<String>.empty();
                         }
                         return suggetions.where((String option) {
-                          return option
-                              .contains(textEditingValue.text.toLowerCase());
+                          return option.contains(textEditingValue.text.toLowerCase());
                         });
                       },
                       onSelected: (option) {
@@ -81,9 +77,7 @@ class _SearchPage extends ConsumerState<SearchPage> {
                         _updateFutureTransactions();
                       },
                     )),
-                Container(
-                    alignment: Alignment.centerLeft,
-                    child: const Text("SEARCH FOR:")),
+                Container(alignment: Alignment.centerLeft, child: const Text("SEARCH FOR:")),
                 Row(children: [
                   Expanded(
                     child: SingleChildScrollView(
@@ -95,9 +89,8 @@ class _SearchPage extends ConsumerState<SearchPage> {
                               showCheckmark: false,
                               label: Text("Income",
                                   style: TextStyle(
-                                      color: filterType["IN"]!
-                                          ? Colors.white
-                                          : Colors.blue.shade700)),
+                                      color:
+                                          filterType["IN"]! ? Colors.white : Colors.blue.shade700)),
                               selected: filterType["IN"] ?? false,
                               backgroundColor: Colors.white,
                               selectedColor: Colors.blue.shade700,
@@ -111,9 +104,7 @@ class _SearchPage extends ConsumerState<SearchPage> {
                               onSelected: (_) {
                                 ref.read(typeFilterProvider.notifier).state = {
                                   ...filterType,
-                                  "IN": filterType["IN"] != null
-                                      ? !filterType["IN"]!
-                                      : false
+                                  "IN": filterType["IN"] != null ? !filterType["IN"]! : false
                                 };
                                 _updateFutureTransactions();
                               },
@@ -141,9 +132,7 @@ class _SearchPage extends ConsumerState<SearchPage> {
                               onSelected: (_) {
                                 ref.read(typeFilterProvider.notifier).state = {
                                   ...filterType,
-                                  "OUT": filterType["OUT"] != null
-                                      ? !filterType["OUT"]!
-                                      : false
+                                  "OUT": filterType["OUT"] != null ? !filterType["OUT"]! : false
                                 };
                                 _updateFutureTransactions();
                               },
@@ -156,9 +145,7 @@ class _SearchPage extends ConsumerState<SearchPage> {
                               label: Text(
                                 "Transfer",
                                 style: TextStyle(
-                                    color: filterType["TR"]!
-                                        ? Colors.white
-                                        : Colors.blue.shade700),
+                                    color: filterType["TR"]! ? Colors.white : Colors.blue.shade700),
                               ),
                               selected: filterType["TR"] ?? false,
                               backgroundColor: Colors.white,
@@ -173,9 +160,7 @@ class _SearchPage extends ConsumerState<SearchPage> {
                               onSelected: (_) {
                                 ref.read(typeFilterProvider.notifier).state = {
                                   ...filterType,
-                                  "TR": filterType["TR"] != null
-                                      ? !filterType["TR"]!
-                                      : false
+                                  "TR": filterType["TR"] != null ? !filterType["TR"]! : false
                                 };
                                 _updateFutureTransactions();
                               },
@@ -184,9 +169,7 @@ class _SearchPage extends ConsumerState<SearchPage> {
                         ])),
                   )
                 ]),
-                Container(
-                    alignment: Alignment.centerLeft,
-                    child: const Text("SEARCH IN:")),
+                Container(alignment: Alignment.centerLeft, child: const Text("SEARCH IN:")),
                 Row(
                   children: [
                     Expanded(
@@ -197,48 +180,34 @@ class _SearchPage extends ConsumerState<SearchPage> {
                               return Row(
                                   children: accounts.map((account) {
                                 return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
+                                    padding: const EdgeInsets.symmetric(horizontal: 10),
                                     child: FilterChip(
                                         label: Text(
                                           account.name,
                                           style: TextStyle(
-                                            color:
-                                                filterAccountList[account.id] !=
-                                                            null &&
-                                                        filterAccountList[
-                                                            account.id]!
-                                                    ? Colors.white
-                                                    : Colors.blue.shade700,
+                                            color: filterAccountList[account.id] != null &&
+                                                    filterAccountList[account.id]!
+                                                ? Colors.white
+                                                : Colors.blue.shade700,
                                           ),
                                         ),
                                         showCheckmark: false,
-                                        selected:
-                                            filterAccountList[account.id] ??
-                                                false,
+                                        selected: filterAccountList[account.id] ?? false,
                                         backgroundColor: Colors.white,
                                         selectedColor: Colors.blue.shade700,
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(50),
+                                          borderRadius: BorderRadius.circular(50),
                                           side: BorderSide(
                                             color: Colors.blue.shade700,
                                             width: 2.0,
                                           ),
                                         ),
                                         onSelected: (_) {
-                                          ref
-                                              .read(filterAccountProvider
-                                                  .notifier)
-                                              .state = {
+                                          ref.read(filterAccountProvider.notifier).state = {
                                             ...ref.read(filterAccountProvider),
                                             account.id!:
-                                                ref.read(filterAccountProvider)[
-                                                            account.id] !=
-                                                        null
-                                                    ? !ref.read(
-                                                            filterAccountProvider)[
-                                                        account.id]!
+                                                ref.read(filterAccountProvider)[account.id] != null
+                                                    ? !ref.read(filterAccountProvider)[account.id]!
                                                     : false
                                           };
                                           _updateFutureTransactions();
@@ -260,11 +229,9 @@ class _SearchPage extends ConsumerState<SearchPage> {
                             snapshot.connectionState == ConnectionState.done) {
                           return TransactionsList(transactions: snapshot.data!);
                         } else if (snapshot.hasError) {
-                          return Text(
-                              'Something went wrong: ${snapshot.error}');
+                          return Text('Something went wrong: ${snapshot.error}');
                         } else {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
                             return Transform.scale(
                               scale: 0.5,
                               child: const CircularProgressIndicator(),

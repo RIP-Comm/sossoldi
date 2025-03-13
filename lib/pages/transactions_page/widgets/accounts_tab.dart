@@ -32,8 +32,7 @@ class _AccountsTabState extends ConsumerState<AccountsTab> with Functions {
 
     // create a map to link each accounts with a list of its transactions
     // stored as Map<String, dynamic> to be passed to AccountListTile
-    Map<int, List<Transaction>> accountToTransactionsIncome = {},
-        accountToTransactionsExpense = {};
+    Map<int, List<Transaction>> accountToTransactionsIncome = {}, accountToTransactionsExpense = {};
     Map<int, double> accountToAmountIncome = {}, accountToAmountExpense = {};
     double totalIncome = 0, totalExpense = 0;
 

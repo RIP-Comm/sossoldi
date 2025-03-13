@@ -38,10 +38,7 @@ class AccountsSum extends ConsumerWidget with Functions {
           child: InkWell(
             borderRadius: BorderRadius.circular(8),
             onTap: () async {
-              await ref
-                  .read(accountsProvider.notifier)
-                  .refreshAccount(account)
-                  .whenComplete(() {
+              await ref.read(accountsProvider.notifier).refreshAccount(account).whenComplete(() {
                 if (context.mounted) {
                   Navigator.of(context).pushNamed('/account');
                 }
@@ -65,23 +62,18 @@ class AccountsSum extends ConsumerWidget with Functions {
                     children: [
                       Text(
                         account.name,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyLarge,
+                        style: Theme.of(context).textTheme.bodyLarge,
                       ),
                       RichText(
                         text: TextSpan(
                           children: [
                             TextSpan(
                               text: numToCurrency(account.total),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleSmall,
+                              style: Theme.of(context).textTheme.titleSmall,
                             ),
                             TextSpan(
                               text: currencyState.selectedCurrency.symbol,
-                              style:
-                                  Theme.of(context).textTheme.bodySmall?.apply(
+                              style: Theme.of(context).textTheme.bodySmall?.apply(
                                 fontFeatures: [const FontFeature.subscripts()],
                               ),
                             ),

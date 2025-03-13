@@ -36,10 +36,8 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
     if (ref.read(selectedTransactionUpdateProvider) != null) {
       _isSaveEnabled = true;
     }
-    amountController.text =
-        numToCurrency(ref.read(selectedTransactionUpdateProvider)?.amount);
-    noteController.text =
-        ref.read(selectedTransactionUpdateProvider)?.note ?? '';
+    amountController.text = numToCurrency(ref.read(selectedTransactionUpdateProvider)?.amount);
+    noteController.text = ref.read(selectedTransactionUpdateProvider)?.note ?? '';
 
     amountController.addListener(_updateAmount);
 
@@ -55,8 +53,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
     if (recurrencyEditingPermittedFromRoute == null) {
       final argsMap = args as Map<String, dynamic>?;
       recurrencyEditingPermittedFromRoute =
-          argsMap?['recurrencyEditingPermitted'] ??
-              widget.recurrencyEditingPermitted;
+          argsMap?['recurrencyEditingPermitted'] ?? widget.recurrencyEditingPermitted;
     }
   }
 
@@ -69,13 +66,11 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
 
   String getCleanAmountString() {
     // Remove all non-numeric characters
-    var cleanNumberString =
-        amountController.text.replaceAll(RegExp(r'[^0-9\.]'), '');
+    var cleanNumberString = amountController.text.replaceAll(RegExp(r'[^0-9\.]'), '');
 
     // Remove leading zeros only if the number does not start with "0."
     if (!cleanNumberString.startsWith('0.')) {
-      cleanNumberString =
-          cleanNumberString.replaceAll(RegExp(r'^0+(?!\.)'), '');
+      cleanNumberString = cleanNumberString.replaceAll(RegExp(r'^0+(?!\.)'), '');
     }
 
     if (cleanNumberString.startsWith('.')) {
@@ -107,9 +102,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
     final selectedAccount = ref.watch(bankAccountProvider) != null;
     final selectedCategory = ref.watch(categoryProvider) != null;
     setState(() {
-      _isSaveEnabled = selectedAccount &&
-          selectedCategory &&
-          amountController.text.isNotEmpty;
+      _isSaveEnabled = selectedAccount && selectedCategory && amountController.text.isNotEmpty;
     });
   }
 
@@ -132,27 +125,22 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
       if (selectedTransaction != null) {
         // if the original transaction is not recurrent, but user sets a recurrency, add the corrispondent record
         // and edit the original transaction
-        if (ref.read(selectedRecurringPayProvider) &&
-            !selectedTransaction.recurring) {
+        if (ref.read(selectedRecurringPayProvider) && !selectedTransaction.recurring) {
           ref
               .read(transactionsProvider.notifier)
-              .addRecurringTransaction(
-                  currencyToNum(cleanAmount), noteController.text)
+              .addRecurringTransaction(currencyToNum(cleanAmount), noteController.text)
               .then((value) {
             if (value != null) {
               ref
                   .read(transactionsProvider.notifier)
-                  .updateTransaction(
-                      currencyToNum(cleanAmount), noteController.text, value.id)
+                  .updateTransaction(currencyToNum(cleanAmount), noteController.text, value.id)
                   .whenComplete(() => _refreshAccountAndNavigateBack());
             }
           });
         } else {
           ref
               .read(transactionsProvider.notifier)
-              .updateTransaction(
-                  currencyToNum(cleanAmount),
-                  noteController.text,
+              .updateTransaction(currencyToNum(cleanAmount), noteController.text,
                   selectedTransaction.idRecurringTransaction)
               .whenComplete(() => _refreshAccountAndNavigateBack());
         }
@@ -170,14 +158,12 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
             if (ref.read(selectedRecurringPayProvider)) {
               ref
                   .read(transactionsProvider.notifier)
-                  .addRecurringTransaction(
-                      currencyToNum(cleanAmount), noteController.text)
+                  .addRecurringTransaction(currencyToNum(cleanAmount), noteController.text)
                   .whenComplete(() => _refreshAccountAndNavigateBack());
             } else {
               ref
                   .read(transactionsProvider.notifier)
-                  .addTransaction(
-                      currencyToNum(cleanAmount), noteController.text)
+                  .addTransaction(currencyToNum(cleanAmount), noteController.text)
                   .whenComplete(() => _refreshAccountAndNavigateBack());
             }
           }
@@ -204,9 +190,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          (selectedTransaction != null)
-              ? "Editing transaction"
-              : "New transaction",
+          (selectedTransaction != null) ? "Editing transaction" : "New transaction",
         ),
         leadingWidth: 100,
         leading: TextButton(
@@ -237,12 +221,13 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                   AmountSection(amountController),
                   Container(
                     alignment: Alignment.centerLeft,
-                    padding:
-                        const EdgeInsets.only(left: 16, top: 32, bottom: 8),
+                    padding: const EdgeInsets.only(left: 16, top: 32, bottom: 8),
                     child: Text(
                       "DETAILS",
-                      style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.primary),
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge!
+                          .copyWith(color: Theme.of(context).colorScheme.primary),
                     ),
                   ),
                   Container(
@@ -330,9 +315,8 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                                     minimumYear: 2015,
                                     maximumYear: 2050,
                                     mode: CupertinoDatePickerMode.date,
-                                    onDateTimeChanged: (date) => ref
-                                        .read(dateProvider.notifier)
-                                        .state = date,
+                                    onDateTimeChanged: (date) =>
+                                        ref.read(dateProvider.notifier).state = date,
                                   ),
                                 ),
                               );
@@ -344,18 +328,15 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                                 lastDate: DateTime(2050),
                               );
                               if (pickedDate != null) {
-                                ref.read(dateProvider.notifier).state =
-                                    pickedDate;
+                                ref.read(dateProvider.notifier).state = pickedDate;
                               }
                             }
                           },
                         ),
                         if (selectedType == TransactionType.expense) ...[
                           RecurrenceListTile(
-                            recurrencyEditingPermitted:
-                                widget.recurrencyEditingPermitted,
-                            selectedTransaction:
-                                ref.read(selectedTransactionUpdateProvider),
+                            recurrencyEditingPermitted: widget.recurrencyEditingPermitted,
+                            selectedTransaction: ref.read(selectedTransactionUpdateProvider),
                           )
                         ],
                       ],
@@ -372,10 +353,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
               color: Theme.of(context).colorScheme.surface,
               boxShadow: [
                 BoxShadow(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .primary
-                      .withValues(alpha: 0.15),
+                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.15),
                   blurRadius: 5.0,
                   offset: const Offset(0, -1.0),
                 )
@@ -391,9 +369,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
               child: ElevatedButton(
                 onPressed: _isSaveEnabled ? _createOrUpdateTransaction : null,
                 child: Text(
-                  selectedTransaction != null
-                      ? "UPDATE TRANSACTION"
-                      : "ADD TRANSACTION",
+                  selectedTransaction != null ? "UPDATE TRANSACTION" : "ADD TRANSACTION",
                 ),
               ),
             ),

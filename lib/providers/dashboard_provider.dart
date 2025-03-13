@@ -20,13 +20,15 @@ final dashboardProvider = FutureProvider<void>((ref) async {
   double runningTotal = 0;
   ref.read(currentMonthListProvider.notifier).state = currentMonth.map((e) {
     runningTotal += e['income'] - e['expense'];
-    return FlSpot(double.parse(e['day'].substring(8)) - 1, double.parse(runningTotal.toStringAsFixed(2)));
+    return FlSpot(
+        double.parse(e['day'].substring(8)) - 1, double.parse(runningTotal.toStringAsFixed(2)));
   }).toList();
 
   runningTotal = 0; // Reset the running total for the next calculation
 
   ref.read(lastMonthListProvider.notifier).state = lastMonth.map((e) {
     runningTotal += e['income'] - e['expense'];
-    return FlSpot(double.parse(e['day'].substring(8)) - 1, double.parse(runningTotal.toStringAsFixed(2)));
+    return FlSpot(
+        double.parse(e['day'].substring(8)) - 1, double.parse(runningTotal.toStringAsFixed(2)));
   }).toList();
 });

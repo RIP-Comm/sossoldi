@@ -63,13 +63,13 @@ class CSVFilePicker {
         // User canceled the picker
         return;
       }
-      
+
       final String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
       final String filePath = join(selectedDirectory, 'sossoldi_export_$timestamp.csv');
-      
+
       // Write the CSV content directly to the file
       final file = await File(filePath).writeAsString(csv);
-      
+
       // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

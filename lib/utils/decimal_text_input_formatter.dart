@@ -19,10 +19,10 @@ class DecimalTextInputFormatter extends TextInputFormatter {
 
     RegExp regex = RegExp(r'[\d\,\.]');
 
-    if (value.isNotEmpty && !regex.hasMatch(value[value.length -1])) {
+    if (value.isNotEmpty && !regex.hasMatch(value[value.length - 1])) {
       return oldValue;
     }
-    
+
     if (value.contains(thousandsSeparator)) {
       value = value.replaceAll(thousandsSeparator, decimalSeparator);
     }
@@ -30,14 +30,15 @@ class DecimalTextInputFormatter extends TextInputFormatter {
     if (decimalSeparator.allMatches(value).length > 1 || value.contains(thousandsSeparator)) {
       return oldValue;
     }
-    
+
     if (value == decimalSeparator) {
       // Allow for .x decimal notation
       value = "0$decimalSeparator";
     }
 
-    if (decimalDigits != null && 
-        value.contains(decimalSeparator) && value.substring(value.indexOf(decimalSeparator) + 1).length > decimalDigits!) {
+    if (decimalDigits != null &&
+        value.contains(decimalSeparator) &&
+        value.substring(value.indexOf(decimalSeparator) + 1).length > decimalDigits!) {
       value = oldValue.text;
     }
 

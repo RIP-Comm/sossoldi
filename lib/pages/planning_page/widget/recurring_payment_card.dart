@@ -24,11 +24,8 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
 
   String getNextText() {
     final now = DateTime.now();
-    final daysPassed = now
-        .difference(transaction.lastInsertion ?? transaction.fromDate)
-        .inDays;
-    final daysInterval =
-        recurrenceMap[parseRecurrence(transaction.recurrency)]!.days;
+    final daysPassed = now.difference(transaction.lastInsertion ?? transaction.fromDate).inDays;
+    final daysInterval = recurrenceMap[parseRecurrence(transaction.recurrency)]!.days;
     final daysUntilNextTransaction = daysInterval - (daysPassed % daysInterval);
     return daysUntilNextTransaction.toString();
   }
@@ -40,8 +37,7 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
     final isDarkMode = ref.watch(appThemeStateNotifier).isDarkModeEnabled;
     final currencyState = ref.watch(currencyStateNotifier);
 
-    var cat = categories
-        ?.firstWhere((element) => element.id == transaction.idCategory);
+    var cat = categories?.firstWhere((element) => element.id == transaction.idCategory);
 
     return cat != null
         ? Container(
@@ -51,8 +47,7 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
               boxShadow: [defaultShadow],
             ),
             child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
               decoration: BoxDecoration(
                 color: categoryColorList[cat.color].withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(8),
@@ -102,13 +97,11 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
                           children: [
                             Text("In ${getNextText()} days"),
                             const SizedBox(height: 10),
-                            Text(
-                                "-${transaction.amount}${currencyState.selectedCurrency.symbol}",
+                            Text("-${transaction.amount}${currencyState.selectedCurrency.symbol}",
                                 style: const TextStyle(color: Colors.red)),
                             const SizedBox(height: 10),
                             Text(accounts!
-                                .firstWhere((element) =>
-                                    element.id == transaction.idBankAccount)
+                                .firstWhere((element) => element.id == transaction.idBankAccount)
                                 .name)
                           ],
                         ),
@@ -149,17 +142,14 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
                               )
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Theme.of(context)
-                                  .colorScheme
-                                  .primaryContainer,
+                              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
                               foregroundColor: isDarkMode
                                   ? Theme.of(context).colorScheme.primary
                                   : Theme.of(context).colorScheme.secondary,
                               iconColor: isDarkMode
                                   ? Theme.of(context).colorScheme.primary
                                   : Theme.of(context).colorScheme.secondary,
-                              overlayColor:
-                                  Theme.of(context).colorScheme.primary,
+                              overlayColor: Theme.of(context).colorScheme.primary,
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 8,
                                 vertical: 4,

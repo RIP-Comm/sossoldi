@@ -76,8 +76,12 @@ class BudgetsSection extends ConsumerWidget with Functions {
                               padding: const EdgeInsets.symmetric(horizontal: 13),
                               child: BudgetCircularIndicator(
                                 title: budgets[index].name!,
-                                amount: budgets[index].amountLimit - budgets[index].spent > 0 ? budgets[index].amountLimit - budgets[index].spent : 0,
-                                perc: budgets[index].spent / budgets[index].amountLimit > 1 ? 1 : budgets[index].spent / budgets[index].amountLimit,
+                                amount: budgets[index].amountLimit - budgets[index].spent > 0
+                                    ? budgets[index].amountLimit - budgets[index].spent
+                                    : 0,
+                                perc: budgets[index].spent / budgets[index].amountLimit > 1
+                                    ? 1
+                                    : budgets[index].spent / budgets[index].amountLimit,
                                 color: categoryColorList[index % categoryColorList.length],
                               ),
                             ),

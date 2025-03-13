@@ -78,11 +78,7 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
                     return DropdownMenuItem<CategoryTransaction>(
                         value: category,
                         child: Row(
-                          children: [
-                            Icon(icon),
-                            const SizedBox(width: 15),
-                            Text(category.name)
-                          ],
+                          children: [Icon(icon), const SizedBox(width: 15), Text(category.name)],
                         ));
                   }).toList(),
                   onChanged: (CategoryTransaction? newValue) {

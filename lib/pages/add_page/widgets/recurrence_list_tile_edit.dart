@@ -78,16 +78,12 @@ class RecurrenceListTileEdit extends ConsumerWidget with Functions {
                   Text(
                     recurrenceMap[ref.watch(intervalProvider)]!.label,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: isDarkMode
-                            ? grey3
-                            : Theme.of(context).colorScheme.secondary),
+                        color: isDarkMode ? grey3 : Theme.of(context).colorScheme.secondary),
                   ),
                   const SizedBox(width: 6),
                   Icon(
                     Icons.chevron_right,
-                    color: isDarkMode
-                        ? grey3
-                        : Theme.of(context).colorScheme.secondary,
+                    color: isDarkMode ? grey3 : Theme.of(context).colorScheme.secondary,
                   ),
                 ],
               ),
@@ -121,16 +117,12 @@ class RecurrenceListTileEdit extends ConsumerWidget with Functions {
                   Text(
                     endDate != null ? dateToString(endDate) : "Never",
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: isDarkMode
-                            ? grey3
-                            : Theme.of(context).colorScheme.secondary),
+                        color: isDarkMode ? grey3 : Theme.of(context).colorScheme.secondary),
                   ),
                   const SizedBox(width: 6),
                   Icon(
                     Icons.chevron_right,
-                    color: isDarkMode
-                        ? grey3
-                        : Theme.of(context).colorScheme.secondary,
+                    color: isDarkMode ? grey3 : Theme.of(context).colorScheme.secondary,
                   ),
                 ],
               ),
@@ -155,23 +147,17 @@ class EndDateSelector extends ConsumerWidget with Functions {
           children: [
             ListTile(
               visualDensity: const VisualDensity(vertical: -3),
-              trailing: ref.watch(endDateProvider) != null
-                  ? null
-                  : const Icon(Icons.check),
+              trailing: ref.watch(endDateProvider) != null ? null : const Icon(Icons.check),
               title: const Text(
                 "Never",
               ),
-              onTap: () => {
-                ref.read(endDateProvider.notifier).state = null,
-                Navigator.pop(context)
-              },
+              onTap: () =>
+                  {ref.read(endDateProvider.notifier).state = null, Navigator.pop(context)},
             ),
             ListTile(
                 visualDensity: const VisualDensity(vertical: -3),
                 title: const Text("On a date"),
-                trailing: ref.watch(endDateProvider) != null
-                    ? const Icon(Icons.check)
-                    : null,
+                trailing: ref.watch(endDateProvider) != null ? const Icon(Icons.check) : null,
                 subtitle: Text(ref.read(endDateProvider) != null
                     ? dateToString(ref.read(endDateProvider.notifier).state!)
                     : ''),

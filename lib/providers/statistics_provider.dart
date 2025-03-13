@@ -6,12 +6,13 @@ import '../model/transaction.dart';
 final currentYearMontlyTransactionsProvider = StateProvider<List<FlSpot>>((ref) => const []);
 
 final statisticsProvider = FutureProvider<void>((ref) async {
-  final currentYearMontlyTransaction =
-      await TransactionMethods().currentYearMontlyTransactions();
+  final currentYearMontlyTransaction = await TransactionMethods().currentYearMontlyTransactions();
 
   double runningTotal = 0;
-  ref.read(currentYearMontlyTransactionsProvider.notifier).state = currentYearMontlyTransaction.map((e) {
+  ref.read(currentYearMontlyTransactionsProvider.notifier).state =
+      currentYearMontlyTransaction.map((e) {
     runningTotal += e['income'] - e['expense'];
-    return FlSpot(double.parse(e['month'].substring(5)) - 1, double.parse(runningTotal.toStringAsFixed(2)));
+    return FlSpot(
+        double.parse(e['month'].substring(5)) - 1, double.parse(runningTotal.toStringAsFixed(2)));
   }).toList();
 });

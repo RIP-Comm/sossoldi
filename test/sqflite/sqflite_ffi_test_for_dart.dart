@@ -18,8 +18,7 @@ void main() {
         options: OpenDatabaseOptions(
             version: 1,
             onCreate: (db, version) async {
-              await db.execute(
-                  'CREATE TABLE Test (id INTEGER PRIMARY KEY, value TEXT)');
+              await db.execute('CREATE TABLE Test (id INTEGER PRIMARY KEY, value TEXT)');
             }));
     // Insert some data
     await db.insert('Test', {'value': 'my_value'});

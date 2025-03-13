@@ -21,13 +21,10 @@ class _OlderRecurringPaymentsState extends ConsumerState<OlderRecurringPayments>
   @override
   void initState() {
     super.initState();
-    TransactionMethods()
-        .getRecurrenceTransactionsById(id: widget.transaction.id)
-        .then((value) {
+    TransactionMethods().getRecurrenceTransactionsById(id: widget.transaction.id).then((value) {
       setState(() {
         transactions = value;
-        sum = value.fold(
-            0.0, (previousValue, element) => previousValue + element.amount);
+        sum = value.fold(0.0, (previousValue, element) => previousValue + element.amount);
       });
     });
   }
@@ -53,10 +50,8 @@ class _OlderRecurringPaymentsState extends ConsumerState<OlderRecurringPayments>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(widget.transaction.note,
-                    style: const TextStyle(fontSize: 25)),
-                Text(widget.transaction.recurrency,
-                    style: const TextStyle(fontSize: 15)),
+                Text(widget.transaction.note, style: const TextStyle(fontSize: 25)),
+                Text(widget.transaction.recurrency, style: const TextStyle(fontSize: 15)),
               ],
             )),
         Expanded(
@@ -64,8 +59,7 @@ class _OlderRecurringPaymentsState extends ConsumerState<OlderRecurringPayments>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(
-                    "-${sum.toStringAsFixed(2)}${currencyState.selectedCurrency.symbol}",
+                Text("-${sum.toStringAsFixed(2)}${currencyState.selectedCurrency.symbol}",
                     style: const TextStyle(fontSize: 25, color: Colors.red)),
               ],
             ))
@@ -91,8 +85,7 @@ class _OlderRecurringPaymentsState extends ConsumerState<OlderRecurringPayments>
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Text(
                       year.toString(),
-                      style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
                   Column(

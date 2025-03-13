@@ -42,10 +42,10 @@ class DetailsListTile extends ConsumerWidget {
         children: [
           Text(
             value ?? '',
-            style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                color: isDarkMode
-                    ? grey3
-                    : Theme.of(context).colorScheme.secondary),
+            style: Theme.of(context)
+                .textTheme
+                .bodySmall!
+                .copyWith(color: isDarkMode ? grey3 : Theme.of(context).colorScheme.secondary),
           ),
           const SizedBox(width: 6.0),
           Icon(

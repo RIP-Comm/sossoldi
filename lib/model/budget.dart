@@ -201,7 +201,6 @@ class BudgetMethods extends SossoldiDatabase {
     return statsList;
   }
 
-
   Future<int> updateItem(Budget item) async {
     final db = await database;
 

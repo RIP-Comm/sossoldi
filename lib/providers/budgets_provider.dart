@@ -52,7 +52,6 @@ class AsyncBudgetsNotifier extends AsyncNotifier<List<Budget>> {
   }
 }
 
-final budgetsProvider =
-    AsyncNotifierProvider<AsyncBudgetsNotifier, List<Budget>>(() {
+final budgetsProvider = AsyncNotifierProvider<AsyncBudgetsNotifier, List<Budget>>(() {
   return AsyncBudgetsNotifier();
 });

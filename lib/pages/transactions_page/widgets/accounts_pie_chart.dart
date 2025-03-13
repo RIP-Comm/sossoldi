@@ -57,11 +57,9 @@ class AccountsPieChart extends ConsumerWidget with Functions {
             children: [
               (selectedAccountIndex != -1)
                   ? RoundedIcon(
-                      icon: accountIconList[
-                              accounts[selectedAccountIndex].symbol] ??
+                      icon: accountIconList[accounts[selectedAccountIndex].symbol] ??
                           Icons.swap_horiz_rounded,
-                      backgroundColor: accountColorList[
-                          accounts[selectedAccountIndex].color],
+                      backgroundColor: accountColorList[accounts[selectedAccountIndex].color],
                       padding: const EdgeInsets.all(8.0),
                     )
                   : const SizedBox(),
@@ -71,8 +69,7 @@ class AccountsPieChart extends ConsumerWidget with Functions {
                     : "${total.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}",
                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                     color: ((selectedAccountIndex != -1 &&
-                                amounts[accounts[selectedAccountIndex].id]! >
-                                    0) ||
+                                amounts[accounts[selectedAccountIndex].id]! > 0) ||
                             (selectedAccountIndex == -1 && total > 0))
                         ? green
                         : red),

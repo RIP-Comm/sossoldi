@@ -78,13 +78,10 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                               ),
                               const SizedBox(height: 4),
                               LinearProgressBar(
-                                type: BarType.category,
-                                colorIndex: index,
-                                amount: (spent == 0 || budget.amountLimit == 0)
-                                      ? 0
-                                      : spent,
-                                total: budget.amountLimit
-                              ),
+                                  type: BarType.category,
+                                  colorIndex: index,
+                                  amount: (spent == 0 || budget.amountLimit == 0) ? 0 : spent,
+                                  total: budget.amountLimit),
                             ],
                           );
                         },

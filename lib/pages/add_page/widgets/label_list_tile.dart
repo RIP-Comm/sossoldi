@@ -43,9 +43,7 @@ class LabelListTile extends ConsumerWidget {
               ),
               textAlign: TextAlign.end,
               style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                    color: isDarkMode
-                        ? grey3
-                        : Theme.of(context).colorScheme.secondary,
+                    color: isDarkMode ? grey3 : Theme.of(context).colorScheme.secondary,
                   ),
             ),
           ),
