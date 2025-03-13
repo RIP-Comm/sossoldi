@@ -72,7 +72,12 @@ var collaborators = const [
     "napitek",
     "Full Stack Dev",
     "github.com/napitek",
-  ]
+  ],
+  [
+    "Alessandro Bongiovanni",
+    "Flutter Dev",
+    "https://github.com/bongio94",
+  ],
 ];
 
 class _CollaboratorsPageState extends ConsumerState<CollaboratorsPage> {
