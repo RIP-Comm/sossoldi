@@ -1,0 +1,30 @@
+name: Flutter Dart Format Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  format-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Run dart format check
+        run: |
+          echo "Checking code formatting (line length set to 100)..."
+          if ! dart format --set-exit-if-changed --line-length 100 .; then
+            echo "⛔ ERROR: Code format check failed. Please run 'dart format --line-length 100 .' on your code and commit the formatted changes."
+            exit 1
+          else
+            echo "✅ Code format check passed."
+          fi
