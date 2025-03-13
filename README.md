@@ -32,14 +32,14 @@
 
 ## ❓ What problem we are solving & why
 
-[Mr. Rip](https://retireinprogress.com/) is a blogger that has a [spreadsheet](https://docs.google.com/spreadsheets/d/1ilL6rBdzIQ6yRotqOKLUKI7KXFxu5_cZ5FQgdYTSHJk/edit#gid=138629885) in which he tracks his net worth. Sossoldi is a Mobile + Desktop app that aims at replacing that spreadsheet and make it easier for everyone to track their net worth even if they are not as skilled with Google sheets or Excel.
+[Mr. Rip](https://retireinprogress.com/) is a blogger that has a [spreadsheet](https://docs.google.com/spreadsheets/d/1ilL6rBdzIQ6yRotqOKLUKI7KXFxu5_cZ5FQgdYTSHJk/edit#gid=138629885) in which he tracks his net worth. Sossoldi is a Mobile + Desktop app that aims at replacing that spreadsheet and make it easier for everyone to track their net worth even if they are not as skilled with Google Sheets or Excel.
 
 The app is being developed using the [Flutter](https://docs.flutter.dev/get-started/install) framework which makes it possible to have one codebase for different platforms (Android, iOS, Windows, macOS, Linux). We are currently working on a beta which hopefully will be out soon.
 
 ## This app is for you if you want to...
 
--   📈 track their net worth
--   💸 track your expenses to better understand where they are spending their money
+-   📈 track your net worth
+-   💸 track your expenses to better understand where you are spending your money
 -   👀 keep track of your investments
 -   🪦 keep everything in one place like Mr. Rip
 
@@ -76,7 +76,7 @@ The pages that will be implemented are:
 
 ## Contributing
 
-If you want to help with this project you are more than welcome! Sossoldi is completely free and open source, the best place to start is from the issue tab and look for something that seems interesting to you. If are unsure on where to start feel free to reach out to us on [Discord](https://discord.com/channels/919139369774891088/1013368203575038012), we will be more than happy to help you find what's best for you!
+If you want to help with this project you are more than welcome! Sossoldi is completely free and open source, the best place to start is from the issue tab and look for something that seems interesting to you. If you are unsure on where to start feel free to reach out to us on [Discord](https://discord.com/channels/919139369774891088/1013368203575038012), we will be more than happy to help you find what's best for you!
 
 Also, you can refer to internal docs:
 
