@@ -6,7 +6,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() {
   // I'm not 100% familiar with how this works but for some reason when adding the last two test cases
-  // it would throw and error after the tests were completed successfully.
+  // it would throw an error after the tests were completed successfully.
   //
   // Seems like using the NoIsolate solves the problem.
   databaseFactory = databaseFactoryFfiNoIsolate;
