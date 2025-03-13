@@ -31,7 +31,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
     final selectedAccount = ref.read(selectedAccountProvider);
     if (selectedAccount != null) {
       nameController.text = selectedAccount.name;
-      balanceController.text = selectedAccount.total.toString();
+      balanceController.text = numToCurrency(selectedAccount.total);
       accountIcon = selectedAccount.symbol;
       accountColor = selectedAccount.color;
       countNetWorth = selectedAccount.active;
@@ -69,7 +69,9 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                   Container(
                     width: double.infinity,
                     margin: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 24),
+                      horizontal: 16,
+                      vertical: 24,
+                    ),
                     padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
@@ -94,7 +96,9 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                     width: double.infinity,
                     margin: const EdgeInsets.symmetric(horizontal: 16),
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
                       borderRadius: BorderRadius.circular(4),
