@@ -12,11 +12,14 @@ import '../model/category_transaction.dart';
 import '../model/currency.dart';
 import '../model/recurring_transaction.dart';
 import '../model/transaction.dart';
+import 'migration_manager.dart';
 
 class SossoldiDatabase {
   static final SossoldiDatabase instance = SossoldiDatabase._init();
+  final MigrationManager _migrationManager = MigrationManager();
   static Database? _database;
   static String dbName = 'sossoldi.db';
+
 
   // Zero args constructor needed to extend this class
   SossoldiDatabase({String? dbName}) {
@@ -35,7 +38,11 @@ class SossoldiDatabase {
   Future<Database> _initDB(String filePath) async {
     final databasePath = await getDatabasesPath();
     final path = join(databasePath, filePath);
-    return await openDatabase(path, version: 1, onCreate: _createDB);
+    return await openDatabase(
+        path,
+        version: 1,
+        onCreate: _createDB,
+        onUpgrade: _upgradeDB);
   }
 
   static Future _createDB(Database database, int version) async {
@@ -142,7 +149,10 @@ class SossoldiDatabase {
         ("CHF", "CHF", "Switzerland Franc", 0),
         ("£", "GBP", "United Kingdom Pound", 0);
     ''');
+  }
 
+  static Future _upgradeDB(Database database, int oldVersion, int newVersion) async {
+    //todo
   }
 
   Future<String> exportToCSV() async {
@@ -180,7 +190,8 @@ class SossoldiDatabase {
         final List<Map<String, dynamic>> rows = await db.query(tableName);
 
         for (var row in rows) {
-          List<dynamic> csvRow = List.filled(headers.length, ''); // Initialize with empty strings
+          List<dynamic> csvRow =
+              List.filled(headers.length, ''); // Initialize with empty strings
           csvRow[0] = tableName; // Set table name
 
           // Fill in values for existing columns
@@ -215,7 +226,8 @@ class SossoldiDatabase {
       }
 
       final String csvData = await file.readAsString();
-      final List<List<dynamic>> rows = const CsvToListConverter().convert(csvData);
+      final List<List<dynamic>> rows =
+          const CsvToListConverter().convert(csvData);
 
       if (rows.isEmpty) {
         throw Exception('CSV file is empty');
@@ -251,7 +263,8 @@ class SossoldiDatabase {
             for (int i = 1; i < tableRows.length; i++) {
               final Map<String, dynamic> row = {};
               for (int j = 0; j < headers.length; j++) {
-                if (j != tableNameIndex) { // Skip the table_name column
+                if (j != tableNameIndex) {
+                  // Skip the table_name column
                   final String header = headers[j];
                   final dynamic value = tableRows[i][j];
 
