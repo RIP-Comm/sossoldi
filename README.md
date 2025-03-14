@@ -76,7 +76,7 @@ The pages that will be implemented are:
 
 ## Contributing
 
-If you want to help with this project you are more than welcome! Sossoldi is completely free and open source, the best place to start is from the issue tab and look for something that seems interesting to you. If are unsure on where to start feel free to reach out to us on [Discord](https://discord.com/channels/919139369774891088/1013368203575038012), we will be more than happy to help you find what's best for you!
+If you want to help with this project you are more than welcome! Sossoldi is completely free and open source, the best place to start is from the issue tab and look for something that seems interesting to you. If are unsure on where to start feel free to reach out to us on [Discord](https://discord.sossoldi.com), we will be more than happy to help you find what's best for you!
 
 Also, you can refer to internal docs:
 
@@ -85,7 +85,7 @@ Also, you can refer to internal docs:
 
 ### Useful links to get started
 -   [Github Repo](https://github.com/RIP-Comm/sossoldi)
--   [Discord](http://mr.rip/discord)
+-   [Discord](https://discord.sossoldi.com)
 -   [Design file](https://www.figma.com/file/6NyY9yqunpbU7HIkbNEAL3/Sossoldi-App?node-id=0%3A1)
 -   [UX Research](https://www.federicopozzato.it/portfolio/sossoldi-personal-finance-app)
 -   [Information architecture](https://www.figma.com/file/xjVHAaHznRW1OFAJvp8DXn/Sossoldi-App---Figjam?node-id=0%3A1)
