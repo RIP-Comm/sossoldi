@@ -23,7 +23,6 @@ dependencies:
   flutter_phoenix: ^1.1.1
   flutter_riverpod: ^2.6.1
   gap: ^3.0.1
-  google_fonts: ^6.2.1
   intl: ^0.19.0
   path: ^1.9.1
   path_provider: ^2.1.5
@@ -46,11 +45,15 @@ dev_dependencies:
   test: ^1.25.2
 
 flutter:
-
   uses-material-design: true
-
   assets:
     - assets/
+  fonts:
+    - family: NunitoSans
+      fonts:
+        - asset: assets/fonts/NunitoSans-VariableFont_YTLC,opsz,wdth,wght.ttf
+        - asset: assets/fonts/NunitoSans-Italic-VariableFont_YTLC,opsz,wdth,wght.ttf
+          style: italic
 
 flutter_native_splash:
   web: false
