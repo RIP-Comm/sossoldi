@@ -54,7 +54,7 @@ What features do we want to implement?
 Here is a list of useful links if you want to contribute to the project:
 
 - [Github Repo](https://github.com/RIP-Comm/sossoldi)
-- [Discord](discord.sossoldi.com)
+- [Discord](https://discord.sossoldi.com)
 - [Design file](https://www.figma.com/file/6NyY9yqunpbU7HIkbNEAL3/Sossoldi-App?node-id=0%3A1)
 - [UX Research](https://www.federicopozzato.it/portfolio/sossoldi-personal-finance-app)
 - [Information architecture](https://www.figma.com/file/xjVHAaHznRW1OFAJvp8DXn/Sossoldi-App---Figjam?node-id=0%3A1)
