@@ -53,7 +53,7 @@ class AppTheme {
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
-        textStyle: WidgetStatePropertyAll(
+        textStyle: const WidgetStatePropertyAll(
           TextStyle(
             fontFamily: 'NunitoSans',
             fontSize: 18.0,
@@ -221,7 +221,7 @@ class AppTheme {
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
-        textStyle: WidgetStatePropertyAll(
+        textStyle: const WidgetStatePropertyAll(
           TextStyle(
             fontFamily: 'NunitoSans',
             fontSize: 18.0,
