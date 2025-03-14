@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
+import '../../../constants/constants.dart';
 import '../../../constants/functions.dart';
 import "../../../constants/style.dart";
 import '../../../custom_widgets/rounded_icon.dart';
@@ -150,6 +151,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                                 );
                               },
                               child: Container(
+                                height: 35,
                                 decoration: BoxDecoration(
                                   color: Theme.of(context)
                                       .colorScheme
@@ -161,17 +163,29 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                                 child: Row(
                                   children: [
                                     RoundedIcon(
-                                      icon: Icons.account_balance,
-                                      backgroundColor: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
+                                      icon: ref
+                                                  .watch(bankAccountProvider)
+                                                  ?.symbol !=
+                                              null
+                                          ? accountIconList[ref
+                                              .watch(bankAccountProvider)!
+                                              .symbol]
+                                          : null,
+                                      backgroundColor: ref
+                                                  .watch(bankAccountProvider)
+                                                  ?.color !=
+                                              null
+                                          ? accountColorListTheme[ref
+                                              .watch(bankAccountProvider)!
+                                              .color]
+                                          : null,
                                       size: 16,
                                       padding: EdgeInsets.all(4.0),
                                     ),
                                     const Spacer(),
                                     Text(
                                       ref.watch(bankAccountProvider)?.name ??
-                                          "",
+                                          "Select Account",
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodySmall!
@@ -263,6 +277,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                                 );
                               },
                               child: Container(
+                                height: 35,
                                 decoration: BoxDecoration(
                                   color: Theme.of(context)
                                       .colorScheme
@@ -273,7 +288,21 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                                 padding: const EdgeInsets.all(4),
                                 child: Row(
                                   children: [
-                                    const Icon(Icons.sort, color: grey2),
+                                    RoundedIcon(
+                                      icon: accountIconList[ref
+                                          .watch(bankAccountTransferProvider)
+                                          ?.symbol],
+                                      backgroundColor: ref.watch(
+                                                  bankAccountTransferProvider) !=
+                                              null
+                                          ? accountColorListTheme[ref
+                                              .watch(
+                                                  bankAccountTransferProvider)!
+                                              .color]
+                                          : null,
+                                      size: 16,
+                                      padding: EdgeInsets.all(4.0),
+                                    ),
                                     const Spacer(),
                                     Text(
                                       ref
