@@ -45,6 +45,7 @@ class _BackupPageState extends ConsumerState<BackupPage> {
     try {
       final file = await CSVFilePicker.pickCSVFile(context);
       if (file != null) {
+        if (!mounted) return;
         CSVFilePicker.showLoading(context, 'Importing data...');
         
         final results = await SossoldiDatabase.instance.importFromCSV(file.path);
@@ -54,7 +55,7 @@ class _BackupPageState extends ConsumerState<BackupPage> {
         
         if (results.values.every((success) => success)) {
           await CSVFilePicker.showSuccess(context, 'Data imported successfully');
-          Phoenix.rebirth(context);
+          if(mounted) Phoenix.rebirth(context);
         } else {
           final failedTables = results.entries
               .where((e) => !e.value)
