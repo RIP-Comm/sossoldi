@@ -202,6 +202,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
     _updateAmount();
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(
           (selectedTransaction != null)
