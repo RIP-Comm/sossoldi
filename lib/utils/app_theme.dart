@@ -5,8 +5,9 @@ import '../constants/style.dart';
 
 class AppTheme {
   static final lightTheme = ThemeData(
-    cupertinoOverrideTheme:
-        const CupertinoThemeData(brightness: Brightness.light),
+    cupertinoOverrideTheme: const CupertinoThemeData(
+      brightness: Brightness.light,
+    ),
     colorScheme: customColorScheme,
     scaffoldBackgroundColor: white,
     appBarTheme: const AppBarTheme(
