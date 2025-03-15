@@ -78,6 +78,7 @@ class AppTheme {
         ),
         textStyle: WidgetStatePropertyAll(
           TextStyle(
+            fontFamily: 'NunitoSans',
             fontSize: 14.0,
             fontWeight: FontWeight.w700,
           ),
@@ -246,6 +247,7 @@ class AppTheme {
         ),
         textStyle: WidgetStatePropertyAll(
           TextStyle(
+            fontFamily: 'NunitoSans',
             fontSize: 14.0,
             fontWeight: FontWeight.w700,
           ),
