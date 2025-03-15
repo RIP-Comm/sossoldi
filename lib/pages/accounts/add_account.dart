@@ -324,7 +324,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                                 "Set as main account",
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
-                              CupertinoSwitch(
+                              Switch.adaptive(
                                 value: mainAccount,
                                 onChanged: (value) =>
                                     setState(() => mainAccount = value),
@@ -342,7 +342,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                                 "Counts for the net worth",
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
-                              CupertinoSwitch(
+                              Switch.adaptive(
                                 value: countNetWorth,
                                 onChanged: (value) =>
                                     setState(() => countNetWorth = value),

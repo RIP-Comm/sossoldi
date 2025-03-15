@@ -274,7 +274,6 @@ class AppTheme {
       tileColor: darkBlue7,
       contentPadding: EdgeInsets.all(16),
     ),
-
     disabledColor: darkGrey2,
     //Text style
     fontFamily: 'NunitoSans',
