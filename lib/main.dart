@@ -28,16 +28,23 @@ void main() async {
   _isFirstLogin = getPref;
 
   // perform recurring transactions checks
-  DateTime? lastCheckGetPref = preferences.getString('last_recurring_transactions_check') != null ? DateTime.parse(preferences.getString('last_recurring_transactions_check')!) : null;
+  DateTime? lastCheckGetPref =
+      preferences.getString('last_recurring_transactions_check') != null
+          ? DateTime.parse(
+              preferences.getString('last_recurring_transactions_check')!)
+          : null;
   DateTime? lastRecurringTransactionsCheck = lastCheckGetPref;
 
-  if(lastRecurringTransactionsCheck == null || DateTime.now().difference(lastRecurringTransactionsCheck).inDays >= 1){
+  if (lastRecurringTransactionsCheck == null ||
+      DateTime.now().difference(lastRecurringTransactionsCheck).inDays >= 1) {
     RecurringTransactionMethods().checkRecurringTransactions();
     // update last recurring transactions runtime
-    await preferences.setString('last_recurring_transactions_check', DateTime.now().toIso8601String());
+    await preferences.setString(
+        'last_recurring_transactions_check', DateTime.now().toIso8601String());
   }
 
-  initializeDateFormatting('it_IT', null).then((_) => runApp(Phoenix(child: const ProviderScope(child: Launcher()))));
+  initializeDateFormatting('it_IT', null).then(
+      (_) => runApp(Phoenix(child: const ProviderScope(child: Launcher()))));
 }
 
 class Launcher extends ConsumerWidget {
@@ -51,9 +58,11 @@ class Launcher extends ConsumerWidget {
       title: 'Sossoldi',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: appThemeState.isDarkModeEnabled ? ThemeMode.dark : ThemeMode.light,
+      themeMode:
+          appThemeState.isDarkModeEnabled ? ThemeMode.dark : ThemeMode.light,
       onGenerateRoute: makeRoute,
-      initialRoute: _isFirstLogin == null || _isFirstLogin! ? '/onboarding' : '/',
+      initialRoute:
+          _isFirstLogin == null || _isFirstLogin! ? '/onboarding' : '/',
     );
   }
 }
