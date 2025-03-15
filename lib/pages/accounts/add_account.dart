@@ -53,6 +53,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
     final currencyState = ref.watch(currencyStateNotifier);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text("${selectedAccount == null ? "New" : "Edit"} account"),
         leading: IconButton(
