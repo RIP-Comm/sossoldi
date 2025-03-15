@@ -6,6 +6,7 @@ class RoundedIcon extends StatelessWidget {
   const RoundedIcon({
     this.icon,
     this.backgroundColor,
+    this.color,
     this.size = 24,
     this.padding = const EdgeInsets.all(10.0),
     super.key,
@@ -13,6 +14,7 @@ class RoundedIcon extends StatelessWidget {
 
   final IconData? icon;
   final Color? backgroundColor;
+  final Color? color;
   final double? size;
   final EdgeInsets? padding;
 
@@ -28,7 +30,7 @@ class RoundedIcon extends StatelessWidget {
           ? Icon(
               icon,
               size: size,
-              color: white,
+              color: color ?? white,
             )
           : const SizedBox(),
     );
