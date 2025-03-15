@@ -2,6 +2,7 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants/functions.dart';
@@ -30,6 +31,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
   final TextEditingController noteController = TextEditingController();
   bool? recurrencyEditingPermittedFromRoute;
   bool _isSaveEnabled = false;
+  bool _hasShownSnackbar = false;
 
   @override
   void initState() {
@@ -85,6 +87,14 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
     return cleanNumberString;
   }
 
+  // TODO: This should be inside addTransaction
+  void _refreshAccountAndNavigateBack() {
+    ref
+        .read(accountsProvider.notifier)
+        .refreshAccount(ref.read(bankAccountProvider)!)
+        .whenComplete(() => Navigator.of(context).pop());
+  }
+
   void _updateAmount() {
     final selectedType = ref.read(transactionTypeProvider);
 
@@ -98,27 +108,61 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
     }
 
     if (toBeWritten != amountController.text) {
-      // only update the controller if the value is different
+      // update the controller when value is different
       amountController.text = toBeWritten;
       amountController.selection = TextSelection.fromPosition(
         TextPosition(offset: toBeWritten.length),
       );
     }
-    final selectedAccount = ref.watch(bankAccountProvider) != null;
-    final selectedCategory = ref.watch(categoryProvider) != null;
-    setState(() {
-      _isSaveEnabled = selectedAccount &&
-          selectedCategory &&
-          amountController.text.isNotEmpty;
-    });
-  }
 
-  // TODO: This should be inside addTransaction
-  void _refreshAccountAndNavigateBack() {
-    ref
-        .read(accountsProvider.notifier)
-        .refreshAccount(ref.read(bankAccountProvider)!)
-        .whenComplete(() => Navigator.of(context).pop());
+    // Add proper validation for transfers
+    if (selectedType == TransactionType.transfer) {
+      final fromAccount = ref.watch(bankAccountProvider);
+      final toAccount = ref.watch(bankAccountTransferProvider);
+      final amount =
+          toBeWritten.isNotEmpty ? double.tryParse(toBeWritten) ?? 0 : 0;
+
+      // Check if there's enough balance
+      bool hasEnoughFunds = false;
+      if (fromAccount != null) {
+        final accountBalance = fromAccount.total;
+        hasEnoughFunds = accountBalance != null && accountBalance >= amount;
+
+        setState(() {
+          _isSaveEnabled = fromAccount != null &&
+              toAccount != null &&
+              fromAccount.id != toAccount.id &&
+              amountController.text.isNotEmpty &&
+              hasEnoughFunds;
+        });
+        // Show an error message if trying to transfer more than available balance
+        if (!hasEnoughFunds && amount > 0 && !_hasShownSnackbar) {
+          _hasShownSnackbar = true;
+
+          SchedulerBinding.instance.addPostFrameCallback((_) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Insufficient funds in ${fromAccount.name}. Available balance: ${numToCurrency(accountBalance)}',
+                ),
+                backgroundColor: Theme.of(context).colorScheme.error,
+                duration: const Duration(seconds: 3),
+              ),
+            );
+          });
+        }
+      }
+    } else {
+      // Original validation for income/expense
+      final selectedAccount = ref.watch(bankAccountProvider) != null;
+      final selectedCategory = ref.watch(categoryProvider) != null;
+
+      setState(() {
+        _isSaveEnabled = selectedAccount &&
+            selectedCategory &&
+            amountController.text.isNotEmpty;
+      });
+    }
   }
 
   void _createOrUpdateTransaction() {
@@ -126,6 +170,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
     final selectedTransaction = ref.read(selectedTransactionUpdateProvider);
 
     final cleanAmount = getCleanAmountString();
+    final amount = cleanAmount != '' ? double.tryParse(cleanAmount) ?? 0 : 0;
 
     // Check that an amount has been provided
     if (cleanAmount != '') {
@@ -158,7 +203,28 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
         }
       } else {
         if (selectedType == TransactionType.transfer) {
-          if (ref.read(bankAccountTransferProvider) != null) {
+          final fromAccount = ref.read(bankAccountProvider);
+          final toAccount = ref.read(bankAccountTransferProvider);
+
+          // Validate sufficient funds for transfer
+          if (fromAccount != null &&
+              toAccount != null &&
+              fromAccount.id != toAccount.id) {
+            final accountBalance = fromAccount.total;
+
+            if (accountBalance != null && amount > accountBalance) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Insufficient funds in ${fromAccount.name}.'),
+                  //maybe in future we show to user the the amount of the acc
+                  backgroundColor: Theme.of(context).colorScheme.error,
+                  duration: const Duration(seconds: 3),
+                ),
+              );
+              return; // Stop the transaction
+            }
+
+            // Proceed with transfer if validation passes
             ref
                 .read(transactionsProvider.notifier)
                 .addTransaction(currencyToNum(cleanAmount), noteController.text)
