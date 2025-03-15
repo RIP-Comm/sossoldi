@@ -300,8 +300,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                           ],
                           style: Theme.of(context)
                               .textTheme
-                              .titleLarge!
-                              .copyWith(color: grey1),
+                              .titleLarge,
                         ),
                       ],
                     ),
