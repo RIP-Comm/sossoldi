@@ -6,6 +6,8 @@ import '../constants/constants.dart';
 import '../constants/functions.dart';
 import '../constants/style.dart';
 import '../model/transaction.dart';
+import '../pages/planning_page/manage_budget_page.dart';
+import '../pages/transactions_page/widgets/transaction_empty_state_widget.dart';
 import '../providers/currency_provider.dart';
 import '../providers/transactions_provider.dart';
 import '../utils/date_helper.dart';
@@ -96,9 +98,7 @@ class _TransactionsListState extends State<TransactionsList> with Functions {
               },
             ),
           )
-        : const Center(
-            child: Text("No transactions available"),
-          );
+        : TransactionEmptyStateWidget();
   }
 }
 
