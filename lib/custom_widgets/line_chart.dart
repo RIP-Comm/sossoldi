@@ -92,7 +92,7 @@ class _LineChartSample2State extends State<LineChartWidget> {
                       widget.line2Data.length < 2) {
                     return Center(
                       child: Text(
-                        "We are sorry but there are not\nenough data to make the graph...",
+                        "We are sorry but there is not\nenough data to make the graph...",
                         style: TextStyle(color: Theme.of(context).hintColor),
                       ),
                     );
