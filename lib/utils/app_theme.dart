@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../constants/style.dart';
 
@@ -98,7 +97,7 @@ class AppTheme {
       contentPadding: EdgeInsets.all(16),
     ),
     disabledColor: grey2,
-    fontFamily: GoogleFonts.nunitoSans().fontFamily,
+    fontFamily: 'NunitoSans',
     textTheme: const TextTheme(
       // display
       displayLarge: TextStyle(
@@ -267,7 +266,7 @@ class AppTheme {
 
     disabledColor: darkGrey2,
     //Text style
-    fontFamily: GoogleFonts.nunitoSans().fontFamily,
+    fontFamily: 'NunitoSans',
     textTheme: const TextTheme(
       displayLarge: TextStyle(
         fontSize: 34.0,
