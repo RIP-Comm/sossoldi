@@ -118,7 +118,9 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
     ref
         .read(accountsProvider.notifier)
         .refreshAccount(ref.read(bankAccountProvider)!)
-        .whenComplete(() => Navigator.of(context).pop());
+        .whenComplete(() {
+          if(mounted) Navigator.of(context).pop();
+        });
   }
 
   void _createOrUpdateTransaction() {
