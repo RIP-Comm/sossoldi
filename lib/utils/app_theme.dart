@@ -318,7 +318,7 @@ class AppTheme {
       thumbColor: WidgetStateColor.resolveWith(
         (state) {
           if (state.contains(WidgetState.selected)) {
-            return customColorScheme.surface;
+            return darkCustomColorScheme.surface;
           }
 
           return darkGrey1;
