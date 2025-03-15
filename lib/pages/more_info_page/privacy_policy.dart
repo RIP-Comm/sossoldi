@@ -57,7 +57,7 @@ class _PrivacyPolicyPageState extends ConsumerState<PrivacyPolicyPage> {
                   .copyWith(color: Theme.of(context).colorScheme.primary),
             ),
             Text(
-              'We may update our Privacy Policy from time to time. Thus, you are advised to review this page periodically for any changes./nThis policy is effective as of 2024-01-01\n',
+              'We may update our Privacy Policy from time to time. Thus, you are advised to review this page periodically for any changes.\nThis policy is effective as of 2024-01-01\n',
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium!
