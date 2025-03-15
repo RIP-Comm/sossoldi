@@ -325,8 +325,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                                 builder: (_) => Container(
                                   height: 300,
                                   color: CupertinoDynamicColor.resolve(
-                                    CupertinoTheme.of(context)
-                                        .scaffoldBackgroundColor,
+                                    CupertinoColors.secondarySystemBackground,
                                     context,
                                   ),
                                   child: CupertinoDatePicker(
