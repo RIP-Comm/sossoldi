@@ -38,7 +38,7 @@ The app is being developed using the [Flutter](https://docs.flutter.dev/get-star
 
 ## This app is for you if you want to...
 
--   📈 track their net worth
+-   📈 track your net worth
 -   💸 track your expenses to better understand where they are spending their money
 -   👀 keep track of your investments
 -   🪦 keep everything in one place like Mr. Rip
