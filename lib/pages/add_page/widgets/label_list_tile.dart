@@ -37,6 +37,7 @@ class LabelListTile extends ConsumerWidget {
           Expanded(
             child: TextField(
               controller: labelController,
+              textCapitalization: TextCapitalization.sentences,
               decoration: const InputDecoration(
                 border: InputBorder.none,
                 hintText: "Add a description",

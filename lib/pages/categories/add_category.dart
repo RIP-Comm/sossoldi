@@ -64,7 +64,9 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                   Container(
                     width: double.infinity,
                     margin: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                     padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
@@ -85,17 +87,8 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                           controller: nameController,
                           decoration: InputDecoration(
                             hintText: "Category name",
-                            hintStyle: Theme.of(context)
-                                .textTheme
-                                .titleLarge!
-                                .copyWith(color: grey2),
-                            border: InputBorder.none,
-                            contentPadding: const EdgeInsets.all(0),
                           ),
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge!
-                              .copyWith(color: grey1),
+                          style: Theme.of(context).textTheme.titleLarge,
                         )
                       ],
                     ),
@@ -103,7 +96,9 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                   Container(
                     width: double.infinity,
                     margin: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                     padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
@@ -136,10 +131,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                               child: Text(
                                 capitalizeFirstLetter(
                                     type.toString().split('.').last),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge!
-                                    .copyWith(color: grey1),
+                                style: Theme.of(context).textTheme.titleLarge,
                               ),
                             );
                           }).toList(),
@@ -155,9 +147,13 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                   Container(
                     width: double.infinity,
                     margin: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
                       borderRadius: BorderRadius.circular(4),

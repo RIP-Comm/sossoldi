@@ -53,15 +53,17 @@ class NotificationService {
       // If notificaitons are not enabled popup the request
       if (!notificationEnabled) {
         notificationEnabled = await notificationsPlugin
-            .resolvePlatformSpecificImplementation<
-                AndroidFlutterLocalNotificationsPlugin>()
-            ?.requestNotificationsPermission() ?? false;
+                .resolvePlatformSpecificImplementation<
+                    AndroidFlutterLocalNotificationsPlugin>()
+                ?.requestNotificationsPermission() ??
+            false;
       }
       if (notificationEnabled) {
         bool? canSchedule = await notificationsPlugin
-            .resolvePlatformSpecificImplementation<
-                AndroidFlutterLocalNotificationsPlugin>()
-            ?.canScheduleExactNotifications() ?? false;
+                .resolvePlatformSpecificImplementation<
+                    AndroidFlutterLocalNotificationsPlugin>()
+                ?.canScheduleExactNotifications() ??
+            false;
         if (!canSchedule) {
           await notificationsPlugin
               .resolvePlatformSpecificImplementation<
@@ -125,7 +127,7 @@ class NotificationService {
     }
 
     // ? Uncomment the following line to test the notification after 10 seconds
-    // scheduledDate = DateTime.now().add(const Duration(seconds: 10));
+    // scheduledDate = now.add(const Duration(seconds: 10));
 
     await notificationsPlugin.zonedSchedule(
       id,
