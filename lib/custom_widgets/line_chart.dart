@@ -25,6 +25,9 @@ class LineChartWidget extends StatefulWidget {
 
   final Color? colorBackground;
 
+  // Animation duration
+  final Duration animationDuration;
+
   LineChartWidget({
     super.key,
     required List<FlSpot> lineData,
@@ -36,6 +39,7 @@ class LineChartWidget extends StatefulWidget {
     this.period = Period.month,
     int nXLabel = 10,
     double? minY,
+    this.animationDuration = const Duration(milliseconds: 1500),
   })  : lineData = enableGapFilling ? fillGaps(lineData) : lineData,
         line2Data = enableGapFilling ? fillGaps(line2Data) : line2Data,
         minY = minY ?? calculateMinY(lineData, line2Data);
@@ -70,8 +74,76 @@ class LineChartWidget extends StatefulWidget {
   State<LineChartWidget> createState() => _LineChartSample2State();
 }
 
-class _LineChartSample2State extends State<LineChartWidget> {
-  _LineChartSample2State();
+class _LineChartSample2State extends State<LineChartWidget>
+    with SingleTickerProviderStateMixin {
+  // Initialize with default values instead of using late
+  AnimationController? _animationController;
+  Animation<double>? _animation;
+
+  // Track hover state
+  bool isHovering = false;
+  // Use a value directly for initial draw
+  double animationValue = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _setupAnimation();
+  }
+
+  void _setupAnimation() {
+    // Initialize animation controller properly
+    _animationController = AnimationController(
+      vsync: this,
+      duration: widget.animationDuration,
+    );
+
+    _animation = CurvedAnimation(
+      parent: _animationController!,
+      curve: Curves.easeInOut,
+    );
+
+    // Add listener to update state when animation value changes
+    _animation!.addListener(() {
+      if (mounted) {
+        setState(() {
+          animationValue = _animation!.value;
+        });
+      }
+    });
+
+    // Start the animation
+    _animationController!.forward();
+  }
+
+  @override
+  void didUpdateWidget(LineChartWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // Animate when data changes
+    if (oldWidget.lineData != widget.lineData ||
+        oldWidget.line2Data != widget.line2Data) {
+      // Reset animation value
+      setState(() {
+        animationValue = 0.0;
+      });
+
+      // Dispose and recreate animation controller if duration changed
+      if (oldWidget.animationDuration != widget.animationDuration) {
+        _animationController?.dispose();
+        _setupAnimation();
+      } else {
+        _animationController?.reset();
+        _animationController?.forward();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _animationController?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,27 +152,44 @@ class _LineChartSample2State extends State<LineChartWidget> {
       children: [
         AspectRatio(
           aspectRatio: 2,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: widget.colorBackground ?? themeData.colorScheme.tertiary,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(top: 24),
-              child: Builder(
-                builder: (context) {
-                  if (widget.lineData.length < 2 &&
-                      widget.line2Data.length < 2) {
-                    return Center(
-                      child: Text(
-                        "We are sorry but there are not\nenough data to make the graph...",
-                        style: TextStyle(color: Theme.of(context).hintColor),
-                      ),
+          child: MouseRegion(
+            onEnter: (_) => setState(() => isHovering = true),
+            onExit: (_) => setState(() => isHovering = false),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: widget.colorBackground ?? themeData.colorScheme.tertiary,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: isHovering
+                    ? [
+                        BoxShadow(
+                          color: (widget.lineColor ??
+                                  themeData.colorScheme.primary)
+                              .withOpacity(0.2),
+                          blurRadius: 8,
+                          spreadRadius: 2,
+                        )
+                      ]
+                    : null,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 24),
+                child: Builder(
+                  builder: (context) {
+                    if (widget.lineData.length < 2 &&
+                        widget.line2Data.length < 2) {
+                      return Center(
+                        child: Text(
+                          "We are sorry but there are not\nenough data to make the graph...",
+                          style: TextStyle(color: Theme.of(context).hintColor),
+                        ),
+                      );
+                    }
+                    // Use the current animation value directly without AnimatedBuilder
+                    return LineChart(
+                      mainData(animationValue),
                     );
-                  }
-                  return LineChart(
-                    mainData(),
-                  );
-                },
+                  },
+                ),
               ),
             ),
           ),
@@ -172,10 +261,21 @@ class _LineChartSample2State extends State<LineChartWidget> {
     );
   }
 
-  LineChartData mainData() {
+  // Modified to accept animation progres
+  LineChartData mainData([double animationValue = 1.0]) {
     final ThemeData themeData = Theme.of(context);
     Color lineColor = widget.lineColor ?? themeData.colorScheme.primary;
     Color line2Color = widget.line2Color ?? themeData.disabledColor;
+
+    // Animated spots for main lane
+    final animatedLineData = widget.lineData.map((spot) {
+      return FlSpot(spot.x, spot.y * animationValue);
+    }).toList();
+
+    // Animated spots for second line
+    final animatedLine2Data = widget.line2Data.map((spot) {
+      return FlSpot(spot.x, spot.y * animationValue);
+    }).toList();
 
     return LineChartData(
       titlesData: FlTitlesData(
@@ -207,14 +307,15 @@ class _LineChartSample2State extends State<LineChartWidget> {
           }
           return spotIndexes.map((spotIndex) {
             return TouchedSpotIndicatorData(
-              const FlLine(
+              FlLine(
                 color: Colors.blueGrey,
                 strokeWidth: 2,
+                dashArray: isHovering ? [5, 5] : null,
               ),
               FlDotData(
                 getDotPainter: (spot, percent, barData, index) {
                   return FlDotCirclePainter(
-                    radius: 2,
+                    radius: isHovering ? 4 : 2,
                     color: Colors.grey,
                     strokeWidth: 2,
                     strokeColor: Colors.blueGrey,
@@ -226,6 +327,9 @@ class _LineChartSample2State extends State<LineChartWidget> {
         },
         touchTooltipData: LineTouchTooltipData(
           fitInsideHorizontally: true,
+          tooltipRoundedRadius: 8,
+          tooltipPadding:
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
             bool allSameX = touchedBarSpots.map((e) => e.x).toSet().length == 1;
 
@@ -285,9 +389,10 @@ class _LineChartSample2State extends State<LineChartWidget> {
       ),
 
       borderData: FlBorderData(
-        border: const Border(
+        show: true,
+        border: Border(
           bottom: BorderSide(
-            color: Colors.grey,
+            color: Colors.grey.withOpacity(0.8),
             width: 1.0,
             style: BorderStyle.solid,
           ),
@@ -299,26 +404,58 @@ class _LineChartSample2State extends State<LineChartWidget> {
       minY: widget.minY,
       lineBarsData: [
         LineChartBarData(
-          spots: widget.lineData,
+          spots: animatedLineData,
           isCurved: true,
           curveSmoothness: 0.15,
           barWidth: 1.5,
           isStrokeCapRound: true,
           color: lineColor,
-          dotData: const FlDotData(show: false),
+          dotData: FlDotData(
+            show: isHovering,
+            getDotPainter: (spot, percent, barData, index) {
+              return FlDotCirclePainter(
+                radius: 2.5,
+                color: lineColor,
+                strokeWidth: 1,
+                strokeColor: Colors.white,
+              );
+            },
+          ),
           belowBarData: BarAreaData(
             show: true,
-            color: lineColor.withValues(alpha: 0.2),
+            color: lineColor.withOpacity(0.2),
+            gradient: LinearGradient(
+              colors: [
+                lineColor.withOpacity(0.4),
+                lineColor.withOpacity(0.1),
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
           ),
         ),
         LineChartBarData(
-          spots: widget.line2Data,
+          spots: animatedLine2Data,
           isCurved: true,
           curveSmoothness: 0.15,
           barWidth: 1,
           isStrokeCapRound: true,
           color: line2Color,
-          dotData: const FlDotData(show: false),
+          dotData: FlDotData(
+            show: isHovering,
+            getDotPainter: (spot, percent, barData, index) {
+              return FlDotCirclePainter(
+                radius: 2,
+                color: line2Color,
+                strokeWidth: 1,
+                strokeColor: Colors.white,
+              );
+            },
+          ),
+          belowBarData: BarAreaData(
+            show: false,
+            color: line2Color.withOpacity(0.1),
+          ),
         ),
       ],
     );
