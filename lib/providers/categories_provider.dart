@@ -16,14 +16,17 @@ final categoryTypeProvider = StateProvider<CategoryTransactionType>(
 final selectedCategoryIndexProvider =
     StateProvider.autoDispose<int>((ref) => -1);
 
-class AsyncCategoriesNotifier extends AsyncNotifier<List<CategoryTransaction>> {
+class AsyncCategoriesNotifier
+    extends FamilyAsyncNotifier<List<CategoryTransaction>, CategoryFilter> {
   @override
-  Future<List<CategoryTransaction>> build() async {
-    return _getCategories();
+  Future<List<CategoryTransaction>> build(CategoryFilter filter) async {
+    return _getCategories(filter);
   }
 
-  Future<List<CategoryTransaction>> _getCategories() async {
-    final categories = await CategoryTransactionMethods().selectAll();
+  Future<List<CategoryTransaction>> _getCategories(
+      CategoryFilter filter) async {
+    final categories =
+        await CategoryTransactionMethods().selectCategories(filter);
     return categories;
   }
 
@@ -38,13 +41,14 @@ class AsyncCategoriesNotifier extends AsyncNotifier<List<CategoryTransaction>> {
       symbol: icon,
       type: type,
       color: color,
+      markedAsDeleted: false,
     );
 
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       await CategoryTransactionMethods().insert(category);
       ref.invalidate(categoriesByTypeProvider(category.type));
-      return _getCategories();
+      return _getCategories(arg);
     });
   }
 
@@ -64,7 +68,15 @@ class AsyncCategoriesNotifier extends AsyncNotifier<List<CategoryTransaction>> {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       await CategoryTransactionMethods().updateItem(category);
-      return _getCategories();
+      return _getCategories(arg);
+    });
+  }
+
+  Future<void> markAsDeleted(int categoryId) async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      await CategoryTransactionMethods().markAsDeleted(categoryId);
+      return _getCategories(arg);
     });
   }
 
@@ -72,20 +84,17 @@ class AsyncCategoriesNotifier extends AsyncNotifier<List<CategoryTransaction>> {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       await CategoryTransactionMethods().deleteById(categoryId);
-      return _getCategories();
+      return _getCategories(arg);
     });
   }
 
   Future<List<CategoryTransaction>> getCategories() async {
-    return _getCategories();
+    return _getCategories(arg);
   }
 }
 
-final categoriesProvider =
-    AsyncNotifierProvider<AsyncCategoriesNotifier, List<CategoryTransaction>>(
-        () {
-  return AsyncCategoriesNotifier();
-});
+final categoriesProvider = AsyncNotifierProviderFamily<AsyncCategoriesNotifier,
+    List<CategoryTransaction>, CategoryFilter>(() => AsyncCategoriesNotifier());
 
 final categoriesByTypeProvider =
     FutureProvider.family<List<CategoryTransaction>, CategoryTransactionType?>(
@@ -178,9 +187,7 @@ final categoryToTransactionProvider =
   return CategoryTransactionMethods().categoryToTransactionType(type);
 });
 
-final monthlyTotalsProvider =
-    FutureProvider<List<double>>(
-        (ref) async {
+final monthlyTotalsProvider = FutureProvider<List<double>>((ref) async {
   final categoryType = ref.watch(categoryTypeProvider);
   final dateStart = ref.watch(filterDateStartProvider);
   //final dateEnd = ref.watch(filterDateEndProvider);

@@ -5,6 +5,7 @@ import '../../constants/functions.dart';
 import '../../constants/style.dart';
 import '../../model/category_transaction.dart';
 import '../../providers/categories_provider.dart';
+import 'widgets/delete_category_dialog.dart';
 
 class AddCategory extends ConsumerStatefulWidget {
   final bool hideIncome;
@@ -374,14 +375,8 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                       width: double.infinity,
                       padding: const EdgeInsets.all(16),
                       child: TextButton.icon(
-                        onPressed: () => ref
-                            .read(categoriesProvider.notifier)
-                            .removeCategory(selectedCategory.id!)
-                            .whenComplete(() {
-                          if (context.mounted) {
-                            Navigator.of(context).pop();
-                          }
-                        }),
+                        onPressed: () => showDeleteCategoryDialog(
+                            context, ref, selectedCategory),
                         style: TextButton.styleFrom(
                           side: const BorderSide(color: red, width: 1),
                         ),
@@ -427,7 +422,8 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                   if (nameController.text.isNotEmpty) {
                     if (selectedCategory != null) {
                       await ref
-                          .read(categoriesProvider.notifier)
+                          .read(
+                              categoriesProvider(userCategoriesFilter).notifier)
                           .updateCategory(
                             name: nameController.text,
                             type: categoryType,
@@ -435,7 +431,10 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                             color: categoryColor,
                           );
                     } else {
-                      await ref.read(categoriesProvider.notifier).addCategory(
+                      await ref
+                          .read(
+                              categoriesProvider(userCategoriesFilter).notifier)
+                          .addCategory(
                             name: nameController.text,
                             type: categoryType,
                             icon: categoryIcon,

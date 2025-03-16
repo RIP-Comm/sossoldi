@@ -12,6 +12,7 @@ class CategoryTransactionFields extends BaseEntityFields {
   static String color = 'color';
   static String note = 'note';
   static String parent = 'parent';
+  static String markedAsDeleted = 'markedAsDeleted';
   static String createdAt = BaseEntityFields.getCreatedAt;
   static String updatedAt = BaseEntityFields.getUpdatedAt;
 
@@ -23,10 +24,48 @@ class CategoryTransactionFields extends BaseEntityFields {
     color,
     note,
     parent,
+    markedAsDeleted,
     BaseEntityFields.createdAt,
     BaseEntityFields.updatedAt
   ];
 }
+
+class CategoryFilter {
+  final bool showSystemCategories;
+  final bool showDeletedCategories;
+
+  const CategoryFilter({
+    this.showSystemCategories = false,
+    this.showDeletedCategories = false,
+  });
+
+  //Avoid useless Riverpod recostructions
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is CategoryFilter &&
+        other.showSystemCategories == showSystemCategories &&
+        other.showDeletedCategories == showDeletedCategories;
+  }
+
+  @override
+  int get hashCode =>
+      showSystemCategories.hashCode ^ showDeletedCategories.hashCode;
+}
+
+const userCategoriesFilter = CategoryFilter(
+  showSystemCategories: false,
+  showDeletedCategories: false,
+);
+
+const onlyActiveCategoriesFilter = CategoryFilter(
+  showSystemCategories: true,
+  showDeletedCategories: false,
+);
+const allCategoriesFilter = CategoryFilter(
+  showSystemCategories: true,
+  showDeletedCategories: true,
+);
 
 enum CategoryTransactionType { income, expense }
 
@@ -42,6 +81,7 @@ class CategoryTransaction extends BaseEntity {
   final int color;
   final String? note;
   final int? parent;
+  final bool markedAsDeleted;
 
   const CategoryTransaction({
     super.id,
@@ -51,6 +91,7 @@ class CategoryTransaction extends BaseEntity {
     required this.color,
     this.note,
     this.parent,
+    required this.markedAsDeleted,
     super.createdAt,
     super.updatedAt,
   });
@@ -63,6 +104,7 @@ class CategoryTransaction extends BaseEntity {
           int? color,
           String? note,
           int? parent,
+          bool? markedAsDeleted,
           DateTime? createdAt,
           DateTime? updatedAt}) =>
       CategoryTransaction(
@@ -73,6 +115,7 @@ class CategoryTransaction extends BaseEntity {
           color: color ?? this.color,
           note: note ?? this.note,
           parent: parent ?? this.parent,
+          markedAsDeleted: markedAsDeleted ?? this.markedAsDeleted,
           createdAt: createdAt ?? this.createdAt,
           updatedAt: updatedAt ?? this.updatedAt);
 
@@ -86,6 +129,9 @@ class CategoryTransaction extends BaseEntity {
           color: json[CategoryTransactionFields.color] as int,
           note: json[CategoryTransactionFields.note] as String?,
           parent: json[CategoryTransactionFields.parent] as int?,
+          markedAsDeleted: json[CategoryTransactionFields.markedAsDeleted] == 1
+              ? true
+              : false,
           createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
           updatedAt:
               DateTime.parse(json[BaseEntityFields.updatedAt] as String));
@@ -99,6 +145,7 @@ class CategoryTransaction extends BaseEntity {
         CategoryTransactionFields.color: color,
         CategoryTransactionFields.note: note,
         CategoryTransactionFields.parent: parent,
+        CategoryTransactionFields.markedAsDeleted: markedAsDeleted ? 1 : 0,
         BaseEntityFields.createdAt: update
             ? createdAt?.toIso8601String()
             : DateTime.now().toIso8601String(),
@@ -141,6 +188,39 @@ class CategoryTransactionMethods extends SossoldiDatabase {
     return result.map((json) => CategoryTransaction.fromJson(json)).toList();
   }
 
+  Future<List<CategoryTransaction>> selectCategories(
+      CategoryFilter filter) async {
+    final db = await database;
+
+    String whereClause = '';
+    List<dynamic> whereArgs = [];
+
+    // showSystemCategories == false => no uncategorized
+    if (!filter.showSystemCategories) {
+      whereClause =
+          '${CategoryTransactionFields.id} != ? AND ${CategoryTransactionFields.id} != ?';
+      whereArgs = [0, 1];
+    }
+
+    // showDeletedCategories == false => no markedAsDeleted
+    if (!filter.showDeletedCategories) {
+      if (whereClause.isNotEmpty) {
+        whereClause += ' AND ';
+      }
+      whereClause += '${CategoryTransactionFields.markedAsDeleted} = ?';
+      whereArgs.add(0);
+    }
+
+    final result = await db.query(
+      categoryTransactionTable,
+      where: whereClause.isNotEmpty ? whereClause : null,
+      whereArgs: whereArgs.isNotEmpty ? whereArgs : null,
+      orderBy: orderByASC,
+    );
+
+    return result.map((json) => CategoryTransaction.fromJson(json)).toList();
+  }
+
   Future<List<CategoryTransaction>> selectCategoriesByType(
       CategoryTransactionType type) async {
     final db = await database;
@@ -170,6 +250,17 @@ class CategoryTransactionMethods extends SossoldiDatabase {
       item.toJson(update: true),
       where: '${CategoryTransactionFields.id} = ?',
       whereArgs: [item.id],
+    );
+  }
+
+  Future<int> markAsDeleted(int id) async {
+    final db = await database;
+
+    return await db.update(
+      categoryTransactionTable,
+      {CategoryTransactionFields.markedAsDeleted: 1},
+      where: '${CategoryTransactionFields.id} = ?',
+      whereArgs: [id],
     );
   }
 

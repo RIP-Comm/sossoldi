@@ -106,9 +106,17 @@ class SossoldiDatabase {
         `${CategoryTransactionFields.color}` $integerNotNull,
         `${CategoryTransactionFields.note}` $text,
         `${CategoryTransactionFields.parent}` $integer,
+        `${CategoryTransactionFields.markedAsDeleted}` $integerNotNull CHECK (${CategoryTransactionFields.markedAsDeleted} IN (0, 1)),
         `${CategoryTransactionFields.createdAt}` $textNotNull,
         `${CategoryTransactionFields.updatedAt}` $textNotNull
       )
+    ''');
+
+    // Default "Uncategorized" Category
+    await database.execute('''
+      INSERT INTO `$categoryTransactionTable`(`${CategoryTransactionFields.id}`, `${CategoryTransactionFields.name}`, `${CategoryTransactionFields.type}`, `${CategoryTransactionFields.symbol}`, `${CategoryTransactionFields.color}`, `${CategoryTransactionFields.note}`, `${CategoryTransactionFields.parent}`, `${CategoryTransactionFields.markedAsDeleted}`, `${CategoryTransactionFields.createdAt}`, `${CategoryTransactionFields.updatedAt}`) VALUES
+        (0, "Uncategorized", "IN", "question_mark", 0, 'This is a default category for no categorized transactions', null, '0', '${DateTime.now()}', '${DateTime.now()}'),
+        (1, "Uncategorized", "OUT", "question_mark", 0, 'This is a default category for no categorized transactions', null, '0', '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
     // Budget Table
@@ -142,7 +150,6 @@ class SossoldiDatabase {
         ("CHF", "CHF", "Switzerland Franc", 0),
         ("£", "GBP", "United Kingdom Pound", 0);
     ''');
-
   }
 
   Future<String> exportToCSV() async {
@@ -180,7 +187,8 @@ class SossoldiDatabase {
         final List<Map<String, dynamic>> rows = await db.query(tableName);
 
         for (var row in rows) {
-          List<dynamic> csvRow = List.filled(headers.length, ''); // Initialize with empty strings
+          List<dynamic> csvRow =
+              List.filled(headers.length, ''); // Initialize with empty strings
           csvRow[0] = tableName; // Set table name
 
           // Fill in values for existing columns
@@ -215,7 +223,8 @@ class SossoldiDatabase {
       }
 
       final String csvData = await file.readAsString();
-      final List<List<dynamic>> rows = const CsvToListConverter().convert(csvData);
+      final List<List<dynamic>> rows =
+          const CsvToListConverter().convert(csvData);
 
       if (rows.isEmpty) {
         throw Exception('CSV file is empty');
@@ -251,7 +260,8 @@ class SossoldiDatabase {
             for (int i = 1; i < tableRows.length; i++) {
               final Map<String, dynamic> row = {};
               for (int j = 0; j < headers.length; j++) {
-                if (j != tableNameIndex) { // Skip the table_name column
+                if (j != tableNameIndex) {
+                  // Skip the table_name column
                   final String header = headers[j];
                   final dynamic value = tableRows[i][j];
 
@@ -289,14 +299,16 @@ class SossoldiDatabase {
 
     // Add fake categories
     await _database?.execute('''
-      INSERT INTO categoryTransaction(id, name, type, symbol, color, note, parent, createdAt, updatedAt) VALUES
-        (10, "Out", "OUT", "restaurant", 0, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (11, "Home", "OUT", "home", 1, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (12, "Furniture","OUT", "home", 2, '', 11, '${DateTime.now()}', '${DateTime.now()}'),
-        (13, "Shopping", "OUT", "shopping_cart", 3, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (14, "Leisure", "OUT", "subscriptions", 4, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (15, "Transports", "OUT", "directions_car_rounded", 6, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (16, "Salary", "IN", "work", 5, '', null, '${DateTime.now()}', '${DateTime.now()}');
+      INSERT INTO categoryTransaction(id, name, type, symbol, color, note, parent, markedAsDeleted, createdAt, updatedAt) VALUES
+        (0, "Uncategorized", "IN", "question_mark", 0, 'This is a default category for no categorized transactions', null, 0, '${DateTime.now()}', '${DateTime.now()}'),
+        (1, "Uncategorized", "OUT", "question_mark", 0, 'This is a default category for no categorized transactions', null, 0, '${DateTime.now()}', '${DateTime.now()}'),
+        (10, "Out", "OUT", "restaurant", 1, '', null, 0, '${DateTime.now()}', '${DateTime.now()}'),
+        (11, "Home", "OUT", "home", 2, '', null, 0, '${DateTime.now()}', '${DateTime.now()}'),
+        (12, "Furniture","OUT", "home", 3, '', 11, 0, '${DateTime.now()}', '${DateTime.now()}'),
+        (13, "Shopping", "OUT", "shopping_cart", 4, '', null, 0, '${DateTime.now()}', '${DateTime.now()}'),
+        (14, "Leisure", "OUT", "subscriptions", 5, '', null, 0, '${DateTime.now()}', '${DateTime.now()}'),
+        (15, "Transports", "OUT", "directions_car_rounded", 6, '', null, 0, '${DateTime.now()}', '${DateTime.now()}'),
+        (16, "Salary", "IN", "work", 5, '', null, 0, '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
     // Add currencies
