@@ -56,7 +56,7 @@ var settingsOptions = [
   ],
   [
     Icons.feedback,
-    "Leave feedback",
+    "Feedback",
     "Complete a small form to report a bug or leave a feedback",
     "https://feedback.sossoldi.com",
   ],
