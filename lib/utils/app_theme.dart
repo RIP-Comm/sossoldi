@@ -1,10 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../constants/style.dart';
 
 class AppTheme {
   static final lightTheme = ThemeData(
+    cupertinoOverrideTheme: const CupertinoThemeData(
+      brightness: Brightness.light,
+    ),
     colorScheme: customColorScheme,
     scaffoldBackgroundColor: white,
     appBarTheme: const AppBarTheme(
@@ -14,6 +17,7 @@ class AppTheme {
       centerTitle: true,
       iconTheme: IconThemeData(color: blue5),
       titleTextStyle: TextStyle(
+        fontFamily: 'NunitoSans',
         color: blue1,
         fontSize: 18,
         fontWeight: FontWeight.w700,
@@ -56,6 +60,7 @@ class AppTheme {
         ),
         textStyle: const WidgetStatePropertyAll(
           TextStyle(
+            fontFamily: 'NunitoSans',
             fontSize: 18.0,
             fontWeight: FontWeight.w600,
           ),
@@ -76,8 +81,9 @@ class AppTheme {
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
-        textStyle: WidgetStatePropertyAll(
+        textStyle: const WidgetStatePropertyAll(
           TextStyle(
+            fontFamily: 'NunitoSans',
             fontSize: 14.0,
             fontWeight: FontWeight.w700,
           ),
@@ -94,11 +100,11 @@ class AppTheme {
       ),
     ),
     listTileTheme: const ListTileThemeData(
-      tileColor: grey3,
+      tileColor: white,
       contentPadding: EdgeInsets.all(16),
     ),
     disabledColor: grey2,
-    fontFamily: GoogleFonts.nunitoSans().fontFamily,
+    fontFamily: 'NunitoSans',
     textTheme: const TextTheme(
       // display
       displayLarge: TextStyle(
@@ -171,6 +177,9 @@ class AppTheme {
   );
 
   static final darkTheme = ThemeData(
+    cupertinoOverrideTheme: const CupertinoThemeData(
+      brightness: Brightness.dark,
+    ),
     colorScheme: darkCustomColorScheme,
     scaffoldBackgroundColor: darkGrey4,
     appBarTheme: const AppBarTheme(
@@ -180,6 +189,7 @@ class AppTheme {
       centerTitle: true,
       iconTheme: IconThemeData(color: darkBlue5),
       titleTextStyle: TextStyle(
+        fontFamily: 'NunitoSans',
         color: darkBlue1,
         fontSize: 18,
         fontWeight: FontWeight.w700,
@@ -223,6 +233,7 @@ class AppTheme {
         ),
         textStyle: const WidgetStatePropertyAll(
           TextStyle(
+            fontFamily: 'NunitoSans',
             fontSize: 18.0,
             fontWeight: FontWeight.w600,
           ),
@@ -243,8 +254,9 @@ class AppTheme {
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
-        textStyle: WidgetStatePropertyAll(
+        textStyle: const WidgetStatePropertyAll(
           TextStyle(
+            fontFamily: 'NunitoSans',
             fontSize: 14.0,
             fontWeight: FontWeight.w700,
           ),
@@ -261,13 +273,13 @@ class AppTheme {
       ),
     ),
     listTileTheme: const ListTileThemeData(
-      tileColor: darkBlue7,
+      tileColor: darkGrey4,
       contentPadding: EdgeInsets.all(16),
     ),
 
     disabledColor: darkGrey2,
     //Text style
-    fontFamily: GoogleFonts.nunitoSans().fontFamily,
+    fontFamily: 'NunitoSans',
     textTheme: const TextTheme(
       displayLarge: TextStyle(
         fontSize: 34.0,

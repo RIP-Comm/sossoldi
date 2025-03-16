@@ -106,11 +106,20 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
       );
     }
     final selectedAccount = ref.watch(bankAccountProvider) != null;
+    final selectedAccountTransfer =
+        ref.watch(bankAccountTransferProvider) != null;
     final selectedCategory = ref.watch(categoryProvider) != null;
     setState(() {
-      _isSaveEnabled = selectedAccount &&
-          selectedCategory &&
-          amountController.text.isNotEmpty;
+      _isSaveEnabled = amountController.text.isNotEmpty && selectedAccount;
+      switch (selectedType) {
+        case TransactionType.expense:
+        case TransactionType.income:
+          _isSaveEnabled &= selectedCategory;
+          break;
+        case TransactionType.transfer:
+          _isSaveEnabled &= selectedAccountTransfer;
+          break;
+      }
     });
   }
 
@@ -328,7 +337,10 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                                 context: context,
                                 builder: (_) => Container(
                                   height: 300,
-                                  color: white,
+                                  color: CupertinoDynamicColor.resolve(
+                                    CupertinoColors.secondarySystemBackground,
+                                    context,
+                                  ),
                                   child: CupertinoDatePicker(
                                     initialDateTime: ref.watch(dateProvider),
                                     minimumYear: 2015,

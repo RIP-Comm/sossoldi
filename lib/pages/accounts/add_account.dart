@@ -7,6 +7,7 @@ import '../../constants/constants.dart';
 import '../../constants/functions.dart';
 import '../../constants/style.dart';
 import '../../providers/currency_provider.dart';
+import 'widgets/confirm_account_deletion_dialog.dart';
 
 class AddAccount extends ConsumerStatefulWidget {
   const AddAccount({super.key});
@@ -17,7 +18,7 @@ class AddAccount extends ConsumerStatefulWidget {
 
 class _AddAccountState extends ConsumerState<AddAccount> with Functions {
   final TextEditingController nameController = TextEditingController();
-  final TextEditingController startingValueController = TextEditingController();
+  final TextEditingController balanceController = TextEditingController();
   String accountIcon = accountIconList.keys.first;
   int accountColor = 0;
   bool countNetWorth = true;
@@ -30,7 +31,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
     final selectedAccount = ref.read(selectedAccountProvider);
     if (selectedAccount != null) {
       nameController.text = selectedAccount.name;
-      startingValueController.text = selectedAccount.startingValue.toString();
+      balanceController.text = numToCurrency(selectedAccount.total);
       accountIcon = selectedAccount.symbol;
       accountColor = selectedAccount.color;
       countNetWorth = selectedAccount.active;
@@ -42,7 +43,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
   @override
   void dispose() {
     nameController.dispose();
-    startingValueController.dispose();
+    balanceController.dispose();
     super.dispose();
   }
 
@@ -68,7 +69,9 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                   Container(
                     width: double.infinity,
                     margin: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 24),
+                      horizontal: 16,
+                      vertical: 24,
+                    ),
                     padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
@@ -93,7 +96,9 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                     width: double.infinity,
                     margin: const EdgeInsets.symmetric(horizontal: 16),
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
                       borderRadius: BorderRadius.circular(4),
@@ -265,41 +270,42 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                       ],
                     ),
                   ),
-                  if (selectedAccount == null)
-                    Container(
-                      width: double.infinity,
-                      margin: const EdgeInsets.fromLTRB(16, 24, 16, 0),
-                      padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surface,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "STARTING VALUE",
-                            style: Theme.of(context).textTheme.labelLarge,
-                          ),
-                          TextField(
-                            controller: startingValueController,
-                            decoration: InputDecoration(
-                              hintText: "Initial balance",
-                              suffixText: currencyState.selectedCurrency.symbol,
-                            ),
-                            keyboardType: TextInputType.number,
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.allow(
-                                RegExp(r'^\d*\.?\d{0,2}'),
-                              ),
-                            ],
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                        ],
-                      ),
-                    ),
                   Container(
-                    width: double.infinity,
+                    margin: const EdgeInsets.fromLTRB(16, 24, 16, 0),
+                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surface,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "${selectedAccount == null ? "INITIAL" : "CURRENT"} BALANCE",
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
+                        TextField(
+                          controller: balanceController,
+                          decoration: InputDecoration(
+                            hintText:
+                                "${selectedAccount == null ? "Initial" : "Current"} Balance",
+                            suffixText: currencyState.selectedCurrency.symbol,
+                          ),
+                          keyboardType:
+                              TextInputType.numberWithOptions(decimal: true),
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.allow(
+                              RegExp(r'^\d*\.?\d{0,2}'),
+                            ),
+                          ],
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
                     margin: const EdgeInsets.symmetric(
                       horizontal: 16,
                       vertical: 16,
@@ -355,14 +361,30 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                       width: double.infinity,
                       padding: const EdgeInsets.all(16),
                       child: TextButton.icon(
-                        onPressed: () => ref
-                            .read(accountsProvider.notifier)
-                            .removeAccount(selectedAccount.id!)
-                            .whenComplete(() {
-                          if (context.mounted) {
-                            Navigator.of(context).pop();
-                          }
-                        }),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return ConfirmAccountDeletionDialog(
+                                account: selectedAccount,
+                                onPressed: () => ref
+                                    .read(accountsProvider.notifier)
+                                    .removeAccount(selectedAccount.id!)
+                                    .whenComplete(
+                                  () {
+                                    if (context.mounted) {
+                                      // Navigate back to the /account-list route.
+                                      Navigator.popUntil(
+                                        context,
+                                        ModalRoute.withName('/account-list'),
+                                      );
+                                    }
+                                  },
+                                ),
+                              );
+                            },
+                          );
+                        },
                         style: TextButton.styleFrom(
                           side: const BorderSide(color: red, width: 1),
                         ),
@@ -413,6 +435,15 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                           active: countNetWorth,
                           mainAccount: mainAccount,
                         );
+                    if (currencyToNum(balanceController.text) !=
+                        selectedAccount.total) {
+                      await ref
+                          .read(accountsProvider.notifier)
+                          .reconcileAccount(
+                            newBalance: currencyToNum(balanceController.text),
+                            account: selectedAccount,
+                          );
+                    }
                   } else {
                     await ref.read(accountsProvider.notifier).addAccount(
                           name: nameController.text,
@@ -420,8 +451,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                           color: accountColor,
                           active: countNetWorth,
                           mainAccount: mainAccount,
-                          startingValue:
-                              currencyToNum(startingValueController.text),
+                          startingValue: currencyToNum(balanceController.text),
                         );
                   }
                   if (context.mounted) Navigator.of(context).pop();

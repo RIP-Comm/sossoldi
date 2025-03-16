@@ -23,7 +23,6 @@ dependencies:
   flutter_phoenix: ^1.1.1
   flutter_riverpod: ^2.6.1
   gap: ^3.0.1
-  google_fonts: ^6.2.1
   intl: ^0.19.0
   path: ^1.9.1
   path_provider: ^2.1.5
@@ -46,11 +45,52 @@ dev_dependencies:
   test: ^1.25.2
 
 flutter:
-
   uses-material-design: true
-
   assets:
     - assets/
+  fonts:
+    - family: NunitoSans
+      fonts:
+        - asset: assets/fonts/NunitoSans-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/NunitoSans-ExtraLightItalic.ttf
+          style: italic
+          weight: 200
+        - asset: assets/fonts/NunitoSans-Light.ttf
+          weight: 300
+        - asset: assets/fonts/NunitoSans-LightItalic.ttf
+          style: italic
+          weight: 300
+        - asset: assets/fonts/NunitoSans-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/NunitoSans-Italic.ttf
+          style: italic
+          weight: 400
+        - asset: assets/fonts/NunitoSans-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/NunitoSans-MediumItalic.ttf
+          style: italic
+          weight: 500
+        - asset: assets/fonts/NunitoSans-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/NunitoSans-SemiBoldItalic.ttf
+          style: italic
+          weight: 600
+        - asset: assets/fonts/NunitoSans-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/NunitoSans-BoldItalic.ttf
+          style: italic
+          weight: 700
+        - asset: assets/fonts/NunitoSans-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/NunitoSans-ExtraBoldItalic.ttf
+          style: italic
+          weight: 800
+        - asset: assets/fonts/NunitoSans-Black.ttf
+          weight: 900
+        - asset: assets/fonts/NunitoSans-BlackItalic.ttf
+          style: italic
+          weight: 900
 
 flutter_native_splash:
   web: false
