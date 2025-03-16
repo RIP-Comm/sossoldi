@@ -16,7 +16,7 @@ class ListTab extends ConsumerWidget with Functions {
       child: asyncTransactions.when(
         data: (transactions) {
           return TransactionsList(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            margin: const EdgeInsets.all(16.0),
             transactions: transactions,
           );
         },
