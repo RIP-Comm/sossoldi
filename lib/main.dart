@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -51,6 +53,13 @@ class Launcher extends ConsumerWidget {
       title: 'Sossoldi',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
+      builder: (context, child) { // Rescale all TextStyles for macOS
+        double scaleFactor = Platform.isMacOS ? 1.5 : 1.0;
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(textScaleFactor: scaleFactor),
+          child: child!,
+        );
+      },
       themeMode: appThemeState.isDarkModeEnabled ? ThemeMode.dark : ThemeMode.light,
       onGenerateRoute: makeRoute,
       initialRoute: _isFirstLogin == null || _isFirstLogin! ? '/onboarding' : '/',
