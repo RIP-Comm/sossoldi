@@ -20,7 +20,7 @@ import '../providers/transactions_provider.dart';
 var settingsOptions = [
   [
     Icons.settings,
-    "General Settings",
+    "General",
     "Edit general settings",
     "/general-settings",
   ],
@@ -56,7 +56,7 @@ var settingsOptions = [
   ],
   [
     Icons.feedback,
-    "Leave a feedback",
+    "Leave feedback",
     "Complete a small form to report a bug or leave a feedback",
     "https://feedback.sossoldi.com",
   ],
@@ -100,7 +100,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 onPressed: () => Navigator.pop(context),
                 child: Text(
                   "OK",
-                  style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
               ),
             ],
@@ -123,40 +124,14 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () => Navigator.pop(context),
         ),
+        title: const Text('Settings'),
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
-              child: GestureDetector(
-                onTap: _onSettingsTap,
-                child: Row(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      padding: const EdgeInsets.all(5.0),
-                      child: Icon(
-                        Icons.settings,
-                        size: 28.0,
-                        color: Theme.of(context).colorScheme.surface,
-                      ),
-                    ),
-                    const SizedBox(width: 12.0),
-                    Text(
-                      "Settings",
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineLarge!
-                          .copyWith(color: Theme.of(context).colorScheme.primary),
-                    ),
-                  ],
-                ),
-              ),
+            const SizedBox(
+              height: 16,
             ),
             ListView.builder(
               itemCount: settingsOptions.length,
@@ -204,14 +179,20 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleLarge!
-                                      .copyWith(color: Theme.of(context).colorScheme.primary),
+                                      .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary),
                                 ),
                                 Text(
                                   setting[2].toString(),
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodySmall!
-                                      .copyWith(color: Theme.of(context).colorScheme.primary),
+                                      .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary),
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 2,
                                 ),
@@ -263,7 +244,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                     child: const Text('CLEAR AND FILL DEMO DATA'),
                     onPressed: () async {
                       await SossoldiDatabase.instance.clearDatabase();
-                      await SossoldiDatabase.instance.fillDemoData().then((value) {
+                      await SossoldiDatabase.instance
+                          .fillDemoData()
+                          .then((value) {
                         ref.refresh(accountsProvider);
                         ref.refresh(categoriesProvider);
                         ref.refresh(transactionsProvider);
@@ -271,7 +254,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         ref.refresh(dashboardProvider);
                         ref.refresh(lastTransactionsProvider);
                         ref.refresh(statisticsProvider);
-                        showSuccessDialog(context, "DB Cleared, and DEMO data added");
+                        showSuccessDialog(
+                            context, "DB Cleared, and DEMO data added");
                       });
                     },
                   ),

@@ -11,7 +11,8 @@ class GeneralSettingsPage extends ConsumerStatefulWidget {
   const GeneralSettingsPage({super.key});
 
   @override
-  ConsumerState<GeneralSettingsPage> createState() => _GeneralSettingsPageState();
+  ConsumerState<GeneralSettingsPage> createState() =>
+      _GeneralSettingsPageState();
 }
 
 class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
@@ -40,7 +41,7 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text('General Settings'),
+        title: const Text('General'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(left: 20, right: 20, top: 25),
@@ -50,10 +51,8 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
             Row(
               children: [
                 Text("Appearance",
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(color: Theme.of(context).colorScheme.primary)),
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        color: Theme.of(context).colorScheme.primary)),
                 const Spacer(),
                 CircleAvatar(
                     radius: 30.0,
@@ -63,13 +62,19 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                       onPressed: () {
                         // Toggle dark mode using the provider
                         if (appThemeState.isDarkModeEnabled) {
-                          ref.read(appThemeStateNotifier.notifier).setLightTheme();
+                          ref
+                              .read(appThemeStateNotifier.notifier)
+                              .setLightTheme();
                         } else {
-                          ref.read(appThemeStateNotifier.notifier).setDarkTheme();
+                          ref
+                              .read(appThemeStateNotifier.notifier)
+                              .setDarkTheme();
                         }
                       },
                       icon: Icon(
-                        appThemeState.isDarkModeEnabled ? Icons.dark_mode : Icons.light_mode,
+                        appThemeState.isDarkModeEnabled
+                            ? Icons.dark_mode
+                            : Icons.light_mode,
                         size: 25.0,
                         color: Theme.of(context).colorScheme.onPrimary,
                       ),
@@ -80,10 +85,8 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
             Row(
               children: [
                 Text("Currency",
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(color: Theme.of(context).colorScheme.primary)),
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        color: Theme.of(context).colorScheme.primary)),
                 const Spacer(),
                 GestureDetector(
                     onTap: () {
@@ -99,7 +102,8 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                             child: Text(
                           currencyState.selectedCurrency.symbol,
                           style: TextStyle(
-                              color: Theme.of(context).colorScheme.onPrimary, fontSize: 25),
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontSize: 25),
                         )))),
               ],
             ),

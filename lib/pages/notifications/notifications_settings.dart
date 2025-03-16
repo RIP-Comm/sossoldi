@@ -23,6 +23,7 @@ class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
 
     return Scaffold(
       appBar: AppBar(
+        title: const Text('Notifications'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () => Navigator.pop(context),
@@ -32,32 +33,8 @@ class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-              child: Row(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.notifications_active,
-                      size: 24.0,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                  ),
-                  const SizedBox(width: 12.0),
-                  Text(
-                    "Notifications",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineLarge!
-                        .copyWith(color: Theme.of(context).colorScheme.primary),
-                  ),
-                ],
-              ),
+            const SizedBox(
+              height: 16,
             ),
             Container(
               width: double.infinity,
