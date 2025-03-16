@@ -46,6 +46,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                     children: [
                       const SizedBox(height: 24),
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const SizedBox(width: 16),
                           Column(
@@ -80,7 +81,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                               ),
                             ],
                           ),
-                          const SizedBox(width: 30),
+                          const SizedBox(width: 16),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -110,7 +111,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                               ),
                             ],
                           ),
-                          const SizedBox(width: 30),
+                          const SizedBox(width: 16),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
