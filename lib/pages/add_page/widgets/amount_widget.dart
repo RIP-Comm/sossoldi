@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import "package:flutter_riverpod/flutter_riverpod.dart";
@@ -42,28 +41,10 @@ class _AmountWidgetState extends ConsumerState<AmountWidget> with Functions {
                 ),
               ),
         ),
-        keyboardType: TextInputType.numberWithOptions(
-          decimal: true,
-          // Leaving the default behaviour on Android which seems to be working as expeceted.
-          signed: defaultTargetPlatform == TargetPlatform.android,
-        ),
+        keyboardType:
+            const TextInputType.numberWithOptions(decimal: true, signed: true),
         inputFormatters: [
-          // Allow only digits and one decimal separator.
-          FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
-
-          // AI generated regex: checks that the String contains either one comma or
-          // one period. Only two decimal digits only allowed.
-          //
-          // Because replacementString is not nullable and defaults to empty String
-          // I've set it to the current input text so that every time a second period
-          // is inserted, it won't clear the text that's already present.
-          FilteringTextInputFormatter.allow(
-            RegExp(r'^(\d*([.,]\d{0,2})?|[.,]\d{0,2})$'),
-            replacementString: widget.amountController.text,
-          ),
-
-          // Replaces comma with period.
-          FilteringTextInputFormatter.deny(RegExp(r','), replacementString: '.'),
+          FilteringTextInputFormatter.allow(RegExp(r'\d*\.?\d{0,2}')),
         ],
         autofocus: false,
         textAlign: TextAlign.center,
