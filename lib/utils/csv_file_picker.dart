@@ -16,6 +16,9 @@ class CSVFilePicker {
         final status = await Permission.storage.request();
         return status.isGranted;
       }
+
+      final status = await Permission.manageExternalStorage.request();
+      return status.isGranted;
     }
     return true;
   }
@@ -63,13 +66,25 @@ class CSVFilePicker {
         // User canceled the picker
         return;
       }
-      
+
+      bool permissionGranted = await _requestStoragePermission();
+      if (!permissionGranted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Storage permission is required'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+
       final String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
-      final String filePath = join(selectedDirectory, 'sossoldi_export_$timestamp.csv');
-      
+      final String filePath =
+          join(selectedDirectory, 'sossoldi_export_$timestamp.csv');
+
       // Write the CSV content directly to the file
       final file = await File(filePath).writeAsString(csv);
-      
+
       // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
