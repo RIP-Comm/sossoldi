@@ -7,7 +7,6 @@ import '../../constants/constants.dart';
 import '../../constants/functions.dart';
 import '../../constants/style.dart';
 import '../../providers/currency_provider.dart';
-import 'widgets/confirm_account_deletion_dialog.dart';
 
 class AddAccount extends ConsumerStatefulWidget {
   const AddAccount({super.key});
@@ -361,30 +360,14 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                       width: double.infinity,
                       padding: const EdgeInsets.all(16),
                       child: TextButton.icon(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return ConfirmAccountDeletionDialog(
-                                account: selectedAccount,
-                                onPressed: () => ref
-                                    .read(accountsProvider.notifier)
-                                    .removeAccount(selectedAccount.id!)
-                                    .whenComplete(
-                                  () {
-                                    if (context.mounted) {
-                                      // Navigate back to the /account-list route.
-                                      Navigator.popUntil(
-                                        context,
-                                        ModalRoute.withName('/account-list'),
-                                      );
-                                    }
-                                  },
-                                ),
-                              );
-                            },
-                          );
-                        },
+                        onPressed: () => ref
+                            .read(accountsProvider.notifier)
+                            .removeAccount(selectedAccount.id!)
+                            .whenComplete(() {
+                          if (context.mounted) {
+                            Navigator.of(context).pop();
+                          }
+                        }),
                         style: TextButton.styleFrom(
                           side: const BorderSide(color: red, width: 1),
                         ),

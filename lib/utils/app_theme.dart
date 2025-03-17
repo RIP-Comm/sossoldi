@@ -60,7 +60,6 @@ class AppTheme {
         ),
         textStyle: const WidgetStatePropertyAll(
           TextStyle(
-            fontFamily: 'NunitoSans',
             fontSize: 18.0,
             fontWeight: FontWeight.w600,
           ),
@@ -83,7 +82,6 @@ class AppTheme {
         ),
         textStyle: const WidgetStatePropertyAll(
           TextStyle(
-            fontFamily: 'NunitoSans',
             fontSize: 14.0,
             fontWeight: FontWeight.w700,
           ),
@@ -233,7 +231,6 @@ class AppTheme {
         ),
         textStyle: const WidgetStatePropertyAll(
           TextStyle(
-            fontFamily: 'NunitoSans',
             fontSize: 18.0,
             fontWeight: FontWeight.w600,
           ),
@@ -256,7 +253,6 @@ class AppTheme {
         ),
         textStyle: const WidgetStatePropertyAll(
           TextStyle(
-            fontFamily: 'NunitoSans',
             fontSize: 14.0,
             fontWeight: FontWeight.w700,
           ),
