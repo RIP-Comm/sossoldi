@@ -333,10 +333,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                                 context: context,
                                 builder: (_) => Container(
                                   height: 300,
-                                  color: CupertinoDynamicColor.resolve(
-                                    CupertinoColors.secondarySystemBackground,
-                                    context,
-                                  ),
+                                  color: white,
                                   child: CupertinoDatePicker(
                                     initialDateTime: ref.watch(dateProvider),
                                     minimumYear: 2015,

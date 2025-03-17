@@ -1,13 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/style.dart';
 
 class AppTheme {
   static final lightTheme = ThemeData(
-    cupertinoOverrideTheme: const CupertinoThemeData(
-      brightness: Brightness.light,
-    ),
     colorScheme: customColorScheme,
     scaffoldBackgroundColor: white,
     appBarTheme: const AppBarTheme(
@@ -177,9 +173,6 @@ class AppTheme {
   );
 
   static final darkTheme = ThemeData(
-    cupertinoOverrideTheme: const CupertinoThemeData(
-      brightness: Brightness.dark,
-    ),
     colorScheme: darkCustomColorScheme,
     scaffoldBackgroundColor: darkGrey4,
     appBarTheme: const AppBarTheme(
