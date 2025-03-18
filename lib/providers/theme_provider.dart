@@ -25,16 +25,20 @@ class AppThemeState extends ChangeNotifier {
   AppThemeMode get themeMode => _themeMode;
 
   AppThemeState() {
+    // Check system theme immediately to prevent flicker
+    final brightness = WidgetsBinding.instance.platformDispatcher.platformBrightness;
+    isDarkModeEnabled = brightness == Brightness.dark;
+
     _loadTheme();
   }
 
   // Initialize and load saved theme
   Future<void> _loadTheme() async {
     _prefs = await SharedPreferences.getInstance();
-    final storedThemeMode = _prefs.getInt(_themeKey) ?? 0;
+    // Default to system (2) instead of light (0)
+    final storedThemeMode = _prefs.getInt(_themeKey) ?? 2;
     _themeMode = AppThemeMode.values[storedThemeMode];
 
-    // Determine if dark mode is enabled based on theme mode
     if (_themeMode == AppThemeMode.system) {
       isDarkModeEnabled = WidgetsBinding.instance.platformDispatcher.platformBrightness == Brightness.dark;
       _setupSystemThemeListener();
