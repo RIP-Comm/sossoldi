@@ -51,7 +51,11 @@ class Launcher extends ConsumerWidget {
       title: 'Sossoldi',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: appThemeState.isDarkModeEnabled ? ThemeMode.dark : ThemeMode.light,
+      themeMode: ref.watch(appThemeStateNotifier).themeMode == AppThemeMode.system
+          ? ThemeMode.system
+          : (ref.watch(appThemeStateNotifier).isDarkModeEnabled
+          ? ThemeMode.dark
+          : ThemeMode.light),
       onGenerateRoute: makeRoute,
       initialRoute: _isFirstLogin == null || _isFirstLogin! ? '/onboarding' : '/',
     );

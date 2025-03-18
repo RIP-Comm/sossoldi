@@ -62,14 +62,21 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                       color: blue5,
                       onPressed: () {
                         // Toggle dark mode using the provider
-                        if (appThemeState.isDarkModeEnabled) {
-                          ref.read(appThemeStateNotifier.notifier).setLightTheme();
-                        } else {
+                        if (appThemeState.themeMode == AppThemeMode.light) {
                           ref.read(appThemeStateNotifier.notifier).setDarkTheme();
+                        } else if (appThemeState.themeMode == AppThemeMode.dark) {
+                          ref.read(appThemeStateNotifier.notifier).setSystemTheme();
+                        } else {
+                          ref.read(appThemeStateNotifier.notifier).setLightTheme();
                         }
                       },
                       icon: Icon(
-                        appThemeState.isDarkModeEnabled ? Icons.dark_mode : Icons.light_mode,
+                        // Change the icon based on the current theme
+                        appThemeState.themeMode == AppThemeMode.light
+                            ? Icons.light_mode
+                            : appThemeState.themeMode == AppThemeMode.dark
+                                ? Icons.dark_mode
+                                : Icons.brightness_auto,
                         size: 25.0,
                         color: Theme.of(context).colorScheme.onPrimary,
                       ),
