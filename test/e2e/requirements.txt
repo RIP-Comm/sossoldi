@@ -1,0 +1,7 @@
+Appium-Python-Client>=3.0
+pytest
+selenium
+colorama
+pytest-variables
+pytest-selenium
+pyyaml

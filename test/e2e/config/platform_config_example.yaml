@@ -1,0 +1,35 @@
+appiumURL: http://0.0.0.0:4723
+
+platforms:
+  - platformName: android
+    automationName: UiAutomator2
+    appPackage: com.ripster.sossoldi
+    appActivity: com.ripster.sossoldi.MainActivity
+    udid: YOUR-UDID
+    deviceModel: DEVICE-NAME
+    constants:
+      text: text
+      text_view: android.widget.TextView
+      auto_text_view: android.widget.AutoCompleteTextView
+      radio_button: android.widget.RadioButton
+      edit_text: android.widget.EditText
+      edit_textfield: android.widget.EditText
+      checkbox: android.widget.TextView
+      checkbox_icon: android.widget.CheckBox
+      slider: android.widget.SeekBar
+  
+  - platformName: ios
+    automationName: XCUITest
+    deviceName: DEVICE-NAME
+    udid: YOUR-UDID
+    bundleID: com.ripster.sossoldi
+    constants:
+      text: value
+      text_view: XCUIElementTypeTextView
+      radio_button: XCUIElementTypeButton
+      edit_text: XCUIElementTypeButton
+      edit_textfield: XCUIElementTypeTextView
+      checkbox: XCUIElementTypeButton
+      label: label
+      checkbox_icon: XCUIElementTypeButton
+      slider: XCUIElementTypeSlider
