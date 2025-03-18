@@ -56,7 +56,7 @@ class Launcher extends ConsumerWidget {
       builder: (context, child) { // Rescale all TextStyles for macOS
         double scaleFactor = Platform.isMacOS ? 1.5 : 1.0;
         return MediaQuery(
-          data: MediaQuery.of(context).copyWith(textScaleFactor: scaleFactor),
+          data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(scaleFactor)),
           child: child!,
         );
       },
