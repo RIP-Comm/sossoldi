@@ -299,7 +299,7 @@ class SossoldiDatabase {
 
     // Add fake categories
     await _database?.execute('''
-      INSERT INTO categoryTransaction(id, name, type, symbol, color, note, parent, markedAsDeleted, createdAt, updatedAt) VALUES
+      INSERT OR IGNORE INTO categoryTransaction(id, name, type, symbol, color, note, parent, markedAsDeleted, createdAt, updatedAt) VALUES
         (0, "Uncategorized", "IN", "question_mark", 0, 'This is a default category for no categorized transactions', null, 0, '${DateTime.now()}', '${DateTime.now()}'),
         (1, "Uncategorized", "OUT", "question_mark", 0, 'This is a default category for no categorized transactions', null, 0, '${DateTime.now()}', '${DateTime.now()}'),
         (10, "Out", "OUT", "restaurant", 1, '', null, 0, '${DateTime.now()}', '${DateTime.now()}'),
