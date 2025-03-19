@@ -23,9 +23,9 @@ void main() async {
 
   SharedPreferences preferences = await SharedPreferences.getInstance();
 
-  // Even though the saved key refers to a 'user first login',
-  // the behavior mimics a 'has user completed onboarding process' check.
-  // The key has not been renamed to maintain support for the app's previous versions.
+  // Although the saved key refers to 'is_first_login',
+  // its behavior aligns with a 'has the user completed onboarding' check.
+  // It has not been renamed to maintain compatibility with previous versions.
   _isFirstLogin = preferences.getBool('is_first_login') ?? true;
 
   // perform recurring transactions checks
