@@ -1,0 +1,33 @@
+name: Feature Request
+
+description: Submit your request here!
+
+title: "[Feature]: "
+
+labels: ["enhancement"]
+
+# assignees:
+#   - dariowskii # You can assign a specific user to the issue
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # Let me know what you would like to add!
+
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+      placeholder: ex. email@example.com
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Explain your idea 💡
+      description: Please provide some information about you want like to add and insert some *pseudo-syntax*
+      placeholder: I would really like to add...
+      
+    validations:
+      required: true
