@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../model/category_transaction.dart';
+import '../model/recurring_transaction.dart';
 import '../model/transaction.dart';
 import 'transactions_provider.dart';
 
@@ -86,15 +87,36 @@ class AsyncCategoriesNotifier
       final defaultCategoryId =
           categoryType == CategoryTransactionType.income ? 0 : 1;
 
-      final transactionMethods = TransactionMethods();
-      final transactions = await transactionMethods.selectAll();
+      final transactions = await TransactionMethods().selectAll();
       final affectedTransactions =
           transactions.where((t) => t.idCategory == categoryId).toList();
 
       for (var transaction in affectedTransactions) {
         final updatedTransaction =
             transaction.copy(idCategory: defaultCategoryId);
-        await transactionMethods.updateItem(updatedTransaction);
+        await TransactionMethods().updateItem(updatedTransaction);
+      }
+
+      ref.invalidate(transactionsProvider);
+    };
+  });
+
+  final reassignRecurringTransactionsProvider =
+      Provider<Future<void> Function(int, CategoryTransactionType)>((ref) {
+    return (int categoryId, CategoryTransactionType categoryType) async {
+      final defaultCategoryId =
+          categoryType == CategoryTransactionType.income ? 0 : 1;
+
+      final recurringTransactions =
+          await RecurringTransactionMethods().selectAll();
+      final affectedRecurringTransactions = recurringTransactions
+          .where((t) => t.idCategory == categoryId)
+          .toList();
+
+      for (var recurringTransaction in affectedRecurringTransactions) {
+        final updatedTransaction =
+            recurringTransaction.copy(idCategory: defaultCategoryId);
+        await RecurringTransactionMethods().updateItem(updatedTransaction);
       }
 
       ref.invalidate(transactionsProvider);
@@ -107,6 +129,8 @@ class AsyncCategoriesNotifier
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       await ref.read(reassignTransactionsProvider)(categoryId, category.type);
+      await ref.read(reassignRecurringTransactionsProvider)(
+          categoryId, category.type);
       await CategoryTransactionMethods().deleteById(categoryId);
       return _getCategories(arg);
     });
