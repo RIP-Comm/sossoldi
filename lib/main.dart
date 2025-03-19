@@ -12,7 +12,7 @@ import 'routes.dart';
 import 'utils/app_theme.dart';
 import 'utils/notifications_service.dart';
 
-bool? _isFirstLogin = true;
+late bool _isFirstLogin;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,9 +23,7 @@ void main() async {
 
   SharedPreferences preferences = await SharedPreferences.getInstance();
 
-  bool? getPref = preferences.getBool('is_first_login');
-  getPref == null ? await preferences.setBool('is_first_login', false) : null;
-  _isFirstLogin = getPref;
+  _isFirstLogin = preferences.getBool('is_first_login') ?? true;
 
   // perform recurring transactions checks
   DateTime? lastCheckGetPref = preferences.getString('last_recurring_transactions_check') != null ? DateTime.parse(preferences.getString('last_recurring_transactions_check')!) : null;
@@ -53,7 +51,7 @@ class Launcher extends ConsumerWidget {
       darkTheme: AppTheme.darkTheme,
       themeMode: appThemeState.isDarkModeEnabled ? ThemeMode.dark : ThemeMode.light,
       onGenerateRoute: makeRoute,
-      initialRoute: _isFirstLogin == null || _isFirstLogin! ? '/onboarding' : '/',
+      initialRoute: _isFirstLogin ? '/onboarding' : '/',
     );
   }
 }
