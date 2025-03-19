@@ -5,6 +5,7 @@ import '../constants/style.dart';
 
 class AppTheme {
   static final lightTheme = ThemeData(
+    adaptations: [SwitchThemeAdaptation()],
     cupertinoOverrideTheme: const CupertinoThemeData(
       brightness: Brightness.light,
     ),
@@ -206,6 +207,7 @@ class AppTheme {
   );
 
   static final darkTheme = ThemeData(
+    adaptations: [SwitchThemeAdaptation()],
     cupertinoOverrideTheme: const CupertinoThemeData(
       brightness: Brightness.dark,
     ),
@@ -449,3 +451,27 @@ ColorScheme darkCustomColorScheme = const ColorScheme(
   onError: darkBlack,
   brightness: Brightness.dark,
 );
+
+class SwitchThemeAdaptation extends Adaptation<SwitchThemeData> {
+  const SwitchThemeAdaptation();
+
+  @override
+  SwitchThemeData adapt(ThemeData theme, SwitchThemeData defaultValue) {
+    switch (theme.platform) {
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.windows:
+        return defaultValue;
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        return SwitchThemeData(
+          trackColor: WidgetStateProperty.fromMap(
+            {
+              WidgetState.selected: theme.colorScheme.secondary,
+            },
+          ),
+        );
+    }
+  }
+}
