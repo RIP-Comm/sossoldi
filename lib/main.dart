@@ -12,7 +12,7 @@ import 'routes.dart';
 import 'utils/app_theme.dart';
 import 'utils/notifications_service.dart';
 
-late bool _isFirstLogin;
+late SharedPreferences _sharedPreferences;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,21 +21,16 @@ void main() async {
   tz.initializeTimeZones();
   tz.setLocalLocation(tz.local);
 
-  SharedPreferences preferences = await SharedPreferences.getInstance();
-
-  // Although the saved key refers to 'is_first_login',
-  // its behavior aligns with a 'has the user completed onboarding' check.
-  // It has not been renamed to maintain compatibility with previous versions.
-  _isFirstLogin = preferences.getBool('is_first_login') ?? true;
+  _sharedPreferences = await SharedPreferences.getInstance();
 
   // perform recurring transactions checks
-  DateTime? lastCheckGetPref = preferences.getString('last_recurring_transactions_check') != null ? DateTime.parse(preferences.getString('last_recurring_transactions_check')!) : null;
+  DateTime? lastCheckGetPref = _sharedPreferences.getString('last_recurring_transactions_check') != null ? DateTime.parse(_sharedPreferences.getString('last_recurring_transactions_check')!) : null;
   DateTime? lastRecurringTransactionsCheck = lastCheckGetPref;
 
   if(lastRecurringTransactionsCheck == null || DateTime.now().difference(lastRecurringTransactionsCheck).inDays >= 1){
     RecurringTransactionMethods().checkRecurringTransactions();
     // update last recurring transactions runtime
-    await preferences.setString('last_recurring_transactions_check', DateTime.now().toIso8601String());
+    await _sharedPreferences.setString('last_recurring_transactions_check', DateTime.now().toIso8601String());
   }
 
   initializeDateFormatting('it_IT', null).then((_) => runApp(Phoenix(child: const ProviderScope(child: Launcher()))));
@@ -47,6 +42,12 @@ class Launcher extends ConsumerWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
+    // Although the saved key refers to 'is_first_login',
+    // its behavior aligns with a 'has the user completed onboarding' check.
+    // It has not been renamed to maintain compatibility with previous versions.
+    final bool isFirstLogin = _sharedPreferences.getBool('is_first_login') ?? true;
+
     final appThemeState = ref.watch(appThemeStateNotifier);
     return MaterialApp(
       title: 'Sossoldi',
@@ -54,7 +55,7 @@ class Launcher extends ConsumerWidget {
       darkTheme: AppTheme.darkTheme,
       themeMode: appThemeState.isDarkModeEnabled ? ThemeMode.dark : ThemeMode.light,
       onGenerateRoute: makeRoute,
-      initialRoute: _isFirstLogin ? '/onboarding' : '/',
+      initialRoute: isFirstLogin ? '/onboarding' : '/',
     );
   }
 }
