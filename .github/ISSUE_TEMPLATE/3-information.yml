@@ -1,0 +1,31 @@
+name: Information Request
+
+description: Do you need some information?
+
+title: "[INFO]: "
+
+labels: ["question"]
+
+# assignees:
+#   - dariowskii # You can assign a specific user to the issue
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # Do you need some information?
+
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+      placeholder: ex. email@example.com
+      
+  - type: textarea
+    id: info
+    attributes:
+      label: What do you want to know?
+      description: Please be detailed in your request for information, including any use cases or pieces of code you would like help with
+    validations:
+      required: true
