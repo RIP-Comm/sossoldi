@@ -2,94 +2,49 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../constants/constants.dart';
-
-// Define enum for theme modes
-enum AppThemeMode {
-  light,
-  dark,
-  system
-}
-
 final appThemeStateNotifier = ChangeNotifierProvider(
-      (ref) => AppThemeState(),
+  (ref) => AppThemeState(),
 );
 
 class AppThemeState extends ChangeNotifier {
   static const String _themeKey = 'themeMode';
   late SharedPreferences _prefs;
 
-  AppThemeMode _themeMode = AppThemeMode.system;
-  bool isDarkModeEnabled = false;
+  ThemeMode _themeMode = ThemeMode.system;
 
-  AppThemeMode get themeMode => _themeMode;
+  bool get isDarkModeEnabled => _themeMode == ThemeMode.dark;
+
+  ThemeMode get themeMode => _themeMode;
 
   AppThemeState() {
-    // Check system theme immediately to prevent flicker
-    final brightness = WidgetsBinding.instance.platformDispatcher.platformBrightness;
-    isDarkModeEnabled = brightness == Brightness.dark;
-
     _loadTheme();
   }
 
-  // Initialize and load saved theme
   Future<void> _loadTheme() async {
     _prefs = await SharedPreferences.getInstance();
-    // Default to system (2) instead of light (0)
-    final storedThemeMode = _prefs.getInt(_themeKey) ?? 2;
-    _themeMode = AppThemeMode.values[storedThemeMode];
-
-    if (_themeMode == AppThemeMode.system) {
-      isDarkModeEnabled = WidgetsBinding.instance.platformDispatcher.platformBrightness == Brightness.dark;
-      _setupSystemThemeListener();
-    } else {
-      isDarkModeEnabled = _themeMode == AppThemeMode.dark;
-    }
-
-    updateColorsBasedOnTheme(isDarkModeEnabled);
-    notifyListeners();
-  }
-
-  void _setupSystemThemeListener() {
-    WidgetsBinding.instance.platformDispatcher.onPlatformBrightnessChanged = () {
-      if (_themeMode == AppThemeMode.system) {
-        final isDark = WidgetsBinding.instance.platformDispatcher.platformBrightness == Brightness.dark;
-        if (isDarkModeEnabled != isDark) {
-          isDarkModeEnabled = isDark;
-          updateColorsBasedOnTheme(isDarkModeEnabled);
-          notifyListeners();
-        }
-      }
+    final storedThemeMode = _prefs.getString(_themeKey) ?? ThemeMode.system.name;
+    _themeMode = switch (storedThemeMode) {
+      'dark' => ThemeMode.dark,
+      'light' => ThemeMode.light,
+      _ => ThemeMode.system,
     };
+    notifyListeners();
   }
 
-  // Save theme preference
-  Future<void> _saveThemeMode(AppThemeMode mode) async {
+  Future<void> setTheme({required ThemeMode mode}) async {
     _prefs = await SharedPreferences.getInstance();
-    await _prefs.setInt(_themeKey, mode.index);
+    await _prefs.setString(_themeKey, mode.name);
     _themeMode = mode;
-  }
-
-  void setLightTheme() {
-    _saveThemeMode(AppThemeMode.light);
-    isDarkModeEnabled = false;
-    updateColorsBasedOnTheme(isDarkModeEnabled);
     notifyListeners();
   }
 
-  void setDarkTheme() {
-    _saveThemeMode(AppThemeMode.dark);
-    isDarkModeEnabled = true;
-    updateColorsBasedOnTheme(isDarkModeEnabled);
-    notifyListeners();
-  }
-
-  void setSystemTheme() {
-    _saveThemeMode(AppThemeMode.system);
-    final brightness = WidgetsBinding.instance.platformDispatcher.platformBrightness;
-    isDarkModeEnabled = brightness == Brightness.dark;
-    updateColorsBasedOnTheme(isDarkModeEnabled);
-    _setupSystemThemeListener();
-    notifyListeners();
+  void setNextTheme() {
+    if (_themeMode == ThemeMode.light) {
+      setTheme(mode: ThemeMode.dark);
+    } else if (_themeMode == ThemeMode.dark) {
+      setTheme(mode: ThemeMode.system);
+    } else {
+      setTheme(mode: ThemeMode.light);
+    }
   }
 }

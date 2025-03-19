@@ -55,32 +55,24 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                         .titleLarge!
                         .copyWith(color: Theme.of(context).colorScheme.primary)),
                 const Spacer(),
-                CircleAvatar(
-                    radius: 30.0,
-                    backgroundColor: blue5,
-                    child: IconButton(
-                      color: blue5,
-                      onPressed: () {
-                        // Toggle dark mode using the provider
-                        if (appThemeState.themeMode == AppThemeMode.light) {
-                          ref.read(appThemeStateNotifier.notifier).setDarkTheme();
-                        } else if (appThemeState.themeMode == AppThemeMode.dark) {
-                          ref.read(appThemeStateNotifier.notifier).setSystemTheme();
-                        } else {
-                          ref.read(appThemeStateNotifier.notifier).setLightTheme();
-                        }
-                      },
-                      icon: Icon(
-                        // Change the icon based on the current theme
-                        appThemeState.themeMode == AppThemeMode.light
+                GestureDetector(
+                  onTap: () {
+                    ref.read(appThemeStateNotifier.notifier).setNextTheme();
+                  },
+                  child: CircleAvatar(
+                      radius: 30.0,
+                      backgroundColor: blue5,
+                      child: Icon(
+                        // Display icon based on current theme
+                        appThemeState.themeMode == ThemeMode.light
                             ? Icons.light_mode
-                            : appThemeState.themeMode == AppThemeMode.dark
-                                ? Icons.dark_mode
-                                : Icons.brightness_auto,
+                            : appThemeState.themeMode == ThemeMode.dark
+                            ? Icons.dark_mode
+                            : Icons.brightness_auto,
                         size: 25.0,
                         color: Theme.of(context).colorScheme.onPrimary,
-                      ),
-                    )),
+                      )),
+                ),
               ],
             ),
             const SizedBox(height: 20),
