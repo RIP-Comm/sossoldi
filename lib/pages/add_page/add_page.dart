@@ -105,11 +105,20 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
       );
     }
     final selectedAccount = ref.watch(bankAccountProvider) != null;
+    final selectedAccountTransfer =
+        ref.watch(bankAccountTransferProvider) != null;
     final selectedCategory = ref.watch(categoryProvider) != null;
     setState(() {
-      _isSaveEnabled = selectedAccount &&
-          selectedCategory &&
-          amountController.text.isNotEmpty;
+      _isSaveEnabled = amountController.text.isNotEmpty && selectedAccount;
+      switch (selectedType) {
+        case TransactionType.expense:
+        case TransactionType.income:
+          _isSaveEnabled &= selectedCategory;
+          break;
+        case TransactionType.transfer:
+          _isSaveEnabled &= selectedAccountTransfer;
+          break;
+      }
     });
   }
 

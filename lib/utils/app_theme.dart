@@ -17,6 +17,7 @@ class AppTheme {
       centerTitle: true,
       iconTheme: IconThemeData(color: blue5),
       titleTextStyle: TextStyle(
+        fontFamily: 'NunitoSans',
         color: blue1,
         fontSize: 18,
         fontWeight: FontWeight.w700,
@@ -80,7 +81,7 @@ class AppTheme {
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
-        textStyle: WidgetStatePropertyAll(
+        textStyle: const WidgetStatePropertyAll(
           TextStyle(
             fontFamily: 'NunitoSans',
             fontSize: 14.0,
@@ -99,7 +100,7 @@ class AppTheme {
       ),
     ),
     listTileTheme: const ListTileThemeData(
-      tileColor: grey3,
+      tileColor: white,
       contentPadding: EdgeInsets.all(16),
     ),
     disabledColor: grey2,
@@ -188,6 +189,7 @@ class AppTheme {
       centerTitle: true,
       iconTheme: IconThemeData(color: darkBlue5),
       titleTextStyle: TextStyle(
+        fontFamily: 'NunitoSans',
         color: darkBlue1,
         fontSize: 18,
         fontWeight: FontWeight.w700,
@@ -252,7 +254,7 @@ class AppTheme {
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
-        textStyle: WidgetStatePropertyAll(
+        textStyle: const WidgetStatePropertyAll(
           TextStyle(
             fontFamily: 'NunitoSans',
             fontSize: 14.0,
@@ -271,7 +273,7 @@ class AppTheme {
       ),
     ),
     listTileTheme: const ListTileThemeData(
-      tileColor: darkBlue7,
+      tileColor: darkGrey4,
       contentPadding: EdgeInsets.all(16),
     ),
 
