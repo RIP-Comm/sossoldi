@@ -1,0 +1,76 @@
+name: Bug Report
+
+description: The form for submitting a bug.
+
+title: "[Bug]: "
+
+labels: ["bug"]
+
+# assignees:
+#   - dariowskii # You can assign a specific user to the issue
+  
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # Thanks for taking the time to fill out this bug report!
+
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+      placeholder: ex. email@example.com
+    validations:
+      required: false
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Also tell us, what did you expect to happen?
+      placeholder: Tell us what you see!
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Flutter Version
+      description: What version of our Flutter are you running?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: What platform are you seeing the problem on?
+      multiple: true
+      options:
+        - iOS
+        - Android
+        - Web
+        - Windows
+        - MacOS
+        - Linux
+    validations:
+      required: true
+
+  - type: input
+    id: platform-version
+    attributes:
+      label: What is the platform's OS version?
+      placeholder: ex. iOS 16.0
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      render: shell
+      
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: Please copy and paste any screenshots, if you have!
