@@ -58,7 +58,7 @@ const userCategoriesFilter = CategoryFilter(
   showDeletedCategories: false,
 );
 
-const onlyActiveCategoriesFilter = CategoryFilter(
+const availableCategoriesFilter = CategoryFilter(
   showSystemCategories: true,
   showDeletedCategories: false,
 );

@@ -23,7 +23,7 @@ class CategoriesTab extends ConsumerStatefulWidget {
 class _CategoriesTabState extends ConsumerState<CategoriesTab> with Functions {
   @override
   Widget build(BuildContext context) {
-    final categories = ref.watch(categoriesProvider(userCategoriesFilter));
+    final categories = ref.watch(categoriesProvider(allCategoriesFilter));
     final transactions = ref.watch(transactionsProvider);
     final transactionType = ref.watch(selectedTransactionTypeProvider);
 

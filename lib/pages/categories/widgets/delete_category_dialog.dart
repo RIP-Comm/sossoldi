@@ -5,6 +5,13 @@ import '../../../providers/categories_provider.dart';
 
 Future<void> showDeleteCategoryDialog(
     BuildContext context, WidgetRef ref, selectedCategory) async {
+  void backToCategoryList() {
+    if (context.mounted) {
+      Navigator.of(context)
+          .popUntil((route) => route.settings.name == '/category-list');
+    }
+  }
+
   return showDialog<void>(
     context: context,
     builder: (BuildContext context) {
@@ -13,9 +20,11 @@ Future<void> showDeleteCategoryDialog(
           child: ListBody(
             children: <Widget>[
               Text(
-                  'With “Mark as deleted,” transitions with the category will be available, but new ones cannot be created\n'),
+                'With "Mark as deleted," transitions with the category will be available, but new ones cannot be created\n',
+              ),
               Text(
-                  'With “Delete” all transitions with that category will automatically be “Uncategorized”'),
+                'With "Delete" all transitions with that category will automatically be "Uncategorized"',
+              ),
             ],
           ),
         ),
@@ -28,11 +37,7 @@ Future<void> showDeleteCategoryDialog(
             onPressed: () => ref
                 .read(categoriesProvider(userCategoriesFilter).notifier)
                 .markAsDeleted(selectedCategory.id)
-                .whenComplete(() {
-              if (context.mounted) {
-                Navigator.of(context).pop();
-              }
-            }),
+                .whenComplete(backToCategoryList),
           ),
           TextButton(
             child: Text(
@@ -42,11 +47,7 @@ Future<void> showDeleteCategoryDialog(
             onPressed: () => ref
                 .read(categoriesProvider(userCategoriesFilter).notifier)
                 .removeCategory(selectedCategory.id!)
-                .whenComplete(() {
-              if (context.mounted) {
-                Navigator.of(context).pop();
-              }
-            }),
+                .whenComplete(backToCategoryList),
           ),
         ],
       );

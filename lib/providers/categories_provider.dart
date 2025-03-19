@@ -80,9 +80,33 @@ class AsyncCategoriesNotifier
     });
   }
 
+  final reassignTransactionsProvider =
+      Provider<Future<void> Function(int, CategoryTransactionType)>((ref) {
+    return (int categoryId, CategoryTransactionType categoryType) async {
+      final defaultCategoryId =
+          categoryType == CategoryTransactionType.income ? 0 : 1;
+
+      final transactionMethods = TransactionMethods();
+      final transactions = await transactionMethods.selectAll();
+      final affectedTransactions =
+          transactions.where((t) => t.idCategory == categoryId).toList();
+
+      for (var transaction in affectedTransactions) {
+        final updatedTransaction =
+            transaction.copy(idCategory: defaultCategoryId);
+        await transactionMethods.updateItem(updatedTransaction);
+      }
+
+      ref.invalidate(transactionsProvider);
+    };
+  });
+
   Future<void> removeCategory(int categoryId) async {
+    final category = await CategoryTransactionMethods().selectById(categoryId);
+
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
+      await ref.read(reassignTransactionsProvider)(categoryId, category.type);
       await CategoryTransactionMethods().deleteById(categoryId);
       return _getCategories(arg);
     });
@@ -105,6 +129,12 @@ final categoriesByTypeProvider =
         await CategoryTransactionMethods().selectCategoriesByType(type);
   }
   return categories;
+});
+
+final categoryByIdProvider =
+    FutureProvider.family<CategoryTransaction, int>((ref, id) async {
+  final category = await CategoryTransactionMethods().selectById(id);
+  return category;
 });
 
 final categoryMapProvider =

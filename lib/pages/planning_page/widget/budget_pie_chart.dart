@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
 import '../../../model/budget.dart';
+import '../../../providers/categories_provider.dart';
 import '../../../providers/currency_provider.dart';
 
 class BudgetPieChart extends ConsumerStatefulWidget {
@@ -50,11 +51,12 @@ class BudgetPieChartState extends ConsumerState<BudgetPieChart> {
   List<PieChartSectionData> showingSections() {
     return List.generate(widget.budgets.length, (i) {
       final Budget budget = widget.budgets.elementAt(i);
-
+      final budgetCategory =
+          ref.watch(categoryByIdProvider(budget.idCategory)).value;
       double value = (budget.amountLimit / totalBudget) * 100;
 
       return PieChartSectionData(
-        color: categoryColorList[i],
+        color: categoryColorList[budgetCategory?.color ?? 1],
         value: value,
         title: "",
         radius: 20,

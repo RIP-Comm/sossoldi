@@ -66,45 +66,54 @@ class _CategorySelectorState extends ConsumerState<CategorySelector>
                     height: 74,
                     width: double.infinity,
                     child: categoriesList.when(
-                      data: (categories) => ListView.builder(
-                        itemCount: categories.length, // to prevent range error
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemBuilder: (context, i) {
-                          CategoryTransaction category = categories[i];
-                          return GestureDetector(
-                            onTap: () => {
-                              ref.read(categoryProvider.notifier).state =
-                                  category,
-                              Navigator.of(context).pop(),
-                            },
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  RoundedIcon(
-                                    icon: iconList[category.symbol],
-                                    backgroundColor:
-                                        categoryColorListTheme[category.color],
-                                  ),
-                                  Text(
-                                    category.name,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelLarge!
-                                        .copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary),
-                                  ),
-                                ],
+                      data: (categories) {
+                        //availableCategories without markedAsDeleted
+                        final availableCategories = categories
+                            .where(
+                                (category) => category.markedAsDeleted == false)
+                            .toList();
+
+                        return ListView.builder(
+                          itemCount: availableCategories.length,
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          itemBuilder: (context, i) {
+                            CategoryTransaction category =
+                                availableCategories[i];
+                            return GestureDetector(
+                              onTap: () => {
+                                ref.read(categoryProvider.notifier).state =
+                                    category,
+                                Navigator.of(context).pop(),
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    RoundedIcon(
+                                      icon: iconList[category.symbol],
+                                      backgroundColor: categoryColorListTheme[
+                                          category.color],
+                                    ),
+                                    Text(
+                                      category.name,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge!
+                                          .copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      ),
+                            );
+                          },
+                        );
+                      },
                       loading: () =>
                           const Center(child: CircularProgressIndicator()),
                       error: (err, stack) => Text('Error: $err'),
@@ -142,10 +151,10 @@ class _CategorySelectorState extends ConsumerState<CategorySelector>
                                   categoryColorListTheme[category.color],
                             ),
                             title: Text(category.name),
-                            trailing: ref.watch(categoryProvider)?.id ==
-                                    category.id
-                                ? Icon(Icons.check)
-                                : null,
+                            trailing:
+                                ref.watch(categoryProvider)?.id == category.id
+                                    ? Icon(Icons.check)
+                                    : null,
                           );
                         },
                       ),

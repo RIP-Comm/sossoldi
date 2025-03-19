@@ -36,8 +36,7 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final categories =
-        ref.watch(categoriesProvider(userCategoriesFilter)).value;
+    final categories = ref.watch(categoriesProvider(allCategoriesFilter)).value;
     final accounts = ref.watch(accountsProvider).value;
     final isDarkMode = ref.watch(appThemeStateNotifier).isDarkModeEnabled;
     final currencyState = ref.watch(currencyStateNotifier);
