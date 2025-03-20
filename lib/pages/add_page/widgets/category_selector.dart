@@ -130,35 +130,46 @@ class _CategorySelectorState extends ConsumerState<CategorySelector>
                     ),
                   ),
                   categoriesList.when(
-                    data: (categories) => Container(
-                      color: Theme.of(context).colorScheme.surface,
-                      child: ListView.separated(
-                        itemCount: categories.length,
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        separatorBuilder: (context, index) =>
-                            const Divider(height: 1, color: grey1),
-                        itemBuilder: (context, i) {
-                          CategoryTransaction category = categories[i];
-                          return ListTile(
-                            onTap: () => ref
-                                .read(categoryProvider.notifier)
-                                .state = category,
-                            leading: RoundedIcon(
-                              icon: iconList[category.symbol],
-                              backgroundColor:
-                                  categoryColorListTheme[category.color],
-                            ),
-                            title: Text(category.name),
-                            trailing:
-                                ref.watch(categoryProvider)?.id == category.id
-                                    ? Icon(Icons.check)
-                                    : null,
-                          );
-                        },
-                      ),
-                    ),
+                    data: (categories) {
+                      //availableCategories without markedAsDeleted
+                      final availableCategories = categories
+                          .where(
+                              (category) => category.markedAsDeleted == false)
+                          .toList();
+
+                      return Container(
+                        color: Theme.of(context).colorScheme.surface,
+                        child: ListView.separated(
+                          itemCount: availableCategories.length,
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          separatorBuilder: (context, index) =>
+                              const Divider(height: 1, color: grey1),
+                          itemBuilder: (context, i) {
+                            CategoryTransaction category =
+                                availableCategories[i];
+                            return ListTile(
+                              onTap: () => {
+                                ref.read(categoryProvider.notifier).state =
+                                    category,
+                                Navigator.of(context).pop(),
+                              },
+                              leading: RoundedIcon(
+                                icon: iconList[category.symbol],
+                                backgroundColor:
+                                    categoryColorListTheme[category.color],
+                              ),
+                              title: Text(category.name),
+                              trailing:
+                                  ref.watch(categoryProvider)?.id == category.id
+                                      ? Icon(Icons.check)
+                                      : null,
+                            );
+                          },
+                        ),
+                      );
+                    },
                     loading: () =>
                         const Center(child: CircularProgressIndicator()),
                     error: (err, stack) => Text('Error: $err'),
