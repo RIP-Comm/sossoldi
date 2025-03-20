@@ -2,7 +2,7 @@ name: Technical Improvement
 description: Suggest a technical enhancement or refactor.
 title: "[Tech Improvement]: "
 labels: ["technical improvement"]
-projects: ["RIP-Comm/sossoldi"]
+projects: ["sossoldi/3"]
 assignees:
   - theperu
 body:

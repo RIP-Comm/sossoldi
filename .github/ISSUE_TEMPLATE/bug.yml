@@ -2,7 +2,7 @@ name: Bug Report
 description: File a bug report.
 title: "[Bug]: "
 labels: ["bug"]
-projects: ["RIP-Comm/sossoldi"]
+projects: ["sossoldi/3"]
 assignees:
   - theperu
 body:
