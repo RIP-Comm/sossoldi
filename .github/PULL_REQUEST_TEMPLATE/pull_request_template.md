@@ -1,11 +1,17 @@
 ## Description
 
-Fixes #<insert_issue_number>
+Closes #<insert_issue_number>
 
-Please provide additional infos here.
+## Before this PR
+
+Describe the problem or feature in the codebase before this PR
+
+## After this PR
+
+Describe the problem or feature in the codebase after this PR
 
 ### TODO
 
-- [ ] Implemented new tests (only for new features)
+- [ ] Implemented new tests
 - [ ] Tests pass
 - [ ] Appropriate changes to README are included in PR
