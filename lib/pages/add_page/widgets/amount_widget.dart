@@ -25,6 +25,7 @@ class _AmountWidgetState extends ConsumerState<AmountWidget> with Functions {
   Widget build(BuildContext context) {
     final selectedType = ref.watch(transactionTypeProvider);
     final currencyState = ref.watch(currencyStateNotifier);
+    final selectedTransaction = ref.read(selectedTransactionUpdateProvider);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
@@ -37,7 +38,7 @@ class _AmountWidgetState extends ConsumerState<AmountWidget> with Functions {
           suffixText: currencyState.selectedCurrency.symbol,
           suffixStyle: Theme.of(context).textTheme.headlineMedium!.copyWith(
                 color: typeToColor(
-                  selectedType,
+                  selectedTransaction?.type ?? selectedType,
                   brightness: Theme.of(context).brightness,
                 ),
               ),
@@ -70,7 +71,7 @@ class _AmountWidgetState extends ConsumerState<AmountWidget> with Functions {
         cursorColor: grey1,
         style: TextStyle(
           color: typeToColor(
-            selectedType,
+            selectedTransaction?.type ?? selectedType,
             brightness: Theme.of(context).brightness,
           ),
           fontSize: 58,
