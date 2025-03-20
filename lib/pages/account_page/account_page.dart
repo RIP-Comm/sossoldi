@@ -20,12 +20,11 @@ class AccountPage extends ConsumerStatefulWidget {
 class _AccountPage extends ConsumerState<AccountPage> with Functions {
   bool isRecoinciling = false;
   final TextEditingController _newBalanceController = TextEditingController();
-
-  FocusNode focusNode = FocusNode();
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void dispose() {
-    focusNode.dispose();
+    _focusNode.dispose();
     _newBalanceController.dispose();
     super.dispose();
   }
@@ -99,7 +98,7 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                       Column(
                         children: [
                           TextField(
-                            focusNode: focusNode,
+                            _focusNode: _focusNode,
                             controller: _newBalanceController,
                             decoration: InputDecoration(
                                 hintText: "New Balance",
@@ -170,7 +169,7 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                       TextButton.icon(
                           onPressed: () {
                             setState(() => isRecoinciling = true);
-                            focusNode.requestFocus();
+                            _focusNode.requestFocus();
                           },
                           icon: const Icon(Icons.sync),
                           label: Text(
