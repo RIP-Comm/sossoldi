@@ -3,8 +3,6 @@ description: Suggest a technical enhancement or refactor.
 title: "[Tech Improvement] "
 labels: ["technical improvement"]
 projects: ["RIP-Comm/3"]
-assignees:
-  - theperu
 body:
   - type: markdown
     attributes:
@@ -37,7 +35,7 @@ body:
       label: Benefits
       description: How would this improvement enhance the codebase, performance, or maintainability?
       placeholder: Explain the advantages of this improvement!
-  - type: dropdown
+  - type: checkboxes
     id: impact-area
     attributes:
       label: Impact Area
