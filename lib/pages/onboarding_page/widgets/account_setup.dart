@@ -31,7 +31,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
 
   Future<void> _flagOnBoardingCompleted() async {
     final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setBool('onboarding_completed', false);
+    sharedPreferences.setBool('onboarding_completed', true);
   }
 
   @override

@@ -29,7 +29,7 @@ void main() async {
   final bool? isFirstLoginCachedValue = _sharedPreferences.getBool('is_first_login');
   final bool isOnBoardingCompletedKeyNotSaved = _sharedPreferences.getBool('onboarding_completed') == null;
   if (isFirstLoginCachedValue != null && isOnBoardingCompletedKeyNotSaved) {
-    await _sharedPreferences.setBool('onboarding_completed', isFirstLoginCachedValue);
+    await _sharedPreferences.setBool('onboarding_completed', !isFirstLoginCachedValue);
   }
 
   // perform recurring transactions checks
@@ -52,7 +52,7 @@ class Launcher extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-    final bool isOnboardingCompleted = _sharedPreferences.getBool('onboarding_completed') ?? true;
+    final bool isOnboardingCompleted = _sharedPreferences.getBool('onboarding_completed') ?? false;
 
     final appThemeState = ref.watch(appThemeStateNotifier);
     return MaterialApp(
@@ -61,7 +61,7 @@ class Launcher extends ConsumerWidget {
       darkTheme: AppTheme.darkTheme,
       themeMode: appThemeState.isDarkModeEnabled ? ThemeMode.dark : ThemeMode.light,
       onGenerateRoute: makeRoute,
-      initialRoute: isOnboardingCompleted ? '/onboarding' : '/',
+      initialRoute: !isOnboardingCompleted ? '/onboarding' : '/',
     );
   }
 }
