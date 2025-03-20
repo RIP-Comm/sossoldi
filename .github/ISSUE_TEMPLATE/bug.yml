@@ -3,8 +3,6 @@ description: File a bug report.
 title: "[Bug] "
 labels: ["bug"]
 projects: ["RIP-Comm/3"]
-assignees:
-  - theperu
 body:
   - type: markdown
     attributes:
@@ -27,32 +25,30 @@ body:
       options:
         - Android
         - Apple
-      default: 0
+        - Both
+      default: 2
     validations:
       required: true
   - type: input
     id: os-version
     attributes:
       label: What version?
-      description: Also tell us, what did you expect to happen?
-      placeholder: e.g. Android 14 or iOS 18.3.2
+      description: e.g. Android 14 or iOS 18.3.2
     validations:
       required: true  
-  - type: dropdown
+  - type: input
     id: version
     attributes:
       label: Version
-      description: What version of our software are you running?
-      options:
-        - 0.1.0
-      default: 0
+      description: What version of Sossoldi are you running? (Find out in Settings -> More info -> Version) 
+      placeholder: e.g. v0.1.0
     validations:
       required: true
   - type: textarea
     id: logs
     attributes:
-      label: Log or screenshots
-      description: Please copy and paste any relevant log output if appliable (e.g. logcat) or copy-paste your screenshots here.
+      label: Screenshots or logs
+      description: Please copy-paste your screenshots here or if appliable, attach a log.
   - type: checkboxes
     id: terms
     attributes:
