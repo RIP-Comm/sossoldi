@@ -3,8 +3,6 @@ description: Suggest a new feature or enhancement.
 title: "[Feature] "
 labels: ["enhancement"]
 projects: ["RIP-Comm/3"]
-assignees:
-  - theperu
 body:
   - type: markdown
     attributes:
@@ -41,16 +39,6 @@ body:
         - Apple
         - Both
       default: 2
-    validations:
-      required: true
-  - type: dropdown
-    id: version
-    attributes:
-      label: Version
-      description: What version of our software are you using?
-      options:
-        - 0.1.0
-      default: 0
     validations:
       required: true
   - type: textarea
