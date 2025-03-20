@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:sossoldi/model/recurring_transaction.dart';
 import 'package:sossoldi/model/base_entity.dart';
+import 'package:sossoldi/model/transaction.dart';
 
 void main() {
   test('Test Copy Recurring Transaction Amount', () {
@@ -13,11 +14,11 @@ void main() {
         amount: 14,
         note: 'Test Transaction',
         recurrency: 'MONTHLY',
+        type: TransactionType.expense,
         idBankAccount: 34,
         idCategory: 24,
         createdAt: DateTime.utc(2022),
-        updatedAt: DateTime.utc(2022)
-    );
+        updatedAt: DateTime.utc(2022));
 
     RecurringTransaction tCopy = t.copy(id: 10, toDate: toDateValue);
 
@@ -50,15 +51,19 @@ void main() {
     RecurringTransaction t = RecurringTransaction.fromJson(json);
 
     assert(t.id == json[BaseEntityFields.id]);
-    assert(t.fromDate.toUtc().toIso8601String() == json[RecurringTransactionFields.fromDate]);
-    assert(t.toDate?.toUtc().toIso8601String() == json[RecurringTransactionFields.toDate]);
+    assert(t.fromDate.toUtc().toIso8601String() ==
+        json[RecurringTransactionFields.fromDate]);
+    assert(t.toDate?.toUtc().toIso8601String() ==
+        json[RecurringTransactionFields.toDate]);
     assert(t.amount == json[RecurringTransactionFields.amount]);
     assert(t.note == json[RecurringTransactionFields.note]);
     assert(t.recurrency == json[RecurringTransactionFields.recurrency]);
     assert(t.idBankAccount == json[RecurringTransactionFields.idBankAccount]);
     assert(t.idCategory == json[RecurringTransactionFields.idCategory]);
-    assert(t.createdAt?.toUtc().toIso8601String() == json[BaseEntityFields.createdAt]);
-    assert(t.updatedAt?.toUtc().toIso8601String() == json[BaseEntityFields.updatedAt]);
+    assert(t.createdAt?.toUtc().toIso8601String() ==
+        json[BaseEntityFields.createdAt]);
+    assert(t.updatedAt?.toUtc().toIso8601String() ==
+        json[BaseEntityFields.updatedAt]);
   });
 
   test("Test toJson Recurring Transaction Amount", () {
@@ -67,6 +72,7 @@ void main() {
         fromDate: DateTime.utc(2022),
         toDate: DateTime.utc(2023),
         amount: 0,
+        type: TransactionType.expense,
         note: "Test transaction",
         recurrency: "MONTHLY",
         idBankAccount: 4,
@@ -77,14 +83,18 @@ void main() {
     Map<String, Object?> json = t.toJson();
 
     assert(t.id == json[BaseEntityFields.id]);
-    assert(t.fromDate.toUtc().toIso8601String() == json[RecurringTransactionFields.fromDate]);
-    assert(t.toDate?.toUtc().toIso8601String() == json[RecurringTransactionFields.toDate]);
+    assert(t.fromDate.toUtc().toIso8601String() ==
+        json[RecurringTransactionFields.fromDate]);
+    assert(t.toDate?.toUtc().toIso8601String() ==
+        json[RecurringTransactionFields.toDate]);
     assert(t.amount == json[RecurringTransactionFields.amount]);
     assert(t.note == json[RecurringTransactionFields.note]);
     assert(t.recurrency == json[RecurringTransactionFields.recurrency]);
     assert(t.idBankAccount == json[RecurringTransactionFields.idBankAccount]);
     assert(t.idCategory == json[RecurringTransactionFields.idCategory]);
-    assert(t.createdAt?.toUtc().toIso8601String() == json[BaseEntityFields.createdAt]);
-    assert(t.updatedAt?.toUtc().toIso8601String() == json[BaseEntityFields.updatedAt]);
+    assert(t.createdAt?.toUtc().toIso8601String() ==
+        json[BaseEntityFields.createdAt]);
+    assert(t.updatedAt?.toUtc().toIso8601String() ==
+        json[BaseEntityFields.updatedAt]);
   });
 }

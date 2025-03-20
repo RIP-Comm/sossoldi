@@ -40,13 +40,31 @@ class TransactionFields extends BaseEntityFields {
   ];
 }
 
-enum TransactionType { income, expense, transfer }
-
 Map<String, TransactionType> typeMap = {
   "IN": TransactionType.income,
   "OUT": TransactionType.expense,
   "TRSF": TransactionType.transfer,
 };
+
+enum TransactionType {
+  income,
+  expense,
+  transfer;
+
+  String get code => switch (this) {
+        TransactionType.income => "IN",
+        TransactionType.expense => "OUT",
+        TransactionType.transfer => "TRSF",
+      };
+
+  String get prefix =>
+      switch (this) { TransactionType.expense => "-", _ => "" };
+
+  static TransactionType fromJson(String code) =>
+      TransactionType.values.firstWhere((e) => e.code == code);
+
+  String toJson() => code;
+}
 
 enum Recurrence {
   daily,
@@ -160,11 +178,12 @@ class Transaction extends BaseEntity {
           createdAt: createdAt ?? this.createdAt,
           updatedAt: updatedAt ?? this.updatedAt);
 
-  static Transaction fromJson(Map<String, Object?> json) => Transaction(
+  static Transaction fromJson(Map<String, Object?> json) {
+    return Transaction(
       id: json[BaseEntityFields.id] as int?,
       date: DateTime.parse(json[TransactionFields.date] as String),
       amount: json[TransactionFields.amount] as num,
-      type: typeMap[json[TransactionFields.type] as String]!,
+      type: TransactionType.fromJson(json[TransactionFields.type] as String),
       note: json[TransactionFields.note] as String?,
       idCategory: json[TransactionFields.idCategory] as int?,
       categoryName: json[TransactionFields.categoryName] as String?,
@@ -176,29 +195,34 @@ class Transaction extends BaseEntity {
           json[TransactionFields.idBankAccountTransfer] as int?,
       bankAccountTransferName:
           json[TransactionFields.bankAccountTransferName] as String?,
-      recurring: json[TransactionFields.recurring] == 1 ? true : false,
+      recurring: json[TransactionFields.recurring] == 1,
       idRecurringTransaction:
           json[TransactionFields.idRecurringTransaction] as int?,
       createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
-      updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String));
+      updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String),
+    );
+  }
 
-  Map<String, Object?> toJson({bool update = false}) => {
-        TransactionFields.id: id,
-        TransactionFields.date: date.toIso8601String(),
-        TransactionFields.amount: amount,
-        TransactionFields.type:
-            typeMap.keys.firstWhere((k) => typeMap[k] == type),
-        TransactionFields.note: note,
-        TransactionFields.idCategory: idCategory,
-        TransactionFields.idBankAccount: idBankAccount,
-        TransactionFields.idBankAccountTransfer: idBankAccountTransfer,
-        TransactionFields.recurring: recurring ? 1 : 0,
-        TransactionFields.idRecurringTransaction: idRecurringTransaction,
-        BaseEntityFields.createdAt: update
-            ? createdAt?.toIso8601String()
-            : DateTime.now().toIso8601String(),
-        BaseEntityFields.updatedAt: DateTime.now().toIso8601String(),
-      };
+  Map<String, Object?> toJson({bool update = false}) {
+    final createdAtDate = update
+        ? createdAt?.toIso8601String()
+        : DateTime.now().toIso8601String();
+
+    return {
+      TransactionFields.id: id,
+      TransactionFields.date: date.toIso8601String(),
+      TransactionFields.amount: amount,
+      TransactionFields.type: type.toJson(),
+      TransactionFields.note: note,
+      TransactionFields.idCategory: idCategory,
+      TransactionFields.idBankAccount: idBankAccount,
+      TransactionFields.idBankAccountTransfer: idBankAccountTransfer,
+      TransactionFields.recurring: recurring ? 1 : 0,
+      TransactionFields.idRecurringTransaction: idRecurringTransaction,
+      BaseEntityFields.createdAt: createdAtDate,
+      BaseEntityFields.updatedAt: DateTime.now().toIso8601String(),
+    };
+  }
 }
 
 class TransactionMethods extends SossoldiDatabase {

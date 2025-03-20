@@ -20,7 +20,6 @@ class SossoldiDatabase {
   static Database? _database;
   static String dbName = 'sossoldi.db';
 
-
   // Zero args constructor needed to extend this class
   SossoldiDatabase({String? dbName}) {
     dbName = dbName ?? 'sossoldi.db';
@@ -38,8 +37,7 @@ class SossoldiDatabase {
   Future<Database> _initDB(String filePath) async {
     final databasePath = await getDatabasesPath();
     final path = join(databasePath, filePath);
-    return await openDatabase(
-        path,
+    return await openDatabase(path,
         version: _migrationManager.latestVersion,
         onCreate: _createDB,
         onUpgrade: _upgradeDB);
@@ -51,7 +49,8 @@ class SossoldiDatabase {
     await instance._migrationManager.migrate(database, 0, version);
   }
 
-  static Future _upgradeDB(Database database, int oldVersion, int newVersion) async {
+  static Future _upgradeDB(
+      Database database, int oldVersion, int newVersion) async {
     await instance._migrationManager.migrate(database, oldVersion, newVersion);
   }
 

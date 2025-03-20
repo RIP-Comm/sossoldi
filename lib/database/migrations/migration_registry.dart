@@ -11,11 +11,10 @@
 /// The MigrationManager will execute migrations in the exact order defined here.
 library;
 
-
 import '0001_initial_schema.dart';
 import '0002_account_net_worth.dart';
+import '0003_recurring_transaction_type.dart';
 import '../migration_base.dart';
-
 
 /// Returns all available migrations in execution order.
 ///
@@ -27,6 +26,7 @@ List<Migration> getMigrations() {
   return [
     InitialSchema(),
     AccountNetWorth(),
+    RecurringTransactionType(),
     // Add future migrations here
   ];
 }
@@ -41,6 +41,6 @@ int getLatestVersion() {
   final migrations = getMigrations();
   if (migrations.isEmpty) return 1;
 
-  return migrations.fold<int>(1, (max, migration) =>
-  migration.version > max ? migration.version : max);
+  return migrations.fold<int>(
+      1, (max, migration) => migration.version > max ? migration.version : max);
 }

@@ -41,7 +41,6 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
         numToCurrency(ref.read(selectedTransactionUpdateProvider)?.amount);
     noteController.text =
         ref.read(selectedTransactionUpdateProvider)?.note ?? '';
-
     amountController.addListener(_updateAmount);
 
     super.initState();
@@ -136,60 +135,54 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
     final selectedTransaction = ref.read(selectedTransactionUpdateProvider);
 
     final cleanAmount = getCleanAmountString();
-
-    // Check that an amount has been provided
-    if (cleanAmount != '') {
-      if (selectedTransaction != null) {
-        // if the original transaction is not recurrent, but user sets a recurrency, add the corrispondent record
-        // and edit the original transaction
-        if (ref.read(selectedRecurringPayProvider) &&
-            !selectedTransaction.recurring) {
+    if (cleanAmount == '') return;
+    if (selectedTransaction != null) {
+      // if the original transaction is not recurrent, but user sets a recurrency, add the corrispondent record
+      // and edit the original transaction
+      if (ref.read(selectedRecurringPayProvider) &&
+          !selectedTransaction.recurring) {
+        ref
+            .read(transactionsProvider.notifier)
+            .addRecurringTransaction(
+                currencyToNum(cleanAmount), noteController.text, selectedType)
+            .then((value) {
+          if (value != null) {
+            ref
+                .read(transactionsProvider.notifier)
+                .updateTransaction(
+                    currencyToNum(cleanAmount), noteController.text, value.id)
+                .whenComplete(() => _refreshAccountAndNavigateBack());
+          }
+        });
+      } else {
+        ref
+            .read(transactionsProvider.notifier)
+            .updateTransaction(currencyToNum(cleanAmount), noteController.text,
+                selectedTransaction.idRecurringTransaction)
+            .whenComplete(() => _refreshAccountAndNavigateBack());
+      }
+    } else {
+      if (selectedType == TransactionType.transfer) {
+        if (ref.read(bankAccountTransferProvider) != null) {
           ref
               .read(transactionsProvider.notifier)
-              .addRecurringTransaction(
-                  currencyToNum(cleanAmount), noteController.text)
-              .then((value) {
-            if (value != null) {
-              ref
-                  .read(transactionsProvider.notifier)
-                  .updateTransaction(
-                      currencyToNum(cleanAmount), noteController.text, value.id)
-                  .whenComplete(() => _refreshAccountAndNavigateBack());
-            }
-          });
-        } else {
-          ref
-              .read(transactionsProvider.notifier)
-              .updateTransaction(
-                  currencyToNum(cleanAmount),
-                  noteController.text,
-                  selectedTransaction.idRecurringTransaction)
+              .addTransaction(currencyToNum(cleanAmount), noteController.text)
               .whenComplete(() => _refreshAccountAndNavigateBack());
         }
       } else {
-        if (selectedType == TransactionType.transfer) {
-          if (ref.read(bankAccountTransferProvider) != null) {
+        // It's an income or an expense
+        if (ref.read(categoryProvider) != null) {
+          if (ref.read(selectedRecurringPayProvider)) {
+            ref
+                .read(transactionsProvider.notifier)
+                .addRecurringTransaction(currencyToNum(cleanAmount),
+                    noteController.text, selectedType)
+                .whenComplete(() => _refreshAccountAndNavigateBack());
+          } else {
             ref
                 .read(transactionsProvider.notifier)
                 .addTransaction(currencyToNum(cleanAmount), noteController.text)
                 .whenComplete(() => _refreshAccountAndNavigateBack());
-          }
-        } else {
-          // It's an income or an expense
-          if (ref.read(categoryProvider) != null) {
-            if (ref.read(selectedRecurringPayProvider)) {
-              ref
-                  .read(transactionsProvider.notifier)
-                  .addRecurringTransaction(
-                      currencyToNum(cleanAmount), noteController.text)
-                  .whenComplete(() => _refreshAccountAndNavigateBack());
-            } else {
-              ref
-                  .read(transactionsProvider.notifier)
-                  .addTransaction(
-                      currencyToNum(cleanAmount), noteController.text)
-                  .whenComplete(() => _refreshAccountAndNavigateBack());
-            }
           }
         }
       }
@@ -226,9 +219,11 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                 size: 20,
                 color: Theme.of(context).colorScheme.primary,
               ),
-              onPressed: () => showDialog(context: context, builder: (_) => DuplicateTransactionDialog(
-                transaction: selectedTransaction,
-              )),
+              onPressed: () => showDialog(
+                  context: context,
+                  builder: (_) => DuplicateTransactionDialog(
+                        transaction: selectedTransaction,
+                      )),
             ),
             IconButton(
               icon: Icon(
@@ -366,14 +361,12 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                             }
                           },
                         ),
-                        if (selectedType == TransactionType.expense) ...[
-                          RecurrenceListTile(
-                            recurrencyEditingPermitted:
-                                widget.recurrencyEditingPermitted,
-                            selectedTransaction:
-                                ref.read(selectedTransactionUpdateProvider),
-                          )
-                        ],
+                        RecurrenceListTile(
+                          recurrencyEditingPermitted:
+                              widget.recurrencyEditingPermitted,
+                          selectedTransaction:
+                              ref.read(selectedTransactionUpdateProvider),
+                        )
                       ],
                     ),
                   ),
