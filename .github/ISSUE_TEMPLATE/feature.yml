@@ -2,7 +2,7 @@ name: Feature Request
 description: Suggest a new feature or enhancement.
 title: "[Feature]: "
 labels: ["enhancement"]
-projects: ["sossoldi/3"]
+projects: ["RIP-Comm/3"]
 assignees:
   - theperu
 body:
