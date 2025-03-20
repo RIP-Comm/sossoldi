@@ -6,10 +6,7 @@ import '/model/bank_account.dart';
 
 class AccountNetWorth extends Migration {
   AccountNetWorth()
-      : super(
-          version: 2,
-          description: 'Add account net worth column',
-        );
+      : super(version: 2, description: 'Add account net worth column');
 
   @override
   Future<void> up(Database db) async {

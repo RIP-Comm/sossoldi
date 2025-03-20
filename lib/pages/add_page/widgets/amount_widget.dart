@@ -27,6 +27,7 @@ class _AmountWidgetState extends ConsumerState<AmountWidget> {
   Widget build(BuildContext context) {
     final selectedType = ref.watch(transactionTypeProvider);
     final currencyState = ref.watch(currencyStateNotifier);
+    final selectedTransaction = ref.read(selectedTransactionUpdateProvider);
 
     return Padding(
       padding:

@@ -42,7 +42,6 @@ class _AddPageState extends ConsumerState<AddPage> {
         ref.read(selectedTransactionUpdateProvider)?.amount.toCurrency() ?? '';
     noteController.text =
         ref.read(selectedTransactionUpdateProvider)?.note ?? '';
-
     amountController.addListener(_updateAmount);
 
     super.initState();
@@ -151,7 +150,8 @@ class _AddPageState extends ConsumerState<AddPage> {
             !selectedTransaction.recurring) {
           ref
               .read(transactionsProvider.notifier)
-              .addRecurringTransaction(cleanAmount.toNum(), noteController.text)
+              .addRecurringTransaction(
+                  cleanAmount.toNum(), noteController.text, selectedType)
               .then((value) {
             if (value != null) {
               ref
@@ -183,7 +183,7 @@ class _AddPageState extends ConsumerState<AddPage> {
               ref
                   .read(transactionsProvider.notifier)
                   .addRecurringTransaction(
-                      cleanAmount.toNum(), noteController.text)
+                      cleanAmount.toNum(), noteController.text, selectedType)
                   .whenComplete(() => _refreshAccountAndNavigateBack());
             } else {
               ref
@@ -374,14 +374,12 @@ class _AddPageState extends ConsumerState<AddPage> {
                             }
                           },
                         ),
-                        if (selectedType == TransactionType.expense) ...[
-                          RecurrenceListTile(
-                            recurrencyEditingPermitted:
-                                widget.recurrencyEditingPermitted,
-                            selectedTransaction:
-                                ref.read(selectedTransactionUpdateProvider),
-                          )
-                        ],
+                        RecurrenceListTile(
+                          recurrencyEditingPermitted:
+                              widget.recurrencyEditingPermitted,
+                          selectedTransaction:
+                              ref.read(selectedTransactionUpdateProvider),
+                        )
                       ],
                     ),
                   ),

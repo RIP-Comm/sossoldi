@@ -25,7 +25,7 @@ final transactionTypeProvider =
 final bankAccountTransferProvider = StateProvider<BankAccount?>((ref) => null);
 // Used as from account in transfer transactions
 final bankAccountProvider =
-    StateProvider<BankAccount?>((ref) => ref.watch(mainAccountProvider));
+    StateProvider<BankAccount?>((ref) => ref.read(mainAccountProvider));
 final dateProvider = StateProvider<DateTime>((ref) => DateTime.now());
 final categoryProvider = StateProvider<CategoryTransaction?>((ref) => null);
 
@@ -81,7 +81,6 @@ class AsyncTransactionsNotifier
     }
     final dateStart = ref.watch(filterDateStartProvider);
     final dateEnd = ref.watch(filterDateEndProvider);
-
     final transactions = await TransactionMethods().selectAll(
         dateRangeStart: dateStart, dateRangeEnd: dateEnd, limit: limit);
 
@@ -152,7 +151,7 @@ class AsyncTransactionsNotifier
   }
 
   Future<RecurringTransaction?> addRecurringTransaction(
-      num amount, String label) async {
+      num amount, String label, TransactionType type) async {
     state = const AsyncValue.loading();
 
     final date = ref.read(dateProvider);
@@ -166,6 +165,7 @@ class AsyncTransactionsNotifier
         fromDate: date,
         toDate: toDate,
         note: label,
+        type: type,
         idBankAccount: bankAccount.id!,
         idCategory: category!.id!,
         recurrency: recurrency.name.toUpperCase(),
@@ -175,7 +175,6 @@ class AsyncTransactionsNotifier
 
     // Here we need the recurringTransaction just inserted, to get and return a model with also his ID
     RecurringTransaction? insertedTransaction;
-
     state = await AsyncValue.guard(() async {
       insertedTransaction =
           await RecurringTransactionMethods().insert(transaction);
@@ -191,7 +190,7 @@ class AsyncTransactionsNotifier
       final transaction = Transaction(
         date: date,
         amount: amount,
-        type: TransactionType.expense,
+        type: type,
         note: label,
         idBankAccount: bankAccount.id!,
         idCategory: category.id!,
@@ -235,7 +234,7 @@ class AsyncTransactionsNotifier
     final recurrency = ref.read(intervalProvider.notifier).state;
     final category = ref.read(categoryProvider);
 
-    RecurringTransaction transaction = ref
+    final RecurringTransaction transaction = ref
         .read(selectedRecurringTransactionUpdateProvider)!
         .copy(
             fromDate: ref.read(dateProvider),

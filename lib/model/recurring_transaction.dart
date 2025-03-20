@@ -10,6 +10,7 @@ class RecurringTransactionFields extends BaseEntityFields {
   static String toDate = 'toDate';
   static String amount = 'amount';
   static String note = 'note';
+  static String type = 'type';
   static String recurrency = 'recurrency';
   static String idCategory = 'idCategory';
   static String idBankAccount = 'idBankAccount';
@@ -50,69 +51,74 @@ class RecurringTransaction extends BaseEntity {
   final String recurrency;
   final int idCategory;
   final int idBankAccount;
+  final TransactionType type;
   final DateTime? lastInsertion;
 
-  const RecurringTransaction({
-    super.id,
-    required this.fromDate,
-    this.toDate,
-    required this.amount,
-    required this.note,
-    required this.recurrency,
-    required this.idCategory,
-    required this.idBankAccount,
-    this.lastInsertion,
-    super.createdAt,
-    super.updatedAt,
-  });
+  const RecurringTransaction(
+      {super.id,
+      required this.fromDate,
+      this.toDate,
+      required this.amount,
+      required this.note,
+      required this.recurrency,
+      required this.idCategory,
+      required this.type,
+      required this.idBankAccount,
+      this.lastInsertion,
+      super.createdAt,
+      super.updatedAt});
 
-  RecurringTransaction copy({
-    int? id,
-    DateTime? fromDate,
-    DateTime? toDate,
-    num? amount,
-    String? note,
-    String? recurrency,
-    int? idCategory,
-    int? idBankAccount,
-    DateTime? lastInsertion,
-    DateTime? createdAt,
-    DateTime? updatedAt,
-  }) =>
+  RecurringTransaction copy(
+          {int? id,
+          DateTime? fromDate,
+          DateTime? toDate,
+          num? amount,
+          String? note,
+          String? recurrency,
+          int? idCategory,
+          TransactionType? type,
+          int? idBankAccount,
+          DateTime? lastInsertion,
+          DateTime? createdAt,
+          DateTime? updatedAt}) =>
       RecurringTransaction(
-        id: id ?? this.id,
-        fromDate: fromDate ?? this.fromDate,
-        toDate: toDate ?? this.toDate,
-        amount: amount ?? this.amount,
-        note: note ?? this.note,
-        recurrency: recurrency ?? this.recurrency,
-        idCategory: idCategory ?? this.idCategory,
-        idBankAccount: idBankAccount ?? this.idBankAccount,
-        lastInsertion: lastInsertion ?? this.lastInsertion,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
-      );
+          id: id ?? this.id,
+          fromDate: fromDate ?? this.fromDate,
+          toDate: toDate ?? this.toDate,
+          amount: amount ?? this.amount,
+          note: note ?? this.note,
+          recurrency: recurrency ?? this.recurrency,
+          idCategory: idCategory ?? this.idCategory,
+          type: type ?? this.type,
+          idBankAccount: idBankAccount ?? this.idBankAccount,
+          lastInsertion: lastInsertion ?? this.lastInsertion,
+          createdAt: createdAt ?? this.createdAt,
+          updatedAt: updatedAt ?? this.updatedAt);
 
   static RecurringTransaction fromJson(Map<String, Object?> json) =>
       RecurringTransaction(
-        id: json[BaseEntityFields.id] as int?,
-        fromDate:
-            DateTime.parse(json[RecurringTransactionFields.fromDate] as String),
-        toDate: json[RecurringTransactionFields.toDate] != null
-            ? DateTime.parse(json[RecurringTransactionFields.toDate] as String)
-            : null,
-        amount: json[RecurringTransactionFields.amount] as num,
-        note: json[RecurringTransactionFields.note] as String,
-        recurrency: json[RecurringTransactionFields.recurrency] as String,
-        idCategory: json[RecurringTransactionFields.idCategory] as int,
-        idBankAccount: json[RecurringTransactionFields.idBankAccount] as int,
-        lastInsertion: json[RecurringTransactionFields.lastInsertion] != null
-            ? DateTime.parse(
-                json[RecurringTransactionFields.lastInsertion] as String)
-            : null,
-        createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
-        updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String),
-      );
+          id: json[BaseEntityFields.id] as int?,
+          fromDate: DateTime.parse(
+              json[RecurringTransactionFields.fromDate] as String),
+          toDate:
+              json[RecurringTransactionFields.toDate] != null
+                  ? DateTime.parse(
+                      json[RecurringTransactionFields.toDate] as String)
+                  : null,
+          amount: json[RecurringTransactionFields.amount] as num,
+          note: json[RecurringTransactionFields.note] as String,
+          recurrency: json[RecurringTransactionFields.recurrency] as String,
+          idCategory: json[RecurringTransactionFields.idCategory] as int,
+          type: TransactionType.fromJson(
+              json[RecurringTransactionFields.type] as String),
+          idBankAccount: json[RecurringTransactionFields.idBankAccount] as int,
+          lastInsertion: json[RecurringTransactionFields.lastInsertion] != null
+              ? DateTime.parse(
+                  json[RecurringTransactionFields.lastInsertion] as String)
+              : null,
+          createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
+          updatedAt:
+              DateTime.parse(json[BaseEntityFields.updatedAt] as String));
 
   Map<String, Object?> toJson() => {
         BaseEntityFields.id: id,
@@ -120,6 +126,7 @@ class RecurringTransaction extends BaseEntity {
         RecurringTransactionFields.toDate: toDate?.toIso8601String(),
         RecurringTransactionFields.amount: amount,
         RecurringTransactionFields.note: note,
+        RecurringTransactionFields.type: type.toJson(),
         RecurringTransactionFields.recurrency: recurrency,
         RecurringTransactionFields.idCategory: idCategory,
         RecurringTransactionFields.idBankAccount: idBankAccount,
@@ -303,7 +310,7 @@ class RecurringTransactionMethods extends SossoldiDatabase {
           break;
         case 'months':
           // get the last day of the next period
-          int lastDayOfNextPeriod = DateTime(lastTransactionDate.year,
+          final int lastDayOfNextPeriod = DateTime(lastTransactionDate.year,
                   (lastTransactionDate.month + amount + 1), 0)
               .day;
           int dayOfInsertion = transaction.fromDate.day;
@@ -330,11 +337,10 @@ class RecurringTransactionMethods extends SossoldiDatabase {
 
     for (var tr in transactions2Add) {
       // insert a new transaction
-
       Transaction addTr = Transaction(
         date: tr,
         amount: transaction.amount,
-        type: TransactionType.expense,
+        type: transaction.type,
         note: transaction.note,
         idCategory: transaction.idCategory,
         idBankAccount: transaction.idBankAccount,

@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:sossoldi/model/recurring_transaction.dart';
 import 'package:sossoldi/model/base_entity.dart';
+import 'package:sossoldi/model/transaction.dart';
 
 void main() {
   test('Test Copy Recurring Transaction Amount', () {
@@ -13,6 +14,7 @@ void main() {
         amount: 14,
         note: 'Test Transaction',
         recurrency: 'MONTHLY',
+        type: TransactionType.expense,
         idBankAccount: 34,
         idCategory: 24,
         createdAt: DateTime.utc(2022),
@@ -41,6 +43,7 @@ void main() {
       RecurringTransactionFields.note: "Test Transaction",
       RecurringTransactionFields.recurrency: "WEEKLY",
       RecurringTransactionFields.idBankAccount: 44,
+      RecurringTransactionFields.type: "OUT",
       RecurringTransactionFields.idCategory: 4,
       BaseEntityFields.createdAt: DateTime.utc(2022).toIso8601String(),
       BaseEntityFields.updatedAt: DateTime.utc(2022).toIso8601String(),
@@ -70,6 +73,7 @@ void main() {
         fromDate: DateTime.utc(2022),
         toDate: DateTime.utc(2023),
         amount: 0,
+        type: TransactionType.expense,
         note: "Test transaction",
         recurrency: "MONTHLY",
         idBankAccount: 4,

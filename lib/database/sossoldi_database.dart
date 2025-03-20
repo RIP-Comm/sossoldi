@@ -231,10 +231,10 @@ class SossoldiDatabase {
 
     // Add fake recurring transactions
     await _database?.execute('''
-      INSERT INTO recurringTransaction(fromDate, toDate, amount, note, recurrency, idCategory, idBankAccount, createdAt, updatedAt) VALUES
-        ("2024-02-23", null, 10.99, "404 Books", "MONTHLY", 14, 70, '${DateTime.now()}', '${DateTime.now()}'),
-        ("2023-12-13", null, 4.97, "ETF Consultant Parcel", "DAILY", 14, 70, '${DateTime.now()}', '${DateTime.now()}'),
-        ("2023-02-11", "2028-02-11", 1193.40, "Car Loan", "QUARTERLY", 15, 72, '${DateTime.now()}', '${DateTime.now()}');
+      INSERT INTO recurringTransaction(fromDate, toDate, amount,type, note, recurrency, idCategory, idBankAccount, createdAt, updatedAt) VALUES
+        ("2024-02-23", null, 10.99, "OUT", "404 Books", "MONTHLY", 14, 70, '${DateTime.now()}', '${DateTime.now()}'),
+        ("2023-12-13", null, 4.97, "OUT", "ETF Consultant Parcel", "DAILY", 14, 70, '${DateTime.now()}', '${DateTime.now()}'),
+        ("2023-02-11", "2028-02-11", 1193.40, "OUT", "Car Loan", "QUARTERLY", 15, 72, '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
     // Add fake transactions
