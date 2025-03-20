@@ -26,6 +26,7 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
   @override
   void dispose() {
     focusNode.dispose();
+    _newBalanceController.dispose();
     super.dispose();
   }
 
