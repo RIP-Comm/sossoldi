@@ -23,6 +23,15 @@ void main() async {
 
   _sharedPreferences = await SharedPreferences.getInstance();
 
+  // KV migration from the 'is_first_login' key to 'onboarding_completed'
+  // to correctly handle the completion of the onboarding process
+  // (To consider to remove in later future)
+  final bool? isFirstLoginCachedValue = _sharedPreferences.getBool('is_first_login');
+  final bool isOnBoardingCompletedKeyNotSaved = _sharedPreferences.getBool('onboarding_completed') == null;
+  if (isFirstLoginCachedValue != null && isOnBoardingCompletedKeyNotSaved) {
+    await _sharedPreferences.setBool('onboarding_completed', isFirstLoginCachedValue);
+  }
+
   // perform recurring transactions checks
   DateTime? lastCheckGetPref = _sharedPreferences.getString('last_recurring_transactions_check') != null ? DateTime.parse(_sharedPreferences.getString('last_recurring_transactions_check')!) : null;
   DateTime? lastRecurringTransactionsCheck = lastCheckGetPref;
@@ -43,10 +52,7 @@ class Launcher extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-    // Although the saved key refers to 'is_first_login',
-    // its behavior aligns with a 'has the user completed onboarding' check.
-    // It has not been renamed to maintain compatibility with previous versions.
-    final bool isFirstLogin = _sharedPreferences.getBool('is_first_login') ?? true;
+    final bool isOnboardingCompleted = _sharedPreferences.getBool('onboarding_completed') ?? true;
 
     final appThemeState = ref.watch(appThemeStateNotifier);
     return MaterialApp(
@@ -55,7 +61,7 @@ class Launcher extends ConsumerWidget {
       darkTheme: AppTheme.darkTheme,
       themeMode: appThemeState.isDarkModeEnabled ? ThemeMode.dark : ThemeMode.light,
       onGenerateRoute: makeRoute,
-      initialRoute: isFirstLogin ? '/onboarding' : '/',
+      initialRoute: isOnboardingCompleted ? '/onboarding' : '/',
     );
   }
 }
