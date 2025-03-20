@@ -30,10 +30,8 @@ class DuplicateTransactionDialog extends ConsumerWidget {
           style: ElevatedButton.styleFrom(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
           ),
-          onPressed: () => ref
-              .read(transactionsProvider.notifier)
-              .duplicateTransaction(transaction)
-              .whenComplete(() {
+          onPressed: () =>
+              ref.read(transactionsProvider.notifier).duplicateTransaction(transaction).then((t) {
             if (context.mounted) {
               Navigator.of(context)
                 ..pop()

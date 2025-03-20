@@ -56,6 +56,8 @@ final typeFilterProvider = StateProvider<Map<String, bool>>(
   },
 );
 
+final duplicatedTransactoinProvider = StateProvider<Transaction?>((ref) => null);
+
 class AsyncTransactionsNotifier
     extends AutoDisposeAsyncNotifier<List<Transaction>> {
   @override
@@ -129,16 +131,19 @@ class AsyncTransactionsNotifier
     });
   }
 
-  Future<void> duplicateTransaction(Transaction transaction) async {
+  Future<Transaction?> duplicateTransaction(Transaction transaction) async {
     final duplicatedTransaction = transaction.copy(
       id: null,
       note: "${transaction.note} (copy)",
     );
+    Transaction? insertedTransaction;
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
-      await TransactionMethods().insert(duplicatedTransaction);
+      insertedTransaction = await TransactionMethods().insert(duplicatedTransaction);
+      ref.read(duplicatedTransactoinProvider.notifier).state = insertedTransaction;
       return _getTransactions(update: true);
     });
+    return insertedTransaction;
   }
 
   Future<RecurringTransaction?> addRecurringTransaction(
