@@ -1,6 +1,6 @@
 name: Technical Improvement
 description: Suggest a technical enhancement or refactor.
-title: "[Tech Improvement]: "
+title: "[Tech Improvement] "
 labels: ["technical improvement"]
 projects: ["RIP-Comm/3"]
 assignees:

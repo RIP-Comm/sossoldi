@@ -1,6 +1,6 @@
 name: Feature Request
 description: Suggest a new feature or enhancement.
-title: "[Feature]: "
+title: "[Feature] "
 labels: ["enhancement"]
 projects: ["RIP-Comm/3"]
 assignees:
