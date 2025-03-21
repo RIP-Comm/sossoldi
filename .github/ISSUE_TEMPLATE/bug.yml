@@ -1,0 +1,59 @@
+name: 🐛 Bug Report
+description: 🛠️ File a bug report.
+title: "[Bug] "
+labels: ["bug"]
+projects: ["RIP-Comm/3"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: 🛰️ **What happened?**
+      description: Also tell us, what did you expect to happen?
+      placeholder: Tell us what you see!
+      value: "A bug happened!"
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: 🖥️ **OS**
+      description: What OS are you on?
+      options:
+        - Android
+        - Apple
+        - Both
+      default: 2
+    validations:
+      required: true
+  - type: input
+    id: os-version
+    attributes:
+      label: 🔄 **What version?**
+      description: e.g. Android 14 or iOS 18.3.2
+    validations:
+      required: true  
+  - type: input
+    id: version
+    attributes:
+      label: 🔢 **Version**
+      description: What version of Sossoldi are you running? (Find out in Settings -> More info -> Version) 
+      placeholder: e.g. v0.1.0
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: 📸 **Screenshots or logs**
+      description: Please copy-paste your screenshots here or if applicable, attach a log.
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: 📝 **Code of Conduct**
+      description: By submitting this issue, you confirm that you have previously used the search function to look for the same issue among both open and closed issues. 
+      options:
+        - label: ✅ I agree
+          required: true
