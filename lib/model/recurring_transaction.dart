@@ -1,3 +1,5 @@
+import 'dart:developer' as dev;
+
 import '../database/sossoldi_database.dart';
 import 'transaction.dart';
 import 'base_entity.dart';
@@ -160,7 +162,7 @@ class RecurringTransactionMethods extends SossoldiDatabase {
       final id = await db.insert(recurringTransactionTable, item.toJson());
       return item.copy(id: id);
     } catch (e){
-      print(e);
+      dev.log('$e');
     }
     return null;
   }
