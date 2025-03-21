@@ -41,11 +41,11 @@ body:
       label: 🧱 **Impact Area**
       description: 🏗️ What area of the codebase would be impacted?
       options:
-        - Backend
-        - Frontend
-        - Infrastructure
-        - DevOps
-        - Other
+        - label: Backend
+        - label: Frontend
+        - label: Infrastructure
+        - label: DevOps
+        - label: Other
     validations:
       required: true
   - type: textarea
