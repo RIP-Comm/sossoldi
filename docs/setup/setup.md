@@ -10,13 +10,17 @@ has_children: true
 
 Download and install Git from [https://git-scm.com/](https://git-scm.com/).
 
-## Step 2: Install Flutter
+## Step 2: Install Flutter (Using FVM)
 
-Installing flutter is slightly different between Windows, MacOS and Linux. Flutter already has a good step-by-step that you can find [here](https://docs.flutter.dev/get-started/install)
+This project uses [FVM](https://fvm.app/) to manage Flutter versions, ensuring consistency and preventing compatibility issues among contributors.<br />
+The installation process varies slightly depending on your operating system (Windows, macOS, or Linux). You can follow the official installation guide [here](https://fvm.app/documentation/getting-started/installation).<br />
+Once FVM is installed, navigate to the project's root directory and run the following command:
 
-1. Download the Flutter SDK from [flutter.dev/docs/get-started/install](https://flutter.dev/docs/get-started/install).
-2. Extract the downloaded archive to a location on your machine.
-3. Add the Flutter `bin` directory to your system's `PATH` variable.
+```sh
+fvm install
+```
+
+This will install the correct Flutter version specified for the project.
 
 ## Step 3: Set Up an IDE
 
