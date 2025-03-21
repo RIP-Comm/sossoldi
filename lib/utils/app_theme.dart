@@ -174,6 +174,15 @@ class AppTheme {
       contentPadding: const EdgeInsets.all(0),
       hintStyle: TextStyle(color: grey2),
     ),
+    snackBarTheme: SnackBarThemeData(
+      backgroundColor: customColorScheme.primaryContainer,
+      contentTextStyle: TextStyle(
+        color: customColorScheme.onSurface,
+        fontSize: 16,
+      ),
+      behavior: SnackBarBehavior.floating,
+      insetPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    ),
   );
 
   static final darkTheme = ThemeData(
@@ -358,6 +367,15 @@ class AppTheme {
       border: InputBorder.none,
       contentPadding: const EdgeInsets.all(0),
       hintStyle: TextStyle(color: grey2),
+    ),
+    snackBarTheme: SnackBarThemeData(
+      backgroundColor: darkCustomColorScheme.primaryContainer,
+      contentTextStyle: TextStyle(
+        color: darkCustomColorScheme.onSurface,
+        fontSize: 16,
+      ),
+      behavior: SnackBarBehavior.floating,
+      insetPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
     ),
   );
 }

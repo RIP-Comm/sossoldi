@@ -48,7 +48,15 @@ Map<String, TransactionType> typeMap = {
   "TRSF": TransactionType.transfer,
 };
 
-enum Recurrence { daily, weekly, monthly, bimonthly, quarterly, semester, annual }
+enum Recurrence {
+  daily,
+  weekly,
+  monthly,
+  bimonthly,
+  quarterly,
+  semester,
+  annual
+}
 
 class RecurrenceData {
   final Recurrence recurrence;
@@ -63,20 +71,32 @@ class RecurrenceData {
 }
 
 Map<Recurrence, RecurrenceData> recurrenceMap = {
-  Recurrence.daily: RecurrenceData(recurrence: Recurrence.daily, label: "Daily", days: 1),
-  Recurrence.weekly: RecurrenceData(recurrence: Recurrence.weekly, label: "Weekly", days: 7),
-  Recurrence.monthly: RecurrenceData(recurrence: Recurrence.monthly, label: "Monthly", days: 30),
-  Recurrence.bimonthly: RecurrenceData(recurrence: Recurrence.bimonthly, label: "Bimonthly", days: 60),
-  Recurrence.quarterly: RecurrenceData(recurrence: Recurrence.quarterly, label: "Quarterly", days: 90),
-  Recurrence.semester: RecurrenceData(recurrence: Recurrence.semester, label: "Semester", days: 180),
-  Recurrence.annual: RecurrenceData(recurrence: Recurrence.annual, label: "Annual", days: 365),
+  Recurrence.daily:
+      RecurrenceData(recurrence: Recurrence.daily, label: "Daily", days: 1),
+  Recurrence.weekly:
+      RecurrenceData(recurrence: Recurrence.weekly, label: "Weekly", days: 7),
+  Recurrence.monthly: RecurrenceData(
+      recurrence: Recurrence.monthly, label: "Monthly", days: 30),
+  Recurrence.bimonthly: RecurrenceData(
+      recurrence: Recurrence.bimonthly, label: "Bimonthly", days: 60),
+  Recurrence.quarterly: RecurrenceData(
+      recurrence: Recurrence.quarterly, label: "Quarterly", days: 90),
+  Recurrence.semester: RecurrenceData(
+      recurrence: Recurrence.semester, label: "Semester", days: 180),
+  Recurrence.annual:
+      RecurrenceData(recurrence: Recurrence.annual, label: "Annual", days: 365),
 };
 
 Recurrence parseRecurrence(String s) {
-  return recurrenceMap.entries.firstWhere((entry) => entry.value.label.toLowerCase() == s.toLowerCase()).key;
+  return recurrenceMap.entries
+      .firstWhere((entry) => entry.value.label.toLowerCase() == s.toLowerCase())
+      .key;
 }
 
 class Transaction extends BaseEntity {
+  // This is to allow to manually set a null value to id field.
+  static const _unset = Object();
+
   final DateTime date;
   final num amount;
   final TransactionType type;
@@ -112,7 +132,7 @@ class Transaction extends BaseEntity {
       super.updatedAt});
 
   Transaction copy(
-          {int? id,
+          {Object? id = _unset,
           DateTime? date,
           num? amount,
           TransactionType? type,
@@ -125,16 +145,18 @@ class Transaction extends BaseEntity {
           DateTime? createdAt,
           DateTime? updatedAt}) =>
       Transaction(
-          id: id ?? this.id,
+          id: id == _unset ? this.id : (id as int?),
           date: date ?? this.date,
           amount: amount ?? this.amount,
           type: type ?? this.type,
           note: note ?? this.note,
           idCategory: idCategory ?? this.idCategory,
           idBankAccount: idBankAccount ?? this.idBankAccount,
-          idBankAccountTransfer: idBankAccountTransfer ?? this.idBankAccountTransfer,
+          idBankAccountTransfer:
+              idBankAccountTransfer ?? this.idBankAccountTransfer,
           recurring: recurring ?? this.recurring,
-          idRecurringTransaction: idRecurringTransaction ?? this.idRecurringTransaction,
+          idRecurringTransaction:
+              idRecurringTransaction ?? this.idRecurringTransaction,
           createdAt: createdAt ?? this.createdAt,
           updatedAt: updatedAt ?? this.updatedAt);
 
@@ -150,10 +172,13 @@ class Transaction extends BaseEntity {
       categorySymbol: json[TransactionFields.categorySymbol] as String?,
       idBankAccount: json[TransactionFields.idBankAccount] as int,
       bankAccountName: json[TransactionFields.bankAccountName] as String?,
-      idBankAccountTransfer: json[TransactionFields.idBankAccountTransfer] as int?,
-      bankAccountTransferName: json[TransactionFields.bankAccountTransferName] as String?,
+      idBankAccountTransfer:
+          json[TransactionFields.idBankAccountTransfer] as int?,
+      bankAccountTransferName:
+          json[TransactionFields.bankAccountTransferName] as String?,
       recurring: json[TransactionFields.recurring] == 1 ? true : false,
-      idRecurringTransaction: json[TransactionFields.idRecurringTransaction] as int?,
+      idRecurringTransaction:
+          json[TransactionFields.idRecurringTransaction] as int?,
       createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
       updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String));
 
@@ -161,15 +186,17 @@ class Transaction extends BaseEntity {
         TransactionFields.id: id,
         TransactionFields.date: date.toIso8601String(),
         TransactionFields.amount: amount,
-        TransactionFields.type: typeMap.keys.firstWhere((k) => typeMap[k] == type),
+        TransactionFields.type:
+            typeMap.keys.firstWhere((k) => typeMap[k] == type),
         TransactionFields.note: note,
         TransactionFields.idCategory: idCategory,
         TransactionFields.idBankAccount: idBankAccount,
         TransactionFields.idBankAccountTransfer: idBankAccountTransfer,
         TransactionFields.recurring: recurring ? 1 : 0,
         TransactionFields.idRecurringTransaction: idRecurringTransaction,
-        BaseEntityFields.createdAt:
-            update ? createdAt?.toIso8601String() : DateTime.now().toIso8601String(),
+        BaseEntityFields.createdAt: update
+            ? createdAt?.toIso8601String()
+            : DateTime.now().toIso8601String(),
         BaseEntityFields.updatedAt: DateTime.now().toIso8601String(),
       };
 }
@@ -185,24 +212,24 @@ class TransactionMethods extends SossoldiDatabase {
     final db = await database;
 
     final maps = await db.rawQuery('''
-      SELECT t.*, 
-        c.${CategoryTransactionFields.name} as ${TransactionFields.categoryName}, 
-        c.${CategoryTransactionFields.color} as ${TransactionFields.categoryColor}, 
-        c.${CategoryTransactionFields.symbol} as ${TransactionFields.categorySymbol}, 
-        b1.${BankAccountFields.name} as ${TransactionFields.bankAccountName}, 
-        b2.${BankAccountFields.name} as ${TransactionFields.bankAccountTransferName} 
-      FROM 
-        '$transactionTable' as t 
-      LEFT JOIN 
-        $categoryTransactionTable as c ON t.${TransactionFields.idCategory} = c.${CategoryTransactionFields.id} 
-      LEFT JOIN 
-        $bankAccountTable as b1 ON t.${TransactionFields.idBankAccount} = b1.${BankAccountFields.id} 
-      LEFT JOIN 
-        $bankAccountTable as b2 ON t.${TransactionFields.idBankAccountTransfer} = b2.${BankAccountFields.id} 
-      WHERE 
+      SELECT t.*,
+        c.${CategoryTransactionFields.name} as ${TransactionFields.categoryName},
+        c.${CategoryTransactionFields.color} as ${TransactionFields.categoryColor},
+        c.${CategoryTransactionFields.symbol} as ${TransactionFields.categorySymbol},
+        b1.${BankAccountFields.name} as ${TransactionFields.bankAccountName},
+        b2.${BankAccountFields.name} as ${TransactionFields.bankAccountTransferName}
+      FROM
+        '$transactionTable' as t
+      LEFT JOIN
+        $categoryTransactionTable as c ON t.${TransactionFields.idCategory} = c.${CategoryTransactionFields.id}
+      LEFT JOIN
+        $bankAccountTable as b1 ON t.${TransactionFields.idBankAccount} = b1.${BankAccountFields.id}
+      LEFT JOIN
+        $bankAccountTable as b2 ON t.${TransactionFields.idBankAccountTransfer} = b2.${BankAccountFields.id}
+      WHERE
         t.${TransactionFields.id} = ?
     ''', [id]);
-    
+
     if (maps.isNotEmpty) {
       return Transaction.fromJson(maps.first);
     } else {
@@ -221,7 +248,9 @@ class TransactionMethods extends SossoldiDatabase {
       Map<int, bool>? bankAccounts}) async {
     final db = await database;
 
-    String? where = type != null ? '${TransactionFields.type} = $type' : null; // filter type
+    String? where = type != null
+        ? '${TransactionFields.type} = $type'
+        : null; // filter type
     if (date != null) {
       where =
           "${where != null ? '$where and ' : ''}strftime('%Y-%m-%d', ${TransactionFields.date}) >= '${date.toString().substring(0, 10)}' and ${TransactionFields.date} <= '${date.toIso8601String().substring(0, 10)}'";
@@ -236,12 +265,15 @@ class TransactionMethods extends SossoldiDatabase {
 
     if (transactionType != null) {
       final transactionTypeList = transactionType.map((e) => "'$e'").toList();
-      where = "${where != null ? '$where and ' : ''}t.type IN (${transactionTypeList.join(',')}) ";
+      where =
+          "${where != null ? '$where and ' : ''}t.type IN (${transactionTypeList.join(',')}) ";
     }
 
-    if (bankAccounts != null && !bankAccounts.entries.every((element) => element.value == false)) {
-      final bankAccountIds =
-          bankAccounts.entries.where((bankAccount) => bankAccount.value).map((e) => "'${e.key}'");
+    if (bankAccounts != null &&
+        !bankAccounts.entries.every((element) => element.value == false)) {
+      final bankAccountIds = bankAccounts.entries
+          .where((bankAccount) => bankAccount.value)
+          .map((e) => "'${e.key}'");
       where =
           "${where != null ? '$where and ' : ''}t.${TransactionFields.idBankAccount} IN (${bankAccountIds.join(',')}) ";
     }
@@ -254,10 +286,11 @@ class TransactionMethods extends SossoldiDatabase {
     return result.map((json) => Transaction.fromJson(json)).toList();
   }
 
-  Future<List<Transaction>> getRecurrenceTransactionsById({int? id}) async  {
-    final db = await database; 
+  Future<List<Transaction>> getRecurrenceTransactionsById({int? id}) async {
+    final db = await database;
 
-    final result = await db.rawQuery('SELECT * FROM "$transactionTable" as t WHERE t.${TransactionFields.idRecurringTransaction} = $id ORDER BY ${TransactionFields.date} DESC');
+    final result = await db.rawQuery(
+        'SELECT * FROM "$transactionTable" as t WHERE t.${TransactionFields.idRecurringTransaction} = $id ORDER BY ${TransactionFields.date} DESC');
 
     return result.map((json) => Transaction.fromJson(json)).toList();
   }
@@ -348,8 +381,9 @@ class TransactionMethods extends SossoldiDatabase {
         throw ArgumentError("Query not implemented for frequency $recurrence");
     }
 
-    final accountFilter =
-        accountId != null ? "${TransactionFields.idBankAccount} = $accountId" : "";
+    final accountFilter = accountId != null
+        ? "${TransactionFields.idBankAccount} = $accountId"
+        : "";
     //var periodDateFormatter = "";
     final periodFilterStart = dateRangeStart != null
         ? "strftime('%Y-%m-%d', ${TransactionFields.date}) >= '${dateRangeStart.toString().substring(0, 10)}'"
