@@ -74,23 +74,31 @@ class _StructureState extends ConsumerState<Structure> {
         selectedFontSize: 8,
         unselectedFontSize: 8,
         currentIndex: selectedIndex,
-        onTap: (index) => index != 2 ? ref.read(selectedIndexProvider.notifier).state = index : null,
+        onTap: (index) => index != 2
+            ? ref.read(selectedIndexProvider.notifier).state = index
+            : null,
         items: [
           BottomNavigationBarItem(
             icon: Icon(selectedIndex == 0 ? Icons.home : Icons.home_outlined),
             label: "DASHBOARD",
           ),
           BottomNavigationBarItem(
-            icon: Icon(selectedIndex == 1 ? Icons.swap_horizontal_circle : Icons.swap_horizontal_circle_outlined),
+            icon: Icon(selectedIndex == 1
+                ? Icons.swap_horizontal_circle
+                : Icons.swap_horizontal_circle_outlined),
             label: "TRANSACTIONS",
           ),
           const BottomNavigationBarItem(icon: Text(""), label: ""),
           BottomNavigationBarItem(
-            icon: Icon(selectedIndex == 3 ? Icons.calendar_today : Icons.calendar_today_outlined),
+            icon: Icon(selectedIndex == 3
+                ? Icons.calendar_today
+                : Icons.calendar_today_outlined),
             label: "PLANNING",
           ),
           BottomNavigationBarItem(
-            icon: Icon(selectedIndex == 4 ? Icons.data_exploration : Icons.data_exploration_outlined),
+            icon: Icon(selectedIndex == 4
+                ? Icons.data_exploration
+                : Icons.data_exploration_outlined),
             label: "GRAPHS",
           ),
         ],
@@ -108,7 +116,8 @@ class _StructureState extends ConsumerState<Structure> {
           Navigator.of(context).pushNamed("/add-page");
         },
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.miniCenterDocked,
     );
   }
 }

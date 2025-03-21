@@ -33,12 +33,15 @@ Route<dynamic> makeRoute(RouteSettings settings) {
       return _materialPageRoute(settings.name, const HomePage());
     case '/add-page':
       final args = settings.arguments as Map<String, dynamic>?;
-      return _materialPageRoute(
+      return _modalBottomSheetRoute(
         settings.name,
-        AddPage(recurrencyEditingPermitted: args?['recurrencyEditingPermitted'] ?? true),
+        AddPage(
+            recurrencyEditingPermitted:
+                args?['recurrencyEditingPermitted'] ?? true),
       );
     case '/edit-recurring-transaction':
-      return _materialPageRoute(settings.name, const EditRecurringTransaction());
+      return _materialPageRoute(
+          settings.name, const EditRecurringTransaction());
     case '/transactions':
       return _materialPageRoute(settings.name, const TransactionsPage());
     case '/category-list':
@@ -91,5 +94,31 @@ PageRoute _materialPageRoute(String? routeName, Widget viewToShow) {
       name: routeName,
     ),
     builder: (_) => viewToShow,
+  );
+}
+
+PageRoute _modalBottomSheetRoute(String? routeName, Widget viewToShow) {
+  return PageRouteBuilder(
+    settings: RouteSettings(
+      name: routeName,
+    ),
+    pageBuilder: (context, animation, secondaryAnimation) => viewToShow,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(0.0, 1.0);
+      const end = Offset.zero;
+      const curve = Curves.easeOut;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+      var offsetAnimation = animation.drive(tween);
+
+      return SlideTransition(
+        position: offsetAnimation,
+        child: child,
+      );
+    },
+    transitionDuration: const Duration(milliseconds: 300),
+    barrierColor: Colors.black54,
+    opaque: false,
+    barrierDismissible: true,
   );
 }
