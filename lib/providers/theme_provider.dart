@@ -2,47 +2,49 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../constants/constants.dart';
-// import 'package:hooks_riverpod/hooks_riverpod.dart';
-
 final appThemeStateNotifier = ChangeNotifierProvider(
   (ref) => AppThemeState(),
 );
 
 class AppThemeState extends ChangeNotifier {
-  static const String _themeKey = 'isDarkMode';
+  static const String _themeKey = 'themeMode';
   late SharedPreferences _prefs;
-  var isDarkModeEnabled = false;
+
+  ThemeMode _themeMode = ThemeMode.system;
+
+  bool get isDarkModeEnabled => _themeMode == ThemeMode.dark;
+
+  ThemeMode get themeMode => _themeMode;
 
   AppThemeState() {
     _loadTheme();
   }
 
-  // Initialize and load saved theme
   Future<void> _loadTheme() async {
     _prefs = await SharedPreferences.getInstance();
-    isDarkModeEnabled = _prefs.getBool(_themeKey) ?? false;
-    updateColorsBasedOnTheme(isDarkModeEnabled);
+    final storedThemeMode = _prefs.getString(_themeKey) ?? ThemeMode.system.name;
+    _themeMode = switch (storedThemeMode) {
+      'dark' => ThemeMode.dark,
+      'light' => ThemeMode.light,
+      _ => ThemeMode.system,
+    };
     notifyListeners();
   }
 
-  // Save theme preference
-  Future<void> _saveTheme(bool isDark) async {
+  Future<void> setTheme({required ThemeMode mode}) async {
     _prefs = await SharedPreferences.getInstance();
-    await _prefs.setBool(_themeKey, isDark);
-  }
-
-  void setLightTheme() {
-    isDarkModeEnabled = false;
-    updateColorsBasedOnTheme(isDarkModeEnabled);
-    _saveTheme(isDarkModeEnabled);
+    await _prefs.setString(_themeKey, mode.name);
+    _themeMode = mode;
     notifyListeners();
   }
 
-  void setDarkTheme() {
-    isDarkModeEnabled = true;
-    updateColorsBasedOnTheme(isDarkModeEnabled);
-    _saveTheme(isDarkModeEnabled);
-    notifyListeners();
+  void setNextTheme() {
+    if (_themeMode == ThemeMode.light) {
+      setTheme(mode: ThemeMode.dark);
+    } else if (_themeMode == ThemeMode.dark) {
+      setTheme(mode: ThemeMode.system);
+    } else {
+      setTheme(mode: ThemeMode.light);
+    }
   }
 }

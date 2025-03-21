@@ -55,25 +55,24 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                         .titleLarge!
                         .copyWith(color: Theme.of(context).colorScheme.primary)),
                 const Spacer(),
-                CircleAvatar(
-                    radius: 30.0,
-                    backgroundColor: blue5,
-                    child: IconButton(
-                      color: blue5,
-                      onPressed: () {
-                        // Toggle dark mode using the provider
-                        if (appThemeState.isDarkModeEnabled) {
-                          ref.read(appThemeStateNotifier.notifier).setLightTheme();
-                        } else {
-                          ref.read(appThemeStateNotifier.notifier).setDarkTheme();
-                        }
-                      },
-                      icon: Icon(
-                        appThemeState.isDarkModeEnabled ? Icons.dark_mode : Icons.light_mode,
+                GestureDetector(
+                  onTap: () {
+                    ref.read(appThemeStateNotifier.notifier).setNextTheme();
+                  },
+                  child: CircleAvatar(
+                      radius: 30.0,
+                      backgroundColor: blue5,
+                      child: Icon(
+                        // Display icon based on current theme
+                        appThemeState.themeMode == ThemeMode.light
+                            ? Icons.light_mode
+                            : appThemeState.themeMode == ThemeMode.dark
+                            ? Icons.dark_mode
+                            : Icons.brightness_auto,
                         size: 25.0,
                         color: Theme.of(context).colorScheme.onPrimary,
-                      ),
-                    )),
+                      )),
+                ),
               ],
             ),
             const SizedBox(height: 20),
