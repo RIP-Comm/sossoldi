@@ -373,6 +373,7 @@ ColorScheme customColorScheme = const ColorScheme(
   onPrimary: white,
   onSecondary: white,
   onSurface: blue1,
+  onSurfaceVariant: blue5,
   onError: black,
   brightness: Brightness.light,
 );
@@ -388,6 +389,7 @@ ColorScheme darkCustomColorScheme = const ColorScheme(
   onPrimary: darkWhite,
   onSecondary: white,
   onSurface: darkBlue1,
+  onSurfaceVariant: darkBlue6,
   onError: darkBlack,
   brightness: Brightness.dark,
 );
