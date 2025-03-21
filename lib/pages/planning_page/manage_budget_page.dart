@@ -21,8 +21,11 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
   List<Budget> deletedBudgets = [];
 
   void _loadCategories() async {
-    categories = await ref.read(categoriesProvider.notifier).getCategories();
-    categories.removeWhere((element) => element.type == CategoryTransactionType.income);
+    categories = await ref
+        .read(categoriesProvider(userCategoriesFilter).notifier)
+        .getCategories();
+    categories.removeWhere(
+        (element) => element.type == CategoryTransactionType.income);
     budgets = await ref.read(budgetsProvider.notifier).getBudgets();
     setState(() {});
   }
@@ -101,16 +104,19 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
                     child: BudgetCategorySelector(
                       categories: categories,
                       categoriesAlreadyUsed: categories
-                          .where((element) => budgets.map((e) => e.name).contains(element.name))
+                          .where((element) =>
+                              budgets.map((e) => e.name).contains(element.name))
                           .map((e) => e.name)
                           .toList(),
                       budget: budgets[index],
                       initSelectedCategory: categories
-                              .where((element) => element.id == budgets[index].idCategory)
+                              .where((element) =>
+                                  element.id == budgets[index].idCategory)
                               .isEmpty
                           ? categories[0]
                           : categories
-                              .where((element) => element.id == budgets[index].idCategory)
+                              .where((element) =>
+                                  element.id == budgets[index].idCategory)
                               .first,
                       onBudgetChanged: (updatedBudget) {
                         updateBudget(updatedBudget, index);
@@ -120,7 +126,8 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
                 },
               ),
               SizedBox(height: 8),
-              Text("Swipe left to delete", style: Theme.of(context).textTheme.bodySmall),
+              Text("Swipe left to delete",
+                  style: Theme.of(context).textTheme.bodySmall),
               SizedBox(height: 12),
               TextButton.icon(
                 icon: Icon(Icons.add_circle, size: 32),

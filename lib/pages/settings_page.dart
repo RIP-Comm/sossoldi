@@ -10,6 +10,7 @@ import '../constants/style.dart';
 import '../custom_widgets/alert_dialog.dart';
 import '../custom_widgets/default_card.dart';
 import '../database/sossoldi_database.dart';
+import '../model/category_transaction.dart';
 import '../providers/accounts_provider.dart';
 import '../providers/budgets_provider.dart';
 import '../providers/categories_provider.dart';
@@ -100,7 +101,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 onPressed: () => Navigator.pop(context),
                 child: Text(
                   "OK",
-                  style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
               ),
             ],
@@ -129,7 +131,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
               child: GestureDetector(
                 onTap: _onSettingsTap,
                 child: Row(
@@ -152,7 +155,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       style: Theme.of(context)
                           .textTheme
                           .headlineLarge!
-                          .copyWith(color: Theme.of(context).colorScheme.primary),
+                          .copyWith(
+                              color: Theme.of(context).colorScheme.primary),
                     ),
                   ],
                 ),
@@ -204,14 +208,20 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleLarge!
-                                      .copyWith(color: Theme.of(context).colorScheme.primary),
+                                      .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary),
                                 ),
                                 Text(
                                   setting[2].toString(),
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodySmall!
-                                      .copyWith(color: Theme.of(context).colorScheme.primary),
+                                      .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary),
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 2,
                                 ),
@@ -252,7 +262,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                     onPressed: () async {
                       await SossoldiDatabase.instance.resetDatabase().then((v) {
                         ref.refresh(accountsProvider);
-                        ref.refresh(categoriesProvider);
+                        ref.refresh(categoriesProvider(userCategoriesFilter));
                         ref.refresh(transactionsProvider);
                         ref.refresh(budgetsProvider);
                         showSuccessDialog(context, "DB Cleared");
@@ -263,15 +273,18 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                     child: const Text('CLEAR AND FILL DEMO DATA'),
                     onPressed: () async {
                       await SossoldiDatabase.instance.clearDatabase();
-                      await SossoldiDatabase.instance.fillDemoData().then((value) {
+                      await SossoldiDatabase.instance
+                          .fillDemoData()
+                          .then((value) {
                         ref.refresh(accountsProvider);
-                        ref.refresh(categoriesProvider);
+                        ref.refresh(categoriesProvider(userCategoriesFilter));
                         ref.refresh(transactionsProvider);
                         ref.refresh(budgetsProvider);
                         ref.refresh(dashboardProvider);
                         ref.refresh(lastTransactionsProvider);
                         ref.refresh(statisticsProvider);
-                        showSuccessDialog(context, "DB Cleared, and DEMO data added");
+                        showSuccessDialog(
+                            context, "DB Cleared, and DEMO data added");
                       });
                     },
                   ),
