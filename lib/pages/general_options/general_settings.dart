@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants/style.dart';
 import '../../model/currency.dart';
-import '../../providers/currency_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../ui/device.dart';
 import 'widgets/currency_selector.dart';
@@ -34,7 +33,6 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
   @override
   Widget build(BuildContext context) {
     final appThemeState = ref.watch(appThemeStateNotifier);
-    final currencyState = ref.watch(currencyStateNotifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -86,41 +84,9 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                 ),
               ],
             ),
-            const SizedBox(height: Sizes.lg),
-            Row(
-              children: [
-                Text(
-                  "Currency",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(color: Theme.of(context).colorScheme.primary),
-                ),
-                const Spacer(),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      CurrencySelectorDialog.selectCurrencyDialog(
-                          context, currencyState, currencyList);
-                    });
-                  },
-                  child: CircleAvatar(
-                    radius: 30.0,
-                    backgroundColor: blue5,
-                    child: Center(
-                      child: Text(
-                        currencyState.selectedCurrency.symbol,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          fontSize: 25,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: Sizes.lg),
+            const SizedBox(height: 20),
+            SettingsCurrencySelector(),
+            const SizedBox(height: 20),
             /*
             Row(
               children: [
