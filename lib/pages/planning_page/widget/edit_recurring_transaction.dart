@@ -150,7 +150,10 @@ class _EditRecurringTransactionState
                 color: Theme.of(context).colorScheme.surface,
                 boxShadow: [
                   BoxShadow(
-                    color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.15),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .primary
+                        .withValues(alpha: 0.15),
                     blurRadius: 5.0,
                     offset: const Offset(0, -1.0),
                   )
