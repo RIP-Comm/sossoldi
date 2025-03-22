@@ -98,7 +98,7 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                       Column(
                         children: [
                           TextField(
-                            _focusNode: _focusNode,
+                            focusNode: _focusNode,
                             controller: _newBalanceController,
                             decoration: InputDecoration(
                                 hintText: "New Balance",
