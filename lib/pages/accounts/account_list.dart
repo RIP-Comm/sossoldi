@@ -26,14 +26,17 @@ class _AccountListState extends ConsumerState<AccountList> with Functions {
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () => Navigator.pop(context),
         ),
+        title: const Text('Account'),
         actions: [
           IconButton(
             onPressed: () {
               ref.read(accountsProvider.notifier).reset();
               Navigator.of(context).pushNamed('/add-account');
             },
-            icon: const Icon(Icons.add_circle),
-            splashRadius: 28,
+            icon: const Icon(
+              Icons.add_circle,
+              size: 30,
+            ),
           ),
         ],
       ),
@@ -41,33 +44,8 @@ class _AccountListState extends ConsumerState<AccountList> with Functions {
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
-              child: Row(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.account_balance_wallet,
-                      size: 24.0,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                  ),
-                  const SizedBox(width: 12.0),
-                  Text(
-                    "Your accounts",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineLarge!
-                        .copyWith(color: Theme.of(context).colorScheme.primary),
-                  ),
-                ],
-              ),
+            const SizedBox(
+              height: 16,
             ),
             accountsList.when(
               data: (accounts) => ListView.separated(
