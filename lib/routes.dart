@@ -44,7 +44,11 @@ Route<dynamic> makeRoute(RouteSettings settings) {
     case '/category-list':
       return _cupertinoPageRoute(settings.name, const CategoryList());
     case '/add-category':
-      return _cupertinoPageRoute(settings.name, const AddCategory());
+      final args = settings.arguments as Map<String, dynamic>?;
+      return _cupertinoPageRoute(
+        settings.name,
+        AddCategory(hideIncome: args?['hideIncome'] ?? false),
+      );
     case '/more-info':
       return _cupertinoPageRoute(settings.name, const MoreInfoPage());
     case '/privacy-policy':
