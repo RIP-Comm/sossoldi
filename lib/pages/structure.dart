@@ -1,5 +1,7 @@
 // Defines application's structure
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -38,6 +40,8 @@ class _StructureState extends ConsumerState<Structure> {
   @override
   Widget build(BuildContext context) {
     final selectedIndex = ref.watch(selectedIndexProvider);
+    double fontSize = Platform.isMacOS ? 16.0 : 8.0;
+
     return Scaffold(
       // Prevent the fab moving up when the keyboard is opened
       resizeToAvoidBottomInset: false,
@@ -71,8 +75,8 @@ class _StructureState extends ConsumerState<Structure> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        selectedFontSize: 8,
-        unselectedFontSize: 8,
+        selectedFontSize: fontSize,
+        unselectedFontSize: fontSize,
         currentIndex: selectedIndex,
         onTap: (index) => index != 2 ? ref.read(selectedIndexProvider.notifier).state = index : null,
         items: [
