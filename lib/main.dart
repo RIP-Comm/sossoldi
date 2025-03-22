@@ -46,12 +46,11 @@ class Launcher extends ConsumerWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appThemeState = ref.watch(appThemeStateNotifier);
     return MaterialApp(
       title: 'Sossoldi',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: appThemeState.isDarkModeEnabled ? ThemeMode.dark : ThemeMode.light,
+      themeMode: ref.watch(appThemeStateNotifier).themeMode,
       onGenerateRoute: makeRoute,
       initialRoute: _isFirstLogin == null || _isFirstLogin! ? '/onboarding' : '/',
     );
