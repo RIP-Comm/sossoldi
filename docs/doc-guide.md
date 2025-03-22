@@ -20,7 +20,7 @@ GitHub already offers a great guide on how to do this but basically what you nee
 </div>
 
 2. Click **Pages** inside the section *Code and automation*.
-3. Then select **Deploy from branch** in *Source* and and make sure to select the main branch and the */docs* folder
+3. Then select **Deploy from branch** in *Source* and make sure to select the main branch and the */docs* folder
 
 <div>
     <img src="./assets/doc-guide/Settings-screen.png" width="1000" alt="Sossoldi icon">
