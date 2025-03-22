@@ -35,6 +35,13 @@ class _EditRecurringTransactionState
   }
 
   @override
+  void dispose() {
+    amountController.dispose();
+    noteController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final selectedRecurringTransaction =
         ref.watch(selectedRecurringTransactionUpdateProvider);
