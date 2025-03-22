@@ -3,11 +3,30 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../constants/style.dart';
 
+/// A list tile like component that can be used for handling selection.
+///
+/// Should be used together with [SelectorContainer] but can work as a standalone
+/// component as well.
+///
+/// Only required property is [title].
 class SelectorTile extends ConsumerWidget {
+  /// The title [String] of the tile, will be displayed on the left side of the tile.
   final String title;
+
+  /// An optional trailing [String], will be displayed on the right side of the tile.
   final String? trailing;
+
+  /// An optional trailing [Widget], will be displayed on the right side of the
+  /// tile only if [trailing] is `null`.
   final Widget? trailingWidget;
+
+  /// Whether or not this tile is selected.
+  ///
+  /// When selected, [title], [trailing] and the [Container] borders will be
+  /// colored of [colorScheme.onSurfaceVariant].
   final bool isSelected;
+
+  /// Callback function that is called when the tile is tapped.
   final VoidCallback? onTap;
 
   const SelectorTile({
