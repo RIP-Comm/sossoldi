@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants/constants.dart';
 import '../../../providers/accounts_provider.dart';
@@ -26,6 +27,11 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
     setState(() {
       _validAmount = RegExp(r'^\d*\.?\d{0,2}$').hasMatch(value);
     });
+  }
+
+  Future<void> _flagOnBoardingCompleted() async {
+    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setBool('onboarding_completed', true);
   }
 
   @override
@@ -306,6 +312,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                   const SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: () {
+                      _flagOnBoardingCompleted();
                       Navigator.of(context)
                           .pushNamedAndRemoveUntil('/', (route) => false);
                     },
@@ -361,6 +368,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                                   startingValue:
                                       num.tryParse(amountController.text) ?? 0,
                                 );
+                            _flagOnBoardingCompleted();
                             Navigator.of(context)
                                 .pushNamedAndRemoveUntil('/', (route) => false);
                           }
