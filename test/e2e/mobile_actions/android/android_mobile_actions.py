@@ -25,7 +25,8 @@ class AndroidMobileActions(MobileActions):
 
     def send_keys(self, locator: tuple[str, str], txt: str) -> None:
         """Send text input to an element."""
-        self._send_keys(self.wait_for_visibility(locator), txt)
+        self.click(locator)
+        self._send_keys(self.wait_for_element(locator), txt)
 
     def send_keys_to_element(self, element: WebElement, text: str) -> None:
         """Send text input to a given element."""

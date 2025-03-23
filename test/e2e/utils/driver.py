@@ -13,7 +13,6 @@ class Driver:
     driver: Optional[MobileActions] = None
     os: Optional[str] = None
     capabilities: Union[dict[Any, Any], Any] = None
-    device_model: Optional[str]
     device_udid: Optional[str]
     app: Optional[str]
 
@@ -56,18 +55,15 @@ class Driver:
                     "appActivity": data["platforms"][0]["appActivity"],
                 }
                 Driver.device_udid = data["platforms"][0]["udid"]
-                Driver.device_model = data["platforms"][0]["deviceModel"]
                 Driver.app = data["platforms"][0]["appPackage"]
             elif os == "ios":
                 capabilities = {
                     "platformName": data["platforms"][1]["platformName"],
-                    "appium:deviceName": data["platforms"][1]["deviceName"],
                     "appium:udid": data["platforms"][1]["udid"],
                     "appium:automationName": data["platforms"][1]["automationName"],
                     "appium:bundleId": data["platforms"][1]["bundleID"],
                 }
                 Driver.device_udid = data["platforms"][1]["udid"]
-                Driver.device_model = data["platforms"][1]["deviceModel"]
                 Driver.app = data["platforms"][1]["bundleID"]
             else:
                 raise ValueError(f"The local argument must be either android or ios got {os}")
