@@ -13,6 +13,7 @@ import "widgets/account_selector.dart";
 import 'widgets/amount_section.dart';
 import "widgets/category_selector.dart";
 import 'widgets/details_list_tile.dart';
+import 'widgets/duplicate_transaction_dialog.dart';
 import 'widgets/label_list_tile.dart';
 import 'widgets/recurrence_list_tile.dart';
 
@@ -217,23 +218,26 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
               ? "Editing transaction"
               : "New transaction",
         ),
-        leadingWidth: 100,
-        leading: TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text('Cancel'),
-        ),
         actions: [
-          if (selectedTransaction != null)
-            Container(
-              alignment: Alignment.centerRight,
-              child: IconButton(
-                icon: Icon(
-                  Icons.delete_outline,
-                  color: Theme.of(context).colorScheme.error,
-                ),
-                onPressed: _deleteTransaction,
+          if (selectedTransaction != null) ...[
+            IconButton(
+              icon: Icon(
+                Icons.copy,
+                size: 20,
+                color: Theme.of(context).colorScheme.primary,
               ),
+              onPressed: () => showDialog(context: context, builder: (_) => DuplicateTransactionDialog(
+                transaction: selectedTransaction,
+              )),
             ),
+            IconButton(
+              icon: Icon(
+                Icons.delete_outline,
+                color: Theme.of(context).colorScheme.error,
+              ),
+              onPressed: _deleteTransaction,
+            ),
+          ]
         ],
       ),
       body: Column(
