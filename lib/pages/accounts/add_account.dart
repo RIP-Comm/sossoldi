@@ -367,7 +367,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                                 account: selectedAccount,
                                 onPressed: () => ref
                                     .read(accountsProvider.notifier)
-                                    .removeAccount(selectedAccount.id!)
+                                    .removeAccount(selectedAccount)
                                     .whenComplete(
                                   () {
                                     if (context.mounted) {
@@ -430,18 +430,10 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                           name: nameController.text,
                           icon: accountIcon,
                           color: accountColor,
+                          balance: currencyToNum(balanceController.text),
                           active: countNetWorth,
                           mainAccount: mainAccount,
                         );
-                    if (currencyToNum(balanceController.text) !=
-                        selectedAccount.total) {
-                      await ref
-                          .read(accountsProvider.notifier)
-                          .reconcileAccount(
-                            newBalance: currencyToNum(balanceController.text),
-                            account: selectedAccount,
-                          );
-                    }
                   } else {
                     await ref.read(accountsProvider.notifier).addAccount(
                           name: nameController.text,
