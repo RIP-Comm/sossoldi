@@ -66,7 +66,7 @@ class SelectorTile extends ConsumerWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: 8.0),
             if (trailing != null) ...[
               Text(
                 trailing!,

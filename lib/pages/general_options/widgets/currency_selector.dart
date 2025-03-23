@@ -23,7 +23,7 @@ class _SettingsCurrencySelectorState
     final currencyState = ref.watch(currencyStateNotifier);
 
     return SelectorContainer(
-      label: 'SELECT A CURRENCY',
+      label: 'currency',
       child: FutureBuilder(
         future: currenciesFuture,
         builder: (context, snapshot) {
@@ -34,7 +34,7 @@ class _SettingsCurrencySelectorState
 
             return ListView.separated(
               separatorBuilder: (context, index) {
-                return const SizedBox(height: 8);
+                return const SizedBox(height: 8.0);
               },
               shrinkWrap: true,
               itemCount: currencies!.length,
