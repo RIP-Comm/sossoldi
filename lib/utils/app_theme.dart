@@ -5,6 +5,7 @@ import '../constants/style.dart';
 
 class AppTheme {
   static final lightTheme = ThemeData(
+    adaptations: [SwitchThemeAdaptation()],
     cupertinoOverrideTheme: const CupertinoThemeData(
       brightness: Brightness.light,
     ),
@@ -104,6 +105,35 @@ class AppTheme {
       contentPadding: EdgeInsets.all(16),
     ),
     disabledColor: grey2,
+    switchTheme: SwitchThemeData(
+      trackOutlineColor: WidgetStateColor.resolveWith(
+        (state) {
+          if (state.contains(WidgetState.selected)) {
+            return customColorScheme.secondary;
+          }
+
+          return grey1;
+        },
+      ),
+      thumbColor: WidgetStateColor.resolveWith(
+        (state) {
+          if (state.contains(WidgetState.selected)) {
+            return customColorScheme.surface;
+          }
+
+          return grey1;
+        },
+      ),
+      trackColor: WidgetStateColor.resolveWith(
+        (state) {
+          if (state.contains(WidgetState.selected)) {
+            return customColorScheme.secondary;
+          }
+
+          return grey3;
+        },
+      ),
+    ),
     fontFamily: 'NunitoSans',
     textTheme: const TextTheme(
       // display
@@ -186,6 +216,7 @@ class AppTheme {
   );
 
   static final darkTheme = ThemeData(
+    adaptations: [SwitchThemeAdaptation()],
     cupertinoOverrideTheme: const CupertinoThemeData(
       brightness: Brightness.dark,
     ),
@@ -287,6 +318,35 @@ class AppTheme {
     ),
 
     disabledColor: darkGrey2,
+    switchTheme: SwitchThemeData(
+      trackOutlineColor: WidgetStateColor.resolveWith(
+        (state) {
+          if (state.contains(WidgetState.selected)) {
+            return darkCustomColorScheme.secondary;
+          }
+
+          return darkGrey1;
+        },
+      ),
+      thumbColor: WidgetStateColor.resolveWith(
+        (state) {
+          if (state.contains(WidgetState.selected)) {
+            return darkCustomColorScheme.surface;
+          }
+
+          return darkGrey1;
+        },
+      ),
+      trackColor: WidgetStateColor.resolveWith(
+        (state) {
+          if (state.contains(WidgetState.selected)) {
+            return darkCustomColorScheme.secondary;
+          }
+
+          return darkGrey3;
+        },
+      ),
+    ),
     //Text style
     fontFamily: 'NunitoSans',
     textTheme: const TextTheme(
@@ -409,3 +469,27 @@ ColorScheme darkCustomColorScheme = const ColorScheme(
   onError: darkBlack,
   brightness: Brightness.dark,
 );
+
+class SwitchThemeAdaptation extends Adaptation<SwitchThemeData> {
+  const SwitchThemeAdaptation();
+
+  @override
+  SwitchThemeData adapt(ThemeData theme, SwitchThemeData defaultValue) {
+    switch (theme.platform) {
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.windows:
+        return defaultValue;
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        return SwitchThemeData(
+          trackColor: WidgetStateProperty.fromMap(
+            {
+              WidgetState.selected: theme.colorScheme.secondary,
+            },
+          ),
+        );
+    }
+  }
+}
