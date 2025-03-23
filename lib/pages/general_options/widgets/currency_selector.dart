@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gap/gap.dart';
 
 import '../../../model/currency.dart';
 import '../../../providers/currency_provider.dart';
@@ -24,7 +23,7 @@ class _SettingsCurrencySelectorState
     final currencyState = ref.watch(currencyStateNotifier);
 
     return SelectorContainer(
-      label: 'SELECT A CURRENCY',
+      label: 'currency',
       child: FutureBuilder(
         future: currenciesFuture,
         builder: (context, snapshot) {
@@ -35,7 +34,7 @@ class _SettingsCurrencySelectorState
 
             return ListView.separated(
               separatorBuilder: (context, index) {
-                return Gap(8);
+                return const SizedBox(height: 8.0);
               },
               shrinkWrap: true,
               itemCount: currencies!.length,

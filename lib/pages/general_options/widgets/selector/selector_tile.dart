@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gap/gap.dart';
 
 import '../../../../constants/style.dart';
 
@@ -67,7 +66,7 @@ class SelectorTile extends ConsumerWidget {
                 ),
               ),
             ),
-            Gap(8.0),
+            const SizedBox(width: 8.0),
             if (trailing != null) ...[
               Text(
                 trailing!,
