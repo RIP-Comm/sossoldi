@@ -14,6 +14,7 @@ class BankAccountFields extends BaseEntityFields {
   static String color = 'color';
   static String startingValue = 'startingValue';
   static String active = 'active';
+  static String countNetWorth = 'countNetWorth';
   static String mainAccount = 'mainAccount';
   static String total = 'total';
   static String createdAt = BaseEntityFields.getCreatedAt;
@@ -26,6 +27,7 @@ class BankAccountFields extends BaseEntityFields {
     color,
     startingValue,
     active,
+    countNetWorth,
     mainAccount,
     BaseEntityFields.createdAt,
     BaseEntityFields.updatedAt
@@ -38,6 +40,7 @@ class BankAccount extends BaseEntity {
   final int color;
   final num startingValue;
   final bool active;
+  final bool countNetWorth;
   final bool mainAccount;
   final num? total;
 
@@ -48,6 +51,7 @@ class BankAccount extends BaseEntity {
     required this.color,
     required this.startingValue,
     required this.active,
+    required this.countNetWorth,
     required this.mainAccount,
     this.total,
     super.createdAt,
@@ -61,6 +65,7 @@ class BankAccount extends BaseEntity {
     int? color,
     num? startingValue,
     bool? active,
+    bool? countNetWorth,
     bool? mainAccount,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -72,6 +77,7 @@ class BankAccount extends BaseEntity {
         color: color ?? this.color,
         startingValue: startingValue ?? this.startingValue,
         active: active ?? this.active,
+        countNetWorth: countNetWorth ?? this.countNetWorth,
         mainAccount: mainAccount ?? this.mainAccount,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
@@ -85,6 +91,7 @@ class BankAccount extends BaseEntity {
         color: json[BankAccountFields.color] as int,
         startingValue: json[BankAccountFields.startingValue] as num,
         active: json[BankAccountFields.active] == 1 ? true : false,
+        countNetWorth: json[BankAccountFields.countNetWorth] == 1 ? true : false,
         mainAccount: json[BankAccountFields.mainAccount] == 1 ? true : false,
         total: json[BankAccountFields.total] as num?,
         createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
@@ -98,6 +105,7 @@ class BankAccount extends BaseEntity {
         BankAccountFields.color: color,
         BankAccountFields.startingValue: startingValue,
         BankAccountFields.active: active ? 1 : 0,
+        BankAccountFields.countNetWorth: countNetWorth ? 1 : 0,
         BankAccountFields.mainAccount: mainAccount ? 1 : 0,
         BaseEntityFields.createdAt: update
             ? createdAt?.toIso8601String()

@@ -351,7 +351,7 @@ class SossoldiDatabase {
     } catch (error) {
       throw Exception('DbBase.resetDatabase: $error');
     }
-    await _createDB(_database!, 1);
+    await _createDB(_database!, _migrationManager.latestVersion);
   }
 
   Future clearDatabase() async {

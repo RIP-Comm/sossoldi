@@ -3,6 +3,7 @@ import 'package:fl_chart/fl_chart.dart';
 
 import '../model/bank_account.dart';
 import '../model/transaction.dart';
+import 'dashboard_provider.dart';
 import 'transactions_provider.dart';
 
 final mainAccountProvider = StateProvider<BankAccount?>((ref) => null);
@@ -42,6 +43,7 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
     required String icon,
     required int color,
     bool active = true,
+    bool countNetWorth = true,
     bool mainAccount = false,
     num startingValue = 0,
   }) async {
@@ -51,6 +53,7 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
       color: color,
       startingValue: startingValue,
       active: active,
+      countNetWorth: countNetWorth,
       mainAccount: mainAccount,
     );
 
@@ -67,6 +70,7 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
     int? color,
     num? balance,
     bool? mainAccount,
+    bool? countNetWorth,
     bool active = true,
   }) async {
     BankAccount account = ref.read(selectedAccountProvider)!.copy(
@@ -74,6 +78,7 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
           symbol: icon,
           color: color,
           active: active,
+          countNetWorth: countNetWorth,
           mainAccount: mainAccount,
         );
     state = const AsyncValue.loading();
@@ -86,6 +91,8 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
       if (account.mainAccount) {
         ref.read(mainAccountProvider.notifier).state = account;
       }
+      ref.invalidate(dashboardProvider);
+      
       return _getAccounts();
     });
   }

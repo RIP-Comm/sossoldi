@@ -26,6 +26,7 @@ void main() {
         color: 0,
         startingValue: randomValue,
         active: true,
+        countNetWorth: true,
         mainAccount: false,
       );
 

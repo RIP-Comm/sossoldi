@@ -34,7 +34,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
       balanceController.text = numToCurrency(selectedAccount.total);
       accountIcon = selectedAccount.symbol;
       accountColor = selectedAccount.color;
-      countNetWorth = selectedAccount.active;
+      countNetWorth = selectedAccount.countNetWorth;
       mainAccount = selectedAccount.mainAccount;
     }
     super.initState();
@@ -431,7 +431,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                           icon: accountIcon,
                           color: accountColor,
                           balance: currencyToNum(balanceController.text),
-                          active: countNetWorth,
+                          countNetWorth: countNetWorth,
                           mainAccount: mainAccount,
                         );
                   } else {
@@ -439,7 +439,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                           name: nameController.text,
                           icon: accountIcon,
                           color: accountColor,
-                          active: countNetWorth,
+                          countNetWorth: countNetWorth,
                           mainAccount: mainAccount,
                           startingValue: currencyToNum(balanceController.text),
                         );
