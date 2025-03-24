@@ -52,16 +52,11 @@ class MobileActions:
         """Click an element matching the given text or label."""
         elements = self.find_elements_by_class(class_name)
         for element in elements:
-            text = self.get_attribute_for_element(element, Utils.CONSTANTS["text"])
-            label = self.get_attribute_for_element(element, Utils.CONSTANTS.get("label", ""))
-            
-            print(f"Checking element text: {text}, label: {label}")
-            if text == target_text or label == target_text:
+            if self._matches_target_text(element, target_text):
                 element.click()
-                return True
-
+                return
+                
         print(f"No element found with text: {target_text}")
-        return False
 
     def check_element_by_text(self, class_name: str, target_text: str) -> bool:
         """Check if an element with specific text is present, scrolling if needed."""
@@ -73,7 +68,7 @@ class MobileActions:
 
             # Scroll if needed
             if self._should_scroll(element):
-                self._perform_scroll(element)
+                self._scroll(element)
 
         # Try again after potential scrolling
         return any(self._matches_target_text(e, target_text) for e in self.find_elements_by_class(class_name))
@@ -102,7 +97,7 @@ class MobileActions:
         y = self.get_y_for_element(element) + self.get_height_for_element(element)
         return y > int(Utils.CONSTANTS["bottom_of_page"])
 
-    def _perform_scroll(self, element: WebElement) -> None:
+    def _scroll(self, element: WebElement) -> None:
         """Perform a scroll action to bring an element into view."""
         scroll_distance = self.get_y_for_element(element) + self.get_height_for_element(element) - int(Utils.CONSTANTS["bottom_of_page"]) + 10
         self.driver.swipe(500, 600, 500, 600 - scroll_distance)

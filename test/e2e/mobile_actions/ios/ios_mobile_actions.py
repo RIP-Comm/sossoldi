@@ -11,7 +11,7 @@ from mobile_actions.mobile_actions import MobileActions
 from utils.utils import Utils
 
 
-class iOSMobileActions(MobileActions):
+class IOSMobileActions(MobileActions):
     def __init__(self, driver: WebDriver):
         super().__init__(driver)
         self.__done_text_button = (By.ACCESSIBILITY_ID, "Done")

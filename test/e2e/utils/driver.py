@@ -5,7 +5,7 @@ from appium import webdriver
 
 from mobile_actions.android.android_mobile_actions import AndroidMobileActions
 from mobile_actions.mobile_actions import MobileActions
-from mobile_actions.ios.ios_mobile_actions import iOSMobileActions
+from mobile_actions.ios.ios_mobile_actions import IOSMobileActions
 from utils.utils import Utils
 
 
@@ -16,14 +16,14 @@ class Driver:
     device_udid: Optional[str]
     app: Optional[str]
 
-    def __init__(self, base_test: Union[AndroidMobileActions, iOSMobileActions]) -> None:
+    def __init__(self, base_test: Union[AndroidMobileActions, IOSMobileActions]) -> None:
         self.driver = base_test
 
     def set_driver(appium_driver: webdriver) -> None:
         if Driver.os == "android":
             Driver.driver = AndroidMobileActions(appium_driver)
         elif Driver.os == "ios":
-            Driver.driver = iOSMobileActions(appium_driver)
+            Driver.driver = IOSMobileActions(appium_driver)
         else:
             raise ValueError(
                 'Invalid value for platformName inside the browserstack.yml file. Expected "android" or "ios".'

@@ -23,10 +23,10 @@ class AndroidMobileActions(MobileActions):
         time.sleep(1)
         self.driver.activate_app(app_package)
 
-    def send_keys(self, locator: tuple[str, str], txt: str) -> None:
+    def send_keys(self, locator: tuple[str, str], text: str) -> None:
         """Send text input to an element."""
         self.click(locator)
-        self._send_keys(self.wait_for_element(locator), txt)
+        self._send_keys(self.wait_for_element(locator), text)
 
     def send_keys_to_element(self, element: WebElement, text: str) -> None:
         """Send text input to a given element."""
@@ -65,11 +65,11 @@ class AndroidMobileActions(MobileActions):
             return self.find_elements_by_class(class_name)
 
     def scroll_gesture(self, locator: tuple[str, str], direction: str) -> bool:
-        """Perform a scroll gesture on an element located by the given locator."""
+        """Perform a scroll gesture on an element located by the given locator and returns whether it can be furtherly scrolled."""
         return self.scroll_gesture_for_element(self.wait_for_visibility(locator), direction)
 
     def scroll_gesture_for_element(self, element: WebElement, direction: str) -> bool:
-        """Perform a scroll gesture on a specific element."""
+        """Perform a scroll gesture on a specific element and returns whether it can be furtherly scrolled."""
         if not element:
             return False
 

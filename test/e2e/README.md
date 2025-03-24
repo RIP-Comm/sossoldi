@@ -56,9 +56,9 @@ If you are missing one or both you can check our [guide](installation_guide.md)
 ### Mobile actions
 The *mobile_actions* folder houses essential classes for testing across different platforms. Here's what you'll find inside:
 
-- mobile_actions: Contains basic actions that can be performed across all platforms. If a new action needs to be added, start here and then extend to platform-specific classes only if necessary.
-- android_mobile_actions: Contains specific implementation of some actions for Android platform.
-- ios_mobile_actions: Contains specific implementation of some actions for iOS platform.
+- mobile_actions.py: Contains basic actions that can be performed across all platforms. If a new action needs to be added, start here and then extend to platform-specific classes only if necessary.
+- android/android_mobile_actions.py: Contains specific implementation of some actions for Android platform.
+- ios/ios_mobile_actions.py: Contains specific implementation of some actions for iOS platform.
 
 ### pages
 In the pages folder, you'll find actions that are specific to each page of the application. Each page should have its own file with locators defined inside the __init__ method. 

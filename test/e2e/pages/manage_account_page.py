@@ -14,7 +14,7 @@ class ManageAccountPage:
             self.__initial_balance = (By.ACCESSIBILITY_ID, "Initial Balance")
         self.__create_account = (By.ACCESSIBILITY_ID, "CREATE ACCOUNT")
 
-    def add_account_info(self, account:str, balance:float) -> bool:
+    def add_account_info(self, account:str, balance:float):
         self.driver.send_keys(self.__account_name, account)
         self.driver.send_keys(self.__initial_balance, balance)
 
