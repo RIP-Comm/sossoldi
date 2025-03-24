@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 
 /// A container widget that provides a consistent layout for selector components.
 ///
@@ -53,7 +52,7 @@ class SelectorContainer extends StatelessWidget {
               label!.toUpperCase(),
               style: appTheme.textTheme.labelMedium,
             ),
-            Gap(8),
+            const SizedBox(height: 8.0),
           ],
           child ?? const SizedBox.shrink(),
         ],
