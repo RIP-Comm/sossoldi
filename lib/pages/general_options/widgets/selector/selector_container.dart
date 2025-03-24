@@ -52,7 +52,7 @@ class SelectorContainer extends StatelessWidget {
               label!.toUpperCase(),
               style: appTheme.textTheme.labelMedium,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 8.0),
           ],
           child ?? const SizedBox.shrink(),
         ],
