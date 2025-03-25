@@ -25,7 +25,7 @@
 
 
 <div align="center">
-<img src="./assets/sossoldi project cover.jpg" width="1000" alt="Sossoldi icon">
+<img src="./assets/sossoldi_project_cover.jpg" width="1000" alt="Sossoldi icon">
 </div>
 </div>
 
@@ -56,7 +56,7 @@ What features do we want to implement?
 -   🤓 Advanced onboarding
 
 <div align="center">
-<img src="./assets/Sossoldi-portfolio-card-image.png" width="500" alt="Sossoldi icon">
+<img src="./assets/sossoldi_portfolio_card.png" width="500" alt="Sossoldi icon">
 </div>
 
 ## Phase 1 (Ongoing)
