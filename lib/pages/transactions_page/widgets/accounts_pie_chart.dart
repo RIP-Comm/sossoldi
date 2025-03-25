@@ -3,7 +3,6 @@ import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
-import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
 import '../../../ui/widgets/rounded_icon.dart';
 import '../../../model/bank_account.dart';
@@ -11,7 +10,7 @@ import '../../../providers/currency_provider.dart';
 import '../../../ui/device.dart';
 import 'accounts_tab.dart';
 
-class AccountsPieChart extends ConsumerWidget with Functions {
+class AccountsPieChart extends ConsumerWidget{
   const AccountsPieChart({
     required this.accounts,
     required this.amounts,

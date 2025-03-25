@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../constants/constants.dart';
 
-import '../../constants/functions.dart';
 import '../../ui/widgets/budget_circular_indicator.dart';
 import '../../model/budget.dart';
 import '../../providers/budgets_provider.dart';
 import '../../ui/device.dart';
 
-class BudgetsSection extends ConsumerWidget with Functions {
+class BudgetsSection extends ConsumerWidget {
   const BudgetsSection({super.key});
 
   @override

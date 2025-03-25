@@ -4,12 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../constants/functions.dart';
 import '../../constants/style.dart';
 import '../../model/transaction.dart';
 import '../../providers/accounts_provider.dart';
 import '../../providers/transactions_provider.dart';
 import '../../ui/device.dart';
+import '../../ui/extensions.dart';
 import "widgets/account_selector.dart";
 import 'widgets/amount_section.dart';
 import "widgets/category_selector.dart";
@@ -27,7 +27,7 @@ class AddPage extends ConsumerStatefulWidget {
   ConsumerState<AddPage> createState() => _AddPageState();
 }
 
-class _AddPageState extends ConsumerState<AddPage> with Functions {
+class _AddPageState extends ConsumerState<AddPage> {
   final TextEditingController amountController = TextEditingController();
   final TextEditingController noteController = TextEditingController();
   bool? recurrencyEditingPermittedFromRoute;
@@ -39,7 +39,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
       _isSaveEnabled = true;
     }
     amountController.text =
-        numToCurrency(ref.read(selectedTransactionUpdateProvider)?.amount);
+        ref.read(selectedTransactionUpdateProvider)?.amount.toCurrency() ?? '';
     noteController.text =
         ref.read(selectedTransactionUpdateProvider)?.note ?? '';
 
@@ -147,14 +147,13 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
             !selectedTransaction.recurring) {
           ref
               .read(transactionsProvider.notifier)
-              .addRecurringTransaction(
-                  currencyToNum(cleanAmount), noteController.text)
+              .addRecurringTransaction(cleanAmount.toNum(), noteController.text)
               .then((value) {
             if (value != null) {
               ref
                   .read(transactionsProvider.notifier)
                   .updateTransaction(
-                      currencyToNum(cleanAmount), noteController.text, value.id)
+                      cleanAmount.toNum(), noteController.text, value.id)
                   .whenComplete(() => _refreshAccountAndNavigateBack());
             }
           });
@@ -162,7 +161,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
           ref
               .read(transactionsProvider.notifier)
               .updateTransaction(
-                  currencyToNum(cleanAmount),
+                  cleanAmount.toNum(),
                   noteController.text,
                   selectedTransaction.idRecurringTransaction)
               .whenComplete(() => _refreshAccountAndNavigateBack());
@@ -172,7 +171,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
           if (ref.read(bankAccountTransferProvider) != null) {
             ref
                 .read(transactionsProvider.notifier)
-                .addTransaction(currencyToNum(cleanAmount), noteController.text)
+                .addTransaction(cleanAmount.toNum(), noteController.text)
                 .whenComplete(() => _refreshAccountAndNavigateBack());
           }
         } else {
@@ -182,13 +181,13 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
               ref
                   .read(transactionsProvider.notifier)
                   .addRecurringTransaction(
-                      currencyToNum(cleanAmount), noteController.text)
+                      cleanAmount.toNum(), noteController.text)
                   .whenComplete(() => _refreshAccountAndNavigateBack());
             } else {
               ref
                   .read(transactionsProvider.notifier)
                   .addTransaction(
-                      currencyToNum(cleanAmount), noteController.text)
+                      cleanAmount.toNum(), noteController.text)
                   .whenComplete(() => _refreshAccountAndNavigateBack());
             }
           }

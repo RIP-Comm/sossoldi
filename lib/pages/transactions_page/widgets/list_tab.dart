@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../constants/functions.dart';
 import '../../../ui/widgets/transactions_list.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../ui/device.dart';
 
-class ListTab extends ConsumerWidget with Functions {
+class ListTab extends ConsumerWidget {
   const ListTab({super.key});
 
   @override

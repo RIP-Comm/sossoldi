@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
+import '../../../ui/extensions.dart';
 import '../../../ui/widgets/rounded_icon.dart';
 import '../../../model/recurring_transaction.dart';
 import '../../../providers/theme_provider.dart';
@@ -9,13 +10,12 @@ import 'older_recurring_payments.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/currency_provider.dart';
 
-import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/categories_provider.dart';
 
 /// This class shows account summaries in dashboard
-class RecurringPaymentCard extends ConsumerWidget with Functions {
+class RecurringPaymentCard extends ConsumerWidget {
   final RecurringTransaction transaction;
 
   const RecurringPaymentCard({
@@ -184,7 +184,7 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
                           child: Container(
                             alignment: Alignment.centerRight,
                             child: Text(
-                              "Until ${dateToString(transaction.toDate!)}",
+                              "Until ${transaction.toDate?.formatEDMY()}",
                               style: const TextStyle(fontSize: 8),
                             ),
                           ),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
-import '../../../constants/functions.dart';
 import '../../../model/category_transaction.dart';
 import '../../../providers/categories_provider.dart';
 import '../../ui/widgets/default_card.dart';
@@ -16,7 +15,7 @@ class CategoryList extends ConsumerStatefulWidget {
   ConsumerState<CategoryList> createState() => _CategoryListState();
 }
 
-class _CategoryListState extends ConsumerState<CategoryList> with Functions {
+class _CategoryListState extends ConsumerState<CategoryList> {
   @override
   Widget build(BuildContext context) {
     final categorysList = ref.watch(categoriesProvider);

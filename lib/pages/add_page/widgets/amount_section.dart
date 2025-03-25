@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
 import '../../../constants/constants.dart';
-import '../../../constants/functions.dart';
 import "../../../constants/style.dart";
+import '../../../ui/extensions.dart';
 import '../../../ui/widgets/rounded_icon.dart';
 import '../../../model/transaction.dart';
-// import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../pages/add_page/widgets/amount_widget.dart';
 import '../../../ui/device.dart';
@@ -25,7 +24,7 @@ class AmountSection extends ConsumerStatefulWidget {
   ConsumerState<AmountSection> createState() => _AmountSectionState();
 }
 
-class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
+class _AmountSectionState extends ConsumerState<AmountSection> {
   static const List<String> _titleList = ['Income', 'Expense', 'Transfer'];
 
   List<bool> _typeToggleState = [false, true, false];
@@ -91,8 +90,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                 (index) => TypeTab(
                   _typeToggleState[index],
                   _titleList[index],
-                  typeToColor(
-                    trsncTypeList[index],
+                  trsncTypeList[index].toColor(
                     brightness: Theme.of(context).brightness,
                   ),
                 ),

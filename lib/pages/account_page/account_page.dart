@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../constants/functions.dart';
 import '../../constants/style.dart';
+import '../../ui/extensions.dart';
 import '../../ui/widgets/line_chart.dart';
 import '../../ui/widgets/transactions_list.dart';
 import '../../providers/accounts_provider.dart';
@@ -20,7 +20,7 @@ class AccountPage extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _AccountPage();
 }
 
-class _AccountPage extends ConsumerState<AccountPage> with Functions {
+class _AccountPage extends ConsumerState<AccountPage> {
   bool isRecoinciling = false;
   final TextEditingController _newBalanceController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
@@ -65,7 +65,7 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
               child: Column(
                 children: [
                   Text(
-                    numToCurrency(account?.total),
+                    account?.total?.toCurrency() ?? "",
                     style: const TextStyle(
                       color: white,
                       fontSize: 32.0,
@@ -149,11 +149,11 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                                       await ref
                                           .read(accountsProvider.notifier)
                                           .reconcileAccount(
-                                              newBalance: currencyToNum(
-                                                  _newBalanceController.text),
+                                              newBalance: _newBalanceController.text.toNum(),
                                               account: account);
-                                      if (context.mounted)
+                                      if (context.mounted) {
                                         Navigator.of(context).pop();
+                                      }
                                     }
                                   },
                                   label: const Text("Save"),
