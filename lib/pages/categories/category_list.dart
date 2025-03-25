@@ -26,14 +26,17 @@ class _CategoryListState extends ConsumerState<CategoryList> with Functions {
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () => Navigator.pop(context),
         ),
+        title: const Text('Categories'),
         actions: [
           IconButton(
             onPressed: () {
               ref.invalidate(selectedCategoryProvider);
               Navigator.of(context).pushNamed('/add-category');
             },
-            icon: const Icon(Icons.add_circle),
-            splashRadius: 28,
+            icon: const Icon(
+              Icons.add_circle,
+              size: 30,
+            ),
           ),
         ],
       ),
@@ -41,33 +44,8 @@ class _CategoryListState extends ConsumerState<CategoryList> with Functions {
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
-              child: Row(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.list_alt,
-                      size: 24.0,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                  ),
-                  const SizedBox(width: 12.0),
-                  Text(
-                    "Your categories",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineLarge!
-                        .copyWith(color: Theme.of(context).colorScheme.primary),
-                  ),
-                ],
-              ),
+            const SizedBox(
+              height: 16,
             ),
             categorysList.when(
               data: (categorys) => ListView.separated(
