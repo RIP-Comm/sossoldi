@@ -10,7 +10,7 @@ import '../../../providers/currency_provider.dart';
 import '../../../ui/device.dart';
 import 'accounts_tab.dart';
 
-class AccountsPieChart extends ConsumerWidget{
+class AccountsPieChart extends ConsumerWidget {
   const AccountsPieChart({
     required this.accounts,
     required this.amounts,
