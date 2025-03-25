@@ -9,6 +9,7 @@ import '../../../custom_widgets/rounded_icon.dart';
 import '../../../model/category_transaction.dart';
 import '../../../providers/categories_provider.dart';
 import '../../../providers/currency_provider.dart';
+import '../../../ui/device.dart';
 
 class CategoriesPieChart extends ConsumerWidget with Functions {
   const CategoriesPieChart({
@@ -63,7 +64,7 @@ class CategoriesPieChart extends ConsumerWidget with Functions {
                           Icons.swap_horiz_rounded,
                       backgroundColor:
                           categoryColorList[selectedCategory.color],
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(Sizes.lg),
                     )
                   : const SizedBox(),
               Text(

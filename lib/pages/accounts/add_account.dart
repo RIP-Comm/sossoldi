@@ -70,9 +70,9 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                     width: double.infinity,
                     margin: const EdgeInsets.symmetric(
                       horizontal: 16,
-                      vertical: 24,
+                      vertical: Sizes.lg,
                     ),
-                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                    padding: const EdgeInsets.fromLTRB(Sizes.lg, Sizes.md, Sizes.lg, 0),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
                       borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
@@ -94,7 +94,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                   ),
                   Container(
                     width: double.infinity,
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    margin: const EdgeInsets.symmetric(horizontal: Sizes.lg),
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16,
                       vertical: 12,
@@ -124,7 +124,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                                 shape: BoxShape.circle,
                                 color: accountColorListTheme[accountColor],
                               ),
-                              padding: const EdgeInsets.all(16),
+                              padding: const EdgeInsets.all(Sizes.lg),
                               child: Icon(
                                 accountIconList[accountIcon],
                                 size: 48,
@@ -143,8 +143,8 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                         if (showAccountIcons)
                           Container(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 8,
+                              horizontal: Sizes.lg,
+                              vertical: Sizes.sm,
                             ),
                             color: Theme.of(context).colorScheme.surface,
                             child: Column(
@@ -183,7 +183,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                                       onTap: () => setState(
                                           () => accountIcon = accountIconName),
                                       child: Container(
-                                        margin: const EdgeInsets.all(4),
+                                        margin: const EdgeInsets.all(Sizes.xs),
                                         decoration: BoxDecoration(
                                           color: accountIconList[accountIcon] ==
                                                   accountIconData
@@ -219,7 +219,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                           child: ListView.separated(
                             scrollDirection: Axis.horizontal,
                             physics: const BouncingScrollPhysics(),
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            padding: const EdgeInsets.symmetric(horizontal: Sizes.lg),
                             separatorBuilder: (context, index) =>
                                 const SizedBox(width: 16),
                             itemBuilder: (context, index) {
@@ -270,8 +270,8 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.fromLTRB(16, 24, 16, 0),
-                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                    margin: const EdgeInsets.fromLTRB(Sizes.lg, Sizes.xl, Sizes.lg, 0),
+                    padding: const EdgeInsets.fromLTRB(Sizes.lg, Sizes.md, Sizes.lg, 0),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
                       borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
@@ -304,10 +304,10 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                   ),
                   Container(
                     margin: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 16,
+                      horizontal: Sizes.lg,
+                      vertical: Sizes.lg,
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: Sizes.lg),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
                       borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
@@ -316,7 +316,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 12.0),
+                          padding: const EdgeInsets.symmetric(vertical: Sizes.md),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -334,7 +334,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                         ),
                         const Divider(height: 1, color: grey2),
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 12.0),
+                          padding: const EdgeInsets.symmetric(vertical: Sizes.md),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -356,7 +356,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                   if (selectedAccount != null)
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(Sizes.lg),
                       child: TextButton.icon(
                         onPressed: () {
                           showDialog(
@@ -415,7 +415,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                 )
               ],
             ),
-            padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
+            padding: const EdgeInsets.fromLTRB(Sizes.xl, Sizes.md, Sizes.lg, Sizes.lg),
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(

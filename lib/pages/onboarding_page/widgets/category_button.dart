@@ -22,7 +22,7 @@ class CategoryButton extends StatelessWidget {
           color: categoryColor,
           borderRadius: BorderRadius.circular(Sizes.borderRadius),
         ),
-        padding: const EdgeInsets.only(left: 12),
+        padding: const EdgeInsets.only(left: Sizes.md),
         child: Row(
           children: [
             Container(
@@ -30,13 +30,13 @@ class CategoryButton extends StatelessWidget {
                 color: white,
                 shape: BoxShape.circle,
               ),
-              padding: const EdgeInsets.all(2),
+              padding: const EdgeInsets.all(Sizes.xxs),
               child:
               Icon(Icons.check_rounded, color: categoryColor, size: 22),
             ),
             const SizedBox(width: 10),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              padding: const EdgeInsets.symmetric(vertical: Sizes.sm),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,11 +73,11 @@ class CategoryButton extends StatelessWidget {
         child: Row(
           children: [
             const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
+                padding: EdgeInsets.symmetric(horizontal: Sizes.sm),
                 child: Icon(Icons.add_circle_outline_outlined,
                     size: 30, color: blue1)),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              padding: const EdgeInsets.symmetric(vertical: Sizes.sm),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,

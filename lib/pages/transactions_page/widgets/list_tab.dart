@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/functions.dart';
 import '../../../custom_widgets/transactions_list.dart';
 import '../../../providers/transactions_provider.dart';
+import '../../../ui/device.dart';
 
 class ListTab extends ConsumerWidget with Functions {
   const ListTab({super.key});
@@ -16,7 +17,7 @@ class ListTab extends ConsumerWidget with Functions {
       child: asyncTransactions.when(
         data: (transactions) {
           return TransactionsList(
-            margin: const EdgeInsets.all(16.0),
+            margin: const EdgeInsets.all(Sizes.lg),
             transactions: transactions,
           );
         },

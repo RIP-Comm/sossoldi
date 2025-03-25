@@ -4,6 +4,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../ui/device.dart';
+
 enum Period { month, year }
 
 //This class can be used when we need to draw a line chart with one or two lines
@@ -85,7 +87,7 @@ class _LineChartSample2State extends State<LineChartWidget> {
               color: widget.colorBackground ?? themeData.colorScheme.tertiary,
             ),
             child: Padding(
-              padding: const EdgeInsets.only(top: 24),
+              padding: const EdgeInsets.only(top: Sizes.xl),
               child: Builder(
                 builder: (context) {
                   if (widget.lineData.length < 2 &&

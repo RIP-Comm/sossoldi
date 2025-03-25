@@ -7,6 +7,7 @@ import '../../custom_widgets/default_card.dart';
 import '../../custom_widgets/rounded_icon.dart';
 import '../../model/bank_account.dart';
 import '../../providers/accounts_provider.dart';
+import '../../ui/device.dart';
 
 class AccountList extends ConsumerStatefulWidget {
   const AccountList({super.key});
@@ -43,7 +44,7 @@ class _AccountListState extends ConsumerState<AccountList> with Functions {
           children: [
             Padding(
               padding:
-                  const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+                  const EdgeInsets.symmetric(vertical: Sizes.xl, horizontal: Sizes.lg),
               child: Row(
                 children: [
                   Container(
@@ -51,7 +52,7 @@ class _AccountListState extends ConsumerState<AccountList> with Functions {
                       shape: BoxShape.circle,
                       color: Theme.of(context).colorScheme.primary,
                     ),
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(Sizes.sm),
                     child: Icon(
                       Icons.account_balance_wallet,
                       size: 24.0,

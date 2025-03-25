@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../model/transaction.dart';
 import '../../../constants/functions.dart';
 import '../../../providers/transactions_provider.dart';
+import '../../../ui/device.dart';
 
 class RecurrenceSelector extends ConsumerStatefulWidget {
   const RecurrenceSelector({super.key});
@@ -35,7 +36,8 @@ class _RecurrenceSelectorState extends ConsumerState<RecurrenceSelector> with Fu
               child: InkWell(
                 onTap: () => ref.read(intervalProvider.notifier).state = recurrence.keys.first,
                 child: ListTile(
-                  contentPadding: const EdgeInsets.fromLTRB(32, 20, 20, 20),
+                  contentPadding: const EdgeInsets.fromLTRB(
+                      Sizes.xxl, Sizes.lg, Sizes.lg, Sizes.lg),
                   title: Text(
                     recurrence.values.first,
                     style: Theme.of(context)

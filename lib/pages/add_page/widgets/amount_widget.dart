@@ -7,6 +7,7 @@ import '../../../constants/functions.dart';
 import "../../../constants/style.dart";
 import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
+import '../../../ui/device.dart';
 
 class AmountWidget extends ConsumerStatefulWidget {
   const AmountWidget(
@@ -27,7 +28,7 @@ class _AmountWidgetState extends ConsumerState<AmountWidget> with Functions {
     final currencyState = ref.watch(currencyStateNotifier);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+      padding: const EdgeInsets.symmetric(horizontal: Sizes.lg, vertical: Sizes.xl),
       child: TextField(
         controller: widget.amountController,
         decoration: InputDecoration(

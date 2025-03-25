@@ -65,10 +65,10 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                   Container(
                     width: double.infinity,
                     margin: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
+                      horizontal: Sizes.lg,
+                      vertical: Sizes.md,
                     ),
-                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                    padding: const EdgeInsets.fromLTRB(Sizes.lg, Sizes.md, Sizes.lg, 0),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
                       borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
@@ -100,7 +100,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                       horizontal: 16,
                       vertical: 12,
                     ),
-                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                    padding: const EdgeInsets.fromLTRB(Sizes.lg, Sizes.md, Sizes.lg, 0),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
                       borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
@@ -148,12 +148,12 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                   Container(
                     width: double.infinity,
                     margin: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
+                      horizontal: Sizes.lg,
+                      vertical: Sizes.md,
                     ),
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
+                      horizontal: Sizes.lg,
+                      vertical: Sizes.md,
                     ),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
@@ -185,7 +185,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                                 shape: BoxShape.circle,
                                 color: categoryColorListTheme[categoryColor],
                               ),
-                              padding: const EdgeInsets.all(16),
+                              padding: const EdgeInsets.all(Sizes.lg),
                               child: Icon(
                                 iconList[categoryIcon],
                                 size: 48,
@@ -209,7 +209,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                         if (showCategoryIcons)
                           Container(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 8),
+                                horizontal: Sizes.lg, vertical: Sizes.sm),
                             color: Theme.of(context).colorScheme.surface,
                             child: Column(
                               children: [
@@ -246,7 +246,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                                       onTap: () => setState(() =>
                                           categoryIcon = categoryIconName),
                                       child: Container(
-                                        margin: const EdgeInsets.all(12),
+                                        margin: const EdgeInsets.all(Sizes.md),
                                         decoration: BoxDecoration(
                                           color: iconList[categoryIcon] ==
                                                   categoryIconData
@@ -282,7 +282,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                           child: ListView.separated(
                             scrollDirection: Axis.horizontal,
                             physics: const BouncingScrollPhysics(),
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            padding: const EdgeInsets.symmetric(horizontal: Sizes.lg),
                             separatorBuilder: (context, index) =>
                                 const SizedBox(width: 16),
                             itemBuilder: (context, index) {
@@ -367,7 +367,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                   if (selectedCategory != null)
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(Sizes.lg),
                       child: TextButton.icon(
                         onPressed: () => ref
                             .read(categoriesProvider.notifier)
@@ -410,7 +410,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                 )
               ],
             ),
-            padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
+            padding: const EdgeInsets.fromLTRB(Sizes.xl, Sizes.md, Sizes.xl, Sizes.xl),
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
