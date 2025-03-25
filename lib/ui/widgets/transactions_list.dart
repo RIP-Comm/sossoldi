@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../constants/constants.dart';
-import '../constants/functions.dart';
-import '../constants/style.dart';
-import '../model/transaction.dart';
-import '../providers/currency_provider.dart';
-import '../providers/transactions_provider.dart';
-import '../ui/device.dart';
-import '../utils/date_helper.dart';
+import '../../constants/constants.dart';
+import '../../constants/functions.dart';
+import '../../constants/style.dart';
+import '../../model/transaction.dart';
+import '../../providers/currency_provider.dart';
+import '../../providers/transactions_provider.dart';
+import '../device.dart';
+import '../../utils/date_helper.dart';
 import 'default_container.dart';
 import 'rounded_icon.dart';
 

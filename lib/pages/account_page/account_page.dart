@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants/functions.dart';
 import '../../constants/style.dart';
-import '../../custom_widgets/line_chart.dart';
-import '../../custom_widgets/transactions_list.dart';
+import '../../ui/widgets/line_chart.dart';
+import '../../ui/widgets/transactions_list.dart';
 import '../../providers/accounts_provider.dart';
 import '../../model/transaction.dart';
 import '../../providers/currency_provider.dart';
