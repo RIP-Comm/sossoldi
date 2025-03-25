@@ -45,7 +45,7 @@ class _GraphsPageState extends ConsumerState<GraphsPage> with Functions {
                 return Column(
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(Sizes.lg),
                       color: Theme.of(context).colorScheme.tertiary,
                       child: Column(
                         children: [
@@ -112,7 +112,7 @@ class _GraphsPageState extends ConsumerState<GraphsPage> with Functions {
                                   borderRadius: BorderRadius.circular(
                                       Sizes.borderRadiusSmall),
                                 ),
-                                padding: const EdgeInsets.all(4.0),
+                                padding: const EdgeInsets.all(Sizes.xxs),
                                 child: Text(
                                   "${numToCurrency(percentGainLoss)}%",
                                   style: Theme.of(context)

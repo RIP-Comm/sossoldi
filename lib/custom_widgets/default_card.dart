@@ -12,7 +12,7 @@ class DefaultCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultContainer(
-      padding: const EdgeInsets.all(0),
+      padding: EdgeInsets.zero,
       child: Material(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(Sizes.borderRadius),
@@ -20,7 +20,7 @@ class DefaultCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(Sizes.borderRadius),
           onTap: onTap,
           child: Ink(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(Sizes.md),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(Sizes.borderRadius),

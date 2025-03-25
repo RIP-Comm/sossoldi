@@ -52,8 +52,8 @@ class AccountListTile extends ConsumerWidget {
               color: color.withAlpha(90),
             ),
             padding: const EdgeInsets.symmetric(
-              horizontal: 8.0,
-              vertical: 16.0,
+              horizontal: Sizes.sm,
+              vertical: Sizes.lg,
             ),
             child: Row(
               mainAxisSize: MainAxisSize.max,
@@ -61,7 +61,7 @@ class AccountListTile extends ConsumerWidget {
                 RoundedIcon(
                   icon: icon,
                   backgroundColor: color,
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(Sizes.sm),
                 ),
                 const SizedBox(width: 8.0),
                 Expanded(
@@ -148,8 +148,8 @@ class TransactionRow extends ConsumerWidget with Functions {
     final currencyState = ref.watch(currencyStateNotifier);
     return Container(
       padding: const EdgeInsets.symmetric(
-        horizontal: 8.0,
-        vertical: 16.0,
+        horizontal: Sizes.sm,
+        vertical: Sizes.lg,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.max,

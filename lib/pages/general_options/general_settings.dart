@@ -5,6 +5,7 @@ import '../../constants/style.dart';
 import '../../model/currency.dart';
 import '../../providers/currency_provider.dart';
 import '../../providers/theme_provider.dart';
+import '../../ui/device.dart';
 import 'widgets/currency_selector.dart';
 
 class GeneralSettingsPage extends ConsumerStatefulWidget {
@@ -44,7 +45,7 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
         title: const Text('General Settings'),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.only(left: 20, right: 20, top: 25),
+        padding: const EdgeInsets.only(left: Sizes.lg, right: Sizes.lg, top: Sizes.xl),
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [

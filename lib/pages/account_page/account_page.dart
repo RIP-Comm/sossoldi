@@ -58,7 +58,7 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 12.0),
+              padding: const EdgeInsets.symmetric(vertical: Sizes.md),
               color: Theme.of(context).colorScheme.secondary,
               child: Column(
                 children: [
@@ -71,9 +71,9 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const Padding(padding: EdgeInsets.all(8.0)),
+                  const Padding(padding: EdgeInsets.all(Sizes.sm)),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(Sizes.sm),
                     child: LineChartWidget(
                       lineData: accountTransactions,
                       colorBackground: Theme.of(context).colorScheme.secondary,
@@ -85,9 +85,9 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
               ),
             ),
             Card(
-              margin: const EdgeInsets.all(16),
+              margin: const EdgeInsets.all(Sizes.lg),
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(Sizes.lg),
                 child: Column(
                   children: [
                     Row(
@@ -191,7 +191,7 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 16, bottom: 8, top: 8),
+              padding: const EdgeInsets.only(left: Sizes.lg, bottom: Sizes.sm, top: Sizes.sm),
               child: Text("Your last transactions", style: Theme.of(context).textTheme.titleLarge),
             ),
             TransactionsList(

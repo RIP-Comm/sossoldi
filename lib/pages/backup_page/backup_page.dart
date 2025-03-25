@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../database/sossoldi_database.dart';
+import '../../ui/device.dart';
 import '../../utils/csv_file_picker.dart';
 
 class BackupPage extends ConsumerStatefulWidget {
@@ -45,10 +46,8 @@ class _BackupPageState extends ConsumerState<BackupPage> {
       final file = await CSVFilePicker.pickCSVFile(context);
       if (file != null) {
         CSVFilePicker.showLoading(context, 'Importing data...');
-
         final results =
             await SossoldiDatabase.instance.importFromCSV(file.path);
-
         if (!mounted) return;
         CSVFilePicker.hideLoading(context);
 
@@ -147,7 +146,7 @@ class _BackupPageState extends ConsumerState<BackupPage> {
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(Sizes.lg),
           child: Column(
             children: [
               ListView.separated(
@@ -192,7 +191,7 @@ class _BackupPageState extends ConsumerState<BackupPage> {
                         }
                       },
                       child: Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: const EdgeInsets.all(Sizes.lg),
                         child: Row(
                           children: [
                             Icon(

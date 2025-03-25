@@ -58,7 +58,7 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(Sizes.lg),
       color: Theme.of(context).colorScheme.surface,
       child: Row(
         children: [
@@ -71,7 +71,7 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
                 border: Border.all(width: 1, color: Colors.grey),
               ),
               child: Container(
-                padding: const EdgeInsets.all(5),
+                padding: const EdgeInsets.all(Sizes.xxs),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.primaryContainer,
                   borderRadius: BorderRadius.circular(Sizes.borderRadius),
@@ -112,7 +112,7 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
               border: Border.all(width: 1, color: Colors.grey),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(Sizes.sm),
               child: TextField(
                 controller: _controller,
                 inputFormatters: [

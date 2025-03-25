@@ -59,7 +59,7 @@ class _SearchPage extends ConsumerState<SearchPage> {
           ),
         ),
         body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: Sizes.sm),
             child: Column(
               children: [
                 InputDecorator(
@@ -91,7 +91,7 @@ class _SearchPage extends ConsumerState<SearchPage> {
                         scrollDirection: Axis.horizontal,
                         child: Row(children: [
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: Sizes.sm),
                             child: FilterChip(
                               showCheckmark: false,
                               label: Text("Income",
@@ -121,7 +121,7 @@ class _SearchPage extends ConsumerState<SearchPage> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: Sizes.sm),
                             child: FilterChip(
                               showCheckmark: false,
                               label: Text("Outcome",
@@ -151,7 +151,7 @@ class _SearchPage extends ConsumerState<SearchPage> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: Sizes.sm),
                             child: FilterChip(
                               showCheckmark: false,
                               label: Text(
@@ -199,7 +199,7 @@ class _SearchPage extends ConsumerState<SearchPage> {
                                   children: accounts.map((account) {
                                 return Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
+                                        horizontal: Sizes.sm),
                                     child: FilterChip(
                                         label: Text(
                                           account.name,

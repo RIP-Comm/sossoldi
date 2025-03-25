@@ -38,7 +38,7 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
       backgroundColor: blue7,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(Sizes.lg),
           child: Column(
             children: [
               Text("STEP 1 OF 2",

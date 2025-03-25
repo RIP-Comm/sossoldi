@@ -252,14 +252,14 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
         children: [
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.only(bottom: 72),
+              padding: const EdgeInsets.only(bottom: Sizes.md * 6),
               child: Column(
                 children: [
                   AmountSection(amountController),
                   Container(
                     alignment: Alignment.centerLeft,
                     padding:
-                        const EdgeInsets.only(left: 16, top: 32, bottom: 8),
+                        const EdgeInsets.only(left: Sizes.lg, top: Sizes.xxl, bottom: Sizes.sm),
                     child: Text(
                       "DETAILS",
                       style: Theme.of(context).textTheme.labelLarge!.copyWith(
@@ -405,7 +405,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                 )
               ],
             ),
-            padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
+            padding: const EdgeInsets.fromLTRB(Sizes.xl, Sizes.md, Sizes.xl, Sizes.xl),
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(

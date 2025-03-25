@@ -4,6 +4,7 @@ import '../../../../custom_widgets/category_type_button.dart';
 import '../../../../custom_widgets/default_container.dart';
 import '../../../../model/category_transaction.dart';
 import '../../../../providers/categories_provider.dart';
+import '../../../../ui/device.dart';
 import '../../../transactions_page/widgets/month_selector.dart';
 import '../card_label.dart';
 import '../linear_progress_bar.dart';
@@ -119,7 +120,7 @@ class CategoryItem extends StatelessWidget {
       height: 50.0,
       child: Column(
         children: [
-          const Padding(padding: EdgeInsets.all(2.0)),
+          const Padding(padding: EdgeInsets.all(Sizes.xxs * 0.5)),
           CategoryLabel(
             category: category,
             amount: amount,

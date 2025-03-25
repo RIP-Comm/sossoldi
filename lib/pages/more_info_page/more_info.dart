@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../custom_widgets/default_card.dart';
+import '../../ui/device.dart';
 
 class MoreInfoPage extends ConsumerStatefulWidget {
   const MoreInfoPage({super.key});
@@ -42,7 +43,7 @@ class _MoreInfoPageState extends ConsumerState<MoreInfoPage> {
         title: const Text('App Info'),
       ),
       body: ListView.separated(
-        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        padding: const EdgeInsets.symmetric(vertical: Sizes.lg),
         physics: const BouncingScrollPhysics(),
         itemCount: moreInfoOptions.length,
         separatorBuilder: (context, index) => const SizedBox(height: 16),

@@ -19,7 +19,7 @@ class AddCategoryButton extends StatelessWidget {
       child: Row(
         children: [
           const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            padding: EdgeInsets.symmetric(horizontal: Sizes.sm),
             child: Icon(
               Icons.add_circle_outline_outlined,
               size: 30,

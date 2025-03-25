@@ -59,7 +59,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
               color: Theme.of(context).colorScheme.primaryContainer,
               borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall)
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 2),
+            padding: const EdgeInsets.symmetric(horizontal: Sizes.xxs * 0.5),
             child: ToggleButtons(
               direction: Axis.horizontal,
               onPressed: (int index) {
@@ -101,7 +101,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
           ),
           if (selectedType == TransactionType.transfer)
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              padding: const EdgeInsets.fromLTRB(Sizes.lg, Sizes.sm, Sizes.lg, 0),
               child: SizedBox(
                 height: 64,
                 child: Row(
@@ -160,7 +160,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                                   borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
                                   boxShadow: [defaultShadow],
                                 ),
-                                padding: const EdgeInsets.all(4),
+                                padding: const EdgeInsets.all(Sizes.xxs),
                                 child: Row(
                                   children: [
                                     RoundedIcon(
@@ -181,7 +181,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                                               .color]
                                           : null,
                                       size: 16,
-                                      padding: EdgeInsets.all(4.0),
+                                      padding: EdgeInsets.all(Sizes.xs),
                                     ),
                                     const Spacer(),
                                     Text(
@@ -218,7 +218,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                               child: VerticalDivider(width: 1, color: grey2)),
                           Padding(
                             padding: EdgeInsets.symmetric(
-                                vertical: 2, horizontal: 20),
+                                vertical: Sizes.xxs * 0.5, horizontal: Sizes.xl),
                             child: Icon(
                               Icons.change_circle,
                               size: 32,
@@ -286,7 +286,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                                   borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
                                   boxShadow: [defaultShadow],
                                 ),
-                                padding: const EdgeInsets.all(4),
+                                padding: const EdgeInsets.all(Sizes.xs),
                                 child: Row(
                                   children: [
                                     RoundedIcon(
@@ -302,7 +302,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                                               .color]
                                           : null,
                                       size: 16,
-                                      padding: EdgeInsets.all(4.0),
+                                      padding: EdgeInsets.all(Sizes.xs),
                                     ),
                                     const Spacer(),
                                     Text(

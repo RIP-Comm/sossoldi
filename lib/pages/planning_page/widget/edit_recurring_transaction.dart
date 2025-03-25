@@ -83,7 +83,7 @@ class _EditRecurringTransactionState
       body: Stack(
         children: [
           SingleChildScrollView(
-            padding: const EdgeInsets.only(bottom: 72),
+            padding: const EdgeInsets.only(bottom: Sizes.md * 6),
             child: Column(
               children: [
                 AmountWidget(amountController),
@@ -170,7 +170,8 @@ class _EditRecurringTransactionState
                   )
                 ],
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: Sizes.xl, vertical: Sizes.sm),
               child: Container(
                 height: 48,
                 decoration: BoxDecoration(

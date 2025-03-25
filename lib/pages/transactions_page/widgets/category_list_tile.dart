@@ -49,8 +49,8 @@ class CategoryListTile extends ConsumerWidget {
               color: categoryColorList[category.color].withAlpha(90),
             ),
             padding: const EdgeInsets.symmetric(
-              horizontal: 8.0,
-              vertical: 16.0,
+              horizontal: Sizes.sm,
+              vertical: Sizes.lg,
             ),
             child: Row(
               mainAxisSize: MainAxisSize.max,
@@ -58,9 +58,9 @@ class CategoryListTile extends ConsumerWidget {
                 RoundedIcon(
                   icon: iconList[category.symbol],
                   backgroundColor: categoryColorList[category.color],
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(Sizes.sm),
                 ),
-                const SizedBox(width: 8.0),
+                const SizedBox(width: Sizes.sm),
                 Expanded(
                   child: Column(
                     children: [

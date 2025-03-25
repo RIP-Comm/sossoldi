@@ -7,6 +7,7 @@ import '../../../model/category_transaction.dart';
 import '../../../providers/categories_provider.dart';
 import '../../custom_widgets/default_card.dart';
 import '../../custom_widgets/rounded_icon.dart';
+import '../../ui/device.dart';
 
 class CategoryList extends ConsumerStatefulWidget {
   const CategoryList({super.key});
@@ -43,7 +44,7 @@ class _CategoryListState extends ConsumerState<CategoryList> with Functions {
           children: [
             Padding(
               padding:
-                  const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+                  const EdgeInsets.symmetric(vertical: Sizes.xl, horizontal: Sizes.lg),
               child: Row(
                 children: [
                   Container(
@@ -51,7 +52,7 @@ class _CategoryListState extends ConsumerState<CategoryList> with Functions {
                       shape: BoxShape.circle,
                       color: Theme.of(context).colorScheme.primary,
                     ),
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(Sizes.sm),
                     child: Icon(
                       Icons.list_alt,
                       size: 24.0,

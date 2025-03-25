@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
 import "../../../custom_widgets/rounded_icon.dart";
+import "../../../ui/device.dart";
 import "details_list_tile.dart";
 
 class NonEditableDetailsListTile extends DetailsListTile {
@@ -17,7 +18,7 @@ class NonEditableDetailsListTile extends DetailsListTile {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
-      contentPadding: const EdgeInsets.all(16.0),
+      contentPadding: const EdgeInsets.all(Sizes.lg),
       tileColor: Theme.of(context).colorScheme.surface,
       onTap: callback,
       leading: RoundedIcon(

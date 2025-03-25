@@ -8,6 +8,7 @@ import '../../../custom_widgets/rounded_icon.dart';
 import '../../../model/category_transaction.dart';
 import '../../../providers/categories_provider.dart';
 import '../../../providers/transactions_provider.dart';
+import '../../../ui/device.dart';
 
 class CategorySelector extends ConsumerStatefulWidget {
   const CategorySelector({
@@ -54,7 +55,7 @@ class _CategorySelectorState extends ConsumerState<CategorySelector>
                   Container(
                     alignment: Alignment.centerLeft,
                     padding:
-                        const EdgeInsets.only(left: 16, top: 32, bottom: 8),
+                        const EdgeInsets.only(left: Sizes.lg, top: Sizes.xxl, bottom: Sizes.md),
                     child: Text(
                       "MORE FREQUENT",
                       style: Theme.of(context).textTheme.labelLarge!.copyWith(
@@ -80,7 +81,7 @@ class _CategorySelectorState extends ConsumerState<CategorySelector>
                             },
                             child: Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 16.0),
+                                  const EdgeInsets.symmetric(horizontal: Sizes.lg),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -113,7 +114,7 @@ class _CategorySelectorState extends ConsumerState<CategorySelector>
                   Container(
                     alignment: Alignment.centerLeft,
                     padding:
-                        const EdgeInsets.only(left: 16, top: 32, bottom: 8),
+                        const EdgeInsets.only(left: Sizes.lg, top: Sizes.xxl, bottom: Sizes.sm),
                     child: Text(
                       "ALL CATEGORIES",
                       style: Theme.of(context).textTheme.labelLarge!.copyWith(

@@ -6,6 +6,7 @@ import '../../constants/functions.dart';
 import '../../custom_widgets/budget_circular_indicator.dart';
 import '../../model/budget.dart';
 import '../../providers/budgets_provider.dart';
+import '../../ui/device.dart';
 
 class BudgetsSection extends ConsumerWidget with Functions {
   const BudgetsSection({super.key});
@@ -33,7 +34,7 @@ class BudgetsSection extends ConsumerWidget with Functions {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 16),
+                          padding: const EdgeInsets.only(left: Sizes.lg),
                           child: Text(
                             "Your budgets",
                             style: Theme.of(context).textTheme.titleLarge,
@@ -79,8 +80,8 @@ class BudgetsSection extends ConsumerWidget with Functions {
                             scrollDirection: Axis.horizontal,
                             itemCount: budgets.length,
                             itemBuilder: (context, index) => Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 13),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: Sizes.md),
                               child: BudgetCircularIndicator(
                                 title: budgets[index].name!,
                                 amount: budgets[index].amountLimit -

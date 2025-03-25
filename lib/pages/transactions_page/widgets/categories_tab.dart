@@ -8,6 +8,7 @@ import '../../../model/category_transaction.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/categories_provider.dart';
 import '../../../providers/transactions_provider.dart';
+import '../../../ui/device.dart';
 import 'categories_pie_chart.dart';
 import 'category_list_tile.dart';
 
@@ -78,7 +79,7 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> with Functions {
     }
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(vertical: 24),
+      padding: const EdgeInsets.symmetric(vertical: Sizes.xl),
       child: DefaultContainer(
         child: Column(
           children: [

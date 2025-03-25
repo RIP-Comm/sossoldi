@@ -22,7 +22,7 @@ class NotificationTypeTile extends ConsumerWidget {
     return GestureDetector(
       onTap: setNotificationTypeCallback.call,
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 6),
+        margin: const EdgeInsets.symmetric(vertical: Sizes.xs),
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.primaryContainer,
@@ -34,7 +34,7 @@ class NotificationTypeTile extends ConsumerWidget {
           borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(12.0),
+          padding: const EdgeInsets.all(Sizes.md),
           child: Row(
             children: [
               Text(

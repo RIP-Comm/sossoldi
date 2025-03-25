@@ -28,7 +28,7 @@ class _PlanningPageState extends State<PlanningPage> {
     return Container(
       key: _key,
       child: ListView(
-        padding: const EdgeInsetsDirectional.all(10),
+        padding: const EdgeInsetsDirectional.all(Sizes.md),
         children: [
           Row(
             children: [

@@ -103,7 +103,7 @@ class CSVFilePicker {
             borderRadius: BorderRadius.circular(Sizes.borderRadius),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+            padding: const EdgeInsets.symmetric(vertical: Sizes.lg, horizontal: Sizes.xl),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

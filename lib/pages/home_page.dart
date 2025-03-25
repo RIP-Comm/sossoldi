@@ -229,7 +229,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+                  padding: const EdgeInsets.fromLTRB(Sizes.lg, Sizes.xl, Sizes.lg, Sizes.sm),
                   child: Text(
                     "Your accounts",
                     style: Theme.of(context).textTheme.titleLarge,
@@ -242,8 +242,8 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                       itemCount: accounts.length + 1,
                       shrinkWrap: true,
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 4,
+                        horizontal: Sizes.lg,
+                        vertical: Sizes.xs,
                       ),
                       physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
@@ -263,12 +263,12 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                                 backgroundColor:
                                     Theme.of(context).colorScheme.surface,
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 8),
+                                    horizontal: Sizes.md, vertical: Sizes.sm),
                               ),
                               icon: RoundedIcon(
                                 icon: Icons.add_rounded,
                                 backgroundColor: blue5,
-                                padding: EdgeInsets.all(5.0),
+                                padding: EdgeInsets.all(Sizes.xs),
                               ),
                               label: Text(
                                 "New Account",
@@ -302,7 +302,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 32, 16, 8),
+                    padding: const EdgeInsets.fromLTRB(Sizes.lg, Sizes.xxl, Sizes.lg, Sizes.sm),
                     child: Text(
                       "Last transactions",
                       style: Theme.of(context).textTheme.titleLarge,
