@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../constants/style.dart';
-import '../ui/device.dart';
+import '../../constants/style.dart';
+import '../device.dart';
 
 class DefaultContainer extends StatelessWidget {
   const DefaultContainer({

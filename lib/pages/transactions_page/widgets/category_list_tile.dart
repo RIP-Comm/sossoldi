@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
 import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
-import '../../../custom_widgets/rounded_icon.dart';
+import '../../../ui/widgets/rounded_icon.dart';
 import '../../../model/category_transaction.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/categories_provider.dart';
@@ -145,8 +145,8 @@ class TransactionRow extends ConsumerWidget with Functions {
     final currencyState = ref.watch(currencyStateNotifier);
     return Container(
       padding: const EdgeInsets.symmetric(
-        horizontal: 8.0,
-        vertical: 16.0,
+        horizontal: Sizes.sm,
+        vertical: Sizes.lg,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.max,
