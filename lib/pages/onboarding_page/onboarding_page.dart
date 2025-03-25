@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../ui/assets.dart';
 import '/pages/onboarding_page/widgets/budget_setup.dart';
 import '/constants/style.dart';
 
@@ -34,7 +35,7 @@ class _OnboardingState extends State<Onboarding> {
                 ),
                 const SizedBox(height: 80),
                 Image.asset(
-                  'assets/openVault.png',
+                  SossoldiAssets.openVault,
                   height: MediaQuery.sizeOf(context).height / 3.7,
                 ),
                 const SizedBox(height: 74),

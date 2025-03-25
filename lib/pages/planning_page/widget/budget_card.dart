@@ -7,6 +7,7 @@ import '../../../model/transaction.dart';
 import '../../../providers/budgets_provider.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
+import '../../../ui/assets.dart';
 import '../../graphs_page/widgets/linear_progress_bar.dart';
 import '../manage_budget_page.dart';
 import 'budget_pie_chart.dart';
@@ -112,7 +113,7 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                         textAlign: TextAlign.center,
                       ),
                       Image.asset(
-                        'assets/wallet.png',
+                        SossoldiAssets.wallet,
                         width: 240,
                         height: 240,
                       ),
