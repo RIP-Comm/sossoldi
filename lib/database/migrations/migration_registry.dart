@@ -13,6 +13,7 @@ library;
 
 
 import '0001_initial_schema.dart';
+import '0002_account_net_worth.dart';
 import '../migration_base.dart';
 
 
@@ -24,7 +25,8 @@ import '../migration_base.dart';
 /// determines which runs first.
 List<Migration> getMigrations() {
   return [
-    InitialSchema()
+    InitialSchema(),
+    AccountNetWorth(),
     // Add future migrations here
   ];
 }

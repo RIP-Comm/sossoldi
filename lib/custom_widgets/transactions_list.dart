@@ -16,10 +16,12 @@ class TransactionsList extends StatefulWidget {
   const TransactionsList({
     super.key,
     required this.transactions,
+    this.margin = const EdgeInsets.symmetric(horizontal: 16),
     this.padding,
   });
 
   final List<Transaction> transactions;
+  final EdgeInsetsGeometry? margin;
   final EdgeInsetsGeometry? padding;
 
   @override
@@ -62,6 +64,7 @@ class _TransactionsListState extends State<TransactionsList> with Functions {
   Widget build(BuildContext context) {
     return transactions.isNotEmpty
         ? DefaultContainer(
+            margin: widget.margin,
             child: ListView.separated(
               physics: const NeverScrollableScrollPhysics(),
               padding: widget.padding,
