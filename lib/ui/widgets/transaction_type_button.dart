@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../constants/style.dart';
-import '../model/transaction.dart';
-import '../pages/transactions_page/widgets/accounts_tab.dart';
-import '../providers/categories_provider.dart';
-import '../ui/device.dart';
+import '../../constants/style.dart';
+import '../../model/transaction.dart';
+import '../../pages/transactions_page/widgets/accounts_tab.dart';
+import '../../providers/categories_provider.dart';
+import '../device.dart';
 
 final selectedTransactionTypeProvider =
     StateProvider.autoDispose<TransactionType>((ref) => TransactionType.income);

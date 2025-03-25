@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../custom_widgets/default_container.dart';
+import '../../../ui/widgets/default_container.dart';
 import '../../../model/budget.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/budgets_provider.dart';

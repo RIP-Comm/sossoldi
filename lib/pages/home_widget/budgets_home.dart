@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../constants/constants.dart';
 
 import '../../constants/functions.dart';
-import '../../custom_widgets/budget_circular_indicator.dart';
+import '../../ui/widgets/budget_circular_indicator.dart';
 import '../../model/budget.dart';
 import '../../providers/budgets_provider.dart';
 import '../../ui/device.dart';

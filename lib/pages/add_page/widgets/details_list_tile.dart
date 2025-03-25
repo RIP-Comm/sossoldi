@@ -3,7 +3,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 
 import "../../../constants/style.dart";
 import "../../../providers/theme_provider.dart";
-import "../../../custom_widgets/rounded_icon.dart";
+import "../../../ui/widgets/rounded_icon.dart";
 import "../../../ui/device.dart";
 
 class DetailsListTile extends ConsumerWidget {

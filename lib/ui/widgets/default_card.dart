@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../ui/device.dart';
+import '../device.dart';
 import 'default_container.dart';
 
 class DefaultCard extends StatelessWidget {

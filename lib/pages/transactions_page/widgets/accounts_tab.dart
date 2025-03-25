@@ -3,12 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
 import '../../../constants/functions.dart';
-import '../../../custom_widgets/default_container.dart';
-import '../../../custom_widgets/transaction_type_button.dart';
+import '../../../ui/widgets/default_container.dart';
+import '../../../ui/widgets/transaction_type_button.dart';
 import '../../../model/bank_account.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/transactions_provider.dart';
+import '../../../ui/device.dart';
 import 'account_list_tile.dart';
 import 'accounts_pie_chart.dart';
 
@@ -79,7 +80,7 @@ class _AccountsTabState extends ConsumerState<AccountsTab> with Functions {
     }
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(vertical: 24),
+      padding: const EdgeInsets.symmetric(vertical: Sizes.xl),
       child: DefaultContainer(
         child: Column(
           children: [

@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
-import '../../../custom_widgets/rounded_icon.dart';
+import '../../../ui/widgets/rounded_icon.dart';
 import '../../../model/recurring_transaction.dart';
 import '../../../providers/theme_provider.dart';
 import '../../../ui/device.dart';

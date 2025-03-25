@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
 import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
-import '../../../custom_widgets/rounded_icon.dart';
+import '../../../ui/widgets/rounded_icon.dart';
 import '../../../model/bank_account.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/transactions_provider.dart';
