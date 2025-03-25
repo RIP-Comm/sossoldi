@@ -9,6 +9,7 @@ import '../../constants/style.dart';
 import '../../model/transaction.dart';
 import '../../providers/accounts_provider.dart';
 import '../../providers/transactions_provider.dart';
+import '../../ui/device.dart';
 import "widgets/account_selector.dart";
 import 'widgets/amount_section.dart';
 import "widgets/category_selector.dart";
@@ -285,8 +286,8 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                                 useSafeArea: true,
                                 shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10.0),
-                                    topRight: Radius.circular(10.0),
+                                    topLeft: Radius.circular(Sizes.borderRadius),
+                                    topRight: Radius.circular(Sizes.borderRadius),
                                   ),
                                 ),
                                 builder: (_) => DraggableScrollableSheet(
@@ -315,8 +316,8 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                                 useSafeArea: true,
                                 shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10.0),
-                                    topRight: Radius.circular(10.0),
+                                    topLeft: Radius.circular(Sizes.borderRadius),
+                                    topRight: Radius.circular(Sizes.borderRadius),
                                   ),
                                 ),
                                 builder: (_) => DraggableScrollableSheet(
@@ -409,7 +410,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
               width: double.infinity,
               decoration: BoxDecoration(
                 boxShadow: [defaultShadow],
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(Sizes.borderRadius),
               ),
               child: ElevatedButton(
                 onPressed: _isSaveEnabled ? _createOrUpdateTransaction : null,

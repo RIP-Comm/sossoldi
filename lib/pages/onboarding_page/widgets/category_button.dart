@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../constants/style.dart';
 import '../../../model/budget.dart';
+import '../../../ui/device.dart';
 
 class CategoryButton extends StatelessWidget {
   const CategoryButton(
@@ -23,7 +24,7 @@ class CategoryButton extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border.all(color: categoryColor, width: 2.5),
           color: categoryColor,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(Sizes.borderRadius),
         ),
         padding: const EdgeInsets.only(left: 12),
         child: Row(
@@ -71,7 +72,7 @@ class CategoryButton extends StatelessWidget {
           color: HSLColor.fromColor(categoryColor)
               .withLightness(clampDouble(0.99, 0.0, 0.9))
               .toColor(),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
         ),
         alignment: Alignment.center,
         child: Row(

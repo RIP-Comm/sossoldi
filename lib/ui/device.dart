@@ -136,6 +136,9 @@ class Sizes {
   /// Size: 32
   static const double xxl = 2 * unit;
 
+  /// Large BorderRadius: 16
+  static const double borderRadiusLarge = unit;
+
   /// Default BorderRadius: 8
   static const double borderRadius = 0.5 * unit;
 

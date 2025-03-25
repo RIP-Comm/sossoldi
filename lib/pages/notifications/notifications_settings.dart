@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants/style.dart';
 import '../../providers/settings_provider.dart';
+import '../../ui/device.dart';
 import '../../utils/notifications_service.dart';
 import 'widgets/notification_type_tile.dart';
 
@@ -65,7 +66,7 @@ class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
               ),
               child: Column(
                 children: [
@@ -139,7 +140,7 @@ class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
               ),
               child: Column(
                 children: [

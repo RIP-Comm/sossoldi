@@ -5,6 +5,7 @@ import '../../../constants/constants.dart';
 import '../../../custom_widgets/rounded_icon.dart';
 import '../../../model/recurring_transaction.dart';
 import '../../../providers/theme_provider.dart';
+import '../../../ui/device.dart';
 import 'older_recurring_payments.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/currency_provider.dart';
@@ -47,7 +48,7 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
     return cat != null
         ? Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(Sizes.borderRadius),
               color: Theme.of(context).colorScheme.primaryContainer,
               boxShadow: [defaultShadow],
             ),
@@ -55,7 +56,7 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
               decoration: BoxDecoration(
                 color: categoryColorList[cat.color].withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(Sizes.borderRadius),
               ),
               child: Column(
                 spacing: 16,
@@ -127,8 +128,8 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
                                 context: context,
                                 shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(20.0),
-                                    topRight: Radius.circular(20.0),
+                                    topLeft: Radius.circular(Sizes.borderRadiusLarge),
+                                    topRight: Radius.circular(Sizes.borderRadiusLarge),
                                   ),
                                 ),
                                 elevation: 10,

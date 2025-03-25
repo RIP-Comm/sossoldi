@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../providers/settings_provider.dart';
+import '../../../ui/device.dart';
 
 class NotificationTypeTile extends ConsumerWidget {
   final NotificationReminderType type;
@@ -30,7 +31,7 @@ class NotificationTypeTile extends ConsumerWidget {
                 ? Theme.of(context).colorScheme.secondary
                 : Colors.grey,
           ),
-          borderRadius: BorderRadius.circular(4.0),
+          borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
         ),
         child: Padding(
           padding: const EdgeInsets.all(12.0),

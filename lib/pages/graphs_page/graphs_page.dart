@@ -8,6 +8,7 @@ import '../../custom_widgets/line_chart.dart';
 import '../../model/transaction.dart';
 import '../../providers/currency_provider.dart';
 import '../../providers/statistics_provider.dart';
+import '../../ui/device.dart';
 import 'widgets/categories/categories_card.dart';
 import 'widgets/accounts/accounts_card.dart';
 
@@ -108,7 +109,8 @@ class _GraphsPageState extends ConsumerState<GraphsPage> with Functions {
                               Container(
                                 decoration: BoxDecoration(
                                   color: Theme.of(context).colorScheme.surface,
-                                  borderRadius: BorderRadius.circular(4),
+                                  borderRadius: BorderRadius.circular(
+                                      Sizes.borderRadiusSmall),
                                 ),
                                 padding: const EdgeInsets.all(4.0),
                                 child: Text(

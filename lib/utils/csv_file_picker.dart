@@ -5,6 +5,8 @@ import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
+import '../ui/device.dart';
+
 class CSVFilePicker {
   // Request storage permission based on Android version
   static Future<bool> _requestStoragePermission() async {
@@ -98,7 +100,7 @@ class CSVFilePicker {
           backgroundColor: Colors.white,
           elevation: 8,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(Sizes.borderRadius),
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
@@ -138,7 +140,7 @@ class CSVFilePicker {
           title: const Text('Success'),
           content: Text(message),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(Sizes.borderRadius),
           ),
           actions: [
             TextButton(

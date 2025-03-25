@@ -5,6 +5,7 @@ import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
+import '../../../ui/device.dart';
 import '../../../utils/formatted_date_range.dart';
 import '../../graphs_page/widgets/categories/categories_bar_chart.dart';
 
@@ -61,7 +62,7 @@ class MonthSelector extends ConsumerWidget with Functions {
         height: currentHeight,
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.tertiary,
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: BorderRadius.circular(Sizes.borderRadius * 10)
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

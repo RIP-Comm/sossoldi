@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../ui/device.dart';
 import 'manage_budget_page.dart';
 import 'widget/budget_card.dart';
 import 'widget/recurring_payments_list.dart';
@@ -43,8 +44,8 @@ class _PlanningPageState extends State<PlanningPage> {
                     isScrollControlled: true,
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20.0),
-                        topRight: Radius.circular(20.0),
+                        topLeft: Radius.circular(Sizes.borderRadiusLarge),
+                        topRight: Radius.circular(Sizes.borderRadiusLarge),
                       ),
                     ),
                     elevation: 10,

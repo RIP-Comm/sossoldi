@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
 import '../../../model/budget.dart';
 import '../../../model/category_transaction.dart';
 import '../../../utils/decimal_text_input_formatter.dart';
+import '../../../ui/device.dart';
 
 class BudgetCategorySelector extends ConsumerStatefulWidget {
   final List<CategoryTransaction> categories;
@@ -67,14 +67,14 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
               height: 55,
               width: double.infinity,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(Sizes.borderRadius),
                 border: Border.all(width: 1, color: Colors.grey),
               ),
               child: Container(
                 padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.primaryContainer,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(Sizes.borderRadius),
                 ),
                 child: DropdownButton<CategoryTransaction>(
                   value: selectedCategory,
@@ -89,11 +89,7 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
                     return DropdownMenuItem<CategoryTransaction>(
                         value: category,
                         child: Row(
-                          children: [
-                            Icon(icon),
-                            const SizedBox(width: 15),
-                            Text(category.name)
-                          ],
+                          children: [Icon(icon), const SizedBox(width: 15), Text(category.name)],
                         ));
                   }).toList(),
                   onChanged: (CategoryTransaction? newValue) {
@@ -112,7 +108,7 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
             height: 55,
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primaryContainer,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(Sizes.borderRadius),
               border: Border.all(width: 1, color: Colors.grey),
             ),
             child: Padding(
@@ -122,8 +118,7 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
                 inputFormatters: [
                   DecimalTextInputFormatter(decimalDigits: 2),
                 ],
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 onChanged: (_) {
                   setState(() {
                     _modifyBudget();

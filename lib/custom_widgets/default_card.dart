@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../ui/device.dart';
 import 'default_container.dart';
 
 class DefaultCard extends StatelessWidget {
@@ -14,15 +15,15 @@ class DefaultCard extends StatelessWidget {
       padding: const EdgeInsets.all(0),
       child: Material(
         color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(Sizes.borderRadius),
         child: InkWell(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(Sizes.borderRadius),
           onTap: onTap,
           child: Ink(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(Sizes.borderRadius),
             ),
             child: child,
           ),

@@ -4,6 +4,7 @@ import '../../../providers/accounts_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../custom_widgets/transactions_list.dart';
 import '../../model/transaction.dart';
+import '../../ui/device.dart';
 
 class SearchPage extends ConsumerStatefulWidget {
   const SearchPage({super.key});
@@ -102,7 +103,7 @@ class _SearchPage extends ConsumerState<SearchPage> {
                               backgroundColor: Colors.white,
                               selectedColor: Colors.blue.shade700,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50),
+                                borderRadius: BorderRadius.circular(Sizes.borderRadius * 10),
                                 side: BorderSide(
                                   color: Colors.blue.shade700,
                                   width: 2.0,
@@ -132,7 +133,7 @@ class _SearchPage extends ConsumerState<SearchPage> {
                               backgroundColor: Colors.white,
                               selectedColor: Colors.blue.shade700,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50),
+                                borderRadius: BorderRadius.circular(Sizes.borderRadius * 10),
                                 side: BorderSide(
                                   color: Colors.blue.shade700,
                                   width: 2.0,
@@ -164,7 +165,7 @@ class _SearchPage extends ConsumerState<SearchPage> {
                               backgroundColor: Colors.white,
                               selectedColor: Colors.blue.shade700,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50),
+                                borderRadius: BorderRadius.circular(Sizes.borderRadius * 10),
                                 side: BorderSide(
                                   color: Colors.blue.shade700,
                                   width: 2.0,
@@ -220,7 +221,8 @@ class _SearchPage extends ConsumerState<SearchPage> {
                                         selectedColor: Colors.blue.shade700,
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(50),
+                                              BorderRadius.circular(
+                                              Sizes.borderRadius * 10),
                                           side: BorderSide(
                                             color: Colors.blue.shade700,
                                             width: 2.0,

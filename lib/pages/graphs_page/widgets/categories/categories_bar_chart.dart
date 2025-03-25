@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import '../../../../constants/style.dart';
 import '../../../../providers/categories_provider.dart';
 import '../../../../providers/transactions_provider.dart';
+import '../../../../ui/device.dart';
 
 final highlightedMonthProvider =
     StateProvider<int>((ref) => DateTime.now().month - 1);
@@ -86,8 +87,8 @@ class CategoriesBarChart extends ConsumerWidget {
     int highlightedMonth,
   ) {
     const rodBorderRadius = BorderRadius.only(
-      topLeft: Radius.circular(5),
-      topRight: Radius.circular(5),
+      topLeft: Radius.circular(Sizes.borderRadiusSmall),
+      topRight: Radius.circular(Sizes.borderRadiusSmall),
     );
 
     final maxAmount =

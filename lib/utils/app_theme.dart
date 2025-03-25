@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/style.dart';
+import '../ui/device.dart';
 
 class AppTheme {
   static final lightTheme = ThemeData(
@@ -34,7 +35,7 @@ class AppTheme {
     ),
     tabBarTheme: TabBarTheme(
       indicator: BoxDecoration(
-        borderRadius: BorderRadius.circular(50),
+        shape: BoxShape.circle,
         color: blue5,
       ),
       dividerHeight: 0,
@@ -57,7 +58,7 @@ class AppTheme {
         iconColor: const WidgetStatePropertyAll(blue5),
         padding: const WidgetStatePropertyAll(EdgeInsets.all(12)),
         shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(Sizes.borderRadius)),
         ),
         textStyle: const WidgetStatePropertyAll(
           TextStyle(
@@ -80,7 +81,7 @@ class AppTheme {
         elevation: WidgetStatePropertyAll(0),
         padding: WidgetStatePropertyAll(EdgeInsets.all(16)),
         shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(Sizes.borderRadius)),
         ),
         textStyle: const WidgetStatePropertyAll(
           TextStyle(
@@ -96,7 +97,7 @@ class AppTheme {
         padding: WidgetStatePropertyAll(EdgeInsets.all(4)),
         iconSize: WidgetStatePropertyAll(28),
         shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(Sizes.borderRadius)),
         ),
       ),
     ),
@@ -246,7 +247,7 @@ class AppTheme {
     ),
     tabBarTheme: TabBarTheme(
       indicator: BoxDecoration(
-        borderRadius: BorderRadius.circular(50),
+        shape: BoxShape.circle,
         color: darkBlue5,
       ),
       dividerHeight: 0,
@@ -269,7 +270,7 @@ class AppTheme {
         iconColor: const WidgetStatePropertyAll(white),
         padding: const WidgetStatePropertyAll(EdgeInsets.all(12)),
         shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(Sizes.borderRadius)),
         ),
         textStyle: const WidgetStatePropertyAll(
           TextStyle(
@@ -292,7 +293,7 @@ class AppTheme {
         elevation: WidgetStatePropertyAll(0),
         padding: WidgetStatePropertyAll(EdgeInsets.all(16)),
         shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(Sizes.borderRadius)),
         ),
         textStyle: const WidgetStatePropertyAll(
           TextStyle(
@@ -308,7 +309,7 @@ class AppTheme {
         padding: WidgetStatePropertyAll(EdgeInsets.all(4)),
         iconSize: WidgetStatePropertyAll(28),
         shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(Sizes.borderRadius)),
         ),
       ),
     ),

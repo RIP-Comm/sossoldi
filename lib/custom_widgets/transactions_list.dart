@@ -8,6 +8,7 @@ import '../constants/style.dart';
 import '../model/transaction.dart';
 import '../providers/currency_provider.dart';
 import '../providers/transactions_provider.dart';
+import '../ui/device.dart';
 import '../utils/date_helper.dart';
 import 'default_container.dart';
 import 'rounded_icon.dart';
@@ -89,10 +90,10 @@ class _TransactionsListState extends State<TransactionsList> with Functions {
                     Container(
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.primaryContainer,
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(Sizes.borderRadius),
                       ),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(Sizes.borderRadius),
                         child: ListView.separated(
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
