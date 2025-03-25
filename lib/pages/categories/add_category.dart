@@ -5,6 +5,7 @@ import '../../constants/functions.dart';
 import '../../constants/style.dart';
 import '../../model/category_transaction.dart';
 import '../../providers/categories_provider.dart';
+import '../../ui/device.dart';
 
 class AddCategory extends ConsumerStatefulWidget {
   final bool hideIncome;
@@ -70,7 +71,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                     padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,7 +103,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                     padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,7 +157,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                     ),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
                     ),
                     child: Column(
                       children: [
@@ -176,8 +177,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                         Material(
                           color: Colors.transparent,
                           child: InkWell(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(90)),
+                            borderRadius: BorderRadius.circular(Sizes.borderRadius * 10),
                             onTap: () =>
                                 setState(() => showCategoryIcons = true),
                             child: Ink(
@@ -256,9 +256,8 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                                               : Theme.of(context)
                                                   .colorScheme
                                                   .surface,
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(4)),
-                                        ),
+                                          borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall)
+                                          ),
                                         child: Icon(
                                           categoryIconData,
                                           color: iconList[categoryIcon] ==
@@ -416,7 +415,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
               width: double.infinity,
               decoration: BoxDecoration(
                 boxShadow: [defaultShadow],
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(Sizes.borderRadius),
               ),
               child: ElevatedButton(
                 onPressed: () async {

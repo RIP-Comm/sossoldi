@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
 import '../../../providers/transactions_provider.dart';
+import '../../../ui/device.dart';
 import '../../add_page/widgets/account_selector.dart';
 import '../../add_page/widgets/amount_widget.dart';
 import '../../add_page/widgets/details_list_tile.dart';
@@ -116,8 +117,8 @@ class _EditRecurringTransactionState
                             useSafeArea: true,
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10.0),
-                                topRight: Radius.circular(10.0),
+                                topLeft: Radius.circular(Sizes.borderRadius),
+                                topRight: Radius.circular(Sizes.borderRadius),
                               ),
                             ),
                             builder: (_) => DraggableScrollableSheet(
@@ -169,7 +170,7 @@ class _EditRecurringTransactionState
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.secondary,
                   boxShadow: [defaultShadow],
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(Sizes.borderRadius),
                 ),
                 child: TextButton(
                   onPressed: () {
@@ -187,7 +188,7 @@ class _EditRecurringTransactionState
                   style: TextButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.secondary,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
+                        borderRadius: BorderRadius.circular(Sizes.borderRadius)),
                   ),
                   child: Text(
                     "UPDATE TRANSACTION",

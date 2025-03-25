@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../constants/style.dart';
+import '../ui/device.dart';
 
 class DefaultContainer extends StatelessWidget {
   const DefaultContainer({
@@ -21,7 +22,7 @@ class DefaultContainer extends StatelessWidget {
       margin: margin,
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(Sizes.borderRadius),
         boxShadow: [defaultShadow],
       ),
       child: child,

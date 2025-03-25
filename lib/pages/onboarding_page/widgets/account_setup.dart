@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants/constants.dart';
 import '../../../providers/accounts_provider.dart';
+import '../../../ui/device.dart';
 import '/constants/style.dart';
 
 class AccountSetup extends ConsumerStatefulWidget {
@@ -102,7 +103,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                           offset: const Offset(2, 2),
                         ),
                       ],
-                      borderRadius: const BorderRadius.all(Radius.circular(20)),
+                      borderRadius: BorderRadius.circular(Sizes.borderRadiusLarge)
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,

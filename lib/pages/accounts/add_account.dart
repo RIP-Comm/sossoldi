@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +6,7 @@ import '../../constants/constants.dart';
 import '../../constants/functions.dart';
 import '../../constants/style.dart';
 import '../../providers/currency_provider.dart';
+import '../../ui/device.dart';
 import 'widgets/confirm_account_deletion_dialog.dart';
 
 class AddAccount extends ConsumerStatefulWidget {
@@ -75,7 +75,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                     padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,7 +101,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                     ),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
                     ),
                     child: Column(
                       children: [
@@ -116,8 +116,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                         Material(
                           color: Colors.transparent,
                           child: InkWell(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(90)),
+                            borderRadius: BorderRadius.circular(Sizes.borderRadius * 10),
                             onTap: () =>
                                 setState(() => showAccountIcons = true),
                             child: Ink(
@@ -275,7 +274,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                     padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -311,7 +310,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -421,7 +420,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
               width: double.infinity,
               decoration: BoxDecoration(
                 boxShadow: [defaultShadow],
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(Sizes.borderRadius),
               ),
               child: ElevatedButton(
                 onPressed: () async {

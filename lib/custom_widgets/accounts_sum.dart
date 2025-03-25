@@ -7,6 +7,7 @@ import '../constants/functions.dart';
 import '../constants/style.dart';
 import '../providers/accounts_provider.dart';
 import '../providers/currency_provider.dart';
+import '../ui/device.dart';
 import 'rounded_icon.dart';
 
 /// This class shows account summaries in the dashboard
@@ -25,18 +26,18 @@ class AccountsSum extends ConsumerWidget with Functions {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primaryContainer,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(Sizes.borderRadius),
         boxShadow: [defaultShadow],
       ),
       child: Container(
         decoration: BoxDecoration(
           color: accountColorListTheme[account.color].withValues(alpha: 0.2),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(Sizes.borderRadius),
         ),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(Sizes.borderRadius),
             onTap: () async {
               await ref
                   .read(accountsProvider.notifier)

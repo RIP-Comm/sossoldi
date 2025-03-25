@@ -10,6 +10,7 @@ import '../../providers/accounts_provider.dart';
 import '../../model/transaction.dart';
 import '../../providers/currency_provider.dart';
 import '../../providers/transactions_provider.dart';
+import '../../ui/device.dart';
 import '../../utils/snack_bars/transactions_snack_bars.dart';
 
 class AccountPage extends ConsumerStatefulWidget {
@@ -139,7 +140,8 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                                       iconColor: Colors.white,
                                       padding: EdgeInsets.zero,
                                       shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8),
+                                        borderRadius: BorderRadius.circular(
+                                            Sizes.borderRadius),
                                       ),
                                       backgroundColor: Colors.green),
                                   onPressed: () async {
@@ -164,7 +166,7 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                                       iconColor: Colors.red,
                                       side: const BorderSide(color: Colors.red),
                                       shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8),
+                                        borderRadius: BorderRadius.circular(Sizes.borderRadius),
                                       ),
                                       foregroundColor: Colors.red,
                                       backgroundColor: Colors.transparent),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../utils/snack_bars/snack_bar.dart';
+import '../ui/device.dart';
 import '../utils/snack_bars/transactions_snack_bars.dart';
 import 'home_widget/budgets_home.dart';
 import '../constants/functions.dart';
@@ -221,8 +221,8 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                   .colorScheme
                   .primaryContainer, //da modificare in darkMode
               borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(16),
-                topRight: Radius.circular(16),
+                topLeft: Radius.circular(Sizes.borderRadiusLarge),
+                topRight: Radius.circular(Sizes.borderRadiusLarge),
               ),
             ),
             child: Column(
@@ -254,7 +254,8 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                           return Container(
                             constraints: const BoxConstraints(maxWidth: 140),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(
+                                  Sizes.borderRadius),
                               boxShadow: [defaultShadow],
                             ),
                             child: ElevatedButton.icon(

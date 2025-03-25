@@ -5,6 +5,7 @@ import '../../../constants/style.dart';
 import '../../../model/budget.dart';
 import '../../../model/category_transaction.dart';
 import '../../../providers/budgets_provider.dart';
+import '../../../ui/device.dart';
 
 class AddBudget extends ConsumerStatefulWidget {
   final CategoryTransaction category;
@@ -82,7 +83,7 @@ class _AddBudgetState extends ConsumerState<AddBudget> with Functions {
           style: ElevatedButton.styleFrom(
             backgroundColor: blue5,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(Sizes.borderRadius),
             ),
           ),
           child: Text(
