@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../ui/device.dart';
 import '../../categories/add_category.dart';
 import '/constants/constants.dart';
 import '/constants/style.dart';
@@ -37,7 +38,7 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
       backgroundColor: blue7,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(Sizes.lg),
           child: Column(
             children: [
               Text("STEP 1 OF 2",
@@ -167,7 +168,7 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: blue5,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: BorderRadius.circular(Sizes.borderRadius),
                                 ),
                               ),
                               child: Text('NEXT STEP',

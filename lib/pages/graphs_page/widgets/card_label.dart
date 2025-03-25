@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../ui/device.dart';
+
 class CardLabel extends StatelessWidget {
   const CardLabel({super.key, required this.label});
 
@@ -10,7 +12,7 @@ class CardLabel extends StatelessWidget {
     return Align(
       alignment: Alignment.centerLeft,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        padding: const EdgeInsets.symmetric(horizontal: Sizes.lg, vertical: Sizes.sm),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

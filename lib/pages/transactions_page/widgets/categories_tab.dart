@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../constants/functions.dart';
-import '../../../custom_widgets/default_container.dart';
-import '../../../custom_widgets/transaction_type_button.dart';
+import '../../../ui/widgets/default_container.dart';
+import '../../../ui/widgets/transaction_type_button.dart';
 import '../../../model/category_transaction.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/categories_provider.dart';
 import '../../../providers/transactions_provider.dart';
+import '../../../ui/device.dart';
 import 'categories_pie_chart.dart';
 import 'category_list_tile.dart';
 
@@ -20,7 +20,7 @@ class CategoriesTab extends ConsumerStatefulWidget {
   ConsumerState<CategoriesTab> createState() => _CategoriesTabState();
 }
 
-class _CategoriesTabState extends ConsumerState<CategoriesTab> with Functions {
+class _CategoriesTabState extends ConsumerState<CategoriesTab> {
   @override
   Widget build(BuildContext context) {
     final categories = ref.watch(categoriesProvider);
@@ -69,7 +69,7 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> with Functions {
     }
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(vertical: 24),
+      padding: const EdgeInsets.symmetric(vertical: Sizes.xl),
       child: DefaultContainer(
         child: Column(
           children: [

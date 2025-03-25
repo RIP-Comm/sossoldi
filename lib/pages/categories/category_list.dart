@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
-import '../../../constants/functions.dart';
 import '../../../model/category_transaction.dart';
 import '../../../providers/categories_provider.dart';
-import '../../custom_widgets/default_card.dart';
-import '../../custom_widgets/rounded_icon.dart';
+import '../../ui/widgets/default_card.dart';
+import '../../ui/widgets/rounded_icon.dart';
+import '../../ui/device.dart';
 
 class CategoryList extends ConsumerStatefulWidget {
   const CategoryList({super.key});
@@ -15,7 +15,7 @@ class CategoryList extends ConsumerStatefulWidget {
   ConsumerState<CategoryList> createState() => _CategoryListState();
 }
 
-class _CategoryListState extends ConsumerState<CategoryList> with Functions {
+class _CategoryListState extends ConsumerState<CategoryList> {
   @override
   Widget build(BuildContext context) {
     final categorysList = ref.watch(categoriesProvider);
@@ -43,7 +43,7 @@ class _CategoryListState extends ConsumerState<CategoryList> with Functions {
           children: [
             Padding(
               padding:
-                  const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+                  const EdgeInsets.symmetric(vertical: Sizes.xl, horizontal: Sizes.lg),
               child: Row(
                 children: [
                   Container(
@@ -51,7 +51,7 @@ class _CategoryListState extends ConsumerState<CategoryList> with Functions {
                       shape: BoxShape.circle,
                       color: Theme.of(context).colorScheme.primary,
                     ),
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(Sizes.sm),
                     child: Icon(
                       Icons.list_alt,
                       size: 24.0,

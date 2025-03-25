@@ -3,14 +3,14 @@ import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
-import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
-import '../../../custom_widgets/rounded_icon.dart';
+import '../../../ui/widgets/rounded_icon.dart';
 import '../../../model/bank_account.dart';
 import '../../../providers/currency_provider.dart';
+import '../../../ui/device.dart';
 import 'accounts_tab.dart';
 
-class AccountsPieChart extends ConsumerWidget with Functions {
+class AccountsPieChart extends ConsumerWidget {
   const AccountsPieChart({
     required this.accounts,
     required this.amounts,
@@ -62,7 +62,7 @@ class AccountsPieChart extends ConsumerWidget with Functions {
                           Icons.swap_horiz_rounded,
                       backgroundColor: accountColorList[
                           accounts[selectedAccountIndex].color],
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(Sizes.sm),
                     )
                   : const SizedBox(),
               Text(

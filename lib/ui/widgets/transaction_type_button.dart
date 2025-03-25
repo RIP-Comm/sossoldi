@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../constants/style.dart';
-import '../model/transaction.dart';
-import '../pages/transactions_page/widgets/accounts_tab.dart';
-import '../providers/categories_provider.dart';
+import '../../constants/style.dart';
+import '../../model/transaction.dart';
+import '../../pages/transactions_page/widgets/accounts_tab.dart';
+import '../../providers/categories_provider.dart';
+import '../device.dart';
 
 final selectedTransactionTypeProvider = StateProvider.autoDispose<TransactionType>((ref) => TransactionType.income);
 
@@ -26,9 +27,7 @@ class TransactionTypeButton extends ConsumerWidget {
       height: 28,
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primaryContainer,
-        borderRadius: BorderRadius.all(
-          Radius.circular(5.0),
-        ),
+        borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall)
       ),
       child: Stack(
         children: [
@@ -42,11 +41,9 @@ class TransactionTypeButton extends ConsumerWidget {
             child: Container(
               width: width,
               height: 28,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: blue5,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(5.0),
-                ),
+                borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall)
               ),
             ),
           ),

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
 import '../../../model/budget.dart';
 import '../../../model/category_transaction.dart';
+import '../../../ui/device.dart';
 
 class BudgetCategorySelector extends ConsumerStatefulWidget {
   final List<CategoryTransaction> categories;
@@ -53,7 +54,7 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(Sizes.lg),
       color: Theme.of(context).colorScheme.surface,
       child: Row(
         children: [
@@ -62,14 +63,14 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
               height: 55,
               width: double.infinity,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(Sizes.borderRadius),
                 border: Border.all(width: 1, color: Colors.grey),
               ),
               child: Container(
-                padding: const EdgeInsets.all(5),
+                padding: const EdgeInsets.all(Sizes.xxs),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.primaryContainer,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(Sizes.borderRadius),
                 ),
                 child: DropdownButton<CategoryTransaction>(
                   value: selectedCategory,
@@ -107,11 +108,11 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
             height: 55,
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primaryContainer,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(Sizes.borderRadius),
               border: Border.all(width: 1, color: Colors.grey),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(Sizes.sm),
               child: TextField(
                 controller: _controller,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],

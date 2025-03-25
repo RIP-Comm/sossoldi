@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
 import '../../../constants/constants.dart';
-import '../../../constants/functions.dart';
 import "../../../constants/style.dart";
-import '../../../custom_widgets/rounded_icon.dart';
+import '../../../ui/extensions.dart';
+import '../../../ui/widgets/rounded_icon.dart';
 import '../../../model/transaction.dart';
-// import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../pages/add_page/widgets/amount_widget.dart';
+import '../../../ui/device.dart';
 import 'account_selector.dart';
 import 'type_tab.dart';
 
@@ -24,7 +24,7 @@ class AmountSection extends ConsumerStatefulWidget {
   ConsumerState<AmountSection> createState() => _AmountSectionState();
 }
 
-class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
+class _AmountSectionState extends ConsumerState<AmountSection> {
   static const List<String> _titleList = ['Income', 'Expense', 'Transfer'];
 
   List<bool> _typeToggleState = [false, true, false];
@@ -56,9 +56,9 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
             height: 30,
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primaryContainer,
-              borderRadius: const BorderRadius.all(Radius.circular(4)),
+              borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall)
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 2),
+            padding: const EdgeInsets.symmetric(horizontal: Sizes.xxs * 0.5),
             child: ToggleButtons(
               direction: Axis.horizontal,
               onPressed: (int index) {
@@ -74,7 +74,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                 ref.invalidate(bankAccountTransferProvider);
                 setState(() => _typeToggleState = newSelection);
               },
-              borderRadius: const BorderRadius.all(Radius.circular(4)),
+              borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
               renderBorder: false,
               selectedColor: Colors.transparent,
               fillColor: Colors.transparent,
@@ -90,8 +90,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                 (index) => TypeTab(
                   _typeToggleState[index],
                   _titleList[index],
-                  typeToColor(
-                    trsncTypeList[index],
+                  trsncTypeList[index].toColor(
                     brightness: Theme.of(context).brightness,
                   ),
                 ),
@@ -100,7 +99,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
           ),
           if (selectedType == TransactionType.transfer)
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              padding: const EdgeInsets.fromLTRB(Sizes.lg, Sizes.sm, Sizes.lg, 0),
               child: SizedBox(
                 height: 64,
                 child: Row(
@@ -134,8 +133,8 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                                   useSafeArea: true,
                                   shape: const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(10.0),
-                                      topRight: Radius.circular(10.0),
+                                      topLeft: Radius.circular(Sizes.borderRadius),
+                                      topRight: Radius.circular(Sizes.borderRadius),
                                     ),
                                   ),
                                   builder: (_) => DraggableScrollableSheet(
@@ -156,10 +155,10 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                                   color: Theme.of(context)
                                       .colorScheme
                                       .primaryContainer,
-                                  borderRadius: BorderRadius.circular(4),
+                                  borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
                                   boxShadow: [defaultShadow],
                                 ),
-                                padding: const EdgeInsets.all(4),
+                                padding: const EdgeInsets.all(Sizes.xxs),
                                 child: Row(
                                   children: [
                                     RoundedIcon(
@@ -180,7 +179,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                                               .color]
                                           : null,
                                       size: 16,
-                                      padding: EdgeInsets.all(4.0),
+                                      padding: EdgeInsets.all(Sizes.xs),
                                     ),
                                     const Spacer(),
                                     Text(
@@ -217,7 +216,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                               child: VerticalDivider(width: 1, color: grey2)),
                           Padding(
                             padding: EdgeInsets.symmetric(
-                                vertical: 2, horizontal: 20),
+                                vertical: Sizes.xxs * 0.5, horizontal: Sizes.xl),
                             child: Icon(
                               Icons.change_circle,
                               size: 32,
@@ -259,8 +258,8 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                                   useSafeArea: true,
                                   shape: const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(10.0),
-                                      topRight: Radius.circular(10.0),
+                                      topLeft: Radius.circular(Sizes.borderRadius),
+                                      topRight: Radius.circular(Sizes.borderRadius),
                                     ),
                                   ),
                                   builder: (_) => DraggableScrollableSheet(
@@ -282,10 +281,10 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                                   color: Theme.of(context)
                                       .colorScheme
                                       .primaryContainer,
-                                  borderRadius: BorderRadius.circular(4),
+                                  borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
                                   boxShadow: [defaultShadow],
                                 ),
-                                padding: const EdgeInsets.all(4),
+                                padding: const EdgeInsets.all(Sizes.xs),
                                 child: Row(
                                   children: [
                                     RoundedIcon(
@@ -301,7 +300,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> with Functions {
                                               .color]
                                           : null,
                                       size: 16,
-                                      padding: EdgeInsets.all(4.0),
+                                      padding: EdgeInsets.all(Sizes.xs),
                                     ),
                                     const Spacer(),
                                     Text(

@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../../../model/recurring_transaction.dart';
 import '../../../providers/currency_provider.dart';
+import '../../../ui/device.dart';
 
 class OlderRecurringPayments extends ConsumerStatefulWidget {
   final RecurringTransaction transaction;
@@ -88,7 +89,7 @@ class _OlderRecurringPaymentsState extends ConsumerState<OlderRecurringPayments>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    padding: const EdgeInsets.symmetric(vertical: Sizes.sm),
                     child: Text(
                       year.toString(),
                       style: const TextStyle(
@@ -99,7 +100,7 @@ class _OlderRecurringPaymentsState extends ConsumerState<OlderRecurringPayments>
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: transactionsOfYear.map((transaction) {
                       return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                        padding: const EdgeInsets.symmetric(vertical: Sizes.sm, horizontal: Sizes.lg),
                         child: Row(
                           children: [
                             Text(

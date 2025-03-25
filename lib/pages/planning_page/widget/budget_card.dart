@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../custom_widgets/default_container.dart';
+import '../../../ui/widgets/default_container.dart';
 import '../../../model/budget.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/budgets_provider.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
+import '../../../ui/assets.dart';
+import '../../../ui/device.dart';
 import '../../graphs_page/widgets/linear_progress_bar.dart';
 import '../manage_budget_page.dart';
 import 'budget_pie_chart.dart';
@@ -102,7 +104,7 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                         textAlign: TextAlign.center,
                       ),
                       Image.asset(
-                        'assets/wallet.png',
+                        SossoldiAssets.wallet,
                         width: 240,
                         height: 240,
                       ),
@@ -123,8 +125,8 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                             isScrollControlled: true,
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20.0),
-                                topRight: Radius.circular(20.0),
+                                topLeft: Radius.circular(Sizes.borderRadiusLarge),
+                                topRight: Radius.circular(Sizes.borderRadiusLarge),
                               ),
                             ),
                             elevation: 10,

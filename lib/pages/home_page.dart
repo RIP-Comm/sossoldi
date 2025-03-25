@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../utils/snack_bars/snack_bar.dart';
+import '../ui/device.dart';
+import '../ui/extensions.dart';
 import '../utils/snack_bars/transactions_snack_bars.dart';
 import 'home_widget/budgets_home.dart';
-import '../constants/functions.dart';
 import '../constants/style.dart';
-import '../custom_widgets/accounts_sum.dart';
-import '../custom_widgets/line_chart.dart';
-import '../custom_widgets/rounded_icon.dart';
-import '../custom_widgets/transactions_list.dart';
+import '../ui/widgets/accounts_sum.dart';
+import '../ui/widgets/line_chart.dart';
+import '../ui/widgets/rounded_icon.dart';
+import '../ui/widgets/transactions_list.dart';
 import '../model/bank_account.dart';
 import '../providers/accounts_provider.dart';
 import '../providers/currency_provider.dart';
@@ -24,7 +24,7 @@ class HomePage extends ConsumerStatefulWidget {
   ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends ConsumerState<HomePage> with Functions {
+class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     final accountList = ref.watch(accountsProvider);
@@ -72,7 +72,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                                 text: TextSpan(
                                   children: [
                                     TextSpan(
-                                      text: numToCurrency(total),
+                                      text: total.toCurrency(),
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineLarge
@@ -109,7 +109,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                                 text: TextSpan(
                                   children: [
                                     TextSpan(
-                                      text: numToCurrency(income),
+                                      text: income.toCurrency(),
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium
@@ -140,7 +140,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                                 text: TextSpan(
                                   children: [
                                     TextSpan(
-                                      text: numToCurrency(expense),
+                                      text: expense.toCurrency(),
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium
@@ -221,15 +221,15 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                   .colorScheme
                   .primaryContainer, //da modificare in darkMode
               borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(16),
-                topRight: Radius.circular(16),
+                topLeft: Radius.circular(Sizes.borderRadiusLarge),
+                topRight: Radius.circular(Sizes.borderRadiusLarge),
               ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+                  padding: const EdgeInsets.fromLTRB(Sizes.lg, Sizes.xl, Sizes.lg, Sizes.sm),
                   child: Text(
                     "Your accounts",
                     style: Theme.of(context).textTheme.titleLarge,
@@ -242,8 +242,8 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                       itemCount: accounts.length + 1,
                       shrinkWrap: true,
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 4,
+                        horizontal: Sizes.lg,
+                        vertical: Sizes.xs,
                       ),
                       physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
@@ -254,7 +254,8 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                           return Container(
                             constraints: const BoxConstraints(maxWidth: 140),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(
+                                  Sizes.borderRadius),
                               boxShadow: [defaultShadow],
                             ),
                             child: ElevatedButton.icon(
@@ -262,12 +263,12 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                                 backgroundColor:
                                     Theme.of(context).colorScheme.surface,
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 8),
+                                    horizontal: Sizes.md, vertical: Sizes.sm),
                               ),
                               icon: RoundedIcon(
                                 icon: Icons.add_rounded,
                                 backgroundColor: blue5,
-                                padding: EdgeInsets.all(5.0),
+                                padding: EdgeInsets.all(Sizes.xs),
                               ),
                               label: Text(
                                 "New Account",
@@ -301,7 +302,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 32, 16, 8),
+                    padding: const EdgeInsets.fromLTRB(Sizes.lg, Sizes.xxl, Sizes.lg, Sizes.sm),
                     child: Text(
                       "Last transactions",
                       style: Theme.of(context).textTheme.titleLarge,

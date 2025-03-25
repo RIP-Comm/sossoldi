@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import '../constants/functions.dart';
-import '../providers/currency_provider.dart';
+import '../../providers/currency_provider.dart';
+import '../extensions.dart';
 
 /// This class shows account summaries in dashboard
-class BudgetCircularIndicator extends ConsumerWidget with Functions {
+class BudgetCircularIndicator extends ConsumerWidget {
   final String title;
   final num amount;
   final double perc;
@@ -38,7 +38,7 @@ class BudgetCircularIndicator extends ConsumerWidget with Functions {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: numToCurrency(amount),
+                      text: amount.toCurrency(),
                       style: Theme.of(context)
                           .textTheme
                           .titleMedium!
