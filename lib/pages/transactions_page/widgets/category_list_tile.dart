@@ -9,6 +9,7 @@ import '../../../model/category_transaction.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/categories_provider.dart';
 import '../../../providers/currency_provider.dart';
+import '../../../ui/device.dart';
 
 class CategoryListTile extends ConsumerWidget {
   const CategoryListTile({
@@ -44,7 +45,7 @@ class CategoryListTile extends ConsumerWidget {
           },
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
               color: categoryColorList[category.color].withAlpha(90),
             ),
             padding: const EdgeInsets.symmetric(

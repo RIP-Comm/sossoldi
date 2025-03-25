@@ -6,6 +6,7 @@ import '../../../constants/style.dart';
 import '../../../custom_widgets/rounded_icon.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/currency_provider.dart';
+import '../../../ui/device.dart';
 import 'accounts_tab.dart';
 
 class AccountListTile extends ConsumerWidget {
@@ -47,7 +48,7 @@ class AccountListTile extends ConsumerWidget {
           },
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
               color: color.withAlpha(90),
             ),
             padding: const EdgeInsets.symmetric(

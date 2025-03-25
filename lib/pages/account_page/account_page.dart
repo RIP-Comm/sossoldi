@@ -11,6 +11,7 @@ import '../../model/transaction.dart';
 import '../../providers/currency_provider.dart';
 import '../../providers/transactions_provider.dart';
 import '../../utils/decimal_text_input_formatter.dart';
+import '../../ui/device.dart';
 import '../../utils/snack_bars/transactions_snack_bars.dart';
 
 class AccountPage extends ConsumerStatefulWidget {
@@ -35,15 +36,12 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
   @override
   Widget build(BuildContext context) {
     final account = ref.read(selectedAccountProvider);
-    final accountTransactions =
-        ref.watch(selectedAccountCurrentMonthDailyBalanceProvider);
+    final accountTransactions = ref.watch(selectedAccountCurrentMonthDailyBalanceProvider);
     final transactions = ref.watch(selectedAccountLastTransactions);
     final currencyState = ref.watch(currencyStateNotifier);
 
-    ref.listen(
-        duplicatedTransactoinProvider,
-        (prev, curr) => showDuplicatedTransactionSnackBar(context,
-            transaction: curr, ref: ref));
+    ref.listen(duplicatedTransactoinProvider,
+        (prev, curr) => showDuplicatedTransactionSnackBar(context, transaction: curr, ref: ref));
 
     return Scaffold(
       appBar: AppBar(
@@ -117,9 +115,7 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                                   child: Center(
                                     child: Text(
                                       currencyState.selectedCurrency.symbol,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleLarge,
+                                      style: Theme.of(context).textTheme.titleLarge,
                                     ),
                                   ),
                                 )),
@@ -140,17 +136,14 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                                       iconColor: Colors.white,
                                       padding: EdgeInsets.zero,
                                       shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8),
+                                        borderRadius: BorderRadius.circular(Sizes.borderRadius),
                                       ),
                                       backgroundColor: Colors.green),
                                   onPressed: () async {
                                     if (account != null) {
-                                      await ref
-                                          .read(accountsProvider.notifier)
-                                          .reconcileAccount(
-                                              newBalance: currencyToNum(
-                                                  _newBalanceController.text),
-                                              account: account);
+                                      await ref.read(accountsProvider.notifier).reconcileAccount(
+                                          newBalance: currencyToNum(_newBalanceController.text),
+                                          account: account);
                                       if (context.mounted) {
                                         Navigator.of(context).pop();
                                       }
@@ -166,12 +159,11 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                                       iconColor: Colors.red,
                                       side: const BorderSide(color: Colors.red),
                                       shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8),
+                                        borderRadius: BorderRadius.circular(Sizes.borderRadius),
                                       ),
                                       foregroundColor: Colors.red,
                                       backgroundColor: Colors.transparent),
-                                  onPressed: () =>
-                                      setState(() => isRecoinciling = false),
+                                  onPressed: () => setState(() => isRecoinciling = false),
                                   label: const Text(
                                     "Cancel",
                                     style: TextStyle(fontSize: 14),
@@ -200,13 +192,10 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 16, bottom: 8, top: 8),
-              child: Text("Your last transactions",
-                  style: Theme.of(context).textTheme.titleLarge),
+              child: Text("Your last transactions", style: Theme.of(context).textTheme.titleLarge),
             ),
             TransactionsList(
-              transactions: transactions
-                  .map((json) => Transaction.fromJson(json))
-                  .toList(),
+              transactions: transactions.map((json) => Transaction.fromJson(json)).toList(),
             ),
           ],
         ),

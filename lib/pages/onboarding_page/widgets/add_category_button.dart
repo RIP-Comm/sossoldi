@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../constants/style.dart';
+import '../../../ui/device.dart';
 
 class AddCategoryButton extends StatelessWidget {
   const AddCategoryButton({
@@ -13,7 +14,7 @@ class AddCategoryButton extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border.all(color: grey2, width: 1.5),
         color: grey3,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(Sizes.borderRadius),
       ),
       child: Row(
         children: [
