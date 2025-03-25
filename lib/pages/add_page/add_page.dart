@@ -329,7 +329,7 @@ class _AddPageState extends ConsumerState<AddPage> {
                         DetailsListTile(
                           title: "Date",
                           icon: Icons.calendar_month,
-                          value: dateToString(ref.watch(dateProvider)),
+                          value: ref.watch(dateProvider).formatEDMY(),
                           callback: () async {
                             FocusManager.instance.primaryFocus?.unfocus();
                             if (Platform.isIOS) {
