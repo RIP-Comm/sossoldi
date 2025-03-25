@@ -1,0 +1,21 @@
+{
+  "name": "Flutter Container",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "runArgs": [
+    "--privileged",
+    "-v",
+    "/dev/bus/usb:/dev/bus/usb"
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "Dart-Code.flutter"
+      ],
+      "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash"
+      }
+    }
+  }
+}

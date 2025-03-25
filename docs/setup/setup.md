@@ -10,13 +10,9 @@ has_children: true
 
 Download and install Git from [https://git-scm.com/](https://git-scm.com/).
 
-## Step 2: Install Flutter
+## Step 2: Install Docker
 
-Installing flutter is slightly different between Windows, MacOS and Linux. Flutter already has a good step-by-step that you can find [here](https://docs.flutter.dev/get-started/install)
-
-1. Download the Flutter SDK from [flutter.dev/docs/get-started/install](https://flutter.dev/docs/get-started/install).
-2. Extract the downloaded archive to a location on your machine.
-3. Add the Flutter `bin` directory to your system's `PATH` variable.
+For linux system follow [this](https://docs.docker.com/engine/install/ubuntu/)
 
 ## Step 3: Set Up an IDE
 
@@ -26,6 +22,16 @@ Choose one of the following:
 
 1. Download and install Visual Studio Code from [https://code.visualstudio.com/](https://code.visualstudio.com/).
 2. Install the Flutter and Dart extensions.
+
+#### Coding inside Docker Container
+
+##### Android
+
+To help contributors working with the same dependencies and SDKs, in .devcontainer folder there a Dockerfile with all the necessary for coding.
+
+On VSCode install [Dev Container exentension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers). This extension allows you to coding inside a Docker container directly in VSCode.
+
+Once the extension in installed at the bottom left corner of VSCode window click on "Open a Remote Window" then click on "Reopen in Container". This will create a Docker container inside which you'll have all the necessary dependencies for coding.
 
 ### Using IntelliJ IDEA or Android Studio:
 
