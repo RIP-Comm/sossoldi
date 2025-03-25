@@ -3,7 +3,6 @@ import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
-import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
 import '../../../ui/widgets/rounded_icon.dart';
 import '../../../model/category_transaction.dart';
@@ -11,7 +10,7 @@ import '../../../providers/categories_provider.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../ui/device.dart';
 
-class CategoriesPieChart extends ConsumerWidget with Functions {
+class CategoriesPieChart extends ConsumerWidget {
   const CategoriesPieChart({
     required this.categories,
     required this.amounts,

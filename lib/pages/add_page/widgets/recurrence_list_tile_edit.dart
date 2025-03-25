@@ -4,15 +4,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
-import '../../../constants/functions.dart';
 import "../../../constants/style.dart";
 import '../../../providers/theme_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../model/transaction.dart';
 import '../../../ui/device.dart';
+import '../../../ui/extensions.dart';
 import 'recurrence_selector.dart';
 
-class RecurrenceListTileEdit extends ConsumerWidget with Functions {
+class RecurrenceListTileEdit extends ConsumerWidget {
   const RecurrenceListTileEdit({
     super.key,
   });
@@ -120,7 +120,7 @@ class RecurrenceListTileEdit extends ConsumerWidget with Functions {
                   ),
                   const Spacer(),
                   Text(
-                    endDate != null ? dateToString(endDate) : "Never",
+                    endDate != null ? endDate.formatEDMY() : "Never",
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: isDarkMode
                             ? grey3
@@ -143,7 +143,7 @@ class RecurrenceListTileEdit extends ConsumerWidget with Functions {
   }
 }
 
-class EndDateSelector extends ConsumerWidget with Functions {
+class EndDateSelector extends ConsumerWidget {
   const EndDateSelector({super.key});
 
   @override
@@ -174,7 +174,7 @@ class EndDateSelector extends ConsumerWidget with Functions {
                     ? const Icon(Icons.check)
                     : null,
                 subtitle: Text(ref.read(endDateProvider) != null
-                    ? dateToString(ref.read(endDateProvider.notifier).state!)
+                    ? ref.read(endDateProvider.notifier).state!.formatEDMY()
                     : ''),
                 onTap: () async {
                   FocusManager.instance.primaryFocus?.unfocus();

@@ -3,12 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
-import '../../../constants/functions.dart';
 import "../../../constants/style.dart";
 import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../utils/decimal_text_input_formatter.dart';
 import '../../../ui/device.dart';
+import '../../../ui/extensions.dart';
 
 class AmountWidget extends ConsumerStatefulWidget {
   const AmountWidget(
@@ -22,7 +22,7 @@ class AmountWidget extends ConsumerStatefulWidget {
   ConsumerState<AmountWidget> createState() => _AmountWidgetState();
 }
 
-class _AmountWidgetState extends ConsumerState<AmountWidget> with Functions {
+class _AmountWidgetState extends ConsumerState<AmountWidget> {
   @override
   Widget build(BuildContext context) {
     final selectedType = ref.watch(transactionTypeProvider);
@@ -38,8 +38,7 @@ class _AmountWidgetState extends ConsumerState<AmountWidget> with Functions {
           prefixText: ' ',
           suffixText: currencyState.selectedCurrency.symbol,
           suffixStyle: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                color: typeToColor(
-                  selectedType,
+                color: selectedType.toColor(
                   brightness: Theme.of(context).brightness,
                 ),
               ),
@@ -56,8 +55,7 @@ class _AmountWidgetState extends ConsumerState<AmountWidget> with Functions {
         textAlign: TextAlign.center,
         cursorColor: grey1,
         style: TextStyle(
-          color: typeToColor(
-            selectedType,
+          color: selectedType.toColor(
             brightness: Theme.of(context).brightness,
           ),
           fontSize: 58,

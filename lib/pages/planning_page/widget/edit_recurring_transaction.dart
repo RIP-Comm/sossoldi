@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../ui/device.dart';
+import '../../../ui/extensions.dart';
 import '../../add_page/widgets/account_selector.dart';
 import '../../add_page/widgets/amount_widget.dart';
 import '../../add_page/widgets/details_list_tile.dart';
@@ -21,14 +21,15 @@ class EditRecurringTransaction extends ConsumerStatefulWidget {
 }
 
 class _EditRecurringTransactionState
-    extends ConsumerState<EditRecurringTransaction> with Functions {
+    extends ConsumerState<EditRecurringTransaction> {
   final TextEditingController amountController = TextEditingController();
   final TextEditingController noteController = TextEditingController();
 
   @override
   void initState() {
-    amountController.text = numToCurrency(
-        ref.read(selectedRecurringTransactionUpdateProvider)?.amount);
+    amountController.text =
+        ref.read(selectedRecurringTransactionUpdateProvider)?.amount
+            .toCurrency() ?? '';
     noteController.text =
         ref.read(selectedRecurringTransactionUpdateProvider)?.note ?? '';
 
@@ -142,7 +143,7 @@ class _EditRecurringTransactionState
                       NonEditableDetailsListTile(
                           title: "Date Start",
                           icon: Icons.calendar_month,
-                          value: dateToString(ref.watch(dateProvider))),
+                          value: ref.watch(dateProvider).formatEDMY()),
                       const RecurrenceListTileEdit(),
                     ],
                   ),
@@ -177,7 +178,7 @@ class _EditRecurringTransactionState
                     ref
                         .read(transactionsProvider.notifier)
                         .updateRecurringTransaction(
-                            currencyToNum(amountController.text),
+                            amountController.text.toNum(),
                             noteController.text)
                         .whenComplete(() {
                       if (context.mounted) {

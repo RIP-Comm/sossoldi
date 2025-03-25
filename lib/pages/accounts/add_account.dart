@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/accounts_provider.dart';
 import '../../constants/constants.dart';
-import '../../constants/functions.dart';
 import '../../constants/style.dart';
 import '../../providers/currency_provider.dart';
 import '../../utils/decimal_text_input_formatter.dart';
 import '../../ui/device.dart';
+import '../../ui/extensions.dart';
 import 'widgets/confirm_account_deletion_dialog.dart';
 
 class AddAccount extends ConsumerStatefulWidget {
@@ -16,7 +16,7 @@ class AddAccount extends ConsumerStatefulWidget {
   ConsumerState<AddAccount> createState() => _AddAccountState();
 }
 
-class _AddAccountState extends ConsumerState<AddAccount> with Functions {
+class _AddAccountState extends ConsumerState<AddAccount> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController balanceController = TextEditingController();
   String accountIcon = accountIconList.keys.first;
@@ -31,7 +31,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
     final selectedAccount = ref.read(selectedAccountProvider);
     if (selectedAccount != null) {
       nameController.text = selectedAccount.name;
-      balanceController.text = numToCurrency(selectedAccount.total);
+      balanceController.text = selectedAccount.total?.toCurrency() ?? "";
       accountIcon = selectedAccount.symbol;
       accountColor = selectedAccount.color;
       countNetWorth = selectedAccount.countNetWorth;
@@ -389,7 +389,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                           name: nameController.text,
                           icon: accountIcon,
                           color: accountColor,
-                          balance: currencyToNum(balanceController.text),
+                          balance: balanceController.text.toNum(),
                           countNetWorth: countNetWorth,
                           mainAccount: mainAccount,
                         );
@@ -400,7 +400,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                           color: accountColor,
                           countNetWorth: countNetWorth,
                           mainAccount: mainAccount,
-                          startingValue: currencyToNum(balanceController.text),
+                          startingValue: balanceController.text.toNum(),
                         );
                   }
                   if (context.mounted) Navigator.of(context).pop();
