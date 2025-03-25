@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
+import '../../../ui/extensions.dart';
 import '../../../ui/widgets/rounded_icon.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/currency_provider.dart';
@@ -135,7 +135,7 @@ class AccountListTile extends ConsumerWidget {
   }
 }
 
-class TransactionRow extends ConsumerWidget with Functions {
+class TransactionRow extends ConsumerWidget {
   const TransactionRow({
     super.key,
     required this.transaction,
@@ -166,7 +166,7 @@ class TransactionRow extends ConsumerWidget with Functions {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(
-                      "${numToCurrency(transaction.amount)} ${currencyState.selectedCurrency.symbol}",
+                      "${transaction.amount.toCurrency()} ${currencyState.selectedCurrency.symbol}",
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           color: (transaction.amount > 0) ? green : red),
                     ),

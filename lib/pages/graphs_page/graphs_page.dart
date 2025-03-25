@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../constants/functions.dart';
 import '../../constants/style.dart';
+import '../../ui/extensions.dart';
 import '../../ui/widgets/line_chart.dart';
 import '../../model/transaction.dart';
 import '../../providers/currency_provider.dart';
@@ -19,7 +19,7 @@ class GraphsPage extends ConsumerStatefulWidget {
   ConsumerState<GraphsPage> createState() => _GraphsPageState();
 }
 
-class _GraphsPageState extends ConsumerState<GraphsPage> with Functions {
+class _GraphsPageState extends ConsumerState<GraphsPage> {
   @override
   Widget build(BuildContext context) {
     final currentYearMonthlyTransactions =
@@ -69,18 +69,15 @@ class _GraphsPageState extends ConsumerState<GraphsPage> with Functions {
                                     TextSpan(
                                       text: currentYearMonthlyTransactions
                                               .isNotEmpty
-                                          ? numToCurrency(
-                                              currentYearMonthlyTransactions
-                                                  .last.y)
+                                          ? currentYearMonthlyTransactions
+                                              .last.y.toCurrency()
                                           : '0',
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineLarge
                                           ?.copyWith(
-                                            color: typeToColor(
-                                              TransactionType.transfer,
-                                              brightness:
-                                                  Theme.of(context).brightness,
+                                            color: TransactionType.transfer.toColor(
+                                              brightness: Theme.of(context).brightness,
                                             ),
                                           ),
                                     ),
@@ -91,10 +88,8 @@ class _GraphsPageState extends ConsumerState<GraphsPage> with Functions {
                                           .textTheme
                                           .labelLarge
                                           ?.copyWith(
-                                            color: typeToColor(
-                                              TransactionType.transfer,
-                                              brightness:
-                                                  Theme.of(context).brightness,
+                                            color: TransactionType.transfer.toColor(
+                                              brightness: Theme.of(context).brightness,
                                             ),
                                           ),
                                     ),
@@ -114,7 +109,7 @@ class _GraphsPageState extends ConsumerState<GraphsPage> with Functions {
                                 ),
                                 padding: const EdgeInsets.all(Sizes.xxs),
                                 child: Text(
-                                  "${numToCurrency(percentGainLoss)}%",
+                                  "${percentGainLoss.toCurrency()}%",
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyMedium

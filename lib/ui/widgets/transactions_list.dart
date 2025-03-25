@@ -3,13 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../constants/constants.dart';
-import '../../constants/functions.dart';
 import '../../constants/style.dart';
 import '../../model/transaction.dart';
 import '../../providers/currency_provider.dart';
 import '../../providers/transactions_provider.dart';
 import '../device.dart';
-import '../../utils/date_helper.dart';
+import '../extensions.dart';
 import 'default_container.dart';
 import 'rounded_icon.dart';
 
@@ -29,7 +28,7 @@ class TransactionsList extends StatefulWidget {
   State<TransactionsList> createState() => _TransactionsListState();
 }
 
-class _TransactionsListState extends State<TransactionsList> with Functions {
+class _TransactionsListState extends State<TransactionsList> {
   Map<String, double> totals = {};
   List<Transaction> get transactions => widget.transactions;
 
@@ -48,7 +47,7 @@ class _TransactionsListState extends State<TransactionsList> with Functions {
   void updateTotal() {
     totals = {};
     for (final transaction in transactions) {
-      final date = transaction.date.toYMD();
+      final date = transaction.date.formatYMD();
       final currentTotal = totals[date] ?? 0.0;
 
       final amount = switch (transaction.type) {
@@ -78,7 +77,7 @@ class _TransactionsListState extends State<TransactionsList> with Functions {
                   ..sort((a, b) => b.compareTo(a));
                 final currentDate = dates[monthIndex];
                 final dateTransactions = transactions
-                    .where((t) => t.date.toYMD() == currentDate)
+                    .where((t) => t.date.formatYMD() == currentDate)
                     .toList();
 
                 return Column(
@@ -121,7 +120,7 @@ class _TransactionsListState extends State<TransactionsList> with Functions {
   }
 }
 
-class TransactionTile extends ConsumerWidget with Functions {
+class TransactionTile extends ConsumerWidget {
   const TransactionTile({required this.transaction, super.key});
 
   final Transaction transaction;
@@ -180,11 +179,10 @@ class TransactionTile extends ConsumerWidget with Functions {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  '${transaction.type == TransactionType.expense ? "-" : ""}${numToCurrency(transaction.amount)}',
+                  '${transaction.type == TransactionType.expense ? "-" : ""}${transaction.amount.toCurrency()}',
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                        color: typeToColor(
-                          transaction.type,
+                        color: transaction.type.toColor(
                           brightness: Theme.of(context).brightness,
                         ),
                       ),
@@ -193,8 +191,7 @@ class TransactionTile extends ConsumerWidget with Functions {
                   currencyState.selectedCurrency.symbol,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: typeToColor(
-                          transaction.type,
+                        color: transaction.type.toColor(
                           brightness: Theme.of(context).brightness,
                         ),
                       ),
@@ -216,7 +213,7 @@ class TransactionTile extends ConsumerWidget with Functions {
   }
 }
 
-class TransactionTitle extends ConsumerWidget with Functions {
+class TransactionTitle extends ConsumerWidget {
   final DateTime date;
   final num total;
 
@@ -235,7 +232,7 @@ class TransactionTitle extends ConsumerWidget with Functions {
       child: Row(
         children: [
           Text(
-            dateToString(date),
+            date.formatEDMY(),
             style: Theme.of(context)
                 .textTheme
                 .bodySmall!
@@ -243,7 +240,7 @@ class TransactionTitle extends ConsumerWidget with Functions {
           ),
           const Spacer(),
           Text(
-            numToCurrency(total),
+            total.toCurrency(),
             style:
                 Theme.of(context).textTheme.bodyLarge!.copyWith(color: color),
           ),

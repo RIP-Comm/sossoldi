@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../constants/constants.dart';
-import '../../constants/functions.dart';
 import '../../constants/style.dart';
 import '../../model/category_transaction.dart';
 import '../../providers/categories_provider.dart';
 import '../../ui/device.dart';
+import '../../ui/extensions.dart';
 
 class AddCategory extends ConsumerStatefulWidget {
   final bool hideIncome;
@@ -16,7 +16,7 @@ class AddCategory extends ConsumerStatefulWidget {
   ConsumerState<AddCategory> createState() => _AddCategoryState();
 }
 
-class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
+class _AddCategoryState extends ConsumerState<AddCategory> {
   final TextEditingController nameController = TextEditingController();
   CategoryTransactionType categoryType = CategoryTransactionType.income;
   String categoryIcon = iconList.keys.first;
@@ -130,8 +130,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                             return DropdownMenuItem<CategoryTransactionType>(
                               value: type,
                               child: Text(
-                                capitalizeFirstLetter(
-                                    type.toString().split('.').last),
+                                type.toString().split('.').last.capitalize(),
                                 style: Theme.of(context).textTheme.titleLarge,
                               ),
                             );

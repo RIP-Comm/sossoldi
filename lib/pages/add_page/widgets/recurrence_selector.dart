@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../model/transaction.dart';
-import '../../../constants/functions.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../ui/device.dart';
 
@@ -12,8 +11,7 @@ class RecurrenceSelector extends ConsumerStatefulWidget {
   ConsumerState<RecurrenceSelector> createState() => _RecurrenceSelectorState();
 }
 
-class _RecurrenceSelectorState extends ConsumerState<RecurrenceSelector>
-    with Functions {
+class _RecurrenceSelectorState extends ConsumerState<RecurrenceSelector> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

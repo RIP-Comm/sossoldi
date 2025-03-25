@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../constants/functions.dart';
 import '../../../ui/widgets/default_container.dart';
 import '../../../ui/widgets/transaction_type_button.dart';
 import '../../../model/category_transaction.dart';
@@ -21,7 +20,7 @@ class CategoriesTab extends ConsumerStatefulWidget {
   ConsumerState<CategoriesTab> createState() => _CategoriesTabState();
 }
 
-class _CategoriesTabState extends ConsumerState<CategoriesTab> with Functions {
+class _CategoriesTabState extends ConsumerState<CategoriesTab> {
   @override
   Widget build(BuildContext context) {
     final categories = ref.watch(categoriesProvider);

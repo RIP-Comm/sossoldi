@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
-import '../../../constants/functions.dart';
 import '../../../ui/widgets/default_container.dart';
 import '../../../ui/widgets/transaction_type_button.dart';
 import '../../../model/bank_account.dart';
@@ -25,7 +24,7 @@ class AccountsTab extends ConsumerStatefulWidget {
   ConsumerState<AccountsTab> createState() => _AccountsTabState();
 }
 
-class _AccountsTabState extends ConsumerState<AccountsTab> with Functions {
+class _AccountsTabState extends ConsumerState<AccountsTab> {
   @override
   Widget build(BuildContext context) {
     final accounts = ref.watch(accountsProvider);

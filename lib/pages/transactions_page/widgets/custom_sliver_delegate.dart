@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../ui/device.dart';
+import '../../../ui/extensions.dart';
 import '../../../utils/formatted_date_range.dart';
 import 'month_selector.dart';
 
@@ -88,7 +88,8 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
                 TabBar(
                   controller: tabController,
                   tabs: myTabs,
-                  splashBorderRadius: BorderRadius.circular(Sizes.borderRadius * 10),
+                  splashBorderRadius:
+                      BorderRadius.circular(Sizes.borderRadius * 10),
                   indicatorPadding: EdgeInsets.symmetric(horizontal: Sizes.lg),
                   // TODO: capitalize text of the selected label
                   // not possible from TextStyle https://github.com/flutter/flutter/issues/22695
@@ -126,7 +127,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
   }
 }
 
-class CollapsedWidget extends StatelessWidget with Functions {
+class CollapsedWidget extends StatelessWidget {
   const CollapsedWidget(this.myTabs, this.tabController, {super.key});
 
   final List<Tab> myTabs;
@@ -168,7 +169,7 @@ class CollapsedWidget extends StatelessWidget with Functions {
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: numToCurrency(totalAmount),
+                  text: totalAmount.toCurrency(),
                   style: Theme.of(context)
                       .textTheme
                       .bodyLarge!

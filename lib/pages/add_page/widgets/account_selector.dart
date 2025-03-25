@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
-import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
 import '../../../ui/widgets/rounded_icon.dart';
 import '../../../model/bank_account.dart';
@@ -24,8 +23,7 @@ class AccountSelector extends ConsumerStatefulWidget {
   ConsumerState<AccountSelector> createState() => _AccountSelectorState();
 }
 
-class _AccountSelectorState extends ConsumerState<AccountSelector>
-    with Functions {
+class _AccountSelectorState extends ConsumerState<AccountSelector> {
   @override
   Widget build(BuildContext context) {
     final accountsList = ref.watch(accountsProvider);

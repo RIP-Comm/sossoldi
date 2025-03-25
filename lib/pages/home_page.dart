@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../ui/device.dart';
+import '../ui/extensions.dart';
 import '../utils/snack_bars/transactions_snack_bars.dart';
 import 'home_widget/budgets_home.dart';
-import '../constants/functions.dart';
 import '../constants/style.dart';
 import '../ui/widgets/accounts_sum.dart';
 import '../ui/widgets/line_chart.dart';
@@ -24,7 +24,7 @@ class HomePage extends ConsumerStatefulWidget {
   ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends ConsumerState<HomePage> with Functions {
+class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     final accountList = ref.watch(accountsProvider);
@@ -72,7 +72,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                                 text: TextSpan(
                                   children: [
                                     TextSpan(
-                                      text: numToCurrency(total),
+                                      text: total.toCurrency(),
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineLarge
@@ -109,7 +109,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                                 text: TextSpan(
                                   children: [
                                     TextSpan(
-                                      text: numToCurrency(income),
+                                      text: income.toCurrency(),
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium
@@ -140,7 +140,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                                 text: TextSpan(
                                   children: [
                                     TextSpan(
-                                      text: numToCurrency(expense),
+                                      text: expense.toCurrency(),
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium

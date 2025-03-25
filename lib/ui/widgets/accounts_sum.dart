@@ -3,15 +3,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants/constants.dart';
 import '../../model/bank_account.dart';
-import '../../constants/functions.dart';
 import '../../constants/style.dart';
 import '../../providers/accounts_provider.dart';
 import '../../providers/currency_provider.dart';
 import '../device.dart';
+import '../extensions.dart';
 import 'rounded_icon.dart';
 
 /// This class shows account summaries in the dashboard
-class AccountsSum extends ConsumerWidget with Functions {
+class AccountsSum extends ConsumerWidget {
   final BankAccount account;
 
   const AccountsSum({
@@ -49,7 +49,8 @@ class AccountsSum extends ConsumerWidget with Functions {
               });
             },
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: Sizes.md, vertical: Sizes.sm),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: Sizes.md, vertical: Sizes.sm),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 spacing: 8,
@@ -72,7 +73,7 @@ class AccountsSum extends ConsumerWidget with Functions {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text: numToCurrency(account.total),
+                              text: account.total?.toCurrency(),
                               style: Theme.of(context).textTheme.titleSmall,
                             ),
                             TextSpan(

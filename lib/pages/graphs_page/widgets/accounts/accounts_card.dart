@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../ui/extensions.dart';
 import '../linear_progress_bar.dart';
-import '../../../../constants/functions.dart';
 import '../../../../ui/widgets/default_container.dart';
 import '../../../../providers/accounts_provider.dart';
 import '../../../../providers/currency_provider.dart';
 import '../../../../model/bank_account.dart';
 import '../card_label.dart';
 
-class AccountsCard extends ConsumerWidget with Functions {
+class AccountsCard extends ConsumerWidget {
   const AccountsCard({super.key});
 
   @override
@@ -56,7 +56,7 @@ class AccountsCard extends ConsumerWidget with Functions {
                             ),
                           ),
                           Text(
-                            "${numToCurrency(account.total)}${currencyState.selectedCurrency.symbol}",
+                            "${account.total?.toCurrency()}${currencyState.selectedCurrency.symbol}",
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                         ],
