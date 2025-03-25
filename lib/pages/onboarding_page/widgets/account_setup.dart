@@ -51,37 +51,39 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(Sizes.lg),
           child: Column(
             children: [
               Text("STEP 2 OF 2", style: Theme.of(context).textTheme.labelSmall),
-              const SizedBox(height: 20),
+              const SizedBox(height: Sizes.xl),
               Text(
                 "Set the liquidity in your main account",
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: blue1),
               ),
-              const SizedBox(height: 28),
+              const SizedBox(height: Sizes.xl),
               Text(
                 "It will be used as a baseline to which you can add income, expenses and calculate your wealth.",
                 textAlign: TextAlign.center,
                 maxLines: 3,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(color: blue1),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: Sizes.sm),
               Text(
                 "You'll be able to add more accounts within the app.",
                 textAlign: TextAlign.center,
                 maxLines: 3,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(color: blue1),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: Sizes.sm),
               Expanded(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 25, vertical: 16),
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: Sizes.xl, vertical: Sizes.lg),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: Sizes.xl, vertical: Sizes.lg),
                     decoration: BoxDecoration(
                         color: white,
                         shape: BoxShape.rectangle,
@@ -184,7 +186,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                             shape: BoxShape.circle,
                             color: accountColorList[accountColor],
                           ),
-                          padding: const EdgeInsets.all(16),
+                          padding: const EdgeInsets.all(Sizes.lg),
                           child: Icon(
                             accountIconList[accountIcon],
                             size: 36,
@@ -197,8 +199,9 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                           child: ListView.separated(
                             scrollDirection: Axis.horizontal,
                             physics: const BouncingScrollPhysics(),
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            separatorBuilder: (context, index) => const SizedBox(width: 16),
+                            padding: const EdgeInsets.symmetric(horizontal: Sizes.lg),
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(width: 16),
                             itemBuilder: (context, index) {
                               Color color = accountColorList[index];
                               return GestureDetector(
@@ -223,7 +226,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                           ),
                         ),
                         const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 8.0),
+                          padding: EdgeInsets.symmetric(vertical: Sizes.sm),
                           child: Divider(height: 1, color: grey2),
                         ),
                         SizedBox(
@@ -231,8 +234,9 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                           child: ListView.separated(
                             scrollDirection: Axis.horizontal,
                             physics: const BouncingScrollPhysics(),
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            separatorBuilder: (context, index) => const SizedBox(width: 16),
+                            padding: const EdgeInsets.symmetric(horizontal: Sizes.lg),
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(width: 16),
                             itemBuilder: (context, index) {
                               IconData accountIconData = accountIconList.values.elementAt(index);
                               String accountIconName = accountIconList.keys.elementAt(index);
@@ -241,7 +245,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                                 child: Container(
                                   width: 38,
                                   height: 38,
-                                  margin: const EdgeInsets.all(2),
+                                  margin: const EdgeInsets.all(Sizes.xxs),
                                   decoration: BoxDecoration(
                                     color: accountIconList[accountIcon] == accountIconData
                                         ? Theme.of(context).colorScheme.secondary
@@ -310,8 +314,8 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 15,
+                      horizontal: Sizes.xl,
+                      vertical: Sizes.lg,
                     ),
                     child: SizedBox(
                       width: double.infinity,

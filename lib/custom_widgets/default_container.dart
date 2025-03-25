@@ -6,8 +6,8 @@ import '../ui/device.dart';
 class DefaultContainer extends StatelessWidget {
   const DefaultContainer({
     required this.child,
-    this.padding = const EdgeInsets.all(16.0),
-    this.margin = const EdgeInsets.symmetric(horizontal: 16),
+    this.padding = const EdgeInsets.all(Sizes.lg),
+    this.margin = const EdgeInsets.symmetric(horizontal: Sizes.lg),
     super.key,
   });
 

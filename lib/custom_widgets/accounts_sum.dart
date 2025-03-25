@@ -49,7 +49,7 @@ class AccountsSum extends ConsumerWidget with Functions {
               });
             },
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: Sizes.md, vertical: Sizes.sm),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 spacing: 8,
@@ -57,7 +57,7 @@ class AccountsSum extends ConsumerWidget with Functions {
                   RoundedIcon(
                     icon: accountIconList[account.symbol],
                     backgroundColor: accountColorListTheme[account.color],
-                    padding: const EdgeInsets.all(6.0),
+                    padding: const EdgeInsets.all(Sizes.xs),
                     size: 20,
                   ),
                   Column(

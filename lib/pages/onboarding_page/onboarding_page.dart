@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../ui/assets.dart';
+import '../../ui/device.dart';
 import '/pages/onboarding_page/widgets/budget_setup.dart';
 import '/constants/style.dart';
 
@@ -48,7 +49,7 @@ class _OnboardingState extends State<Onboarding> {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: Sizes.xl, vertical: Sizes.sm),
               child: SizedBox(
                 width: MediaQuery.sizeOf(context).width,
                 child: ElevatedButton(

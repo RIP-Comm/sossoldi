@@ -54,7 +54,7 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
             ),
             child: Container(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                  const EdgeInsets.symmetric(horizontal: Sizes.sm, vertical: Sizes.md),
               decoration: BoxDecoration(
                 color: categoryColorList[cat.color].withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(Sizes.borderRadius),
@@ -67,7 +67,7 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
                       RoundedIcon(
                         icon: iconList[cat.symbol],
                         backgroundColor: categoryColorList[cat.color],
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(Sizes.sm),
                         size: 25,
                       ),
                       const SizedBox(width: 10),
@@ -138,8 +138,8 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
                                   return ListView(
                                     scrollDirection: Axis.vertical,
                                     padding: const EdgeInsets.symmetric(
-                                      vertical: 20,
-                                      horizontal: 10,
+                                      vertical: Sizes.xl,
+                                      horizontal: Sizes.sm,
                                     ),
                                     children: [
                                       OlderRecurringPayments(
@@ -163,8 +163,8 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
                               overlayColor:
                                   Theme.of(context).colorScheme.primary,
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
+                                horizontal: Sizes.sm,
+                                vertical: Sizes.xs,
                               ),
                             ),
                             icon: Icon(

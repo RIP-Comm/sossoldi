@@ -10,6 +10,7 @@ import '../../../custom_widgets/rounded_icon.dart';
 import '../../../providers/theme_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../model/transaction.dart';
+import '../../../ui/device.dart';
 import 'recurrence_selector.dart';
 
 class RecurrenceListTile extends ConsumerWidget with Functions {
@@ -79,7 +80,7 @@ class RecurrenceListTile extends ConsumerWidget with Functions {
         ),
         if (isRecurring) ...[
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: Sizes.lg),
             child: Opacity(
               opacity: selectedTransaction == null || recurrencyEditingPermitted
                   ? 1.0
@@ -88,7 +89,7 @@ class RecurrenceListTile extends ConsumerWidget with Functions {
                 style: FilledButton.styleFrom(
                   backgroundColor:
                       Theme.of(context).colorScheme.primaryContainer,
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(Sizes.lg),
                 ),
                 onPressed:
                     selectedTransaction == null || recurrencyEditingPermitted
@@ -129,7 +130,7 @@ class RecurrenceListTile extends ConsumerWidget with Functions {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(Sizes.lg),
             child: Opacity(
               opacity: selectedTransaction == null || recurrencyEditingPermitted
                   ? 1.0
@@ -138,7 +139,7 @@ class RecurrenceListTile extends ConsumerWidget with Functions {
                 style: FilledButton.styleFrom(
                   backgroundColor:
                       Theme.of(context).colorScheme.primaryContainer,
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(Sizes.lg),
                 ),
                 onPressed:
                     selectedTransaction == null || recurrencyEditingPermitted
@@ -180,7 +181,7 @@ class RecurrenceListTile extends ConsumerWidget with Functions {
           ),
           if (selectedTransaction != null && !recurrencyEditingPermitted) ...[
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: Sizes.lg),
               child: TextButton(
                 onPressed: () {
                   Navigator.of(context)

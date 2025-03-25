@@ -39,11 +39,11 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
     // prevent the expanded widget from shrinking in size when collapsing
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: Sizes.lg),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primaryContainer,
         border: const Border(
-          bottom: BorderSide(width: 1.0, color: grey2),
+          bottom: BorderSide(color: grey2),
         ),
       ),
       child: Column(
@@ -89,7 +89,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
                   controller: tabController,
                   tabs: myTabs,
                   splashBorderRadius: BorderRadius.circular(Sizes.borderRadius * 10),
-                  indicatorPadding: EdgeInsets.symmetric(horizontal: 16),
+                  indicatorPadding: EdgeInsets.symmetric(horizontal: Sizes.lg),
                   // TODO: capitalize text of the selected label
                   // not possible from TextStyle https://github.com/flutter/flutter/issues/22695
                   labelStyle: Theme.of(context).textTheme.bodyLarge,
@@ -144,8 +144,8 @@ class CollapsedWidget extends StatelessWidget with Functions {
         children: [
           Container(
             padding: const EdgeInsets.symmetric(
-              vertical: 4.0,
-              horizontal: 8.0,
+              vertical: Sizes.xxs,
+              horizontal: Sizes.sm,
             ),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(Sizes.borderRadius * 10),

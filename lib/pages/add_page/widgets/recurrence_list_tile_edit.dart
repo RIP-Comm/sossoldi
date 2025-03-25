@@ -9,6 +9,7 @@ import "../../../constants/style.dart";
 import '../../../providers/theme_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../model/transaction.dart';
+import '../../../ui/device.dart';
 import 'recurrence_selector.dart';
 
 class RecurrenceListTileEdit extends ConsumerWidget with Functions {
@@ -26,14 +27,14 @@ class RecurrenceListTileEdit extends ConsumerWidget with Functions {
       children: [
         const Divider(),
         ListTile(
-          contentPadding: const EdgeInsets.all(16),
+          contentPadding: const EdgeInsets.all(Sizes.lg),
           leading: Container(
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: Theme.of(context).colorScheme.secondary,
             ),
             child: Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(Sizes.sm),
               child: Icon(
                 Icons.autorenew,
                 size: 24.0,
@@ -55,7 +56,7 @@ class RecurrenceListTileEdit extends ConsumerWidget with Functions {
             child: FilledButton(
               style: FilledButton.styleFrom(
                 backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(Sizes.lg),
               ),
               onPressed: () {
                 FocusManager.instance.primaryFocus?.unfocus();
@@ -94,11 +95,11 @@ class RecurrenceListTileEdit extends ConsumerWidget with Functions {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(Sizes.lg),
             child: FilledButton(
               style: FilledButton.styleFrom(
                 backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(Sizes.lg),
               ),
               onPressed: () => showModalBottomSheet(
                 context: context,

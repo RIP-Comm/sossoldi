@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../ui/device.dart';
+
 class CollaboratorsPage extends ConsumerStatefulWidget {
   const CollaboratorsPage({super.key});
 
@@ -103,7 +105,7 @@ class _CollaboratorsPageState extends ConsumerState<CollaboratorsPage> {
               launchUrl(url);
             },
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(Sizes.lg),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

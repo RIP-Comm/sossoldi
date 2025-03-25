@@ -122,7 +122,7 @@ class CategoriesBarChart extends ConsumerWidget {
           showTitles: true,
           getTitlesWidget: (value, meta) {
             return Padding(
-              padding: const EdgeInsets.only(top: 6.0),
+              padding: const EdgeInsets.only(top: Sizes.sm),
               child: Text(
                 DateFormat('MMM').format(DateTime(0, value.toInt() + 1)),
                 style: TextStyle(

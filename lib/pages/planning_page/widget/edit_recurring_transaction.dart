@@ -83,13 +83,13 @@ class _EditRecurringTransactionState
       body: Stack(
         children: [
           SingleChildScrollView(
-            padding: const EdgeInsets.only(bottom: 72),
+            padding: const EdgeInsets.only(bottom: Sizes.md * 6),
             child: Column(
               children: [
                 AmountWidget(amountController),
                 Container(
                   alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.only(left: 16, top: 32, bottom: 8),
+                  padding: const EdgeInsets.only(left: Sizes.lg, top: Sizes.xxl, bottom: Sizes.sm),
                   child: Text(
                     "DETAILS (any change will affect only future transactions)",
                     style: Theme.of(context)
@@ -164,7 +164,7 @@ class _EditRecurringTransactionState
                   )
                 ],
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: Sizes.xl, vertical: Sizes.sm),
               child: Container(
                 height: 48,
                 decoration: BoxDecoration(

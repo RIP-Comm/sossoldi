@@ -8,6 +8,7 @@ import '../../../custom_widgets/rounded_icon.dart';
 import '../../../model/bank_account.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/transactions_provider.dart';
+import '../../../ui/device.dart';
 
 class AccountSelector extends ConsumerStatefulWidget {
   const AccountSelector({
@@ -58,7 +59,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
                   Container(
                     alignment: Alignment.centerLeft,
                     padding:
-                        const EdgeInsets.only(left: 16, top: 32, bottom: 8),
+                        const EdgeInsets.only(left: Sizes.lg, top: Sizes.xl, bottom: Sizes.sm),
                     child: Text(
                       "MORE FREQUENT",
                       style: Theme.of(context).textTheme.labelLarge!.copyWith(
@@ -99,7 +100,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
                               opacity: enabled ? 1.0 : 0.5,
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 16.0),
+                                    horizontal: Sizes.lg),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -133,7 +134,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector>
                   Container(
                     alignment: Alignment.centerLeft,
                     padding:
-                        const EdgeInsets.only(left: 16, top: 32, bottom: 8),
+                        const EdgeInsets.only(left: Sizes.lg, top: Sizes.xxl, bottom: Sizes.sm),
                     child: Text(
                       "ALL ACCOUNTS",
                       style: Theme.of(context).textTheme.labelLarge!.copyWith(

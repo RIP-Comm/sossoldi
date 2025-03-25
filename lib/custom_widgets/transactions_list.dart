@@ -17,7 +17,7 @@ class TransactionsList extends StatefulWidget {
   const TransactionsList({
     super.key,
     required this.transactions,
-    this.margin = const EdgeInsets.symmetric(horizontal: 16),
+    this.margin = const EdgeInsets.symmetric(horizontal: Sizes.lg),
     this.padding,
   });
 
@@ -133,7 +133,7 @@ class TransactionTile extends ConsumerWidget with Functions {
       child: ListTile(
         visualDensity: VisualDensity.compact,
         dense: true,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        contentPadding: const EdgeInsets.symmetric(horizontal: Sizes.md, vertical: Sizes.xs),
         onTap: () async {
           ref
               .read(transactionsProvider.notifier)
@@ -154,7 +154,7 @@ class TransactionTile extends ConsumerWidget with Functions {
               ? categoryColorListTheme[transaction.categoryColor!]
               : Theme.of(context).colorScheme.secondary,
           size: 25,
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(Sizes.sm),
         ),
         title: Text(
           (transaction.note?.isEmpty ?? true)
@@ -231,7 +231,7 @@ class TransactionTitle extends ConsumerWidget with Functions {
     final currencyState = ref.watch(currencyStateNotifier);
     final color = total < 0 ? red : (total > 0 ? green : blue3);
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
+      padding: const EdgeInsets.only(bottom: Sizes.md),
       child: Row(
         children: [
           Text(
