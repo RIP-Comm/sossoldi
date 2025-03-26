@@ -21,7 +21,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3.2.1'
+        uses: android-actions/setup-android@v3.2.1
 
       - name: Build the app
         run: ./gradlew assembleDebug
