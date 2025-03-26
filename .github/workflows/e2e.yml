@@ -12,12 +12,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
       - name: Setup Node.js environment
         uses: actions/setup-node@v4.3.0
-
-      - name: b
-        run: "ls"
-
     
       - name: Setup Python
         uses: actions/setup-python@v5.5.0
@@ -27,8 +26,7 @@ jobs:
       - name: Install requirements
         run: 'pip install -r test/e2e/requirements.txt'
     
-      - name: Checkout code
-        uses: actions/checkout@v3
+
 
       - name: Enable KVM group perms
         run: |
