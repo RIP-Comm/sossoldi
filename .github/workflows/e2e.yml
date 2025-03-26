@@ -17,9 +17,11 @@ jobs:
     
       - name: Setup Python
         uses: actions/setup-python@v5.5.0
+        with:
+          python-version: '3.13.1'
 
       - name: Install requirements
-        run: pip install -r requirements.txt
+        run: 'pip install -r test/e2e/requirements.txt'
     
       - name: Checkout code
         uses: actions/checkout@v3
