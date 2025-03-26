@@ -45,6 +45,8 @@ jobs:
           api-level: 29
           disable-animations: true
           disable-spellchecker: true
-          script: 'appium -h "pytest -s tests --driver Remote --local android"'
+          script: |
+            appium&
+            pytest -s tests --driver Remote --local android
             
       
