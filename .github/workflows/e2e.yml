@@ -46,6 +46,6 @@ jobs:
           disable-spellchecker: true
           script: |
             appium&
-            (cd test/e2e && exec pytest -s tests --driver Remote --local android && pkill -SIGKILL crashpad_handler)
+            (cd test/e2e && exec pytest -s tests --driver Remote --local android && killall -INT crashpad_handler || true)
             
       
