@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
 import '../../../model/budget.dart';
 import '../../../model/category_transaction.dart';
+import '../../../utils/decimal_text_input_formatter.dart';
 
 class BudgetCategorySelector extends ConsumerStatefulWidget {
   final List<CategoryTransaction> categories;
@@ -114,8 +115,11 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
               padding: const EdgeInsets.all(8),
               child: TextField(
                 controller: _controller,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                inputFormatters: [
+                  DecimalTextInputFormatter(decimalDigits: 2),
+                ],
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
                 onChanged: (_) {
                   setState(() {
                     _modifyBudget();

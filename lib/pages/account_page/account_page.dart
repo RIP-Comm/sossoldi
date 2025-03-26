@@ -10,6 +10,7 @@ import '../../providers/accounts_provider.dart';
 import '../../model/transaction.dart';
 import '../../providers/currency_provider.dart';
 import '../../providers/transactions_provider.dart';
+import '../../utils/decimal_text_input_formatter.dart';
 import '../../utils/snack_bars/transactions_snack_bars.dart';
 
 class AccountPage extends ConsumerStatefulWidget {
@@ -124,9 +125,7 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                                 )),
                             keyboardType: TextInputType.number,
                             inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.allow(
-                                RegExp(r'^\d*\.?\d{0,2}'),
-                              ),
+                              DecimalTextInputFormatter(decimalDigits: 2),
                             ],
                           ),
                           const SizedBox(height: 16),
@@ -150,8 +149,9 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                                               newBalance: currencyToNum(
                                                   _newBalanceController.text),
                                               account: account);
-                                      if (context.mounted)
+                                      if (context.mounted) {
                                         Navigator.of(context).pop();
+                                      }
                                     }
                                   },
                                   label: const Text("Save"),

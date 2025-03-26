@@ -1,10 +1,10 @@
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants/constants.dart';
 import '../../../providers/accounts_provider.dart';
+import '../../../utils/decimal_text_input_formatter.dart';
 import '/constants/style.dart';
 
 class AccountSetup extends ConsumerStatefulWidget {
@@ -160,8 +160,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                               decimal: true, signed: true),
                           onChanged: validateAmount,
                           inputFormatters: [
-                            FilteringTextInputFormatter.allow(
-                                RegExp(r'^\d*\.?\d{0,2}')),
+                            DecimalTextInputFormatter(decimalDigits: 2),
                           ],
                           decoration: InputDecoration(
                             hintText: "e.g 1300 €",
