@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,7 +32,8 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
   }
 
   Future<void> _flagOnBoardingCompleted() async {
-    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
     sharedPreferences.setBool('onboarding_completed', true);
   }
 
@@ -156,8 +159,10 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                         TextField(
                           textAlign: TextAlign.center,
                           controller: amountController,
-                          keyboardType: const TextInputType.numberWithOptions(
-                              decimal: true, signed: true),
+                          keyboardType: TextInputType.numberWithOptions(
+                            decimal: true,
+                            signed: Platform.isAndroid,
+                          ),
                           onChanged: validateAmount,
                           inputFormatters: [
                             DecimalTextInputFormatter(decimalDigits: 2),

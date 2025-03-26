@@ -123,7 +123,9 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                                     ),
                                   ),
                                 )),
-                            keyboardType: TextInputType.number,
+                            keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true,
+                            ),
                             inputFormatters: <TextInputFormatter>[
                               DecimalTextInputFormatter(decimalDigits: 2),
                             ],

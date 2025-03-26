@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import "package:flutter_riverpod/flutter_riverpod.dart";
@@ -45,7 +47,7 @@ class _AmountWidgetState extends ConsumerState<AmountWidget> with Functions {
         keyboardType: TextInputType.numberWithOptions(
           decimal: true,
           // Leaving the default behaviour on Android which seems to be working as expeceted.
-          signed: defaultTargetPlatform == TargetPlatform.android,
+          signed: Platform.isAndroid,
         ),
         inputFormatters: [
           DecimalTextInputFormatter(decimalDigits: 2),
