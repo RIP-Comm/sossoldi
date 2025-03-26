@@ -9,7 +9,7 @@ on:
 jobs:
   android-e2e-tests:
     name: Run Android E2E Tests
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
@@ -41,7 +41,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: '28'
-          arch: 'x86_64'
+          #arch: 'x86_64'
           disable-animations: true
           disable-spellchecker: true
           script: |
