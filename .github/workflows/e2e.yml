@@ -7,27 +7,42 @@ on:
   pull_request:
 
 jobs:
-  e2e-tests:
+  android-e2e-tests:
     name: Run Android E2E Tests
     runs-on: ubuntu-latest
 
     steps:
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4.3.0
+    
+      - name: Setup Python
+        uses: actions/setup-python@v5.5.0
+
+      - name: Install requirements
+        run: pip install -r requirements.txt
+    
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup JDK
-        uses: actions/setup-java@v3
+      - name: Enable KVM group perms
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm        
+
+      - name: Install Appium
+        run: | 
+          npm install -g appium@2.x.x
+          appium driver install uiautomator2
+
+      - name: Test the app
+        uses: reactivecircus/android-emulator-runner@v2
         with:
-          distribution: 'temurin'
-          java-version: 21
-
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3.2.1
-
-      - name: Build the app
-        run: ./gradlew assembleDebug
-
-      # Run E2E tests
-      - name: Run E2E tests
-        run: ./gradlew connectedAndroidTest
-        working-directory: test/e2e
+          api-level: 29
+          disable-animations: true
+          disable-spellchecker: true
+          script: |
+            appium
+            pytest -s tests --driver Remote --local android
+            
+      
