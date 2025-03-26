@@ -47,6 +47,7 @@ jobs:
           disable-spellchecker: true
           script: |
             appium&
+            sleep 30
             pytest -s tests --driver Remote --local android
             
       
