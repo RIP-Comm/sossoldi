@@ -47,5 +47,8 @@ jobs:
           script: |
             appium&
             (cd test/e2e && exec pytest -s tests --driver Remote --local android)
+            pkill -SIGTERM crashpad_handler || true
+            sleep 5
+            pkill -SIGKILL crashpad_handler || true
             
       
