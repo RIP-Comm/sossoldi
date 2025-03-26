@@ -46,7 +46,7 @@ jobs:
           disable-animations: true
           disable-spellchecker: true
           script: |
-            appium&
+            appium
             pytest -s tests --driver Remote --local android
             
       
