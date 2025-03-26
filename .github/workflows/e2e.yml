@@ -47,6 +47,6 @@ jobs:
           disable-spellchecker: true
           script: |
             appium&
-            pytest -s test/tests --driver Remote --local android
+            pytest -s test/e2e/tests --driver Remote --local android
             
       
