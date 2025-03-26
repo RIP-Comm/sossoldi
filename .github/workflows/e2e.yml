@@ -9,7 +9,7 @@ on:
 jobs:
   android-e2e-tests:
     name: Run Android E2E Tests
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
       - name: Checkout code
