@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-node@v4.3.0
 
       - name: b
-        run: "cd"
+        run: "ls"
 
     
       - name: Setup Python
