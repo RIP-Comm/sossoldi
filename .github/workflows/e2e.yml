@@ -27,7 +27,7 @@ jobs:
       - name: Build apk
         run: |
           flutter pub get
-          flutter build apk
+          flutter build apk --debug
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4.6.2
