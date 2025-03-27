@@ -5,7 +5,7 @@ platforms:
     automationName: UiAutomator2
     appPackage: com.ripster.sossoldi
     appActivity: com.ripster.sossoldi.MainActivity
-    udid: {uuid}
+    udid: {udid}
     constants:
       text: text
       text_view: android.widget.TextView

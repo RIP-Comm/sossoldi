@@ -6,7 +6,7 @@ file_path = "platform_config_template.yaml"
 command = f"adb -s {emulator_name} shell getprop emu.uuid"
 
 ret = subprocess.run(command, shell=True, check=True, text=True, capture_output=True)
-emulator_udid = ret.stdout.strip()
+emulator_udid = ret.stdout
 print(f"Emulator udid: {emulator_udid}")
 
 
