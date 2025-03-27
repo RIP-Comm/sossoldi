@@ -6,15 +6,15 @@ file_path = "platform_config_template.yaml"
 command = f"adb -s {emulator_name} shell getprop emu.uuid"
 
 ret = subprocess.run(command, shell=True, check=True, text=True, capture_output=True)
-emulator_uuid = ret.stdout.strip()
-print(f"Emulator UUID: {emulator_uuid}")
+emulator_udid = ret.stdout.strip()
+print(f"Emulator udid: {emulator_udid}")
 
 
 try:
     with open(file_path, 'r') as file:
         content = file.read()
         format_config = content.format(
-            uuid=emulator_uuid,
+            udid=emulator_udid,
         )
         print(format_config)
 
