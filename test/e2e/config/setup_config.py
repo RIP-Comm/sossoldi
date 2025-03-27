@@ -7,6 +7,7 @@ command = f"adb -s {emulator_name} shell getprop emu.uuid"
 
 ret = subprocess.run(command, shell=True, check=True, text=True, capture_output=True)
 emulator_uuid = ret.stdout.strip()
+print(f"Emulator UUID: {emulator_uuid}")
 
 
 try:
