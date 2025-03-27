@@ -6,6 +6,7 @@ platforms:
     appPackage: com.ripster.sossoldi
     appActivity: com.ripster.sossoldi.MainActivity
     udid: emulator-5554
+    app: _ci/app-debug.apk
     constants:
       text: text
       text_view: android.widget.TextView
