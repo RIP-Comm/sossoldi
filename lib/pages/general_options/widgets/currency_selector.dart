@@ -23,7 +23,7 @@ class _SettingsCurrencySelectorState
     final currencyState = ref.watch(currencyStateNotifier);
 
     return SelectorContainer(
-      label: 'currency',
+      label: 'CURRENCY',
       child: FutureBuilder(
         future: currenciesFuture,
         builder: (context, snapshot) {
