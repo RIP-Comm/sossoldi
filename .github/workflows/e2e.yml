@@ -9,7 +9,7 @@ on:
 jobs:
   build-android-apk:
     name: Build apk
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
@@ -32,7 +32,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4.6.2
         with:
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: build/app/outputs/flutter-apk/app-debug.apk #build/app/outputs/flutter-apk/app-release.apk
           name: android-apk
           if-no-files-found: error
           retention-days: 1
