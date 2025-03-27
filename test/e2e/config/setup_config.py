@@ -3,7 +3,7 @@ import subprocess
 emulator_name = "emulator-5554"
 file_path = "platform_config_template.yaml"
 
-command = f"adb -s {emulator_name} shell getprop qemu.uuid"
+command = f"adb -s {emulator_name} shell getprop emu.uuid"
 
 ret = subprocess.run(command, shell=True, check=True, text=True, capture_output=True)
 emulator_udid = ret.stdout
