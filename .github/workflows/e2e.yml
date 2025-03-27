@@ -41,8 +41,8 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           emulator-options: '-no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -prop qemu.uuid=3f4e92d2-1d60-4b45-928a-c49ba0623423'
-          api-level: '28'
-          #arch: 'x86_64'
+          api-level: '35'
+          arch: 'x86_64'
           disable-animations: true
           disable-spellchecker: true
           script: |
