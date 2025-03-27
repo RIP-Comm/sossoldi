@@ -51,6 +51,7 @@ jobs:
         id: get-apk
         with:
           name: android-apk
+          path: _ci
 
       - name: Test
         run: echo ${{ steps.get-apk.outputs.download-path }}
