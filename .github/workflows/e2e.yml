@@ -54,7 +54,11 @@ jobs:
           path: _ci
 
       - name: Test
-        run: echo ${{ steps.get-apk.outputs.download-path }}
+        run: |
+          echo ${{ steps.get-apk.outputs.download-path }}
+          ls _ci
+          echo ----
+          ls .
         
       - name: Setup Node.js environment
         uses: actions/setup-node@v4.3.0
