@@ -7,8 +7,36 @@ on:
   pull_request:
 
 jobs:
+  build-android-apk:
+    name: Build apk
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+
+      - name: Flutter action
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.0'
+          channel: stable
+          cache: true
+          cache-key: flutter
+          cache-path: ${{ runner.tool_cache }}/flutter
+
+      - name: Build apk
+        run: 'flutter build apk'
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          path: build/app/outputs/flutter-apk/app-release.apk
+          name: android-apk
+          if-no-files-found: error
+    
   android-e2e-tests:
     name: Run Android E2E Tests
+    needs: [build-android-apk]
     runs-on: ubuntu-latest
 
     steps:
