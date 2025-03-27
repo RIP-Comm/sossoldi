@@ -2,7 +2,7 @@ import subprocess
 
 emulator_name = "android-emulator"
 file_path = "platform_config_template.yaml"
-command = f"adb -s {android_emulator} shell getprop emu.uuid"
+command = f"adb -s {emulator_name} shell getprop emu.uuid"
 exception_raised = False
 
 ret = subprocess.run(command, shell=True, check=True, text=True, capture_output=True)
