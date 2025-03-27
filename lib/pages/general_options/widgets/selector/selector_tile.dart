@@ -16,8 +16,17 @@ class SelectorTile extends ConsumerWidget {
   /// An optional trailing [String], will be displayed on the right side of the tile.
   final String? trailing;
 
+  /// Optional [TextStyle] to customize the appearance of the [trailing] text.
+  ///
+  /// If not provided, the default text style will be used.
+  final TextStyle? trailingTextStyle;
+
   /// An optional trailing [Widget], will be displayed on the right side of the
   /// tile only if [trailing] is `null`.
+  ///
+  /// The widget's colors should match the [title]'s color scheme:
+  /// - Use `colorScheme.onSurfaceVariant` when [isSelected] is true
+  /// - Use `colorScheme.onSurface` when [isSelected] is false
   final Widget? trailingWidget;
 
   /// Whether or not this tile is selected.
@@ -32,11 +41,15 @@ class SelectorTile extends ConsumerWidget {
   const SelectorTile({
     required this.title,
     this.trailing,
+    this.trailingTextStyle,
     this.trailingWidget,
     this.isSelected = false,
     this.onTap,
     super.key,
-  });
+  }) : assert(
+          trailing == null || trailingWidget == null,
+          'Cannot provide both trailing and trailingWidget at the same time',
+        );
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -70,12 +83,14 @@ class SelectorTile extends ConsumerWidget {
             if (trailing != null) ...[
               Text(
                 trailing!,
-                style: appTheme.textTheme.bodyMedium?.copyWith(
-                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
-                  color: isSelected
-                      ? appTheme.colorScheme.onSurfaceVariant
-                      : appTheme.colorScheme.onSurface,
-                ),
+                style: trailingTextStyle ??
+                    appTheme.textTheme.bodyMedium?.copyWith(
+                      fontWeight:
+                          isSelected ? FontWeight.w700 : FontWeight.w400,
+                      color: isSelected
+                          ? appTheme.colorScheme.onSurfaceVariant
+                          : appTheme.colorScheme.onSurface,
+                    ),
               ),
             ],
             if (trailing == null && trailingWidget != null) trailingWidget!,
