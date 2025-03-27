@@ -1,4 +1,4 @@
-appiumURL: http://0.0.0.0:4723
+appiumURL: http://127.0.0.1:4723
 
 platforms:
   - platformName: android
