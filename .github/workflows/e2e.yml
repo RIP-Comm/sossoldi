@@ -45,6 +45,7 @@ jobs:
           disable-animations: true
           disable-spellchecker: true
           script: |
+            python setup_config.py
             appium&
             (cd test/e2e && exec pytest -s tests --driver Remote --local android)
             
