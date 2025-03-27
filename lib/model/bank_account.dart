@@ -336,4 +336,55 @@ class BankAccountMethods extends SossoldiDatabase {
 
     return result;
   }
+
+  Future<List> accountMonthlyBalance(
+      int accountId, {
+        DateTime? dateRangeStart,
+        DateTime? dateRangeEnd,
+      }) async {
+    final db = await database;
+
+    final accountFilter =
+        "(${TransactionFields.idBankAccount} = $accountId OR ${TransactionFields.idBankAccountTransfer} = $accountId)";
+    final recurrentFilter = "(${TransactionFields.recurring} = 0)";
+    final periodFilterEnd = dateRangeEnd != null
+        ? "strftime('%Y-%m-%d', ${TransactionFields.date}) < '${dateRangeEnd.toString().substring(0, 10)}'"
+        : "";
+    final filters = [periodFilterEnd, accountFilter, recurrentFilter];
+    final sqlFilters = filters.where((filter) => filter != "").join(" AND ");
+
+    final resultQuery = await db.rawQuery('''
+      SELECT
+        strftime('%Y-%m', ${TransactionFields.date}) as month,
+        SUM(CASE WHEN (${TransactionFields.type} = 'IN' OR (${TransactionFields.type} = 'TRSF' AND ${TransactionFields.idBankAccountTransfer} = $accountId)) THEN ${TransactionFields.amount} ELSE 0 END) as income,
+        SUM(CASE WHEN ${TransactionFields.type} = 'OUT' OR (${TransactionFields.type} = 'TRSF' AND ${TransactionFields.idBankAccount} = $accountId) THEN ${TransactionFields.amount} ELSE 0 END) as expense
+      FROM "$transactionTable"
+      WHERE $sqlFilters
+      GROUP BY month
+    ''');
+
+    final statritngValue = await db.rawQuery('''
+      SELECT ${BankAccountFields.startingValue} as Value
+      FROM $bankAccountTable
+      WHERE ${BankAccountFields.id} = $accountId
+    ''');
+
+    double runningTotal = statritngValue[0]['Value'] as double;
+
+    var result = resultQuery.map((e) {
+      runningTotal += double.parse(e['income'].toString()) -
+          double.parse(e['expense'].toString());
+      return {"month": e["month"], "balance": runningTotal};
+    }).toList();
+
+    if (dateRangeStart != null) {
+      return result
+          .where((element) => dateRangeStart.isBefore(
+          DateTime.parse(("${element["month"]}-01").toString())
+              .add(const Duration(days: 1))))
+          .toList();
+    }
+
+    return result;
+  }
 }

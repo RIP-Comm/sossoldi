@@ -7,8 +7,10 @@ import 'transactions_provider.dart';
 
 final mainAccountProvider = StateProvider<BankAccount?>((ref) => null);
 
-final selectedAccountProvider = StateProvider.autoDispose<BankAccount?>((ref) => null);
-final selectedAccountCurrentMonthDailyBalanceProvider = StateProvider<List<FlSpot>>((ref) => const []);
+final selectedAccountProvider =
+    StateProvider.autoDispose<BankAccount?>((ref) => null);
+final selectedAccountCurrentYearMonthlyBalanceProvider =
+    StateProvider<List<FlSpot>>((ref) => const []);
 final selectedAccountLastTransactions = StateProvider<List>((ref) => const []);
 final filterAccountProvider = StateProvider<Map<int, bool>>((ref) => {});
 
@@ -84,18 +86,18 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
   }
 
   Future<void> reconcileAccount(
-    {required num newBalance, required BankAccount account}) async {
-     final num difference = newBalance - (account.total ?? 0);
-      if (difference != 0) {
-        final transactionsNotifier = ref.read(transactionsProvider.notifier);
-        await transactionsNotifier.addTransaction(
-          difference.abs(),
-          'Reconciliation',
-          account: account,
-          type: difference > 0 ? TransactionType.income : TransactionType.expense,
-          date: DateTime.now(),
-        );
-      }
+      {required num newBalance, required BankAccount account}) async {
+    final num difference = newBalance - (account.total ?? 0);
+    if (difference != 0) {
+      final transactionsNotifier = ref.read(transactionsProvider.notifier);
+      await transactionsNotifier.addTransaction(
+        difference.abs(),
+        'Reconciliation',
+        account: account,
+        type: difference > 0 ? TransactionType.income : TransactionType.expense,
+        date: DateTime.now(),
+      );
+    }
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       await BankAccountMethods().updateItem(account);
@@ -109,13 +111,19 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
   Future<void> refreshAccount(BankAccount account) async {
     ref.read(selectedAccountProvider.notifier).state = account;
 
-    final currentMonthDailyBalance = await BankAccountMethods().accountDailyBalance(account.id!,
-        dateRangeStart: DateTime(DateTime.now().year, DateTime.now().month, 1), // beginnig of current month
-        dateRangeEnd: DateTime(DateTime.now().year, DateTime.now().month + 1, 1) // beginnig of next month
-        );
+    final currentMonthDailyBalance = await BankAccountMethods()
+        .accountMonthlyBalance(account.id!,
+            dateRangeStart:
+                DateTime(DateTime.now().year, 1, 1), // beginnig of current year
+            dateRangeEnd:
+                DateTime(DateTime.now().year + 1, 1, 1) // beginnig of next year
+            );
 
-    ref.read(selectedAccountCurrentMonthDailyBalanceProvider.notifier).state = currentMonthDailyBalance.map((e) {
-      return FlSpot(double.parse(e['day'].substring(8)) - 1, double.parse(e['balance'].toStringAsFixed(2)));
+    ref.read(selectedAccountCurrentYearMonthlyBalanceProvider.notifier).state =
+        currentMonthDailyBalance.map((e) {
+      DateTime pointDT = DateTime.parse(e['month'] + "-01");
+      return FlSpot(
+          pointDT.month - 1, double.parse(e['balance'].toStringAsFixed(2)));
     }).toList();
 
     ref.read(selectedAccountLastTransactions.notifier).state =
@@ -132,10 +140,11 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
 
   void reset() {
     ref.invalidate(selectedAccountProvider);
-    ref.invalidate(selectedAccountCurrentMonthDailyBalanceProvider);
+    ref.invalidate(selectedAccountCurrentYearMonthlyBalanceProvider);
   }
 }
 
-final accountsProvider = AsyncNotifierProvider<AsyncAccountsNotifier, List<BankAccount>>(() {
+final accountsProvider =
+    AsyncNotifierProvider<AsyncAccountsNotifier, List<BankAccount>>(() {
   return AsyncAccountsNotifier();
 });

@@ -32,7 +32,8 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
   @override
   Widget build(BuildContext context) {
     final account = ref.read(selectedAccountProvider);
-    final accountTransactions = ref.watch(selectedAccountCurrentMonthDailyBalanceProvider);
+    final accountTransactions =
+        ref.watch(selectedAccountCurrentYearMonthlyBalanceProvider);
     final transactions = ref.watch(selectedAccountLastTransactions);
     final currencyState = ref.watch(currencyStateNotifier);
 
@@ -55,14 +56,28 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
               color: Theme.of(context).colorScheme.secondary,
               child: Column(
                 children: [
-                  Text(
-                    numToCurrency(account?.total),
-                    style: const TextStyle(
-                      color: white,
-                      fontSize: 32.0,
-                      fontFamily: 'SF Pro Text',
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        numToCurrency(account?.total),
+                        style: const TextStyle(
+                          color: white,
+                          fontSize: 32.0,
+                          fontFamily: 'SF Pro Text',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        currencyState.selectedCurrency.symbol,
+                        style: const TextStyle(
+                          color: white,
+                          fontSize: 22.0,
+                          fontFamily: 'SF Pro Text',
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                    ],
                   ),
                   const Padding(padding: EdgeInsets.all(8.0)),
                   Padding(
@@ -70,7 +85,7 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                     child: LineChartWidget(
                       lineData: accountTransactions,
                       colorBackground: Theme.of(context).colorScheme.secondary,
-                      period: Period.month,
+                      period: Period.year,
                       minY: 0,
                     ),
                   ),
@@ -108,14 +123,17 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                                   child: Center(
                                     child: Text(
                                       currencyState.selectedCurrency.symbol,
-                                      style: Theme.of(context).textTheme.titleLarge,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge,
                                     ),
                                   ),
                                 )),
                             keyboardType: TextInputType.number,
                             inputFormatters: <TextInputFormatter>[
                               FilteringTextInputFormatter.allow(
-                                RegExp(r'^\d*\.?\d{0,2}'),),
+                                RegExp(r'^\d*\.?\d{0,2}'),
+                              ),
                             ],
                           ),
                           const SizedBox(height: 16),
@@ -133,10 +151,14 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                                       backgroundColor: Colors.green),
                                   onPressed: () async {
                                     if (account != null) {
-                                        await ref.read(accountsProvider.notifier).reconcileAccount(
-                                          newBalance: currencyToNum(_newBalanceController.text), account: account
-                                        );
-                                        if (context.mounted) Navigator.of(context).pop();
+                                      await ref
+                                          .read(accountsProvider.notifier)
+                                          .reconcileAccount(
+                                              newBalance: currencyToNum(
+                                                  _newBalanceController.text),
+                                              account: account);
+                                      if (context.mounted)
+                                        Navigator.of(context).pop();
                                     }
                                   },
                                   label: const Text("Save"),
@@ -153,7 +175,8 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                                       ),
                                       foregroundColor: Colors.red,
                                       backgroundColor: Colors.transparent),
-                                  onPressed: () => setState(() => isRecoinciling = false),
+                                  onPressed: () =>
+                                      setState(() => isRecoinciling = false),
                                   label: const Text(
                                     "Cancel",
                                     style: TextStyle(fontSize: 14),
@@ -182,10 +205,13 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 16, bottom: 8, top: 8),
-              child: Text("Your last transactions", style: Theme.of(context).textTheme.titleLarge),
+              child: Text("Your last transactions",
+                  style: Theme.of(context).textTheme.titleLarge),
             ),
             TransactionsList(
-              transactions: transactions.map((json) => Transaction.fromJson(json)).toList(),
+              transactions: transactions
+                  .map((json) => Transaction.fromJson(json))
+                  .toList(),
             ),
           ],
         ),
