@@ -45,6 +45,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Get apk
+        uses: actions/download-artifact@v4.2.1
+        id: get-apk
+        with:
+          name: android-apk
+
+      - name: Test
+        run: echo ${{ steps.get-apk.outputs.download-path }}
         
       - name: Setup Node.js environment
         uses: actions/setup-node@v4.3.0
