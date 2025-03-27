@@ -1,6 +1,6 @@
 import subprocess
 
-emulator_name = "emulator-5555"
+emulator_name = "emulator-5554"
 file_path = "platform_config_template.yaml"
 
 command = f"adb -s {emulator_name} shell getprop emu.uuid"
