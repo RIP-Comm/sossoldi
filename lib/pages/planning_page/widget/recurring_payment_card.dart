@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
@@ -41,7 +42,7 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
     final currencyState = ref.watch(currencyStateNotifier);
 
     var cat = categories
-        ?.firstWhere((element) => element.id == transaction.idCategory);
+        ?.firstWhereOrNull((element) => element.id == transaction.idCategory);
 
     return cat != null
         ? Container(
