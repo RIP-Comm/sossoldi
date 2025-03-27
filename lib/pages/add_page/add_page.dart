@@ -381,35 +381,37 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
               ),
             ),
           ),
-          Container(
-            alignment: Alignment.bottomCenter,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              boxShadow: [
-                BoxShadow(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .primary
-                      .withValues(alpha: 0.15),
-                  blurRadius: 5.0,
-                  offset: const Offset(0, -1.0),
-                )
-              ],
-            ),
-            padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
+          SafeArea(
             child: Container(
+              alignment: Alignment.bottomCenter,
               width: double.infinity,
               decoration: BoxDecoration(
-                boxShadow: [defaultShadow],
-                borderRadius: BorderRadius.circular(8),
+                color: Theme.of(context).colorScheme.surface,
+                boxShadow: [
+                  BoxShadow(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .primary
+                        .withValues(alpha: 0.15),
+                    blurRadius: 5.0,
+                    offset: const Offset(0, -1.0),
+                  )
+                ],
               ),
-              child: ElevatedButton(
-                onPressed: _isSaveEnabled ? _createOrUpdateTransaction : null,
-                child: Text(
-                  selectedTransaction != null
-                      ? "UPDATE TRANSACTION"
-                      : "ADD TRANSACTION",
+              padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  boxShadow: [defaultShadow],
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: ElevatedButton(
+                  onPressed: _isSaveEnabled ? _createOrUpdateTransaction : null,
+                  child: Text(
+                    selectedTransaction != null
+                        ? "UPDATE TRANSACTION"
+                        : "ADD TRANSACTION",
+                  ),
                 ),
               ),
             ),
