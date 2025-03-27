@@ -9,7 +9,7 @@ on:
 jobs:
   build-android-apk:
     name: Build apk
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
       - name: Checkout
