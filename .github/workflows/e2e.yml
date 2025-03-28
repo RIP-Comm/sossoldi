@@ -100,7 +100,7 @@ jobs:
           disable-animations: true
           disable-spellchecker: true
           script: |
-            flutter install -d emulator-5554
+            adb install build/app/outputs/flutter-apk/app-release.apk
             appium&
             (cd test/e2e && exec pytest -s tests --driver Remote --local android)
             
