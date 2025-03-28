@@ -93,6 +93,6 @@ jobs:
           disable-animations: true
           disable-spellchecker: true
           script: |
-            adb install build/app/outputs/flutter-apk/app-release.apk
+            adb -s emulator-5554 install build/app/outputs/flutter-apk/app-release.apk
             (cd test/e2e && exec python ci_start.py)
       
