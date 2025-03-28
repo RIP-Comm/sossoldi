@@ -22,7 +22,7 @@ def wait_for_appium_initialization(process: subprocess.Popen, timeout: int):
             raise TimeoutError("Appium initialization timeout")
 
 def main():
-    appium_process = subprocess.Popen("appium", stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    appium_process = subprocess.Popen("appium", stdout=subprocess.STDOUT, stderr=subprocess.STDOUT)
     try:
         wait_for_appium_initialization(appium_process, timeout=30)
         print("Appium started successfully")
@@ -37,7 +37,7 @@ def main():
 
 
     tests_command = "pytest -s tests --driver Remote --local android"
-    tests_process = subprocess.Popen(tests_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    tests_process = subprocess.Popen(tests_command, shell=True, stdout=subprocess.STDOUT, stderr=subprocess.PIPE)
     tests_process.wait()
 
     close_process(appium_process)
