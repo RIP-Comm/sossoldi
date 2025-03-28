@@ -87,7 +87,6 @@ jobs:
       - name: Test the app
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          emulator-port: 5037
           cores: 4
           api-level: '34'
           arch: 'x86_64'
