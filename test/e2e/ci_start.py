@@ -30,9 +30,10 @@ def add_output(output: subprocess.Popen):
     outputs.append(output)
     mutex.release()
 
-def open_process(command: str) -> subprocess.Popen:
+def open_process(command: str, add_to_std_output = True) -> subprocess.Popen:
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    add_output(process)
+    if add_to_std_output:
+        add_output(process)
     return process
 
 def close_process(process: subprocess.Popen):
@@ -42,8 +43,6 @@ def close_process(process: subprocess.Popen):
         if process.poll() is None:
             process.kill()
 
-
-
 def wait_for_appium_initialization(process: subprocess.Popen, timeout: int):
     start_time = time.time()
     while True:
@@ -51,7 +50,10 @@ def wait_for_appium_initialization(process: subprocess.Popen, timeout: int):
             raise RuntimeError("Appium process terminated")
         
         output = process.stdout.readline().decode("utf-8").strip()
+        print(output)
+
         if "Appium REST http interface listener started" in output:
+            add_output(process)
             return
 
         if time.time() - start_time > timeout:
@@ -61,7 +63,7 @@ def main():
     output_thread = threading.Thread(target=print_outputs, daemon=True)
     output_thread.start()
 
-    appium_process = open_process("appium")
+    appium_process = open_process("appium", False)
     try:
         wait_for_appium_initialization(appium_process, timeout=30)
         print("Appium started successfully")
