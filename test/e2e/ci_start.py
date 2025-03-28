@@ -13,11 +13,11 @@ def print_outputs():
             _stdout = output.stdout
             _stderr = output.stderr
             
-            while _stdout.readable():
+            if _stdout.readable():
                 line = _stdout.readline().decode("utf-8")
                 if line != "":
                     print(line)
-            while _stderr.readable():
+            if _stderr.readable():
                 line = _stderr.readline().decode("utf-8")
                 if line != "":
                     print(line)
@@ -79,9 +79,9 @@ def main():
 
     tests_command = "pytest -s tests --driver Remote --local android"
     tests_process = open_process(tests_command)
-    tests_process.wait()
-    
+
     close_process(appium_process)
+    threading.Event().wait(5)
     exit(tests_process.returncode)
 
 
