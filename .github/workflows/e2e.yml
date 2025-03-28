@@ -93,5 +93,5 @@ jobs:
           disable-spellchecker: true
           script: |
             adb install build/app/outputs/flutter-apk/app-release.apk
-            (cd test/e2e && python ci_start.py)
+            (cd test/e2e && exec python ci_start.py)
       
