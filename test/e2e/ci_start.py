@@ -1,7 +1,7 @@
 import subprocess
 import time
 import threading
-from typing import IO
+import sys
 
 outputs: list[subprocess.Popen] = []
 mutex = threading.Lock()
@@ -28,8 +28,14 @@ def add_output(output: subprocess.Popen):
     outputs.append(output)
     mutex.release()
 
-def open_process(command: str, add_to_std_output = True) -> subprocess.Popen[bytes]:
-    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+def open_process(command: str, add_to_std_output = True, direct_outputs_stdout = False) -> subprocess.Popen[bytes]:
+   assert add_to_std_output or direct_outputs_stdout, "Either add_to_std_output or direct_outputs_stdout must be True"
+
+    _stdout = subprocess.PIPE
+    if direct_outputs_stdout:
+        _stdout = sys.stdout
+    
+    process = subprocess.Popen(command, shell=True, stdout=_stdout, stderr=_stdout)
     
     if add_to_std_output:
         add_output(process)
@@ -77,7 +83,7 @@ def main():
 
 
     tests_command = "pytest -s tests --driver Remote --local android"
-    tests_process = open_process(str(tests_command))
+    tests_process = open_process(str(tests_command), add_to_std_output=False, direct_outputs_stdout=True)
     tests_process.wait()
 
     close_process(appium_process)
