@@ -24,11 +24,10 @@ jobs:
           cache-key: flutter
           cache-path: ${{ runner.tool_cache }}/flutter
 
-     # - name: Build apk
-      #  run: flutter pub get
-
-      - name: Build apk 2
-        run: flutter build apk --no-tree-shake-icons
+      - name: Build apk
+        run: |
+          flutter pub get
+          flutter build apk --no-tree-shake-icons
           
       - name: Upload Artifact
         uses: actions/upload-artifact@v4.6.2
