@@ -87,7 +87,9 @@ jobs:
       - name: Test the app
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: '27'
+          emulator-port: 5037
+          cores: 4
+          api-level: '34'
           arch: 'x86_64'
           disable-animations: true
           disable-spellchecker: true
