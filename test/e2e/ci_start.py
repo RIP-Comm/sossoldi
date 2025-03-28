@@ -30,6 +30,7 @@ def add_output(output: subprocess.Popen):
 
 def open_process(command: str, add_to_std_output = True) -> subprocess.Popen:
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    
     if add_to_std_output:
         add_output(process)
     return process
@@ -83,6 +84,8 @@ def main():
 
     close_process(appium_process)
     threading.Event().wait(5)
+
+    print("Tests completed, return value:", tests_process.returncode)
     exit(tests_process.returncode)
 
 
