@@ -24,15 +24,15 @@ jobs:
           cache-key: flutter
           cache-path: ${{ runner.tool_cache }}/flutter
 
-      - name: Build apk #--no-tree-shake-icons
+      - name: Build apk
         run: |
           flutter pub get
-          flutter build apk --debug 
+          flutter build apk --no-tree-shake-icons
           
       - name: Upload Artifact
         uses: actions/upload-artifact@v4.6.2
         with:
-          path: build/app/outputs/flutter-apk/app-debug.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
           name: android-apk
           if-no-files-found: error
           retention-days: 1
@@ -52,6 +52,9 @@ jobs:
         with:
           name: android-apk
           path: build/app/outputs/flutter-apk
+
+      - name: Setup Java
+        uses: actions/setup-java@v4.7.0
 
       - name: Flutter action
         uses: subosito/flutter-action@v2
@@ -88,7 +91,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: '26'
-          #arch: 'x86_64'
+          arch: 'x86_64'
           disable-animations: true
           disable-spellchecker: true
           script: |
