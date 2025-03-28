@@ -94,5 +94,6 @@ jobs:
           script: |
             adb install build/app/outputs/flutter-apk/app-release.apk
             appium&
-            (cd test/e2e && killall -INT crashpad_handler || true && pytest -s tests --driver Remote --local android)
+            killall -INT crashpad_handler
+            (cd test/e2e && pytest -s tests --driver Remote --local android)
       
