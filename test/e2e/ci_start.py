@@ -52,7 +52,7 @@ def main():
     tests_process = open_process(tests_command)
     tests_process.wait()
     
-    #close_process(appium_process)
+    close_process(appium_process)
     exit(tests_process.returncode)
 
 
