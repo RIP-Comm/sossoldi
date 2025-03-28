@@ -29,7 +29,6 @@ def add_output(output: subprocess.Popen):
     mutex.release()
 
 def open_process(command: str, add_to_std_output = True, direct_outputs_stdout = False) -> subprocess.Popen[bytes]:
-   assert add_to_std_output or direct_outputs_stdout, "Either add_to_std_output or direct_outputs_stdout must be True"
 
     _stdout = subprocess.PIPE
     if direct_outputs_stdout:
