@@ -6,7 +6,7 @@ from typing import IO
 outputs: list[subprocess.Popen] = []
 mutex = threading.Lock()
 
-def print_outputs(def_timeout = 5):
+def print_outputs():
     while True:
         mutex.acquire(True, 60)
         for output in outputs:
@@ -21,9 +21,7 @@ def print_outputs(def_timeout = 5):
                 line = _stderr.readline().decode("utf-8")
                 if line != "":
                     print(line)
-
         mutex.release()
-        time.sleep(def_timeout)
         
 def add_output(output: subprocess.Popen):
     mutex.acquire(True, 60)
