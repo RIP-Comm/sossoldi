@@ -79,6 +79,7 @@ def main():
 
     tests_command = "pytest -s tests --driver Remote --local android"
     tests_process = open_process(tests_command)
+    tests_process.wait()
 
     close_process(appium_process)
     threading.Event().wait(5)
