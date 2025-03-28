@@ -37,10 +37,10 @@ def main():
 
 
     tests_command = "pytest -s tests --driver Remote --local android"
-    tests_process = subprocess.Popen(tests_command, shell=True, stdout=subprocess.STDOUT, stderr=subprocess.PIPE)
+    tests_process = subprocess.Popen(tests_command, shell=True, stdout=subprocess.STDOUT, stderr=subprocess.STDOUT)
     tests_process.wait()
 
-    close_process(appium_process)
+    #close_process(appium_process)
     exit(tests_process.returncode)
 
 
