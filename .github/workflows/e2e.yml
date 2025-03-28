@@ -14,20 +14,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4.2.2
-
-      - name: Flutter action
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.29.0'
-          channel: stable
-          cache: true
-          cache-key: flutter
-          cache-path: ${{ runner.tool_cache }}/flutter
-
-      - name: Build apk
-        run: |
-          flutter pub get
-          flutter build apk --no-tree-shake-icons
           
       - name: Upload Artifact
         uses: actions/upload-artifact@v4.6.2
@@ -39,30 +25,24 @@ jobs:
     
   android-e2e-tests:
     name: Run Android E2E Tests
-    needs: [build-android-apk]
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Get apk
-        uses: actions/download-artifact@v4.2.1
-        id: get-apk
-        with:
-          name: android-apk
-          path: _ci
-
-      - name: Test
-        run: |
-          echo ${{ steps.get-apk.outputs.download-path }}
-          ls _ci
-          echo ----
-          ls .
         
       - name: Setup Node.js environment
         uses: actions/setup-node@v4.3.0
-    
+
+      - name: Flutter action
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.0'
+          channel: stable
+          cache: true
+          cache-key: flutter
+          cache-path: ${{ runner.tool_cache }}/flutter
+      
       - name: Setup Python
         uses: actions/setup-python@v5.5.0
         with:
@@ -91,6 +71,7 @@ jobs:
           disable-animations: true
           disable-spellchecker: true
           script: |
+            flutter install -d emulator-5554
             appium&
             (cd test/e2e && exec pytest -s tests --driver Remote --local android)
             
