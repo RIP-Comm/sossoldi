@@ -36,6 +36,8 @@ jobs:
           name: android-apk
           if-no-files-found: error
           retention-days: 1
+
+
     
   android-e2e-tests:
     name: Run Android E2E Tests
@@ -57,6 +59,7 @@ jobs:
         uses: actions/setup-java@v4.7.0
         with:
           distribution: temurin
+          java-version: 21
 
       - name: Flutter action
         uses: subosito/flutter-action@v2
