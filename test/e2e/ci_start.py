@@ -28,14 +28,14 @@ def add_output(output: subprocess.Popen):
     outputs.append(output)
     mutex.release()
 
-def open_process(command: str, add_to_std_output = True) -> subprocess.Popen:
+def open_process(command: str, add_to_std_output = True) -> subprocess.Popen[bytes]:
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     
     if add_to_std_output:
         add_output(process)
     return process
 
-def close_process(process: subprocess.Popen):
+def close_process(process: subprocess.Popen[bytes]):
     if process:
         process.send_signal(subprocess.signal.SIGTERM)
         process.wait(10)
@@ -71,13 +71,13 @@ def main():
 
     except Exception as e:
         print(f"Unexpected error: {e}")
-        if appium_process.poll() is None:
+        if appium_process:
             close_process(appium_process)
         exit(1)
 
 
     tests_command = "pytest -s tests --driver Remote --local android"
-    tests_process = open_process(tests_command)
+    tests_process = open_process(str(tests_command))
     tests_process.wait()
 
     close_process(appium_process)
