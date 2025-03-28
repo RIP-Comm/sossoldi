@@ -39,8 +39,10 @@ def close_process(process: subprocess.Popen):
     if process:
         process.send_signal(subprocess.signal.SIGTERM)
         process.wait(10)
-        if process.poll() is None:
+        ret_code = process.poll()
+        if ret_code is None:
             process.kill()
+        return ret_code
 
 def wait_for_appium_initialization(process: subprocess.Popen, timeout: int):
     start_time = time.time()
@@ -67,10 +69,6 @@ def main():
         wait_for_appium_initialization(appium_process, timeout=30)
         print("Appium started successfully")
 
-    except TimeoutError as e:
-        print(f"Error: {e}")
-        close_process(appium_process)
-        exit(1)
     except Exception as e:
         print(f"Unexpected error: {e}")
         if appium_process.poll() is None:
