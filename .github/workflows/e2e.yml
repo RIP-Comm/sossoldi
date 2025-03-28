@@ -51,7 +51,6 @@ jobs:
         id: get-apk
         with:
           name: android-apk
-          path: _ci
 
       - name: Flutter action
         uses: subosito/flutter-action@v2
