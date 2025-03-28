@@ -1,30 +1,13 @@
 import subprocess
 import time
 import threading
-from typing import IO
+import sys
 
-outputs: list[IO[bytes]] = []
-mutex = threading.Lock()
 
-def print_outputs(def_timeout = 5):
-    while True:
-        mutex.acquire(True, 60)
-        for output in outputs:
-            while output.readable():
-                line = output.readline().decode("utf-8")
-                if line != "":
-                    print(line)
-        mutex.release()
-        time.sleep(def_timeout)
-        
-def add_output(output: IO[bytes]):
-    mutex.acquire(True, 60)
-    outputs.append(output)
-    mutex.release()
 
 def open_process(command: str) -> subprocess.Popen:
-    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    add_output(process.stdout)
+    process = subprocess.Popen(command, shell=True, stdout=sys.stdout, stderr=sys.stdout)
+    #add_output(process.stdout)
     return process
 
 def close_process(process: subprocess.Popen):
@@ -48,8 +31,8 @@ def wait_for_appium_initialization(process: subprocess.Popen, timeout: int):
             raise TimeoutError("Appium initialization timeout")
 
 def main():
-    output_thread = threading.Thread(target=print_outputs, daemon=True)
-    output_thread.start()
+  #  output_thread = threading.Thread(target=print_outputs, daemon=True)
+    #output_thread.start()
 
     appium_process =  open_process("appium")
     try:
@@ -69,8 +52,12 @@ def main():
     tests_process = open_process(tests_command)
     tests_process.wait()
     
-    close_process(appium_process)
+    #close_process(appium_process)
     exit(tests_process.returncode)
+
+
+
+
 
 
 
