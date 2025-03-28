@@ -53,12 +53,14 @@ jobs:
           name: android-apk
           path: _ci
 
-      - name: Test
-        run: |
-          echo ${{ steps.get-apk.outputs.download-path }}
-          ls _ci
-          echo ----
-          ls .
+      - name: Flutter action
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.0'
+          channel: stable
+          cache: true
+          cache-key: flutter
+          cache-path: ${{ runner.tool_cache }}/flutter
         
       - name: Setup Node.js environment
         uses: actions/setup-node@v4.3.0
@@ -91,6 +93,7 @@ jobs:
           disable-animations: true
           disable-spellchecker: true
           script: |
+            flutter install -d emulator-5554
             appium&
             (cd test/e2e && exec pytest -s tests --driver Remote --local android)
             
