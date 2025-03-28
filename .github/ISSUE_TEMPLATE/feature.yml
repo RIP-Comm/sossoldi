@@ -1,0 +1,56 @@
+name: 🌟 Feature Request
+description: 💡 Suggest a new feature or enhancement.
+title: "[Feature] "
+labels: ["enhancement"]
+projects: ["RIP-Comm/3"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        🚀 Thanks for taking the time to suggest a feature!
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: 📝 **Feature Description**
+      description: 📖 Describe the feature you'd like to see and its purpose.
+      placeholder: 💭 Explain your idea!
+      value: "I have a feature suggestion!"
+    validations:
+      required: true
+  - type: textarea
+    id: problem-statement
+    attributes:
+      label: 🛑 **Problem Statement**
+      description: ❓ What problem would this feature solve, if any?
+      placeholder: Explain the problem this solves!
+  - type: textarea
+    id: benefits
+    attributes:
+      label: 🎁 **Benefits**
+      description: 🌿 How would this feature benefit users or improve the product?
+      placeholder: Describe the benefits of this feature!
+  - type: dropdown
+    id: os
+    attributes:
+      label: 🖥️ **OS**
+      description: 🧑‍💻 What OS would this feature apply to?
+      options:
+        - Android
+        - Apple
+        - Both
+      default: 2
+    validations:
+      required: true
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: ✍️ **Additional Context**
+      description: 🖼️ Add any other context, screenshots, or mockups about the feature request here.
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: 📜 **Code of Conduct**
+      description: 🔎 By submitting this request, you confirm that you have previously used the search function to look for similar feature requests among both open and closed issues.
+      options:
+        - label: ✅ I agree to the Code of Conduct
+          required: true

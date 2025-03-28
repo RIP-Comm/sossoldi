@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -26,11 +28,11 @@ import 'pages/backup_page/backup_page.dart';
 Route<dynamic> makeRoute(RouteSettings settings) {
   switch (settings.name) {
     case '/':
-      return _materialPageRoute(settings.name, const Structure());
+      return buildAdaptiveRoute(settings.name, const Structure());
     case '/onboarding':
-      return _materialPageRoute(settings.name, const Onboarding());
+      return buildAdaptiveRoute(settings.name, const Onboarding());
     case '/dashboard':
-      return _materialPageRoute(settings.name, const HomePage());
+      return buildAdaptiveRoute(settings.name, const HomePage());
     case '/add-page':
       Map<String, bool>? args;
       try {
@@ -38,47 +40,58 @@ Route<dynamic> makeRoute(RouteSettings settings) {
       } catch (_) {
         args = null;
       }
-      return _materialPageRoute(
+      return buildAdaptiveRoute(
         settings.name,
-        AddPage(recurrencyEditingPermitted: args?['recurrencyEditingPermitted'] ?? true),
+        AddPage(
+            recurrencyEditingPermitted:
+                args?['recurrencyEditingPermitted'] ?? true),
       );
     case '/edit-recurring-transaction':
-      return _materialPageRoute(settings.name, const EditRecurringTransaction());
+      return buildAdaptiveRoute(
+          settings.name, const EditRecurringTransaction());
     case '/transactions':
-      return _materialPageRoute(settings.name, const TransactionsPage());
+      return buildAdaptiveRoute(settings.name, const TransactionsPage());
     case '/category-list':
-      return _cupertinoPageRoute(settings.name, const CategoryList());
+      return buildAdaptiveRoute(settings.name, const CategoryList());
     case '/add-category':
-      return _cupertinoPageRoute(settings.name, const AddCategory());
+      return buildAdaptiveRoute(settings.name, const AddCategory());
     case '/more-info':
-      return _cupertinoPageRoute(settings.name, const MoreInfoPage());
+      return buildAdaptiveRoute(settings.name, const MoreInfoPage());
     case '/privacy-policy':
-      return _cupertinoPageRoute(settings.name, const PrivacyPolicyPage());
+      return buildAdaptiveRoute(settings.name, const PrivacyPolicyPage());
     case '/collaborators':
-      return _cupertinoPageRoute(settings.name, const CollaboratorsPage());
+      return buildAdaptiveRoute(settings.name, const CollaboratorsPage());
     case '/account':
-      return _materialPageRoute(settings.name, const AccountPage());
+      return buildAdaptiveRoute(settings.name, const AccountPage());
     case '/account-list':
-      return _cupertinoPageRoute(settings.name, const AccountList());
+      return buildAdaptiveRoute(settings.name, const AccountList());
     case '/add-account':
-      return _cupertinoPageRoute(settings.name, const AddAccount());
+      return buildAdaptiveRoute(settings.name, const AddAccount());
     case '/planning':
-      return _materialPageRoute(settings.name, const PlanningPage());
+      return buildAdaptiveRoute(settings.name, const PlanningPage());
     case '/graphs':
-      return _materialPageRoute(settings.name, const GraphsPage());
+      return buildAdaptiveRoute(settings.name, const GraphsPage());
     case '/settings':
-      return _cupertinoPageRoute(settings.name, const SettingsPage());
+      return buildAdaptiveRoute(settings.name, const SettingsPage());
     case '/general-settings':
-      return _cupertinoPageRoute(settings.name, const GeneralSettingsPage());
+      return buildAdaptiveRoute(settings.name, const GeneralSettingsPage());
     case '/notifications-settings':
-      return _cupertinoPageRoute(settings.name, const NotificationsSettings());
+      return buildAdaptiveRoute(settings.name, const NotificationsSettings());
     case '/search':
-      return _materialPageRoute(settings.name, const SearchPage());
+      return buildAdaptiveRoute(settings.name, const SearchPage());
     case '/backup-page':
-      return _cupertinoPageRoute(settings.name, const BackupPage());
+      return buildAdaptiveRoute(settings.name, const BackupPage());
     default:
       throw 'Route is not defined';
   }
+}
+
+PageRoute buildAdaptiveRoute(String? routeName, Widget viewToShow) {
+  if (Platform.isAndroid) {
+    return _materialPageRoute(routeName, viewToShow);
+  }
+
+  return _cupertinoPageRoute(routeName, viewToShow);
 }
 
 PageRoute _cupertinoPageRoute(String? routeName, Widget viewToShow) {

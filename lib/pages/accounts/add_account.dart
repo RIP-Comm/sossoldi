@@ -34,7 +34,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
       balanceController.text = numToCurrency(selectedAccount.total);
       accountIcon = selectedAccount.symbol;
       accountColor = selectedAccount.color;
-      countNetWorth = selectedAccount.active;
+      countNetWorth = selectedAccount.countNetWorth;
       mainAccount = selectedAccount.mainAccount;
     }
     super.initState();
@@ -298,9 +298,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                               RegExp(r'^\d*\.?\d{0,2}'),
                             ),
                           ],
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge,
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
                       ],
                     ),
@@ -327,7 +325,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                                 "Set as main account",
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
-                              CupertinoSwitch(
+                              Switch.adaptive(
                                 value: mainAccount,
                                 onChanged: (value) =>
                                     setState(() => mainAccount = value),
@@ -345,7 +343,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                                 "Counts for the net worth",
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
-                              CupertinoSwitch(
+                              Switch.adaptive(
                                 value: countNetWorth,
                                 onChanged: (value) =>
                                     setState(() => countNetWorth = value),
@@ -369,7 +367,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                                 account: selectedAccount,
                                 onPressed: () => ref
                                     .read(accountsProvider.notifier)
-                                    .removeAccount(selectedAccount.id!)
+                                    .removeAccount(selectedAccount)
                                     .whenComplete(
                                   () {
                                     if (context.mounted) {
@@ -432,24 +430,16 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                           name: nameController.text,
                           icon: accountIcon,
                           color: accountColor,
-                          active: countNetWorth,
+                          balance: currencyToNum(balanceController.text),
+                          countNetWorth: countNetWorth,
                           mainAccount: mainAccount,
                         );
-                    if (currencyToNum(balanceController.text) !=
-                        selectedAccount.total) {
-                      await ref
-                          .read(accountsProvider.notifier)
-                          .reconcileAccount(
-                            newBalance: currencyToNum(balanceController.text),
-                            account: selectedAccount,
-                          );
-                    }
                   } else {
                     await ref.read(accountsProvider.notifier).addAccount(
                           name: nameController.text,
                           icon: accountIcon,
                           color: accountColor,
-                          active: countNetWorth,
+                          countNetWorth: countNetWorth,
                           mainAccount: mainAccount,
                           startingValue: currencyToNum(balanceController.text),
                         );
