@@ -30,7 +30,6 @@ jobs:
       - name: Build apk 2
         run: flutter build apk --no-tree-shake-icons
           
-
       - name: Upload Artifact
         uses: actions/upload-artifact@v4.6.2
         with:
