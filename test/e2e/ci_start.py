@@ -22,7 +22,7 @@ def wait_for_appium_initialization(process: subprocess.Popen, timeout: int):
             raise TimeoutError("Appium initialization timeout")
 
 def main():
-    appium_process = subprocess.Popen("appium&", stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    appium_process = subprocess.Popen("appium", stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     try:
         wait_for_appium_initialization(appium_process, timeout=30)
         print("Appium started successfully")
