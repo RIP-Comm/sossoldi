@@ -1,13 +1,38 @@
 import subprocess
 import time
 import threading
-import sys
+from typing import IO
 
+outputs: list[subprocess.Popen] = []
+mutex = threading.Lock()
 
+def print_outputs(def_timeout = 5):
+    while True:
+        mutex.acquire(True, 60)
+        for output in outputs:
+            _stdout = output.stdout
+            _stderr = output.stderr
+            
+            while _stdout.readable():
+                line = _stdout.readline().decode("utf-8")
+                if line != "":
+                    print(line)
+            while _stderr.readable():
+                line = _stderr.readline().decode("utf-8")
+                if line != "":
+                    print(line)
+
+        mutex.release()
+        time.sleep(def_timeout)
+        
+def add_output(output: subprocess.Popen):
+    mutex.acquire(True, 60)
+    outputs.append(output)
+    mutex.release()
 
 def open_process(command: str) -> subprocess.Popen:
-    process = subprocess.Popen(command, shell=True, stdout=sys.stdout, stderr=sys.stdout)
-    #add_output(process.stdout)
+    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    add_output(process)
     return process
 
 def close_process(process: subprocess.Popen):
@@ -22,19 +47,21 @@ def close_process(process: subprocess.Popen):
 def wait_for_appium_initialization(process: subprocess.Popen, timeout: int):
     start_time = time.time()
     while True:
+        if process.poll() is not None:
+            raise RuntimeError("Appium process terminated")
+        
         output = process.stdout.readline().decode("utf-8").strip()
         if "Appium REST http interface listener started" in output:
             return
-        if process.poll() is not None:
-            raise RuntimeError("Appium process terminated")
+
         if time.time() - start_time > timeout:
             raise TimeoutError("Appium initialization timeout")
 
 def main():
-  #  output_thread = threading.Thread(target=print_outputs, daemon=True)
-    #output_thread.start()
+    output_thread = threading.Thread(target=print_outputs, daemon=True)
+    output_thread.start()
 
-    appium_process =  open_process("appium")
+    appium_process = open_process("appium")
     try:
         wait_for_appium_initialization(appium_process, timeout=30)
         print("Appium started successfully")
@@ -45,6 +72,8 @@ def main():
         exit(1)
     except Exception as e:
         print(f"Unexpected error: {e}")
+        if appium_process.poll() is None:
+            close_process(appium_process)
         exit(1)
 
 
@@ -52,7 +81,7 @@ def main():
     tests_process = open_process(tests_command)
     tests_process.wait()
     
-    close_process(appium_process)
+    #close_process(appium_process)
     exit(tests_process.returncode)
 
 
