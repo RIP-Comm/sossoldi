@@ -48,6 +48,9 @@ def wait_for_appium_initialization(process: subprocess.Popen, timeout: int):
             raise TimeoutError("Appium initialization timeout")
 
 def main():
+    output_thread = threading.Thread(target=print_outputs, daemon=True)
+    output_thread.start()
+
     appium_process =  open_process("appium")
     try:
         wait_for_appium_initialization(appium_process, timeout=30)
