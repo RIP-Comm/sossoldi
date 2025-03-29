@@ -56,10 +56,15 @@ def wait_for_appium_initialization(process: subprocess.Popen, timeout: int):
             raise RuntimeError("Appium process terminated")
         
         output = process.stdout.readline().decode("utf-8").strip()
+
         sys.stdout.write(output + "\n")
         sys.stdout.flush()
 
         if "Appium REST http interface listener started" in output:
+            sys.stdout.writelines(process.stdout.readlines())
+            sys.stdout.writelines(process.stderr.readlines())
+            sys.stdout.write("Appium started successfully\n")
+            sys.stdout.flush()
             add_output(process)
             return
 
@@ -73,7 +78,6 @@ def main():
     appium_process = open_process("appium", False, False)
     try:
         wait_for_appium_initialization(appium_process, timeout=30)
-        print("Appium started successfully")
 
     except Exception as e:
         print(f"Unexpected error: {e}")
