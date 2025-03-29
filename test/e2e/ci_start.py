@@ -21,6 +21,7 @@ def print_outputs():
                 line = _stderr.readline().decode("utf-8")
                 if line != "":
                     print(line)
+            sys.stdout.flush()
         mutex.release()
         
 def add_output(output: subprocess.Popen):
@@ -61,8 +62,6 @@ def wait_for_appium_initialization(process: subprocess.Popen, timeout: int):
         sys.stdout.flush()
 
         if "Appium REST http interface listener started" in output:
-            sys.stdout.writelines(process.stdout.readlines())
-            sys.stdout.writelines(process.stderr.readlines())
             sys.stdout.write("Appium started successfully\n")
             sys.stdout.flush()
             add_output(process)
