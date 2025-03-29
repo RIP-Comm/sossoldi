@@ -42,3 +42,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Ignored folders/files used for the e2e tests
+__pycache__
+.pytest_cache
+pyenv
+platform_config.yaml
