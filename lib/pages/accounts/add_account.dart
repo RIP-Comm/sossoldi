@@ -1,12 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/accounts_provider.dart';
 import '../../constants/constants.dart';
 import '../../constants/functions.dart';
 import '../../constants/style.dart';
 import '../../providers/currency_provider.dart';
+import '../../utils/decimal_text_input_formatter.dart';
 import 'widgets/confirm_account_deletion_dialog.dart';
 
 class AddAccount extends ConsumerStatefulWidget {
@@ -293,10 +292,8 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                           ),
                           keyboardType:
                               TextInputType.numberWithOptions(decimal: true),
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.allow(
-                              RegExp(r'^\d*\.?\d{0,2}'),
-                            ),
+                          inputFormatters: [
+                            DecimalTextInputFormatter(decimalDigits: 2),
                           ],
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
