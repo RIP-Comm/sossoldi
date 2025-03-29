@@ -1,7 +1,7 @@
 import yaml
 
 class Utils:
-    WAIT = 20
+    WAIT = 10
     ANDROID = "android"
     IOS = "ios"
     CONSTANTS = None
