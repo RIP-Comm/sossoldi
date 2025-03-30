@@ -1,3 +1,10 @@
+---
+title: Sossoldi Database Structure
+layout: default
+nav_order: 5
+---
+
+
 # Sossoldi Database Structure
 
 > **[TODO]**: Why are there no foreign keys?
