@@ -20,6 +20,7 @@ class SossoldiDatabase {
   static Database? _database;
   static String dbName = 'sossoldi.db';
 
+
   // Zero args constructor needed to extend this class
   SossoldiDatabase({String? dbName}) {
     dbName = dbName ?? 'sossoldi.db';

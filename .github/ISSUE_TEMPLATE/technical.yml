@@ -1,0 +1,63 @@
+name: 🛠️ Technical Improvement
+description: ⚙️ Suggest a technical enhancement or refactor.
+title: "[Tech Improvement] "
+labels: ["technical improvement"]
+projects: ["RIP-Comm/3"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        🚀 Thanks for taking the time to suggest a technical improvement!
+  - type: textarea
+    id: improvement-description
+    attributes:
+      label: 📝 **Improvement Description**
+      description: 📖 Describe the technical improvement or refactor you'd like to propose.
+      placeholder: 💡 Explain your idea!
+      value: "I have a technical improvement suggestion!"
+    validations:
+      required: true
+  - type: textarea
+    id: problem-statement
+    attributes:
+      label: 🛑 **Problem Statement**
+      description: ❗ What technical debt or issue would this improvement address?
+      placeholder: 🧩 Explain the problem this solves!
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: 💡 **Proposed Solution**
+      description: 🛠️ Provide details on how the improvement could be implemented.
+      placeholder: ✍️ Describe your proposed solution!
+  - type: textarea
+    id: benefits
+    attributes:
+      label: 🌿 **Benefits**
+      description: 🚀 How would this improvement enhance the codebase, performance, or maintainability?
+      placeholder: 📈 Explain the advantages of this improvement!
+  - type: checkboxes
+    id: impact-area
+    attributes:
+      label: 🧱 **Impact Area**
+      description: 🏗️ What area of the codebase would be impacted?
+      options:
+        - label: Backend
+        - label: Frontend
+        - label: Infrastructure
+        - label: DevOps
+        - label: Other
+    validations:
+      required: true
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: ✍️ **Additional Context**
+      description: 🖼️ Add any other context, screenshots, or code snippets relevant to your suggestion.
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: 📜 **Code of Conduct**
+      description: 🔎 By submitting this request, you confirm that you have previously used the search function to look for similar technical improvement requests among both open and closed issues.
+      options:
+        - label: ✅ I agree to the Code of Conduct
+          required: true
