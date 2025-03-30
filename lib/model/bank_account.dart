@@ -14,6 +14,7 @@ class BankAccountFields extends BaseEntityFields {
   static String color = 'color';
   static String startingValue = 'startingValue';
   static String active = 'active';
+  static String countNetWorth = 'countNetWorth';
   static String mainAccount = 'mainAccount';
   static String total = 'total';
   static String createdAt = BaseEntityFields.getCreatedAt;
@@ -26,6 +27,7 @@ class BankAccountFields extends BaseEntityFields {
     color,
     startingValue,
     active,
+    countNetWorth,
     mainAccount,
     BaseEntityFields.createdAt,
     BaseEntityFields.updatedAt
@@ -38,6 +40,7 @@ class BankAccount extends BaseEntity {
   final int color;
   final num startingValue;
   final bool active;
+  final bool countNetWorth;
   final bool mainAccount;
   final num? total;
 
@@ -48,46 +51,53 @@ class BankAccount extends BaseEntity {
     required this.color,
     required this.startingValue,
     required this.active,
+    required this.countNetWorth,
     required this.mainAccount,
     this.total,
     super.createdAt,
     super.updatedAt,
   });
 
-  BankAccount copy(
-          {int? id,
-          String? name,
-          String? symbol,
-          int? color,
-          num? startingValue,
-          bool? active,
-          bool? mainAccount,
-          DateTime? createdAt,
-          DateTime? updatedAt,}) =>
+  BankAccount copy({
+    int? id,
+    String? name,
+    String? symbol,
+    int? color,
+    num? startingValue,
+    bool? active,
+    bool? countNetWorth,
+    bool? mainAccount,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) =>
       BankAccount(
-          id: id ?? this.id,
-          name: name ?? this.name,
-          symbol: symbol ?? this.symbol,
-          color: color ?? this.color,
-          startingValue: startingValue ?? this.startingValue,
-          active: active ?? this.active,
-          mainAccount: mainAccount ?? this.mainAccount,
-          createdAt: createdAt ?? this.createdAt,
-          updatedAt: updatedAt ?? this.updatedAt,
-          total: total
-          );
+        id: id ?? this.id,
+        name: name ?? this.name,
+        symbol: symbol ?? this.symbol,
+        color: color ?? this.color,
+        startingValue: startingValue ?? this.startingValue,
+        active: active ?? this.active,
+        countNetWorth: countNetWorth ?? this.countNetWorth,
+        mainAccount: mainAccount ?? this.mainAccount,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+        total: total,
+      );
 
   static BankAccount fromJson(Map<String, Object?> json) => BankAccount(
-      id: json[BaseEntityFields.id] as int,
-      name: json[BankAccountFields.name] as String,
-      symbol: json[BankAccountFields.symbol] as String,
-      color: json[BankAccountFields.color] as int,
-      startingValue: json[BankAccountFields.startingValue] as num,
-      active: json[BankAccountFields.active] == 1 ? true : false,
-      mainAccount: json[BankAccountFields.mainAccount] == 1 ? true : false,
-      total: json[BankAccountFields.total] as num?,
-      createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
-      updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String));
+        id: json[BaseEntityFields.id] as int,
+        name: json[BankAccountFields.name] as String,
+        symbol: json[BankAccountFields.symbol] as String,
+        color: json[BankAccountFields.color] as int,
+        startingValue: json[BankAccountFields.startingValue] as num,
+        active: json[BankAccountFields.active] == 1 ? true : false,
+        countNetWorth:
+            json[BankAccountFields.countNetWorth] == 1 ? true : false,
+        mainAccount: json[BankAccountFields.mainAccount] == 1 ? true : false,
+        total: json[BankAccountFields.total] as num?,
+        createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
+        updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String),
+      );
 
   Map<String, Object?> toJson({bool update = false}) => {
         BaseEntityFields.id: id,
@@ -96,9 +106,11 @@ class BankAccount extends BaseEntity {
         BankAccountFields.color: color,
         BankAccountFields.startingValue: startingValue,
         BankAccountFields.active: active ? 1 : 0,
+        BankAccountFields.countNetWorth: countNetWorth ? 1 : 0,
         BankAccountFields.mainAccount: mainAccount ? 1 : 0,
-        BaseEntityFields.createdAt:
-            update ? createdAt?.toIso8601String() : DateTime.now().toIso8601String(),
+        BaseEntityFields.createdAt: update
+            ? createdAt?.toIso8601String()
+            : DateTime.now().toIso8601String(),
         BaseEntityFields.updatedAt: DateTime.now().toIso8601String(),
       };
 }
@@ -152,7 +164,8 @@ class BankAccountMethods extends SossoldiDatabase {
 
     final orderByASC = '${BankAccountFields.createdAt} ASC';
     final where = '${BankAccountFields.active} = 1 ';
-    final recurringFilter = '(t.${TransactionFields.recurring} = 0 OR t.${TransactionFields.recurring} IS NULL)';
+    final recurringFilter =
+        '(t.${TransactionFields.recurring} = 0 OR t.${TransactionFields.recurring} IS NULL)';
 
     final result = await db.rawQuery('''
       SELECT b.*, (b.${BankAccountFields.startingValue} +
@@ -207,7 +220,11 @@ class BankAccountMethods extends SossoldiDatabase {
   Future<int> deleteById(int id) async {
     final db = await database;
 
-    return await db.delete(bankAccountTable, where: '${BankAccountFields.id} = ?', whereArgs: [id]);
+    return await db.delete(
+      bankAccountTable,
+      where: '${BankAccountFields.id} = ?',
+      whereArgs: [id],
+    );
   }
 
   Future<int> deactivateById(int id) async {
@@ -215,7 +232,7 @@ class BankAccountMethods extends SossoldiDatabase {
 
     return await db.update(
       bankAccountTable,
-      {'active': 0},
+      {BankAccountFields.active: 0, BankAccountFields.mainAccount: 0},
       where: '${BankAccountFields.id} = ?',
       whereArgs: [id],
     );
@@ -225,8 +242,11 @@ class BankAccountMethods extends SossoldiDatabase {
     final db = await database;
 
     //get account infos first
-    final result =
-        await db.query(bankAccountTable, where: '${BankAccountFields.id}  = $id', limit: 1);
+    final result = await db.query(
+      bankAccountTable,
+      where: '${BankAccountFields.id}  = $id',
+      limit: 1,
+    );
     final singleObject = result.isNotEmpty ? result[0] : null;
 
     if (singleObject != null) {
@@ -323,14 +343,16 @@ class BankAccountMethods extends SossoldiDatabase {
     double runningTotal = statritngValue[0]['Value'] as double;
 
     var result = resultQuery.map((e) {
-      runningTotal += double.parse(e['income'].toString()) - double.parse(e['expense'].toString());
+      runningTotal += double.parse(e['income'].toString()) -
+          double.parse(e['expense'].toString());
       return {"day": e["day"], "balance": runningTotal};
     }).toList();
 
     if (dateRangeStart != null) {
       return result
-          .where((element) => dateRangeStart
-              .isBefore(DateTime.parse(element["day"].toString()).add(const Duration(days: 1))))
+          .where((element) => dateRangeStart.isBefore(
+              DateTime.parse(element["day"].toString())
+                  .add(const Duration(days: 1))))
           .toList();
     }
 

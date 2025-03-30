@@ -12,9 +12,11 @@ import '../model/category_transaction.dart';
 import '../model/currency.dart';
 import '../model/recurring_transaction.dart';
 import '../model/transaction.dart';
+import 'migration_manager.dart';
 
 class SossoldiDatabase {
   static final SossoldiDatabase instance = SossoldiDatabase._init();
+  final MigrationManager _migrationManager = MigrationManager();
   static Database? _database;
   static String dbName = 'sossoldi.db';
 
@@ -35,121 +37,21 @@ class SossoldiDatabase {
   Future<Database> _initDB(String filePath) async {
     final databasePath = await getDatabasesPath();
     final path = join(databasePath, filePath);
-    return await openDatabase(path, version: 1, onCreate: _createDB);
+    return await openDatabase(path,
+        version: _migrationManager.latestVersion,
+        onCreate: _createDB,
+        onUpgrade: _upgradeDB);
   }
 
   static Future _createDB(Database database, int version) async {
-    const integerPrimaryKeyAutoincrement = 'INTEGER PRIMARY KEY AUTOINCREMENT';
-    const integerNotNull = 'INTEGER NOT NULL';
-    const integer = 'INTEGER';
-    const realNotNull = 'REAL NOT NULL';
-    const textNotNull = 'TEXT NOT NULL';
-    const text = 'TEXT';
+    // Use the migration manager to apply all migrations from version 0
+    // This will run the InitialSchema migration (version 1) first
+    await instance._migrationManager.migrate(database, 0, version);
+  }
 
-    // Bank accounts Table
-    await database.execute('''
-      CREATE TABLE `$bankAccountTable`(
-        `${BankAccountFields.id}` $integerPrimaryKeyAutoincrement,
-        `${BankAccountFields.name}` $textNotNull,
-        `${BankAccountFields.symbol}` $textNotNull,
-        `${BankAccountFields.color}` $integerNotNull,
-        `${BankAccountFields.startingValue}` $realNotNull,
-        `${BankAccountFields.active}` $integerNotNull CHECK (${BankAccountFields.active} IN (0, 1)),
-        `${BankAccountFields.mainAccount}` $integerNotNull CHECK (${BankAccountFields.mainAccount} IN (0, 1)),
-        `${BankAccountFields.createdAt}` $textNotNull,
-        `${BankAccountFields.updatedAt}` $textNotNull
-      )
-      ''');
-
-    // Transactions Table
-    await database.execute('''
-      CREATE TABLE `$transactionTable`(
-        `${TransactionFields.id}` $integerPrimaryKeyAutoincrement,
-        `${TransactionFields.date}` $text,
-        `${TransactionFields.amount}` $realNotNull,
-        `${TransactionFields.type}` $integerNotNull,
-        `${TransactionFields.note}` $text,
-        `${TransactionFields.idCategory}` $integer,
-        `${TransactionFields.idBankAccount}` $integerNotNull,
-        `${TransactionFields.idBankAccountTransfer}` $integer,
-        `${TransactionFields.recurring}` $integerNotNull CHECK (${TransactionFields.recurring} IN (0, 1)),
-        `${TransactionFields.idRecurringTransaction}` $integer,
-        `${TransactionFields.createdAt}` $textNotNull,
-        `${TransactionFields.updatedAt}` $textNotNull
-      )
-    ''');
-
-    // Recurring Transactions Amount Table
-    await database.execute('''
-      CREATE TABLE `$recurringTransactionTable`(
-        `${RecurringTransactionFields.id}` $integerPrimaryKeyAutoincrement,
-        `${RecurringTransactionFields.fromDate}` $textNotNull,
-        `${RecurringTransactionFields.toDate}` $text,
-        `${RecurringTransactionFields.amount}` $realNotNull,
-        `${RecurringTransactionFields.note}` $textNotNull,
-        `${RecurringTransactionFields.recurrency}` $textNotNull,
-        `${RecurringTransactionFields.idCategory}` $integerNotNull,
-        `${RecurringTransactionFields.idBankAccount}` $integerNotNull,
-        `${RecurringTransactionFields.lastInsertion}` $text,
-        `${RecurringTransactionFields.createdAt}` $textNotNull,
-        `${RecurringTransactionFields.updatedAt}` $textNotNull
-      )
-    ''');
-
-    // Category Transaction Table
-    await database.execute('''
-      CREATE TABLE `$categoryTransactionTable`(
-        `${CategoryTransactionFields.id}` $integerPrimaryKeyAutoincrement,
-        `${CategoryTransactionFields.name}` $textNotNull,
-        `${CategoryTransactionFields.type}` $textNotNull,
-        `${CategoryTransactionFields.symbol}` $textNotNull,
-        `${CategoryTransactionFields.color}` $integerNotNull,
-        `${CategoryTransactionFields.note}` $text,
-        `${CategoryTransactionFields.parent}` $integer,
-        `${CategoryTransactionFields.markedAsDeleted}` $integerNotNull CHECK (${CategoryTransactionFields.markedAsDeleted} IN (0, 1)),
-        `${CategoryTransactionFields.createdAt}` $textNotNull,
-        `${CategoryTransactionFields.updatedAt}` $textNotNull
-      )
-    ''');
-
-    // Default "Uncategorized" Category
-    await database.execute('''
-      INSERT INTO `$categoryTransactionTable`(`${CategoryTransactionFields.id}`, `${CategoryTransactionFields.name}`, `${CategoryTransactionFields.type}`, `${CategoryTransactionFields.symbol}`, `${CategoryTransactionFields.color}`, `${CategoryTransactionFields.note}`, `${CategoryTransactionFields.parent}`, `${CategoryTransactionFields.markedAsDeleted}`, `${CategoryTransactionFields.createdAt}`, `${CategoryTransactionFields.updatedAt}`) VALUES
-        (0, "Uncategorized", "IN", "question_mark", 0, 'This is a default category for no categorized transactions', null, '0', '${DateTime.now()}', '${DateTime.now()}'),
-        (1, "Uncategorized", "OUT", "question_mark", 0, 'This is a default category for no categorized transactions', null, '0', '${DateTime.now()}', '${DateTime.now()}');
-    ''');
-
-    // Budget Table
-    await database.execute('''
-      CREATE TABLE `$budgetTable`(
-        `${BudgetFields.id}` $integerPrimaryKeyAutoincrement,
-        `${BudgetFields.idCategory}` $integerNotNull,
-        `${BudgetFields.name}` $textNotNull,
-        `${BudgetFields.amountLimit}` $realNotNull,
-        `${BudgetFields.active}` $integerNotNull  CHECK (${BudgetFields.active} IN (0, 1)),
-        `${BudgetFields.createdAt}` $textNotNull,
-        `${BudgetFields.updatedAt}` $textNotNull
-      )
-    ''');
-
-    // Currencies Table
-    await database.execute('''
-      CREATE TABLE `$currencyTable`(
-        `${CurrencyFields.id}` $integerPrimaryKeyAutoincrement,
-        `${CurrencyFields.symbol}` $textNotNull,
-        `${CurrencyFields.code}` $textNotNull,
-        `${CurrencyFields.name}` $textNotNull,
-        `${CurrencyFields.mainCurrency}` $integerNotNull CHECK (${CurrencyFields.mainCurrency} IN (0, 1))
-      )
-      ''');
-
-    await database.execute('''
-      INSERT INTO `$currencyTable`(`${CurrencyFields.symbol}`, `${CurrencyFields.code}`, `${CurrencyFields.name}`, `${CurrencyFields.mainCurrency}`) VALUES
-        ("€", "EUR", "Euro", 1),
-        ("\$", "USD", "United States Dollar", 0),
-        ("CHF", "CHF", "Switzerland Franc", 0),
-        ("£", "GBP", "United Kingdom Pound", 0);
-    ''');
+  static Future _upgradeDB(
+      Database database, int oldVersion, int newVersion) async {
+    await instance._migrationManager.migrate(database, oldVersion, newVersion);
   }
 
   Future<String> exportToCSV() async {
@@ -450,7 +352,7 @@ class SossoldiDatabase {
     } catch (error) {
       throw Exception('DbBase.resetDatabase: $error');
     }
-    await _createDB(_database!, 1);
+    await _createDB(_database!, _migrationManager.latestVersion);
   }
 
   Future clearDatabase() async {
