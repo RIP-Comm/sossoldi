@@ -102,7 +102,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4.6.2
         with:
-          path: videos/*/*/*
+          path: test/e2e/videos/*/*/*
           name: failure-recording
           if-no-files-found: error
           retention-days: 30
