@@ -12,7 +12,7 @@ has_children: true
 
 ## Tables
 
-[Database schema](database-schema.md)
+[Database schema](database-diagram.md)
 
 
 ### System
