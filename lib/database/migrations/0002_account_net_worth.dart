@@ -6,8 +6,8 @@ import '/model/bank_account.dart';
 
 class AccountNetWorth extends Migration {
   AccountNetWorth() : super(
-    version: 2,
-    description: 'Add account net worth column'
+      version: 2,
+      description: 'Add account net worth column'
   );
 
   @override

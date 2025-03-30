@@ -16,6 +16,7 @@ import '0001_initial_schema.dart';
 import '0002_account_net_worth.dart';
 import '../migration_base.dart';
 
+
 /// Returns all available migrations in execution order.
 ///
 /// IMPORTANT: The order of migrations in this list is critical!
