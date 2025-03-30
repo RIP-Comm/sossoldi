@@ -67,6 +67,7 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
                         backgroundColor: categoryColorList[cat.color],
                         padding: const EdgeInsets.all(8.0),
                         size: 25,
+                        markedAsDeleted: cat.markedAsDeleted,
                       ),
                       const SizedBox(width: 10),
                       Expanded(

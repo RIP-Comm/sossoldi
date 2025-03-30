@@ -39,7 +39,8 @@ Future<void> showDeleteCategoryDialog(
                     .read(categoriesProvider(userCategoriesFilter).notifier)
                     .markAsDeleted(selectedCategory.id)
                     .whenComplete(backToCategoryList);
-                final _ = ref.refresh(categoriesProvider(userCategoriesFilter));
+                ref.invalidate(categoriesProvider(userCategoriesFilter));
+                ref.invalidate(categoryByIdProvider);
               }),
           TextButton(
               child: Text(
@@ -51,7 +52,8 @@ Future<void> showDeleteCategoryDialog(
                     .read(categoriesProvider(userCategoriesFilter).notifier)
                     .removeCategory(selectedCategory.id!)
                     .whenComplete(backToCategoryList);
-                final _ = ref.refresh(categoriesProvider(userCategoriesFilter));
+                ref.invalidate(categoriesProvider(userCategoriesFilter));
+                ref.invalidate(categoryByIdProvider);
               }),
         ],
       );
