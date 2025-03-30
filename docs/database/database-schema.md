@@ -1,3 +1,11 @@
+---
+title: Database schema
+layout: default
+nav_order: 6
+parent: Sossoldi Database Structure
+---
+
+```mermaid
 erDiagram
     bankAccount ||--o{ transaction : has
     bankAccount ||--o{ transaction : transfers_to
@@ -75,3 +83,4 @@ erDiagram
         string name "NOT NULL"
         boolean mainCurrency "NOT NULL"
     }
+```

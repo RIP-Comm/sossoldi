@@ -2,6 +2,7 @@
 title: Sossoldi Database Structure
 layout: default
 nav_order: 5
+has_children: true
 ---
 
 
@@ -10,6 +11,9 @@ nav_order: 5
 > **[TODO]**: Why are there no foreign keys?
 
 ## Tables
+
+[Database schema](database-schema.md)
+
 
 ### System
 
