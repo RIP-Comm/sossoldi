@@ -6,3 +6,7 @@ url: https://github.com/RIP-Comm/sossoldi
 
 aux_links:
   View it on GitHub: https://github.com/RIP-Comm/sossoldi
+
+mermaid:
+  version: "11.6.0"
+
