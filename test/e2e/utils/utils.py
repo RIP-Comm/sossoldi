@@ -1,3 +1,4 @@
+from datetime import datetime
 import yaml
 
 class Utils:
@@ -17,3 +18,9 @@ class Utils:
             with open(yaml_file, "r") as file:
                 data = yaml.safe_load(file)
             Utils.CONSTANTS = data["platforms"][1]["constants"]
+
+    @staticmethod
+    def get_date_time():
+        date_format = "%Y-%m-%d-%H-%M-%S"
+        current_datetime = datetime.now()
+        return current_datetime.strftime(date_format)

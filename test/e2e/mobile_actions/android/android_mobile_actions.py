@@ -84,3 +84,9 @@ class AndroidMobileActions(MobileActions):
             },
         )
         return bool(can_scroll_more)
+    
+    def start_recording(self) -> None:
+        """Start recording the screen."""
+        self.driver.start_recording_screen()
+        MobileActions.is_recording = True
+        print("Started recording...")

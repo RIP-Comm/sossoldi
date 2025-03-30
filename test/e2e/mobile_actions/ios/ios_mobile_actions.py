@@ -113,3 +113,9 @@ class IOSMobileActions(MobileActions):
         }
 
         return offsets.get(direction)
+    
+    def start_recording(self) -> None:
+        """Start recording the screen."""
+        ex = self.driver.start_recording_screen(video_quality="low")
+        MobileActions.is_recording = True
+        print("Started recording...")

@@ -1,4 +1,6 @@
 import time
+import base64
+import os
 from appium.webdriver.webdriver import WebDriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -11,6 +13,8 @@ from utils.utils import Utils
 
 class MobileActions:
     driver = None
+    date_time = None
+    is_recording = False
 
     def __init__(self, driver: WebDriver):
         MobileActions.driver = driver
@@ -102,6 +106,27 @@ class MobileActions:
         scroll_distance = self.get_y_for_element(element) + self.get_height_for_element(element) - int(Utils.CONSTANTS["bottom_of_page"]) + 10
         self.driver.swipe(500, 600, 500, 600 - scroll_distance)
 
+    def stop_recording(self, file_name: str) -> None:
+        """Stops the video recording and saves the file."""
+        from utils.driver import Driver
+
+        raw_video = self.driver.stop_recording_screen()
+
+        dir = os.path.join(
+            "videos",
+            Driver.os + "_" + Driver.device_udid,
+            MobileActions.date_time,
+        )
+        video_dir = os.path.join(dir)
+        if not os.path.exists(video_dir):
+            os.makedirs(video_dir)
+            print("Created folder at: " + video_dir)
+        filepath = os.path.join(video_dir, file_name + ".mp4")
+        with open(filepath, "wb") as vd:
+            vd.write(base64.b64decode(raw_video))
+        MobileActions.is_recording = False
+        print("Raw video saved")
+
     def send_keys_to_element(self, element: WebElement, text: str) -> None:
         raise NotImplementedError
 
@@ -124,4 +149,7 @@ class MobileActions:
         raise NotImplementedError
 
     def relaunch_app(self):
+        raise NotImplementedError
+    
+    def start_recording(self) -> None:
         raise NotImplementedError
