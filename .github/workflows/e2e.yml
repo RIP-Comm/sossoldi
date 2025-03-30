@@ -85,6 +85,7 @@ jobs:
           appium driver install uiautomator2
 
       - name: Test the app
+        id: app-test
         uses: reactivecircus/android-emulator-runner@v2
         with:
           profile: Nexus 6
@@ -96,4 +97,14 @@ jobs:
           script: |
             adb -s emulator-5554 install _ci/app-debug.apk
             (cd test/e2e && exec python ci_start.py)
+
+      - name: Upload recording
+        if: failure()
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          path: videos/*/*
+          name: failure-recording
+          if-no-files-found: error
+          retention-days: 30
+          
       
