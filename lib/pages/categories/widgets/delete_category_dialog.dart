@@ -30,25 +30,29 @@ Future<void> showDeleteCategoryDialog(
         ),
         actions: <Widget>[
           TextButton(
-            child: Text(
-              "Mark as deleted",
-              style: TextStyle(color: Theme.of(context).colorScheme.primary),
-            ),
-            onPressed: () => ref
-                .read(categoriesProvider(userCategoriesFilter).notifier)
-                .markAsDeleted(selectedCategory.id)
-                .whenComplete(backToCategoryList),
-          ),
+              child: Text(
+                "Mark as deleted",
+                style: TextStyle(color: Theme.of(context).colorScheme.primary),
+              ),
+              onPressed: () async {
+                ref
+                    .read(categoriesProvider(userCategoriesFilter).notifier)
+                    .markAsDeleted(selectedCategory.id)
+                    .whenComplete(backToCategoryList);
+                final _ = ref.refresh(categoriesProvider(userCategoriesFilter));
+              }),
           TextButton(
-            child: Text(
-              "Delete",
-              style: TextStyle(color: Theme.of(context).colorScheme.primary),
-            ),
-            onPressed: () => ref
-                .read(categoriesProvider(userCategoriesFilter).notifier)
-                .removeCategory(selectedCategory.id!)
-                .whenComplete(backToCategoryList),
-          ),
+              child: Text(
+                "Delete",
+                style: TextStyle(color: Theme.of(context).colorScheme.primary),
+              ),
+              onPressed: () async {
+                ref
+                    .read(categoriesProvider(userCategoriesFilter).notifier)
+                    .removeCategory(selectedCategory.id!)
+                    .whenComplete(backToCategoryList);
+                final _ = ref.refresh(categoriesProvider(userCategoriesFilter));
+              }),
         ],
       );
     },

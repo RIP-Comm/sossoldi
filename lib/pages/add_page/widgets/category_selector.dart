@@ -28,7 +28,7 @@ class _CategorySelectorState extends ConsumerState<CategorySelector>
     final transactionType = ref.watch(transactionTypeProvider);
     final categoryType =
         ref.watch(transactionToCategoryProvider(transactionType));
-    final categoriesList = ref.watch(categoriesByTypeProvider(categoryType));
+    final categoriesList = ref.watch(categoriesProvider(userCategoriesFilter));
 
     return Container(
       color: Theme.of(context).colorScheme.primaryContainer,
@@ -67,10 +67,10 @@ class _CategorySelectorState extends ConsumerState<CategorySelector>
                     width: double.infinity,
                     child: categoriesList.when(
                       data: (categories) {
-                        //availableCategories without markedAsDeleted
                         final availableCategories = categories
-                            .where(
-                                (category) => category.markedAsDeleted == false)
+                            .where((category) =>
+                                category.type == categoryType &&
+                                !category.markedAsDeleted)
                             .toList();
 
                         return ListView.builder(
@@ -131,10 +131,10 @@ class _CategorySelectorState extends ConsumerState<CategorySelector>
                   ),
                   categoriesList.when(
                     data: (categories) {
-                      //availableCategories without markedAsDeleted
                       final availableCategories = categories
-                          .where(
-                              (category) => category.markedAsDeleted == false)
+                          .where((category) =>
+                              category.type == categoryType &&
+                              !category.markedAsDeleted)
                           .toList();
 
                       return Container(
