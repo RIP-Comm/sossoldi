@@ -12,7 +12,7 @@ import '/model/transaction.dart';
 class InitialSchema extends Migration {
   InitialSchema() : super(
     version: 1,
-     description: 'Initial database schema creation'
+    description: 'Initial database schema creation'
   );
 
   @override
