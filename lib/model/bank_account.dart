@@ -91,8 +91,7 @@ class BankAccount extends BaseEntity {
         color: json[BankAccountFields.color] as int,
         startingValue: json[BankAccountFields.startingValue] as num,
         active: json[BankAccountFields.active] == 1 ? true : false,
-        countNetWorth:
-            json[BankAccountFields.countNetWorth] == 1 ? true : false,
+        countNetWorth: json[BankAccountFields.countNetWorth] == 1 ? true : false,
         mainAccount: json[BankAccountFields.mainAccount] == 1 ? true : false,
         total: json[BankAccountFields.total] as num?,
         createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),

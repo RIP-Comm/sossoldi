@@ -44,4 +44,5 @@ abstract class Migration {
 
   /// Applies this migration to upgrade the database schema.
   Future<void> up(Database db);
+  
 }

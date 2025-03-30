@@ -10,8 +10,10 @@ import '/model/recurring_transaction.dart';
 import '/model/transaction.dart';
 
 class InitialSchema extends Migration {
-  InitialSchema()
-      : super(version: 1, description: 'Initial database schema creation');
+  InitialSchema() : super(
+    version: 1,
+     description: 'Initial database schema creation'
+  );
 
   @override
   Future<void> up(Database db) async {
@@ -82,7 +84,6 @@ class InitialSchema extends Migration {
         `${CategoryTransactionFields.color}` $integerNotNull,
         `${CategoryTransactionFields.note}` $text,
         `${CategoryTransactionFields.parent}` $integer,
-        `${CategoryTransactionFields.markedAsDeleted}` $integerNotNull CHECK (${CategoryTransactionFields.markedAsDeleted} IN (0, 1)),
         `${CategoryTransactionFields.createdAt}` $textNotNull,
         `${CategoryTransactionFields.updatedAt}` $textNotNull
       )
