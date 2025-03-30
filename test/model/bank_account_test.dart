@@ -19,6 +19,7 @@ void main() {
         color: 0,
         startingValue: 100,
         active: true,
+        countNetWorth: true,
         mainAccount: true,
         createdAt: DateTime.utc(2022),
         updatedAt: DateTime.utc(2022));
@@ -31,6 +32,7 @@ void main() {
     assert(bCopy.color == b.color);
     assert(bCopy.startingValue == bCopy.startingValue);
     assert(bCopy.active == bCopy.active);
+    assert(bCopy.countNetWorth == bCopy.countNetWorth);
     assert(bCopy.mainAccount == bCopy.mainAccount);
     assert(bCopy.createdAt == b.createdAt);
     assert(bCopy.updatedAt == b.updatedAt);
@@ -68,6 +70,7 @@ void main() {
         color: 0,
         startingValue: 100,
         active: true,
+        countNetWorth: true,
         mainAccount: false);
 
     Map<String, Object?> json = b.toJson();
@@ -78,6 +81,7 @@ void main() {
     assert(b.color == json[BankAccountFields.color]);
     assert(b.startingValue == json[BankAccountFields.startingValue]);
     assert((b.active ? 1 : 0) == json[BankAccountFields.active]);
+    assert((b.countNetWorth ? 1 : 0) == json[BankAccountFields.countNetWorth]);
     assert((b.mainAccount ? 1 : 0) == json[BankAccountFields.mainAccount]);
   });
 
