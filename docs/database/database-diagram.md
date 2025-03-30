@@ -12,7 +12,6 @@ erDiagram
     categoryTransaction ||--o{ transaction : categorizes
     transaction ||--o{ recurringTransaction : triggers
     categoryTransaction ||--o{ budget : categorizes
-    currency
 
     bankAccount {
         int id PK "AUTO_INCREMENT"
@@ -76,6 +75,12 @@ erDiagram
         datetime updatedAt "NOT NULL"
     }
 
+```
+
+```mermaid
+erDiagram
+    currency
+
     currency {
         int id PK "AUTO_INCREMENT"
         string symbol "NOT NULL"
@@ -83,4 +88,5 @@ erDiagram
         string name "NOT NULL"
         boolean mainCurrency "NOT NULL"
     }
+
 ```
