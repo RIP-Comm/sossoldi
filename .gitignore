@@ -47,4 +47,7 @@ app.*.map.json
 __pycache__
 .pytest_cache
 pyenv
+
 # platform_config.yaml
+videos
+

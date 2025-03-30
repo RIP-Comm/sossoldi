@@ -120,6 +120,10 @@ This guide provides step-by-step instructions for setting up a development envir
    - Set as global: `pyenv global 3.10`
    - Verify: `python --version`
 
+5. **Install ffmpeg for video recording**
+   - Run: `brew install ffmpeg`
+   **NOTE:** ffmpeg uses the same port of the flutter dev tools (9100) if you have also flutter installed I would suggest to change the default port for it to something different or you will end up with 0 bytes videos.
+
 ## Appium Inspector Installation
 - Download the latest Mac version from [GitHub releases](https://github.com/appium/appium-inspector/releases)
 - Install and run the application

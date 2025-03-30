@@ -396,11 +396,12 @@ class TransactionMethods extends SossoldiDatabase {
 
     final result = await db.rawQuery('''
       SELECT
-        strftime('$frequencyDateParser', ${TransactionFields.date}) as $freqencyString,
-        SUM(CASE WHEN ${TransactionFields.type} = 'IN' THEN ${TransactionFields.amount} ELSE 0 END) as income,
-        SUM(CASE WHEN ${TransactionFields.type} = 'OUT' THEN ${TransactionFields.amount} ELSE 0 END) as expense
-      FROM "$transactionTable"
-      WHERE $sqlFilters
+        strftime('$frequencyDateParser', t.${TransactionFields.date}) as $freqencyString,
+        SUM(CASE WHEN t.${TransactionFields.type} = 'IN' THEN t.${TransactionFields.amount} ELSE 0 END) as income,
+        SUM(CASE WHEN t.${TransactionFields.type} = 'OUT' THEN t.${TransactionFields.amount} ELSE 0 END) as expense
+      FROM "$transactionTable" t
+      JOIN $bankAccountTable b ON t.${TransactionFields.idBankAccount} = b.${BankAccountFields.id}
+      WHERE $sqlFilters AND b.${BankAccountFields.countNetWorth} = 1 AND b.${BankAccountFields.active} = 1
       GROUP BY $freqencyString
     ''');
 
