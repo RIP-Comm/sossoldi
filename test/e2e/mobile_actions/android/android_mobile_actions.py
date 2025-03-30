@@ -30,6 +30,7 @@ class AndroidMobileActions(MobileActions):
 
     def send_keys_to_element(self, element: WebElement, text: str) -> None:
         """Send text input to a given element."""
+        self.click_element(element)
         self._send_keys(element, text)
 
     def _send_keys(self, element: WebElement, text: str) -> None:
@@ -59,6 +60,7 @@ class AndroidMobileActions(MobileActions):
     def find_elements_by_class(self, class_name: str):
         """Find elements by class name, handling StaleElementReferenceException."""
         try:
+            print(class_name)
             return self.driver.find_elements(AppiumBy.CLASS_NAME, class_name)
         except StaleElementReferenceException:
             print("Retrying due to stale element issue...")
