@@ -1,7 +1,7 @@
 FROM ghcr.io/cirruslabs/flutter:3.29.1
 
 # Set up Android NDK
-ENV ANDROID_NDK_VERSION=22
+ARG ANDROID_NDK_VERSION
 ENV ANDROID_HOME=/opt/android-sdk-linux
 ENV ANDROID_NDK_HOME=$ANDROID_HOME/ndk/$ANDROID_NDK_VERSION
 

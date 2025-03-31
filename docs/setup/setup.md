@@ -29,9 +29,11 @@ Choose one of the following:
 
 To help contributors working with the same dependencies and SDKs, in .devcontainer folder there a Dockerfile with all the necessary for coding.
 
-On VSCode install [Dev Container exentension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers). This extension allows you to coding inside a Docker container directly in VSCode.
+1. On VSCode install [Dev Container exentension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers). This extension allows you to coding inside a Docker container directly in VSCode.
 
-Once the extension in installed at the bottom left corner of VSCode window click on "Open a Remote Window" then click on "Reopen in Container". This will create a Docker container inside which you'll have all the necessary dependencies for coding.
+2. Open ```.devcontainer/devcontainer.json``` and modify the *args* section, if needed (ex. you may want use a different NDK version)
+
+3. Once the extension in installed at the bottom left corner of VSCode window click on "Open a Remote Window" then click on "Reopen in Container". This will create a Docker container inside which you'll have all the necessary dependencies for coding.
 
 ### Using IntelliJ IDEA or Android Studio:
 

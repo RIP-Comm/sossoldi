@@ -1,7 +1,10 @@
 {
   "name": "Flutter Container",
   "build": {
-    "dockerfile": "Dockerfile"
+    "dockerfile": "Dockerfile",
+    "args": {
+      "ANDROID_NDK_VERSION": "22"
+    }
   },
   "runArgs": [
     "--privileged",
