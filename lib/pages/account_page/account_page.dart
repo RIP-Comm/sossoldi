@@ -9,6 +9,9 @@ import '../../custom_widgets/transactions_list.dart';
 import '../../providers/accounts_provider.dart';
 import '../../model/transaction.dart';
 import '../../providers/currency_provider.dart';
+import '../../providers/transactions_provider.dart';
+import '../../utils/decimal_text_input_formatter.dart';
+import '../../utils/snack_bars/transactions_snack_bars.dart';
 
 class AccountPage extends ConsumerStatefulWidget {
   const AccountPage({super.key});
@@ -20,21 +23,27 @@ class AccountPage extends ConsumerStatefulWidget {
 class _AccountPage extends ConsumerState<AccountPage> with Functions {
   bool isRecoinciling = false;
   final TextEditingController _newBalanceController = TextEditingController();
-
-  FocusNode focusNode = FocusNode();
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void dispose() {
-    focusNode.dispose();
+    _focusNode.dispose();
+    _newBalanceController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final account = ref.read(selectedAccountProvider);
-    final accountTransactions = ref.watch(selectedAccountCurrentMonthDailyBalanceProvider);
+    final accountTransactions =
+        ref.watch(selectedAccountCurrentMonthDailyBalanceProvider);
     final transactions = ref.watch(selectedAccountLastTransactions);
     final currencyState = ref.watch(currencyStateNotifier);
+
+    ref.listen(
+        duplicatedTransactoinProvider,
+        (prev, curr) => showDuplicatedTransactionSnackBar(context,
+            transaction: curr, ref: ref));
 
     return Scaffold(
       appBar: AppBar(
@@ -98,7 +107,7 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                       Column(
                         children: [
                           TextField(
-                            focusNode: focusNode,
+                            focusNode: _focusNode,
                             controller: _newBalanceController,
                             decoration: InputDecoration(
                                 hintText: "New Balance",
@@ -108,14 +117,17 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                                   child: Center(
                                     child: Text(
                                       currencyState.selectedCurrency.symbol,
-                                      style: Theme.of(context).textTheme.titleLarge,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge,
                                     ),
                                   ),
                                 )),
-                            keyboardType: TextInputType.number,
+                            keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true,
+                            ),
                             inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.allow(
-                                RegExp(r'^\d*\.?\d{0,2}'),),
+                              DecimalTextInputFormatter(decimalDigits: 2),
                             ],
                           ),
                           const SizedBox(height: 16),
@@ -133,10 +145,15 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                                       backgroundColor: Colors.green),
                                   onPressed: () async {
                                     if (account != null) {
-                                        await ref.read(accountsProvider.notifier).reconcileAccount(
-                                          newBalance: currencyToNum(_newBalanceController.text), account: account
-                                        );
-                                        if (context.mounted) Navigator.of(context).pop();
+                                      await ref
+                                          .read(accountsProvider.notifier)
+                                          .reconcileAccount(
+                                              newBalance: currencyToNum(
+                                                  _newBalanceController.text),
+                                              account: account);
+                                      if (context.mounted) {
+                                        Navigator.of(context).pop();
+                                      }
                                     }
                                   },
                                   label: const Text("Save"),
@@ -153,7 +170,8 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                                       ),
                                       foregroundColor: Colors.red,
                                       backgroundColor: Colors.transparent),
-                                  onPressed: () => setState(() => isRecoinciling = false),
+                                  onPressed: () =>
+                                      setState(() => isRecoinciling = false),
                                   label: const Text(
                                     "Cancel",
                                     style: TextStyle(fontSize: 14),
@@ -169,7 +187,7 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                       TextButton.icon(
                           onPressed: () {
                             setState(() => isRecoinciling = true);
-                            focusNode.requestFocus();
+                            _focusNode.requestFocus();
                           },
                           icon: const Icon(Icons.sync),
                           label: Text(
@@ -182,10 +200,13 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 16, bottom: 8, top: 8),
-              child: Text("Your last transactions", style: Theme.of(context).textTheme.titleLarge),
+              child: Text("Your last transactions",
+                  style: Theme.of(context).textTheme.titleLarge),
             ),
             TransactionsList(
-              transactions: transactions.map((json) => Transaction.fromJson(json)).toList(),
+              transactions: transactions
+                  .map((json) => Transaction.fromJson(json))
+                  .toList(),
             ),
           ],
         ),

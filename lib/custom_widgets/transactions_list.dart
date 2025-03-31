@@ -18,10 +18,12 @@ class TransactionsList extends StatefulWidget {
   const TransactionsList({
     super.key,
     required this.transactions,
+    this.margin = const EdgeInsets.symmetric(horizontal: 16),
     this.padding,
   });
 
   final List<Transaction> transactions;
+  final EdgeInsetsGeometry? margin;
   final EdgeInsetsGeometry? padding;
 
   @override
@@ -64,6 +66,7 @@ class _TransactionsListState extends State<TransactionsList> with Functions {
   Widget build(BuildContext context) {
     return transactions.isNotEmpty
         ? DefaultContainer(
+            margin: widget.margin,
             child: ListView.separated(
               physics: const NeverScrollableScrollPhysics(),
               padding: widget.padding,
@@ -72,26 +75,43 @@ class _TransactionsListState extends State<TransactionsList> with Functions {
               separatorBuilder: (_, __) => const SizedBox(height: 16),
               itemBuilder: (context, monthIndex) {
                 // Group transactions by month
-                final dates = totals.keys.toList()..sort((a, b) => b.compareTo(a));
+                final dates = totals.keys.toList()
+                  ..sort((a, b) => b.compareTo(a));
                 final currentDate = dates[monthIndex];
-                final dateTransactions = transactions.where((t) => t.date.toYMD() == currentDate).toList();
+                final dateTransactions = transactions
+                    .where((t) => t.date.toYMD() == currentDate)
+                    .toList();
 
                 return Column(
                   children: [
-                    TransactionTitle(date: DateTime.parse(currentDate), total: totals[currentDate] ?? 0),
+                    TransactionTitle(
+                      date: DateTime.parse(currentDate),
+                      total: totals[currentDate] ?? 0,
+                    ),
                     Container(
                       decoration: BoxDecoration(
-                        color: Theme.of(context).scaffoldBackgroundColor,
+                        color: Theme.of(context).colorScheme.primaryContainer,
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: ListView.separated(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: ListView.separated(
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: dateTransactions.length,
                           separatorBuilder: (_, __) => Divider(
-                                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.4),
-                              ),
-                          itemBuilder: (context, index) => TransactionTile(transaction: dateTransactions[index])),
+                            indent: 12,
+                            endIndent: 12,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withValues(alpha: 0.4),
+                          ),
+                          itemBuilder: (context, index) => TransactionTile(
+                            transaction: dateTransactions[index],
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 );
@@ -110,80 +130,88 @@ class TransactionTile extends ConsumerWidget with Functions {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currencyState = ref.watch(currencyStateNotifier);
-    return ListTile(
-      visualDensity: VisualDensity.compact,
-      dense: true,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      onTap: () {
-        ref.read(transactionsProvider.notifier).transactionUpdateState(transaction).whenComplete(() {
-          if (context.mounted) {
-            Navigator.of(context)
-                .pushNamed("/add-page", arguments: {'recurrencyEditingPermitted': !transaction.recurring});
-          }
-        });
-      },
-      leading: RoundedIcon(
-        icon: transaction.categorySymbol != null ? iconList[transaction.categorySymbol] : Icons.swap_horiz_rounded,
-        backgroundColor: transaction.categoryColor != null
-            ? categoryColorListTheme[transaction.categoryColor!]
-            : Theme.of(context).colorScheme.secondary,
-        size: 25,
-        padding: const EdgeInsets.all(8.0),
-      ),
-      title: Text(
-        (transaction.note?.isEmpty ?? true)
-            ? DateFormat("dd MMMM - HH:mm").format(transaction.date)
-            : transaction.note!,
-        overflow: TextOverflow.ellipsis,
-        style: Theme.of(context).textTheme.titleMedium!.copyWith(
-              color: Theme.of(context).colorScheme.primary,
-            ),
-      ),
-      subtitle: Text(
-        transaction.categoryName ?? "Uncategorized",
-        overflow: TextOverflow.ellipsis,
-        style: Theme.of(context).textTheme.labelMedium!.copyWith(
-              color: Theme.of(context).colorScheme.primary,
-            ),
-      ),
-      trailing: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                '${transaction.type == TransactionType.expense ? "-" : ""}${numToCurrency(transaction.amount)}',
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      color: typeToColor(
-                        transaction.type,
-                        brightness: Theme.of(context).brightness,
-                      ),
-                    ),
+    return Material(
+      child: ListTile(
+        visualDensity: VisualDensity.compact,
+        dense: true,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        onTap: () async {
+          ref
+              .read(transactionsProvider.notifier)
+              .transactionUpdateState(transaction)
+              .whenComplete(() {
+            if (context.mounted) {
+              Navigator.of(context).pushNamed("/add-page", arguments: {
+                'recurrencyEditingPermitted': !transaction.recurring
+              });
+            }
+          });
+        },
+        leading: RoundedIcon(
+          icon: transaction.categorySymbol != null
+              ? iconList[transaction.categorySymbol]
+              : Icons.swap_horiz_rounded,
+          backgroundColor: transaction.categoryColor != null
+              ? categoryColorListTheme[transaction.categoryColor!]
+              : Theme.of(context).colorScheme.secondary,
+          size: 25,
+          padding: const EdgeInsets.all(8.0),
+        ),
+        title: Text(
+          (transaction.note?.isEmpty ?? true)
+              ? DateFormat("dd MMMM - HH:mm").format(transaction.date)
+              : transaction.note!,
+          overflow: TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                color: Theme.of(context).colorScheme.primary,
               ),
-              Text(
-                currencyState.selectedCurrency.symbol,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: typeToColor(
-                        transaction.type,
-                        brightness: Theme.of(context).brightness,
-                      ),
-                    ),
+        ),
+        subtitle: Text(
+          transaction.categoryName ?? "Uncategorized",
+          overflow: TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                color: Theme.of(context).colorScheme.primary,
               ),
-            ],
-          ),
-          Text(
-            transaction.type == TransactionType.transfer
-                ? "${transaction.bankAccountName ?? ''}→${transaction.bankAccountTransferName ?? ''}"
-                : transaction.bankAccountName ?? '',
-            style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                  color: Theme.of(context).colorScheme.primary,
+        ),
+        trailing: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  '${transaction.type == TransactionType.expense ? "-" : ""}${numToCurrency(transaction.amount)}',
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        color: typeToColor(
+                          transaction.type,
+                          brightness: Theme.of(context).brightness,
+                        ),
+                      ),
                 ),
-          ),
-        ],
+                Text(
+                  currencyState.selectedCurrency.symbol,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: typeToColor(
+                          transaction.type,
+                          brightness: Theme.of(context).brightness,
+                        ),
+                      ),
+                ),
+              ],
+            ),
+            Text(
+              transaction.type == TransactionType.transfer
+                  ? "${transaction.bankAccountName ?? ''}→${transaction.bankAccountTransferName ?? ''}"
+                  : transaction.bankAccountName ?? '',
+              style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -209,16 +237,21 @@ class TransactionTitle extends ConsumerWidget with Functions {
         children: [
           Text(
             dateToString(date),
-            style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).colorScheme.primary),
+            style: Theme.of(context)
+                .textTheme
+                .bodySmall!
+                .copyWith(color: Theme.of(context).colorScheme.primary),
           ),
           const Spacer(),
           Text(
             numToCurrency(total),
-            style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: color),
+            style:
+                Theme.of(context).textTheme.bodyLarge!.copyWith(color: color),
           ),
           Text(
             currencyState.selectedCurrency.symbol,
-            style: Theme.of(context).textTheme.labelMedium!.copyWith(color: color),
+            style:
+                Theme.of(context).textTheme.labelMedium!.copyWith(color: color),
           ),
         ],
       ),
