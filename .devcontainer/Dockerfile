@@ -20,3 +20,6 @@ RUN mkdir -p $ANDROID_HOME/ndk && \
 
 # Ensure the NDK is in the PATH
 ENV PATH="$ANDROID_NDK_HOME:/usr/local/bin:$PATH"
+
+# Set the working directory for Flutter builds
+WORKDIR /workspace/build
