@@ -121,7 +121,7 @@ class _TransactionsListState extends State<TransactionsList> with Functions {
             ),
           )
         : widget.isFromHomeScreen
-          ? const Center(child: Text("Add a transaction to make this section more appealing"))
+          ? DefaultContainer(child: const Center(child: Text("Add a transaction to make this section more appealing")))
             : TransactionEmptyStateWidget();
   }
 }

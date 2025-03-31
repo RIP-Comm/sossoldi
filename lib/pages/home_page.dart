@@ -311,7 +311,7 @@ class _HomePageState extends ConsumerState<HomePage> with Functions {
                 ),
                 lastTransactions.when(
                   data: (transactions) =>
-                      TransactionsList(transactions: transactions),
+                      TransactionsList(transactions: transactions,isFromHomeScreen:true),
                   loading: () => const SizedBox(),
                   error: (err, stack) => Text('Error: $err'),
                 ),
