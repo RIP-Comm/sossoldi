@@ -20,8 +20,10 @@ class TransactionsList extends StatefulWidget {
     required this.transactions,
     this.margin = const EdgeInsets.symmetric(horizontal: 16),
     this.padding,
+    this.isFromHomeScreen = false,
   });
 
+  final bool isFromHomeScreen;
   final List<Transaction> transactions;
   final EdgeInsetsGeometry? margin;
   final EdgeInsetsGeometry? padding;
@@ -118,7 +120,9 @@ class _TransactionsListState extends State<TransactionsList> with Functions {
               },
             ),
           )
-        : TransactionEmptyStateWidget();
+        : widget.isFromHomeScreen
+          ? const Center(child: Text("Add a transaction to make this section more appealing"))
+            : TransactionEmptyStateWidget();
   }
 }
 
