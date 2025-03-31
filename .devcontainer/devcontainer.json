@@ -4,7 +4,8 @@
     "dockerfile": "Dockerfile",
     "args": {
       "ANDROID_NDK_VERSION": "22",
-      "ANDROID_NDK_SHA256": "d37fc69cd81e5660234a686e20adef39bc0244086e4d66525a40af771c020718"
+      "ANDROID_NDK_SHA256": "d37fc69cd81e5660234a686e20adef39bc0244086e4d66525a40af771c020718",
+      "FLUTTER_VERSION": "3.29.1"
     }
   },
   "runArgs": [

@@ -1,4 +1,6 @@
-FROM ghcr.io/cirruslabs/flutter:3.29.1
+# Use a parameterized Flutter version
+ARG FLUTTER_VERSION
+FROM ghcr.io/cirruslabs/flutter:$FLUTTER_VERSION
 
 # Set up Android NDK
 ARG ANDROID_NDK_VERSION
