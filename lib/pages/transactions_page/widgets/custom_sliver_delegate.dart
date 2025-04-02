@@ -66,7 +66,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
               ],
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: Sizes.sm),
         ],
       ),
     );
@@ -96,7 +96,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
                   labelStyle: Theme.of(context).textTheme.bodyLarge,
                   unselectedLabelStyle: Theme.of(context).textTheme.bodyLarge,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: Sizes.lg),
                 const MonthSelector(type: MonthSelectorType.advanced),
               ],
             ),

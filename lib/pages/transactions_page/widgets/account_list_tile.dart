@@ -63,7 +63,7 @@ class AccountListTile extends ConsumerWidget {
                   backgroundColor: color,
                   padding: const EdgeInsets.all(Sizes.sm),
                 ),
-                const SizedBox(width: 8.0),
+                const SizedBox(width: Sizes.sm),
                 Expanded(
                   child: Column(
                     children: [
@@ -99,7 +99,7 @@ class AccountListTile extends ConsumerWidget {
                     ],
                   ),
                 ),
-                const SizedBox(width: 8.0),
+                const SizedBox(width: Sizes.sm),
                 Icon(
                   (selectedAccountIndex == index)
                       ? Icons.expand_more
@@ -154,7 +154,7 @@ class TransactionRow extends ConsumerWidget {
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
-          const SizedBox(width: 48.0),
+          const SizedBox(width: Sizes.xl * 2),
           Expanded(
             child: Column(
               children: [
@@ -189,7 +189,7 @@ class TransactionRow extends ConsumerWidget {
               ],
             ),
           ),
-          const SizedBox(width: 8.0),
+          const SizedBox(width: Sizes.sm),
         ],
       ),
     );

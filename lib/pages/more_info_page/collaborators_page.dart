@@ -117,7 +117,7 @@ class _CollaboratorsPageState extends ConsumerState<CollaboratorsPage> {
                         .copyWith(color: Theme.of(context).colorScheme.primary),
                     textAlign: TextAlign.left,
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: Sizes.xs),
                   Text(
                     option[1].toString(),
                     style: Theme.of(context)
@@ -126,7 +126,7 @@ class _CollaboratorsPageState extends ConsumerState<CollaboratorsPage> {
                         .copyWith(color: Theme.of(context).colorScheme.primary),
                     textAlign: TextAlign.left,
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: Sizes.xs),
                   Text(
                     option[2].toString(),
                     style: Theme.of(context)

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import '../../providers/currency_provider.dart';
+import '../device.dart';
 import '../extensions.dart';
 
 /// This class shows account summaries in dashboard
@@ -57,7 +58,7 @@ class BudgetCircularIndicator extends ConsumerWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: Sizes.sm),
               Text(
                 "LEFT",
                 style: Theme.of(context)
@@ -71,15 +72,14 @@ class BudgetCircularIndicator extends ConsumerWidget {
           backgroundColor: color.withValues(alpha: 0.3),
           progressColor: color,
         ),
-        const SizedBox(height: 10),
-        Row(
-          children: [
-            if (perc >= 0.9)
-              const Icon(Icons.error_outline, color: Colors.red, size: 15),
-            const SizedBox(width: 3),
-            Text(title, style: Theme.of(context).textTheme.bodyLarge),
-          ],
-        )
+        const SizedBox(height: Sizes.sm),
+        Row(children: [
+          perc >= 0.9
+              ? const Icon(Icons.error_outline, color: Colors.red, size: 15)
+              : Container(),
+          const SizedBox(width: Sizes.xxs),
+          Text(title, style: Theme.of(context).textTheme.bodyLarge),
+        ])
       ],
     );
   }

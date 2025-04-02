@@ -37,7 +37,7 @@ class CategoryButton extends StatelessWidget {
               padding: const EdgeInsets.all(Sizes.xxs),
               child: Icon(Icons.check_rounded, color: categoryColor, size: 22),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: Sizes.sm),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: Sizes.sm),
               child: Column(

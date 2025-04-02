@@ -51,10 +51,10 @@ class _HomePageState extends ConsumerState<HomePage> {
 
                   return Column(
                     children: [
-                      const SizedBox(height: 24),
+                      const SizedBox(height: Sizes.xl),
                       Row(
                         children: [
-                          const SizedBox(width: 16),
+                          const SizedBox(width: Sizes.lg),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -97,7 +97,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                               ),
                             ],
                           ),
-                          const SizedBox(width: 30),
+                          const SizedBox(width: Sizes.xl),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -128,7 +128,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                               ),
                             ],
                           ),
-                          const SizedBox(width: 30),
+                          const SizedBox(width: Sizes.xl),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -161,14 +161,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: Sizes.lg),
                       LineChartWidget(
                         lineData: currentMonthList,
                         line2Data: lastMonthList,
                       ),
                       Row(
                         children: [
-                          const SizedBox(width: 16),
+                          const SizedBox(width: Sizes.lg),
                           Container(
                             width: 8,
                             height: 8,
@@ -177,7 +177,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                               color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
-                          const SizedBox(width: 4),
+                          const SizedBox(width: Sizes.xs),
                           Text(
                             "Current month",
                             style: Theme.of(context)
@@ -187,7 +187,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     color:
                                         Theme.of(context).colorScheme.primary),
                           ),
-                          const SizedBox(width: 12),
+                          const SizedBox(width: Sizes.md),
                           Container(
                             width: 8,
                             height: 8,
@@ -196,7 +196,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                               color: grey2,
                             ),
                           ),
-                          const SizedBox(width: 4),
+                          const SizedBox(width: Sizes.xs),
                           Text(
                             "Last month",
                             style: Theme.of(context)
@@ -208,7 +208,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 22),
+                      const SizedBox(height: Sizes.xl),
                     ],
                   );
                 },
@@ -248,11 +248,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                       physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
                       separatorBuilder: (context, i) =>
-                          const SizedBox(width: 16),
+                          const SizedBox(width: Sizes.lg),
                       itemBuilder: (context, i) {
                         if (i == accounts.length) {
                           return Container(
-                            constraints: const BoxConstraints(maxWidth: 140),
+                            constraints: const BoxConstraints(maxWidth: Sizes.xs),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(
                                   Sizes.borderRadius),
@@ -315,7 +315,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   loading: () => const SizedBox(),
                   error: (err, stack) => Text('Error: $err'),
                 ),
-                const SizedBox(height: 28),
+                const SizedBox(height: Sizes.xxl),
                 const BudgetsSection(),
               ],
             ),

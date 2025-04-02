@@ -40,7 +40,7 @@ class BudgetsSection extends ConsumerWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: Sizes.lg),
                       if (budgets == null || budgets.isEmpty)
                         Container(
                           height: 90,
@@ -58,7 +58,7 @@ class BudgetsSection extends ConsumerWidget {
                                       color: Colors.grey[600],
                                     ),
                               ),
-                              const SizedBox(height: 8),
+                              const SizedBox(height: Sizes.sm),
                               Text(
                                 "Create a budget to track your spending",
                                 style: Theme.of(context)

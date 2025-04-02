@@ -70,7 +70,7 @@ class _TransactionsListState extends State<TransactionsList> {
               padding: widget.padding,
               shrinkWrap: true,
               itemCount: totals.keys.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 16),
+              separatorBuilder: (_, __) => const SizedBox(height: Sizes.lg),
               itemBuilder: (context, monthIndex) {
                 // Group transactions by month
                 final dates = totals.keys.toList()

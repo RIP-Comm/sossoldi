@@ -97,10 +97,10 @@ class _AccountPage extends ConsumerState<AccountPage> {
                         Text("Balance Discrepancy?"),
                       ],
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: Sizes.sm),
                     Text(
                         "Your recorder balance might differ from your bank's statement. Tap below to manually adjust your balance and keep your records accurate."),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: Sizes.lg),
                     if (isRecoinciling)
                       Column(
                         children: [
@@ -126,7 +126,7 @@ class _AccountPage extends ConsumerState<AccountPage> {
                               DecimalTextInputFormatter(decimalDigits: 2),
                             ],
                           ),
-                          const SizedBox(height: 16),
+                          const SizedBox(height: Sizes.lg),
                           Row(
                             spacing: 8,
                             children: [

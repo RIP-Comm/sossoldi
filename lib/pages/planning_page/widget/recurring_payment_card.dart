@@ -70,7 +70,7 @@ class RecurringPaymentCard extends ConsumerWidget {
                         padding: const EdgeInsets.all(Sizes.sm),
                         size: 25,
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: Sizes.sm),
                       Expanded(
                           flex: 4,
                           child: Column(
@@ -81,10 +81,10 @@ class RecurringPaymentCard extends ConsumerWidget {
                                 transaction.recurrency,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w200,
-                                  fontSize: 10,
+                                  fontSize: Sizes.sm,
                                 ),
                               ),
-                              const SizedBox(height: 10),
+                              const SizedBox(height: Sizes.sm),
                               Text(
                                 transaction.note,
                                 style: const TextStyle(
@@ -92,7 +92,7 @@ class RecurringPaymentCard extends ConsumerWidget {
                                   fontSize: 16,
                                 ),
                               ),
-                              const SizedBox(height: 10),
+                              const SizedBox(height: Sizes.sm),
                               Text(cat.name),
                             ],
                           )),
@@ -103,11 +103,11 @@ class RecurringPaymentCard extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Text("In ${getNextText()} days"),
-                            const SizedBox(height: 10),
+                            const SizedBox(height: Sizes.sm),
                             Text(
                                 "-${transaction.amount}${currencyState.selectedCurrency.symbol}",
                                 style: const TextStyle(color: Colors.red)),
-                            const SizedBox(height: 10),
+                            const SizedBox(height: Sizes.sm),
                             Text(accounts!
                                 .firstWhere((element) =>
                                     element.id == transaction.idBankAccount)
@@ -135,7 +135,7 @@ class RecurringPaymentCard extends ConsumerWidget {
                                         Sizes.borderRadiusLarge),
                                   ),
                                 ),
-                                elevation: 10,
+                                elevation: Sizes.sm,
                                 builder: (BuildContext context) {
                                   return ListView(
                                     scrollDirection: Axis.vertical,

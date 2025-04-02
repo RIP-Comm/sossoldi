@@ -28,7 +28,7 @@ class _GraphsPageState extends ConsumerState<GraphsPage> {
 
     return ListView(
       children: [
-        const SizedBox(height: 16),
+        const SizedBox(height: Sizes.lg),
         ref.watch(statisticsProvider).when(
               data: (value) {
                 double percentGainLoss = 0;
@@ -143,11 +143,11 @@ class _GraphsPageState extends ConsumerState<GraphsPage> {
               loading: () => const SizedBox(),
               error: (error, stack) => Text('Error: $error'),
             ),
-        const SizedBox(height: 24),
+        const SizedBox(height: Sizes.xl),
         const AccountsCard(),
-        const SizedBox(height: 24),
+        const SizedBox(height: Sizes.xl),
         const CategoriesCard(),
-        const SizedBox(height: 24),
+        const SizedBox(height: Sizes.xl),
       ],
     );
   }

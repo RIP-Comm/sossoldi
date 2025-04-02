@@ -172,7 +172,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
                                         Theme.of(context).colorScheme.primary),
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: Sizes.xl),
                         Material(
                           color: Colors.transparent,
                           child: InkWell(
@@ -193,7 +193,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 6),
+                        const SizedBox(height: Sizes.sm),
                         Text(
                           "CHOOSE ICON",
                           style: Theme.of(context)
@@ -202,7 +202,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
                               .copyWith(
                                   color: Theme.of(context).colorScheme.primary),
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: Sizes.md),
                         if (showCategoryIcons)
                           const Divider(height: 1, color: grey1),
                         if (showCategoryIcons)
@@ -275,7 +275,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
                             ),
                           ),
                         const Divider(height: 1, color: grey1),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: Sizes.md),
                         SizedBox(
                           height: 38,
                           child: ListView.separated(
@@ -283,7 +283,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
                             physics: const BouncingScrollPhysics(),
                             padding: const EdgeInsets.symmetric(horizontal: Sizes.lg),
                             separatorBuilder: (context, index) =>
-                                const SizedBox(width: 16),
+                                const SizedBox(width: Sizes.lg),
                             itemBuilder: (context, index) {
                               Color color = categoryColorListTheme[index];
                               return GestureDetector(
@@ -320,7 +320,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
                             itemCount: categoryColorListTheme.length,
                           ),
                         ),
-                        const SizedBox(height: 6),
+                        const SizedBox(height: Sizes.xs),
                         Text(
                           "CHOOSE COLOR",
                           style: Theme.of(context)

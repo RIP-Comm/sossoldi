@@ -154,7 +154,7 @@ class _BackupPageState extends ConsumerState<BackupPage> {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 separatorBuilder: (context, index) =>
-                    const SizedBox(height: 16),
+                    const SizedBox(height: Sizes.lg),
                 itemBuilder: (context, i) {
                   final option = options[i];
                   return Card(
@@ -199,7 +199,7 @@ class _BackupPageState extends ConsumerState<BackupPage> {
                               color: Theme.of(context).colorScheme.primary,
                               size: 32,
                             ),
-                            const SizedBox(width: 16),
+                            const SizedBox(width: Sizes.lg),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -215,7 +215,7 @@ class _BackupPageState extends ConsumerState<BackupPage> {
                                               .primary,
                                         ),
                                   ),
-                                  const SizedBox(height: 4),
+                                  const SizedBox(height: Sizes.xs),
                                   Text(
                                     option.description,
                                     style: Theme.of(context)

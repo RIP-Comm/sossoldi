@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../ui/device.dart';
 import '../../../../ui/extensions.dart';
 import '../linear_progress_bar.dart';
 import '../../../../ui/widgets/default_container.dart';
@@ -20,7 +21,7 @@ class AccountsCard extends ConsumerWidget {
     return Column(
       children: [
         const CardLabel(label: "Accounts"),
-        const SizedBox(height: 10),
+        const SizedBox(height: Sizes.sm),
         DefaultContainer(
           child: accountList.when(
             data: (accounts) => ListView.separated(
@@ -28,7 +29,7 @@ class AccountsCard extends ConsumerWidget {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               scrollDirection: Axis.vertical,
-              separatorBuilder: (context, i) => const SizedBox(height: 4),
+              separatorBuilder: (context, i) => const SizedBox(height: Sizes.xs),
               itemBuilder: (context, i) {
                 double total = accounts.isNotEmpty
                     ? accounts
@@ -38,7 +39,7 @@ class AccountsCard extends ConsumerWidget {
                     : 0.0;
                 BankAccount account = accounts[i];
                 return SizedBox(
-                  height: 50.0,
+                  height: Sizes.xl * 2,
                   child: Column(
                     spacing: 4,
                     children: [

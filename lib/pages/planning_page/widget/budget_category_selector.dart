@@ -89,7 +89,7 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
                     return DropdownMenuItem<CategoryTransaction>(
                         value: category,
                         child: Row(
-                          children: [Icon(icon), const SizedBox(width: 15), Text(category.name)],
+                          children: [Icon(icon), const SizedBox(width: Sizes.lg), Text(category.name)],
                         ));
                   }).toList(),
                   onChanged: (CategoryTransaction? newValue) {
@@ -102,7 +102,7 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
               ),
             ),
           ),
-          const SizedBox(width: 20),
+          const SizedBox(width: Sizes.xl),
           Container(
             width: 100,
             height: 55,

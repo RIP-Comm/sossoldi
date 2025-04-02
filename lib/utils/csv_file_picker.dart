@@ -108,7 +108,7 @@ class CSVFilePicker {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const CircularProgressIndicator(),
-                const SizedBox(height: 16),
+                const SizedBox(height: Sizes.lg),
                 Text(
                   message,
                   style: const TextStyle(

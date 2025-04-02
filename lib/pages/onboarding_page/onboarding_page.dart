@@ -52,19 +52,16 @@ class _OnboardingState extends State<Onboarding> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: Sizes.xl, vertical: Sizes.sm),
-              child: SizedBox(
-                width: MediaQuery.sizeOf(context).width,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const BudgetSetup(),
-                      ),
-                    );
-                  },
-                  child: Text('START THE SET UP'),
-                ),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const BudgetSetup(),
+                    ),
+                  );
+                },
+                child: Center(child: Text('START THE SET UP')),
               ),
             ),
           ],
