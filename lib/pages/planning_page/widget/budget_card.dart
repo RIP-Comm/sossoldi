@@ -49,7 +49,7 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                       Text("Composition", style: Theme.of(context).textTheme.titleLarge),
                       BudgetPieChart(budgets: budgets as List<Budget>),
                       Text("Progress", style: Theme.of(context).textTheme.titleLarge),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: Sizes.sm),
                       ListView.separated(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
@@ -78,7 +78,7 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 4),
+                              const SizedBox(height: Sizes.xs),
                               LinearProgressBar(
                                 type: BarType.category,
                                 colorIndex: index,
@@ -91,7 +91,7 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                           );
                         },
                         separatorBuilder: (context, index) {
-                          return const SizedBox(height: 15);
+                          return const SizedBox(height: Sizes.lg);
                         },
                       ),
                     ],
@@ -113,7 +113,7 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                         style: Theme.of(context).textTheme.bodySmall,
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 15),
+                      const SizedBox(height: Sizes.lg),
                       TextButton.icon(
                         icon: Icon(
                           Icons.add_circle,

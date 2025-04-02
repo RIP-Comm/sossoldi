@@ -58,7 +58,7 @@ class _CategoryListState extends ConsumerState<CategoryList> {
                       color: Theme.of(context).colorScheme.onPrimary,
                     ),
                   ),
-                  const SizedBox(width: 12.0),
+                  const SizedBox(width: Sizes.md),
                   Text(
                     "Your categories",
                     style: Theme.of(context)
@@ -75,7 +75,7 @@ class _CategoryListState extends ConsumerState<CategoryList> {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 separatorBuilder: (context, index) =>
-                    const SizedBox(height: 16),
+                    const SizedBox(height: Sizes.lg),
                 itemBuilder: (context, i) {
                   CategoryTransaction category = categorys[i];
                   return DefaultCard(
@@ -92,7 +92,7 @@ class _CategoryListState extends ConsumerState<CategoryList> {
                               categoryColorListTheme[category.color],
                           size: 30,
                         ),
-                        const SizedBox(width: 12.0),
+                        const SizedBox(width: Sizes.md),
                         Text(
                           category.name,
                           style: Theme.of(context)

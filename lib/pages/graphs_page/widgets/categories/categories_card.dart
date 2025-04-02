@@ -31,14 +31,14 @@ class CategoriesCardState extends ConsumerState<CategoriesCard> {
     return Column(
       children: [
         const CardLabel(label: "Categories"),
-        const SizedBox(height: 10),
+        const SizedBox(height: Sizes.sm),
         DefaultContainer(
           child: Column(
             children: [
               const MonthSelector(type: MonthSelectorType.simple),
-              const SizedBox(height: 30),
+              const SizedBox(height: Sizes.xxl),
               const CategoryTypeButton(),
-              const SizedBox(height: 20),
+              const SizedBox(height: Sizes.xl),
               categoryMap.when(
                 data: (categories) {
                   _categoriesCount = categories.length;
@@ -80,7 +80,7 @@ class CategoriesContent extends StatelessWidget {
           categoryMap: categories,
           total: totalAmount,
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: Sizes.xl),
         ListView.builder(
           itemCount: categories.length,
           shrinkWrap: true,
@@ -95,7 +95,7 @@ class CategoriesContent extends StatelessWidget {
             );
           },
         ),
-        const SizedBox(height: 30),
+        const SizedBox(height: Sizes.xxl),
         const CategoriesBarChart(),
       ],
     );
@@ -126,7 +126,7 @@ class CategoryItem extends StatelessWidget {
             amount: amount,
             total: totalAmount,
           ),
-          const SizedBox(height: 4.0),
+          const SizedBox(height: Sizes.xs),
           LinearProgressBar(
             type: BarType.category,
             amount: amount,
@@ -153,10 +153,10 @@ class LoadingContentWidget extends StatelessWidget {
       children: [
         // height of CategoriesPieChart2
         const SizedBox(height: 200),
-        const SizedBox(height: 20),
+        const SizedBox(height: Sizes.xl),
         // Height of CategoryItem's list
         SizedBox(height: 50.0 * previousCategoriesCount),
-        const SizedBox(height: 30),
+        const SizedBox(height: Sizes.xxl),
         // Height of CategoriesBarChart
         const SizedBox(height: 200),
       ],

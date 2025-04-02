@@ -74,7 +74,7 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
         child: Column(
           children: [
             const TransactionTypeButton(),
-            const SizedBox(height: 16),
+            const SizedBox(height: Sizes.lg),
             categories.when(
               data: (data) {
                 List<CategoryTransaction> categoryIncomeList =
@@ -96,7 +96,7 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
                                 amounts: categoryToAmountIncome,
                                 total: totalIncome,
                               ),
-                              const SizedBox(height: 16),
+                              const SizedBox(height: Sizes.lg),
                               ListView.separated(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
@@ -129,7 +129,7 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
                                 amounts: categoryToAmountExpense,
                                 total: totalExpense,
                               ),
-                              const SizedBox(height: 16),
+                              const SizedBox(height: Sizes.lg),
                               ListView.separated(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),

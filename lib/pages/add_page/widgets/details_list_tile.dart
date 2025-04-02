@@ -48,7 +48,7 @@ class DetailsListTile extends ConsumerWidget {
                     ? grey3
                     : Theme.of(context).colorScheme.secondary),
           ),
-          const SizedBox(width: 6.0),
+          const SizedBox(width: Sizes.sm),
           Icon(
             Icons.chevron_right,
             color: isDarkMode ? grey3 : Theme.of(context).colorScheme.secondary,

@@ -130,7 +130,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                             }
                           },
                         ),
-                        const SizedBox(height: 15),
+                        const SizedBox(height: Sizes.md),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -170,7 +170,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                             }
                           },
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: Sizes.sm),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -180,7 +180,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                             const Icon(Icons.edit, size: 10)
                           ],
                         ),
-                        const SizedBox(height: 6),
+                        const SizedBox(height: Sizes.xs),
                         Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
@@ -193,7 +193,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                             color: Theme.of(context).colorScheme.onPrimary,
                           ),
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: Sizes.md),
                         SizedBox(
                           height: 38,
                           child: ListView.separated(
@@ -201,7 +201,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                             physics: const BouncingScrollPhysics(),
                             padding: const EdgeInsets.symmetric(horizontal: Sizes.lg),
                             separatorBuilder: (context, index) =>
-                                const SizedBox(width: 16),
+                                const SizedBox(width: Sizes.lg),
                             itemBuilder: (context, index) {
                               Color color = accountColorList[index];
                               return GestureDetector(
@@ -236,7 +236,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                             physics: const BouncingScrollPhysics(),
                             padding: const EdgeInsets.symmetric(horizontal: Sizes.lg),
                             separatorBuilder: (context, index) =>
-                                const SizedBox(width: 16),
+                                const SizedBox(width: Sizes.lg),
                             itemBuilder: (context, index) {
                               IconData accountIconData = accountIconList.values.elementAt(index);
                               String accountIconName = accountIconList.keys.elementAt(index);
@@ -272,10 +272,10 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
               ),
               Column(
                 children: [
-                  SizedBox(height: 16),
+                  SizedBox(height: Sizes.lg),
                   Text('Or you can skip this step and start from 0',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(color: blue1)),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: Sizes.sm),
                   ElevatedButton(
                     onPressed: () {
                       _flagOnBoardingCompleted();
@@ -317,25 +317,24 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                       horizontal: Sizes.xl,
                       vertical: Sizes.lg,
                     ),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (_validAmount) {
-                            ref.watch(accountsProvider.notifier).addAccount(
-                                  name: accountNameController.text,
-                                  icon: accountIcon,
-                                  color: accountColor,
-                                  mainAccount: true,
-                                  startingValue: num.tryParse(amountController.text) ?? 0,
-                                );
-                            _flagOnBoardingCompleted();
-                            Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: _validAmount ? blue5 : grey2,
-                        ),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (_validAmount) {
+                          ref.watch(accountsProvider.notifier).addAccount(
+                                name: accountNameController.text,
+                                icon: accountIcon,
+                                color: accountColor,
+                                mainAccount: true,
+                                startingValue: num.tryParse(amountController.text) ?? 0,
+                              );
+                          _flagOnBoardingCompleted();
+                          Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: _validAmount ? blue5 : grey2,
+                      ),
+                      child: Center(
                         child: Text(
                           'START TRACKING YOUR EXPENSES',
                         ),

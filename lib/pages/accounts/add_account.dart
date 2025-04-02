@@ -112,7 +112,7 @@ class _AddAccountState extends ConsumerState<AddAccount> {
                             style: Theme.of(context).textTheme.labelLarge,
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: Sizes.xl),
                         Material(
                           color: Colors.transparent,
                           child: InkWell(
@@ -132,12 +132,12 @@ class _AddAccountState extends ConsumerState<AddAccount> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 6),
+                        const SizedBox(height: Sizes.sm),
                         Text(
                           "CHOOSE ICON",
                           style: Theme.of(context).textTheme.labelMedium,
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: Sizes.md),
                         if (showAccountIcons) const Divider(color: grey2),
                         if (showAccountIcons)
                           Container(
@@ -197,7 +197,7 @@ class _AddAccountState extends ConsumerState<AddAccount> {
                             ),
                           ),
                         const Divider(height: 1, color: grey2),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: Sizes.md),
                         SizedBox(
                           height: 38,
                           child: ListView.separated(
@@ -205,7 +205,7 @@ class _AddAccountState extends ConsumerState<AddAccount> {
                             physics: const BouncingScrollPhysics(),
                             padding: const EdgeInsets.symmetric(horizontal: Sizes.lg),
                             separatorBuilder: (context, index) =>
-                                const SizedBox(width: 16),
+                                const SizedBox(width: Sizes.lg),
                             itemBuilder: (context, index) {
                               Color color = accountColorListTheme[index];
                               return GestureDetector(
@@ -229,7 +229,7 @@ class _AddAccountState extends ConsumerState<AddAccount> {
                             itemCount: accountColorListTheme.length,
                           ),
                         ),
-                        const SizedBox(height: 6),
+                        const SizedBox(height: Sizes.sm),
                         Text(
                           "CHOOSE COLOR",
                           style: Theme.of(context)
@@ -237,7 +237,7 @@ class _AddAccountState extends ConsumerState<AddAccount> {
                               .labelMedium!
                               .copyWith(color: Theme.of(context).colorScheme.primary),
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: Sizes.lg),
                       ],
                     ),
                   ),

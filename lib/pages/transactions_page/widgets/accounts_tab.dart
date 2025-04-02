@@ -78,7 +78,7 @@ class _AccountsTabState extends ConsumerState<AccountsTab> {
         child: Column(
           children: [
             const TransactionTypeButton(),
-            const SizedBox(height: 16),
+            const SizedBox(height: Sizes.lg),
             accounts.when(
               data: (data) {
                 List<BankAccount> accountIncomeList =
@@ -101,7 +101,7 @@ class _AccountsTabState extends ConsumerState<AccountsTab> {
                                 amounts: accountToAmountIncome,
                                 total: totalIncome,
                               ),
-                              const SizedBox(height: 16),
+                              const SizedBox(height: Sizes.lg),
                               ListView.separated(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
@@ -137,12 +137,12 @@ class _AccountsTabState extends ConsumerState<AccountsTab> {
                                 amounts: accountToAmountExpense,
                                 total: totalExpense,
                               ),
-                              const SizedBox(height: 16),
+                              const SizedBox(height: Sizes.lg),
                               ListView.separated(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: accountExpenseList.length,
-                                separatorBuilder: (context, index) => const SizedBox(height: 10),
+                                separatorBuilder: (context, index) => const SizedBox(height: Sizes.sm),
                                 itemBuilder: (context, index) {
                                   BankAccount b = accountExpenseList[index];
                                   return AccountListTile(

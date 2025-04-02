@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
 import '../../../model/budget.dart';
 import '../../../providers/currency_provider.dart';
+import '../../../ui/device.dart';
 
 class BudgetPieChart extends ConsumerStatefulWidget {
   const BudgetPieChart({super.key, required this.budgets});
@@ -40,7 +41,7 @@ class BudgetPieChartState extends ConsumerState<BudgetPieChart> {
         children: [
           Text("${totalBudget.round()}${currencyState.selectedCurrency.symbol}",
               style: const TextStyle(fontSize: 25)),
-          const SizedBox(height: 5),
+          const SizedBox(height: Sizes.xs),
           const Text("PLANNED", style: TextStyle(fontWeight: FontWeight.normal))
         ],
       )

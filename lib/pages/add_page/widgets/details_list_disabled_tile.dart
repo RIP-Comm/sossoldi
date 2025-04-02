@@ -42,7 +42,7 @@ class NonEditableDetailsListTile extends DetailsListTile {
                 .bodySmall!
                 .copyWith(color: Colors.grey),
           ),
-          const SizedBox(width: 6.0)
+          const SizedBox(width: Sizes.sm)
         ],
       ),
     );

@@ -26,7 +26,7 @@ class LabelListTile extends ConsumerWidget {
             icon: Icons.description,
             backgroundColor: Theme.of(context).colorScheme.secondary,
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: Sizes.lg),
           Text(
             "Description",
             style: Theme.of(context)
@@ -34,7 +34,7 @@ class LabelListTile extends ConsumerWidget {
                 .titleLarge!
                 .copyWith(color: Theme.of(context).colorScheme.primary),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: Sizes.lg),
           Expanded(
             child: TextField(
               controller: labelController,

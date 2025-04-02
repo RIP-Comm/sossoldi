@@ -51,7 +51,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
       color: Theme.of(context).colorScheme.surface,
       child: Column(
         children: [
-          const SizedBox(height: 34),
+          const SizedBox(height: Sizes.xxl),
           Container(
             height: 30,
             decoration: BoxDecoration(
@@ -101,14 +101,14 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
             Padding(
               padding: const EdgeInsets.fromLTRB(Sizes.lg, Sizes.sm, Sizes.lg, 0),
               child: SizedBox(
-                height: 64,
+                height: Sizes.xxl * 2,
                 child: Row(
                   children: [
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(height: 8),
+                          const SizedBox(height: Sizes.sm),
                           Text(
                             "FROM:",
                             style: Theme.of(context)
@@ -121,7 +121,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
                                       : darkGrey1,
                                 ),
                           ),
-                          const SizedBox(height: 2),
+                          const SizedBox(height: Sizes.xxs * 0.5),
                           Material(
                             child: InkWell(
                               onTap: () {
@@ -233,7 +233,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(height: 8),
+                          const SizedBox(height: Sizes.sm),
                           Text(
                             "TO:",
                             style: Theme.of(context)
@@ -246,7 +246,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
                                       : darkGrey1,
                                 ),
                           ),
-                          const SizedBox(height: 2),
+                          const SizedBox(height: Sizes.xxs * 0.5),
                           Material(
                             child: InkWell(
                               onTap: () {

@@ -77,7 +77,7 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                     )),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: Sizes.lg),
             Row(
               children: [
                 Text("Currency",
@@ -104,7 +104,7 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                         )))),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: Sizes.lg),
             /*
             Row(
               children: [

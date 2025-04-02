@@ -57,7 +57,7 @@ class _MoreInfoPageState extends ConsumerState<MoreInfoPage> {
             },
             child: Row(
               children: [
-                const SizedBox(width: 12.0),
+                const SizedBox(width: Sizes.md),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.start,

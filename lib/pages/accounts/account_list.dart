@@ -58,7 +58,7 @@ class _AccountListState extends ConsumerState<AccountList> {
                       color: Theme.of(context).colorScheme.onPrimary,
                     ),
                   ),
-                  const SizedBox(width: 12.0),
+                  const SizedBox(width: Sizes.md),
                   Text(
                     "Your accounts",
                     style: Theme.of(context)
@@ -75,7 +75,7 @@ class _AccountListState extends ConsumerState<AccountList> {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 separatorBuilder: (context, index) =>
-                    const SizedBox(height: 16),
+                    const SizedBox(height: Sizes.lg),
                 itemBuilder: (context, i) {
                   BankAccount account = accounts[i];
                   return DefaultCard(
@@ -91,7 +91,7 @@ class _AccountListState extends ConsumerState<AccountList> {
                           backgroundColor: accountColorListTheme[account.color],
                           size: 30,
                         ),
-                        const SizedBox(width: 12.0),
+                        const SizedBox(width: Sizes.md),
                         Text(
                           account.name,
                           style: Theme.of(context)

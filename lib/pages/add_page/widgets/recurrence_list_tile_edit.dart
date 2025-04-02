@@ -83,7 +83,7 @@ class RecurrenceListTileEdit extends ConsumerWidget {
                             ? grey3
                             : Theme.of(context).colorScheme.secondary),
                   ),
-                  const SizedBox(width: 6),
+                  const SizedBox(width: Sizes.xs),
                   Icon(
                     Icons.chevron_right,
                     color: isDarkMode
@@ -126,7 +126,7 @@ class RecurrenceListTileEdit extends ConsumerWidget {
                             ? grey3
                             : Theme.of(context).colorScheme.secondary),
                   ),
-                  const SizedBox(width: 6),
+                  const SizedBox(width: Sizes.xs),
                   Icon(
                     Icons.chevron_right,
                     color: isDarkMode

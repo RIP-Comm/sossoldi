@@ -147,7 +147,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         color: Theme.of(context).colorScheme.surface,
                       ),
                     ),
-                    const SizedBox(width: 12.0),
+                    const SizedBox(width: Sizes.md),
                     Text(
                       "Settings",
                       style: Theme.of(context)
@@ -194,7 +194,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                               color: white,
                             ),
                           ),
-                          const SizedBox(width: 12.0),
+                          const SizedBox(width: Sizes.md),
                           Expanded(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
