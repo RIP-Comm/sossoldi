@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 
 import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
@@ -155,16 +156,18 @@ class TransactionRow extends ConsumerWidget with Functions {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      transaction.note ?? "",
-                      style: Theme.of(context).textTheme.titleMedium,
+                    Expanded(
+                      child: Text(
+                        transaction.note ?? "",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
                     ),
+                    Gap(10),
                     Text(
                       "${numToCurrency(transaction.amount)} ${currencyState.selectedCurrency.symbol}",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge
-                          ?.copyWith(color: (transaction.amount > 0) ? green : red),
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: (transaction.amount > 0) ? green : red),
                     ),
                   ],
                 ),
