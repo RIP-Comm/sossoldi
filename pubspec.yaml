@@ -3,7 +3,7 @@ description: A wealth management / personal finance / net worth tracking app.
 
 publish_to: 'none'
 
-version: 0.1.2+3
+version: 0.1.6+1
 
 environment:
   sdk: '>=3.3.3 <4.0.0'
@@ -33,6 +33,7 @@ dependencies:
   sqlite3_flutter_libs:
   timezone: ^0.10.0
   url_launcher: ^6.3.1
+  package_info_plus: ^8.3.0
 
 dev_dependencies:
   flutter_test:

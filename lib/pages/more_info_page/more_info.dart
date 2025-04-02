@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../custom_widgets/default_card.dart';
 
@@ -12,10 +13,10 @@ class MoreInfoPage extends ConsumerStatefulWidget {
   ConsumerState<MoreInfoPage> createState() => _MoreInfoPageState();
 }
 
-var moreInfoOptions = const [
+var moreInfoOptions = [
   [
     "App Version:",
-    "0.1.2",
+    "Loading...",
     null,
   ],
   [
@@ -32,6 +33,20 @@ var moreInfoOptions = const [
 
 class _MoreInfoPageState extends ConsumerState<MoreInfoPage> {
   @override
+
+  void initState() {
+    super.initState();
+    _loadAppVersion();
+  }
+
+  Future<void> _loadAppVersion() async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    setState(() {
+      moreInfoOptions[0][1] = packageInfo.version;
+    });
+  }
+
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
