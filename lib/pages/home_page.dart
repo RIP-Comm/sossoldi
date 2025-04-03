@@ -252,7 +252,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                       itemBuilder: (context, i) {
                         if (i == accounts.length) {
                           return Container(
-                            constraints: const BoxConstraints(maxWidth: Sizes.xs),
+                            width: 140,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(
                                   Sizes.borderRadius),
