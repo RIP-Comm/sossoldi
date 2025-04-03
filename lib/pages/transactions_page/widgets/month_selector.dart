@@ -62,7 +62,7 @@ class MonthSelector extends ConsumerWidget {
         height: currentHeight,
         decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.tertiary,
-            borderRadius: BorderRadius.circular(Sizes.borderRadius * 10)),
+            borderRadius: BorderRadius.circular(Sizes.borderRadius)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

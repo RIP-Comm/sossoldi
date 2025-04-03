@@ -53,13 +53,13 @@ class AccountsSum extends ConsumerWidget {
                   horizontal: Sizes.md, vertical: Sizes.sm),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                spacing: 8,
+                spacing: Sizes.sm,
                 children: [
                   RoundedIcon(
                     icon: accountIconList[account.symbol],
                     backgroundColor: accountColorListTheme[account.color],
-                    padding: const EdgeInsets.all(Sizes.xs),
-                    size: 20,
+                    padding: const EdgeInsets.all(Sizes.sm),
+                    size: Sizes.xl,
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
