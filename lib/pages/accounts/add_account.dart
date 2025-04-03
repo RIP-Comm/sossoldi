@@ -1,12 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/accounts_provider.dart';
 import '../../constants/constants.dart';
 import '../../constants/functions.dart';
 import '../../constants/style.dart';
 import '../../providers/currency_provider.dart';
+import '../../utils/decimal_text_input_formatter.dart';
 import 'widgets/confirm_account_deletion_dialog.dart';
 
 class AddAccount extends ConsumerStatefulWidget {
@@ -31,10 +30,10 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
     final selectedAccount = ref.read(selectedAccountProvider);
     if (selectedAccount != null) {
       nameController.text = selectedAccount.name;
-      balanceController.text = selectedAccount.total.toString();
+      balanceController.text = numToCurrency(selectedAccount.total);
       accountIcon = selectedAccount.symbol;
       accountColor = selectedAccount.color;
-      countNetWorth = selectedAccount.active;
+      countNetWorth = selectedAccount.countNetWorth;
       mainAccount = selectedAccount.mainAccount;
     }
     super.initState();
@@ -69,7 +68,9 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                   Container(
                     width: double.infinity,
                     margin: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 24),
+                      horizontal: 16,
+                      vertical: 24,
+                    ),
                     padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
@@ -94,7 +95,9 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                     width: double.infinity,
                     margin: const EdgeInsets.symmetric(horizontal: 16),
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
                       borderRadius: BorderRadius.circular(4),
@@ -289,15 +292,10 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                           ),
                           keyboardType:
                               TextInputType.numberWithOptions(decimal: true),
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.allow(
-                              RegExp(r'^\d*\.?\d{0,2}'),
-                            ),
+                          inputFormatters: [
+                            DecimalTextInputFormatter(decimalDigits: 2),
                           ],
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge!
-                              .copyWith(color: grey1),
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
                       ],
                     ),
@@ -324,7 +322,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                                 "Set as main account",
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
-                              CupertinoSwitch(
+                              Switch.adaptive(
                                 value: mainAccount,
                                 onChanged: (value) =>
                                     setState(() => mainAccount = value),
@@ -342,7 +340,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                                 "Counts for the net worth",
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
-                              CupertinoSwitch(
+                              Switch.adaptive(
                                 value: countNetWorth,
                                 onChanged: (value) =>
                                     setState(() => countNetWorth = value),
@@ -366,7 +364,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                                 account: selectedAccount,
                                 onPressed: () => ref
                                     .read(accountsProvider.notifier)
-                                    .removeAccount(selectedAccount.id!)
+                                    .removeAccount(selectedAccount)
                                     .whenComplete(
                                   () {
                                     if (context.mounted) {
@@ -429,24 +427,16 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                           name: nameController.text,
                           icon: accountIcon,
                           color: accountColor,
-                          active: countNetWorth,
+                          balance: currencyToNum(balanceController.text),
+                          countNetWorth: countNetWorth,
                           mainAccount: mainAccount,
                         );
-                    if (currencyToNum(balanceController.text) !=
-                        selectedAccount.total) {
-                      await ref
-                          .read(accountsProvider.notifier)
-                          .reconcileAccount(
-                            newBalance: currencyToNum(balanceController.text),
-                            account: selectedAccount,
-                          );
-                    }
                   } else {
                     await ref.read(accountsProvider.notifier).addAccount(
                           name: nameController.text,
                           icon: accountIcon,
                           color: accountColor,
-                          active: countNetWorth,
+                          countNetWorth: countNetWorth,
                           mainAccount: mainAccount,
                           startingValue: currencyToNum(balanceController.text),
                         );
