@@ -35,7 +35,7 @@ class AppTheme {
     ),
     tabBarTheme: TabBarTheme(
       indicator: BoxDecoration(
-        shape: BoxShape.circle,
+        borderRadius: BorderRadius.circular(Sizes.borderRadius * 6),
         color: blue5,
       ),
       dividerHeight: 0,
@@ -94,7 +94,7 @@ class AppTheme {
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: ButtonStyle(
-        padding: WidgetStatePropertyAll(EdgeInsets.all(Sizes.xxs)),
+        padding: WidgetStatePropertyAll(EdgeInsets.all(Sizes.xs)),
         iconSize: WidgetStatePropertyAll(28),
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(Sizes.borderRadius)),
@@ -247,7 +247,7 @@ class AppTheme {
     ),
     tabBarTheme: TabBarTheme(
       indicator: BoxDecoration(
-        shape: BoxShape.circle,
+        borderRadius: BorderRadius.circular(Sizes.borderRadius * 6),
         color: darkBlue5,
       ),
       dividerHeight: 0,
@@ -306,7 +306,7 @@ class AppTheme {
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: ButtonStyle(
-        padding: WidgetStatePropertyAll(EdgeInsets.all(Sizes.xxs)),
+        padding: WidgetStatePropertyAll(EdgeInsets.all(Sizes.xs)),
         iconSize: WidgetStatePropertyAll(28),
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(Sizes.borderRadius)),
