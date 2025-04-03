@@ -96,20 +96,3 @@ extension TransactionTypeExtension on TransactionType {
     }
   }
 }
-
-/// Adds a method to [Iterable] to get the first element that satisfies the
-/// given [test] or `null` if no element satisfies the test.
-///
-/// ```
-/// [1, 2, 3].firstWhereOrNull((element) => element == 2); // 2
-/// [1, 2, 3].firstWhereOrNull((element) => element == 4); // null
-/// ```
-extension IterableExtensions<E> on Iterable<E> {
-  E? firstWhereOrNull(bool Function(E element) test) {
-    try {
-      return firstWhere(test);
-    } catch (_) {
-      return null;
-    }
-  }
-}
