@@ -75,10 +75,17 @@ class CategoriesContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Map<CategoryTransaction, double> sortedCategories = SplayTreeMap.from(
-        categories,
-        (key1, key2) =>
-            (categories[key1] ?? 0).compareTo(categories[key2] ?? 0));
+    final Map<CategoryTransaction, double> sortedCategories = Map.fromEntries(
+      categories.entries.toList()
+        ..sort((a, b) {
+          int valueSorting = a.value.compareTo(b.value);
+          if (valueSorting == 0) {
+            int categoryNameSorting = a.key.name.compareTo(b.key.name);
+            return categoryNameSorting;
+          }
+          return valueSorting;
+        }),
+    );
 
     return Column(
       children: [
