@@ -55,5 +55,5 @@ body:
       label: 📝 **Code of Conduct**
       description: By submitting this issue, you confirm that you have previously used the search function to look for the same issue among both open and closed issues. 
       options:
-        - label: ✅ I agree
+        - label: ✅ I agree to the Code of Conduct
           required: true

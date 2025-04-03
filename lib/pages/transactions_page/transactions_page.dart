@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../providers/transactions_provider.dart';
+import '../../utils/snack_bars/transactions_snack_bars.dart';
 import 'widgets/accounts_tab.dart';
 import 'widgets/categories_tab.dart';
 import 'widgets/custom_sliver_delegate.dart';
@@ -43,6 +45,11 @@ class _TransactionsPageState extends ConsumerState<TransactionsPage>
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(
+        duplicatedTransactoinProvider,
+        (prev, curr) => showDuplicatedTransactionSnackBar(context,
+            transaction: curr, ref: ref));
+
     return NotificationListener<ScrollEndNotification>(
       onNotification: (notification) {
         // snap the header open/close when it's in between the two states

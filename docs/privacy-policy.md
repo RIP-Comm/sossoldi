@@ -6,7 +6,7 @@ nav_order: 6
 
 # Privacy Policy
 
-Sossoldi is build as an open source app. This service is provided by us at no cost and it is intended for use as is.
+Sossoldi is built as an open source app. This service is provided by us at no cost and it is intended for use as is.
 We are not interested in collecting any personal information. We believe such information is yours and yours alone. We do not store or transmit your personal details, nor do we include any advertising or analytics software that talks to third parties.
 
 ## What Information Do We Collect?
