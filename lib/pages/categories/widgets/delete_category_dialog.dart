@@ -20,10 +20,13 @@ Future<void> showDeleteCategoryDialog(
           child: ListBody(
             children: <Widget>[
               Text(
-                'With "Mark as deleted," transitions with the category will be available, but new ones cannot be created\n',
+                "Mark as deleted: Category remains available for existing transitions but cannot be used for new ones.\n",
               ),
               Text(
-                'With "Delete" all transitions with that category will automatically be "Uncategorized"',
+                "Delete: All transitions using this category will be automatically changed to 'Uncategorized'.\n",
+              ),
+              Text(
+                "Both options will delete budgets with the specified category.",
               ),
             ],
           ),

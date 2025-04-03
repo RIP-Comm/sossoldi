@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../model/category_transaction.dart';
 import '../model/recurring_transaction.dart';
 import '../model/transaction.dart';
+import 'budgets_provider.dart';
 import 'transactions_provider.dart';
 
 final categoryTransactionTypeList = Provider<List<CategoryTransactionType>>(
@@ -76,6 +77,7 @@ class AsyncCategoriesNotifier
   Future<void> markAsDeleted(int categoryId) async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
+      await ref.read(deleteBudgetsByCategoryProvider)(categoryId);
       await CategoryTransactionMethods().markAsDeleted(categoryId);
       return _getCategories(arg);
     });
@@ -123,6 +125,27 @@ class AsyncCategoriesNotifier
     };
   });
 
+  //final reassignBudgetsProvider =
+  //    Provider<Future<void> Function(int, CategoryTransactionType)>((ref) {
+  //  return (int categoryId, CategoryTransactionType categoryType) async {
+  //    final defaultCategoryId = 1;
+//
+  //    final budgets =
+  //        await BudgetMethods().selectAll();
+  //    final affectedBudgets = budgets
+  //        .where((t) => t.idCategory == categoryId)
+  //        .toList();
+//
+  //    for (var budget in affectedBudgets) {
+  //      final updatedBudget =
+  //          budget.copy(idCategory: defaultCategoryId);
+  //      await BudgetMethods().updateItem(updatedBudget);
+  //    }
+//
+  //    ref.invalidate(budgetsProvider);
+  //  };
+  //});
+
   Future<void> removeCategory(int categoryId) async {
     final category = await CategoryTransactionMethods().selectById(categoryId);
 
@@ -131,6 +154,8 @@ class AsyncCategoriesNotifier
       await ref.read(reassignTransactionsProvider)(categoryId, category.type);
       await ref.read(reassignRecurringTransactionsProvider)(
           categoryId, category.type);
+      await ref.read(deleteBudgetsByCategoryProvider)(categoryId);
+
       await CategoryTransactionMethods().deleteById(categoryId);
       return _getCategories(arg);
     });
