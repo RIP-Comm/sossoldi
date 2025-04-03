@@ -3,6 +3,7 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../database/sossoldi_database.dart';
 import '../../utils/csv_file_picker.dart';
+import '../../utils/snack_bars/snack_bar.dart';
 
 class BackupPage extends ConsumerStatefulWidget {
   const BackupPage({super.key});
@@ -63,22 +64,20 @@ class _BackupPageState extends ConsumerState<BackupPage> {
               .join(', ');
           
           if (!mounted) return;
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Failed to import some tables: $failedTables'),
-              backgroundColor: Colors.red,
-            ),
+          
+          showSnackBar(
+            context, 
+            message: 'Failed to import some tables: $failedTables',
           );
         }
       }
     } catch (e) {
       if (!mounted) return;
       CSVFilePicker.hideLoading(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Import failed: ${e.toString()}'),
-          backgroundColor: Colors.red,
-        ),
+
+      showSnackBar(
+        context, 
+        message: 'Import failed: ${e.toString()}',
       );
     }
   }
@@ -96,11 +95,9 @@ class _BackupPageState extends ConsumerState<BackupPage> {
     } catch (e) {
       if (!mounted) return;
       CSVFilePicker.hideLoading(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Export failed: ${e.toString()}'),
-          backgroundColor: Colors.red,
-        ),
+      showSnackBar(
+        context,
+        message: 'Export failed: ${e.toString()}',
       );
     }
   }

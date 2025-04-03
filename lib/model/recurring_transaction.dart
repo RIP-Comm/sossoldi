@@ -257,7 +257,7 @@ class RecurringTransactionMethods extends SossoldiDatabase {
         populateRecurringTransaction(entity, lastTransactionDate, transaction, entityAmt);
 
       } catch (e) {
-        // TODO show an error to the user?
+        dev.log('$e');
       }
     }
   }
