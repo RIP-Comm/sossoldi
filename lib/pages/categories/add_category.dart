@@ -28,12 +28,10 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
   void initState() {
     super.initState();
 
-    // Set default category type based on transaction type
     final transactionType = ref.read(transactionTypeProvider);
     categoryType = ref.read(transactionToCategoryProvider(transactionType))
         ?? CategoryTransactionType.expense;
 
-    // If editing an existing category, override values
     final selectedCategory = ref.read(selectedCategoryProvider);
     if (selectedCategory != null) {
       nameController.text = selectedCategory.name;
