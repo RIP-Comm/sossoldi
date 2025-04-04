@@ -16,6 +16,29 @@ class CategoryList extends ConsumerStatefulWidget {
 }
 
 class _CategoryListState extends ConsumerState<CategoryList> with Functions {
+  Widget getCategoryTypeIcon(String categoryTypeName) {
+    switch (categoryTypeName) {
+      case 'expense':
+        return RoundedIcon(
+          icon: genericIconList['export'],
+          color: Theme.of(context).colorScheme.primary,
+          size: 25,
+        );
+      case 'income':
+        return RoundedIcon(
+          icon: genericIconList['import'],
+          color: Theme.of(context).colorScheme.primary,
+          size: 25,
+        );
+      default:
+        return RoundedIcon(
+          icon: genericIconList['unknown'],
+          color: Theme.of(context).colorScheme.primary,
+          size: 25,
+        );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final categorysList = ref.watch(categoriesProvider);
@@ -101,6 +124,8 @@ class _CategoryListState extends ConsumerState<CategoryList> with Functions {
                               .copyWith(
                                   color: Theme.of(context).colorScheme.primary),
                         ),
+                        const Spacer(),
+                        getCategoryTypeIcon(category.type.name),
                       ],
                     ),
                   );
