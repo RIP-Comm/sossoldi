@@ -36,7 +36,7 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
   Widget build(BuildContext context) {
     final account = ref.read(selectedAccountProvider);
     final accountTransactions =
-        ref.watch(selectedAccountCurrentMonthDailyBalanceProvider);
+      ref.watch(selectedAccountCurrentYearMonthlyBalanceProvider);
     final transactions = ref.watch(selectedAccountLastTransactions);
     final currencyState = ref.watch(currencyStateNotifier);
 
@@ -64,14 +64,28 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
               color: Theme.of(context).colorScheme.secondary,
               child: Column(
                 children: [
-                  Text(
-                    numToCurrency(account?.total),
-                    style: const TextStyle(
-                      color: white,
-                      fontSize: 32.0,
-                      fontFamily: 'SF Pro Text',
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        numToCurrency(account?.total),
+                        style: const TextStyle(
+                          color: white,
+                          fontSize: 32.0,
+                          fontFamily: 'SF Pro Text',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        currencyState.selectedCurrency.symbol,
+                        style: const TextStyle(
+                          color: white,
+                          fontSize: 22.0,
+                          fontFamily: 'SF Pro Text',
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                    ],
                   ),
                   const Padding(padding: EdgeInsets.all(8.0)),
                   Padding(
@@ -79,7 +93,7 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
                     child: LineChartWidget(
                       lineData: accountTransactions,
                       colorBackground: Theme.of(context).colorScheme.secondary,
-                      period: Period.month,
+                      period: Period.year,
                       minY: 0,
                     ),
                   ),
