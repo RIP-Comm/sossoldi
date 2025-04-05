@@ -41,9 +41,8 @@ class _DashboardPageState extends ConsumerState<DashboardPage> with Functions {
               color: Theme.of(context)
                   .colorScheme
                   .primaryContainer, //da modificare in darkMode
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(16),
-                topRight: Radius.circular(16),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(16),
               ),
             ),
             child: Column(
