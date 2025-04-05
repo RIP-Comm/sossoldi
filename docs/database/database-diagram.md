@@ -64,6 +64,7 @@ erDiagram
     categoryTransaction {
         int id PK "AUTO_INCREMENT"
         string name "NOT NULL"
+        string type "NOT NULL"
         string symbol "NOT NULL"
         int color "NOT NULL"
         string note
