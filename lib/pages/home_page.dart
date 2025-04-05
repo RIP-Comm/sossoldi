@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../utils/snack_bars/snack_bar.dart';
 import '../utils/snack_bars/transactions_snack_bars.dart';
 import 'home_widget/budgets_home.dart';
 import '../constants/functions.dart';

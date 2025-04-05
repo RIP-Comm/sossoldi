@@ -5,6 +5,8 @@ import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
+import 'snack_bars/snack_bar.dart';
+
 class CSVFilePicker {
   // Request storage permission based on Android version
   static Future<bool> _requestStoragePermission() async {
@@ -24,12 +26,12 @@ class CSVFilePicker {
   static Future<File?> pickCSVFile(BuildContext context) async {
     bool permissionGranted = await _requestStoragePermission();
     if (!permissionGranted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Storage permission is required'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      if(context.mounted) {
+        showSnackBar(
+          context,
+          message: 'Storage permission is required',
+        );
+      }
       return null;
     }
 
@@ -44,12 +46,12 @@ class CSVFilePicker {
         return File(result.files.first.path!);
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error picking file: ${e.toString()}'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      if(context.mounted) {
+        showSnackBar(
+          context,
+          message: 'Error picking file: ${e.toString()}',
+        );
+      }
     }
     return null;
   }
@@ -71,19 +73,19 @@ class CSVFilePicker {
       final file = await File(filePath).writeAsString(csv);
       
       // Show success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('File saved to: ${file.path}'),
-          backgroundColor: Colors.green,
-        ),
-      );
+      if(context.mounted) {
+        showSnackBar(
+          context,
+          message: 'File saved to: ${file.path}',
+        );
+      }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error saving file: ${e.toString()}'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      if(context.mounted) {
+        showSnackBar(
+          context,
+          message: 'Error saving file: ${e.toString()}',
+        );
+      }
     }
   }
 
