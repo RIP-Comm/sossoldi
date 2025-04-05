@@ -7,9 +7,8 @@ import '../../../pages/home_widget/budgets_home.dart';
 import '../../../constants/functions.dart';
 import 'accounts_list_widget.dart';
 import '../../../custom_widgets/transactions_list.dart';
-import '../../../providers/dashboard_provider.dart';
 import '../../../providers/transactions_provider.dart';
-import 'dashboard_data_widget.dart';
+import 'dashboard_graph.dart';
 
 class DashboardPage extends ConsumerStatefulWidget {
   const DashboardPage({super.key});
@@ -25,17 +24,6 @@ class _DashboardPageState extends ConsumerState<DashboardPage> with Functions {
         duplicatedTransactoinProvider,
         (prev, curr) => showDuplicatedTransactionSnackBar(context,
             transaction: curr, ref: ref));
-
-    final dashboardHeader = switch (ref.watch(dashboardProvider)) {
-      AsyncData() => const DashboardDataWidget(),
-      AsyncError(:final error) => Text('Error: $error'),
-      _ => const SizedBox(
-          height: 330,
-          child: Center(
-            child: CircularProgressIndicator.adaptive(),
-          ),
-        ),
-    };
 
     final accountListWidget = switch (ref.watch(accountsProvider)) {
       AsyncData(:final value) => AccountsListWidget(accounts: value),
@@ -57,7 +45,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> with Functions {
       color: Theme.of(context).colorScheme.tertiary,
       child: ListView(
         children: [
-          dashboardHeader,
+          const DashboardGraph(),
           Container(
             decoration: BoxDecoration(
               color: Theme.of(context)
