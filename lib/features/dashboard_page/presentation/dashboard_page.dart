@@ -21,8 +21,6 @@ class DashboardPage extends ConsumerStatefulWidget {
 class _DashboardPageState extends ConsumerState<DashboardPage> with Functions {
   @override
   Widget build(BuildContext context) {
-    final lastTransactions = ref.watch(lastTransactionsProvider);
-
     ref.listen(
         duplicatedTransactoinProvider,
         (prev, curr) => showDuplicatedTransactionSnackBar(context,
@@ -30,7 +28,6 @@ class _DashboardPageState extends ConsumerState<DashboardPage> with Functions {
 
     final dashboardHeader = switch (ref.watch(dashboardProvider)) {
       AsyncData() => const DashboardDataWidget(),
-      // TODO: handle error properly
       AsyncError(:final error) => Text('Error: $error'),
       _ => const SizedBox(
           height: 330,
@@ -42,12 +39,18 @@ class _DashboardPageState extends ConsumerState<DashboardPage> with Functions {
 
     final accountListWidget = switch (ref.watch(accountsProvider)) {
       AsyncData(:final value) => AccountsListWidget(accounts: value),
-      // TODO: handle error properly
       AsyncError(:final error) => Text('Error: $error'),
       _ => Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: CircularProgressIndicator.adaptive(),
         ),
+    };
+
+    final lastTransactionsWidget =
+        switch (ref.watch(lastTransactionsProvider)) {
+      AsyncData(:final value) => TransactionsList(transactions: value),
+      AsyncError(:final error) => Text('Error: $error'),
+      _ => const SizedBox(),
     };
 
     return Container(
@@ -89,12 +92,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> with Functions {
                     ),
                   ),
                 ),
-                lastTransactions.when(
-                  data: (transactions) =>
-                      TransactionsList(transactions: transactions),
-                  loading: () => const SizedBox(),
-                  error: (err, stack) => Text('Error: $err'),
-                ),
+                lastTransactionsWidget,
                 const SizedBox(height: 28),
                 const BudgetsSection(),
               ],
