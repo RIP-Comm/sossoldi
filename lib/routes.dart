@@ -11,7 +11,7 @@ import 'pages/categories/add_category.dart';
 import 'pages/categories/category_list.dart';
 import 'pages/general_options/general_settings.dart';
 import 'pages/graphs_page/graphs_page.dart';
-import 'pages/home_page.dart';
+import 'features/dashboard_page/presentation/dashboard_page.dart';
 import 'pages/more_info_page/collaborators_page.dart';
 import 'pages/more_info_page/more_info.dart';
 import 'pages/more_info_page/privacy_policy.dart';
@@ -28,11 +28,11 @@ import 'pages/backup_page/backup_page.dart';
 Route<dynamic> makeRoute(RouteSettings settings) {
   switch (settings.name) {
     case '/':
-      return buildAdaptiveRoute(settings.name, const Structure());
+      return buildAdaptiveRoute(settings.name, const HomePage());
     case '/onboarding':
       return buildAdaptiveRoute(settings.name, const Onboarding());
     case '/dashboard':
-      return buildAdaptiveRoute(settings.name, const HomePage());
+      return buildAdaptiveRoute(settings.name, const DashboardPage());
     case '/add-page':
       final args = settings.arguments as Map<String, dynamic>?;
       return buildAdaptiveRoute(

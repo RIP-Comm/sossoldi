@@ -1,30 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../utils/snack_bars/snack_bar.dart';
-import '../utils/snack_bars/transactions_snack_bars.dart';
-import 'home_widget/budgets_home.dart';
-import '../constants/functions.dart';
-import '../constants/style.dart';
-import '../custom_widgets/accounts_sum.dart';
-import '../custom_widgets/line_chart.dart';
-import '../custom_widgets/rounded_icon.dart';
-import '../custom_widgets/transactions_list.dart';
-import '../model/bank_account.dart';
-import '../providers/accounts_provider.dart';
-import '../providers/currency_provider.dart';
-import '../providers/dashboard_provider.dart';
-import '../providers/theme_provider.dart';
-import '../providers/transactions_provider.dart';
+import '../../../providers/accounts_provider.dart';
+import '../../../utils/snack_bars/transactions_snack_bars.dart';
+import '../../../pages/home_widget/budgets_home.dart';
+import '../../../constants/functions.dart';
+import '../../../constants/style.dart';
+import '../../../custom_widgets/accounts_sum.dart';
+import '../../../custom_widgets/line_chart.dart';
+import '../../../custom_widgets/rounded_icon.dart';
+import '../../../custom_widgets/transactions_list.dart';
+import '../../../model/bank_account.dart';
+import '../../../providers/currency_provider.dart';
+import '../../../providers/dashboard_provider.dart';
+import '../../../providers/theme_provider.dart';
+import '../../../providers/transactions_provider.dart';
 
-class HomePage extends ConsumerStatefulWidget {
-  const HomePage({super.key});
+class DashboardPage extends ConsumerStatefulWidget {
+  const DashboardPage({super.key});
 
   @override
-  ConsumerState<HomePage> createState() => _HomePageState();
+  ConsumerState<DashboardPage> createState() => _DashboardPageState();
 }
 
-class _HomePageState extends ConsumerState<HomePage> with Functions {
+class _DashboardPageState extends ConsumerState<DashboardPage> with Functions {
   @override
   Widget build(BuildContext context) {
     final accountList = ref.watch(accountsProvider);

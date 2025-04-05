@@ -5,19 +5,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../providers/transactions_provider.dart';
 import '../../../pages/graphs_page/graphs_page.dart';
-import '../../../pages/home_page.dart';
+import '../../dashboard_page/presentation/dashboard_page.dart';
 import '../../../pages/planning_page/planning_page.dart';
 import '../../../pages/transactions_page/transactions_page.dart';
 import '../data/selected_index_provider.dart';
 
-class Structure extends ConsumerStatefulWidget {
-  const Structure({super.key});
+class HomePage extends ConsumerStatefulWidget {
+  const HomePage({super.key});
 
   @override
-  ConsumerState<Structure> createState() => _StructureState();
+  ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-class _StructureState extends ConsumerState<Structure> {
+class _HomePageState extends ConsumerState<HomePage> {
   // We could add this List in the app's state, so it isn't intialized every time.
   final List<String> _pagesTitle = [
     "Dashboard",
@@ -27,7 +27,7 @@ class _StructureState extends ConsumerState<Structure> {
     "Graphs",
   ];
   final List<Widget> _pages = [
-    const HomePage(),
+    const DashboardPage(),
     const TransactionsPage(),
     const SizedBox(),
     const PlanningPage(),
@@ -87,6 +87,7 @@ class _StructureState extends ConsumerState<Structure> {
                 : Icons.swap_horizontal_circle_outlined),
             label: "TRANSACTIONS",
           ),
+          const BottomNavigationBarItem(icon: Text(""), label: ""),
           BottomNavigationBarItem(
             icon: Icon(selectedIndex == 3
                 ? Icons.calendar_today
