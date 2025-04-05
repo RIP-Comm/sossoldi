@@ -10,10 +10,11 @@ import '/model/recurring_transaction.dart';
 import '/model/transaction.dart';
 
 class InitialSchema extends Migration {
-  InitialSchema() : super(
-      version: 1,
-      description: 'Initial database schema creation'
-  );
+  InitialSchema()
+      : super(
+          version: 1,
+          description: 'Initial database schema creation',
+        );
 
   @override
   Future<void> up(Database db) async {

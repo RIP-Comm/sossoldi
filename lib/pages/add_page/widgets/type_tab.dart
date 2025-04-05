@@ -19,14 +19,19 @@ class TypeTab extends StatelessWidget {
       height: 26,
       width: (MediaQuery.of(context).size.width - 36) / 3,
       decoration: BoxDecoration(
-        color: selectedType ? color : Theme.of(context).colorScheme.primaryContainer,
+        color: selectedType
+            ? color
+            : Theme.of(context).colorScheme.primaryContainer,
         borderRadius: const BorderRadius.all(Radius.circular(4)),
         boxShadow: selectedType ? [defaultShadow] : [],
       ),
       alignment: Alignment.center,
       child: Text(
         title,
-        style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: selectedType ? white : color),
+        style: Theme.of(context)
+            .textTheme
+            .bodyLarge!
+            .copyWith(color: selectedType ? white : color),
       ),
     );
   }

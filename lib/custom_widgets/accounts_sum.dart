@@ -65,18 +65,14 @@ class AccountsSum extends ConsumerWidget with Functions {
                     children: [
                       Text(
                         account.name,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyLarge,
+                        style: Theme.of(context).textTheme.bodyLarge,
                       ),
                       RichText(
                         text: TextSpan(
                           children: [
                             TextSpan(
                               text: numToCurrency(account.total),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleSmall,
+                              style: Theme.of(context).textTheme.titleSmall,
                             ),
                             TextSpan(
                               text: currencyState.selectedCurrency.symbol,

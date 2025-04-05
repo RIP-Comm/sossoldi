@@ -27,22 +27,24 @@ class _OnboardingState extends State<Onboarding> {
                 ),
                 Text(
                   'Set up the app',
-                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: blue1),
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineLarge
+                      ?.copyWith(color: blue1),
                 ),
-                const SizedBox(
-                  height: 80,
-                ),
+                const SizedBox(height: 80),
                 Image.asset(
                   'assets/openVault.png',
                   height: MediaQuery.sizeOf(context).height / 3.7,
                 ),
-                const SizedBox(
-                  height: 74,
-                ),
+                const SizedBox(height: 74),
                 Text(
                   'In a few steps you\'ll be ready to start keeping\ntrack of your personal finances (almost) like\nMr. Rip',
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(color: blue1),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall
+                      ?.copyWith(color: blue1),
                 ),
               ],
             ),

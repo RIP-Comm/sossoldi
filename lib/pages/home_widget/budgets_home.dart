@@ -51,14 +51,20 @@ class BudgetsSection extends ConsumerWidget with Functions {
                             children: [
                               Text(
                                 "No budget set",
-                                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium
+                                    ?.copyWith(
                                       color: Colors.grey[600],
                                     ),
                               ),
                               const SizedBox(height: 8),
                               Text(
                                 "Create a budget to track your spending",
-                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
                                       color: Colors.grey[500],
                                     ),
                               ),
@@ -73,12 +79,24 @@ class BudgetsSection extends ConsumerWidget with Functions {
                             scrollDirection: Axis.horizontal,
                             itemCount: budgets.length,
                             itemBuilder: (context, index) => Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 13),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 13),
                               child: BudgetCircularIndicator(
                                 title: budgets[index].name!,
-                                amount: budgets[index].amountLimit - budgets[index].spent > 0 ? budgets[index].amountLimit - budgets[index].spent : 0,
-                                perc: budgets[index].spent / budgets[index].amountLimit > 1 ? 1 : budgets[index].spent / budgets[index].amountLimit,
-                                color: categoryColorList[index % categoryColorList.length],
+                                amount: budgets[index].amountLimit -
+                                            budgets[index].spent >
+                                        0
+                                    ? budgets[index].amountLimit -
+                                        budgets[index].spent
+                                    : 0,
+                                perc: budgets[index].spent /
+                                            budgets[index].amountLimit >
+                                        1
+                                    ? 1
+                                    : budgets[index].spent /
+                                        budgets[index].amountLimit,
+                                color: categoryColorList[
+                                    index % categoryColorList.length],
                               ),
                             ),
                           ),
@@ -90,7 +108,7 @@ class BudgetsSection extends ConsumerWidget with Functions {
             ),
           ],
         ),
-        const SizedBox(height: 50)
+        const SizedBox(height: 50),
       ],
     );
   }

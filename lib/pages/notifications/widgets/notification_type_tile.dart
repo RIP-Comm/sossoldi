@@ -15,7 +15,8 @@ class NotificationTypeTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final transactionReminderCadence = ref.watch(transactionReminderCadenceProvider);
+    final transactionReminderCadence =
+        ref.watch(transactionReminderCadenceProvider);
 
     return GestureDetector(
       onTap: setNotificationTypeCallback.call,

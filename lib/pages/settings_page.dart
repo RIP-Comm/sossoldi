@@ -100,7 +100,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 onPressed: () => Navigator.pop(context),
                 child: Text(
                   "OK",
-                  style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
               ),
             ],
@@ -129,7 +130,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
               child: GestureDetector(
                 onTap: _onSettingsTap,
                 child: Row(
@@ -152,7 +154,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       style: Theme.of(context)
                           .textTheme
                           .headlineLarge!
-                          .copyWith(color: Theme.of(context).colorScheme.primary),
+                          .copyWith(
+                              color: Theme.of(context).colorScheme.primary),
                     ),
                   ],
                 ),
@@ -166,61 +169,68 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 List setting = settingsOptions[i];
                 if (setting[3] == null) return Container();
                 return Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: DefaultCard(
-                      onTap: () {
-                        if (setting[3] != null) {
-                          final link = setting[3] as String;
-                          if (link.startsWith("http")) {
-                            Uri url = Uri.parse(link);
-                            launchUrl(url);
-                          } else {
-                            Navigator.of(context).pushNamed(link);
-                          }
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: DefaultCard(
+                    onTap: () {
+                      if (setting[3] != null) {
+                        final link = setting[3] as String;
+                        if (link.startsWith("http")) {
+                          Uri url = Uri.parse(link);
+                          launchUrl(url);
+                        } else {
+                          Navigator.of(context).pushNamed(link);
                         }
-                      },
-                      child: Row(
-                        children: [
-                          Container(
-                            decoration: const BoxDecoration(
-                              color: blue5,
-                              shape: BoxShape.circle,
-                            ),
-                            padding: const EdgeInsets.all(10.0),
-                            child: Icon(
-                              setting[0] as IconData,
-                              size: 30.0,
-                              color: white,
-                            ),
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        Container(
+                          decoration: const BoxDecoration(
+                            color: blue5,
+                            shape: BoxShape.circle,
                           ),
-                          const SizedBox(width: 12.0),
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  setting[1].toString(),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge!
-                                      .copyWith(color: Theme.of(context).colorScheme.primary),
-                                ),
-                                Text(
-                                  setting[2].toString(),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall!
-                                      .copyWith(color: Theme.of(context).colorScheme.primary),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 2,
-                                ),
-                              ],
-                            ),
+                          padding: const EdgeInsets.all(10.0),
+                          child: Icon(
+                            setting[0] as IconData,
+                            size: 30.0,
+                            color: white,
                           ),
-                        ],
-                      ),
-                    ));
+                        ),
+                        const SizedBox(width: 12.0),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                setting[1].toString(),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge!
+                                    .copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
+                              ),
+                              Text(
+                                setting[2].toString(),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall!
+                                    .copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
               },
             ),
           ],
@@ -263,7 +273,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                     child: const Text('CLEAR AND FILL DEMO DATA'),
                     onPressed: () async {
                       await SossoldiDatabase.instance.clearDatabase();
-                      await SossoldiDatabase.instance.fillDemoData().then((value) {
+                      await SossoldiDatabase.instance
+                          .fillDemoData()
+                          .then((value) {
                         ref.refresh(accountsProvider);
                         ref.refresh(categoriesProvider);
                         ref.refresh(transactionsProvider);
@@ -271,7 +283,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         ref.refresh(dashboardProvider);
                         ref.refresh(lastTransactionsProvider);
                         ref.refresh(statisticsProvider);
-                        showSuccessDialog(context, "DB Cleared, and DEMO data added");
+                        showSuccessDialog(
+                            context, "DB Cleared, and DEMO data added");
                       });
                     },
                   ),
