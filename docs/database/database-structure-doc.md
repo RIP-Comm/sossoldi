@@ -83,12 +83,12 @@ Stores the configuration of recurring transactions that will be inserted over ti
 
 - The `idRecurringTransaction` field in the `transaction` table links to the `recurringTransaction` table.
 
-Fields of `recurringTransaction`:
+Fields:
 
 - `fromDate`, `toDate` and `amount`: indicate the period of validity and the amount of the recurring transaction.
 - `note`: an arbitrary description provided by the user for the transaction. this field is mandatory.
-   > **[TODO]**: why is this field mandatory? in the `transaction` table, it is nullable.
-- `recurrency`: specifies the interval at which the transaction will be repeated: daily, monthly, bi-monthly and so on.
+   > **[TODO]**: why is this field mandatory? in the `transaction` table, it is nullable. In any case, the user can leave this field black and will be saved with blank string.
+- `recurrency`: string that indicate in upper case the interval at which the transaction will be repeated: DAILY, MONTHLY, BIMONTHLY, and so on.
 - `idCategory`: the ID of the `categoryTransaction` table, indicating the category of the recurring transaction.
 - `idBankAccount`: the ID of the `bankAccount` from which the funds will be deducted for the recurring transaction.
 - `lastInsertion`: the last date used to calculate when the next transaction will be inserted into the `transaction` table.
