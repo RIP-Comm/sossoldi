@@ -9,6 +9,7 @@ import '../../../utils/snack_bars/transactions_snack_bars.dart';
 import '../../dashboard_page/presentation/dashboard_page.dart';
 import '../../../pages/planning_page/planning_page.dart';
 import '../../../pages/transactions_page/transactions_page.dart';
+import '../data/duplicated_transactions_provider.dart';
 import '../data/selected_index_provider.dart';
 
 class HomePage extends ConsumerStatefulWidget {

@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../features/home_page/data/duplicated_transactions_provider.dart';
 import '../model/bank_account.dart';
 import '../model/category_transaction.dart';
 import '../model/recurring_transaction.dart';
@@ -55,9 +56,6 @@ final typeFilterProvider = StateProvider<Map<String, bool>>(
     'TR': false,
   },
 );
-
-final duplicatedTransactoinProvider =
-    StateProvider<Transaction?>((ref) => null);
 
 class AsyncTransactionsNotifier
     extends AutoDisposeAsyncNotifier<List<Transaction>> {
