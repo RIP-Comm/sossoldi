@@ -153,7 +153,10 @@ class CollapsedWidget extends StatelessWidget with Functions {
             child: Text(
               myTabs[tabController.index].text!,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge
+                  ?.copyWith(color: Colors.white),
             ),
           ),
           Text(
@@ -165,11 +168,17 @@ class CollapsedWidget extends StatelessWidget with Functions {
               children: [
                 TextSpan(
                   text: numToCurrency(totalAmount),
-                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: totalAmount >= 0 ? green : red),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .copyWith(color: totalAmount >= 0 ? green : red),
                 ),
                 TextSpan(
                   text: currencyState.selectedCurrency.symbol,
-                  style: Theme.of(context).textTheme.labelLarge!.copyWith(color: totalAmount >= 0 ? green : red),
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelLarge!
+                      .copyWith(color: totalAmount >= 0 ? green : red),
                 ),
               ],
             ),

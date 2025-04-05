@@ -11,7 +11,8 @@ class RecurrenceSelector extends ConsumerStatefulWidget {
   ConsumerState<RecurrenceSelector> createState() => _RecurrenceSelectorState();
 }
 
-class _RecurrenceSelectorState extends ConsumerState<RecurrenceSelector> with Functions {
+class _RecurrenceSelectorState extends ConsumerState<RecurrenceSelector>
+    with Functions {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +34,8 @@ class _RecurrenceSelectorState extends ConsumerState<RecurrenceSelector> with Fu
             });
             return Material(
               child: InkWell(
-                onTap: () => ref.read(intervalProvider.notifier).state = recurrence.keys.first,
+                onTap: () => ref.read(intervalProvider.notifier).state =
+                    recurrence.keys.first,
                 child: ListTile(
                   contentPadding: const EdgeInsets.fromLTRB(32, 20, 20, 20),
                   title: Text(

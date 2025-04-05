@@ -178,9 +178,7 @@ final categoryToTransactionProvider =
   return CategoryTransactionMethods().categoryToTransactionType(type);
 });
 
-final monthlyTotalsProvider =
-    FutureProvider<List<double>>(
-        (ref) async {
+final monthlyTotalsProvider = FutureProvider<List<double>>((ref) async {
   final categoryType = ref.watch(categoryTypeProvider);
   final dateStart = ref.watch(filterDateStartProvider);
   //final dateEnd = ref.watch(filterDateEndProvider);

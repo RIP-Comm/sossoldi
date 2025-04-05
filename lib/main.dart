@@ -26,23 +26,36 @@ void main() async {
   // KV migration from the 'is_first_login' key to 'onboarding_completed'
   // to correctly handle the completion of the onboarding process
   // (To consider to remove in later future)
-  final bool? isFirstLoginCachedValue = _sharedPreferences.getBool('is_first_login');
-  final bool isOnBoardingCompletedKeyNotSaved = _sharedPreferences.getBool('onboarding_completed') == null;
+  final bool? isFirstLoginCachedValue =
+      _sharedPreferences.getBool('is_first_login');
+  final bool isOnBoardingCompletedKeyNotSaved =
+      _sharedPreferences.getBool('onboarding_completed') == null;
   if (isFirstLoginCachedValue != null && isOnBoardingCompletedKeyNotSaved) {
-    await _sharedPreferences.setBool('onboarding_completed', !isFirstLoginCachedValue);
+    await _sharedPreferences.setBool(
+        'onboarding_completed', !isFirstLoginCachedValue);
   }
 
   // perform recurring transactions checks
-  DateTime? lastCheckGetPref = _sharedPreferences.getString('last_recurring_transactions_check') != null ? DateTime.parse(_sharedPreferences.getString('last_recurring_transactions_check')!) : null;
+  DateTime? lastCheckGetPref = _sharedPreferences
+              .getString('last_recurring_transactions_check') !=
+          null
+      ? DateTime.parse(
+          _sharedPreferences.getString('last_recurring_transactions_check')!)
+      : null;
   DateTime? lastRecurringTransactionsCheck = lastCheckGetPref;
 
-  if(lastRecurringTransactionsCheck == null || DateTime.now().difference(lastRecurringTransactionsCheck).inDays >= 1){
+  if (lastRecurringTransactionsCheck == null ||
+      DateTime.now().difference(lastRecurringTransactionsCheck).inDays >= 1) {
     RecurringTransactionMethods().checkRecurringTransactions();
     // update last recurring transactions runtime
-    await _sharedPreferences.setString('last_recurring_transactions_check', DateTime.now().toIso8601String());
+    await _sharedPreferences.setString(
+      'last_recurring_transactions_check',
+      DateTime.now().toIso8601String(),
+    );
   }
 
-  initializeDateFormatting('it_IT', null).then((_) => runApp(Phoenix(child: const ProviderScope(child: Launcher()))));
+  initializeDateFormatting('it_IT', null).then(
+      (_) => runApp(Phoenix(child: const ProviderScope(child: Launcher()))));
 }
 
 class Launcher extends ConsumerWidget {
@@ -51,15 +64,16 @@ class Launcher extends ConsumerWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
-    final bool isOnboardingCompleted = _sharedPreferences.getBool('onboarding_completed') ?? false;
+    final bool isOnboardingCompleted =
+        _sharedPreferences.getBool('onboarding_completed') ?? false;
 
     final appThemeState = ref.watch(appThemeStateNotifier);
     return MaterialApp(
       title: 'Sossoldi',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: appThemeState.isDarkModeEnabled ? ThemeMode.dark : ThemeMode.light,
+      themeMode:
+          appThemeState.isDarkModeEnabled ? ThemeMode.dark : ThemeMode.light,
       onGenerateRoute: makeRoute,
       initialRoute: !isOnboardingCompleted ? '/onboarding' : '/',
     );

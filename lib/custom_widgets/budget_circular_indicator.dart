@@ -39,17 +39,18 @@ class BudgetCircularIndicator extends ConsumerWidget with Functions {
                   children: [
                     TextSpan(
                       text: numToCurrency(amount),
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium!
-                          .copyWith(color: Theme.of(context).colorScheme.primary),
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                     ),
                     TextSpan(
                       text: currencyState.selectedCurrency.symbol,
                       style: Theme.of(context)
                           .textTheme
                           .labelMedium!
-                          .copyWith(color: Theme.of(context).colorScheme.primary)
+                          .copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                          )
                           .apply(
                         fontFeatures: [const FontFeature.subscripts()],
                       ),
@@ -72,11 +73,14 @@ class BudgetCircularIndicator extends ConsumerWidget with Functions {
           progressColor: color,
         ),
         const SizedBox(height: 10),
-        Row(children: [
-          perc >= 0.9 ? const Icon(Icons.error_outline, color: Colors.red, size: 15) : Container(),
-          const SizedBox(width: 3),
-          Text(title, style: Theme.of(context).textTheme.bodyLarge),
-        ])
+        Row(
+          children: [
+            if (perc >= 0.9)
+              const Icon(Icons.error_outline, color: Colors.red, size: 15),
+            const SizedBox(width: 3),
+            Text(title, style: Theme.of(context).textTheme.bodyLarge),
+          ],
+        )
       ],
     );
   }

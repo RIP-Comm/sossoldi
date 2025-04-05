@@ -6,14 +6,15 @@ import '../utils/app_theme.dart';
 /// To simply show a dialog with text, you may also use [showInfoDialog], [showWarningDialog] or [showErrorDialog]
 ///
 class AlertDialogBuilder {
-  AlertDialogBuilder(
-      {required this.text,
-      required this.primaryActionText,
-      this.dialogType = AlertDialogType.info,
-      this.isDismissible = true,
-      this.primaryActionFunction,
-      this.secondaryActionText,
-      this.secondaryActionFunction});
+  AlertDialogBuilder({
+    required this.text,
+    required this.primaryActionText,
+    this.dialogType = AlertDialogType.info,
+    this.isDismissible = true,
+    this.primaryActionFunction,
+    this.secondaryActionText,
+    this.secondaryActionFunction,
+  });
 
   ///
   /// Main text content of the dialog
@@ -56,42 +57,55 @@ class AlertDialogBuilder {
   ///
   void show(BuildContext context) {
     showDialog(
-        context: context,
-        builder: (context) {
-          return _AlertDialog(dialogType, text, primaryActionText, primaryActionFunction,
-              secondaryActionText, secondaryActionFunction);
-        },
-        barrierDismissible: isDismissible);
+      context: context,
+      builder: (context) {
+        return _AlertDialog(
+          dialogType,
+          text,
+          primaryActionText,
+          primaryActionFunction,
+          secondaryActionText,
+          secondaryActionFunction,
+        );
+      },
+      barrierDismissible: isDismissible,
+    );
   }
 }
 
 ///
 /// Shows an info dialog with given text
 ///
-void showInfoDialog(BuildContext context, String text) =>
-    AlertDialogBuilder(text: text, dialogType: AlertDialogType.info, primaryActionText: "OK")
-        .show(context);
+void showInfoDialog(BuildContext context, String text) => AlertDialogBuilder(
+        text: text, dialogType: AlertDialogType.info, primaryActionText: "OK")
+    .show(context);
 
 ///
 /// Shows a success dialog with given text
 ///
-void showSuccessDialog(BuildContext context, String text) =>
-    AlertDialogBuilder(text: text, dialogType: AlertDialogType.success, primaryActionText: "OK")
-        .show(context);
+void showSuccessDialog(BuildContext context, String text) => AlertDialogBuilder(
+      text: text,
+      dialogType: AlertDialogType.success,
+      primaryActionText: "OK",
+    ).show(context);
 
 ///
 /// Shows a warning dialog with given text
 ///
-void showWarningDialog(BuildContext context, String text) =>
-    AlertDialogBuilder(text: text, dialogType: AlertDialogType.warning, primaryActionText: "OK")
-        .show(context);
+void showWarningDialog(BuildContext context, String text) => AlertDialogBuilder(
+      text: text,
+      dialogType: AlertDialogType.warning,
+      primaryActionText: "OK",
+    ).show(context);
 
 ///
 /// Shows an error dialog with given text
 ///
-void showErrorDialog(BuildContext context, String text) =>
-    AlertDialogBuilder(text: text, dialogType: AlertDialogType.error, primaryActionText: "OK")
-        .show(context);
+void showErrorDialog(BuildContext context, String text) => AlertDialogBuilder(
+      text: text,
+      dialogType: AlertDialogType.error,
+      primaryActionText: "OK",
+    ).show(context);
 
 enum AlertDialogType { info, success, warning, error }
 

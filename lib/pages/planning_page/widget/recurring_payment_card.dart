@@ -52,8 +52,7 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
               boxShadow: [defaultShadow],
             ),
             child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
               decoration: BoxDecoration(
                 color: categoryColorList[cat.color].withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(8),
@@ -110,10 +109,10 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
                             Text(accounts!
                                 .firstWhere((element) =>
                                     element.id == transaction.idBankAccount)
-                                .name)
+                                .name),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                   Row(

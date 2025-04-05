@@ -11,11 +11,9 @@
 /// The MigrationManager will execute migrations in the exact order defined here.
 library;
 
-
 import '0001_initial_schema.dart';
 import '0002_account_net_worth.dart';
 import '../migration_base.dart';
-
 
 /// Returns all available migrations in execution order.
 ///
@@ -41,6 +39,6 @@ int getLatestVersion() {
   final migrations = getMigrations();
   if (migrations.isEmpty) return 1;
 
-  return migrations.fold<int>(1, (max, migration) =>
-  migration.version > max ? migration.version : max);
+  return migrations.fold<int>(
+      1, (max, migration) => migration.version > max ? migration.version : max);
 }
