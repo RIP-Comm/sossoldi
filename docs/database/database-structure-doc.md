@@ -118,14 +118,14 @@ Fields:
 
 Stores the spending limits for categories.
 
-Fields of `budget`:
+Fields:
 
 - `idCategory`: the ID of the `categoryTransaction` table, indicating the category for the budget.
 - `name`: the name of the category. This field is mandatory.
   > **[TODO]**: Why is this field here? It duplicates the `name` field in `categoryTransaction`, and there is already an `idCategory` reference.
 - `amountLimit`: the maximum spending limit for the category.
 - `active`: if set to `'1'` (true), the budget is active.
-> **[TODO]**: The purpose of this field is unclear. It seems to always be active.
+> **[TODO]**: The purpose of this field is unclear. It seems to always be active. If the user delete a category budget, it deletes the row in the table.
 
 [Back to Tables](#tables)
 
