@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../constants/constants.dart';
-import '../model/bank_account.dart';
-import '../constants/functions.dart';
-import '../constants/style.dart';
-import '../providers/accounts_provider.dart';
-import '../providers/currency_provider.dart';
-import 'rounded_icon.dart';
+import '../../../constants/constants.dart';
+import '../../../model/bank_account.dart';
+import '../../../constants/functions.dart';
+import '../../../constants/style.dart';
+import '../../../providers/accounts_provider.dart';
+import '../../../providers/currency_provider.dart';
+import '../../../custom_widgets/rounded_icon.dart';
 
 /// This class shows account summaries in the dashboard
 class AccountsSum extends ConsumerWidget with Functions {
