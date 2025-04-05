@@ -7,14 +7,13 @@ import '../../../pages/home_widget/budgets_home.dart';
 import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
 import '../../../custom_widgets/accounts_sum.dart';
-import '../../../custom_widgets/line_chart.dart';
 import '../../../custom_widgets/rounded_icon.dart';
 import '../../../custom_widgets/transactions_list.dart';
 import '../../../model/bank_account.dart';
-import '../../../providers/currency_provider.dart';
 import '../../../providers/dashboard_provider.dart';
 import '../../../providers/theme_provider.dart';
 import '../../../providers/transactions_provider.dart';
+import 'dashboard_data_widget.dart';
 
 class DashboardPage extends ConsumerStatefulWidget {
   const DashboardPage({super.key});
@@ -28,7 +27,6 @@ class _DashboardPageState extends ConsumerState<DashboardPage> with Functions {
   Widget build(BuildContext context) {
     final accountList = ref.watch(accountsProvider);
     final lastTransactions = ref.watch(lastTransactionsProvider);
-    final currencyState = ref.watch(currencyStateNotifier);
     final isDarkMode = ref.watch(appThemeStateNotifier).isDarkModeEnabled;
 
     ref.listen(
@@ -36,184 +34,23 @@ class _DashboardPageState extends ConsumerState<DashboardPage> with Functions {
         (prev, curr) => showDuplicatedTransactionSnackBar(context,
             transaction: curr, ref: ref));
 
+    final dashboardHeader = switch (ref.watch(dashboardProvider)) {
+      AsyncData() => const DashboardDataWidget(),
+      // TODO: handle error properly
+      AsyncError(:final error) => Text('Error: $error'),
+      _ => const SizedBox(
+          height: 330,
+          child: Center(
+            child: CircularProgressIndicator.adaptive(),
+          ),
+        ),
+    };
+
     return Container(
       color: Theme.of(context).colorScheme.tertiary,
       child: ListView(
         children: [
-          ref.watch(dashboardProvider).when(
-                data: (value) {
-                  final income = ref.watch(incomeProvider);
-                  final expense = ref.watch(expenseProvider);
-                  final total = income + expense;
-                  final currentMonthList = ref.watch(currentMonthListProvider);
-                  final lastMonthList = ref.watch(lastMonthListProvider);
-
-                  return Column(
-                    children: [
-                      const SizedBox(height: 24),
-                      Row(
-                        children: [
-                          const SizedBox(width: 16),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "MONTHLY BALANCE",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelMedium
-                                    ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary),
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: numToCurrency(total),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headlineLarge
-                                          ?.copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary),
-                                    ),
-                                    TextSpan(
-                                      text:
-                                          currencyState.selectedCurrency.symbol,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyLarge
-                                          ?.copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(width: 30),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "INCOME",
-                                style: Theme.of(context).textTheme.labelMedium,
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: numToCurrency(income),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(color: green),
-                                    ),
-                                    TextSpan(
-                                      text:
-                                          currencyState.selectedCurrency.symbol,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelLarge
-                                          ?.copyWith(color: green),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(width: 30),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "EXPENSES",
-                                style: Theme.of(context).textTheme.labelMedium,
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: numToCurrency(expense),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(color: red),
-                                    ),
-                                    TextSpan(
-                                      text:
-                                          currencyState.selectedCurrency.symbol,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelLarge
-                                          ?.copyWith(color: red),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      LineChartWidget(
-                        lineData: currentMonthList,
-                        line2Data: lastMonthList,
-                      ),
-                      Row(
-                        children: [
-                          const SizedBox(width: 16),
-                          Container(
-                            width: 8,
-                            height: 8,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            "Current month",
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelMedium
-                                ?.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.primary),
-                          ),
-                          const SizedBox(width: 12),
-                          Container(
-                            width: 8,
-                            height: 8,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: grey2,
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            "Last month",
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelMedium
-                                ?.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.primary),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 22),
-                    ],
-                  );
-                },
-                loading: () => const SizedBox(height: 330),
-                error: (err, stack) => Text('Error: $err'),
-              ),
+          dashboardHeader,
           Container(
             decoration: BoxDecoration(
               color: Theme.of(context)
