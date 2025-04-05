@@ -45,13 +45,16 @@ Stores the last index used for the `id` field of each table. The `name` field co
 
 Stores all types of user accounts, including bank accounts, debit cards, broker accounts and so on.
 
-Fields of `bankAccount`:
+Fields:
 
-- `name`: the name provided by the user for the account. This field is mandatory.
+- `name`: the name provided by the user for the account.
 - `symbol` and `color`: manage the information of the icon shown in the app.
-- `startingValue`: contains the initial value used to calculate balance of the account.
-- `active`: if set to '1' (true), the account is included in the net worth calculation.
+- `startingValue`: initial value used to calculate balance of the account.
+- `active`: if set to '1' (true), the account is active, otherwise is logical deleted.
 - `mainAccount`: if set to '1' (true) is the default account. Only one account can be the main account at any given time.
+- `countNetWorth`: if set to '1' (true), the account is included in the net worth calculation.
+
+All fields of `bankAccount` table are mandatory (not nullable).
 
 [Back to Tables](#tables)
 

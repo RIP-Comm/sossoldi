@@ -21,6 +21,7 @@ erDiagram
         float startingValue "NOT NULL"
         boolean active "NOT NULL"
         boolean mainAccount "NOT NULL"
+        boolean countNetWorth "NOT NULL"
         datetime createdAt "NOT NULL"
         datetime updatedAt "NOT NULL"
     }
