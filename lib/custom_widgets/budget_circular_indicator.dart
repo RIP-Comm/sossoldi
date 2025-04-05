@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import '../constants/functions.dart';
+import '../constants/style.dart';
 import '../providers/currency_provider.dart';
 
 /// This class shows account summaries in dashboard
@@ -22,7 +23,7 @@ class BudgetCircularIndicator extends ConsumerWidget with Functions {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currencyState = ref.watch(currencyStateNotifier);
-
+    final theme = Theme.of(context);
     return Column(
       children: [
         CircularPercentIndicator(
@@ -39,17 +40,13 @@ class BudgetCircularIndicator extends ConsumerWidget with Functions {
                   children: [
                     TextSpan(
                       text: numToCurrency(amount),
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium!
-                          .copyWith(color: Theme.of(context).colorScheme.primary),
+                      style: theme.textTheme.titleMedium!
+                          .copyWith(color: theme.colorScheme.primary),
                     ),
                     TextSpan(
                       text: currencyState.selectedCurrency.symbol,
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelMedium!
-                          .copyWith(color: Theme.of(context).colorScheme.primary)
+                      style: theme.textTheme.labelMedium!
+                          .copyWith(color: theme.colorScheme.primary)
                           .apply(
                         fontFeatures: [const FontFeature.subscripts()],
                       ),
@@ -60,10 +57,8 @@ class BudgetCircularIndicator extends ConsumerWidget with Functions {
               const SizedBox(height: 6),
               Text(
                 "LEFT",
-                style: Theme.of(context)
-                    .textTheme
-                    .labelLarge!
-                    .copyWith(color: Theme.of(context).colorScheme.primary),
+                style: theme.textTheme.labelLarge!
+                    .copyWith(color: theme.colorScheme.primary),
               ),
             ],
           ),
@@ -73,9 +68,11 @@ class BudgetCircularIndicator extends ConsumerWidget with Functions {
         ),
         const SizedBox(height: 10),
         Row(children: [
-          perc >= 0.9 ? const Icon(Icons.error_outline, color: Colors.red, size: 15) : Container(),
+          perc >= 0.9
+              ? const Icon(Icons.error_outline, color: red, size: 15)
+              : const SizedBox(),
           const SizedBox(width: 3),
-          Text(title, style: Theme.of(context).textTheme.bodyLarge),
+          Text(title, style: theme.textTheme.bodyLarge),
         ])
       ],
     );
