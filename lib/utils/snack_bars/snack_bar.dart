@@ -18,6 +18,7 @@ void showSnackBar(
         Expanded(
           child: Text(
             message,
+            maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
         ),
