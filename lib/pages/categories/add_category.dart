@@ -5,6 +5,7 @@ import '../../constants/functions.dart';
 import '../../constants/style.dart';
 import '../../model/category_transaction.dart';
 import '../../providers/categories_provider.dart';
+import '../../providers/transactions_provider.dart';
 
 class AddCategory extends ConsumerStatefulWidget {
   final bool hideIncome;
@@ -17,7 +18,7 @@ class AddCategory extends ConsumerStatefulWidget {
 
 class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
   final TextEditingController nameController = TextEditingController();
-  CategoryTransactionType categoryType = CategoryTransactionType.income;
+  late CategoryTransactionType categoryType;
   String categoryIcon = iconList.keys.first;
   int categoryColor = 0;
 
@@ -25,9 +26,12 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
 
   @override
   void initState() {
-    if (widget.hideIncome) {
-      categoryType = CategoryTransactionType.expense;
-    }
+    super.initState();
+
+    final transactionType = ref.read(transactionTypeProvider);
+    categoryType = ref.read(transactionToCategoryProvider(transactionType))
+        ?? CategoryTransactionType.expense;
+
     final selectedCategory = ref.read(selectedCategoryProvider);
     if (selectedCategory != null) {
       nameController.text = selectedCategory.name;
@@ -35,7 +39,6 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
       categoryIcon = selectedCategory.symbol;
       categoryColor = selectedCategory.color;
     }
-    super.initState();
   }
 
   @override
