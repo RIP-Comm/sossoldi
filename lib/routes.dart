@@ -34,7 +34,12 @@ Route<dynamic> makeRoute(RouteSettings settings) {
     case '/dashboard':
       return buildAdaptiveRoute(settings.name, const HomePage());
     case '/add-page':
-      final args = settings.arguments as Map<String, dynamic>?;
+      Map<String, bool>? args;
+      if (settings.arguments is Map<String, bool>?) {
+        args = settings.arguments as Map<String, bool>?;
+      } else {
+        args = null;
+      }
       return buildAdaptiveRoute(
         settings.name,
         AddPage(
