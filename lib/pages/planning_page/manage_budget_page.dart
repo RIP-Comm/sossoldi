@@ -3,11 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../model/budget.dart';
 import '../../model/category_transaction.dart';
-import '../../ui/device.dart';
+import '../../utils/snack_bars/snack_bar.dart';
 import 'widget/budget_category_selector.dart';
 import '../../../providers/categories_provider.dart';
 import '../../../providers/budgets_provider.dart';
-import 'widget/missing_category_snackabr.dart';
 
 class ManageBudgetPage extends ConsumerStatefulWidget {
   final Function() onRefreshBudgets;
@@ -47,30 +46,30 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
   }
 
   void handleEmptyCategories() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: MissingCategorySnackBarContent(
-          onActionPressed: () async {
-            ScaffoldMessenger.of(context).clearSnackBars();
-            final bool? categoryAdded;
+    showSnackBar(
+      context,
+      message:
+          "At least one category must be created before adding a category budget.",
+      actionLabel: "ADD",
+      onAction: () async {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        final bool? categoryAdded;
 
-            // Push /add-category route, saving the returned result.
-            //
-            // Returned result will be false if no new category is added, true otherwise.
-            categoryAdded = await Navigator.pushNamed(
-              context,
-              '/add-category',
-              arguments: {'hideIncome': true},
-            ) as bool?;
+        // Push /add-category route, saving the returned result.
+        //
+        // Returned result will be false if no new category is added, true otherwise.
+        categoryAdded = await Navigator.pushNamed(
+          context,
+          '/add-category',
+          arguments: {'hideIncome': true},
+        ) as bool?;
 
-            // Only call _loadCategories() if a new category has been added.
-            //
-            // When the user navigates back without adding a category without pressing the back button
-            // on the /add-category page, Navigator will return null, which will be handled as a false.
-            if (categoryAdded ?? false) _loadCategories();
-          },
-        ),
-      ),
+        // Only call _loadCategories() if a new category has been added.
+        //
+        // When the user navigates back without adding a category without pressing the back button
+        // on the /add-category page, Navigator will return null, which will be handled as a false.
+        if (categoryAdded ?? false) _loadCategories();
+      },
     );
   }
 
