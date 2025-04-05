@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
+import '../../../ui/device.dart';
+import '../../../ui/extensions.dart';
 import '../../../utils/formatted_date_range.dart';
 import '../../graphs_page/widgets/categories/categories_bar_chart.dart';
 
 enum MonthSelectorType { simple, advanced } //advanced = with amount
 
-class MonthSelector extends ConsumerWidget with Functions {
+class MonthSelector extends ConsumerWidget {
   const MonthSelector({
     required this.type,
     super.key,
@@ -58,7 +59,7 @@ class MonthSelector extends ConsumerWidget with Functions {
         height: currentHeight,
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.tertiary,
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: BorderRadius.circular(Sizes.borderRadius)
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -95,7 +96,7 @@ class MonthSelector extends ConsumerWidget with Functions {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text: numToCurrency(totalAmount),
+                              text: totalAmount.toCurrency(),
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyLarge!

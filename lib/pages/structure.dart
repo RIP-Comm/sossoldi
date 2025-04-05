@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/transactions_provider.dart';
+import '../ui/device.dart';
 import 'graphs_page/graphs_page.dart';
 import 'home_page.dart';
 import 'planning_page/planning_page.dart';
@@ -48,7 +49,7 @@ class _StructureState extends ConsumerState<Structure> {
           _pagesTitle.elementAt(selectedIndex),
         ),
         leading: Padding(
-          padding: const EdgeInsets.only(left: 16),
+          padding: const EdgeInsets.only(left: Sizes.lg),
           child: FilledButton(
             onPressed: () => Navigator.of(context).pushNamed('/search'),
             style: FilledButton.styleFrom(shape: const CircleBorder()),
@@ -57,7 +58,7 @@ class _StructureState extends ConsumerState<Structure> {
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(Sizes.sm),
             child: FilledButton(
               onPressed: () => Navigator.of(context).pushNamed('/settings'),
               style: FilledButton.styleFrom(shape: const CircleBorder()),
