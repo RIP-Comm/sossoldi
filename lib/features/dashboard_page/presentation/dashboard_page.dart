@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../providers/accounts_provider.dart';
 import '../../../utils/snack_bars/transactions_snack_bars.dart';
-import '../../../pages/home_widget/budgets_home.dart';
+import 'budgets_section.dart';
 import '../../../constants/functions.dart';
-import 'accounts_list.dart';
 import '../../../custom_widgets/transactions_list.dart';
 import '../../../providers/transactions_provider.dart';
 import 'dashboard_graph.dart';
+import 'your_accounts_section.dart';
 
 class DashboardPage extends ConsumerStatefulWidget {
   const DashboardPage({super.key});
@@ -24,15 +23,6 @@ class _DashboardPageState extends ConsumerState<DashboardPage> with Functions {
         duplicatedTransactoinProvider,
         (prev, curr) => showDuplicatedTransactionSnackBar(context,
             transaction: curr, ref: ref));
-
-    final accountListWidget = switch (ref.watch(accountsProvider)) {
-      AsyncData(:final value) => AccountsList(accounts: value),
-      AsyncError(:final error) => Text('Error: $error'),
-      _ => Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: CircularProgressIndicator.adaptive(),
-        ),
-    };
 
     final lastTransactionsWidget =
         switch (ref.watch(lastTransactionsProvider)) {
@@ -59,17 +49,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> with Functions {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
-                  child: Text(
-                    "Your accounts",
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                ),
-                SizedBox(
-                  height: 80.0,
-                  child: accountListWidget,
-                ),
+                const YourAccountsSection(),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(

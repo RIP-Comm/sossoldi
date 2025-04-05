@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../constants/constants.dart';
+import '../../../constants/constants.dart';
 
-import '../../constants/functions.dart';
-import '../../custom_widgets/budget_circular_indicator.dart';
-import '../../model/budget.dart';
-import '../../providers/budgets_provider.dart';
+import '../../../constants/functions.dart';
+import '../../../custom_widgets/budget_circular_indicator.dart';
+import '../../../model/budget.dart';
+import '../../../providers/budgets_provider.dart';
 
 class BudgetsSection extends ConsumerWidget with Functions {
   const BudgetsSection({super.key});
