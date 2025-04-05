@@ -3,13 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../providers/transactions_provider.dart';
-import 'graphs_page/graphs_page.dart';
-import 'home_page.dart';
-import 'planning_page/planning_page.dart';
-import 'transactions_page/transactions_page.dart';
-
-final StateProvider selectedIndexProvider = StateProvider<int>((ref) => 0);
+import '../../../providers/transactions_provider.dart';
+import '../../../pages/graphs_page/graphs_page.dart';
+import '../../../pages/home_page.dart';
+import '../../../pages/planning_page/planning_page.dart';
+import '../../../pages/transactions_page/transactions_page.dart';
+import '../data/selected_index_provider.dart';
 
 class Structure extends ConsumerStatefulWidget {
   const Structure({super.key});
@@ -88,7 +87,6 @@ class _StructureState extends ConsumerState<Structure> {
                 : Icons.swap_horizontal_circle_outlined),
             label: "TRANSACTIONS",
           ),
-          const BottomNavigationBarItem(icon: Text(""), label: ""),
           BottomNavigationBarItem(
             icon: Icon(selectedIndex == 3
                 ? Icons.calendar_today
