@@ -7,8 +7,8 @@ import '../../../custom_widgets/line_chart.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../providers/dashboard_provider.dart';
 
-class DashboardDataWidget extends ConsumerWidget with Functions {
-  const DashboardDataWidget({super.key});
+class DashboardData extends ConsumerWidget with Functions {
+  const DashboardData({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -8,8 +8,8 @@ import '../../../providers/theme_provider.dart';
 import 'accounts_sum.dart';
 import '../../../model/bank_account.dart';
 
-class AccountsListWidget extends ConsumerWidget {
-  const AccountsListWidget({
+class AccountsList extends ConsumerWidget {
+  const AccountsList({
     super.key,
     required this.accounts,
   });

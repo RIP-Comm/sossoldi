@@ -5,7 +5,7 @@ import '../../../providers/accounts_provider.dart';
 import '../../../utils/snack_bars/transactions_snack_bars.dart';
 import '../../../pages/home_widget/budgets_home.dart';
 import '../../../constants/functions.dart';
-import 'accounts_list_widget.dart';
+import 'accounts_list.dart';
 import '../../../custom_widgets/transactions_list.dart';
 import '../../../providers/transactions_provider.dart';
 import 'dashboard_graph.dart';
@@ -26,7 +26,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> with Functions {
             transaction: curr, ref: ref));
 
     final accountListWidget = switch (ref.watch(accountsProvider)) {
-      AsyncData(:final value) => AccountsListWidget(accounts: value),
+      AsyncData(:final value) => AccountsList(accounts: value),
       AsyncError(:final error) => Text('Error: $error'),
       _ => Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
