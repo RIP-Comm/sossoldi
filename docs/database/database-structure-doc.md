@@ -102,15 +102,15 @@ Stores the user's transaction categories.
 - The `idCategory` field in the `transaction` table links to the `categoryTransaction` table.
 - The `idCategory` field in the `budget` table links to the `categoryTransaction` table.
 
-> **[TODO]** This tables is linked with `transaction` and `budget`. Why its name is `categoryTransaction`?
-
-Fields of `categoryTransaction`:
+Fields:
 
 - `name`: an arbitrary name provided by the user for the category. This field is mandatory.
+- `type`: enumerates the type of category: `'IN'` (income) or `'OUT'` (expense)
 - `symbol` and `color`: manage the information of the icon shown in the app.
 - `note`: not used
-  - > **[TODO]**: should this field be removed?
+  > **[TODO]**: should this field be removed?
 - `parent`: if it is a sub-category, contains the ID of the parent category.
+  > **[TODO]**: parent category not yet implemented
 
 [Back to Tables](#tables)
 
