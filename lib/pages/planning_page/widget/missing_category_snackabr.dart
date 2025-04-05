@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// SnackBar content for lib\pages\planning_page\manage_budget_page.dart:50.
-/// 
+///
 /// Used to prompt the user to add a category before adding a category budget.
 class MissingCategorySnackBarContent extends StatelessWidget {
   final VoidCallback onActionPressed;
