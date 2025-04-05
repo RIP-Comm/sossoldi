@@ -9,9 +9,7 @@ import '../../custom_widgets/transactions_list.dart';
 import '../../providers/accounts_provider.dart';
 import '../../model/transaction.dart';
 import '../../providers/currency_provider.dart';
-import '../../providers/transactions_provider.dart';
 import '../../utils/decimal_text_input_formatter.dart';
-import '../../utils/snack_bars/transactions_snack_bars.dart';
 
 class AccountPage extends ConsumerStatefulWidget {
   const AccountPage({super.key});
@@ -39,11 +37,6 @@ class _AccountPage extends ConsumerState<AccountPage> with Functions {
         ref.watch(selectedAccountCurrentMonthDailyBalanceProvider);
     final transactions = ref.watch(selectedAccountLastTransactions);
     final currencyState = ref.watch(currencyStateNotifier);
-
-    ref.listen(
-        duplicatedTransactoinProvider,
-        (prev, curr) => showDuplicatedTransactionSnackBar(context,
-            transaction: curr, ref: ref));
 
     return Scaffold(
       appBar: AppBar(

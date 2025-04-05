@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../providers/transactions_provider.dart';
 import '../../../pages/graphs_page/graphs_page.dart';
+import '../../../utils/snack_bars/transactions_snack_bars.dart';
 import '../../dashboard_page/presentation/dashboard_page.dart';
 import '../../../pages/planning_page/planning_page.dart';
 import '../../../pages/transactions_page/transactions_page.dart';
@@ -33,6 +34,19 @@ class _HomePageState extends ConsumerState<HomePage> {
     const PlanningPage(),
     const GraphsPage(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    ref.listenManual(duplicatedTransactoinProvider, (_, next) {
+      showDuplicatedTransactionSnackBar(
+        context,
+        transaction: next,
+        ref: ref,
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
