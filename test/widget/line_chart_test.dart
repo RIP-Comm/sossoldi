@@ -16,13 +16,15 @@ void main() {
           height: 400, // Explicit size to ensure proper rendering
           width: 600,
           child: LineChartWidget(
-            lineData: List.generate(17, (i) =>
-              FlSpot(i.toDouble(), lower + random.nextDouble() * (upper - lower))
-            ),
+            lineData: List.generate(
+                17,
+                (i) => FlSpot(i.toDouble(),
+                    lower + random.nextDouble() * (upper - lower))),
             lineColor: const Color(0xffffffff),
-            line2Data: List.generate(30, (i) =>
-              FlSpot(i.toDouble(), lower + random.nextDouble() * (upper - lower))
-            ),
+            line2Data: List.generate(
+                30,
+                (i) => FlSpot(i.toDouble(),
+                    lower + random.nextDouble() * (upper - lower))),
             line2Color: const Color(0xffffffff),
             colorBackground: const Color(0xff356CA3),
             period: Period.month,
@@ -44,9 +46,8 @@ void main() {
     }
 
     // Test basic chart properties
-    final chartWidget = tester.widget<LineChartWidget>(
-      find.byType(LineChartWidget)
-    );
+    final chartWidget =
+        tester.widget<LineChartWidget>(find.byType(LineChartWidget));
     expect(chartWidget.lineColor, equals(const Color(0xffffffff)));
     expect(chartWidget.colorBackground, equals(const Color(0xff356CA3)));
   });

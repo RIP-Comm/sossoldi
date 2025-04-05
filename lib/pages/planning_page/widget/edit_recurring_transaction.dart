@@ -134,14 +134,16 @@ class _EditRecurringTransactionState
                       ),
                       const Divider(height: 1, color: grey1),
                       NonEditableDetailsListTile(
-                          title: "Category",
-                          icon: Icons.list_alt,
-                          value: ref.watch(categoryProvider)?.name),
+                        title: "Category",
+                        icon: Icons.list_alt,
+                        value: ref.watch(categoryProvider)?.name,
+                      ),
                       const Divider(height: 1, color: grey1),
                       NonEditableDetailsListTile(
-                          title: "Date Start",
-                          icon: Icons.calendar_month,
-                          value: dateToString(ref.watch(dateProvider))),
+                        title: "Date Start",
+                        icon: Icons.calendar_month,
+                        value: dateToString(ref.watch(dateProvider)),
+                      ),
                       const RecurrenceListTileEdit(),
                     ],
                   ),
@@ -157,7 +159,10 @@ class _EditRecurringTransactionState
                 color: Theme.of(context).colorScheme.surface,
                 boxShadow: [
                   BoxShadow(
-                    color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.15),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .primary
+                        .withValues(alpha: 0.15),
                     blurRadius: 5.0,
                     offset: const Offset(0, -1.0),
                   )
@@ -187,7 +192,8 @@ class _EditRecurringTransactionState
                   style: TextButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.secondary,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                   child: Text(
                     "UPDATE TRANSACTION",

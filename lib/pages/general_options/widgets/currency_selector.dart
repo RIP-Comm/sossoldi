@@ -6,7 +6,10 @@ import '../../../providers/currency_provider.dart';
 
 class CurrencySelectorDialog {
   static void selectCurrencyDialog(
-      BuildContext context, CurrencyState state, Future<List<Currency>> currencies) {
+    BuildContext context,
+    CurrencyState state,
+    Future<List<Currency>> currencies,
+  ) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -22,53 +25,56 @@ class CurrencySelectorDialog {
           width: 220,
           child: SingleChildScrollView(
             child: FutureBuilder(
-                future: currencies,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData &&
-                      snapshot.data != null &&
-                      snapshot.connectionState == ConnectionState.done) {
-                    return ListView.builder(
-                      itemCount: snapshot.data!.length,
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (BuildContext context, int i) {
-                        return GestureDetector(
-                          onTap: () {
-                            state.setSelectedCurrency(snapshot.data![i]);
-                            Navigator.pop(context);
-                          },
-                          child: ListTile(
-                            leading: CircleAvatar(
-                              radius: 22,
-                              backgroundColor: state.selectedCurrency.code == snapshot.data![i].code
-                                  ? blue5
-                                  : grey1,
-                              child: Text(snapshot.data![i].symbol,
-                                  style: TextStyle(
-                                      color: Theme.of(context).colorScheme.onPrimary,
-                                      fontSize: 20)),
-                            ),
-                            title: Text(
-                              snapshot.data![i].name,
-                              textAlign: TextAlign.center,
-                            ),
+              future: currencies,
+              builder: (context, snapshot) {
+                if (snapshot.hasData &&
+                    snapshot.data != null &&
+                    snapshot.connectionState == ConnectionState.done) {
+                  return ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context, int i) {
+                      return GestureDetector(
+                        onTap: () {
+                          state.setSelectedCurrency(snapshot.data![i]);
+                          Navigator.pop(context);
+                        },
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            radius: 22,
+                            backgroundColor: state.selectedCurrency.code ==
+                                    snapshot.data![i].code
+                                ? blue5
+                                : grey1,
+                            child: Text(snapshot.data![i].symbol,
+                                style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                    fontSize: 20)),
                           ),
-                        );
-                      },
-                    );
-                  } else if (snapshot.hasError) {
-                    return Text('Something went wrong: ${snapshot.error}');
-                  } else {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Transform.scale(
-                        scale: 0.5,
-                        child: const CircularProgressIndicator(),
+                          title: Text(
+                            snapshot.data![i].name,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                       );
-                    } else {
-                      return const Text("Search for a transaction");
-                    }
+                    },
+                  );
+                } else if (snapshot.hasError) {
+                  return Text('Something went wrong: ${snapshot.error}');
+                } else {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Transform.scale(
+                      scale: 0.5,
+                      child: const CircularProgressIndicator(),
+                    );
+                  } else {
+                    return const Text("Search for a transaction");
                   }
-                }),
+                }
+              },
+            ),
           ),
         ),
       ),

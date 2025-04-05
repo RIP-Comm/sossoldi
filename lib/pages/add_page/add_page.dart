@@ -128,7 +128,11 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
     ref
         .read(accountsProvider.notifier)
         .refreshAccount(ref.read(bankAccountProvider)!)
-        .whenComplete(() => Navigator.of(context).pop());
+        .whenComplete(() {
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
+    });
   }
 
   void _createOrUpdateTransaction() {
@@ -226,9 +230,12 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                 size: 20,
                 color: Theme.of(context).colorScheme.primary,
               ),
-              onPressed: () => showDialog(context: context, builder: (_) => DuplicateTransactionDialog(
-                transaction: selectedTransaction,
-              )),
+              onPressed: () => showDialog(
+                context: context,
+                builder: (_) => DuplicateTransactionDialog(
+                  transaction: selectedTransaction,
+                ),
+              ),
             ),
             IconButton(
               icon: Icon(

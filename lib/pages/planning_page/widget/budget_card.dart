@@ -23,7 +23,8 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
   @override
   Widget build(BuildContext context) {
     final budgets = ref.watch(budgetsProvider.notifier).getBudgets();
-    final transactions = ref.watch(transactionsProvider.notifier).getMonthlyTransactions();
+    final transactions =
+        ref.watch(transactionsProvider.notifier).getMonthlyTransactions();
     final currencyState = ref.watch(currencyStateNotifier);
 
     return DefaultContainer(
@@ -44,19 +45,23 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Composition", style: Theme.of(context).textTheme.titleLarge),
+                      Text("Composition",
+                          style: Theme.of(context).textTheme.titleLarge),
                       BudgetPieChart(budgets: budgets as List<Budget>),
-                      Text("Progress", style: Theme.of(context).textTheme.titleLarge),
+                      Text("Progress",
+                          style: Theme.of(context).textTheme.titleLarge),
                       const SizedBox(height: 10),
                       ListView.separated(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: budgets.length,
                         itemBuilder: (BuildContext context, int index) {
-                          num spent = num.parse((transactions as List<Transaction>)
-                              .where((t) => t.idCategory == budgets[index].idCategory)
-                              .fold(0.0, (sum, t) => sum + t.amount)
-                              .toStringAsFixed(2));
+                          num spent = num.parse(
+                              (transactions as List<Transaction>)
+                                  .where((t) =>
+                                      t.idCategory == budgets[index].idCategory)
+                                  .fold(0.0, (sum, t) => sum + t.amount)
+                                  .toStringAsFixed(2));
                           Budget budget = budgets.elementAt(index);
                           return Column(
                             children: [
@@ -64,15 +69,20 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                                 children: [
                                   Text(
                                     budget.name!,
-                                    style: const TextStyle(fontWeight: FontWeight.normal),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.normal),
                                   ),
                                   const Spacer(),
-                                  spent >= (budget.amountLimit * 0.9)
-                                      ? const Icon(Icons.error_outline, color: Colors.red)
-                                      : Container(),
+                                  if (spent >= (budget.amountLimit * 0.9))
+                                    const Icon(
+                                      Icons.error_outline,
+                                      color: Colors.red,
+                                    ),
                                   Text(
                                     "$spent${currencyState.selectedCurrency.symbol}/${budget.amountLimit}${currencyState.selectedCurrency.symbol}",
-                                    style: const TextStyle(fontWeight: FontWeight.normal),
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -81,9 +91,9 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                                 type: BarType.category,
                                 colorIndex: index,
                                 amount: (spent == 0 || budget.amountLimit == 0)
-                                      ? 0
-                                      : spent,
-                                total: budget.amountLimit
+                                    ? 0
+                                    : spent,
+                                total: budget.amountLimit,
                               ),
                             ],
                           );
@@ -130,18 +140,17 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                             elevation: 10,
                             builder: (BuildContext context) {
                               return FractionallySizedBox(
-                                  heightFactor: 0.9,
-                                  child:
-                                      ManageBudgetPage(onRefreshBudgets: widget.onRefreshBudgets));
+                                heightFactor: 0.9,
+                                child: ManageBudgetPage(
+                                    onRefreshBudgets: widget.onRefreshBudgets),
+                              );
                             },
                           );
                         },
                         label: Text(
                           "Create budget",
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall!
-                              .apply(color: Theme.of(context).colorScheme.secondary),
+                          style: Theme.of(context).textTheme.titleSmall!.apply(
+                              color: Theme.of(context).colorScheme.secondary),
                         ),
                         style: TextButton.styleFrom(
                           backgroundColor: Colors.white,

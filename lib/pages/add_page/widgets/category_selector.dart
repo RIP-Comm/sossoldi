@@ -142,10 +142,10 @@ class _CategorySelectorState extends ConsumerState<CategorySelector>
                                   categoryColorListTheme[category.color],
                             ),
                             title: Text(category.name),
-                            trailing: ref.watch(categoryProvider)?.id ==
-                                    category.id
-                                ? Icon(Icons.check)
-                                : null,
+                            trailing:
+                                ref.watch(categoryProvider)?.id == category.id
+                                    ? Icon(Icons.check)
+                                    : null,
                           );
                         },
                       ),

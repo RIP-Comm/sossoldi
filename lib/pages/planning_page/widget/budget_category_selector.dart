@@ -14,16 +14,18 @@ class BudgetCategorySelector extends ConsumerStatefulWidget {
   final CategoryTransaction initSelectedCategory;
   final Function(Budget) onBudgetChanged;
 
-  const BudgetCategorySelector(
-      {super.key,
-      required this.categories,
-      required this.budget,
-      required this.initSelectedCategory,
-      required this.onBudgetChanged,
-      required this.categoriesAlreadyUsed});
+  const BudgetCategorySelector({
+    super.key,
+    required this.categories,
+    required this.budget,
+    required this.initSelectedCategory,
+    required this.onBudgetChanged,
+    required this.categoriesAlreadyUsed,
+  });
 
   @override
-  ConsumerState<BudgetCategorySelector> createState() => _BudgetCategorySelector();
+  ConsumerState<BudgetCategorySelector> createState() =>
+      _BudgetCategorySelector();
 }
 
 class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
@@ -32,10 +34,12 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
 
   void _modifyBudget() {
     Budget updatedBudget = Budget(
-        idCategory: selectedCategory.id!,
-        name: selectedCategory.name,
-        active: true,
-        amountLimit: _controller.text.isNotEmpty ? double.parse(_controller.text) : 0);
+      idCategory: selectedCategory.id!,
+      name: selectedCategory.name,
+      active: true,
+      amountLimit:
+          _controller.text.isNotEmpty ? double.parse(_controller.text) : 0,
+    );
     widget.onBudgetChanged(updatedBudget);
   }
 
