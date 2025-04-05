@@ -62,10 +62,12 @@ All fields of `bankAccount` table are mandatory (not nullable).
 
 Stores all the user's transactions for all the accounts. A transaction can be an income, an expanse or a transfer to other accounts.
 
-Fields of `transaction`:
+Fields:
 
-- `date` and `amount`: specify the date of the transaction and the amount involved.
+- `date`: the date of the transaction.
+- `amount`: the amount involved in the transaction.
 - `type`: enumerates the type of transaction: `'IN'` (income), `'OUT'` (expense) or `'TRSF'` (transfer).
+  > **[TODO]**: why is this field is defined as INTEGER if it stores strings? SQLite allow to store strings in a INTEGER field. Reference: https://www.sqlite.org/faq.html#q3
 - `note`: an arbitrary description provided by the user for the transaction. Is not mandatory.
 - `idCategory`: the ID of the `categoryTransaction` table, indicating the category of the transaction.
 - `idBankAccount`: the ID of the `bankAccount` table in which the transaction occurred.
