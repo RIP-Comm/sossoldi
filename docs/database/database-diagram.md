@@ -5,13 +5,19 @@ nav_order: 6
 parent: Sossoldi Database Structure
 ---
 
+ > Note: The foreign keys (FK) shown in this schema are not explicitly defined in the database schema, 
+but are included here to better illustrate the structure.
+
+
 ```mermaid
 erDiagram
     bankAccount ||--o{ transaction : has
-    bankAccount ||--o{ transaction : transfers_to
+    transaction ||--o{ bankAccount : transfers_to
     categoryTransaction ||--o{ transaction : categorizes
-    transaction ||--o{ recurringTransaction : triggers
-    categoryTransaction ||--o{ budget : categorizes
+    transaction }o--|| recurringTransaction : triggers
+    categoryTransaction ||--o{ recurringTransaction : categorizes
+    bankAccount ||--o{ recurringTransaction : has
+    budget ||--o{ categoryTransaction : targets
 
     bankAccount {
         int id PK "AUTO_INCREMENT"
@@ -77,6 +83,8 @@ erDiagram
     }
 
 ```
+
+### currency table doesn't have any relationships with other tables.
 
 ```mermaid
 erDiagram
