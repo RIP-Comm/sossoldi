@@ -4,9 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../utils/snack_bars/transactions_snack_bars.dart';
 import 'budgets_section.dart';
 import '../../../constants/functions.dart';
-import '../../../custom_widgets/transactions_list.dart';
 import '../../../providers/transactions_provider.dart';
 import 'dashboard_graph.dart';
+import 'last_transactions_section.dart';
 import 'your_accounts_section.dart';
 
 class DashboardPage extends ConsumerStatefulWidget {
@@ -23,13 +23,6 @@ class _DashboardPageState extends ConsumerState<DashboardPage> with Functions {
         duplicatedTransactoinProvider,
         (prev, curr) => showDuplicatedTransactionSnackBar(context,
             transaction: curr, ref: ref));
-
-    final lastTransactionsWidget =
-        switch (ref.watch(lastTransactionsProvider)) {
-      AsyncData(:final value) => TransactionsList(transactions: value),
-      AsyncError(:final error) => Text('Error: $error'),
-      _ => const SizedBox(),
-    };
 
     return Container(
       color: Theme.of(context).colorScheme.tertiary,
@@ -49,17 +42,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> with Functions {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const YourAccountsSection(),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 32, 16, 8),
-                    child: Text(
-                      "Last transactions",
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                  ),
-                ),
-                lastTransactionsWidget,
+                const LastTransactionsSection(),
                 const SizedBox(height: 28),
                 const BudgetsSection(),
               ],
