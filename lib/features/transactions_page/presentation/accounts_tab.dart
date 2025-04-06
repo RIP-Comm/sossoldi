@@ -15,18 +15,11 @@ import '../../../pages/transactions_page/widgets/accounts_pie_chart.dart';
 final selectedAccountIndexProvider =
     StateProvider.autoDispose<int>((ref) => -1);
 
-class AccountsTab extends ConsumerStatefulWidget {
-  const AccountsTab({
-    super.key,
-  });
+class AccountsTab extends ConsumerWidget with Functions {
+  const AccountsTab({super.key});
 
   @override
-  ConsumerState<AccountsTab> createState() => _AccountsTabState();
-}
-
-class _AccountsTabState extends ConsumerState<AccountsTab> with Functions {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final accounts = ref.watch(accountsProvider);
     final transactions = ref.watch(transactionsProvider);
     final transactionType = ref.watch(selectedTransactionTypeProvider);
