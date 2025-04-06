@@ -13,7 +13,7 @@ plugins {
 android {
     namespace "com.ripster.sossoldi"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = "29.0.13113456"
+    ndkVersion = flutter.ndkVersion
 
     compileOptions {
 				// Flag to enable support for the new language APIs
