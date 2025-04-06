@@ -42,8 +42,8 @@ class _AccountListState extends ConsumerState<AccountList> {
         child: Column(
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: Sizes.xl, horizontal: Sizes.lg),
+              padding: const EdgeInsets.symmetric(
+                  vertical: Sizes.xl, horizontal: Sizes.lg),
               child: Row(
                 children: [
                   Container(

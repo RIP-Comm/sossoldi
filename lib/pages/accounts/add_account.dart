@@ -72,10 +72,12 @@ class _AddAccountState extends ConsumerState<AddAccount> {
                       horizontal: 16,
                       vertical: Sizes.lg,
                     ),
-                    padding: const EdgeInsets.fromLTRB(Sizes.lg, Sizes.md, Sizes.lg, 0),
+                    padding: const EdgeInsets.fromLTRB(
+                        Sizes.lg, Sizes.md, Sizes.lg, 0),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
+                      borderRadius:
+                          BorderRadius.circular(Sizes.borderRadiusSmall),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,7 +103,8 @@ class _AddAccountState extends ConsumerState<AddAccount> {
                     ),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
+                      borderRadius:
+                          BorderRadius.circular(Sizes.borderRadiusSmall),
                     ),
                     child: Column(
                       children: [
@@ -116,8 +119,10 @@ class _AddAccountState extends ConsumerState<AddAccount> {
                         Material(
                           color: Colors.transparent,
                           child: InkWell(
-                            borderRadius: BorderRadius.circular(Sizes.borderRadius * 10),
-                            onTap: () => setState(() => showAccountIcons = true),
+                            borderRadius:
+                                BorderRadius.circular(Sizes.borderRadius * 10),
+                            onTap: () =>
+                                setState(() => showAccountIcons = true),
                             child: Ink(
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
@@ -151,13 +156,17 @@ class _AddAccountState extends ConsumerState<AddAccount> {
                                 Align(
                                   alignment: Alignment.topRight,
                                   child: TextButton(
-                                    onPressed: () => setState(() => showAccountIcons = false),
+                                    onPressed: () => setState(
+                                        () => showAccountIcons = false),
                                     child: Text(
                                       "Done",
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyLarge!
-                                          .copyWith(color: Theme.of(context).colorScheme.secondary),
+                                          .copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary),
                                     ),
                                   ),
                                 ),
@@ -165,28 +174,39 @@ class _AddAccountState extends ConsumerState<AddAccount> {
                                   itemCount: accountIconList.length,
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
-                                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 6,
                                   ),
                                   itemBuilder: (context, index) {
                                     IconData accountIconData =
                                         accountIconList.values.elementAt(index);
-                                    String accountIconName = accountIconList.keys.elementAt(index);
+                                    String accountIconName =
+                                        accountIconList.keys.elementAt(index);
                                     return GestureDetector(
-                                      onTap: () => setState(() => accountIcon = accountIconName),
+                                      onTap: () => setState(
+                                          () => accountIcon = accountIconName),
                                       child: Container(
                                         margin: const EdgeInsets.all(Sizes.xs),
                                         decoration: BoxDecoration(
-                                          color: accountIconList[accountIcon] == accountIconData
-                                              ? Theme.of(context).colorScheme.secondary
-                                              : Theme.of(context).colorScheme.surface,
+                                          color: accountIconList[accountIcon] ==
+                                                  accountIconData
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .surface,
                                           shape: BoxShape.circle,
                                         ),
                                         child: Icon(
                                           accountIconData,
-                                          color: accountIconList[accountIcon] == accountIconData
+                                          color: accountIconList[accountIcon] ==
+                                                  accountIconData
                                               ? white
-                                              : Theme.of(context).colorScheme.primary,
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
                                           size: 24,
                                         ),
                                       ),
@@ -203,25 +223,37 @@ class _AddAccountState extends ConsumerState<AddAccount> {
                           child: ListView.separated(
                             scrollDirection: Axis.horizontal,
                             physics: const BouncingScrollPhysics(),
-                            padding: const EdgeInsets.symmetric(horizontal: Sizes.lg),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: Sizes.lg),
                             separatorBuilder: (context, index) =>
                                 const SizedBox(width: Sizes.lg),
                             itemBuilder: (context, index) {
                               Color color = accountColorListTheme[index];
                               return GestureDetector(
-                                onTap: () => setState(() => accountColor = index),
+                                onTap: () =>
+                                    setState(() => accountColor = index),
                                 child: Container(
-                                  height: accountColorListTheme[accountColor] == color ? 38 : 32,
-                                  width: accountColorListTheme[accountColor] == color ? 38 : 32,
+                                  height: accountColorListTheme[accountColor] ==
+                                          color
+                                      ? 38
+                                      : 32,
+                                  width: accountColorListTheme[accountColor] ==
+                                          color
+                                      ? 38
+                                      : 32,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: color,
-                                    border: accountColorListTheme[accountColor] == color
-                                        ? Border.all(
-                                            color: Theme.of(context).colorScheme.primary,
-                                            width: 3,
-                                          )
-                                        : null,
+                                    border:
+                                        accountColorListTheme[accountColor] ==
+                                                color
+                                            ? Border.all(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                                width: 3,
+                                              )
+                                            : null,
                                   ),
                                 ),
                               );
@@ -235,18 +267,22 @@ class _AddAccountState extends ConsumerState<AddAccount> {
                           style: Theme.of(context)
                               .textTheme
                               .labelMedium!
-                              .copyWith(color: Theme.of(context).colorScheme.primary),
+                              .copyWith(
+                                  color: Theme.of(context).colorScheme.primary),
                         ),
                         const SizedBox(height: Sizes.lg),
                       ],
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.fromLTRB(Sizes.lg, Sizes.xl, Sizes.lg, 0),
-                    padding: const EdgeInsets.fromLTRB(Sizes.lg, Sizes.md, Sizes.lg, 0),
+                    margin: const EdgeInsets.fromLTRB(
+                        Sizes.lg, Sizes.xl, Sizes.lg, 0),
+                    padding: const EdgeInsets.fromLTRB(
+                        Sizes.lg, Sizes.md, Sizes.lg, 0),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
+                      borderRadius:
+                          BorderRadius.circular(Sizes.borderRadiusSmall),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -258,10 +294,12 @@ class _AddAccountState extends ConsumerState<AddAccount> {
                         TextField(
                           controller: balanceController,
                           decoration: InputDecoration(
-                            hintText: "${selectedAccount == null ? "Initial" : "Current"} Balance",
+                            hintText:
+                                "${selectedAccount == null ? "Initial" : "Current"} Balance",
                             suffixText: currencyState.selectedCurrency.symbol,
                           ),
-                          keyboardType: TextInputType.numberWithOptions(decimal: true),
+                          keyboardType:
+                              TextInputType.numberWithOptions(decimal: true),
                           inputFormatters: [
                             DecimalTextInputFormatter(decimalDigits: 2),
                           ],
@@ -278,13 +316,15 @@ class _AddAccountState extends ConsumerState<AddAccount> {
                     padding: const EdgeInsets.symmetric(horizontal: Sizes.lg),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
+                      borderRadius:
+                          BorderRadius.circular(Sizes.borderRadiusSmall),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: Sizes.md),
+                          padding:
+                              const EdgeInsets.symmetric(vertical: Sizes.md),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -294,14 +334,16 @@ class _AddAccountState extends ConsumerState<AddAccount> {
                               ),
                               Switch.adaptive(
                                 value: mainAccount,
-                                onChanged: (value) => setState(() => mainAccount = value),
+                                onChanged: (value) =>
+                                    setState(() => mainAccount = value),
                               ),
                             ],
                           ),
                         ),
                         const Divider(height: 1, color: grey2),
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: Sizes.md),
+                          padding:
+                              const EdgeInsets.symmetric(vertical: Sizes.md),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -311,7 +353,8 @@ class _AddAccountState extends ConsumerState<AddAccount> {
                               ),
                               Switch.adaptive(
                                 value: countNetWorth,
-                                onChanged: (value) => setState(() => countNetWorth = value),
+                                onChanged: (value) =>
+                                    setState(() => countNetWorth = value),
                               ),
                             ],
                           ),
@@ -354,7 +397,10 @@ class _AddAccountState extends ConsumerState<AddAccount> {
                         icon: const Icon(Icons.delete_outlined, color: red),
                         label: Text(
                           "Delete account",
-                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: red),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge!
+                              .copyWith(color: red),
                         ),
                       ),
                     ),
@@ -369,13 +415,17 @@ class _AddAccountState extends ConsumerState<AddAccount> {
               color: Theme.of(context).colorScheme.surface,
               boxShadow: [
                 BoxShadow(
-                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.15),
+                  color: Theme.of(context)
+                      .colorScheme
+                      .primary
+                      .withValues(alpha: 0.15),
                   blurRadius: 5.0,
                   offset: const Offset(0, -1.0),
                 )
               ],
             ),
-            padding: const EdgeInsets.fromLTRB(Sizes.xl, Sizes.md, Sizes.lg, Sizes.lg),
+            padding: const EdgeInsets.fromLTRB(
+                Sizes.xl, Sizes.md, Sizes.lg, Sizes.lg),
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(

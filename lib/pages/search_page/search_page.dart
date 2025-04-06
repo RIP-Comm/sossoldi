@@ -91,7 +91,8 @@ class _SearchPage extends ConsumerState<SearchPage> {
                         scrollDirection: Axis.horizontal,
                         child: Row(children: [
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: Sizes.sm),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: Sizes.sm),
                             child: FilterChip(
                               showCheckmark: false,
                               label: Text("Income",
@@ -103,7 +104,8 @@ class _SearchPage extends ConsumerState<SearchPage> {
                               backgroundColor: Colors.white,
                               selectedColor: Colors.blue.shade700,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(Sizes.borderRadius * 10),
+                                borderRadius: BorderRadius.circular(
+                                    Sizes.borderRadius * 10),
                                 side: BorderSide(
                                   color: Colors.blue.shade700,
                                   width: 2.0,
@@ -121,7 +123,8 @@ class _SearchPage extends ConsumerState<SearchPage> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: Sizes.sm),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: Sizes.sm),
                             child: FilterChip(
                               showCheckmark: false,
                               label: Text("Outcome",
@@ -133,7 +136,8 @@ class _SearchPage extends ConsumerState<SearchPage> {
                               backgroundColor: Colors.white,
                               selectedColor: Colors.blue.shade700,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(Sizes.borderRadius * 10),
+                                borderRadius: BorderRadius.circular(
+                                    Sizes.borderRadius * 10),
                                 side: BorderSide(
                                   color: Colors.blue.shade700,
                                   width: 2.0,
@@ -151,7 +155,8 @@ class _SearchPage extends ConsumerState<SearchPage> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: Sizes.sm),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: Sizes.sm),
                             child: FilterChip(
                               showCheckmark: false,
                               label: Text(
@@ -165,7 +170,8 @@ class _SearchPage extends ConsumerState<SearchPage> {
                               backgroundColor: Colors.white,
                               selectedColor: Colors.blue.shade700,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(Sizes.borderRadius * 10),
+                                borderRadius: BorderRadius.circular(
+                                    Sizes.borderRadius * 10),
                                 side: BorderSide(
                                   color: Colors.blue.shade700,
                                   width: 2.0,
@@ -220,8 +226,7 @@ class _SearchPage extends ConsumerState<SearchPage> {
                                         backgroundColor: Colors.white,
                                         selectedColor: Colors.blue.shade700,
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(
+                                          borderRadius: BorderRadius.circular(
                                               Sizes.borderRadius * 10),
                                           side: BorderSide(
                                             color: Colors.blue.shade700,

@@ -52,8 +52,8 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
                 children: [
                   Container(
                     alignment: Alignment.centerLeft,
-                    padding:
-                        const EdgeInsets.only(left: Sizes.lg, top: Sizes.xxl, bottom: Sizes.md),
+                    padding: const EdgeInsets.only(
+                        left: Sizes.lg, top: Sizes.xxl, bottom: Sizes.md),
                     child: Text(
                       "MORE FREQUENT",
                       style: Theme.of(context).textTheme.labelLarge!.copyWith(
@@ -78,8 +78,8 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
                               Navigator.of(context).pop(),
                             },
                             child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: Sizes.lg),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: Sizes.lg),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -111,8 +111,8 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
                   ),
                   Container(
                     alignment: Alignment.centerLeft,
-                    padding:
-                        const EdgeInsets.only(left: Sizes.lg, top: Sizes.xxl, bottom: Sizes.sm),
+                    padding: const EdgeInsets.only(
+                        left: Sizes.lg, top: Sizes.xxl, bottom: Sizes.sm),
                     child: Text(
                       "ALL CATEGORIES",
                       style: Theme.of(context).textTheme.labelLarge!.copyWith(

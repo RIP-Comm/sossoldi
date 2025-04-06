@@ -55,9 +55,8 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
           Container(
             height: 30,
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primaryContainer,
-              borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall)
-            ),
+                color: Theme.of(context).colorScheme.primaryContainer,
+                borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall)),
             padding: const EdgeInsets.symmetric(horizontal: Sizes.xxs * 0.5),
             child: ToggleButtons(
               direction: Axis.horizontal,
@@ -99,7 +98,8 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
           ),
           if (selectedType == TransactionType.transfer)
             Padding(
-              padding: const EdgeInsets.fromLTRB(Sizes.lg, Sizes.sm, Sizes.lg, 0),
+              padding:
+                  const EdgeInsets.fromLTRB(Sizes.lg, Sizes.sm, Sizes.lg, 0),
               child: SizedBox(
                 height: Sizes.xxl * 2,
                 child: Row(
@@ -133,8 +133,10 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
                                   useSafeArea: true,
                                   shape: const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(Sizes.borderRadius),
-                                      topRight: Radius.circular(Sizes.borderRadius),
+                                      topLeft:
+                                          Radius.circular(Sizes.borderRadius),
+                                      topRight:
+                                          Radius.circular(Sizes.borderRadius),
                                     ),
                                   ),
                                   builder: (_) => DraggableScrollableSheet(
@@ -155,7 +157,8 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
                                   color: Theme.of(context)
                                       .colorScheme
                                       .primaryContainer,
-                                  borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
+                                  borderRadius: BorderRadius.circular(
+                                      Sizes.borderRadiusSmall),
                                   boxShadow: [defaultShadow],
                                 ),
                                 padding: const EdgeInsets.all(Sizes.xxs),
@@ -216,7 +219,8 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
                               child: VerticalDivider(width: 1, color: grey2)),
                           Padding(
                             padding: EdgeInsets.symmetric(
-                                vertical: Sizes.xxs * 0.5, horizontal: Sizes.xl),
+                                vertical: Sizes.xxs * 0.5,
+                                horizontal: Sizes.xl),
                             child: Icon(
                               Icons.change_circle,
                               size: 32,
@@ -258,8 +262,10 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
                                   useSafeArea: true,
                                   shape: const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(Sizes.borderRadius),
-                                      topRight: Radius.circular(Sizes.borderRadius),
+                                      topLeft:
+                                          Radius.circular(Sizes.borderRadius),
+                                      topRight:
+                                          Radius.circular(Sizes.borderRadius),
                                     ),
                                   ),
                                   builder: (_) => DraggableScrollableSheet(
@@ -281,7 +287,8 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
                                   color: Theme.of(context)
                                       .colorScheme
                                       .primaryContainer,
-                                  borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
+                                  borderRadius: BorderRadius.circular(
+                                      Sizes.borderRadiusSmall),
                                   boxShadow: [defaultShadow],
                                 ),
                                 padding: const EdgeInsets.all(Sizes.xs),

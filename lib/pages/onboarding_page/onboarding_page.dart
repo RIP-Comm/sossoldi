@@ -51,7 +51,8 @@ class _OnboardingState extends State<Onboarding> {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: Sizes.xl, vertical: Sizes.sm),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: Sizes.xl, vertical: Sizes.sm),
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.push(

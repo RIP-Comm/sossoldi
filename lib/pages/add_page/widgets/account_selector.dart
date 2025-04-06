@@ -56,8 +56,8 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> {
                 children: [
                   Container(
                     alignment: Alignment.centerLeft,
-                    padding:
-                        const EdgeInsets.only(left: Sizes.lg, top: Sizes.xl, bottom: Sizes.sm),
+                    padding: const EdgeInsets.only(
+                        left: Sizes.lg, top: Sizes.xl, bottom: Sizes.sm),
                     child: Text(
                       "MORE FREQUENT",
                       style: Theme.of(context).textTheme.labelLarge!.copyWith(
@@ -131,8 +131,8 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> {
                   ),
                   Container(
                     alignment: Alignment.centerLeft,
-                    padding:
-                        const EdgeInsets.only(left: Sizes.lg, top: Sizes.xxl, bottom: Sizes.sm),
+                    padding: const EdgeInsets.only(
+                        left: Sizes.lg, top: Sizes.xxl, bottom: Sizes.sm),
                     child: Text(
                       "ALL ACCOUNTS",
                       style: Theme.of(context).textTheme.labelLarge!.copyWith(

@@ -29,7 +29,8 @@ class AccountsCard extends ConsumerWidget {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               scrollDirection: Axis.vertical,
-              separatorBuilder: (context, i) => const SizedBox(height: Sizes.xs),
+              separatorBuilder: (context, i) =>
+                  const SizedBox(height: Sizes.xs),
               itemBuilder: (context, i) {
                 double total = accounts.isNotEmpty
                     ? accounts

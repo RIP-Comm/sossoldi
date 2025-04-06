@@ -168,7 +168,8 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: blue5,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(Sizes.borderRadius),
+                                  borderRadius:
+                                      BorderRadius.circular(Sizes.borderRadius),
                                 ),
                               ),
                               child: Text('NEXT STEP',

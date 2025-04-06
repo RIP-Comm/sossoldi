@@ -42,8 +42,8 @@ class _CategoryListState extends ConsumerState<CategoryList> {
         child: Column(
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: Sizes.xl, horizontal: Sizes.lg),
+              padding: const EdgeInsets.symmetric(
+                  vertical: Sizes.xl, horizontal: Sizes.lg),
               child: Row(
                 children: [
                   Container(

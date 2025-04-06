@@ -58,7 +58,8 @@ class AppTheme {
         iconColor: const WidgetStatePropertyAll(blue5),
         padding: const WidgetStatePropertyAll(EdgeInsets.all(Sizes.md)),
         shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(Sizes.borderRadius)),
+          RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(Sizes.borderRadius)),
         ),
         textStyle: const WidgetStatePropertyAll(
           TextStyle(
@@ -81,7 +82,8 @@ class AppTheme {
         elevation: WidgetStatePropertyAll(0),
         padding: WidgetStatePropertyAll(EdgeInsets.all(Sizes.lg)),
         shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(Sizes.borderRadius)),
+          RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(Sizes.borderRadius)),
         ),
         textStyle: const WidgetStatePropertyAll(
           TextStyle(
@@ -97,7 +99,8 @@ class AppTheme {
         padding: WidgetStatePropertyAll(EdgeInsets.all(Sizes.xs)),
         iconSize: WidgetStatePropertyAll(28),
         shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(Sizes.borderRadius)),
+          RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(Sizes.borderRadius)),
         ),
       ),
     ),
@@ -212,7 +215,8 @@ class AppTheme {
         fontSize: 16,
       ),
       behavior: SnackBarBehavior.floating,
-      insetPadding: EdgeInsets.symmetric(horizontal: Sizes.lg, vertical: Sizes.sm),
+      insetPadding:
+          EdgeInsets.symmetric(horizontal: Sizes.lg, vertical: Sizes.sm),
     ),
   );
 
@@ -270,7 +274,8 @@ class AppTheme {
         iconColor: const WidgetStatePropertyAll(white),
         padding: const WidgetStatePropertyAll(EdgeInsets.all(Sizes.md)),
         shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(Sizes.borderRadius)),
+          RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(Sizes.borderRadius)),
         ),
         textStyle: const WidgetStatePropertyAll(
           TextStyle(
@@ -293,7 +298,8 @@ class AppTheme {
         elevation: WidgetStatePropertyAll(0),
         padding: WidgetStatePropertyAll(EdgeInsets.all(Sizes.lg)),
         shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(Sizes.borderRadius)),
+          RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(Sizes.borderRadius)),
         ),
         textStyle: const WidgetStatePropertyAll(
           TextStyle(
@@ -309,7 +315,8 @@ class AppTheme {
         padding: WidgetStatePropertyAll(EdgeInsets.all(Sizes.xs)),
         iconSize: WidgetStatePropertyAll(28),
         shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(Sizes.borderRadius)),
+          RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(Sizes.borderRadius)),
         ),
       ),
     ),
@@ -436,7 +443,8 @@ class AppTheme {
         fontSize: 16,
       ),
       behavior: SnackBarBehavior.floating,
-      insetPadding: EdgeInsets.symmetric(horizontal: Sizes.lg, vertical: Sizes.sm),
+      insetPadding:
+          EdgeInsets.symmetric(horizontal: Sizes.lg, vertical: Sizes.sm),
     ),
   );
 }

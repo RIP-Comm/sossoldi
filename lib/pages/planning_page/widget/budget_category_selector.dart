@@ -89,7 +89,11 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
                     return DropdownMenuItem<CategoryTransaction>(
                         value: category,
                         child: Row(
-                          children: [Icon(icon), const SizedBox(width: Sizes.lg), Text(category.name)],
+                          children: [
+                            Icon(icon),
+                            const SizedBox(width: Sizes.lg),
+                            Text(category.name)
+                          ],
                         ));
                   }).toList(),
                   onChanged: (CategoryTransaction? newValue) {
@@ -118,7 +122,8 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
                 inputFormatters: [
                   DecimalTextInputFormatter(decimalDigits: 2),
                 ],
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
                 onChanged: (_) {
                   setState(() {
                     _modifyBudget();

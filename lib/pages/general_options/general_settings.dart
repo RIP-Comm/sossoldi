@@ -45,7 +45,8 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
         title: const Text('General Settings'),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.only(left: Sizes.lg, right: Sizes.lg, top: Sizes.xl),
+        padding: const EdgeInsets.only(
+            left: Sizes.lg, right: Sizes.lg, top: Sizes.xl),
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [

@@ -34,7 +34,8 @@ void showSnackBar(
       ],
     ),
     behavior: SnackBarBehavior.floating,
-    padding: const EdgeInsets.symmetric(vertical: Sizes.lg, horizontal: Sizes.lg),
+    padding:
+        const EdgeInsets.symmetric(vertical: Sizes.lg, horizontal: Sizes.lg),
   );
 
   ScaffoldMessenger.of(context).hideCurrentSnackBar();

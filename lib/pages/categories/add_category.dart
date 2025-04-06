@@ -68,10 +68,12 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
                       horizontal: Sizes.lg,
                       vertical: Sizes.md,
                     ),
-                    padding: const EdgeInsets.fromLTRB(Sizes.lg, Sizes.md, Sizes.lg, 0),
+                    padding: const EdgeInsets.fromLTRB(
+                        Sizes.lg, Sizes.md, Sizes.lg, 0),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
+                      borderRadius:
+                          BorderRadius.circular(Sizes.borderRadiusSmall),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,10 +102,12 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
                       horizontal: 16,
                       vertical: 12,
                     ),
-                    padding: const EdgeInsets.fromLTRB(Sizes.lg, Sizes.md, Sizes.lg, 0),
+                    padding: const EdgeInsets.fromLTRB(
+                        Sizes.lg, Sizes.md, Sizes.lg, 0),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
+                      borderRadius:
+                          BorderRadius.circular(Sizes.borderRadiusSmall),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,7 +160,8 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
                     ),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
+                      borderRadius:
+                          BorderRadius.circular(Sizes.borderRadiusSmall),
                     ),
                     child: Column(
                       children: [
@@ -176,7 +181,8 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
                         Material(
                           color: Colors.transparent,
                           child: InkWell(
-                            borderRadius: BorderRadius.circular(Sizes.borderRadius * 10),
+                            borderRadius:
+                                BorderRadius.circular(Sizes.borderRadius * 10),
                             onTap: () =>
                                 setState(() => showCategoryIcons = true),
                             child: Ink(
@@ -247,16 +253,16 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
                                       child: Container(
                                         margin: const EdgeInsets.all(Sizes.md),
                                         decoration: BoxDecoration(
-                                          color: iconList[categoryIcon] ==
-                                                  categoryIconData
-                                              ? Theme.of(context)
-                                                  .colorScheme
-                                                  .secondary
-                                              : Theme.of(context)
-                                                  .colorScheme
-                                                  .surface,
-                                          borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall)
-                                          ),
+                                            color: iconList[categoryIcon] ==
+                                                    categoryIconData
+                                                ? Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary
+                                                : Theme.of(context)
+                                                    .colorScheme
+                                                    .surface,
+                                            borderRadius: BorderRadius.circular(
+                                                Sizes.borderRadiusSmall)),
                                         child: Icon(
                                           categoryIconData,
                                           color: iconList[categoryIcon] ==
@@ -281,7 +287,8 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
                           child: ListView.separated(
                             scrollDirection: Axis.horizontal,
                             physics: const BouncingScrollPhysics(),
-                            padding: const EdgeInsets.symmetric(horizontal: Sizes.lg),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: Sizes.lg),
                             separatorBuilder: (context, index) =>
                                 const SizedBox(width: Sizes.lg),
                             itemBuilder: (context, index) {
@@ -409,7 +416,8 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
                 )
               ],
             ),
-            padding: const EdgeInsets.fromLTRB(Sizes.xl, Sizes.md, Sizes.xl, Sizes.xl),
+            padding: const EdgeInsets.fromLTRB(
+                Sizes.xl, Sizes.md, Sizes.xl, Sizes.xl),
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(

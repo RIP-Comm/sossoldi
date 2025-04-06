@@ -34,7 +34,8 @@ class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: Sizes.xl, horizontal: Sizes.lg),
+              padding: const EdgeInsets.symmetric(
+                  vertical: Sizes.xl, horizontal: Sizes.lg),
               child: Row(
                 children: [
                   Container(
@@ -63,7 +64,8 @@ class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
             Container(
               width: double.infinity,
               margin: const EdgeInsets.symmetric(horizontal: Sizes.lg),
-              padding: const EdgeInsets.symmetric(horizontal: Sizes.lg, vertical: Sizes.md),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: Sizes.lg, vertical: Sizes.md),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
@@ -125,7 +127,8 @@ class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
             ),
             Container(
               alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.only(left: Sizes.xxl, top: Sizes.xl, bottom: Sizes.sm),
+              padding: const EdgeInsets.only(
+                  left: Sizes.xxl, top: Sizes.xl, bottom: Sizes.sm),
               child: Text(
                 "RECURRING TRANSACTIONS",
                 style: Theme.of(context)
@@ -137,7 +140,8 @@ class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
             Container(
               width: double.infinity,
               margin: const EdgeInsets.symmetric(horizontal: Sizes.lg),
-              padding: const EdgeInsets.symmetric(horizontal: Sizes.lg, vertical: Sizes.md),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: Sizes.lg, vertical: Sizes.md),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),

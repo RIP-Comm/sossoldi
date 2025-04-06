@@ -12,7 +12,8 @@ class CardLabel extends StatelessWidget {
     return Align(
       alignment: Alignment.centerLeft,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: Sizes.lg, vertical: Sizes.sm),
+        padding: const EdgeInsets.symmetric(
+            horizontal: Sizes.lg, vertical: Sizes.sm),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

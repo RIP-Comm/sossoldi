@@ -70,14 +70,17 @@ class _GraphsPageState extends ConsumerState<GraphsPage> {
                                       text: currentYearMonthlyTransactions
                                               .isNotEmpty
                                           ? currentYearMonthlyTransactions
-                                              .last.y.toCurrency()
+                                              .last.y
+                                              .toCurrency()
                                           : '0',
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineLarge
                                           ?.copyWith(
-                                            color: TransactionType.transfer.toColor(
-                                              brightness: Theme.of(context).brightness,
+                                            color: TransactionType.transfer
+                                                .toColor(
+                                              brightness:
+                                                  Theme.of(context).brightness,
                                             ),
                                           ),
                                     ),
@@ -88,8 +91,10 @@ class _GraphsPageState extends ConsumerState<GraphsPage> {
                                           .textTheme
                                           .labelLarge
                                           ?.copyWith(
-                                            color: TransactionType.transfer.toColor(
-                                              brightness: Theme.of(context).brightness,
+                                            color: TransactionType.transfer
+                                                .toColor(
+                                              brightness:
+                                                  Theme.of(context).brightness,
                                             ),
                                           ),
                                     ),

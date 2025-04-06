@@ -19,7 +19,8 @@ class LabelListTile extends ConsumerWidget {
     final isDarkMode = ref.watch(appThemeStateNotifier).isDarkModeEnabled;
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(Sizes.lg, Sizes.lg, Sizes.xxl, Sizes.lg),
+      padding:
+          const EdgeInsets.fromLTRB(Sizes.lg, Sizes.lg, Sizes.xxl, Sizes.lg),
       child: Row(
         children: [
           RoundedIcon(

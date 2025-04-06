@@ -29,7 +29,8 @@ class _AmountWidgetState extends ConsumerState<AmountWidget> {
     final currencyState = ref.watch(currencyStateNotifier);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: Sizes.lg, vertical: Sizes.xl),
+      padding:
+          const EdgeInsets.symmetric(horizontal: Sizes.lg, vertical: Sizes.xl),
       child: TextField(
         controller: widget.amountController,
         decoration: InputDecoration(

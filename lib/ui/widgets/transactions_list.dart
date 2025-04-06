@@ -132,7 +132,8 @@ class TransactionTile extends ConsumerWidget {
       child: ListTile(
         visualDensity: VisualDensity.compact,
         dense: true,
-        contentPadding: const EdgeInsets.symmetric(horizontal: Sizes.md, vertical: Sizes.xs),
+        contentPadding: const EdgeInsets.symmetric(
+            horizontal: Sizes.md, vertical: Sizes.xs),
         onTap: () async {
           ref
               .read(transactionsProvider.notifier)

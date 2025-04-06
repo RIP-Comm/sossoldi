@@ -27,9 +27,8 @@ class TransactionTypeButton extends ConsumerWidget {
     return Container(
       height: 28,
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primaryContainer,
-        borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall)
-      ),
+          color: Theme.of(context).colorScheme.primaryContainer,
+          borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall)),
       child: Stack(
         children: [
           AnimatedAlign(
@@ -43,9 +42,8 @@ class TransactionTypeButton extends ConsumerWidget {
               width: width,
               height: 28,
               decoration: BoxDecoration(
-                color: blue5,
-                borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall)
-              ),
+                  color: blue5,
+                  borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall)),
             ),
           ),
           GestureDetector(

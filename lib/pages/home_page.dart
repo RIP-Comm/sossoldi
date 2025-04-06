@@ -229,7 +229,8 @@ class _HomePageState extends ConsumerState<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(Sizes.lg, Sizes.xl, Sizes.lg, Sizes.sm),
+                  padding: const EdgeInsets.fromLTRB(
+                      Sizes.lg, Sizes.xl, Sizes.lg, Sizes.sm),
                   child: Text(
                     "Your accounts",
                     style: Theme.of(context).textTheme.titleLarge,
@@ -254,8 +255,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                           return Container(
                             width: 140,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(
-                                  Sizes.borderRadius),
+                              borderRadius:
+                                  BorderRadius.circular(Sizes.borderRadius),
                               boxShadow: [defaultShadow],
                             ),
                             child: ElevatedButton.icon(
@@ -302,7 +303,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(Sizes.lg, Sizes.xxl, Sizes.lg, Sizes.sm),
+                    padding: const EdgeInsets.fromLTRB(
+                        Sizes.lg, Sizes.xxl, Sizes.lg, Sizes.sm),
                     child: Text(
                       "Last transactions",
                       style: Theme.of(context).textTheme.titleLarge,
