@@ -21,7 +21,7 @@ import 'pages/planning_page/planning_page.dart';
 import 'pages/search_page/search_page.dart';
 import 'pages/settings_page.dart';
 import 'features/home_page/presentation/home_page.dart';
-import 'pages/transactions_page/transactions_page.dart';
+import 'features/transactions_page/presentation/transactions_page.dart';
 import 'pages/planning_page/widget/edit_recurring_transaction.dart';
 import 'pages/backup_page/backup_page.dart';
 
