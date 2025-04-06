@@ -2,9 +2,13 @@ name: Sossoldi Flutter CI
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, dev]
   push:
-    branches: [main]
+    branches: [main, dev]
+
+concurrency:
+  group: ${{ github.head_ref }}
+  cancel-in-progress: true
 
 jobs:
   format-test-build:
@@ -48,5 +52,4 @@ jobs:
       - name: Build APK and App Bundle
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          flutter build apk
           flutter build appbundle
