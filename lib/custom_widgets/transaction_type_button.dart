@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../constants/style.dart';
 import '../model/transaction.dart';
-import '../pages/transactions_page/widgets/accounts_tab.dart';
+import '../features/transactions_page/presentation/accounts_tab.dart';
 import '../providers/categories_provider.dart';
 
 final selectedTransactionTypeProvider =
