@@ -15,7 +15,7 @@ class TransactionsPage extends ConsumerStatefulWidget {
 
 class _TransactionsPageState extends ConsumerState<TransactionsPage>
     with TickerProviderStateMixin {
-  static const List<Tab> myTabs = <Tab>[
+  late final myTabs = <Tab>[
     Tab(text: "List", height: 35),
     Tab(text: "Categories", height: 35),
     Tab(text: "Accounts", height: 35),
