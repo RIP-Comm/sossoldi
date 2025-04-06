@@ -3,11 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/style.dart';
 import '../../../model/transaction.dart';
+import '../data/selected_transaction_type_provider.dart';
 import 'accounts_tab.dart';
 import '../../../providers/categories_provider.dart';
-
-final selectedTransactionTypeProvider =
-    StateProvider.autoDispose<TransactionType>((ref) => TransactionType.income);
 
 class TransactionTypeButton extends ConsumerWidget {
   const TransactionTypeButton({
