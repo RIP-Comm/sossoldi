@@ -1,0 +1,52 @@
+name: Sossoldi Flutter CI
+
+on:
+  schedule:
+    - cron: "0 0 * * 1"
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  build-android-apk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup FVM
+        uses: kuhnroyal/flutter-fvm-config-action/config@v3
+        id: fvm-config-action
+
+      - name: Flutter action
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ steps.fvm-config-action.outputs.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+          cache-key: flutter
+          cache-path: ${{ runner.tool_cache }}/flutter
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Check formatting
+        run: |
+          echo "Checking code formatting (default line length 80)..."
+          if ! dart format --set-exit-if-changed --output=none .; then
+            echo "⛔ ERROR: Code format check failed. Please run 'dart format .' on your code and commit the formatted changes."
+            exit 1
+          else
+            echo "✅ Code format check passed."
+          fi
+
+      - name: Run tests
+        run: flutter test --concurrency=1
+
+      - name: Build APK and App Bundle
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          flutter build apk
+          flutter build appbundle
