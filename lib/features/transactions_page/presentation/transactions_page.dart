@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../pages/transactions_page/widgets/accounts_tab.dart';
-import '../../../pages/transactions_page/widgets/categories_tab.dart';
+import 'categories_tab.dart';
 import '../../../pages/transactions_page/widgets/custom_sliver_delegate.dart';
 import 'list_tab.dart';
 

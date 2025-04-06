@@ -8,8 +8,8 @@ import '../../../model/category_transaction.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/categories_provider.dart';
 import '../../../providers/transactions_provider.dart';
-import 'categories_pie_chart.dart';
-import 'category_list_tile.dart';
+import '../../../pages/transactions_page/widgets/categories_pie_chart.dart';
+import '../../../pages/transactions_page/widgets/category_list_tile.dart';
 
 class CategoriesTab extends ConsumerStatefulWidget {
   const CategoriesTab({
