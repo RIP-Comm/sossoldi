@@ -11,18 +11,11 @@ import '../../../providers/transactions_provider.dart';
 import '../../../pages/transactions_page/widgets/categories_pie_chart.dart';
 import '../../../pages/transactions_page/widgets/category_list_tile.dart';
 
-class CategoriesTab extends ConsumerStatefulWidget {
-  const CategoriesTab({
-    super.key,
-  });
+class CategoriesTab extends ConsumerWidget with Functions {
+  const CategoriesTab({super.key});
 
   @override
-  ConsumerState<CategoriesTab> createState() => _CategoriesTabState();
-}
-
-class _CategoriesTabState extends ConsumerState<CategoriesTab> with Functions {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final categories = ref.watch(categoriesProvider);
     final transactions = ref.watch(transactionsProvider);
     final transactionType = ref.watch(selectedTransactionTypeProvider);
