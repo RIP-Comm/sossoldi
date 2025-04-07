@@ -50,6 +50,6 @@ jobs:
         run: flutter test --concurrency=1
 
       - name: Build APK and App Bundle
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'push'
         run: |
           flutter build appbundle
