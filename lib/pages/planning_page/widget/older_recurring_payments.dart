@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path/path.dart';
+import 'package:intl/intl.dart';
 import '../../../constants/constants.dart';
 import '../../../custom_widgets/rounded_icon.dart';
 import '../../../model/transaction.dart';
-import 'package:intl/intl.dart';
-
 import '../../../model/recurring_transaction.dart';
 import '../../../providers/categories_provider.dart';
 import '../../../providers/currency_provider.dart';
@@ -51,12 +49,8 @@ class _OlderRecurringPaymentsState extends ConsumerState<OlderRecurringPayments>
   Widget build(BuildContext context) {
     final categories = ref.watch(categoriesProvider).value;
     final category = categories?.firstWhere(
-          (element) => element.id == widget.transaction.idCategory,// Prevents crashing if the category is not found
+          (element) => element.id == widget.transaction.idCategory,
     );
-    var h = MediaQuery.of(context).size.height;
-    var w = MediaQuery.of(context).size.width;
-    // var cat = categories
-    //     ?.firstWhere((element) => element.id == transaction.idCategory);
     final currencyState = ref.watch(currencyStateNotifier);
     Map<int, List<Transaction>> transactionsByYear = {};
     if (transactions != null) {
@@ -73,7 +67,6 @@ class _OlderRecurringPaymentsState extends ConsumerState<OlderRecurringPayments>
       children: [
         // Back and Older Payments Row
         Container(
-         // color: Color(0xFFF5F5F5),
           padding: EdgeInsets.only(bottom: 10.0, top: 10.0),
           child: Row(
             children: [
@@ -153,7 +146,7 @@ class _OlderRecurringPaymentsState extends ConsumerState<OlderRecurringPayments>
                           ),
                           children: [
                             TextSpan(
-                              text: "-${sum.toStringAsFixed(2)}",
+                              text: "-${widget.transaction.amount.toStringAsFixed(2)}",
                               style: const TextStyle(fontSize: 40),
                             ),
                             TextSpan(
@@ -170,7 +163,6 @@ class _OlderRecurringPaymentsState extends ConsumerState<OlderRecurringPayments>
                     children: [
                       SizedBox(width: 10),
                       if (widget.transaction.recurrency == "MONTHLY") ...[
-                        // Display the first RichText if recurrency is "MONTHLY"
                         RichText(
                           text: TextSpan(
                             style: const TextStyle(color: Color(0xFF00152D)),
@@ -202,77 +194,17 @@ class _OlderRecurringPaymentsState extends ConsumerState<OlderRecurringPayments>
                             ],
                           ),
                         ),
-                      ] else if (int.parse(getNextText()) == 1) ...[
-                        // If next transaction is in exactly 1 day, display this
-                        RichText(
-                          text: TextSpan(
-                            style: const TextStyle(color: Color(0xFF00152D)),
-                            children: [
-                              TextSpan(
-                                text: "${widget.transaction.recurrency}",
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "NunitoSans",
-                                ),
-                              ),
-                              TextSpan(
-                                text: " - In ${getNextText()} day",
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: "NunitoSans",
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ] else ...[
-                        // For other recurrencies, display this RichText with plural days
-                        RichText(
-                          text: TextSpan(
-                            style: const TextStyle(color: Color(0xFF00152D)),
-                            children: [
-                              TextSpan(
-                                text: "${widget.transaction.recurrency}",
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "NunitoSans",
-                                ),
-                              ),
-                              TextSpan(
-                                text: " - In ${getNextText()} days",
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: "NunitoSans",
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
                       ],
                     ],
                   ),
-
-
                 ],
               ),
             ),
-            Expanded(
-              flex: 3,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [],
-              ),
-            )
           ],
         ),
 
         SizedBox(height: 20),
 
-        // Display loading, empty message, or transactions
         if (transactions == null)
           const CircularProgressIndicator()
         else if (transactions!.isEmpty)
@@ -294,7 +226,6 @@ class _OlderRecurringPaymentsState extends ConsumerState<OlderRecurringPayments>
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Year Container with Rounded Corners
                     Container(
                       decoration: BoxDecoration(
                         color: Color(0xFFF5F5F5),
@@ -342,85 +273,91 @@ class _OlderRecurringPaymentsState extends ConsumerState<OlderRecurringPayments>
                           ),
                           SizedBox(height: 10),
 
-                          // Monthly Transactions
+                          // Corrected Transactions Display
                           Column(
                             children: transactionsOfYear.map((transaction) {
                               return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 8, horizontal: 15),
+                                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
                                 child: Container(
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 8, horizontal: 10),
+                                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
                                     child: Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      children: transactionsOfYear.map((transaction) {
+                                        return Column(
                                           children: [
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  DateFormat('d')
-                                                      .format(transaction.date),
-                                                  style: const TextStyle(
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.w500,
-                                                    fontFamily: "NunitoSans",
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius: BorderRadius.circular(10),
+                                                ),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          Text(
+                                                            DateFormat('d').format(transaction.date),
+                                                            style: const TextStyle(
+                                                              fontSize: 15,
+                                                              fontWeight: FontWeight.w500,
+                                                              fontFamily: "NunitoSans",
+                                                            ),
+                                                          ),
+                                                          const SizedBox(width: 5),
+                                                          Text(
+                                                            DateFormat('MMMM').format(transaction.date),
+                                                            style: const TextStyle(
+                                                              fontSize: 15,
+                                                              fontWeight: FontWeight.w500,
+                                                              fontFamily: "NunitoSans",
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      RichText(
+                                                        text: TextSpan(
+                                                          text: "- ${transaction.amount.toStringAsFixed(2)}",
+                                                          style: const TextStyle(
+                                                            fontSize: 15,
+                                                            fontWeight: FontWeight.bold,
+                                                            color: Color(0xFFC52626),
+                                                            fontFamily: "NunitoSans",
+                                                          ),
+                                                          children: [
+                                                            TextSpan(
+                                                              text: " ${currencyState.selectedCurrency.symbol}",
+                                                              style: const TextStyle(
+                                                                fontSize: 12,
+                                                                fontWeight: FontWeight.w500,
+                                                                color: Color(0xFFC52626),
+                                                                fontFamily: "NunitoSans",
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
-                                                SizedBox(width: 5),
-                                                Text(
-                                                  DateFormat('MMMM')
-                                                      .format(transaction.date),
-                                                  style: const TextStyle(
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.w500,
-                                                    fontFamily: "NunitoSans",
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            RichText(
-                                              text: TextSpan(
-                                                text:
-                                                "- ${transaction.amount.toStringAsFixed(2)}",
-                                                style: const TextStyle(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Color(0xFFC52626),
-                                                  fontFamily: "NunitoSans",
-                                                ),
-                                                children: [
-                                                  TextSpan(
-                                                    text:
-                                                    " ${currencyState.selectedCurrency.symbol}",
-                                                    style: const TextStyle(
-                                                      fontSize: 12,
-                                                      fontWeight: FontWeight.w500,
-                                                      color: Color(0xFFC52626),
-                                                      fontFamily: "NunitoSans",
-                                                    ),
-                                                  ),
-                                                ],
                                               ),
                                             ),
+                                            // Add divider only if it's not the last transaction
+                                            if (transactionsOfYear.indexOf(transaction) != transactionsOfYear.length - 1)
+                                              const Divider(
+                                                color: Colors.black45,
+                                                thickness: 1,
+                                              ),
                                           ],
-                                        ),
-
-                                        // Divider: Only if there are 2 or more transactions
-                                        if (transactionsOfYear.length > 1)
-                                          Divider(
-                                            color: Colors.black45,
-                                            thickness: 1,
-                                          ),
-                                      ],
+                                        );
+                                      }).toList(),
                                     ),
                                   ),
                                 ),
@@ -438,7 +375,6 @@ class _OlderRecurringPaymentsState extends ConsumerState<OlderRecurringPayments>
       ],
     );
   }
-
   String getDayWithSuffix(int day) {
     if (day >= 11 && day <= 13) {
       return '$day' + 'th'; // Special case for 11, 12, 13
@@ -454,6 +390,4 @@ class _OlderRecurringPaymentsState extends ConsumerState<OlderRecurringPayments>
         return '$day' + 'th';
     }
   }
-
 }
-
