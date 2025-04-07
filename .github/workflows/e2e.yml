@@ -24,16 +24,16 @@ jobs:
           cache-key: flutter
           cache-path: ${{ runner.tool_cache }}/flutter
 
-      - name: Android Build
+      - name: Build apk
         run: |
           flutter pub get
-          flutter build appbundle --debug
+          flutter build apk --debug
           
       - name: Upload Artifact
         uses: actions/upload-artifact@v4.6.2
         with:
-          path: build/app/outputs/bundle/debug/app-debug.aab
-          name: android-build
+          path: build/app/outputs/flutter-apk/app-debug.apk
+          name: android-apk
           if-no-files-found: error
           retention-days: 1
 
@@ -51,9 +51,9 @@ jobs:
 
       - name: Get apk
         uses: actions/download-artifact@v4.2.1
-        id: get-build
+        id: get-apk
         with:
-          name: android-build
+          name: android-apk
           path: _ci
 
       - name: Setup Java
@@ -95,7 +95,7 @@ jobs:
           disable-animations: true
           disable-spellchecker: true
           script: |
-            adb -s emulator-5554 install _ci/app-debug.aab
+            adb -s emulator-5554 install _ci/app-debug.apk
             (cd test/e2e && exec python ci_start.py)
 
       - name: Upload recording
