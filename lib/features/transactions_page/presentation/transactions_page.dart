@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'accounts_tab.dart';
 import 'categories_tab.dart';
-import '../../../pages/transactions_page/widgets/custom_sliver_delegate.dart';
+import 'custom_sliver_delegate.dart';
 import 'list_tab.dart';
 
 class TransactionsPage extends ConsumerStatefulWidget {

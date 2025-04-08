@@ -9,7 +9,7 @@ import '../../../constants/style.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../utils/formatted_date_range.dart';
-import 'month_selector.dart';
+import '../../../pages/transactions_page/widgets/month_selector.dart';
 
 class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
   const CustomSliverDelegate({
