@@ -5,9 +5,9 @@ import '../../../constants/constants.dart';
 import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
 import '../../../custom_widgets/rounded_icon.dart';
+import '../../../features/transactions_page/data/selected_category_index_provider.dart';
 import '../../../model/category_transaction.dart';
 import '../../../model/transaction.dart';
-import '../../../providers/categories_provider.dart';
 import '../../../providers/currency_provider.dart';
 
 class CategoryListTile extends ConsumerWidget {
