@@ -10,7 +10,7 @@ import '../../../model/transaction.dart';
 import '../../../providers/categories_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import 'categories_pie_chart.dart';
-import '../../../pages/transactions_page/widgets/category_list_tile.dart';
+import 'category_list_tile.dart';
 
 class CategoriesTab extends ConsumerWidget with Functions {
   const CategoriesTab({super.key});
