@@ -6,7 +6,7 @@ import '../../../constants/style.dart';
 import '../../../custom_widgets/rounded_icon.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/currency_provider.dart';
-import '../../../features/transactions_page/presentation/accounts_tab.dart';
+import 'accounts_tab.dart';
 
 class AccountListTile extends ConsumerWidget {
   const AccountListTile({

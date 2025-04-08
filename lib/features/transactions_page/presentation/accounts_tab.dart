@@ -10,7 +10,7 @@ import '../../../model/bank_account.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/transactions_provider.dart';
-import '../../../pages/transactions_page/widgets/account_list_tile.dart';
+import 'account_list_tile.dart';
 import '../../../pages/transactions_page/widgets/accounts_pie_chart.dart';
 
 final selectedAccountIndexProvider =
