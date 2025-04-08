@@ -8,7 +8,7 @@ import '../../../constants/style.dart';
 import '../../../custom_widgets/rounded_icon.dart';
 import '../../../model/bank_account.dart';
 import '../../../providers/currency_provider.dart';
-import '../../../features/transactions_page/presentation/accounts_tab.dart';
+import 'accounts_tab.dart';
 
 class AccountsPieChart extends ConsumerWidget with Functions {
   const AccountsPieChart({

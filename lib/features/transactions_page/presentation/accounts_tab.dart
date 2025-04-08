@@ -11,7 +11,7 @@ import '../../../model/transaction.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import 'account_list_tile.dart';
-import '../../../pages/transactions_page/widgets/accounts_pie_chart.dart';
+import 'accounts_pie_chart.dart';
 
 final selectedAccountIndexProvider =
     StateProvider.autoDispose<int>((ref) => -1);
