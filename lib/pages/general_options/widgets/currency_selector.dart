@@ -33,6 +33,7 @@ class _SettingsCurrencySelectorState
             final currencies = snapshot.data;
 
             return ListView.separated(
+              padding: EdgeInsets.zero,
               separatorBuilder: (context, index) {
                 return const SizedBox(height: 8.0);
               },
