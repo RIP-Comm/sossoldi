@@ -353,7 +353,7 @@ void main() {
     },
   );
 
-    testWidgets(
+  testWidgets(
     'GIVEN an SelectorTile widget '
     'WHEN isSelected is false '
     'THEN border color is grey2 in dark mode',
