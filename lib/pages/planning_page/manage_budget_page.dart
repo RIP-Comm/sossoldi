@@ -48,8 +48,7 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
   void handleEmptyCategories() {
     showSnackBar(
       context,
-      message:
-          "At least one category must be created before adding a category budget.",
+      message: "Add a category first to set a budget",
       actionLabel: "ADD",
       onAction: () async {
         ScaffoldMessenger.of(context).clearSnackBars();
