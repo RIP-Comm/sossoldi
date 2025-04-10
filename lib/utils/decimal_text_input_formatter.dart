@@ -19,6 +19,10 @@ class DecimalTextInputFormatter extends TextInputFormatter {
 
     RegExp regex = RegExp(r'[\d\,\.]');
 
+    if (value == "-") {
+      value = "";
+    }
+
     if (value.isNotEmpty && !regex.hasMatch(value[value.length - 1])) {
       return oldValue;
     }
