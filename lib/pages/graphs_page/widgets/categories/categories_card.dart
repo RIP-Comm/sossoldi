@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../custom_widgets/category_type_button.dart';
@@ -73,20 +75,32 @@ class CategoriesContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Map<CategoryTransaction, double> sortedCategories = Map.fromEntries(
+      categories.entries.toList()
+        ..sort((a, b) {
+          int valueSorting = a.value.compareTo(b.value);
+          if (valueSorting == 0) {
+            int categoryNameSorting = a.key.name.compareTo(b.key.name);
+            return categoryNameSorting;
+          }
+          return valueSorting;
+        }),
+    );
+
     return Column(
       children: [
         CategoriesPieChart2(
-          categoryMap: categories,
+          categoryMap: sortedCategories,
           total: totalAmount,
         ),
         const SizedBox(height: 20),
         ListView.builder(
-          itemCount: categories.length,
+          itemCount: sortedCategories.length,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, i) {
-            final category = categories.keys.elementAt(i);
-            final amount = categories[category] ?? 0;
+            final category = sortedCategories.keys.elementAt(i);
+            final amount = sortedCategories[category] ?? 0;
             return CategoryItem(
               category: category,
               amount: amount,
