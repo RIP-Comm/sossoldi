@@ -29,6 +29,12 @@ const Map<String, IconData> accountIconList = {
   'account_balance': Icons.account_balance,
 };
 
+const Map<String, IconData> genericIconList = {
+  'import': Icons.arrow_downward,
+  'export': Icons.arrow_upward,
+  'unknown': Icons.question_mark
+};
+
 // colors
 const categoryColorList = [
   category1,
