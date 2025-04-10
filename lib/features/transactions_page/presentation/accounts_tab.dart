@@ -4,7 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
 import '../../../constants/functions.dart';
 import '../../../custom_widgets/default_container.dart';
-import '../../../custom_widgets/transaction_type_button.dart';
+import '../data/selected_transaction_type_provider.dart';
+import 'transaction_type_button.dart';
 import '../../../model/bank_account.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/accounts_provider.dart';
@@ -15,18 +16,11 @@ import 'accounts_pie_chart.dart';
 final selectedAccountIndexProvider =
     StateProvider.autoDispose<int>((ref) => -1);
 
-class AccountsTab extends ConsumerStatefulWidget {
-  const AccountsTab({
-    super.key,
-  });
+class AccountsTab extends ConsumerWidget with Functions {
+  const AccountsTab({super.key});
 
   @override
-  ConsumerState<AccountsTab> createState() => _AccountsTabState();
-}
-
-class _AccountsTabState extends ConsumerState<AccountsTab> with Functions {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final accounts = ref.watch(accountsProvider);
     final transactions = ref.watch(transactionsProvider);
     final transactionType = ref.watch(selectedTransactionTypeProvider);

@@ -3,22 +3,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../providers/transactions_provider.dart';
-import 'graphs_page/graphs_page.dart';
-import 'home_page.dart';
-import 'planning_page/planning_page.dart';
-import 'transactions_page/transactions_page.dart';
+import '../../../providers/transactions_provider.dart';
+import '../../../pages/graphs_page/graphs_page.dart';
+import '../../../utils/snack_bars/transactions_snack_bars.dart';
+import '../../dashboard_page/presentation/dashboard_page.dart';
+import '../../../pages/planning_page/planning_page.dart';
+import '../../transactions_page/presentation/transactions_page.dart';
+import '../data/duplicated_transactions_provider.dart';
+import '../data/selected_index_provider.dart';
 
-final StateProvider selectedIndexProvider = StateProvider<int>((ref) => 0);
-
-class Structure extends ConsumerStatefulWidget {
-  const Structure({super.key});
+class HomePage extends ConsumerStatefulWidget {
+  const HomePage({super.key});
 
   @override
-  ConsumerState<Structure> createState() => _StructureState();
+  ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-class _StructureState extends ConsumerState<Structure> {
+class _HomePageState extends ConsumerState<HomePage> {
   // We could add this List in the app's state, so it isn't intialized every time.
   final List<String> _pagesTitle = [
     "Dashboard",
@@ -28,12 +29,25 @@ class _StructureState extends ConsumerState<Structure> {
     "Graphs",
   ];
   final List<Widget> _pages = [
-    const HomePage(),
+    const DashboardPage(),
     const TransactionsPage(),
     const SizedBox(),
     const PlanningPage(),
     const GraphsPage(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    ref.listenManual(duplicatedTransactoinProvider, (_, next) {
+      showDuplicatedTransactionSnackBar(
+        context,
+        transaction: next,
+        ref: ref,
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

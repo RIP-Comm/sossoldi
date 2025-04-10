@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/functions.dart';
 import '../../../custom_widgets/default_container.dart';
-import '../../../custom_widgets/transaction_type_button.dart';
+import '../data/selected_transaction_type_provider.dart';
+import 'transaction_type_button.dart';
 import '../../../model/category_transaction.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/categories_provider.dart';
@@ -11,18 +12,11 @@ import '../../../providers/transactions_provider.dart';
 import 'categories_pie_chart.dart';
 import 'category_list_tile.dart';
 
-class CategoriesTab extends ConsumerStatefulWidget {
-  const CategoriesTab({
-    super.key,
-  });
+class CategoriesTab extends ConsumerWidget with Functions {
+  const CategoriesTab({super.key});
 
   @override
-  ConsumerState<CategoriesTab> createState() => _CategoriesTabState();
-}
-
-class _CategoriesTabState extends ConsumerState<CategoriesTab> with Functions {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final categories = ref.watch(categoriesProvider);
     final transactions = ref.watch(transactionsProvider);
     final transactionType = ref.watch(selectedTransactionTypeProvider);

@@ -13,9 +13,6 @@ final selectedCategoryProvider =
 final categoryTypeProvider = StateProvider<CategoryTransactionType>(
     (ref) => CategoryTransactionType.expense); //default as 'Expense'
 
-final selectedCategoryIndexProvider =
-    StateProvider.autoDispose<int>((ref) => -1);
-
 class AsyncCategoriesNotifier extends AsyncNotifier<List<CategoryTransaction>> {
   @override
   Future<List<CategoryTransaction>> build() async {

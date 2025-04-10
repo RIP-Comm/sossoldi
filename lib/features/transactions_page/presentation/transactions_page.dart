@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../providers/transactions_provider.dart';
-import '../../utils/snack_bars/transactions_snack_bars.dart';
-import 'widgets/accounts_tab.dart';
-import 'widgets/categories_tab.dart';
-import 'widgets/custom_sliver_delegate.dart';
-import 'widgets/list_tab.dart';
+import 'accounts_tab.dart';
+import 'categories_tab.dart';
+import 'custom_sliver_delegate.dart';
+import 'list_tab.dart';
 
 class TransactionsPage extends ConsumerStatefulWidget {
   const TransactionsPage({super.key});
@@ -17,7 +15,7 @@ class TransactionsPage extends ConsumerStatefulWidget {
 
 class _TransactionsPageState extends ConsumerState<TransactionsPage>
     with TickerProviderStateMixin {
-  static const List<Tab> myTabs = <Tab>[
+  late final myTabs = <Tab>[
     Tab(text: "List", height: 35),
     Tab(text: "Categories", height: 35),
     Tab(text: "Accounts", height: 35),
@@ -45,11 +43,6 @@ class _TransactionsPageState extends ConsumerState<TransactionsPage>
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(
-        duplicatedTransactoinProvider,
-        (prev, curr) => showDuplicatedTransactionSnackBar(context,
-            transaction: curr, ref: ref));
-
     return NotificationListener<ScrollEndNotification>(
       onNotification: (notification) {
         // snap the header open/close when it's in between the two states
