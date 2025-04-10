@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../ui/device.dart';
+
 void showSnackBar(
   BuildContext context, {
   required String message,
@@ -22,7 +24,7 @@ void showSnackBar(
         if (onAction != null)
           ElevatedButton(
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: Sizes.lg),
               ),
               onPressed: () {
                 onAction.call();
@@ -32,7 +34,8 @@ void showSnackBar(
       ],
     ),
     behavior: SnackBarBehavior.floating,
-    padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+    padding:
+        const EdgeInsets.symmetric(vertical: Sizes.lg, horizontal: Sizes.lg),
   );
 
   ScaffoldMessenger.of(context).hideCurrentSnackBar();

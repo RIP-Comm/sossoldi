@@ -2,12 +2,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../constants/functions.dart';
 import '../../constants/style.dart';
-import '../../custom_widgets/line_chart.dart';
+import '../../ui/extensions.dart';
+import '../../ui/widgets/line_chart.dart';
 import '../../model/transaction.dart';
 import '../../providers/currency_provider.dart';
 import '../../providers/statistics_provider.dart';
+import '../../ui/device.dart';
 import 'widgets/categories/categories_card.dart';
 import 'widgets/accounts/accounts_card.dart';
 
@@ -18,7 +19,7 @@ class GraphsPage extends ConsumerStatefulWidget {
   ConsumerState<GraphsPage> createState() => _GraphsPageState();
 }
 
-class _GraphsPageState extends ConsumerState<GraphsPage> with Functions {
+class _GraphsPageState extends ConsumerState<GraphsPage> {
   @override
   Widget build(BuildContext context) {
     final currentYearMonthlyTransactions =
@@ -27,7 +28,7 @@ class _GraphsPageState extends ConsumerState<GraphsPage> with Functions {
 
     return ListView(
       children: [
-        const SizedBox(height: 16),
+        const SizedBox(height: Sizes.lg),
         ref.watch(statisticsProvider).when(
               data: (value) {
                 double percentGainLoss = 0;
@@ -44,7 +45,7 @@ class _GraphsPageState extends ConsumerState<GraphsPage> with Functions {
                 return Column(
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(Sizes.lg),
                       color: Theme.of(context).colorScheme.tertiary,
                       child: Column(
                         children: [
@@ -68,16 +69,16 @@ class _GraphsPageState extends ConsumerState<GraphsPage> with Functions {
                                     TextSpan(
                                       text: currentYearMonthlyTransactions
                                               .isNotEmpty
-                                          ? numToCurrency(
-                                              currentYearMonthlyTransactions
-                                                  .last.y)
+                                          ? currentYearMonthlyTransactions
+                                              .last.y
+                                              .toCurrency()
                                           : '0',
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineLarge
                                           ?.copyWith(
-                                            color: typeToColor(
-                                              TransactionType.transfer,
+                                            color: TransactionType.transfer
+                                                .toColor(
                                               brightness:
                                                   Theme.of(context).brightness,
                                             ),
@@ -90,8 +91,8 @@ class _GraphsPageState extends ConsumerState<GraphsPage> with Functions {
                                           .textTheme
                                           .labelLarge
                                           ?.copyWith(
-                                            color: typeToColor(
-                                              TransactionType.transfer,
+                                            color: TransactionType.transfer
+                                                .toColor(
                                               brightness:
                                                   Theme.of(context).brightness,
                                             ),
@@ -108,11 +109,12 @@ class _GraphsPageState extends ConsumerState<GraphsPage> with Functions {
                               Container(
                                 decoration: BoxDecoration(
                                   color: Theme.of(context).colorScheme.surface,
-                                  borderRadius: BorderRadius.circular(4),
+                                  borderRadius: BorderRadius.circular(
+                                      Sizes.borderRadiusSmall),
                                 ),
-                                padding: const EdgeInsets.all(4.0),
+                                padding: const EdgeInsets.all(Sizes.xxs),
                                 child: Text(
-                                  "${numToCurrency(percentGainLoss)}%",
+                                  "${percentGainLoss.toCurrency()}%",
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyMedium
@@ -146,11 +148,11 @@ class _GraphsPageState extends ConsumerState<GraphsPage> with Functions {
               loading: () => const SizedBox(),
               error: (error, stack) => Text('Error: $error'),
             ),
-        const SizedBox(height: 24),
+        const SizedBox(height: Sizes.xl),
         const AccountsCard(),
-        const SizedBox(height: 24),
+        const SizedBox(height: Sizes.xl),
         const CategoriesCard(),
-        const SizedBox(height: 24),
+        const SizedBox(height: Sizes.xl),
       ],
     );
   }

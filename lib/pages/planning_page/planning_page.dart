@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../ui/device.dart';
 import 'manage_budget_page.dart';
 import 'widget/budget_card.dart';
 import 'widget/recurring_payments_list.dart';
@@ -27,7 +28,7 @@ class _PlanningPageState extends State<PlanningPage> {
     return Container(
       key: _key,
       child: ListView(
-        padding: const EdgeInsetsDirectional.all(10),
+        padding: const EdgeInsetsDirectional.all(Sizes.md),
         children: [
           Row(
             children: [
@@ -43,8 +44,8 @@ class _PlanningPageState extends State<PlanningPage> {
                     isScrollControlled: true,
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20.0),
-                        topRight: Radius.circular(20.0),
+                        topLeft: Radius.circular(Sizes.borderRadiusLarge),
+                        topRight: Radius.circular(Sizes.borderRadiusLarge),
                       ),
                     ),
                     elevation: 10,
@@ -61,21 +62,19 @@ class _PlanningPageState extends State<PlanningPage> {
                   children: [
                     Text("MANAGE",
                         style: Theme.of(context).textTheme.labelLarge),
-                    const SizedBox(width: 5),
+                    const SizedBox(width: Sizes.xs),
                     const Icon(Icons.edit, size: 13)
                   ],
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: Sizes.sm),
           BudgetCard(_forceRefresh),
-          const SizedBox(height: 20),
-          Text(
-            "Recurring payments",
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-          const SizedBox(height: 10),
+          const SizedBox(height: Sizes.xl),
+          Text("Recurring payments",
+              style: Theme.of(context).textTheme.titleLarge),
+          const SizedBox(height: Sizes.sm),
           RecurringPaymentSection(),
         ],
       ),

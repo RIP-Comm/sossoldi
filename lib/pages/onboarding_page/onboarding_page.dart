@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../ui/assets.dart';
+import '../../ui/device.dart';
 import '/pages/onboarding_page/widgets/budget_setup.dart';
 import '/constants/style.dart';
 
@@ -34,7 +36,7 @@ class _OnboardingState extends State<Onboarding> {
                 ),
                 const SizedBox(height: 80),
                 Image.asset(
-                  'assets/openVault.png',
+                  SossoldiAssets.openVault,
                   height: MediaQuery.sizeOf(context).height / 3.7,
                 ),
                 const SizedBox(height: 74),
@@ -49,20 +51,18 @@ class _OnboardingState extends State<Onboarding> {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-              child: SizedBox(
-                width: MediaQuery.sizeOf(context).width,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const BudgetSetup(),
-                      ),
-                    );
-                  },
-                  child: Text('START THE SET UP'),
-                ),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: Sizes.xl, vertical: Sizes.sm),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const BudgetSetup(),
+                    ),
+                  );
+                },
+                child: Center(child: Text('START THE SET UP')),
               ),
             ),
           ],

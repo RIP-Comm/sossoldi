@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
-import '../constants/style.dart';
+import '../../constants/style.dart';
+import '../device.dart';
 
 class RoundedIcon extends StatelessWidget {
   const RoundedIcon({
     this.icon,
     this.backgroundColor,
     this.size = 24,
-    this.padding = const EdgeInsets.all(10.0),
+    this.padding = const EdgeInsets.all(Sizes.md),
     super.key,
   });
 

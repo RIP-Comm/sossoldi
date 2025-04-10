@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../model/transaction.dart';
-import '../../../constants/functions.dart';
 import '../../../providers/transactions_provider.dart';
+import '../../../ui/device.dart';
 
 class RecurrenceSelector extends ConsumerStatefulWidget {
   const RecurrenceSelector({super.key});
@@ -11,8 +11,7 @@ class RecurrenceSelector extends ConsumerStatefulWidget {
   ConsumerState<RecurrenceSelector> createState() => _RecurrenceSelectorState();
 }
 
-class _RecurrenceSelectorState extends ConsumerState<RecurrenceSelector>
-    with Functions {
+class _RecurrenceSelectorState extends ConsumerState<RecurrenceSelector> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +36,8 @@ class _RecurrenceSelectorState extends ConsumerState<RecurrenceSelector>
                 onTap: () => ref.read(intervalProvider.notifier).state =
                     recurrence.keys.first,
                 child: ListTile(
-                  contentPadding: const EdgeInsets.fromLTRB(32, 20, 20, 20),
+                  contentPadding: const EdgeInsets.fromLTRB(
+                      Sizes.xxl, Sizes.lg, Sizes.lg, Sizes.lg),
                   title: Text(
                     recurrence.values.first,
                     style: Theme.of(context)

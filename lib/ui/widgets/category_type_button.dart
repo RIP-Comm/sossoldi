@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../constants/style.dart';
-import '../model/category_transaction.dart';
-import '../providers/categories_provider.dart';
-import '../providers/transactions_provider.dart';
+import '../../constants/style.dart';
+import '../../model/category_transaction.dart';
+import '../../providers/categories_provider.dart';
+import '../../providers/transactions_provider.dart';
+import '../device.dart';
 
 class CategoryTypeButton extends ConsumerWidget {
   const CategoryTypeButton({super.key});
@@ -28,9 +29,8 @@ class CategoryTypeButton extends ConsumerWidget {
     return Container(
       height: 28,
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primaryContainer,
-        borderRadius: BorderRadius.all(Radius.circular(5.0)),
-      ),
+          color: Theme.of(context).colorScheme.primaryContainer,
+          borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall)),
       child: Stack(
         children: [
           AnimatedAlign(
@@ -41,10 +41,9 @@ class CategoryTypeButton extends ConsumerWidget {
             child: Container(
               width: width,
               height: 28,
-              decoration: const BoxDecoration(
-                color: blue5,
-                borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              ),
+              decoration: BoxDecoration(
+                  color: blue5,
+                  borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall)),
             ),
           ),
           Align(
