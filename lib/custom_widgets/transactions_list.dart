@@ -6,6 +6,8 @@ import '../constants/constants.dart';
 import '../constants/functions.dart';
 import '../constants/style.dart';
 import '../model/transaction.dart';
+import '../pages/planning_page/manage_budget_page.dart';
+import '../pages/transactions_page/widgets/transaction_empty_state_widget.dart';
 import '../providers/currency_provider.dart';
 import '../providers/transactions_provider.dart';
 import '../utils/date_helper.dart';
@@ -18,8 +20,10 @@ class TransactionsList extends StatefulWidget {
     required this.transactions,
     this.margin = const EdgeInsets.symmetric(horizontal: 16),
     this.padding,
+    this.isFromHomeScreen = false,
   });
 
+  final bool isFromHomeScreen;
   final List<Transaction> transactions;
   final EdgeInsetsGeometry? margin;
   final EdgeInsetsGeometry? padding;
@@ -116,7 +120,9 @@ class _TransactionsListState extends State<TransactionsList> with Functions {
               },
             ),
           )
-        : const Center(child: Text("No transactions available"));
+        : widget.isFromHomeScreen
+          ? DefaultContainer(child: const Center(child: Text("Add a transaction to make this section more appealing")))
+            : TransactionEmptyStateWidget();
   }
 }
 
