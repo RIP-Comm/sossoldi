@@ -122,9 +122,10 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
                         child: Container(
                           alignment: Alignment.centerLeft,
                           child: ElevatedButton.icon(
-                            onPressed: () => {
+                            onPressed: () {
                               showModalBottomSheet(
                                 context: context,
+                                isScrollControlled: true, // Allows you to control the height
                                 shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(20.0),
@@ -133,21 +134,25 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
                                 ),
                                 elevation: 10,
                                 builder: (BuildContext context) {
-                                  return ListView(
-                                    scrollDirection: Axis.vertical,
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 20,
-                                      horizontal: 10,
-                                    ),
-                                    children: [
-                                      OlderRecurringPayments(
-                                        transaction: transaction,
+                                  return Container(
+                                    height: MediaQuery.of(context).size.height * 0.9, // Set height to 3/4 of the screen height
+                                    child: ListView(
+                                      scrollDirection: Axis.vertical,
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 20,
+                                        horizontal: 10,
                                       ),
-                                    ],
+                                      children: [
+                                        OlderRecurringPayments(
+                                          transaction: transaction,
+                                        ),
+                                      ],
+                                    ),
                                   );
                                 },
-                              )
+                              );
                             },
+
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Theme.of(context)
                                   .colorScheme
