@@ -52,12 +52,11 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
       actionLabel: "ADD",
       onAction: () async {
         ScaffoldMessenger.of(context).clearSnackBars();
-        final bool? categoryAdded;
 
         // Push /add-category route, saving the returned result.
         //
         // Returned result will be false if no new category is added, true otherwise.
-        categoryAdded = await Navigator.pushNamed(
+        final categoryAdded = await Navigator.pushNamed(
           context,
           '/add-category',
           arguments: {'hideIncome': true},
