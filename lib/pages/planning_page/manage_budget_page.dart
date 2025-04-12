@@ -51,8 +51,6 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
       message: "Add a category first to set a budget",
       actionLabel: "ADD",
       onAction: () async {
-        ScaffoldMessenger.of(context).clearSnackBars();
-
         // Push /add-category route, saving the returned result.
         //
         // Returned result will be false if no new category is added, true otherwise.
