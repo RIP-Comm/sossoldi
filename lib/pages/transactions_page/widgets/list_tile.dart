@@ -1,51 +1,53 @@
 import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../constants/constants.dart';
 import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
 import '../../../custom_widgets/rounded_icon.dart';
-import '../../../model/category_transaction.dart';
 import '../../../model/transaction.dart';
-import '../../../providers/categories_provider.dart';
 import '../../../providers/currency_provider.dart';
+import 'accounts_tab.dart';
 
-class CategoryListTile extends ConsumerWidget {
-  const CategoryListTile({
+class TransactionGroupTile extends ConsumerWidget {
+  const TransactionGroupTile({
     super.key,
-    required this.category,
+    required this.title,
     required this.amount,
     required this.transactions,
     required this.percent,
+    required this.color,
+    required this.icon,
     required this.index,
   });
 
-  final CategoryTransaction category;
+  final String title;
   final double amount;
   final List<Transaction> transactions;
   final double percent;
+  final Color color;
+  final IconData? icon;
   final int index;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedCategoryIndex = ref.watch(selectedCategoryIndexProvider);
-    final currencyState = ref.watch(currencyStateNotifier);
     final nTransactions = transactions.length;
+    final selectedAccountIndex = ref.watch(selectedAccountIndexProvider);
+    final currencyState = ref.watch(currencyStateNotifier);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         GestureDetector(
           onTap: () {
-            if (selectedCategoryIndex == index) {
-              ref.invalidate(selectedCategoryIndexProvider);
+            if (selectedAccountIndex == index) {
+              ref.invalidate(selectedAccountIndexProvider);
             } else {
-              ref.read(selectedCategoryIndexProvider.notifier).state = index;
+              ref.read(selectedAccountIndexProvider.notifier).state = index;
             }
           },
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
-              color: categoryColorList[category.color].withAlpha(90),
+              color: color.withAlpha(90),
             ),
             padding: const EdgeInsets.symmetric(
               horizontal: 8.0,
@@ -55,8 +57,8 @@ class CategoryListTile extends ConsumerWidget {
               mainAxisSize: MainAxisSize.max,
               children: [
                 RoundedIcon(
-                  icon: iconList[category.symbol],
-                  backgroundColor: categoryColorList[category.color],
+                  icon: icon,
+                  backgroundColor: color,
                   padding: const EdgeInsets.all(8.0),
                 ),
                 const SizedBox(width: 8.0),
@@ -67,7 +69,7 @@ class CategoryListTile extends ConsumerWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            category.name,
+                            title,
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           Text(
@@ -97,7 +99,7 @@ class CategoryListTile extends ConsumerWidget {
                 ),
                 const SizedBox(width: 8.0),
                 Icon(
-                  (selectedCategoryIndex == index)
+                  (selectedAccountIndex == index)
                       ? Icons.expand_more
                       : Icons.chevron_right,
                 ),
@@ -106,7 +108,7 @@ class CategoryListTile extends ConsumerWidget {
           ),
         ),
         ExpandedSection(
-          expand: selectedCategoryIndex == index,
+          expand: selectedAccountIndex == index,
           child: Container(
             color: Theme.of(context).colorScheme.primaryContainer,
             height: 70.0 * nTransactions,
@@ -142,6 +144,7 @@ class TransactionRow extends ConsumerWidget with Functions {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currencyState = ref.watch(currencyStateNotifier);
+
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 8.0,
@@ -172,7 +175,8 @@ class TransactionRow extends ConsumerWidget with Functions {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      transaction.categoryName?.toUpperCase() ?? "",
+                      transaction.categoryName?.toUpperCase() ??
+                          "Uncategorized",
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     Text(

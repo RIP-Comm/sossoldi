@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../constants/constants.dart';
 import '../../../constants/functions.dart';
 import '../../../custom_widgets/default_container.dart';
 import '../../../custom_widgets/transaction_type_button.dart';
@@ -9,7 +10,7 @@ import '../../../model/transaction.dart';
 import '../../../providers/categories_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import 'categories_pie_chart.dart';
-import 'category_list_tile.dart';
+import 'list_tile.dart';
 
 class CategoriesTab extends ConsumerStatefulWidget {
   const CategoriesTab({
@@ -119,8 +120,10 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> with Functions {
                                 itemBuilder: (context, index) {
                                   CategoryTransaction category =
                                       categoryIncomeList[index];
-                                  return CategoryListTile(
-                                    category: category,
+                                  return TransactionGroupTile(
+                                    title: category.name,
+                                    color: categoryColorList[category.color],
+                                    icon: iconList[category.symbol],
                                     transactions: categoryToTransactionsIncome[
                                             category.id] ??
                                         [],
@@ -162,8 +165,10 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> with Functions {
                                 itemBuilder: (context, index) {
                                   CategoryTransaction category =
                                       categoryExpenseList[index];
-                                  return CategoryListTile(
-                                    category: category,
+                                  return TransactionGroupTile(
+                                    title: category.name,
+                                    color: categoryColorList[category.color],
+                                    icon: iconList[category.symbol],
                                     transactions: categoryToTransactionsExpense[
                                             category.id] ??
                                         [],

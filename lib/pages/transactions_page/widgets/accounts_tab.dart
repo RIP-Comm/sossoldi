@@ -9,7 +9,7 @@ import '../../../model/bank_account.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/transactions_provider.dart';
-import 'account_list_tile.dart';
+import 'list_tile.dart';
 import 'accounts_pie_chart.dart';
 
 final selectedAccountIndexProvider =
@@ -119,12 +119,8 @@ class _AccountsTabState extends ConsumerState<AccountsTab> with Functions {
                                     const SizedBox(height: 10),
                                 itemBuilder: (context, index) {
                                   BankAccount b = accountIncomeList[index];
-                                  return AccountListTile(
+                                  return TransactionGroupTile(
                                     title: b.name,
-                                    nTransactions:
-                                        accountToTransactionsIncome[b.id]
-                                                ?.length ??
-                                            0,
                                     transactions:
                                         accountToTransactionsIncome[b.id] ?? [],
                                     amount: accountToAmountIncome[b.id] ?? 0,
@@ -164,12 +160,8 @@ class _AccountsTabState extends ConsumerState<AccountsTab> with Functions {
                                     const SizedBox(height: 10),
                                 itemBuilder: (context, index) {
                                   BankAccount b = accountExpenseList[index];
-                                  return AccountListTile(
+                                  return TransactionGroupTile(
                                     title: b.name,
-                                    nTransactions:
-                                        accountToTransactionsExpense[b.id]
-                                                ?.length ??
-                                            0,
                                     transactions:
                                         accountToTransactionsExpense[b.id] ??
                                             [],
