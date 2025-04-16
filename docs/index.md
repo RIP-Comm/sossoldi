@@ -16,7 +16,7 @@ nav_order: 1
 </div>
 
 <div>
-    <img src="/assets/sossoldi_project_cover.jpg" width="1000" alt="Sossoldi icon">
+    <img src="./assets/sossoldi_project_cover.jpg" width="1000" alt="Sossoldi icon">
 </div>
 
 ## ❓ What problem we are solving & why
@@ -46,7 +46,7 @@ What features do we want to implement?
 - 🤓 Advanced onboarding
 
 <div align="center">
-<img src="/assets/sossoldi_portfolio_card.png" width="500" alt="Sossoldi icon">
+<img src="./assets/sossoldi_portfolio_card.png" width="500" alt="Sossoldi icon">
 </div>
 
 ## Useful links
