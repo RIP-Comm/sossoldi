@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../model/budget.dart';
 import '../../model/category_transaction.dart';
+import '../../ui/device.dart';
 import '../../utils/snack_bars/snack_bar.dart';
 import 'widget/budget_category_selector.dart';
 import '../../../providers/categories_provider.dart';
@@ -76,14 +77,15 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: const EdgeInsets.all(15),
+              padding: const EdgeInsets.all(Sizes.lg),
               child: Text(
                 "Select the categories to create your budget",
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: EdgeInsets.symmetric(
+                  horizontal: Sizes.lg, vertical: Sizes.sm),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -108,7 +110,7 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
                       return Dismissible(
                         key: Key(budgets[index].idCategory.toString()),
                         background: Container(
-                          padding: const EdgeInsets.only(right: 20.0),
+                          padding: const EdgeInsets.only(right: Sizes.lg),
                           alignment: Alignment.centerRight,
                           color: Colors.red,
                           child: const Text(
@@ -145,10 +147,10 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
                       );
                     },
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: Sizes.sm),
                   Text("Swipe left to delete",
                       style: Theme.of(context).textTheme.bodySmall),
-                  SizedBox(height: 12),
+                  const SizedBox(height: Sizes.md),
                   TextButton.icon(
                     icon: Icon(Icons.add_circle, size: 32),
                     onPressed: () {
@@ -172,17 +174,17 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: Sizes.lg),
             Center(
               child: Text(
                 "Your monthly budget will be: ${budgets.isEmpty ? 0 : budgets.fold(0, (sum, e) => sum + e.amountLimit.toInt())}€",
                 style: Theme.of(context).textTheme.titleMedium,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: Sizes.lg),
             const Divider(indent: 16, endIndent: 16),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(Sizes.lg),
               child: ElevatedButton(
                 onPressed: () async {
                   for (var item in deletedBudgets) {
