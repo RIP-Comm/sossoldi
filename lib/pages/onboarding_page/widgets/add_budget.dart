@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
 import '../../../model/budget.dart';
 import '../../../model/category_transaction.dart';
 import '../../../providers/budgets_provider.dart';
+import '../../../ui/device.dart';
 
 class AddBudget extends ConsumerStatefulWidget {
   final CategoryTransaction category;
@@ -15,7 +15,7 @@ class AddBudget extends ConsumerStatefulWidget {
   ConsumerState<AddBudget> createState() => _AddBudgetState();
 }
 
-class _AddBudgetState extends ConsumerState<AddBudget> with Functions {
+class _AddBudgetState extends ConsumerState<AddBudget> {
   final TextEditingController amountController = TextEditingController();
 
   List<Budget>? budgetsList = [];
@@ -82,7 +82,7 @@ class _AddBudgetState extends ConsumerState<AddBudget> with Functions {
           style: ElevatedButton.styleFrom(
             backgroundColor: blue5,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(Sizes.borderRadius),
             ),
           ),
           child: Text(

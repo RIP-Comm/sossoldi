@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
-import '../constants/style.dart';
+import '../../constants/style.dart';
+import '../device.dart';
 
 class DefaultContainer extends StatelessWidget {
   const DefaultContainer({
     required this.child,
-    this.padding = const EdgeInsets.all(16.0),
-    this.margin = const EdgeInsets.symmetric(horizontal: 16),
+    this.padding = const EdgeInsets.all(Sizes.lg),
+    this.margin = const EdgeInsets.symmetric(horizontal: Sizes.lg),
     super.key,
   });
 
@@ -21,7 +22,7 @@ class DefaultContainer extends StatelessWidget {
       margin: margin,
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(Sizes.borderRadius),
         boxShadow: [defaultShadow],
       ),
       child: child,

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../constants/constants.dart';
 
-import '../../constants/functions.dart';
-import '../../custom_widgets/budget_circular_indicator.dart';
+import '../../ui/widgets/budget_circular_indicator.dart';
 import '../../model/budget.dart';
 import '../../providers/budgets_provider.dart';
+import '../../ui/device.dart';
 
-class BudgetsSection extends ConsumerWidget with Functions {
+class BudgetsSection extends ConsumerWidget {
   const BudgetsSection({super.key});
 
   @override
@@ -33,14 +33,14 @@ class BudgetsSection extends ConsumerWidget with Functions {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 16),
+                          padding: const EdgeInsets.only(left: Sizes.lg),
                           child: Text(
                             "Your budgets",
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: Sizes.lg),
                       if (budgets == null || budgets.isEmpty)
                         Container(
                           height: 90,
@@ -58,7 +58,7 @@ class BudgetsSection extends ConsumerWidget with Functions {
                                       color: Colors.grey[600],
                                     ),
                               ),
-                              const SizedBox(height: 8),
+                              const SizedBox(height: Sizes.sm),
                               Text(
                                 "Create a budget to track your spending",
                                 style: Theme.of(context)
@@ -79,8 +79,8 @@ class BudgetsSection extends ConsumerWidget with Functions {
                             scrollDirection: Axis.horizontal,
                             itemCount: budgets.length,
                             itemBuilder: (context, index) => Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 13),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: Sizes.md),
                               child: BudgetCircularIndicator(
                                 title: budgets[index].name!,
                                 amount: budgets[index].amountLimit -

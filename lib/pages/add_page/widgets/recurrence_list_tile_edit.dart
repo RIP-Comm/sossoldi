@@ -4,14 +4,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
-import '../../../constants/functions.dart';
 import "../../../constants/style.dart";
 import '../../../providers/theme_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../model/transaction.dart';
+import '../../../ui/device.dart';
+import '../../../ui/extensions.dart';
 import 'recurrence_selector.dart';
 
-class RecurrenceListTileEdit extends ConsumerWidget with Functions {
+class RecurrenceListTileEdit extends ConsumerWidget {
   const RecurrenceListTileEdit({
     super.key,
   });
@@ -26,14 +27,14 @@ class RecurrenceListTileEdit extends ConsumerWidget with Functions {
       children: [
         const Divider(),
         ListTile(
-          contentPadding: const EdgeInsets.all(16),
+          contentPadding: const EdgeInsets.all(Sizes.lg),
           leading: Container(
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: Theme.of(context).colorScheme.secondary,
             ),
             child: Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(Sizes.sm),
               child: Icon(
                 Icons.autorenew,
                 size: 24.0,
@@ -55,7 +56,7 @@ class RecurrenceListTileEdit extends ConsumerWidget with Functions {
             child: FilledButton(
               style: FilledButton.styleFrom(
                 backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(Sizes.lg),
               ),
               onPressed: () {
                 FocusManager.instance.primaryFocus?.unfocus();
@@ -82,7 +83,7 @@ class RecurrenceListTileEdit extends ConsumerWidget with Functions {
                             ? grey3
                             : Theme.of(context).colorScheme.secondary),
                   ),
-                  const SizedBox(width: 6),
+                  const SizedBox(width: Sizes.xs),
                   Icon(
                     Icons.chevron_right,
                     color: isDarkMode
@@ -94,11 +95,11 @@ class RecurrenceListTileEdit extends ConsumerWidget with Functions {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(Sizes.lg),
             child: FilledButton(
               style: FilledButton.styleFrom(
                 backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(Sizes.lg),
               ),
               onPressed: () => showModalBottomSheet(
                 context: context,
@@ -119,13 +120,13 @@ class RecurrenceListTileEdit extends ConsumerWidget with Functions {
                   ),
                   const Spacer(),
                   Text(
-                    endDate != null ? dateToString(endDate) : "Never",
+                    endDate != null ? endDate.formatEDMY() : "Never",
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: isDarkMode
                             ? grey3
                             : Theme.of(context).colorScheme.secondary),
                   ),
-                  const SizedBox(width: 6),
+                  const SizedBox(width: Sizes.xs),
                   Icon(
                     Icons.chevron_right,
                     color: isDarkMode
@@ -142,7 +143,7 @@ class RecurrenceListTileEdit extends ConsumerWidget with Functions {
   }
 }
 
-class EndDateSelector extends ConsumerWidget with Functions {
+class EndDateSelector extends ConsumerWidget {
   const EndDateSelector({super.key});
 
   @override
@@ -173,7 +174,7 @@ class EndDateSelector extends ConsumerWidget with Functions {
                     ? const Icon(Icons.check)
                     : null,
                 subtitle: Text(ref.read(endDateProvider) != null
-                    ? dateToString(ref.read(endDateProvider.notifier).state!)
+                    ? ref.read(endDateProvider.notifier).state!.formatEDMY()
                     : ''),
                 onTap: () async {
                   FocusManager.instance.primaryFocus?.unfocus();

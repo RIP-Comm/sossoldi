@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../custom_widgets/rounded_icon.dart';
+import '../../../ui/widgets/rounded_icon.dart';
 import '../../../constants/style.dart';
 import '../../../providers/theme_provider.dart';
+import '../../../ui/device.dart';
 
 class LabelListTile extends ConsumerWidget {
   const LabelListTile(
@@ -18,14 +19,15 @@ class LabelListTile extends ConsumerWidget {
     final isDarkMode = ref.watch(appThemeStateNotifier).isDarkModeEnabled;
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 32, 16),
+      padding:
+          const EdgeInsets.fromLTRB(Sizes.lg, Sizes.lg, Sizes.xxl, Sizes.lg),
       child: Row(
         children: [
           RoundedIcon(
             icon: Icons.description,
             backgroundColor: Theme.of(context).colorScheme.secondary,
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: Sizes.lg),
           Text(
             "Description",
             style: Theme.of(context)
@@ -33,7 +35,7 @@ class LabelListTile extends ConsumerWidget {
                 .titleLarge!
                 .copyWith(color: Theme.of(context).colorScheme.primary),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: Sizes.lg),
           Expanded(
             child: TextField(
               controller: labelController,
