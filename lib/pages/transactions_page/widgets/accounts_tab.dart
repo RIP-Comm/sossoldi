@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
-import '../../../constants/functions.dart';
-import '../../../custom_widgets/default_container.dart';
-import '../../../custom_widgets/transaction_type_button.dart';
+import '../../../ui/widgets/default_container.dart';
+import '../../../ui/widgets/transaction_type_button.dart';
 import '../../../model/bank_account.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/transactions_provider.dart';
+import '../../../ui/device.dart';
 import 'account_list_tile.dart';
 import 'accounts_pie_chart.dart';
 
@@ -24,7 +24,7 @@ class AccountsTab extends ConsumerStatefulWidget {
   ConsumerState<AccountsTab> createState() => _AccountsTabState();
 }
 
-class _AccountsTabState extends ConsumerState<AccountsTab> with Functions {
+class _AccountsTabState extends ConsumerState<AccountsTab> {
   @override
   Widget build(BuildContext context) {
     final accounts = ref.watch(accountsProvider);
@@ -79,12 +79,12 @@ class _AccountsTabState extends ConsumerState<AccountsTab> with Functions {
     }
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(vertical: 24),
+      padding: const EdgeInsets.symmetric(vertical: Sizes.xl),
       child: DefaultContainer(
         child: Column(
           children: [
             const TransactionTypeButton(),
-            const SizedBox(height: 16),
+            const SizedBox(height: Sizes.lg),
             accounts.when(
               data: (data) {
                 List<BankAccount> accountIncomeList = data
@@ -110,7 +110,7 @@ class _AccountsTabState extends ConsumerState<AccountsTab> with Functions {
                                 amounts: accountToAmountIncome,
                                 total: totalIncome,
                               ),
-                              const SizedBox(height: 16),
+                              const SizedBox(height: Sizes.lg),
                               ListView.separated(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
@@ -155,13 +155,13 @@ class _AccountsTabState extends ConsumerState<AccountsTab> with Functions {
                                 amounts: accountToAmountExpense,
                                 total: totalExpense,
                               ),
-                              const SizedBox(height: 16),
+                              const SizedBox(height: Sizes.lg),
                               ListView.separated(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: accountExpenseList.length,
                                 separatorBuilder: (context, index) =>
-                                    const SizedBox(height: 10),
+                                    const SizedBox(height: Sizes.sm),
                                 itemBuilder: (context, index) {
                                   BankAccount b = accountExpenseList[index];
                                   return AccountListTile(

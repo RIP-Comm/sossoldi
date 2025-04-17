@@ -2,13 +2,14 @@ import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
-import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
-import '../../../custom_widgets/rounded_icon.dart';
+import '../../../ui/extensions.dart';
+import '../../../ui/widgets/rounded_icon.dart';
 import '../../../model/category_transaction.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/categories_provider.dart';
 import '../../../providers/currency_provider.dart';
+import '../../../ui/device.dart';
 
 class CategoryListTile extends ConsumerWidget {
   const CategoryListTile({
@@ -44,12 +45,12 @@ class CategoryListTile extends ConsumerWidget {
           },
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
               color: categoryColorList[category.color].withAlpha(90),
             ),
             padding: const EdgeInsets.symmetric(
-              horizontal: 8.0,
-              vertical: 16.0,
+              horizontal: Sizes.sm,
+              vertical: Sizes.lg,
             ),
             child: Row(
               mainAxisSize: MainAxisSize.max,
@@ -57,9 +58,9 @@ class CategoryListTile extends ConsumerWidget {
                 RoundedIcon(
                   icon: iconList[category.symbol],
                   backgroundColor: categoryColorList[category.color],
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(Sizes.sm),
                 ),
-                const SizedBox(width: 8.0),
+                const SizedBox(width: Sizes.sm),
                 Expanded(
                   child: Column(
                     children: [
@@ -95,7 +96,7 @@ class CategoryListTile extends ConsumerWidget {
                     ],
                   ),
                 ),
-                const SizedBox(width: 8.0),
+                const SizedBox(width: Sizes.sm),
                 Icon(
                   (selectedCategoryIndex == index)
                       ? Icons.expand_more
@@ -131,7 +132,7 @@ class CategoryListTile extends ConsumerWidget {
   }
 }
 
-class TransactionRow extends ConsumerWidget with Functions {
+class TransactionRow extends ConsumerWidget {
   const TransactionRow({
     super.key,
     required this.transaction,
@@ -144,13 +145,13 @@ class TransactionRow extends ConsumerWidget with Functions {
     final currencyState = ref.watch(currencyStateNotifier);
     return Container(
       padding: const EdgeInsets.symmetric(
-        horizontal: 8.0,
-        vertical: 16.0,
+        horizontal: Sizes.sm,
+        vertical: Sizes.lg,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
-          const SizedBox(width: 48.0),
+          const SizedBox(width: Sizes.xl * 2),
           Expanded(
             child: Column(
               children: [
@@ -162,7 +163,7 @@ class TransactionRow extends ConsumerWidget with Functions {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(
-                      "${numToCurrency(transaction.amount)} ${currencyState.selectedCurrency.symbol}",
+                      "${transaction.amount.toCurrency()} ${currencyState.selectedCurrency.symbol}",
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           color: (transaction.amount > 0) ? green : red),
                     ),
@@ -184,7 +185,7 @@ class TransactionRow extends ConsumerWidget with Functions {
               ],
             ),
           ),
-          const SizedBox(width: 8.0),
+          const SizedBox(width: Sizes.sm),
         ],
       ),
     );
