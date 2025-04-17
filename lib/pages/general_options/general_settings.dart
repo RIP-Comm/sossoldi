@@ -44,7 +44,10 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(
-            left: Sizes.lg, right: Sizes.lg, top: Sizes.xl),
+          left: Sizes.lg,
+          right: Sizes.lg,
+          top: Sizes.xl,
+        ),
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
@@ -84,27 +87,9 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: Sizes.lg),
             SettingsCurrencySelector(),
-            const SizedBox(height: 20),
-            /*
-            Row(
-              children: [
-                Text("Language",
-                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        color: Theme.of(context).colorScheme.primary)),
-                const Spacer(),
-                GestureDetector(
-                    onTap: () {
-                      selectLanguage();
-                    },
-                    child: CircleAvatar(
-                      radius: 30.0,
-                      backgroundColor: blue5,
-                      child: Center(child: Text(selectedLanguage, style: const TextStyle(fontSize: 30))),
-                    )),
-              ],
-            ),*/
+            const SizedBox(height: Sizes.lg),
           ],
         ),
       ),
