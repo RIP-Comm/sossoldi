@@ -64,7 +64,7 @@ class SelectorTile extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.all(Sizes.lg),
         foregroundDecoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(Sizes.xs),
+          borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
           border: Border.all(
             width: isSelected ? _kSelectedBorderWidth : _kUnselectedBorderWidth,
             color: isSelected ? appTheme.colorScheme.onSurfaceVariant : grey2,
