@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../constants/style.dart';
+import '../../../../ui/device.dart';
+
+const _kSelectedBorderWidth = 1.0;
+const _kUnselectedBorderWidth = .5;
 
 /// A list tile like component that can be used for handling selection.
 ///
@@ -58,11 +62,11 @@ class SelectorTile extends ConsumerWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(Sizes.lg),
         foregroundDecoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(Sizes.xs),
           border: Border.all(
-            width: isSelected ? 1.0 : .5,
+            width: isSelected ? _kSelectedBorderWidth : _kUnselectedBorderWidth,
             color: isSelected ? appTheme.colorScheme.onSurfaceVariant : grey2,
           ),
         ),
@@ -79,7 +83,7 @@ class SelectorTile extends ConsumerWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 8.0),
+            const SizedBox(width: Sizes.sm),
             if (trailing != null) ...[
               Text(
                 trailing!,

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../model/currency.dart';
 import '../../../providers/currency_provider.dart';
+import '../../../ui/device.dart';
 import 'selector/selector_container.dart';
 import 'selector/selector_tile.dart';
 
@@ -35,7 +36,7 @@ class _SettingsCurrencySelectorState
             return ListView.separated(
               padding: EdgeInsets.zero,
               separatorBuilder: (context, index) {
-                return const SizedBox(height: 8.0);
+                return const SizedBox(height: Sizes.sm);
               },
               shrinkWrap: true,
               itemCount: currencies!.length,
