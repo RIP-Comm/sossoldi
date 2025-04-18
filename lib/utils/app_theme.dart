@@ -209,9 +209,9 @@ class AppTheme {
       hintStyle: TextStyle(color: grey2),
     ),
     snackBarTheme: SnackBarThemeData(
-      backgroundColor: customColorScheme.primaryContainer,
+      backgroundColor: customColorScheme.inverseSurface,
       contentTextStyle: TextStyle(
-        color: customColorScheme.onSurface,
+        color: customColorScheme.onInverseSurface,
         fontSize: 16,
       ),
       behavior: SnackBarBehavior.floating,
@@ -437,9 +437,9 @@ class AppTheme {
       hintStyle: TextStyle(color: grey2),
     ),
     snackBarTheme: SnackBarThemeData(
-      backgroundColor: darkCustomColorScheme.primaryContainer,
+      backgroundColor: darkCustomColorScheme.inverseSurface,
       contentTextStyle: TextStyle(
-        color: darkCustomColorScheme.onSurface,
+        color: darkCustomColorScheme.onInverseSurface,
         fontSize: 16,
       ),
       behavior: SnackBarBehavior.floating,
