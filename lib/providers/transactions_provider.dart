@@ -8,6 +8,7 @@ import 'accounts_provider.dart';
 import 'budgets_provider.dart';
 import 'dashboard_provider.dart';
 import 'statistics_provider.dart';
+import '../ui/extensions.dart';
 
 final lastTransactionsProvider = FutureProvider<List<Transaction>>((ref) async {
   final transactions = await TransactionMethods().selectAll(limit: 5);
@@ -159,49 +160,168 @@ class AsyncTransactionsNotifier
     final toDate = ref.read(endDateProvider);
     final bankAccount = ref.read(bankAccountProvider)!;
     final category = ref.read(categoryProvider);
+    final type = ref.read(transactionTypeProvider);
     final recurrency = ref.read(intervalProvider.notifier).state;
 
-    RecurringTransaction transaction = RecurringTransaction(
-        amount: amount,
-        fromDate: date,
-        toDate: toDate,
-        note: label,
-        idBankAccount: bankAccount.id!,
-        idCategory: category!.id!,
-        recurrency: recurrency.name.toUpperCase(),
-        createdAt: date,
-        updatedAt: date,
-        lastInsertion: date);
+    final RecurringTransaction recurringTransaction =
+        _createRecurringTransactionObject(
+      date: date,
+      toDate: toDate,
+      amount: amount,
+      note: label,
+      type: type,
+      idBankAccount: bankAccount.id!,
+      idCategory: category!.id!,
+      recurrency: recurrency.name.toUpperCase(),
+    );
 
-    // Here we need the recurringTransaction just inserted, to get and return a model with also his ID
     RecurringTransaction? insertedTransaction;
-
     state = await AsyncValue.guard(() async {
       insertedTransaction =
-          await RecurringTransactionMethods().insert(transaction);
+          await RecurringTransactionMethods().insert(recurringTransaction);
       return _getTransactions(update: true);
     });
 
-    // check if fromDate is today, and add the first recurrence of the transaction
-    DateTime now = DateTime.now();
-
-    if (date.year == now.year &&
-        date.month == now.month &&
-        date.day == now.day) {
-      final transaction = Transaction(
-        date: date,
-        amount: amount,
-        type: TransactionType.expense,
-        note: label,
-        idBankAccount: bankAccount.id!,
-        idCategory: category.id!,
-        idRecurringTransaction: insertedTransaction!.id,
-        recurring: true,
-      );
-      await TransactionMethods().insert(transaction);
+    if (insertedTransaction?.id != null) {
+      await _generateTransactionsForRecurringTransaction(insertedTransaction!,
+          amount, label, bankAccount.id!, category.id!, date, recurrency);
     }
 
     return insertedTransaction;
+  }
+
+  RecurringTransaction _createRecurringTransactionObject({
+    required DateTime date,
+    required DateTime? toDate,
+    required num amount,
+    required String note,
+    required TransactionType type,
+    required int idBankAccount,
+    required int idCategory,
+    required String recurrency,
+  }) {
+    return RecurringTransaction(
+        amount: amount,
+        fromDate: date,
+        toDate: toDate,
+        note: note,
+        idBankAccount: idBankAccount,
+        idCategory: idCategory,
+        recurrency: recurrency,
+        type: type,
+        createdAt: date,
+        updatedAt: date,
+        lastInsertion: date);
+  }
+
+  Future<void> _generateTransactionsForRecurringTransaction(
+      RecurringTransaction recurringTransaction,
+      num amount,
+      String label,
+      int idBankAccount,
+      int idCategory,
+      DateTime startDate,
+      Recurrence recurrency) async {
+    DateTime now = DateTime.now();
+
+    if (startDate.isBefore(now)) {
+      await _createPastTransactions(startDate, now, recurrency,
+          recurringTransaction.id!, amount, label, idBankAccount, idCategory);
+    } else if (startDate.isSameDay(now)) {
+      await _createSingleTransaction(
+        date: startDate,
+        amount: amount,
+        note: label,
+        idBankAccount: idBankAccount,
+        idCategory: idCategory,
+        idRecurringTransaction: recurringTransaction.id!,
+      );
+    }
+  }
+
+  Future<void> _createPastTransactions(
+      DateTime startDate,
+      DateTime endDate,
+      Recurrence recurrency,
+      int recurringTransactionId,
+      num amount,
+      String label,
+      int idBankAccount,
+      int idCategory) async {
+    // Calcola tutte le date passate in cui creare transazioni
+    List<DateTime> transactionDates =
+        calculatePastTransactionDates(startDate, endDate, recurrency);
+
+    for (var transactionDate in transactionDates) {
+      await _createSingleTransaction(
+        date: transactionDate,
+        amount: amount,
+        note: label,
+        idBankAccount: idBankAccount,
+        idCategory: idCategory,
+        idRecurringTransaction: recurringTransactionId,
+      );
+    }
+  }
+
+  List<DateTime> calculatePastTransactionDates(
+      DateTime startDate, DateTime endDate, Recurrence recurrence) {
+    List<DateTime> dates = [];
+    DateTime currentDate = startDate;
+
+    final recurrencyEntry = recurrenciesMap[recurrence.name.toUpperCase()];
+    final entity = recurrencyEntry?['entity'] as String;
+    final intervalAmount = recurrencyEntry?['amount'] as int;
+
+    while (currentDate.isBefore(endDate)) {
+      dates.add(currentDate);
+
+      if (entity == 'days') {
+        currentDate = currentDate.add(Duration(days: intervalAmount));
+      } else if (entity == 'months') {
+        currentDate =
+            _calculateNextMonthDate(currentDate, intervalAmount, startDate.day);
+      }
+    }
+
+    return dates;
+  }
+
+  DateTime _calculateNextMonthDate(
+      DateTime currentDate, int monthsToAdd, int originalDay) {
+    int lastDayOfNextPeriod =
+        DateTime(currentDate.year, (currentDate.month + monthsToAdd + 1), 0)
+            .day;
+
+    int dayOfInsertion = originalDay;
+    if (originalDay > lastDayOfNextPeriod) {
+      dayOfInsertion = lastDayOfNextPeriod;
+    }
+
+    return DateTime(
+        currentDate.year, currentDate.month + monthsToAdd, dayOfInsertion);
+  }
+
+  Future<void> _createSingleTransaction({
+    required DateTime date,
+    required num amount,
+    required String note,
+    required int idBankAccount,
+    required int idCategory,
+    required int idRecurringTransaction,
+  }) async {
+    final transaction = Transaction(
+      date: date,
+      amount: amount,
+      type: TransactionType.expense,
+      note: note,
+      idBankAccount: idBankAccount,
+      idCategory: idCategory,
+      idRecurringTransaction: idRecurringTransaction,
+      recurring: true,
+    );
+
+    await TransactionMethods().insert(transaction);
   }
 
   Future<void> updateTransaction(num amount, String label,
