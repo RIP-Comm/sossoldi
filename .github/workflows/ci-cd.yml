@@ -5,7 +5,7 @@ on:
   push:
 
 concurrency:
-  group: ${{ github.head_ref }}
+  group: ${{ github.head_ref != '' && github.head_ref || github.ref  }}
   cancel-in-progress: true
 
 jobs:

@@ -22,6 +22,12 @@ class CategorySelector extends ConsumerStatefulWidget {
 }
 
 class _CategorySelectorState extends ConsumerState<CategorySelector> {
+  void _selectCategory(
+      BuildContext context, WidgetRef ref, CategoryTransaction category) {
+    ref.read(categoryProvider.notifier).state = category;
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     final transactionType = ref.watch(transactionTypeProvider);
@@ -72,11 +78,8 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
                         itemBuilder: (context, i) {
                           CategoryTransaction category = categories[i];
                           return GestureDetector(
-                            onTap: () => {
-                              ref.read(categoryProvider.notifier).state =
-                                  category,
-                              Navigator.of(context).pop(),
-                            },
+                            onTap: () =>
+                                _selectCategory(context, ref, category),
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: Sizes.lg),
@@ -132,9 +135,8 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
                         itemBuilder: (context, i) {
                           CategoryTransaction category = categories[i];
                           return ListTile(
-                            onTap: () => ref
-                                .read(categoryProvider.notifier)
-                                .state = category,
+                            onTap: () =>
+                                _selectCategory(context, ref, category),
                             leading: RoundedIcon(
                               icon: iconList[category.symbol],
                               backgroundColor:
