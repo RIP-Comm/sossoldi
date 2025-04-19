@@ -6,16 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../constants/style.dart';
-import '../custom_widgets/alert_dialog.dart';
-import '../custom_widgets/default_card.dart';
-import '../database/sossoldi_database.dart';
-import '../providers/accounts_provider.dart';
-import '../providers/budgets_provider.dart';
-import '../providers/categories_provider.dart';
-import '../providers/dashboard_provider.dart';
-import '../providers/statistics_provider.dart';
-import '../providers/transactions_provider.dart';
+import '../../../constants/style.dart';
+import '../../../custom_widgets/alert_dialog.dart';
+import '../../../custom_widgets/default_card.dart';
+import '../../../database/sossoldi_database.dart';
+import '../../../providers/accounts_provider.dart';
+import '../../../providers/budgets_provider.dart';
+import '../../../providers/categories_provider.dart';
+import '../../../providers/dashboard_provider.dart';
+import '../../../providers/statistics_provider.dart';
+import '../../../providers/transactions_provider.dart';
 
 var settingsOptions = [
   [
