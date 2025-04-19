@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
-import "../../../custom_widgets/rounded_icon.dart";
+import "rounded_icon.dart";
 import "details_list_tile.dart";
 
 class NonEditableDetailsListTile extends DetailsListTile {

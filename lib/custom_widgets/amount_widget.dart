@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
-import '../../../constants/functions.dart';
-import "../../../constants/style.dart";
-import '../../../providers/currency_provider.dart';
-import '../../../providers/transactions_provider.dart';
-import '../../../utils/decimal_text_input_formatter.dart';
+import '../constants/functions.dart';
+import "../constants/style.dart";
+import '../providers/currency_provider.dart';
+import '../providers/transactions_provider.dart';
+import '../utils/decimal_text_input_formatter.dart';
 
 class AmountWidget extends ConsumerStatefulWidget {
   const AmountWidget(

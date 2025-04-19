@@ -1,9 +1,9 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
-import "../../../constants/style.dart";
-import "../../../providers/theme_provider.dart";
-import "../../../custom_widgets/rounded_icon.dart";
+import "../constants/style.dart";
+import "../providers/theme_provider.dart";
+import "rounded_icon.dart";
 
 class DetailsListTile extends ConsumerWidget {
   const DetailsListTile({

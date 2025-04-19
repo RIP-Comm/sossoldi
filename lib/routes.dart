@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'features/account_page/presentation/account_page.dart';
 import 'features/accounts_feature/presentation/account_list.dart';
 import 'features/accounts_feature/presentation/add_account.dart';
-import 'pages/add_page/add_page.dart';
+import 'features/add_page/presentation/add_page.dart';
 import 'pages/categories/add_category.dart';
 import 'pages/categories/category_list.dart';
 import 'pages/general_options/general_settings.dart';
