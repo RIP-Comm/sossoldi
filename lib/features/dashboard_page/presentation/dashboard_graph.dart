@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../shared/providers/dashboard_provider.dart';
+import '../../../providers/dashboard_provider.dart';
 import 'dashboard_data.dart';
 
 class DashboardGraph extends ConsumerWidget {

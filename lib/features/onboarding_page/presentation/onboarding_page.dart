@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'budget_setup.dart';
-import '../../../shared/constants/style.dart';
+import '/constants/style.dart';
 
 class Onboarding extends StatefulWidget {
   const Onboarding({super.key});

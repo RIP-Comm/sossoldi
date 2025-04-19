@@ -1,4 +1,4 @@
-import 'package:sossoldi/shared/models/transaction.dart';
+import 'package:sossoldi/model/transaction.dart';
 
 String createInsertSqlTransaction(
     {DateTime? date,

@@ -2,12 +2,12 @@ import 'package:fl_chart/fl_chart.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../shared/constants/constants.dart';
-import '../../../../shared/constants/style.dart';
-import '../../../../shared/widgets/rounded_icon.dart';
-import '../../../../shared/models/category_transaction.dart';
-import '../../../../shared/providers/categories_provider.dart';
-import '../../../../shared/providers/currency_provider.dart';
+import '../../../../constants/constants.dart';
+import '../../../../constants/style.dart';
+import '../../../../widgets/rounded_icon.dart';
+import '../../../../model/category_transaction.dart';
+import '../../../../providers/categories_provider.dart';
+import '../../../../providers/currency_provider.dart';
 
 class CategoriesPieChart2 extends ConsumerWidget {
   const CategoriesPieChart2({

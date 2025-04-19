@@ -4,7 +4,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:flutter/material.dart';
 import "dart:math";
 import 'package:sossoldi/features/dashboard_page/presentation/accounts_sum.dart';
-import 'package:sossoldi/shared/models/bank_account.dart';
+import 'package:sossoldi/model/bank_account.dart';
 
 void main() {
   // Initialize the database factory with sqflite_common_ffi

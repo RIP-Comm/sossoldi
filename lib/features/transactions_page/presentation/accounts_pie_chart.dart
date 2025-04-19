@@ -2,12 +2,12 @@ import 'package:fl_chart/fl_chart.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../shared/constants/constants.dart';
-import '../../../shared/constants/functions.dart';
-import '../../../shared/constants/style.dart';
-import '../../../shared/widgets/rounded_icon.dart';
-import '../../../shared/models/bank_account.dart';
-import '../../../shared/providers/currency_provider.dart';
+import '../../../constants/constants.dart';
+import '../../../constants/functions.dart';
+import '../../../constants/style.dart';
+import '../../../widgets/rounded_icon.dart';
+import '../../../model/bank_account.dart';
+import '../../../providers/currency_provider.dart';
 import 'accounts_tab.dart';
 
 class AccountsPieChart extends ConsumerWidget with Functions {

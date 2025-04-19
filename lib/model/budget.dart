@@ -1,6 +1,6 @@
-import 'transaction.dart';
-import '../../database/sossoldi_database.dart';
-import 'category_transaction.dart';
+import '../model/transaction.dart';
+import '../database/sossoldi_database.dart';
+import '../model/category_transaction.dart';
 import 'base_entity.dart';
 
 const String budgetTable = 'budget';

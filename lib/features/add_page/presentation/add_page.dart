@@ -4,17 +4,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../shared/constants/functions.dart';
-import '../../../shared/constants/style.dart';
-import '../../../shared/models/transaction.dart';
-import '../../../shared/providers/accounts_provider.dart';
-import '../../../shared/providers/transactions_provider.dart';
-import "../../../shared/widgets/account_selector.dart";
+import '../../../constants/functions.dart';
+import '../../../constants/style.dart';
+import '../../../model/transaction.dart';
+import '../../../providers/accounts_provider.dart';
+import '../../../providers/transactions_provider.dart';
+import "../../../widgets/account_selector.dart";
 import 'amount_section.dart';
 import "category_selector.dart";
-import '../../../shared/widgets/details_list_tile.dart';
+import '../../../widgets/details_list_tile.dart';
 import 'duplicate_transaction_dialog.dart';
-import '../../../shared/widgets/label_list_tile.dart';
+import '../../../widgets/label_list_tile.dart';
 import 'recurrence_list_tile.dart';
 
 class AddPage extends ConsumerStatefulWidget {

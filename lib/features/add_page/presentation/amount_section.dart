@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
-import '../../../shared/constants/constants.dart';
-import '../../../shared/constants/functions.dart';
-import "../../../shared/constants/style.dart";
-import '../../../shared/widgets/rounded_icon.dart';
-import '../../../shared/models/transaction.dart';
+import '../../../constants/constants.dart';
+import '../../../constants/functions.dart';
+import "../../../constants/style.dart";
+import '../../../widgets/rounded_icon.dart';
+import '../../../model/transaction.dart';
 // import '../../../providers/currency_provider.dart';
-import '../../../shared/providers/transactions_provider.dart';
-import '../../../shared/widgets/amount_widget.dart';
-import '../../../shared/widgets/account_selector.dart';
+import '../../../providers/transactions_provider.dart';
+import '../../../widgets/amount_widget.dart';
+import '../../../widgets/account_selector.dart';
 import 'type_tab.dart';
 
 class AmountSection extends ConsumerStatefulWidget {

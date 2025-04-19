@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../shared/providers/accounts_provider.dart';
-import '../../../shared/providers/transactions_provider.dart';
-import '../../../shared/widgets/transactions_list.dart';
-import '../../../shared/models/transaction.dart';
+import '../../../../providers/accounts_provider.dart';
+import '../../../../providers/transactions_provider.dart';
+import '../../../widgets/transactions_list.dart';
+import '../../../model/transaction.dart';
 
 class SearchPage extends ConsumerStatefulWidget {
   const SearchPage({super.key});

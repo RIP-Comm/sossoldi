@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../../database/sossoldi_database.dart';
+import '../database/sossoldi_database.dart';
 import 'base_entity.dart';
 import 'transaction.dart';
 import 'category_transaction.dart';

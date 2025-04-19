@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../database/sossoldi_database.dart';
-import '../../../shared/utils/csv_file_picker.dart';
+import '../../../utils/csv_file_picker.dart';
 
 class BackupPage extends ConsumerStatefulWidget {
   const BackupPage({super.key});

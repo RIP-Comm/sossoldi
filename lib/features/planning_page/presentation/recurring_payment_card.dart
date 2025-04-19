@@ -1,18 +1,18 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../shared/constants/constants.dart';
-import '../../../shared/widgets/rounded_icon.dart';
-import '../../../shared/models/recurring_transaction.dart';
-import '../../../shared/providers/theme_provider.dart';
+import '../../../constants/constants.dart';
+import '../../../widgets/rounded_icon.dart';
+import '../../../model/recurring_transaction.dart';
+import '../../../providers/theme_provider.dart';
 import 'older_recurring_payments.dart';
-import '../../../shared/providers/accounts_provider.dart';
-import '../../../shared/providers/currency_provider.dart';
+import '../../../providers/accounts_provider.dart';
+import '../../../providers/currency_provider.dart';
 
-import '../../../shared/constants/functions.dart';
-import '../../../shared/constants/style.dart';
-import '../../../shared/models/transaction.dart';
-import '../../../shared/providers/categories_provider.dart';
+import '../../../constants/functions.dart';
+import '../../../constants/style.dart';
+import '../../../model/transaction.dart';
+import '../../../providers/categories_provider.dart';
 
 /// This class shows account summaries in dashboard
 class RecurringPaymentCard extends ConsumerWidget with Functions {

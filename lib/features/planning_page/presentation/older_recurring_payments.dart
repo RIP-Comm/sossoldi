@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../shared/models/transaction.dart';
+import '../../../model/transaction.dart';
 import 'package:intl/intl.dart';
 
-import '../../../shared/models/recurring_transaction.dart';
-import '../../../shared/providers/currency_provider.dart';
+import '../../../model/recurring_transaction.dart';
+import '../../../providers/currency_provider.dart';
 
 class OlderRecurringPayments extends ConsumerStatefulWidget {
   final RecurringTransaction transaction;

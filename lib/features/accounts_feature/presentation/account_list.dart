@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../shared/constants/constants.dart';
-import '../../../shared/constants/functions.dart';
-import '../../../shared/widgets/default_card.dart';
-import '../../../shared/widgets/rounded_icon.dart';
-import '../../../shared/models/bank_account.dart';
-import '../../../shared/providers/accounts_provider.dart';
+import '../../../constants/constants.dart';
+import '../../../constants/functions.dart';
+import '../../../widgets/default_card.dart';
+import '../../../widgets/rounded_icon.dart';
+import '../../../model/bank_account.dart';
+import '../../../providers/accounts_provider.dart';
 
 class AccountList extends ConsumerStatefulWidget {
   const AccountList({super.key});

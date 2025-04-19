@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../shared/widgets/transactions_list.dart';
-import '../../../shared/providers/transactions_provider.dart';
+import '../../../widgets/transactions_list.dart';
+import '../../../providers/transactions_provider.dart';
 
 class ListTab extends ConsumerWidget {
   const ListTab({super.key});

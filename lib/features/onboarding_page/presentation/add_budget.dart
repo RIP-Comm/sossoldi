@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../shared/constants/functions.dart';
-import '../../../shared/constants/style.dart';
-import '../../../shared/models/budget.dart';
-import '../../../shared/models/category_transaction.dart';
-import '../../../shared/providers/budgets_provider.dart';
+import '../../../constants/functions.dart';
+import '../../../constants/style.dart';
+import '../../../model/budget.dart';
+import '../../../model/category_transaction.dart';
+import '../../../providers/budgets_provider.dart';
 
 class AddBudget extends ConsumerStatefulWidget {
   final CategoryTransaction category;

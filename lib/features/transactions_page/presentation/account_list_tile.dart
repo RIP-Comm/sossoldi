@@ -1,11 +1,11 @@
 import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../shared/constants/functions.dart';
-import '../../../shared/constants/style.dart';
-import '../../../shared/widgets/rounded_icon.dart';
-import '../../../shared/models/transaction.dart';
-import '../../../shared/providers/currency_provider.dart';
+import '../../../constants/functions.dart';
+import '../../../constants/style.dart';
+import '../../../widgets/rounded_icon.dart';
+import '../../../model/transaction.dart';
+import '../../../providers/currency_provider.dart';
 import 'accounts_tab.dart';
 
 class AccountListTile extends ConsumerWidget {

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../shared/constants/style.dart';
-import '../../../shared/providers/settings_provider.dart';
-import '../../../shared/utils/notifications_service.dart';
+import '../../../constants/style.dart';
+import '../../../providers/settings_provider.dart';
+import '../../../utils/notifications_service.dart';
 import 'notification_type_tile.dart';
 
 class NotificationsSettings extends ConsumerStatefulWidget {

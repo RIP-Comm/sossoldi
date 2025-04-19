@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../shared/models/budget.dart';
-import '../../../shared/models/category_transaction.dart';
+import '../../../model/budget.dart';
+import '../../../model/category_transaction.dart';
 import 'budget_category_selector.dart';
-import '../../../shared/providers/categories_provider.dart';
-import '../../../shared/providers/budgets_provider.dart';
+import '../../../../providers/categories_provider.dart';
+import '../../../../providers/budgets_provider.dart';
 
 class ManageBudgetPage extends ConsumerStatefulWidget {
   final Function() onRefreshBudgets;

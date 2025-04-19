@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../shared/constants/style.dart';
-import '../../../../shared/providers/categories_provider.dart';
-import '../../../../shared/providers/transactions_provider.dart';
+import '../../../../constants/style.dart';
+import '../../../../providers/categories_provider.dart';
+import '../../../../providers/transactions_provider.dart';
 
 final highlightedMonthProvider =
     StateProvider<int>((ref) => DateTime.now().month - 1);

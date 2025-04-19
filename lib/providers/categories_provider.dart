@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../models/category_transaction.dart';
-import '../models/transaction.dart';
+import '../model/category_transaction.dart';
+import '../model/transaction.dart';
 import 'transactions_provider.dart';
 
 final categoryTransactionTypeList = Provider<List<CategoryTransactionType>>(

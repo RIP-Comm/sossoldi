@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../shared/providers/accounts_provider.dart';
+import '../../../providers/accounts_provider.dart';
 import 'accounts_list.dart';
 
 class YourAccountsSection extends ConsumerWidget {
