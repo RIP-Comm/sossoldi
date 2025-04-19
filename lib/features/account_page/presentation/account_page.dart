@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../constants/functions.dart';
-import '../../constants/style.dart';
-import '../../custom_widgets/line_chart.dart';
-import '../../custom_widgets/transactions_list.dart';
-import '../../providers/accounts_provider.dart';
-import '../../model/transaction.dart';
-import '../../providers/currency_provider.dart';
-import '../../utils/decimal_text_input_formatter.dart';
+import '../../../constants/functions.dart';
+import '../../../constants/style.dart';
+import '../../../custom_widgets/line_chart.dart';
+import '../../../custom_widgets/transactions_list.dart';
+import '../../../providers/accounts_provider.dart';
+import '../../../model/transaction.dart';
+import '../../../providers/currency_provider.dart';
+import '../../../utils/decimal_text_input_formatter.dart';
 
 class AccountPage extends ConsumerStatefulWidget {
   const AccountPage({super.key});
