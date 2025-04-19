@@ -6,6 +6,8 @@ import '../../model/category_transaction.dart';
 import '../../providers/categories_provider.dart';
 import '../../ui/device.dart';
 import '../../ui/extensions.dart';
+import '../../ui/widgets/alert_dialog.dart';
+import 'widgets/delete_category_dialog.dart';
 
 class AddCategory extends ConsumerStatefulWidget {
   final bool hideIncome;
@@ -43,6 +45,27 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
   void dispose() {
     nameController.dispose();
     super.dispose();
+  }
+
+  bool _isDuplicateCategory() {
+    final existingCategoriesAsync =
+        ref.read(categoriesProvider(userCategoriesFilter));
+    final selectedCategory = ref.read(selectedCategoryProvider);
+
+    if (existingCategoriesAsync is AsyncData) {
+      final existingCategories = existingCategoriesAsync.value;
+
+      return existingCategories!.any((category) {
+        if (selectedCategory != null && category.id == selectedCategory.id) {
+          return false;
+        }
+        return category.name == nameController.text &&
+            category.type == categoryType &&
+            category.symbol == categoryIcon &&
+            category.color == categoryColor;
+      });
+    }
+    return false;
   }
 
   @override
@@ -125,11 +148,8 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
                           underline: const SizedBox(),
                           isExpanded: true,
                           items: (widget.hideIncome
-                                  ? [
-                                      CategoryTransactionType.expense
-                                    ] // Only show 'expense' if true
-                                  : CategoryTransactionType
-                                      .values) // Otherwise, show all values
+                                  ? [CategoryTransactionType.expense]
+                                  : CategoryTransactionType.values)
                               .map((CategoryTransactionType type) {
                             return DropdownMenuItem<CategoryTransactionType>(
                               value: type,
@@ -375,14 +395,8 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
                       width: double.infinity,
                       padding: const EdgeInsets.all(Sizes.lg),
                       child: TextButton.icon(
-                        onPressed: () => ref
-                            .read(categoriesProvider.notifier)
-                            .removeCategory(selectedCategory.id!)
-                            .whenComplete(() {
-                          if (context.mounted) {
-                            Navigator.of(context).pop();
-                          }
-                        }),
+                        onPressed: () => showDeleteCategoryDialog(
+                            context, ref, selectedCategory),
                         style: TextButton.styleFrom(
                           side: const BorderSide(color: red, width: 1),
                         ),
@@ -426,28 +440,39 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
               ),
               child: ElevatedButton(
                 onPressed: () async {
-                  if (nameController.text.isNotEmpty) {
-                    if (selectedCategory != null) {
-                      await ref
-                          .read(categoriesProvider.notifier)
-                          .updateCategory(
-                            name: nameController.text,
-                            type: categoryType,
-                            icon: categoryIcon,
-                            color: categoryColor,
-                          );
-                    } else {
-                      await ref.read(categoriesProvider.notifier).addCategory(
-                            name: nameController.text,
-                            type: categoryType,
-                            icon: categoryIcon,
-                            color: categoryColor,
-                          );
-                    }
-                    ref.invalidate(selectedCategoryProvider);
-                    ref.invalidate(categoryMapProvider);
-                    if (context.mounted) Navigator.of(context).pop();
+                  if (nameController.text.isEmpty) {
+                    showWarningDialog(context, "Category name cannot be empty");
+                    return;
                   }
+
+                  if (_isDuplicateCategory()) {
+                    showErrorDialog(
+                        context, "An identical category already exists");
+                    return;
+                  }
+
+                  if (selectedCategory != null) {
+                    await ref
+                        .read(categoriesProvider(userCategoriesFilter).notifier)
+                        .updateCategory(
+                          name: nameController.text,
+                          type: categoryType,
+                          icon: categoryIcon,
+                          color: categoryColor,
+                        );
+                  } else {
+                    await ref
+                        .read(categoriesProvider(userCategoriesFilter).notifier)
+                        .addCategory(
+                          name: nameController.text,
+                          type: categoryType,
+                          icon: categoryIcon,
+                          color: categoryColor,
+                        );
+                  }
+                  ref.invalidate(selectedCategoryProvider);
+                  ref.invalidate(categoryMapProvider);
+                  if (context.mounted) Navigator.of(context).pop();
                 },
                 child: Text(
                   "${selectedCategory == null ? "CREATE" : "UPDATE"} CATEGORY",

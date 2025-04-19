@@ -35,6 +35,7 @@ const grey1 = Color(0xFF666666);
 const grey2 = Color(0xFFB9BABC);
 const grey3 = Color(0xFFF4F4F4);
 
+const category0 = Color(0xFFB9BABC);
 const category1 = Color(0xFFEDC31C);
 const category2 = Color(0xFFF68428);
 const category3 = Color(0xFFFF4754);
@@ -71,6 +72,7 @@ const darkGrey2 = Color(0xFFC6C7C8);
 const darkGrey3 = Color(0xFF181E25);
 const darkGrey4 = Color(0xFF2E3338);
 
+const darkCategory0 = Color(0xFFB9BABC);
 const darkCategory1 = Color(0xFFE3B912);
 const darkCategory2 = Color(0xFFF6740C);
 const darkCategory3 = Color(0xFFFA3240);
