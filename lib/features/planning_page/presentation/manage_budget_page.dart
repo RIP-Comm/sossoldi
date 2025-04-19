@@ -5,8 +5,8 @@ import '../../../shared/models/budget.dart';
 import '../../../shared/models/category_transaction.dart';
 import '../../../ui/device.dart';
 import 'budget_category_selector.dart';
-import '../../../../providers/categories_provider.dart';
-import '../../../../providers/budgets_provider.dart';
+import '../../../shared/providers/categories_provider.dart';
+import '../../../shared/providers/budgets_provider.dart';
 
 class ManageBudgetPage extends ConsumerStatefulWidget {
   final Function() onRefreshBudgets;

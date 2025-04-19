@@ -6,8 +6,8 @@ import '../../../../constants/constants.dart';
 import '../../../../constants/style.dart';
 import '../../../../ui/widgets/rounded_icon.dart';
 import '../../../../shared/models/category_transaction.dart';
-import '../../../../providers/categories_provider.dart';
-import '../../../../providers/currency_provider.dart';
+import '../../../../shared/providers/categories_provider.dart';
+import '../../../../shared/providers/currency_provider.dart';
 import '../../../../ui/device.dart';
 
 class CategoriesPieChart2 extends ConsumerWidget {

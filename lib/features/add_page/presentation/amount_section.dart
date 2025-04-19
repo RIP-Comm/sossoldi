@@ -8,7 +8,7 @@ import '../../../ui/widgets/account_selector.dart';
 import '../../../ui/widgets/amount_widget.dart';
 import '../../../ui/widgets/rounded_icon.dart';
 import '../../../shared/models/transaction.dart';
-import '../../../providers/transactions_provider.dart';
+import '../../../shared/providers/transactions_provider.dart';
 import '../../../ui/device.dart';
 import 'type_tab.dart';
 

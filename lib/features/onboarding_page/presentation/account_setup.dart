@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants/constants.dart';
-import '../../../providers/accounts_provider.dart';
+import '../../../shared/providers/accounts_provider.dart';
 import '../../../utils/decimal_text_input_formatter.dart';
 import '../../../ui/device.dart';
 import '/constants/style.dart';

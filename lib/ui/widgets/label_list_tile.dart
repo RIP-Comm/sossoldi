@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'rounded_icon.dart';
 import '../../constants/style.dart';
-import '../../providers/theme_provider.dart';
+import '../../shared/providers/theme_provider.dart';
 import '../../../ui/device.dart';
 
 class LabelListTile extends ConsumerWidget {

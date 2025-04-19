@@ -1,7 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../shared/models/transaction.dart';
+import '../models/transaction.dart';
 
 final currentYearMontlyTransactionsProvider =
     StateProvider<List<FlSpot>>((ref) => const []);

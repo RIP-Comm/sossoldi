@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../providers/accounts_provider.dart';
-import '../../../providers/currency_provider.dart';
+import '../../../shared/providers/accounts_provider.dart';
+import '../../../shared/providers/currency_provider.dart';
 import '../../../shared/models/bank_account.dart';
 import '../../../ui/widgets/linear_progress_bar.dart';
 import 'card_label.dart';

@@ -6,7 +6,7 @@ import '../../../constants/constants.dart';
 import '../../../constants/style.dart';
 import '../../../ui/widgets/rounded_icon.dart';
 import '../../../shared/models/category_transaction.dart';
-import '../../../providers/currency_provider.dart';
+import '../../../shared/providers/currency_provider.dart';
 import '../data/selected_category_index_provider.dart';
 import '../../../ui/device.dart';
 

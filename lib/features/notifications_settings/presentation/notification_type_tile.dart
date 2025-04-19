@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../providers/settings_provider.dart';
+import '../../../shared/providers/settings_provider.dart';
 import '../../../ui/device.dart';
 
 class NotificationTypeTile extends ConsumerWidget {

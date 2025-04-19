@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../providers/accounts_provider.dart';
+import '../../../shared/providers/accounts_provider.dart';
 import '../../../constants/constants.dart';
 import '../../../constants/style.dart';
-import '../../../providers/currency_provider.dart';
+import '../../../shared/providers/currency_provider.dart';
 import '../../../utils/decimal_text_input_formatter.dart';
 import 'confirm_account_deletion_dialog.dart';
 import '../../../ui/device.dart';

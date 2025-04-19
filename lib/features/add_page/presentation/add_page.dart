@@ -6,8 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/style.dart';
 import '../../../shared/models/transaction.dart';
-import '../../../providers/accounts_provider.dart';
-import '../../../providers/transactions_provider.dart';
+import '../../../shared/providers/accounts_provider.dart';
+import '../../../shared/providers/transactions_provider.dart';
 import '../../../ui/widgets/account_selector.dart';
 import '../../../ui/widgets/details_list_tile.dart';
 import '../../../ui/widgets/label_list_tile.dart';

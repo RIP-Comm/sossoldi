@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
 import '../../../constants/style.dart';
 import '../../../shared/models/category_transaction.dart';
-import '../../../providers/categories_provider.dart';
+import '../../../shared/providers/categories_provider.dart';
 import '../../../ui/device.dart';
 import '../../../ui/extensions.dart';
 

@@ -3,9 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/style.dart';
-import '../../../providers/accounts_provider.dart';
+import '../../../shared/providers/accounts_provider.dart';
 import '../../../shared/models/transaction.dart';
-import '../../../providers/currency_provider.dart';
+import '../../../shared/providers/currency_provider.dart';
 import '../../../utils/decimal_text_input_formatter.dart';
 import '../../../ui/extensions.dart';
 import '../../../ui/widgets/line_chart.dart';

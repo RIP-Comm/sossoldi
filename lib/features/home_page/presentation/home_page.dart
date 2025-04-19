@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../providers/transactions_provider.dart';
+import '../../../shared/providers/transactions_provider.dart';
 import '../../../ui/device.dart';
 import '../../graphs_page/presentation/graphs_page.dart';
 import '../../../utils/snack_bars/transactions_snack_bars.dart';

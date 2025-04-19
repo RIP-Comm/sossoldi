@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/style.dart';
-import '../../../providers/currency_provider.dart';
-import '../../../providers/dashboard_provider.dart';
+import '../../../shared/providers/currency_provider.dart';
+import '../../../shared/providers/dashboard_provider.dart';
 import '../../../ui/extensions.dart';
 import '../../../ui/widgets/line_chart.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../providers/budgets_provider.dart';
+import '../../../shared/providers/budgets_provider.dart';
 import 'budgets_list.dart';
 
 class BudgetsSection extends ConsumerWidget {

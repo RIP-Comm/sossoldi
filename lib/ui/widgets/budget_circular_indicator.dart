@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import '../../providers/currency_provider.dart';
+import '../../shared/providers/currency_provider.dart';
 import '../device.dart';
 import '../extensions.dart';
 

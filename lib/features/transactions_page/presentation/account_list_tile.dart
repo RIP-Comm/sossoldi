@@ -5,7 +5,7 @@ import '../../../constants/style.dart';
 import '../../../ui/extensions.dart';
 import '../../../ui/widgets/rounded_icon.dart';
 import '../../../shared/models/transaction.dart';
-import '../../../providers/currency_provider.dart';
+import '../../../shared/providers/currency_provider.dart';
 import '../../../ui/device.dart';
 import 'accounts_tab.dart';
 

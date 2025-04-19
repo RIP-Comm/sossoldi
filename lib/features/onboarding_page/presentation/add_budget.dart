@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/style.dart';
 import '../../../shared/models/budget.dart';
 import '../../../shared/models/category_transaction.dart';
-import '../../../providers/budgets_provider.dart';
+import '../../../shared/providers/budgets_provider.dart';
 import '../../../ui/device.dart';
 
 class AddBudget extends ConsumerStatefulWidget {

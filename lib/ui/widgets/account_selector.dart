@@ -5,8 +5,8 @@ import '../../constants/constants.dart';
 import '../../constants/style.dart';
 import 'rounded_icon.dart';
 import '../../shared/models/bank_account.dart';
-import '../../providers/accounts_provider.dart';
-import '../../providers/transactions_provider.dart';
+import '../../shared/providers/accounts_provider.dart';
+import '../../shared/providers/transactions_provider.dart';
 import '../../../ui/device.dart';
 
 class AccountSelector extends ConsumerStatefulWidget {

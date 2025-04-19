@@ -4,7 +4,7 @@ import '../../../shared/models/transaction.dart';
 import 'package:intl/intl.dart';
 
 import '../../../shared/models/recurring_transaction.dart';
-import '../../../providers/currency_provider.dart';
+import '../../../shared/providers/currency_provider.dart';
 
 class OlderRecurringPayments extends ConsumerStatefulWidget {
   final RecurringTransaction transaction;

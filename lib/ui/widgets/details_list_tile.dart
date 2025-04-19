@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
 import "../../constants/style.dart";
-import "../../providers/theme_provider.dart";
+import "../../shared/providers/theme_provider.dart";
 import "rounded_icon.dart";
 import "../../../ui/device.dart";
 

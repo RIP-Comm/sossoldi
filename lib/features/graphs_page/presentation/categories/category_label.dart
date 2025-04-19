@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../providers/currency_provider.dart';
+import '../../../../shared/providers/currency_provider.dart';
 
 import '../../../../shared/models/category_transaction.dart';
 
