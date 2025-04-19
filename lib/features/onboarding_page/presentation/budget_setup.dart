@@ -2,12 +2,12 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../features/add_category_feature/presentation/add_category.dart';
+import '../../add_category_feature/presentation/add_category.dart';
 import '/constants/constants.dart';
 import '/constants/style.dart';
 import '/model/budget.dart';
-import '/pages/onboarding_page/widgets/account_setup.dart';
-import '/pages/onboarding_page/widgets/add_budget.dart';
+import 'account_setup.dart';
+import 'add_budget.dart';
 import '/providers/budgets_provider.dart';
 import '/providers/categories_provider.dart';
 import 'add_category_button.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '/pages/onboarding_page/widgets/budget_setup.dart';
+import 'budget_setup.dart';
 import '/constants/style.dart';
 
 class Onboarding extends StatefulWidget {

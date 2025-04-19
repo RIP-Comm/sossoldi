@@ -16,7 +16,7 @@ import 'features/more_info_page/presentation/collaborators_page.dart';
 import 'features/more_info_page/presentation/more_info.dart';
 import 'features/more_info_page/presentation/privacy_policy.dart';
 import 'features/notifications_settings/presentation/notifications_settings.dart';
-import 'pages/onboarding_page/onboarding_page.dart';
+import 'features/onboarding_page/presentation/onboarding_page.dart';
 import 'pages/planning_page/planning_page.dart';
 import 'pages/search_page/search_page.dart';
 import 'pages/settings_page.dart';
