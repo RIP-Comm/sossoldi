@@ -9,7 +9,6 @@ import '../../../providers/transactions_provider.dart';
 
 Future<void> showDeleteCategoryDialog(
     BuildContext context, WidgetRef ref, selectedCategory) async {
-  
   void backToCategoryList() {
     if (context.mounted) {
       Navigator.of(context)
@@ -65,7 +64,7 @@ Future<void> showDeleteCategoryDialog(
                 style: TextStyle(color: Theme.of(context).colorScheme.primary),
               ),
               onPressed: () async {
-                 await ref
+                await ref
                     .read(categoriesProvider(userCategoriesFilter).notifier)
                     .removeCategory(selectedCategory.id!);
                 invalidateProviders();
