@@ -9,7 +9,7 @@ import 'features/accounts_feature/presentation/add_account.dart';
 import 'features/add_page/presentation/add_page.dart';
 import 'features/add_category_feature/presentation/add_category.dart';
 import 'features/add_category_feature/presentation/category_list.dart';
-import 'pages/general_options/general_settings.dart';
+import 'features/general_options/presentation/general_settings_page.dart';
 import 'pages/graphs_page/graphs_page.dart';
 import 'features/dashboard_page/presentation/dashboard_page.dart';
 import 'pages/more_info_page/collaborators_page.dart';
