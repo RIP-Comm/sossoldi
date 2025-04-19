@@ -2,8 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
 import 'package:sossoldi/database/sossoldi_database.dart';
 
-import 'package:sossoldi/models/transaction.dart';
-import 'package:sossoldi/models/base_entity.dart';
+import 'package:sossoldi/shared/models/transaction.dart';
+import 'package:sossoldi/shared/models/base_entity.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
 import 'package:sqflite_common_ffi/sqflite_ffi.dart' as sqflite_ffi;
 

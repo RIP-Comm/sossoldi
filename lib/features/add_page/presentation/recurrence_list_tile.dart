@@ -9,7 +9,7 @@ import '../../../ui/extensions.dart';
 import '../../../ui/widgets/rounded_icon.dart';
 import '../../../providers/theme_provider.dart';
 import '../../../providers/transactions_provider.dart';
-import '../../../models/transaction.dart';
+import '../../../shared/models/transaction.dart';
 import '../../../ui/device.dart';
 import 'recurrence_selector.dart';
 

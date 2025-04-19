@@ -1,5 +1,5 @@
 import 'transaction.dart';
-import '../database/sossoldi_database.dart';
+import '../../database/sossoldi_database.dart';
 import 'category_transaction.dart';
 import 'base_entity.dart';
 

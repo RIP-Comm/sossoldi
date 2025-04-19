@@ -6,7 +6,7 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 
-import 'models/recurring_transaction.dart';
+import 'shared/models/recurring_transaction.dart';
 import 'providers/theme_provider.dart';
 import 'routes.dart';
 import 'utils/app_theme.dart';

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../ui/widgets/default_container.dart';
-import '../../../models/budget.dart';
-import '../../../models/transaction.dart';
+import '../../../shared/models/budget.dart';
+import '../../../shared/models/transaction.dart';
 import '../../../providers/budgets_provider.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';

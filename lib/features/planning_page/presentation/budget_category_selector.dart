@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
-import '../../../models/budget.dart';
-import '../../../models/category_transaction.dart';
+import '../../../shared/models/budget.dart';
+import '../../../shared/models/category_transaction.dart';
 import '../../../utils/decimal_text_input_formatter.dart';
 import '../../../ui/device.dart';
 

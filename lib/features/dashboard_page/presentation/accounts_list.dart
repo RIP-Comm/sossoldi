@@ -6,7 +6,7 @@ import '../../../providers/accounts_provider.dart';
 import '../../../providers/theme_provider.dart';
 import '../../../ui/widgets/accounts_sum.dart';
 import '../../../ui/widgets/rounded_icon.dart';
-import '../../../models/bank_account.dart';
+import '../../../shared/models/bank_account.dart';
 
 class AccountsList extends ConsumerWidget {
   const AccountsList({

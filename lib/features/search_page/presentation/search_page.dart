@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../providers/accounts_provider.dart';
 import '../../../../providers/transactions_provider.dart';
-import '../../../models/transaction.dart';
+import '../../../shared/models/transaction.dart';
 import '../../../ui/device.dart';
 import '../../../ui/widgets/transactions_list.dart';
 

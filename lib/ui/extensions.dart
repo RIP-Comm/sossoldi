@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../constants/style.dart';
-import '../models/transaction.dart';
+import '../shared/models/transaction.dart';
 
 /// Adds extensions to num  to make creating durations more succint:
 ///

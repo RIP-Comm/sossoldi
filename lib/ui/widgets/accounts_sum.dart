@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
-import '../../models/bank_account.dart';
+import '../../shared/models/bank_account.dart';
 import '../../../constants/style.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/currency_provider.dart';

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
-import '../../../models/budget.dart';
+import '../../../shared/models/budget.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../ui/device.dart';
 

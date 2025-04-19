@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 import '../../../constants/style.dart';
-import '../../../models/budget.dart';
+import '../../../shared/models/budget.dart';
 import '../../../ui/device.dart';
 
 class CategoryButton extends StatelessWidget {

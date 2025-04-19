@@ -2,7 +2,7 @@ import 'package:sqflite/sqflite.dart';
 import '../migration_base.dart';
 
 // Models
-import '../../models/bank_account.dart';
+import '../../shared/models/bank_account.dart';
 
 class AccountNetWorth extends Migration {
   AccountNetWorth()

@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../features/home_page/data/duplicated_transactions_provider.dart';
-import '../models/bank_account.dart';
-import '../models/category_transaction.dart';
-import '../models/recurring_transaction.dart';
-import '../models/transaction.dart';
+import '../shared/models/bank_account.dart';
+import '../shared/models/category_transaction.dart';
+import '../shared/models/recurring_transaction.dart';
+import '../shared/models/transaction.dart';
 import 'accounts_provider.dart';
 import 'budgets_provider.dart';
 import 'dashboard_provider.dart';
