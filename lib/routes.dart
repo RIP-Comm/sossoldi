@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'features/account_page/presentation/account_page.dart';
-import 'pages/accounts/account_list.dart';
-import 'pages/accounts/add_account.dart';
+import 'features/accounts_feature/presentation/account_list.dart';
+import 'features/accounts_feature/presentation/add_account.dart';
 import 'pages/add_page/add_page.dart';
 import 'pages/categories/add_category.dart';
 import 'pages/categories/category_list.dart';

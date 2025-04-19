@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../providers/accounts_provider.dart';
-import '../../constants/constants.dart';
-import '../../constants/functions.dart';
-import '../../constants/style.dart';
-import '../../providers/currency_provider.dart';
-import '../../utils/decimal_text_input_formatter.dart';
-import 'widgets/confirm_account_deletion_dialog.dart';
+import '../../../providers/accounts_provider.dart';
+import '../../../constants/constants.dart';
+import '../../../constants/functions.dart';
+import '../../../constants/style.dart';
+import '../../../providers/currency_provider.dart';
+import '../../../utils/decimal_text_input_formatter.dart';
+import 'confirm_account_deletion_dialog.dart';
 
 class AddAccount extends ConsumerStatefulWidget {
   const AddAccount({super.key});
