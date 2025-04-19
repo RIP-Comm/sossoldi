@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
-import '../../../widgets/budget_circular_indicator.dart';
+import '../../../custom_widgets/budget_circular_indicator.dart';
 import '../../../model/budget.dart';
 
 class BudgetsList extends ConsumerWidget {

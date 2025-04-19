@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../widgets/default_container.dart';
+import '../../../custom_widgets/default_container.dart';
 import '../../../model/budget.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/budgets_provider.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
-import '../../../widgets/linear_progress_bar.dart';
+import '../../../custom_widgets/linear_progress_bar.dart';
 import 'manage_budget_page.dart';
 import 'budget_pie_chart.dart';
 

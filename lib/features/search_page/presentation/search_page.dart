@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../providers/accounts_provider.dart';
 import '../../../../providers/transactions_provider.dart';
-import '../../../widgets/transactions_list.dart';
+import '../../../custom_widgets/transactions_list.dart';
 import '../../../model/transaction.dart';
 
 class SearchPage extends ConsumerStatefulWidget {

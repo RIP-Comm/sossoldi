@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../widgets/transactions_list.dart';
+import '../../../custom_widgets/transactions_list.dart';
 import '../../../providers/transactions_provider.dart';
 
 class LastTransactionsSection extends ConsumerWidget {

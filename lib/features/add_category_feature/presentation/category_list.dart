@@ -5,8 +5,8 @@ import '../../../../constants/constants.dart';
 import '../../../../constants/functions.dart';
 import '../../../../model/category_transaction.dart';
 import '../../../../providers/categories_provider.dart';
-import '../../../widgets/default_card.dart';
-import '../../../widgets/rounded_icon.dart';
+import '../../../custom_widgets/default_card.dart';
+import '../../../custom_widgets/rounded_icon.dart';
 
 class CategoryList extends ConsumerStatefulWidget {
   const CategoryList({super.key});

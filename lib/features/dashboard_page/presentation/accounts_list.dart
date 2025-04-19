@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/style.dart';
-import '../../../widgets/rounded_icon.dart';
+import '../../../custom_widgets/rounded_icon.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/theme_provider.dart';
 import 'accounts_sum.dart';
