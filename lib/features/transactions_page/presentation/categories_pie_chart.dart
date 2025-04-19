@@ -7,8 +7,8 @@ import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
 import '../../../custom_widgets/rounded_icon.dart';
 import '../../../model/category_transaction.dart';
-import '../../../providers/categories_provider.dart';
 import '../../../providers/currency_provider.dart';
+import '../data/selected_category_index_provider.dart';
 
 class CategoriesPieChart extends ConsumerWidget with Functions {
   const CategoriesPieChart({
