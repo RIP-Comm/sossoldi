@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../providers/currency_provider.dart';
 
-import '../../../../model/category_transaction.dart';
+import '../../../../models/category_transaction.dart';
 
 class CategoryLabel extends ConsumerWidget {
   const CategoryLabel({

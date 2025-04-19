@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/style.dart';
-import '../../../model/transaction.dart';
+import '../../../models/transaction.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../ui/widgets/account_selector.dart';

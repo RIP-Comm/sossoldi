@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:sossoldi/model/recurring_transaction.dart';
-import 'package:sossoldi/model/base_entity.dart';
+import 'package:sossoldi/models/recurring_transaction.dart';
+import 'package:sossoldi/models/base_entity.dart';
 
 void main() {
   test('Test Copy Recurring Transaction Amount', () {

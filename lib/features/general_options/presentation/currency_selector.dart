@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../constants/style.dart';
-import '../../../model/currency.dart';
+import '../../../models/currency.dart';
 import '../../../providers/currency_provider.dart';
 
 class CurrencySelectorDialog {

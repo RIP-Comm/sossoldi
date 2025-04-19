@@ -6,8 +6,8 @@ import '../../../constants/style.dart';
 import '../data/selected_category_index_provider.dart';
 import '../../../ui/extensions.dart';
 import '../../../ui/widgets/rounded_icon.dart';
-import '../../../model/category_transaction.dart';
-import '../../../model/transaction.dart';
+import '../../../models/category_transaction.dart';
+import '../../../models/transaction.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../ui/device.dart';
 

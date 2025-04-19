@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
 
-import '../model/bank_account.dart';
-import '../model/transaction.dart';
+import '../models/bank_account.dart';
+import '../models/transaction.dart';
 import 'dashboard_provider.dart';
 import 'transactions_provider.dart';
 

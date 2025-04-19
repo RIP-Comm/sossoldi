@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/currency_provider.dart';
-import '../../../model/bank_account.dart';
+import '../../../models/bank_account.dart';
 import '../../../ui/widgets/linear_progress_bar.dart';
 import 'card_label.dart';
 import '../../../../ui/device.dart';

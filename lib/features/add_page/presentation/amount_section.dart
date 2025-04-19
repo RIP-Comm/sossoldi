@@ -7,7 +7,7 @@ import '../../../ui/extensions.dart';
 import '../../../ui/widgets/account_selector.dart';
 import '../../../ui/widgets/amount_widget.dart';
 import '../../../ui/widgets/rounded_icon.dart';
-import '../../../model/transaction.dart';
+import '../../../models/transaction.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../ui/device.dart';
 import 'type_tab.dart';

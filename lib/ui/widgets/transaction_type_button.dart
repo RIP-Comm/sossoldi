@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/style.dart';
-import '../../../model/transaction.dart';
+import '../../models/transaction.dart';
 import '../../features/transactions_page/data/selected_category_index_provider.dart';
 import '../../features/transactions_page/presentation/accounts_tab.dart';
 import '../device.dart';

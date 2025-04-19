@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/style.dart';
 import '../../../providers/accounts_provider.dart';
-import '../../../model/transaction.dart';
+import '../../../models/transaction.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../utils/decimal_text_input_formatter.dart';
 import '../../../ui/extensions.dart';

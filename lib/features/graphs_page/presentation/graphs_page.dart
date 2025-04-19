@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/style.dart';
-import '../../../model/transaction.dart';
+import '../../../models/transaction.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../providers/statistics_provider.dart';
 import 'categories/categories_card.dart';

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/style.dart';
-import '../../../model/budget.dart';
-import '../../../model/category_transaction.dart';
+import '../../../models/budget.dart';
+import '../../../models/category_transaction.dart';
 import '../../../providers/budgets_provider.dart';
 import '../../../ui/device.dart';
 

@@ -6,7 +6,7 @@ import '../../add_category_feature/presentation/add_category.dart';
 import '../../../ui/device.dart';
 import '/constants/constants.dart';
 import '/constants/style.dart';
-import '/model/budget.dart';
+import '../../../models/budget.dart';
 import 'account_setup.dart';
 import 'add_budget.dart';
 import '/providers/budgets_provider.dart';

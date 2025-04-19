@@ -2,12 +2,12 @@ import 'package:sqflite/sqflite.dart';
 import '../migration_base.dart';
 
 // Models
-import '/model/bank_account.dart';
-import '/model/budget.dart';
-import '/model/category_transaction.dart';
-import '/model/currency.dart';
-import '/model/recurring_transaction.dart';
-import '/model/transaction.dart';
+import '../../models/bank_account.dart';
+import '../../models/budget.dart';
+import '../../models/category_transaction.dart';
+import '../../models/currency.dart';
+import '../../models/recurring_transaction.dart';
+import '../../models/transaction.dart';
 
 class InitialSchema extends Migration {
   InitialSchema()

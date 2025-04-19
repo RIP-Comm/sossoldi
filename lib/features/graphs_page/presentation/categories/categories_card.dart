@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../ui/widgets/category_type_button.dart';
 import '../../../../ui/widgets/default_container.dart';
-import '../../../../model/category_transaction.dart';
+import '../../../../models/category_transaction.dart';
 import '../../../../providers/categories_provider.dart';
 import '../../../../ui/device.dart';
 import '../../../../ui/widgets/linear_progress_bar.dart';
