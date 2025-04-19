@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../model/transaction.dart';
-import '../../../constants/functions.dart';
-import '../../../providers/transactions_provider.dart';
+import '../../../shared/models/transaction.dart';
+import '../../../shared/constants/functions.dart';
+import '../../../shared/providers/transactions_provider.dart';
 
 class RecurrenceSelector extends ConsumerStatefulWidget {
   const RecurrenceSelector({super.key});

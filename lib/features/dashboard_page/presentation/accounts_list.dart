@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../constants/style.dart';
-import '../../../widgets/rounded_icon.dart';
-import '../../../providers/accounts_provider.dart';
-import '../../../providers/theme_provider.dart';
+import '../../../shared/constants/style.dart';
+import '../../../shared/widgets/rounded_icon.dart';
+import '../../../shared/providers/accounts_provider.dart';
+import '../../../shared/providers/theme_provider.dart';
 import 'accounts_sum.dart';
-import '../../../model/bank_account.dart';
+import '../../../shared/models/bank_account.dart';
 
 class AccountsList extends ConsumerWidget {
   const AccountsList({

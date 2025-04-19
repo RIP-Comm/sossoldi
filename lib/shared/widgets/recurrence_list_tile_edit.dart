@@ -8,8 +8,8 @@ import '../constants/functions.dart';
 import "../constants/style.dart";
 import '../providers/theme_provider.dart';
 import '../providers/transactions_provider.dart';
-import '../model/transaction.dart';
-import '../features/add_page/presentation/recurrence_selector.dart';
+import '../models/transaction.dart';
+import '../../features/add_page/presentation/recurrence_selector.dart';
 
 class RecurrenceListTileEdit extends ConsumerWidget with Functions {
   const RecurrenceListTileEdit({

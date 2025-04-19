@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../constants/constants.dart';
-import '../../../widgets/budget_circular_indicator.dart';
-import '../../../model/budget.dart';
+import '../../../shared/constants/constants.dart';
+import '../../../shared/widgets/budget_circular_indicator.dart';
+import '../../../shared/models/budget.dart';
 
 class BudgetsList extends ConsumerWidget {
   const BudgetsList({

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../constants/functions.dart';
-import '../../../constants/style.dart';
-import '../../../widgets/line_chart.dart';
-import '../../../providers/currency_provider.dart';
-import '../../../providers/dashboard_provider.dart';
+import '../../../shared/constants/functions.dart';
+import '../../../shared/constants/style.dart';
+import '../../../shared/widgets/line_chart.dart';
+import '../../../shared/providers/currency_provider.dart';
+import '../../../shared/providers/dashboard_provider.dart';
 
 class DashboardData extends ConsumerWidget with Functions {
   const DashboardData({super.key});

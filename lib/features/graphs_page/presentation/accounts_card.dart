@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../widgets/linear_progress_bar.dart';
-import '../../../constants/functions.dart';
-import '../../../widgets/default_container.dart';
-import '../../../providers/accounts_provider.dart';
-import '../../../providers/currency_provider.dart';
-import '../../../model/bank_account.dart';
+import '../../../shared/widgets/linear_progress_bar.dart';
+import '../../../shared/constants/functions.dart';
+import '../../../shared/widgets/default_container.dart';
+import '../../../shared/providers/accounts_provider.dart';
+import '../../../shared/providers/currency_provider.dart';
+import '../../../shared/models/bank_account.dart';
 import 'card_label.dart';
 
 class AccountsCard extends ConsumerWidget with Functions {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../constants/style.dart';
-import '../model/transaction.dart';
+import 'style.dart';
+import '../models/transaction.dart';
 
 mixin Functions {
   String numToCurrency(num? value) {

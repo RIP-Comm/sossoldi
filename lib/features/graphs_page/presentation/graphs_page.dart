@@ -2,12 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../constants/functions.dart';
-import '../../../constants/style.dart';
-import '../../../widgets/line_chart.dart';
-import '../../../model/transaction.dart';
-import '../../../providers/currency_provider.dart';
-import '../../../providers/statistics_provider.dart';
+import '../../../shared/constants/functions.dart';
+import '../../../shared/constants/style.dart';
+import '../../../shared/widgets/line_chart.dart';
+import '../../../shared/models/transaction.dart';
+import '../../../shared/providers/currency_provider.dart';
+import '../../../shared/providers/statistics_provider.dart';
 import 'categories/categories_card.dart';
 import 'accounts_card.dart';
 

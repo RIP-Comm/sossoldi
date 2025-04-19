@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../constants/functions.dart';
-import '../../../constants/style.dart';
-import '../../../providers/transactions_provider.dart';
-import '../../../widgets/account_selector.dart';
-import '../../../widgets/amount_widget.dart';
-import '../../../widgets/details_list_tile.dart';
-import '../../../widgets/details_list_disabled_tile.dart';
-import '../../../widgets/label_list_tile.dart';
-import '../../../widgets/recurrence_list_tile_edit.dart';
+import '../../../shared/constants/functions.dart';
+import '../../../shared/constants/style.dart';
+import '../../../shared/providers/transactions_provider.dart';
+import '../../../shared/widgets/account_selector.dart';
+import '../../../shared/widgets/amount_widget.dart';
+import '../../../shared/widgets/details_list_tile.dart';
+import '../../../shared/widgets/details_list_disabled_tile.dart';
+import '../../../shared/widgets/label_list_tile.dart';
+import '../../../shared/widgets/recurrence_list_tile_edit.dart';
 
 class EditRecurringTransaction extends ConsumerStatefulWidget {
   const EditRecurringTransaction({super.key});

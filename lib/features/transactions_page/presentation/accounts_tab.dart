@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../constants/constants.dart';
-import '../../../constants/functions.dart';
-import '../../../widgets/default_container.dart';
+import '../../../shared/constants/constants.dart';
+import '../../../shared/constants/functions.dart';
+import '../../../shared/widgets/default_container.dart';
 import '../data/selected_transaction_type_provider.dart';
 import 'transaction_type_button.dart';
-import '../../../model/bank_account.dart';
-import '../../../model/transaction.dart';
-import '../../../providers/accounts_provider.dart';
-import '../../../providers/transactions_provider.dart';
+import '../../../shared/models/bank_account.dart';
+import '../../../shared/models/transaction.dart';
+import '../../../shared/providers/accounts_provider.dart';
+import '../../../shared/providers/transactions_provider.dart';
 import 'account_list_tile.dart';
 import 'accounts_pie_chart.dart';
 

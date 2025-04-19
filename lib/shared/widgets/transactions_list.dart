@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import '../constants/constants.dart';
 import '../constants/functions.dart';
 import '../constants/style.dart';
-import '../model/transaction.dart';
+import '../models/transaction.dart';
 import '../providers/currency_provider.dart';
 import '../providers/transactions_provider.dart';
 import '../utils/date_helper.dart';

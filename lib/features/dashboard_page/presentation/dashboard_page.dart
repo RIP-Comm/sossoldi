@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'budgets_section.dart';
-import '../../../constants/functions.dart';
+import '../../../shared/constants/functions.dart';
 import 'dashboard_graph.dart';
 import 'last_transactions_section.dart';
 import 'your_accounts_section.dart';

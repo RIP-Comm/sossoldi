@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../constants/constants.dart';
-import '../../../model/budget.dart';
-import '../../../model/category_transaction.dart';
-import '../../../utils/decimal_text_input_formatter.dart';
+import '../../../shared/constants/constants.dart';
+import '../../../shared/models/budget.dart';
+import '../../../shared/models/category_transaction.dart';
+import '../../../shared/utils/decimal_text_input_formatter.dart';
 
 class BudgetCategorySelector extends ConsumerStatefulWidget {
   final List<CategoryTransaction> categories;

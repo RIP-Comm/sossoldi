@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../model/budget.dart';
+import '../models/budget.dart';
 
 final monthlyBudgetsStatsProvider =
     FutureProvider<List<BudgetStats>>((ref) async {

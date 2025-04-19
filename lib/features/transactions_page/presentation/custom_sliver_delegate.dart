@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../constants/functions.dart';
-import '../../../constants/style.dart';
-import '../../../providers/currency_provider.dart';
-import '../../../providers/transactions_provider.dart';
-import '../../../utils/formatted_date_range.dart';
-import '../../../widgets/month_selector.dart';
+import '../../../shared/constants/functions.dart';
+import '../../../shared/constants/style.dart';
+import '../../../shared/providers/currency_provider.dart';
+import '../../../shared/providers/transactions_provider.dart';
+import '../../../shared/utils/formatted_date_range.dart';
+import '../../../shared/widgets/month_selector.dart';
 
 class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
   const CustomSliverDelegate({

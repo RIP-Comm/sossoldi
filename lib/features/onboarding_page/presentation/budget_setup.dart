@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../add_category_feature/presentation/add_category.dart';
-import '/constants/constants.dart';
-import '/constants/style.dart';
-import '/model/budget.dart';
+import '../../../shared/constants/constants.dart';
+import '../../../shared/constants/style.dart';
+import '../../../shared/models/budget.dart';
 import 'account_setup.dart';
 import 'add_budget.dart';
-import '/providers/budgets_provider.dart';
-import '/providers/categories_provider.dart';
+import '../../../shared/providers/budgets_provider.dart';
+import '../../../shared/providers/categories_provider.dart';
 import 'add_category_button.dart';
 import 'category_button.dart';
 

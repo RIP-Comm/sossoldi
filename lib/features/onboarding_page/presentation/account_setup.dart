@@ -4,10 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../constants/constants.dart';
-import '../../../providers/accounts_provider.dart';
-import '../../../utils/decimal_text_input_formatter.dart';
-import '/constants/style.dart';
+import '../../../shared/constants/constants.dart';
+import '../../../shared/providers/accounts_provider.dart';
+import '../../../shared/utils/decimal_text_input_formatter.dart';
+import '../../../shared/constants/style.dart';
 
 class AccountSetup extends ConsumerStatefulWidget {
   const AccountSetup({super.key});
