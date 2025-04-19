@@ -8,15 +8,15 @@ import '../../../constants/style.dart';
 import '../../../shared/models/transaction.dart';
 import '../../../shared/providers/accounts_provider.dart';
 import '../../../shared/providers/transactions_provider.dart';
-import '../../../ui/widgets/account_selector.dart';
-import '../../../ui/widgets/details_list_tile.dart';
-import '../../../ui/widgets/label_list_tile.dart';
+import '../../../shared/ui/widgets/account_selector.dart';
+import '../../../shared/ui/widgets/details_list_tile.dart';
+import '../../../shared/ui/widgets/label_list_tile.dart';
 import 'amount_section.dart';
 import "category_selector.dart";
 import 'duplicate_transaction_dialog.dart';
 import 'recurrence_list_tile.dart';
-import '../../../ui/device.dart';
-import '../../../ui/extensions.dart';
+import '../../../shared/ui/device.dart';
+import '../../../shared/ui/extensions.dart';
 
 class AddPage extends ConsumerStatefulWidget {
   final bool recurrencyEditingPermitted;

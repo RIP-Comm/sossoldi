@@ -8,9 +8,9 @@ import '../../../shared/providers/currency_provider.dart';
 import '../../../shared/providers/statistics_provider.dart';
 import 'categories/categories_card.dart';
 import 'accounts_card.dart';
-import '../../../ui/extensions.dart';
-import '../../../ui/widgets/line_chart.dart';
-import '../../../ui/device.dart';
+import '../../../shared/ui/extensions.dart';
+import '../../../shared/ui/widgets/line_chart.dart';
+import '../../../shared/ui/device.dart';
 
 class GraphsPage extends ConsumerStatefulWidget {
   const GraphsPage({super.key});

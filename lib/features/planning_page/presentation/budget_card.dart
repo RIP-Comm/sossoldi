@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../ui/widgets/default_container.dart';
+import '../../../shared/ui/widgets/default_container.dart';
 import '../../../shared/models/budget.dart';
 import '../../../shared/models/transaction.dart';
 import '../../../shared/providers/budgets_provider.dart';
 import '../../../shared/providers/currency_provider.dart';
 import '../../../shared/providers/transactions_provider.dart';
-import '../../../ui/widgets/linear_progress_bar.dart';
+import '../../../shared/ui/widgets/linear_progress_bar.dart';
 import 'manage_budget_page.dart';
-import '../../../ui/assets.dart';
-import '../../../ui/device.dart';
+import '../../../shared/ui/assets.dart';
+import '../../../shared/ui/device.dart';
 import 'budget_pie_chart.dart';
 
 class BudgetCard extends ConsumerStatefulWidget {

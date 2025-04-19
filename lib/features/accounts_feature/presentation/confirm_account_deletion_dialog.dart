@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../ui/widgets/native_alert_dialog.dart';
+import '../../../shared/ui/widgets/native_alert_dialog.dart';
 import '../../../shared/models/bank_account.dart';
 
 class ConfirmAccountDeletionDialog extends StatelessWidget {

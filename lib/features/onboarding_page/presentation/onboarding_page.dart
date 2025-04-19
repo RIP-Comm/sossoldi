@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../ui/assets.dart';
-import '../../../ui/device.dart';
+import '../../../shared/ui/assets.dart';
+import '../../../shared/ui/device.dart';
 import 'budget_setup.dart';
 import '/constants/style.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../constants/constants.dart';
-import '../../../ui/device.dart';
+import '../../../../constants/constants.dart';
+import '../device.dart';
 
 enum BarType { account, category }
 

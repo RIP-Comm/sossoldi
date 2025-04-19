@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/style.dart';
-import '../ui/device.dart';
+import '../shared/ui/device.dart';
 
 class AppTheme {
   static final lightTheme = ThemeData(

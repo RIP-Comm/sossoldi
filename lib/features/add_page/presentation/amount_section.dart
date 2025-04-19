@@ -3,13 +3,13 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 
 import '../../../constants/constants.dart';
 import "../../../constants/style.dart";
-import '../../../ui/extensions.dart';
-import '../../../ui/widgets/account_selector.dart';
-import '../../../ui/widgets/amount_widget.dart';
-import '../../../ui/widgets/rounded_icon.dart';
+import '../../../shared/ui/extensions.dart';
+import '../../../shared/ui/widgets/account_selector.dart';
+import '../../../shared/ui/widgets/amount_widget.dart';
+import '../../../shared/ui/widgets/rounded_icon.dart';
 import '../../../shared/models/transaction.dart';
 import '../../../shared/providers/transactions_provider.dart';
-import '../../../ui/device.dart';
+import '../../../shared/ui/device.dart';
 import 'type_tab.dart';
 
 class AmountSection extends ConsumerStatefulWidget {

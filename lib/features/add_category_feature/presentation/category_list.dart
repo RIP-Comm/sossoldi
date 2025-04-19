@@ -4,9 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../constants/constants.dart';
 import '../../../shared/models/category_transaction.dart';
 import '../../../shared/providers/categories_provider.dart';
-import '../../../ui/widgets/default_card.dart';
-import '../../../ui/widgets/rounded_icon.dart';
-import '../../../ui/device.dart';
+import '../../../shared/ui/widgets/default_card.dart';
+import '../../../shared/ui/widgets/rounded_icon.dart';
+import '../../../shared/ui/device.dart';
 
 class CategoryList extends ConsumerStatefulWidget {
   const CategoryList({super.key});

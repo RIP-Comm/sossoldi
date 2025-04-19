@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../ui/device.dart';
+import '../../../shared/ui/device.dart';
 import 'manage_budget_page.dart';
 import 'budget_card.dart';
 import 'recurring_payments_list.dart';

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../add_category_feature/presentation/add_category.dart';
-import '../../../ui/device.dart';
+import '../../../shared/ui/device.dart';
 import '/constants/constants.dart';
 import '/constants/style.dart';
 import '../../../shared/models/budget.dart';

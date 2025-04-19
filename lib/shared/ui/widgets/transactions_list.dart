@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../constants/constants.dart';
-import '../../constants/style.dart';
-import '../../shared/models/transaction.dart';
-import '../../shared/providers/currency_provider.dart';
-import '../../shared/providers/transactions_provider.dart';
+import '../../../constants/constants.dart';
+import '../../../constants/style.dart';
+import '../../models/transaction.dart';
+import '../../providers/currency_provider.dart';
+import '../../providers/transactions_provider.dart';
 import '../device.dart';
 import '../extensions.dart';
 import 'default_container.dart';

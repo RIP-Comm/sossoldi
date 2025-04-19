@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/style.dart';
 import '../../../shared/providers/accounts_provider.dart';
 import '../../../shared/providers/theme_provider.dart';
-import '../../../ui/widgets/accounts_sum.dart';
-import '../../../ui/widgets/rounded_icon.dart';
+import '../../../shared/ui/widgets/accounts_sum.dart';
+import '../../../shared/ui/widgets/rounded_icon.dart';
 import '../../../shared/models/bank_account.dart';
 
 class AccountsList extends ConsumerWidget {

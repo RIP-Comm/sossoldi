@@ -6,7 +6,7 @@ import '../../../shared/models/currency.dart';
 import '../../../shared/providers/currency_provider.dart';
 import '../../../shared/providers/theme_provider.dart';
 import 'currency_selector.dart';
-import '../../../ui/device.dart';
+import '../../../shared/ui/device.dart';
 
 class GeneralSettingsPage extends ConsumerStatefulWidget {
   const GeneralSettingsPage({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../constants/style.dart';
-import '../../../ui/device.dart';
+import '../../../shared/ui/device.dart';
 
 class TypeTab extends StatelessWidget {
   const TypeTab(

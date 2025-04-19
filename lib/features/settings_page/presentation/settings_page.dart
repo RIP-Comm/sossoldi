@@ -14,9 +14,9 @@ import '../../../shared/providers/categories_provider.dart';
 import '../../../shared/providers/dashboard_provider.dart';
 import '../../../shared/providers/statistics_provider.dart';
 import '../../../shared/providers/transactions_provider.dart';
-import '../../../ui/widgets/alert_dialog.dart';
-import '../../../ui/widgets/default_card.dart';
-import '../../../ui/device.dart';
+import '../../../shared/ui/widgets/alert_dialog.dart';
+import '../../../shared/ui/widgets/default_card.dart';
+import '../../../shared/ui/device.dart';
 
 var settingsOptions = [
   [

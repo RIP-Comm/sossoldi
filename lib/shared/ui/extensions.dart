@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../constants/style.dart';
-import '../shared/models/transaction.dart';
+import '../../constants/style.dart';
+import '../models/transaction.dart';
 
 /// Adds extensions to num  to make creating durations more succint:
 ///

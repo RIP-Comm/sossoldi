@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../ui/widgets/category_type_button.dart';
-import '../../../../ui/widgets/default_container.dart';
+import '../../../../shared/ui/widgets/category_type_button.dart';
+import '../../../../shared/ui/widgets/default_container.dart';
 import '../../../../shared/models/category_transaction.dart';
 import '../../../../shared/providers/categories_provider.dart';
-import '../../../../ui/device.dart';
-import '../../../../ui/widgets/linear_progress_bar.dart';
-import '../../../../ui/widgets/month_selector.dart';
+import '../../../../shared/ui/device.dart';
+import '../../../../shared/ui/widgets/linear_progress_bar.dart';
+import '../../../../shared/ui/widgets/month_selector.dart';
 import '../card_label.dart';
 import 'categories_bar_chart.dart';
 import 'categories_pie_chart2.dart';

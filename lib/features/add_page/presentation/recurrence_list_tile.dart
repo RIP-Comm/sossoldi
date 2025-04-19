@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
 import "../../../constants/style.dart";
-import '../../../ui/extensions.dart';
-import '../../../ui/widgets/rounded_icon.dart';
+import '../../../shared/ui/extensions.dart';
+import '../../../shared/ui/widgets/rounded_icon.dart';
 import '../../../shared/providers/theme_provider.dart';
 import '../../../shared/providers/transactions_provider.dart';
 import '../../../shared/models/transaction.dart';
-import '../../../ui/device.dart';
+import '../../../shared/ui/device.dart';
 import 'recurrence_selector.dart';
 
 class RecurrenceListTile extends ConsumerWidget {

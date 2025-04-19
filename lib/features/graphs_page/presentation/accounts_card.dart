@@ -4,11 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../shared/providers/accounts_provider.dart';
 import '../../../shared/providers/currency_provider.dart';
 import '../../../shared/models/bank_account.dart';
-import '../../../ui/widgets/linear_progress_bar.dart';
+import '../../../shared/ui/widgets/linear_progress_bar.dart';
 import 'card_label.dart';
-import '../../../../ui/device.dart';
-import '../../../../ui/extensions.dart';
-import '../../../../ui/widgets/default_container.dart';
+import '../../../shared/ui/device.dart';
+import '../../../shared/ui/extensions.dart';
+import '../../../shared/ui/widgets/default_container.dart';
 
 class AccountsCard extends ConsumerWidget {
   const AccountsCard({super.key});

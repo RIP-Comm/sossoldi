@@ -4,9 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
 import '../../../shared/models/bank_account.dart';
 import '../../../shared/providers/accounts_provider.dart';
-import '../../../ui/widgets/default_card.dart';
-import '../../../ui/widgets/rounded_icon.dart';
-import '../../../ui/device.dart';
+import '../../../shared/ui/widgets/default_card.dart';
+import '../../../shared/ui/widgets/rounded_icon.dart';
+import '../../../shared/ui/device.dart';
 
 class AccountList extends ConsumerStatefulWidget {
   const AccountList({super.key});

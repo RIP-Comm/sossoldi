@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../constants/constants.dart';
-import '../../constants/style.dart';
+import '../../../constants/constants.dart';
+import '../../../constants/style.dart';
 import 'rounded_icon.dart';
-import '../../shared/models/bank_account.dart';
-import '../../shared/providers/accounts_provider.dart';
-import '../../shared/providers/transactions_provider.dart';
-import '../../../ui/device.dart';
+import '../../models/bank_account.dart';
+import '../../providers/accounts_provider.dart';
+import '../../providers/transactions_provider.dart';
+import '../device.dart';
 
 class AccountSelector extends ConsumerStatefulWidget {
   const AccountSelector({

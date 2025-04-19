@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../shared/models/transaction.dart';
 import '../../../shared/providers/transactions_provider.dart';
-import '../../../ui/device.dart';
+import '../../../shared/ui/device.dart';
 
 class DuplicateTransactionDialog extends ConsumerWidget {
   const DuplicateTransactionDialog({super.key, required this.transaction});

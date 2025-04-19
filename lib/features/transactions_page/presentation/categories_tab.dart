@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../ui/widgets/default_container.dart';
-import '../../../ui/widgets/transaction_type_button.dart';
+import '../../../shared/ui/widgets/default_container.dart';
+import '../../../shared/ui/widgets/transaction_type_button.dart';
 import '../../../shared/models/category_transaction.dart';
 import '../../../shared/models/transaction.dart';
 import '../../../shared/providers/categories_provider.dart';
 import '../../../shared/providers/transactions_provider.dart';
-import '../../../ui/device.dart';
+import '../../../shared/ui/device.dart';
 import 'categories_pie_chart.dart';
 import 'category_list_tile.dart';
 

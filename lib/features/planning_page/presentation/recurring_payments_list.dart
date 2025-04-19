@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../ui/device.dart';
+import '../../../shared/ui/device.dart';
 import 'recurring_payment_card.dart';
 import '../../../shared/providers/transactions_provider.dart';
 

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../shared/models/budget.dart';
 import '../../../shared/models/category_transaction.dart';
-import '../../../ui/device.dart';
+import '../../../shared/ui/device.dart';
 import 'budget_category_selector.dart';
 import '../../../shared/providers/categories_provider.dart';
 import '../../../shared/providers/budgets_provider.dart';

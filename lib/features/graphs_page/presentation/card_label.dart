@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../ui/device.dart';
+import '../../../shared/ui/device.dart';
 
 class CardLabel extends StatelessWidget {
   const CardLabel({super.key, required this.label});

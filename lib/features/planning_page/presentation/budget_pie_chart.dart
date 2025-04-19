@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
 import '../../../shared/models/budget.dart';
 import '../../../shared/providers/currency_provider.dart';
-import '../../../ui/device.dart';
+import '../../../shared/ui/device.dart';
 
 class BudgetPieChart extends ConsumerStatefulWidget {
   const BudgetPieChart({super.key, required this.budgets});

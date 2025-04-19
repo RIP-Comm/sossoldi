@@ -4,8 +4,8 @@ import '../../../constants/constants.dart';
 import '../../../constants/style.dart';
 import '../../../shared/models/category_transaction.dart';
 import '../../../shared/providers/categories_provider.dart';
-import '../../../ui/device.dart';
-import '../../../ui/extensions.dart';
+import '../../../shared/ui/device.dart';
+import '../../../shared/ui/extensions.dart';
 
 class AddCategory extends ConsumerStatefulWidget {
   final bool hideIncome;

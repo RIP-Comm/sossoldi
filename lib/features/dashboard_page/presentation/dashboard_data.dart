@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/style.dart';
 import '../../../shared/providers/currency_provider.dart';
 import '../../../shared/providers/dashboard_provider.dart';
-import '../../../ui/extensions.dart';
-import '../../../ui/widgets/line_chart.dart';
+import '../../../shared/ui/extensions.dart';
+import '../../../shared/ui/widgets/line_chart.dart';
 
 class DashboardData extends ConsumerWidget {
   const DashboardData({super.key});

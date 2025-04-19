@@ -4,12 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
 import '../../../constants/style.dart';
 import '../data/selected_category_index_provider.dart';
-import '../../../ui/extensions.dart';
-import '../../../ui/widgets/rounded_icon.dart';
+import '../../../shared/ui/extensions.dart';
+import '../../../shared/ui/widgets/rounded_icon.dart';
 import '../../../shared/models/category_transaction.dart';
 import '../../../shared/models/transaction.dart';
 import '../../../shared/providers/currency_provider.dart';
-import '../../../ui/device.dart';
+import '../../../shared/ui/device.dart';
 
 class CategoryListTile extends ConsumerWidget {
   const CategoryListTile({

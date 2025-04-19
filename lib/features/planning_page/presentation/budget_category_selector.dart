@@ -5,7 +5,7 @@ import '../../../constants/constants.dart';
 import '../../../shared/models/budget.dart';
 import '../../../shared/models/category_transaction.dart';
 import '../../../utils/decimal_text_input_formatter.dart';
-import '../../../ui/device.dart';
+import '../../../shared/ui/device.dart';
 
 class BudgetCategorySelector extends ConsumerStatefulWidget {
   final List<CategoryTransaction> categories;

@@ -5,7 +5,7 @@ import '../../../constants/style.dart';
 import '../../../shared/providers/settings_provider.dart';
 import '../../../utils/notifications_service.dart';
 import 'notification_type_tile.dart';
-import '../../../ui/device.dart';
+import '../../../shared/ui/device.dart';
 
 class NotificationsSettings extends ConsumerStatefulWidget {
   const NotificationsSettings({super.key});

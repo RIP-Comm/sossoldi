@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import '../../../../constants/style.dart';
 import '../../../../shared/providers/categories_provider.dart';
 import '../../../../shared/providers/transactions_provider.dart';
-import '../../../../ui/device.dart';
+import '../../../../shared/ui/device.dart';
 
 final highlightedMonthProvider =
     StateProvider<int>((ref) => DateTime.now().month - 1);

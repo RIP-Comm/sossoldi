@@ -6,8 +6,8 @@ import '../../../constants/style.dart';
 import '../../../shared/providers/currency_provider.dart';
 import '../../../utils/decimal_text_input_formatter.dart';
 import 'confirm_account_deletion_dialog.dart';
-import '../../../ui/device.dart';
-import '../../../ui/extensions.dart';
+import '../../../shared/ui/device.dart';
+import '../../../shared/ui/extensions.dart';
 
 class AddAccount extends ConsumerStatefulWidget {
   const AddAccount({super.key});

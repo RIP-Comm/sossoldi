@@ -4,10 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
 import '../../../constants/style.dart';
-import '../../../ui/widgets/rounded_icon.dart';
+import '../../../shared/ui/widgets/rounded_icon.dart';
 import '../../../shared/models/bank_account.dart';
 import '../../../shared/providers/currency_provider.dart';
-import '../../../ui/device.dart';
+import '../../../shared/ui/device.dart';
 import 'accounts_tab.dart';
 
 class AccountsPieChart extends ConsumerWidget {

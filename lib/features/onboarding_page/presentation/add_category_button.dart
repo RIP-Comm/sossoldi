@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../constants/style.dart';
-import '../../../ui/device.dart';
+import '../../../shared/ui/device.dart';
 
 class AddCategoryButton extends StatelessWidget {
   const AddCategoryButton({

@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
-import '../../../ui/widgets/transaction_type_button.dart';
-import '../../../ui/widgets/default_container.dart';
+import '../../../shared/ui/widgets/transaction_type_button.dart';
+import '../../../shared/ui/widgets/default_container.dart';
 import '../../../shared/models/bank_account.dart';
 import '../../../shared/models/transaction.dart';
 import '../../../shared/providers/accounts_provider.dart';
 import '../../../shared/providers/transactions_provider.dart';
-import '../../../ui/device.dart';
+import '../../../shared/ui/device.dart';
 import 'account_list_tile.dart';
 import 'accounts_pie_chart.dart';
 

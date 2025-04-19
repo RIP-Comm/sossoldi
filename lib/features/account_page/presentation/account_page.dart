@@ -7,10 +7,10 @@ import '../../../shared/providers/accounts_provider.dart';
 import '../../../shared/models/transaction.dart';
 import '../../../shared/providers/currency_provider.dart';
 import '../../../utils/decimal_text_input_formatter.dart';
-import '../../../ui/extensions.dart';
-import '../../../ui/widgets/line_chart.dart';
-import '../../../ui/widgets/transactions_list.dart';
-import '../../../ui/device.dart';
+import '../../../shared/ui/extensions.dart';
+import '../../../shared/ui/widgets/line_chart.dart';
+import '../../../shared/ui/widgets/transactions_list.dart';
+import '../../../shared/ui/device.dart';
 
 class AccountPage extends ConsumerStatefulWidget {
   const AccountPage({super.key});

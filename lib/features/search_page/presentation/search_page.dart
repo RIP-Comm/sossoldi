@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../shared/providers/accounts_provider.dart';
 import '../../../shared/providers/transactions_provider.dart';
 import '../../../shared/models/transaction.dart';
-import '../../../ui/device.dart';
-import '../../../ui/widgets/transactions_list.dart';
+import '../../../shared/ui/device.dart';
+import '../../../shared/ui/widgets/transactions_list.dart';
 
 class SearchPage extends ConsumerStatefulWidget {
   const SearchPage({super.key});
