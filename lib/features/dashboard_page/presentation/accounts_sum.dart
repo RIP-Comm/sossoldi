@@ -7,7 +7,7 @@ import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/currency_provider.dart';
-import '../../../custom_widgets/rounded_icon.dart';
+import '../../../widgets/rounded_icon.dart';
 
 /// This class shows account summaries in the dashboard
 class AccountsSum extends ConsumerWidget with Functions {

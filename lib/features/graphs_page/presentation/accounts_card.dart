@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../custom_widgets/linear_progress_bar.dart';
+import '../../../widgets/linear_progress_bar.dart';
 import '../../../constants/functions.dart';
-import '../../../custom_widgets/default_container.dart';
+import '../../../widgets/default_container.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../model/bank_account.dart';

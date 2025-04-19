@@ -9,12 +9,12 @@ import '../../../constants/style.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/transactions_provider.dart';
-import "../../../custom_widgets/account_selector.dart";
+import "../../../widgets/account_selector.dart";
 import 'amount_section.dart';
 import "category_selector.dart";
-import '../../../custom_widgets/details_list_tile.dart';
+import '../../../widgets/details_list_tile.dart';
 import 'duplicate_transaction_dialog.dart';
-import '../../../custom_widgets/label_list_tile.dart';
+import '../../../widgets/label_list_tile.dart';
 import 'recurrence_list_tile.dart';
 
 class AddPage extends ConsumerStatefulWidget {

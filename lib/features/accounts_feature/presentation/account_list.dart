@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
 import '../../../constants/functions.dart';
-import '../../../custom_widgets/default_card.dart';
-import '../../../custom_widgets/rounded_icon.dart';
+import '../../../widgets/default_card.dart';
+import '../../../widgets/rounded_icon.dart';
 import '../../../model/bank_account.dart';
 import '../../../providers/accounts_provider.dart';
 
