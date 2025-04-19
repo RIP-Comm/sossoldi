@@ -6,7 +6,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "../../../constants/style.dart";
 import '../../providers/currency_provider.dart';
 import '../../providers/transactions_provider.dart';
-import '../../../utils/decimal_text_input_formatter.dart';
+import '../../utils/decimal_text_input_formatter.dart';
 import '../device.dart';
 import '../extensions.dart';
 

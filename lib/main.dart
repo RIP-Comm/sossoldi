@@ -9,8 +9,8 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'shared/models/recurring_transaction.dart';
 import 'shared/providers/theme_provider.dart';
 import 'routes.dart';
-import 'utils/app_theme.dart';
-import 'utils/notifications_service.dart';
+import 'shared/utils/app_theme.dart';
+import 'shared/utils/notifications_service.dart';
 
 late SharedPreferences _sharedPreferences;
 

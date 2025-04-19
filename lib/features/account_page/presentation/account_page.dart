@@ -6,7 +6,7 @@ import '../../../constants/style.dart';
 import '../../../shared/providers/accounts_provider.dart';
 import '../../../shared/models/transaction.dart';
 import '../../../shared/providers/currency_provider.dart';
-import '../../../utils/decimal_text_input_formatter.dart';
+import '../../../shared/utils/decimal_text_input_formatter.dart';
 import '../../../shared/ui/extensions.dart';
 import '../../../shared/ui/widgets/line_chart.dart';
 import '../../../shared/ui/widgets/transactions_list.dart';

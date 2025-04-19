@@ -5,7 +5,7 @@ import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
-import '../shared/ui/device.dart';
+import '../ui/device.dart';
 
 class CSVFilePicker {
   // Request storage permission based on Android version

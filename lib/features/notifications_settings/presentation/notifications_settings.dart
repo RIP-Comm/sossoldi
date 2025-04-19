@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/style.dart';
 import '../../../shared/providers/settings_provider.dart';
-import '../../../utils/notifications_service.dart';
+import '../../../shared/utils/notifications_service.dart';
 import 'notification_type_tile.dart';
 import '../../../shared/ui/device.dart';
 

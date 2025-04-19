@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../shared/ui/device.dart';
+import '../../ui/device.dart';
 
 void showSnackBar(
   BuildContext context, {

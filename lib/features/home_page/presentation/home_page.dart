@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../shared/providers/transactions_provider.dart';
 import '../../../shared/ui/device.dart';
 import '../../graphs_page/presentation/graphs_page.dart';
-import '../../../utils/snack_bars/transactions_snack_bars.dart';
+import '../../../shared/utils/snack_bars/transactions_snack_bars.dart';
 import '../../dashboard_page/presentation/dashboard_page.dart';
 import '../../planning_page/presentation/planning_page.dart';
 import '../../transactions_page/presentation/transactions_page.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../utils/notifications_service.dart';
+import '../utils/notifications_service.dart';
 
 enum NotificationReminderType {
   none,

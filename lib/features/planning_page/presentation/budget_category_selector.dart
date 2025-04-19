@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
 import '../../../shared/models/budget.dart';
 import '../../../shared/models/category_transaction.dart';
-import '../../../utils/decimal_text_input_formatter.dart';
+import '../../../shared/utils/decimal_text_input_formatter.dart';
 import '../../../shared/ui/device.dart';
 
 class BudgetCategorySelector extends ConsumerStatefulWidget {

@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/style.dart';
 import '../../providers/currency_provider.dart';
 import '../../providers/transactions_provider.dart';
-import '../../../utils/formatted_date_range.dart';
+import '../../utils/formatted_date_range.dart';
 import '../../../features/graphs_page/presentation/categories/categories_bar_chart.dart';
 import '../device.dart';
 import '../extensions.dart';

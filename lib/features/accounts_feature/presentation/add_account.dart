@@ -4,7 +4,7 @@ import '../../../shared/providers/accounts_provider.dart';
 import '../../../constants/constants.dart';
 import '../../../constants/style.dart';
 import '../../../shared/providers/currency_provider.dart';
-import '../../../utils/decimal_text_input_formatter.dart';
+import '../../../shared/utils/decimal_text_input_formatter.dart';
 import 'confirm_account_deletion_dialog.dart';
 import '../../../shared/ui/device.dart';
 import '../../../shared/ui/extensions.dart';
