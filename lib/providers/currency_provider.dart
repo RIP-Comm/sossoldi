@@ -14,7 +14,7 @@ class CurrencyState extends ChangeNotifier {
     symbol: '\$',
     code: 'USD',
     name: "United States Dollar",
-    mainCurrency: true
+    mainCurrency: true,
   );
 
   CurrencyState() {
@@ -27,8 +27,8 @@ class CurrencyState extends ChangeNotifier {
   }
 
   void setSelectedCurrency(Currency currency) {
-      selectedCurrency = currency;
-      CurrencyMethods().changeMainCurrency(currency.id!);
-      notifyListeners();
+    selectedCurrency = currency;
+    CurrencyMethods().changeMainCurrency(currency.id!);
+    notifyListeners();
   }
 }

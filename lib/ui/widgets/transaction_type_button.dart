@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../constants/style.dart';
-import '../model/transaction.dart';
-import '../pages/transactions_page/widgets/accounts_tab.dart';
-import '../providers/categories_provider.dart';
+import '../../constants/style.dart';
+import '../../model/transaction.dart';
+import '../../pages/transactions_page/widgets/accounts_tab.dart';
+import '../../providers/categories_provider.dart';
+import '../device.dart';
 
-final selectedTransactionTypeProvider = StateProvider.autoDispose<TransactionType>((ref) => TransactionType.income);
+final selectedTransactionTypeProvider =
+    StateProvider.autoDispose<TransactionType>((ref) => TransactionType.income);
 
 class TransactionTypeButton extends ConsumerWidget {
   const TransactionTypeButton({
@@ -25,11 +27,8 @@ class TransactionTypeButton extends ConsumerWidget {
     return Container(
       height: 28,
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primaryContainer,
-        borderRadius: BorderRadius.all(
-          Radius.circular(5.0),
-        ),
-      ),
+          color: Theme.of(context).colorScheme.primaryContainer,
+          borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall)),
       child: Stack(
         children: [
           AnimatedAlign(
@@ -42,17 +41,15 @@ class TransactionTypeButton extends ConsumerWidget {
             child: Container(
               width: width,
               height: 28,
-              decoration: const BoxDecoration(
-                color: blue5,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(5.0),
-                ),
-              ),
+              decoration: BoxDecoration(
+                  color: blue5,
+                  borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall)),
             ),
           ),
           GestureDetector(
             onTap: () {
-              ref.read(selectedTransactionTypeProvider.notifier).state = TransactionType.income;
+              ref.read(selectedTransactionTypeProvider.notifier).state =
+                  TransactionType.income;
             },
             child: Align(
               alignment: const Alignment(-1, 0),
@@ -62,17 +59,18 @@ class TransactionTypeButton extends ConsumerWidget {
                 alignment: Alignment.center,
                 child: Text(
                   "Income",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge
-                      ?.copyWith(color: (transactionType == TransactionType.income) ? white : Theme.of(context).colorScheme.onPrimaryContainer),
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: (transactionType == TransactionType.income)
+                          ? white
+                          : Theme.of(context).colorScheme.onPrimaryContainer),
                 ),
               ),
             ),
           ),
           GestureDetector(
             onTap: () {
-              ref.read(selectedTransactionTypeProvider.notifier).state = TransactionType.expense;
+              ref.read(selectedTransactionTypeProvider.notifier).state =
+                  TransactionType.expense;
             },
             child: Align(
               alignment: const Alignment(1, 0),
@@ -82,10 +80,10 @@ class TransactionTypeButton extends ConsumerWidget {
                 alignment: Alignment.center,
                 child: Text(
                   'Expenses',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge
-                      ?.copyWith(color: (transactionType == TransactionType.expense) ? white : Theme.of(context).colorScheme.onPrimaryContainer),
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: (transactionType == TransactionType.expense)
+                          ? white
+                          : Theme.of(context).colorScheme.onPrimaryContainer),
                 ),
               ),
             ),

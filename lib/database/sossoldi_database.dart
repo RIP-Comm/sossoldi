@@ -20,7 +20,6 @@ class SossoldiDatabase {
   static Database? _database;
   static String dbName = 'sossoldi.db';
 
-
   // Zero args constructor needed to extend this class
   SossoldiDatabase({String? dbName}) {
     dbName = dbName ?? 'sossoldi.db';
@@ -39,10 +38,11 @@ class SossoldiDatabase {
     final databasePath = await getDatabasesPath();
     final path = join(databasePath, filePath);
     return await openDatabase(
-        path,
-        version: _migrationManager.latestVersion,
-        onCreate: _createDB,
-        onUpgrade: _upgradeDB);
+      path,
+      version: _migrationManager.latestVersion,
+      onCreate: _createDB,
+      onUpgrade: _upgradeDB,
+    );
   }
 
   static Future _createDB(Database database, int version) async {
@@ -51,7 +51,8 @@ class SossoldiDatabase {
     await instance._migrationManager.migrate(database, 0, version);
   }
 
-  static Future _upgradeDB(Database database, int oldVersion, int newVersion) async {
+  static Future _upgradeDB(
+      Database database, int oldVersion, int newVersion) async {
     await instance._migrationManager.migrate(database, oldVersion, newVersion);
   }
 
@@ -185,7 +186,7 @@ class SossoldiDatabase {
       });
     } catch (e) {
       print('Error during import: $e');
-      throw e;
+      rethrow;
     }
 
     return results;

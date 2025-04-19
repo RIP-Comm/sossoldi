@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../database/sossoldi_database.dart';
+import '../../ui/device.dart';
 import '../../utils/csv_file_picker.dart';
 
 class BackupPage extends ConsumerStatefulWidget {
@@ -12,18 +13,17 @@ class BackupPage extends ConsumerStatefulWidget {
 }
 
 class BackupOption {
-    final String title;
-    final String description;
-    final Future<void> Function()? action;
-    final IconData icon;
+  final String title;
+  final String description;
+  final Future<void> Function()? action;
+  final IconData icon;
 
-    BackupOption({
-      required this.title,
-      required this.description,
-      this.action,
-      required this.icon,
-    }
-  );
+  BackupOption({
+    required this.title,
+    required this.description,
+    this.action,
+    required this.icon,
+  });
 
   BackupOption copyWith({
     String? title,
@@ -46,21 +46,21 @@ class _BackupPageState extends ConsumerState<BackupPage> {
       final file = await CSVFilePicker.pickCSVFile(context);
       if (file != null) {
         CSVFilePicker.showLoading(context, 'Importing data...');
-        
-        final results = await SossoldiDatabase.instance.importFromCSV(file.path);
-        
+        final results =
+            await SossoldiDatabase.instance.importFromCSV(file.path);
         if (!mounted) return;
         CSVFilePicker.hideLoading(context);
-        
+
         if (results.values.every((success) => success)) {
-          await CSVFilePicker.showSuccess(context, 'Data imported successfully');
+          await CSVFilePicker.showSuccess(
+              context, 'Data imported successfully');
           Phoenix.rebirth(context);
         } else {
           final failedTables = results.entries
               .where((e) => !e.value)
               .map((e) => e.key)
               .join(', ');
-          
+
           if (!mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -85,12 +85,12 @@ class _BackupPageState extends ConsumerState<BackupPage> {
   Future<void> _handleExport() async {
     try {
       CSVFilePicker.showLoading(context, 'Exporting data...');
-      
+
       final csv = await SossoldiDatabase.instance.exportToCSV();
-      
+
       if (!mounted) return;
       CSVFilePicker.hideLoading(context);
-      
+
       await CSVFilePicker.saveCSVFile(csv, context);
     } catch (e) {
       if (!mounted) return;
@@ -146,14 +146,15 @@ class _BackupPageState extends ConsumerState<BackupPage> {
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(Sizes.lg),
           child: Column(
             children: [
               ListView.separated(
                 itemCount: options.length,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                separatorBuilder: (context, index) => const SizedBox(height: 16),
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: Sizes.lg),
                 itemBuilder: (context, i) {
                   final option = options[i];
                   return Card(
@@ -166,7 +167,8 @@ class _BackupPageState extends ConsumerState<BackupPage> {
                             context: context,
                             builder: (context) => AlertDialog(
                               title: Text('Warning: Data Overwrite'),
-                              content: Text('Importing this file will permanently replace your existing data. This action cannot be undone. Ensure you have a backup before proceeding.'),
+                              content: Text(
+                                  'Importing this file will permanently replace your existing data. This action cannot be undone. Ensure you have a backup before proceeding.'),
                               actions: [
                                 TextButton(
                                   onPressed: () {
@@ -189,7 +191,7 @@ class _BackupPageState extends ConsumerState<BackupPage> {
                         }
                       },
                       child: Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: const EdgeInsets.all(Sizes.lg),
                         child: Row(
                           children: [
                             Icon(
@@ -197,22 +199,32 @@ class _BackupPageState extends ConsumerState<BackupPage> {
                               color: Theme.of(context).colorScheme.primary,
                               size: 32,
                             ),
-                            const SizedBox(width: 16),
+                            const SizedBox(width: Sizes.lg),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     option.title,
-                                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                                          color: Theme.of(context).colorScheme.primary,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge!
+                                        .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
                                         ),
                                   ),
-                                  const SizedBox(height: 4),
+                                  const SizedBox(height: Sizes.xs),
                                   Text(
                                     option.description,
-                                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                          color: Theme.of(context).colorScheme.primary,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
                                         ),
                                   ),
                                 ],

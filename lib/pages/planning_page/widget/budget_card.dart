@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../custom_widgets/default_container.dart';
+import '../../../ui/widgets/default_container.dart';
 import '../../../model/budget.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/budgets_provider.dart';
 import '../../../providers/categories_provider.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
+import '../../../ui/assets.dart';
+import '../../../ui/device.dart';
 import '../../graphs_page/widgets/linear_progress_bar.dart';
 import '../manage_budget_page.dart';
 import 'budget_pie_chart.dart';
@@ -51,7 +53,7 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                       BudgetPieChart(budgets: budgets as List<Budget>),
                       Text("Progress",
                           style: Theme.of(context).textTheme.titleLarge),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: Sizes.sm),
                       ListView.separated(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
@@ -77,31 +79,33 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                                         fontWeight: FontWeight.normal),
                                   ),
                                   const Spacer(),
-                                  spent >= (budget.amountLimit * 0.9)
-                                      ? const Icon(Icons.error_outline,
-                                          color: Colors.red)
-                                      : Container(),
+                                  if (spent >= (budget.amountLimit * 0.9))
+                                    const Icon(
+                                      Icons.error_outline,
+                                      color: Colors.red,
+                                    ),
                                   Text(
                                     "$spent${currencyState.selectedCurrency.symbol}/${budget.amountLimit}${currencyState.selectedCurrency.symbol}",
                                     style: const TextStyle(
-                                        fontWeight: FontWeight.normal),
+                                      fontWeight: FontWeight.normal,
+                                    ),
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 4),
+                              const SizedBox(height: Sizes.xs),
                               LinearProgressBar(
-                                  type: BarType.category,
-                                  colorIndex: budgetCategory?.color ?? 1,
-                                  amount:
-                                      (spent == 0 || budget.amountLimit == 0)
-                                          ? 0
-                                          : spent,
-                                  total: budget.amountLimit),
+                                type: BarType.category,
+                                colorIndex: index,
+                                amount: (spent == 0 || budget.amountLimit == 0)
+                                    ? 0
+                                    : spent,
+                                total: budget.amountLimit,
+                              ),
                             ],
                           );
                         },
                         separatorBuilder: (context, index) {
-                          return const SizedBox(height: 15);
+                          return const SizedBox(height: Sizes.lg);
                         },
                       ),
                     ],
@@ -114,7 +118,7 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                         textAlign: TextAlign.center,
                       ),
                       Image.asset(
-                        'assets/wallet.png',
+                        SossoldiAssets.wallet,
                         width: 240,
                         height: 240,
                       ),
@@ -123,7 +127,7 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                         style: Theme.of(context).textTheme.bodySmall,
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 15),
+                      const SizedBox(height: Sizes.lg),
                       TextButton.icon(
                         icon: Icon(
                           Icons.add_circle,
@@ -135,17 +139,19 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                             isScrollControlled: true,
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20.0),
-                                topRight: Radius.circular(20.0),
+                                topLeft:
+                                    Radius.circular(Sizes.borderRadiusLarge),
+                                topRight:
+                                    Radius.circular(Sizes.borderRadiusLarge),
                               ),
                             ),
                             elevation: 10,
                             builder: (BuildContext context) {
                               return FractionallySizedBox(
-                                  heightFactor: 0.9,
-                                  child: ManageBudgetPage(
-                                      onRefreshBudgets:
-                                          widget.onRefreshBudgets));
+                                heightFactor: 0.9,
+                                child: ManageBudgetPage(
+                                    onRefreshBudgets: widget.onRefreshBudgets),
+                              );
                             },
                           );
                         },

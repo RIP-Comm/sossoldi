@@ -7,8 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../constants/style.dart';
-import '../custom_widgets/alert_dialog.dart';
-import '../custom_widgets/default_card.dart';
+import '../ui/widgets/alert_dialog.dart';
+import '../ui/widgets/default_card.dart';
 import '../database/sossoldi_database.dart';
 import '../model/category_transaction.dart';
 import '../providers/accounts_provider.dart';
@@ -17,6 +17,7 @@ import '../providers/categories_provider.dart';
 import '../providers/dashboard_provider.dart';
 import '../providers/statistics_provider.dart';
 import '../providers/transactions_provider.dart';
+import '../ui/device.dart';
 
 var settingsOptions = [
   [
@@ -103,6 +104,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   "OK",
                   style:
                       TextStyle(color: Theme.of(context).colorScheme.primary),
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
               ),
             ],
@@ -132,7 +135,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           children: [
             Padding(
               padding:
-                  const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+                  const EdgeInsets.symmetric(
+                  vertical: Sizes.xl, horizontal: Sizes.lg),
               child: GestureDetector(
                 onTap: _onSettingsTap,
                 child: Row(
@@ -142,14 +146,14 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         shape: BoxShape.circle,
                         color: Theme.of(context).colorScheme.primary,
                       ),
-                      padding: const EdgeInsets.all(5.0),
+                      padding: const EdgeInsets.all(Sizes.xs),
                       child: Icon(
                         Icons.settings,
                         size: 28.0,
                         color: Theme.of(context).colorScheme.surface,
                       ),
                     ),
-                    const SizedBox(width: 12.0),
+                    const SizedBox(width: Sizes.md),
                     Text(
                       "Settings",
                       style: Theme.of(context)
@@ -170,6 +174,68 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 List setting = settingsOptions[i];
                 if (setting[3] == null) return Container();
                 return Padding(
+                  padding: const EdgeInsets.only(bottom: Sizes.lg),
+                  child: DefaultCard(
+                    onTap: () {
+                      if (setting[3] != null) {
+                        final link = setting[3] as String;
+                        if (link.startsWith("http")) {
+                          Uri url = Uri.parse(link);
+                          launchUrl(url);
+                        } else {
+                          Navigator.of(context).pushNamed(link);
+                        }
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        Container(
+                          decoration: const BoxDecoration(
+                            color: blue5,
+                            shape: BoxShape.circle,
+                          ),
+                          padding: const EdgeInsets.all(Sizes.sm),
+                          child: Icon(
+                            setting[0] as IconData,
+                            size: 30.0,
+                            color: white,
+                          ),
+                        ),
+                        const SizedBox(width: Sizes.md),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                setting[1].toString(),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge!
+                                    .copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
+                              ),
+                              Text(
+                                setting[2].toString(),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall!
+                                    .copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
                     padding: const EdgeInsets.only(bottom: 16),
                     child: DefaultCard(
                       onTap: () {
@@ -276,6 +342,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       await SossoldiDatabase.instance
                           .fillDemoData()
                           .then((value) {
+                      await SossoldiDatabase.instance
+                          .fillDemoData()
+                          .then((value) {
                         ref.refresh(accountsProvider);
                         ref.refresh(categoriesProvider(userCategoriesFilter));
                         ref.refresh(transactionsProvider);
@@ -283,6 +352,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         ref.refresh(dashboardProvider);
                         ref.refresh(lastTransactionsProvider);
                         ref.refresh(statisticsProvider);
+                        showSuccessDialog(
+                            context, "DB Cleared, and DEMO data added");
                         showSuccessDialog(
                             context, "DB Cleared, and DEMO data added");
                       });

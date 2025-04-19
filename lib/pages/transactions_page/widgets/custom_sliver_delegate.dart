@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
+import '../../../ui/device.dart';
+import '../../../ui/extensions.dart';
 import '../../../utils/formatted_date_range.dart';
 import 'month_selector.dart';
 
@@ -38,11 +39,11 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
     // prevent the expanded widget from shrinking in size when collapsing
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: Sizes.lg),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primaryContainer,
         border: const Border(
-          bottom: BorderSide(width: 1.0, color: grey2),
+          bottom: BorderSide(color: grey2),
         ),
       ),
       child: Column(
@@ -65,7 +66,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
               ],
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: Sizes.sm),
         ],
       ),
     );
@@ -87,14 +88,15 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
                 TabBar(
                   controller: tabController,
                   tabs: myTabs,
-                  splashBorderRadius: BorderRadius.circular(50),
-                  indicatorPadding: EdgeInsets.symmetric(horizontal: 16),
+                  splashBorderRadius:
+                      BorderRadius.circular(Sizes.borderRadius * 10),
+                  indicatorPadding: EdgeInsets.symmetric(horizontal: Sizes.lg),
                   // TODO: capitalize text of the selected label
                   // not possible from TextStyle https://github.com/flutter/flutter/issues/22695
                   labelStyle: Theme.of(context).textTheme.bodyLarge,
                   unselectedLabelStyle: Theme.of(context).textTheme.bodyLarge,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: Sizes.lg),
                 const MonthSelector(type: MonthSelectorType.advanced),
               ],
             ),
@@ -125,7 +127,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
   }
 }
 
-class CollapsedWidget extends StatelessWidget with Functions {
+class CollapsedWidget extends StatelessWidget {
   const CollapsedWidget(this.myTabs, this.tabController, {super.key});
 
   final List<Tab> myTabs;
@@ -143,17 +145,20 @@ class CollapsedWidget extends StatelessWidget with Functions {
         children: [
           Container(
             padding: const EdgeInsets.symmetric(
-              vertical: 4.0,
-              horizontal: 8.0,
+              vertical: Sizes.xxs,
+              horizontal: Sizes.sm,
             ),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50),
+              borderRadius: BorderRadius.circular(Sizes.borderRadius * 10),
               color: Theme.of(context).colorScheme.secondary,
             ),
             child: Text(
               myTabs[tabController.index].text!,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge
+                  ?.copyWith(color: Colors.white),
             ),
           ),
           Text(
@@ -164,12 +169,18 @@ class CollapsedWidget extends StatelessWidget with Functions {
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: numToCurrency(totalAmount),
-                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: totalAmount >= 0 ? green : red),
+                  text: totalAmount.toCurrency(),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .copyWith(color: totalAmount >= 0 ? green : red),
                 ),
                 TextSpan(
                   text: currencyState.selectedCurrency.symbol,
-                  style: Theme.of(context).textTheme.labelLarge!.copyWith(color: totalAmount >= 0 ? green : red),
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelLarge!
+                      .copyWith(color: totalAmount >= 0 ? green : red),
                 ),
               ],
             ),

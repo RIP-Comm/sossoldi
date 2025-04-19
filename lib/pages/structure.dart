@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/transactions_provider.dart';
+import '../ui/device.dart';
 import 'graphs_page/graphs_page.dart';
 import 'home_page.dart';
 import 'planning_page/planning_page.dart';
@@ -48,7 +49,7 @@ class _StructureState extends ConsumerState<Structure> {
           _pagesTitle.elementAt(selectedIndex),
         ),
         leading: Padding(
-          padding: const EdgeInsets.only(left: 16),
+          padding: const EdgeInsets.only(left: Sizes.lg),
           child: FilledButton(
             onPressed: () => Navigator.of(context).pushNamed('/search'),
             style: FilledButton.styleFrom(shape: const CircleBorder()),
@@ -57,7 +58,7 @@ class _StructureState extends ConsumerState<Structure> {
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(Sizes.sm),
             child: FilledButton(
               onPressed: () => Navigator.of(context).pushNamed('/settings'),
               style: FilledButton.styleFrom(shape: const CircleBorder()),
@@ -74,23 +75,31 @@ class _StructureState extends ConsumerState<Structure> {
         selectedFontSize: 8,
         unselectedFontSize: 8,
         currentIndex: selectedIndex,
-        onTap: (index) => index != 2 ? ref.read(selectedIndexProvider.notifier).state = index : null,
+        onTap: (index) => index != 2
+            ? ref.read(selectedIndexProvider.notifier).state = index
+            : null,
         items: [
           BottomNavigationBarItem(
             icon: Icon(selectedIndex == 0 ? Icons.home : Icons.home_outlined),
             label: "DASHBOARD",
           ),
           BottomNavigationBarItem(
-            icon: Icon(selectedIndex == 1 ? Icons.swap_horizontal_circle : Icons.swap_horizontal_circle_outlined),
+            icon: Icon(selectedIndex == 1
+                ? Icons.swap_horizontal_circle
+                : Icons.swap_horizontal_circle_outlined),
             label: "TRANSACTIONS",
           ),
           const BottomNavigationBarItem(icon: Text(""), label: ""),
           BottomNavigationBarItem(
-            icon: Icon(selectedIndex == 3 ? Icons.calendar_today : Icons.calendar_today_outlined),
+            icon: Icon(selectedIndex == 3
+                ? Icons.calendar_today
+                : Icons.calendar_today_outlined),
             label: "PLANNING",
           ),
           BottomNavigationBarItem(
-            icon: Icon(selectedIndex == 4 ? Icons.data_exploration : Icons.data_exploration_outlined),
+            icon: Icon(selectedIndex == 4
+                ? Icons.data_exploration
+                : Icons.data_exploration_outlined),
             label: "GRAPHS",
           ),
         ],
@@ -108,7 +117,8 @@ class _StructureState extends ConsumerState<Structure> {
           Navigator.of(context).pushNamed("/add-page");
         },
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.miniCenterDocked,
     );
   }
 }

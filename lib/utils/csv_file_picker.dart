@@ -5,6 +5,8 @@ import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
+import '../ui/device.dart';
+
 class CSVFilePicker {
   // Request storage permission based on Android version
   static Future<bool> _requestStoragePermission() async {
@@ -63,13 +65,14 @@ class CSVFilePicker {
         // User canceled the picker
         return;
       }
-      
+
       final String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
-      final String filePath = join(selectedDirectory, 'sossoldi_export_$timestamp.csv');
-      
+      final String filePath =
+          join(selectedDirectory, 'sossoldi_export_$timestamp.csv');
+
       // Write the CSV content directly to the file
       final file = await File(filePath).writeAsString(csv);
-      
+
       // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -97,15 +100,16 @@ class CSVFilePicker {
           backgroundColor: Colors.white,
           elevation: 8,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(Sizes.borderRadius),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+            padding: const EdgeInsets.symmetric(
+                vertical: Sizes.lg, horizontal: Sizes.xl),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 const CircularProgressIndicator(),
-                const SizedBox(height: 16),
+                const SizedBox(height: Sizes.lg),
                 Text(
                   message,
                   style: const TextStyle(
@@ -137,7 +141,7 @@ class CSVFilePicker {
           title: const Text('Success'),
           content: Text(message),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(Sizes.borderRadius),
           ),
           actions: [
             TextButton(

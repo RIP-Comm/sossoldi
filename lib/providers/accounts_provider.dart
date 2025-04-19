@@ -92,7 +92,7 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
         ref.read(mainAccountProvider.notifier).state = account;
       }
       ref.invalidate(dashboardProvider);
-      
+
       return _getAccounts();
     });
   }

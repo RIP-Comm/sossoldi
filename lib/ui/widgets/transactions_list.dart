@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../constants/constants.dart';
-import '../constants/functions.dart';
-import '../constants/style.dart';
-import '../model/transaction.dart';
-import '../providers/categories_provider.dart';
-import '../providers/currency_provider.dart';
-import '../providers/transactions_provider.dart';
-import '../utils/date_helper.dart';
+import '../../constants/constants.dart';
+import '../../constants/style.dart';
+import '../../model/transaction.dart';
+import '../../providers/categories_provider.dart';
+import '../../providers/currency_provider.dart';
+import '../../providers/transactions_provider.dart';
+import '../device.dart';
+import '../extensions.dart';
 import 'default_container.dart';
 import 'rounded_icon.dart';
 
@@ -17,7 +17,7 @@ class TransactionsList extends StatefulWidget {
   const TransactionsList({
     super.key,
     required this.transactions,
-    this.margin = const EdgeInsets.symmetric(horizontal: 16),
+    this.margin = const EdgeInsets.symmetric(horizontal: Sizes.lg),
     this.padding,
   });
 
@@ -29,7 +29,7 @@ class TransactionsList extends StatefulWidget {
   State<TransactionsList> createState() => _TransactionsListState();
 }
 
-class _TransactionsListState extends State<TransactionsList> with Functions {
+class _TransactionsListState extends State<TransactionsList> {
   Map<String, double> totals = {};
   List<Transaction> get transactions => widget.transactions;
 
@@ -48,7 +48,7 @@ class _TransactionsListState extends State<TransactionsList> with Functions {
   void updateTotal() {
     totals = {};
     for (final transaction in transactions) {
-      final date = transaction.date.toYMD();
+      final date = transaction.date.formatYMD();
       final currentTotal = totals[date] ?? 0.0;
 
       final amount = switch (transaction.type) {
@@ -71,14 +71,14 @@ class _TransactionsListState extends State<TransactionsList> with Functions {
               padding: widget.padding,
               shrinkWrap: true,
               itemCount: totals.keys.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 16),
+              separatorBuilder: (_, __) => const SizedBox(height: Sizes.lg),
               itemBuilder: (context, monthIndex) {
                 // Group transactions by month
                 final dates = totals.keys.toList()
                   ..sort((a, b) => b.compareTo(a));
                 final currentDate = dates[monthIndex];
                 final dateTransactions = transactions
-                    .where((t) => t.date.toYMD() == currentDate)
+                    .where((t) => t.date.formatYMD() == currentDate)
                     .toList();
 
                 return Column(
@@ -90,10 +90,10 @@ class _TransactionsListState extends State<TransactionsList> with Functions {
                     Container(
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.primaryContainer,
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(Sizes.borderRadius),
                       ),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(Sizes.borderRadius),
                         child: ListView.separated(
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
@@ -121,7 +121,7 @@ class _TransactionsListState extends State<TransactionsList> with Functions {
   }
 }
 
-class TransactionTile extends ConsumerWidget with Functions {
+class TransactionTile extends ConsumerWidget {
   const TransactionTile({required this.transaction, super.key});
 
   final Transaction transaction;
@@ -136,7 +136,8 @@ class TransactionTile extends ConsumerWidget with Functions {
       child: ListTile(
         visualDensity: VisualDensity.compact,
         dense: true,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        contentPadding: const EdgeInsets.symmetric(
+            horizontal: Sizes.md, vertical: Sizes.xs),
         onTap: () async {
           ref
               .read(transactionsProvider.notifier)
@@ -157,8 +158,7 @@ class TransactionTile extends ConsumerWidget with Functions {
               ? categoryColorListTheme[transaction.categoryColor!]
               : Theme.of(context).colorScheme.secondary,
           size: 25,
-          padding: const EdgeInsets.all(8.0),
-          markedAsDeleted: category?.markedAsDeleted ?? false,
+          padding: const EdgeInsets.all(Sizes.sm),
         ),
         title: Text(
           (transaction.note?.isEmpty ?? true)
@@ -184,11 +184,10 @@ class TransactionTile extends ConsumerWidget with Functions {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  '${transaction.type == TransactionType.expense ? "-" : ""}${numToCurrency(transaction.amount)}',
+                  '${transaction.type == TransactionType.expense ? "-" : ""}${transaction.amount.toCurrency()}',
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                        color: typeToColor(
-                          transaction.type,
+                        color: transaction.type.toColor(
                           brightness: Theme.of(context).brightness,
                         ),
                       ),
@@ -197,8 +196,7 @@ class TransactionTile extends ConsumerWidget with Functions {
                   currencyState.selectedCurrency.symbol,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: typeToColor(
-                          transaction.type,
+                        color: transaction.type.toColor(
                           brightness: Theme.of(context).brightness,
                         ),
                       ),
@@ -220,7 +218,7 @@ class TransactionTile extends ConsumerWidget with Functions {
   }
 }
 
-class TransactionTitle extends ConsumerWidget with Functions {
+class TransactionTitle extends ConsumerWidget {
   final DateTime date;
   final num total;
 
@@ -235,11 +233,11 @@ class TransactionTitle extends ConsumerWidget with Functions {
     final currencyState = ref.watch(currencyStateNotifier);
     final color = total < 0 ? red : (total > 0 ? green : blue3);
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
+      padding: const EdgeInsets.only(bottom: Sizes.md),
       child: Row(
         children: [
           Text(
-            dateToString(date),
+            date.formatEDMY(),
             style: Theme.of(context)
                 .textTheme
                 .bodySmall!
@@ -247,7 +245,7 @@ class TransactionTitle extends ConsumerWidget with Functions {
           ),
           const Spacer(),
           Text(
-            numToCurrency(total),
+            total.toCurrency(),
             style:
                 Theme.of(context).textTheme.bodyLarge!.copyWith(color: color),
           ),
