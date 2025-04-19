@@ -359,6 +359,37 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
                       ],
                     ),
                   ),
+                  /* temporary hided, see #178
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.only(left: 16, top: 32, bottom: 8),
+                    child: Text(
+                      "SUBCATEGORY",
+                      style:
+                          Theme.of(context).textTheme.labelLarge!.copyWith(color: Theme.of(context).colorScheme.primary),
+                    ),
+                  ),
+                  Material(
+                    child: InkWell(
+                      onTap: () => print("click"),
+                      child: Ink(
+                        width: double.infinity,
+                        color: Theme.of(context).colorScheme.surface,
+                        padding: const EdgeInsets.all(16),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.add_circle_outline_rounded, size: 30, color: grey1),
+                            const SizedBox(width: 12),
+                            Text(
+                              "Add subcategory",
+                              style: Theme.of(context).textTheme.titleSmall!.copyWith(color: grey1),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  */
                   if (selectedCategory != null)
                     Container(
                       width: double.infinity,
