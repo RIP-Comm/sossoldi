@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'dart:math'; // used for random number generation in demo data
+import 'dart:developer' as dev;
+
 import 'package:csv/csv.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
@@ -106,7 +108,7 @@ class SossoldiDatabase {
           allData.add(csvRow);
         }
       } catch (e) {
-        print('Error exporting table $tableName: $e');
+        dev.log('Error exporting table $tableName: $e');
       }
     }
 
@@ -179,13 +181,13 @@ class SossoldiDatabase {
             }
             results[tableName] = true;
           } catch (e) {
-            print('Error importing table $tableName: $e');
+            dev.log('Error importing table $tableName: $e');
             results[tableName] = false;
           }
         }
       });
     } catch (e) {
-      print('Error during import: $e');
+      dev.log('Error during import: $e');
       rethrow;
     }
 

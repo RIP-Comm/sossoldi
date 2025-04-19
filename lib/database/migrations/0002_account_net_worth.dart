@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:sqflite/sqflite.dart';
 import '../migration_base.dart';
 
