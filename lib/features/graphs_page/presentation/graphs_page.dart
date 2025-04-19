@@ -2,14 +2,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../constants/functions.dart';
-import '../../constants/style.dart';
-import '../../custom_widgets/line_chart.dart';
-import '../../model/transaction.dart';
-import '../../providers/currency_provider.dart';
-import '../../providers/statistics_provider.dart';
-import 'widgets/categories/categories_card.dart';
-import 'widgets/accounts/accounts_card.dart';
+import '../../../constants/functions.dart';
+import '../../../constants/style.dart';
+import '../../../custom_widgets/line_chart.dart';
+import '../../../model/transaction.dart';
+import '../../../providers/currency_provider.dart';
+import '../../../providers/statistics_provider.dart';
+import 'categories/categories_card.dart';
+import 'accounts_card.dart';
 
 class GraphsPage extends ConsumerStatefulWidget {
   const GraphsPage({super.key});

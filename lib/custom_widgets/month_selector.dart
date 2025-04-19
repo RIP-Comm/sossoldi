@@ -6,7 +6,7 @@ import '../constants/style.dart';
 import '../providers/currency_provider.dart';
 import '../providers/transactions_provider.dart';
 import '../utils/formatted_date_range.dart';
-import '../pages/graphs_page/widgets/categories/categories_bar_chart.dart';
+import '../features/graphs_page/presentation/categories/categories_bar_chart.dart';
 
 enum MonthSelectorType { simple, advanced } //advanced = with amount
 

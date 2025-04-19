@@ -6,7 +6,7 @@ import '../../../../model/category_transaction.dart';
 import '../../../../providers/categories_provider.dart';
 import '../../../../custom_widgets/month_selector.dart';
 import '../card_label.dart';
-import '../linear_progress_bar.dart';
+import '../../../../custom_widgets/linear_progress_bar.dart';
 import 'categories_bar_chart.dart';
 import 'categories_pie_chart2.dart';
 import 'category_label.dart';

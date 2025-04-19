@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../providers/transactions_provider.dart';
-import '../../../pages/graphs_page/graphs_page.dart';
+import '../../graphs_page/presentation/graphs_page.dart';
 import '../../../utils/snack_bars/transactions_snack_bars.dart';
 import '../../dashboard_page/presentation/dashboard_page.dart';
 import '../../../pages/planning_page/planning_page.dart';
