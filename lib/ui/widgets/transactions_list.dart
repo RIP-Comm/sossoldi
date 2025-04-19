@@ -129,8 +129,9 @@ class TransactionTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currencyState = ref.watch(currencyStateNotifier);
-    
-    final category = ref.watch(categoryByIdProvider(transaction.idCategory!)).value;
+
+    final category =
+        ref.watch(categoryByIdProvider(transaction.idCategory!)).value;
 
     return Material(
       child: ListTile(
