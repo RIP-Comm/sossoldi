@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../custom_widgets/default_card.dart';
+import '../../../custom_widgets/default_card.dart';
 
 class MoreInfoPage extends ConsumerStatefulWidget {
   const MoreInfoPage({super.key});
