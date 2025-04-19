@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../constants/constants.dart';
+import '../../../constants/constants.dart';
+import '../../../ui/device.dart';
 
 enum BarType { account, category }
 
@@ -29,13 +30,13 @@ class LinearProgressBar extends StatelessWidget {
         : (type == BarType.account ? accountColorList : categoryColorList);
 
     return ClipRRect(
-      borderRadius: const BorderRadius.all(Radius.circular(16)),
+      borderRadius: BorderRadius.circular(Sizes.borderRadiusLarge),
       child: LinearProgressIndicator(
         value: amount != 0 ? amount / total : 0,
         minHeight: 16,
         backgroundColor: colorList[colorIndex].withValues(alpha: 0.3),
         valueColor: AlwaysStoppedAnimation<Color>(colorList[colorIndex]),
-        borderRadius: const BorderRadius.all(Radius.circular(16)),
+        borderRadius: BorderRadius.circular(Sizes.borderRadiusLarge),
       ),
     );
   }

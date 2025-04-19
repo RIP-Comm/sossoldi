@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../custom_widgets/category_type_button.dart';
-import '../../../../custom_widgets/default_container.dart';
+import '../../../../ui/widgets/category_type_button.dart';
+import '../../../../ui/widgets/default_container.dart';
 import '../../../../model/category_transaction.dart';
 import '../../../../providers/categories_provider.dart';
-import '../../../../custom_widgets/month_selector.dart';
+import '../../../../ui/device.dart';
+import '../../../../ui/widgets/linear_progress_bar.dart';
+import '../../../../ui/widgets/month_selector.dart';
 import '../card_label.dart';
-import '../../../../custom_widgets/linear_progress_bar.dart';
 import 'categories_bar_chart.dart';
 import 'categories_pie_chart2.dart';
 import 'category_label.dart';
@@ -30,14 +31,14 @@ class CategoriesCardState extends ConsumerState<CategoriesCard> {
     return Column(
       children: [
         const CardLabel(label: "Categories"),
-        const SizedBox(height: 10),
+        const SizedBox(height: Sizes.sm),
         DefaultContainer(
           child: Column(
             children: [
               const MonthSelector(type: MonthSelectorType.simple),
-              const SizedBox(height: 30),
+              const SizedBox(height: Sizes.xxl),
               const CategoryTypeButton(),
-              const SizedBox(height: 20),
+              const SizedBox(height: Sizes.xl),
               categoryMap.when(
                 data: (categories) {
                   _categoriesCount = categories.length;
@@ -79,7 +80,7 @@ class CategoriesContent extends StatelessWidget {
           categoryMap: categories,
           total: totalAmount,
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: Sizes.xl),
         ListView.builder(
           itemCount: categories.length,
           shrinkWrap: true,
@@ -94,7 +95,7 @@ class CategoriesContent extends StatelessWidget {
             );
           },
         ),
-        const SizedBox(height: 30),
+        const SizedBox(height: Sizes.xxl),
         const CategoriesBarChart(),
       ],
     );
@@ -119,13 +120,13 @@ class CategoryItem extends StatelessWidget {
       height: 50.0,
       child: Column(
         children: [
-          const Padding(padding: EdgeInsets.all(2.0)),
+          const Padding(padding: EdgeInsets.all(Sizes.xxs * 0.5)),
           CategoryLabel(
             category: category,
             amount: amount,
             total: totalAmount,
           ),
-          const SizedBox(height: 4.0),
+          const SizedBox(height: Sizes.xs),
           LinearProgressBar(
             type: BarType.category,
             amount: amount,
@@ -152,10 +153,10 @@ class LoadingContentWidget extends StatelessWidget {
       children: [
         // height of CategoriesPieChart2
         const SizedBox(height: 200),
-        const SizedBox(height: 20),
+        const SizedBox(height: Sizes.xl),
         // Height of CategoryItem's list
         SizedBox(height: 50.0 * previousCategoriesCount),
-        const SizedBox(height: 30),
+        const SizedBox(height: Sizes.xxl),
         // Height of CategoriesBarChart
         const SizedBox(height: 200),
       ],

@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../providers/accounts_provider.dart';
 import '../../../../providers/transactions_provider.dart';
-import '../../../custom_widgets/transactions_list.dart';
 import '../../../model/transaction.dart';
+import '../../../ui/device.dart';
+import '../../../ui/widgets/transactions_list.dart';
 
 class SearchPage extends ConsumerStatefulWidget {
   const SearchPage({super.key});
@@ -58,7 +59,7 @@ class _SearchPage extends ConsumerState<SearchPage> {
           ),
         ),
         body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: Sizes.sm),
             child: Column(
               children: [
                 InputDecorator(
@@ -90,7 +91,8 @@ class _SearchPage extends ConsumerState<SearchPage> {
                         scrollDirection: Axis.horizontal,
                         child: Row(children: [
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: Sizes.sm),
                             child: FilterChip(
                               showCheckmark: false,
                               label: Text("Income",
@@ -102,7 +104,8 @@ class _SearchPage extends ConsumerState<SearchPage> {
                               backgroundColor: Colors.white,
                               selectedColor: Colors.blue.shade700,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50),
+                                borderRadius: BorderRadius.circular(
+                                    Sizes.borderRadius * 10),
                                 side: BorderSide(
                                   color: Colors.blue.shade700,
                                   width: 2.0,
@@ -120,7 +123,8 @@ class _SearchPage extends ConsumerState<SearchPage> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: Sizes.sm),
                             child: FilterChip(
                               showCheckmark: false,
                               label: Text("Outcome",
@@ -132,7 +136,8 @@ class _SearchPage extends ConsumerState<SearchPage> {
                               backgroundColor: Colors.white,
                               selectedColor: Colors.blue.shade700,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50),
+                                borderRadius: BorderRadius.circular(
+                                    Sizes.borderRadius * 10),
                                 side: BorderSide(
                                   color: Colors.blue.shade700,
                                   width: 2.0,
@@ -150,7 +155,8 @@ class _SearchPage extends ConsumerState<SearchPage> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: Sizes.sm),
                             child: FilterChip(
                               showCheckmark: false,
                               label: Text(
@@ -164,7 +170,8 @@ class _SearchPage extends ConsumerState<SearchPage> {
                               backgroundColor: Colors.white,
                               selectedColor: Colors.blue.shade700,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50),
+                                borderRadius: BorderRadius.circular(
+                                    Sizes.borderRadius * 10),
                                 side: BorderSide(
                                   color: Colors.blue.shade700,
                                   width: 2.0,
@@ -198,7 +205,7 @@ class _SearchPage extends ConsumerState<SearchPage> {
                                   children: accounts.map((account) {
                                 return Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
+                                        horizontal: Sizes.sm),
                                     child: FilterChip(
                                         label: Text(
                                           account.name,
@@ -219,8 +226,8 @@ class _SearchPage extends ConsumerState<SearchPage> {
                                         backgroundColor: Colors.white,
                                         selectedColor: Colors.blue.shade700,
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(50),
+                                          borderRadius: BorderRadius.circular(
+                                              Sizes.borderRadius * 10),
                                           side: BorderSide(
                                             color: Colors.blue.shade700,
                                             width: 2.0,

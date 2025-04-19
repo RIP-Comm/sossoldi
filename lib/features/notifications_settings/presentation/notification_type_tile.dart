@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../providers/settings_provider.dart';
+import '../../../ui/device.dart';
 
 class NotificationTypeTile extends ConsumerWidget {
   final NotificationReminderType type;
@@ -21,7 +22,7 @@ class NotificationTypeTile extends ConsumerWidget {
     return GestureDetector(
       onTap: setNotificationTypeCallback.call,
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 6),
+        margin: const EdgeInsets.symmetric(vertical: Sizes.xs),
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.primaryContainer,
@@ -30,10 +31,10 @@ class NotificationTypeTile extends ConsumerWidget {
                 ? Theme.of(context).colorScheme.secondary
                 : Colors.grey,
           ),
-          borderRadius: BorderRadius.circular(4.0),
+          borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(12.0),
+          padding: const EdgeInsets.all(Sizes.md),
           child: Row(
             children: [
               Text(

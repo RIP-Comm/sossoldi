@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../custom_widgets/transactions_list.dart';
 import '../../../providers/transactions_provider.dart';
+import '../../../ui/widgets/transactions_list.dart';
 
 class LastTransactionsSection extends ConsumerWidget {
   const LastTransactionsSection({super.key});

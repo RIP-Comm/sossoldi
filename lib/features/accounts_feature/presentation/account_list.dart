@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
-import '../../../constants/functions.dart';
-import '../../../custom_widgets/default_card.dart';
-import '../../../custom_widgets/rounded_icon.dart';
 import '../../../model/bank_account.dart';
 import '../../../providers/accounts_provider.dart';
+import '../../../ui/widgets/default_card.dart';
+import '../../../ui/widgets/rounded_icon.dart';
+import '../../../ui/device.dart';
 
 class AccountList extends ConsumerStatefulWidget {
   const AccountList({super.key});
@@ -15,7 +15,7 @@ class AccountList extends ConsumerStatefulWidget {
   ConsumerState<AccountList> createState() => _AccountListState();
 }
 
-class _AccountListState extends ConsumerState<AccountList> with Functions {
+class _AccountListState extends ConsumerState<AccountList> {
   @override
   Widget build(BuildContext context) {
     final accountsList = ref.watch(accountsProvider);
@@ -42,8 +42,8 @@ class _AccountListState extends ConsumerState<AccountList> with Functions {
         child: Column(
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(
+                  vertical: Sizes.xl, horizontal: Sizes.lg),
               child: Row(
                 children: [
                   Container(
@@ -51,14 +51,14 @@ class _AccountListState extends ConsumerState<AccountList> with Functions {
                       shape: BoxShape.circle,
                       color: Theme.of(context).colorScheme.primary,
                     ),
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(Sizes.sm),
                     child: Icon(
                       Icons.account_balance_wallet,
                       size: 24.0,
                       color: Theme.of(context).colorScheme.onPrimary,
                     ),
                   ),
-                  const SizedBox(width: 12.0),
+                  const SizedBox(width: Sizes.md),
                   Text(
                     "Your accounts",
                     style: Theme.of(context)
@@ -75,7 +75,7 @@ class _AccountListState extends ConsumerState<AccountList> with Functions {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 separatorBuilder: (context, index) =>
-                    const SizedBox(height: 16),
+                    const SizedBox(height: Sizes.lg),
                 itemBuilder: (context, i) {
                   BankAccount account = accounts[i];
                   return DefaultCard(
@@ -91,7 +91,7 @@ class _AccountListState extends ConsumerState<AccountList> with Functions {
                           backgroundColor: accountColorListTheme[account.color],
                           size: 30,
                         ),
-                        const SizedBox(width: 12.0),
+                        const SizedBox(width: Sizes.md),
                         Text(
                           account.name,
                           style: Theme.of(context)

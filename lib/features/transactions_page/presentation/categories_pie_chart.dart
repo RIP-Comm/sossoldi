@@ -3,14 +3,14 @@ import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
-import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
-import '../../../custom_widgets/rounded_icon.dart';
+import '../../../ui/widgets/rounded_icon.dart';
 import '../../../model/category_transaction.dart';
 import '../../../providers/currency_provider.dart';
 import '../data/selected_category_index_provider.dart';
+import '../../../ui/device.dart';
 
-class CategoriesPieChart extends ConsumerWidget with Functions {
+class CategoriesPieChart extends ConsumerWidget {
   const CategoriesPieChart({
     required this.categories,
     required this.amounts,
@@ -63,7 +63,7 @@ class CategoriesPieChart extends ConsumerWidget with Functions {
                           Icons.swap_horiz_rounded,
                       backgroundColor:
                           categoryColorList[selectedCategory.color],
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(Sizes.lg),
                     )
                   : const SizedBox(),
               Text(

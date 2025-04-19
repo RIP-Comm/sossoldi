@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../ui/device.dart';
 import 'recurring_payment_card.dart';
 import '../../../providers/transactions_provider.dart';
 
@@ -63,12 +64,12 @@ class _RecurringPaymentSectionState
                   child: RecurringPaymentCard(transaction: transactions[index]),
                 ),
                 separatorBuilder: (context, index) =>
-                    const SizedBox(height: 16),
+                    const SizedBox(height: Sizes.lg),
               );
             }
           },
         ),
-        const SizedBox(height: 30),
+        const SizedBox(height: Sizes.xxl),
         TextButton.icon(
           icon: Icon(Icons.add_circle, size: 32),
           onPressed: () => {
@@ -85,7 +86,7 @@ class _RecurringPaymentSectionState
           },
           label: Text("Add recurring payment"),
         ),
-        const SizedBox(height: 30),
+        const SizedBox(height: Sizes.xxl),
       ],
     );
   }

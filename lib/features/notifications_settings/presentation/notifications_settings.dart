@@ -5,6 +5,7 @@ import '../../../constants/style.dart';
 import '../../../providers/settings_provider.dart';
 import '../../../utils/notifications_service.dart';
 import 'notification_type_tile.dart';
+import '../../../ui/device.dart';
 
 class NotificationsSettings extends ConsumerStatefulWidget {
   const NotificationsSettings({super.key});
@@ -32,7 +33,8 @@ class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+              padding: const EdgeInsets.symmetric(
+                  vertical: Sizes.xl, horizontal: Sizes.lg),
               child: Row(
                 children: [
                   Container(
@@ -40,7 +42,7 @@ class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
                       shape: BoxShape.circle,
                       color: Theme.of(context).colorScheme.primary,
                     ),
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(Sizes.sm),
                     child: Icon(
                       Icons.notifications_active,
                       size: 24.0,
@@ -60,11 +62,12 @@ class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
             ),
             Container(
               width: double.infinity,
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              margin: const EdgeInsets.symmetric(horizontal: Sizes.lg),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: Sizes.lg, vertical: Sizes.md),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
               ),
               child: Column(
                 children: [
@@ -123,7 +126,8 @@ class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
             ),
             Container(
               alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.only(left: 28, top: 24, bottom: 8),
+              padding: const EdgeInsets.only(
+                  left: Sizes.xxl, top: Sizes.xl, bottom: Sizes.sm),
               child: Text(
                 "RECURRING TRANSACTIONS",
                 style: Theme.of(context)
@@ -134,11 +138,12 @@ class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
             ),
             Container(
               width: double.infinity,
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              margin: const EdgeInsets.symmetric(horizontal: Sizes.lg),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: Sizes.lg, vertical: Sizes.md),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
               ),
               child: Column(
                 children: [
@@ -194,7 +199,7 @@ class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
             ),
             Container(
               alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.only(left: 28, top: 6),
+              padding: const EdgeInsets.only(left: Sizes.xxl, top: Sizes.sm),
               child: Text(
                 "Remind me before a recurring transaction is added",
                 style: Theme.of(context)

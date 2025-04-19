@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../constants/functions.dart';
 import '../../../providers/budgets_provider.dart';
 import 'budgets_list.dart';
 
-class BudgetsSection extends ConsumerWidget with Functions {
+class BudgetsSection extends ConsumerWidget {
   const BudgetsSection({super.key});
 
   @override

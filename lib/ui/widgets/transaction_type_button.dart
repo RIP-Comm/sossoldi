@@ -3,9 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/style.dart';
 import '../../../model/transaction.dart';
-import '../data/selected_category_index_provider.dart';
-import '../data/selected_transaction_type_provider.dart';
-import 'accounts_tab.dart';
+import '../../features/transactions_page/data/selected_category_index_provider.dart';
+import '../../features/transactions_page/presentation/accounts_tab.dart';
+import '../device.dart';
+
+final selectedTransactionTypeProvider =
+    StateProvider.autoDispose<TransactionType>((ref) => TransactionType.income);
 
 class TransactionTypeButton extends ConsumerWidget {
   const TransactionTypeButton({
@@ -24,11 +27,8 @@ class TransactionTypeButton extends ConsumerWidget {
     return Container(
       height: 28,
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primaryContainer,
-        borderRadius: BorderRadius.all(
-          Radius.circular(5.0),
-        ),
-      ),
+          color: Theme.of(context).colorScheme.primaryContainer,
+          borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall)),
       child: Stack(
         children: [
           AnimatedAlign(
@@ -41,12 +41,9 @@ class TransactionTypeButton extends ConsumerWidget {
             child: Container(
               width: width,
               height: 28,
-              decoration: const BoxDecoration(
-                color: blue5,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(5.0),
-                ),
-              ),
+              decoration: BoxDecoration(
+                  color: blue5,
+                  borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall)),
             ),
           ),
           GestureDetector(

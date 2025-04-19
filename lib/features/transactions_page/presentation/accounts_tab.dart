@@ -2,21 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
-import '../../../constants/functions.dart';
-import '../../../custom_widgets/default_container.dart';
-import '../data/selected_transaction_type_provider.dart';
-import 'transaction_type_button.dart';
+import '../../../ui/widgets/transaction_type_button.dart';
+import '../../../ui/widgets/default_container.dart';
 import '../../../model/bank_account.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/transactions_provider.dart';
+import '../../../ui/device.dart';
 import 'account_list_tile.dart';
 import 'accounts_pie_chart.dart';
 
 final selectedAccountIndexProvider =
     StateProvider.autoDispose<int>((ref) => -1);
 
-class AccountsTab extends ConsumerWidget with Functions {
+class AccountsTab extends ConsumerWidget {
   const AccountsTab({super.key});
 
   @override
@@ -73,12 +72,12 @@ class AccountsTab extends ConsumerWidget with Functions {
     }
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(vertical: 24),
+      padding: const EdgeInsets.symmetric(vertical: Sizes.xl),
       child: DefaultContainer(
         child: Column(
           children: [
             const TransactionTypeButton(),
-            const SizedBox(height: 16),
+            const SizedBox(height: Sizes.lg),
             accounts.when(
               data: (data) {
                 List<BankAccount> accountIncomeList = data
@@ -104,7 +103,7 @@ class AccountsTab extends ConsumerWidget with Functions {
                                 amounts: accountToAmountIncome,
                                 total: totalIncome,
                               ),
-                              const SizedBox(height: 16),
+                              const SizedBox(height: Sizes.lg),
                               ListView.separated(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
@@ -149,13 +148,13 @@ class AccountsTab extends ConsumerWidget with Functions {
                                 amounts: accountToAmountExpense,
                                 total: totalExpense,
                               ),
-                              const SizedBox(height: 16),
+                              const SizedBox(height: Sizes.lg),
                               ListView.separated(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: accountExpenseList.length,
                                 separatorBuilder: (context, index) =>
-                                    const SizedBox(height: 10),
+                                    const SizedBox(height: Sizes.sm),
                                 itemBuilder: (context, index) {
                                   BankAccount b = accountExpenseList[index];
                                   return AccountListTile(

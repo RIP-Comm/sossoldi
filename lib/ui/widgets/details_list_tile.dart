@@ -1,9 +1,10 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
-import "../constants/style.dart";
-import "../providers/theme_provider.dart";
+import "../../constants/style.dart";
+import "../../providers/theme_provider.dart";
 import "rounded_icon.dart";
+import "../../../ui/device.dart";
 
 class DetailsListTile extends ConsumerWidget {
   const DetailsListTile({
@@ -24,7 +25,7 @@ class DetailsListTile extends ConsumerWidget {
     final isDarkMode = ref.watch(appThemeStateNotifier).isDarkModeEnabled;
 
     return ListTile(
-      contentPadding: const EdgeInsets.all(16.0),
+      contentPadding: const EdgeInsets.all(Sizes.lg),
       onTap: callback,
       leading: RoundedIcon(
         icon: icon,
@@ -47,7 +48,7 @@ class DetailsListTile extends ConsumerWidget {
                     ? grey3
                     : Theme.of(context).colorScheme.secondary),
           ),
-          const SizedBox(width: 6.0),
+          const SizedBox(width: Sizes.sm),
           Icon(
             Icons.chevron_right,
             color: isDarkMode ? grey3 : Theme.of(context).colorScheme.secondary,

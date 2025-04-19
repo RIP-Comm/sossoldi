@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../providers/transactions_provider.dart';
+import '../../../ui/device.dart';
 import '../../graphs_page/presentation/graphs_page.dart';
 import '../../../utils/snack_bars/transactions_snack_bars.dart';
 import '../../dashboard_page/presentation/dashboard_page.dart';
@@ -62,7 +63,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           _pagesTitle.elementAt(selectedIndex),
         ),
         leading: Padding(
-          padding: const EdgeInsets.only(left: 16),
+          padding: const EdgeInsets.only(left: Sizes.lg),
           child: FilledButton(
             onPressed: () => Navigator.of(context).pushNamed('/search'),
             style: FilledButton.styleFrom(shape: const CircleBorder()),
@@ -71,7 +72,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(Sizes.sm),
             child: FilledButton(
               onPressed: () => Navigator.of(context).pushNamed('/settings'),
               style: FilledButton.styleFrom(shape: const CircleBorder()),

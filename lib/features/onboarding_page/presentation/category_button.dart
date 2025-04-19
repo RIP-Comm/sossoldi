@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../constants/style.dart';
 import '../../../model/budget.dart';
+import '../../../ui/device.dart';
 
 class CategoryButton extends StatelessWidget {
   const CategoryButton(
@@ -23,9 +24,9 @@ class CategoryButton extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border.all(color: categoryColor, width: 2.5),
           color: categoryColor,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(Sizes.borderRadius),
         ),
-        padding: const EdgeInsets.only(left: 12),
+        padding: const EdgeInsets.only(left: Sizes.md),
         child: Row(
           children: [
             Container(
@@ -33,12 +34,12 @@ class CategoryButton extends StatelessWidget {
                 color: white,
                 shape: BoxShape.circle,
               ),
-              padding: const EdgeInsets.all(2),
+              padding: const EdgeInsets.all(Sizes.xxs),
               child: Icon(Icons.check_rounded, color: categoryColor, size: 22),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: Sizes.sm),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              padding: const EdgeInsets.symmetric(vertical: Sizes.sm),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,13 +72,13 @@ class CategoryButton extends StatelessWidget {
           color: HSLColor.fromColor(categoryColor)
               .withLightness(clampDouble(0.99, 0.0, 0.9))
               .toColor(),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
         ),
         alignment: Alignment.center,
         child: Row(
           children: [
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: EdgeInsets.symmetric(horizontal: Sizes.sm),
               child: Icon(
                 Icons.add_circle_outline_outlined,
                 size: 30,
@@ -85,7 +86,7 @@ class CategoryButton extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              padding: const EdgeInsets.symmetric(vertical: Sizes.sm),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,

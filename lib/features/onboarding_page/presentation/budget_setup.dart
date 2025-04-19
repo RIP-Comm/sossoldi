@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../add_category_feature/presentation/add_category.dart';
+import '../../../ui/device.dart';
 import '/constants/constants.dart';
 import '/constants/style.dart';
 import '/model/budget.dart';
@@ -37,12 +38,12 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
       backgroundColor: blue7,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(Sizes.lg),
           child: Column(
             children: [
               Text("STEP 1 OF 2",
                   style: Theme.of(context).textTheme.labelSmall),
-              const SizedBox(height: 20),
+              const SizedBox(height: Sizes.xl),
               Text(
                 "Set up your monthly\nbudgets",
                 textAlign: TextAlign.center,
@@ -51,7 +52,7 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                     .headlineLarge
                     ?.copyWith(color: blue1),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: Sizes.xxl),
               Text(
                 "Choose which categories you want to set a budget for",
                 textAlign: TextAlign.center,
@@ -60,7 +61,7 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                     .bodySmall
                     ?.copyWith(color: blue1),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: Sizes.lg),
               Expanded(
                 child: NotificationListener<OverscrollIndicatorNotification>(
                   onNotification: (OverscrollIndicatorNotification overscroll) {
@@ -125,10 +126,10 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                   ? Center(
                       child: Column(
                         children: [
-                          const SizedBox(height: 10),
+                          const SizedBox(height: Sizes.sm),
                           Text("Monthly budget total:",
                               style: Theme.of(context).textTheme.bodySmall),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: Sizes.sm),
                           RichText(
                             text: TextSpan(
                               children: [
@@ -151,7 +152,7 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                               ],
                             ),
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: Sizes.xl),
                           SizedBox(
                             width: MediaQuery.sizeOf(context).width,
                             height: 48,
@@ -167,7 +168,8 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: blue5,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius:
+                                      BorderRadius.circular(Sizes.borderRadius),
                                 ),
                               ),
                               child: Text('NEXT STEP',
@@ -217,7 +219,7 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                         ],
                       ),
                     ),
-              const SizedBox(height: 20),
+              const SizedBox(height: Sizes.xl),
             ],
           ),
         ),

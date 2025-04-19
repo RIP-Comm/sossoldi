@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
-import '../../../custom_widgets/line_chart.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../providers/dashboard_provider.dart';
+import '../../../ui/extensions.dart';
+import '../../../ui/widgets/line_chart.dart';
 
-class DashboardData extends ConsumerWidget with Functions {
+class DashboardData extends ConsumerWidget {
   const DashboardData({super.key});
 
   @override
@@ -39,7 +39,7 @@ class DashboardData extends ConsumerWidget with Functions {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: numToCurrency(total),
+                        text: total.toCurrency(),
                         style: Theme.of(context)
                             .textTheme
                             .headlineLarge
@@ -68,7 +68,7 @@ class DashboardData extends ConsumerWidget with Functions {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: numToCurrency(income),
+                        text: income.toCurrency(),
                         style: Theme.of(context)
                             .textTheme
                             .bodyMedium
@@ -98,7 +98,7 @@ class DashboardData extends ConsumerWidget with Functions {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: numToCurrency(expense),
+                        text: expense.toCurrency(),
                         style: Theme.of(context)
                             .textTheme
                             .bodyMedium
