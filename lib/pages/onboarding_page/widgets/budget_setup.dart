@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../categories/add_category.dart';
+import '../../../features/add_category_feature/presentation/add_category.dart';
 import '/constants/constants.dart';
 import '/constants/style.dart';
 import '/model/budget.dart';
