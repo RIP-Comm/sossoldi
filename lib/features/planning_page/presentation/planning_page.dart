@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'manage_budget_page.dart';
-import 'widget/budget_card.dart';
-import 'widget/recurring_payments_list.dart';
+import 'budget_card.dart';
+import 'recurring_payments_list.dart';
 
 class PlanningPage extends StatefulWidget {
   const PlanningPage({super.key});
