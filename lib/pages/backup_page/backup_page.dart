@@ -54,8 +54,9 @@ class _BackupPageState extends ConsumerState<BackupPage> {
         CSVFilePicker.hideLoading(context);
 
         if (results.values.every((success) => success)) {
-          await CSVFilePicker.showSuccess(context, 'Data imported successfully');
-          if(mounted) Phoenix.rebirth(context);
+          await CSVFilePicker.showSuccess(
+              context, 'Data imported successfully');
+          if (mounted) Phoenix.rebirth(context);
         } else {
           final failedTables = results.entries
               .where((e) => !e.value)
@@ -63,9 +64,9 @@ class _BackupPageState extends ConsumerState<BackupPage> {
               .join(', ');
 
           if (!mounted) return;
-          
+
           showSnackBar(
-            context, 
+            context,
             message: 'Failed to import some tables: $failedTables',
           );
         }
@@ -75,7 +76,7 @@ class _BackupPageState extends ConsumerState<BackupPage> {
       CSVFilePicker.hideLoading(context);
 
       showSnackBar(
-        context, 
+        context,
         message: 'Import failed: ${e.toString()}',
       );
     }

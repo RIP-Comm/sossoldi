@@ -27,7 +27,7 @@ class CSVFilePicker {
   static Future<File?> pickCSVFile(BuildContext context) async {
     bool permissionGranted = await _requestStoragePermission();
     if (!permissionGranted) {
-      if(context.mounted) {
+      if (context.mounted) {
         showSnackBar(
           context,
           message: 'Storage permission is required',
@@ -47,7 +47,7 @@ class CSVFilePicker {
         return File(result.files.first.path!);
       }
     } catch (e) {
-      if(context.mounted) {
+      if (context.mounted) {
         showSnackBar(
           context,
           message: 'Error picking file: ${e.toString()}',
@@ -75,14 +75,14 @@ class CSVFilePicker {
       final file = await File(filePath).writeAsString(csv);
 
       // Show success message
-      if(context.mounted) {
+      if (context.mounted) {
         showSnackBar(
           context,
           message: 'File saved to: ${file.path}',
         );
       }
     } catch (e) {
-      if(context.mounted) {
+      if (context.mounted) {
         showSnackBar(
           context,
           message: 'Error saving file: ${e.toString()}',

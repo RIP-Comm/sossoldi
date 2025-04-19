@@ -266,8 +266,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       ref.refresh(categoriesProvider);
                       ref.refresh(transactionsProvider);
                       ref.refresh(budgetsProvider);
-                      
-                      if(context.mounted) {
+
+                      if (context.mounted) {
                         showSuccessDialog(context, "DB Cleared");
                       }
                     },
@@ -285,8 +285,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       ref.refresh(lastTransactionsProvider);
                       ref.refresh(statisticsProvider);
 
-                      if(context.mounted) {
-                        showSuccessDialog(context, "DB Cleared, and DEMO data added");
+                      if (context.mounted) {
+                        showSuccessDialog(
+                            context, "DB Cleared, and DEMO data added");
                       }
                     },
                   ),
