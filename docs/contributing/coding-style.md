@@ -26,21 +26,25 @@ Use relative imports for local files:
 import '../../../providers/accounts_provider.dart';
 ```
 
-## Break down pages into separate widgets
+## Adpot the Clean Architecture (feature-based folder structure)
 
-In order to improve readability of our code we should break down each page into separate widgets stored in separate files, with each of them representing a section of the page.
-Each page should be wrapped in a folder with the same name containing a widgets subfolder that stores custom widgets extracted from that page.
+The project is organized using the Clean Architecture pattern, which separates the code into three main layers: Data, Domain, and Presentation. This separation of concerns helps to keep the codebase organized and maintainable.
+
+The main layers are:
+- **Data Layer**: This layer is responsible for data management. It contains the repositories, data sources, and any other code related to data management.
+- **Domain Layer**: This layer is responsible for the business logic. It contains the use cases, entities, and any other code related to business logic.
+- **Presentation Layer**: This layer is responsible for the user interface and user experience. It contains the widgets, screens, and any other UI-related code.
+
+An example of the folder structure is as follows:
+
 ```bash
-Example:
-├── transactions_page.dart
-└── widgets
-    ├── accounts_tab.dart
-    ├── categories_tab.dart
-    ├── custom_sliver_delegate.dart
-    ├── list_tab.dart
-    └── month_selector.dart
+lib/
+├── features/
+│   ├── accounts/
+│   │   ├── data/ # Data layer, responsible for data management (providers, repositories, etc.)
+│   │   ├── domain/ # Domain layer, where you define models and use cases
+│   │   └── presentation/ # Presentation layer, where you define widgets and screens
 ```
-The widgets subfolder should contain widgets that are specific to a particular page, whereas the ones that are shared across multiple pages should go in /lib/custom_widgets.
 
 ## Use trailing comma
 
@@ -50,10 +54,6 @@ See here.
 ## Avoid Copy/Paste:
 
 Do not copy and paste code blocks without proper understanding. Instead of duplicating code, consider creating a shared function or method and if you do so add a line in the [Reusable Widget List](widget-list.html).
-
-## File Structure:
-
-Organize files in a clear and consistent folder structure. Group related files together, such as placing all providers in a 'providers' folder.
 
 ## Naming Conventions:
 

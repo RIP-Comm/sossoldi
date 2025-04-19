@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:sossoldi/model/currency.dart';
-import 'package:sossoldi/model/base_entity.dart';
+import 'package:sossoldi/shared/models/currency.dart';
+import 'package:sossoldi/shared/models/base_entity.dart';
 
 void main() {
   test('Test Copy Currency', () {

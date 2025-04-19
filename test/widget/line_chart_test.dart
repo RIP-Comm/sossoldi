@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import "dart:math";
-import 'package:sossoldi/ui/widgets/line_chart.dart';
+import 'package:sossoldi/shared/ui/widgets/line_chart.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 void main() {

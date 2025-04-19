@@ -6,12 +6,12 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 // Models
-import '../model/bank_account.dart';
-import '../model/budget.dart';
-import '../model/category_transaction.dart';
-import '../model/currency.dart';
-import '../model/recurring_transaction.dart';
-import '../model/transaction.dart';
+import '../shared/models/bank_account.dart';
+import '../shared/models/budget.dart';
+import '../shared/models/category_transaction.dart';
+import '../shared/models/currency.dart';
+import '../shared/models/recurring_transaction.dart';
+import '../shared/models/transaction.dart';
 import 'migration_manager.dart';
 
 class SossoldiDatabase {
