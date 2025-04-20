@@ -261,32 +261,34 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   FilledButton(
                     child: const Text('RESET DB'),
                     onPressed: () async {
-                      await SossoldiDatabase.instance.resetDatabase().then((v) {
-                        ref.refresh(accountsProvider);
-                        ref.refresh(categoriesProvider);
-                        ref.refresh(transactionsProvider);
-                        ref.refresh(budgetsProvider);
+                      await SossoldiDatabase.instance.resetDatabase();
+                      ref.refresh(accountsProvider);
+                      ref.refresh(categoriesProvider);
+                      ref.refresh(transactionsProvider);
+                      ref.refresh(budgetsProvider);
+
+                      if (context.mounted) {
                         showSuccessDialog(context, "DB Cleared");
-                      });
+                      }
                     },
                   ),
                   FilledButton(
                     child: const Text('CLEAR AND FILL DEMO DATA'),
                     onPressed: () async {
                       await SossoldiDatabase.instance.clearDatabase();
-                      await SossoldiDatabase.instance
-                          .fillDemoData()
-                          .then((value) {
-                        ref.refresh(accountsProvider);
-                        ref.refresh(categoriesProvider);
-                        ref.refresh(transactionsProvider);
-                        ref.refresh(budgetsProvider);
-                        ref.refresh(dashboardProvider);
-                        ref.refresh(lastTransactionsProvider);
-                        ref.refresh(statisticsProvider);
+                      await SossoldiDatabase.instance.fillDemoData();
+                      ref.refresh(accountsProvider);
+                      ref.refresh(categoriesProvider);
+                      ref.refresh(transactionsProvider);
+                      ref.refresh(budgetsProvider);
+                      ref.refresh(dashboardProvider);
+                      ref.refresh(lastTransactionsProvider);
+                      ref.refresh(statisticsProvider);
+
+                      if (context.mounted) {
                         showSuccessDialog(
                             context, "DB Cleared, and DEMO data added");
-                      });
+                      }
                     },
                   ),
                 ],
