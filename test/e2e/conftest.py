@@ -1,6 +1,6 @@
 import pytest
 from _pytest.config.argparsing import Parser
-from _pytest.hookspec import Function
+from _pytest.python import Function
 from lib.fixtures import session_setup_teardown, test_setup  # noqa F401
 
 
