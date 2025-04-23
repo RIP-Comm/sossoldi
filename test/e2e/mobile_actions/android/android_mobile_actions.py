@@ -1,76 +1,70 @@
 import time
+from typing import Dict, List, Tuple
+
+from appium.webdriver.common.appiumby import AppiumBy as By
 from appium.webdriver.webdriver import WebDriver
 from appium.webdriver.webelement import WebElement
-from appium.webdriver.common.appiumby import AppiumBy
-from selenium.common.exceptions import StaleElementReferenceException
-from selenium.webdriver.common.by import By
-
+from lib.enums import Direction
 from mobile_actions.mobile_actions import MobileActions
+from selenium.common.exceptions import StaleElementReferenceException
 
 
 class AndroidMobileActions(MobileActions):
-    def __init__(self, driver: WebDriver):
-        super().__init__(driver)
+    def __init__(self, driver: WebDriver, driver_elements: Dict[str, str]):
+        super().__init__(driver=driver, driver_elements=driver_elements)
 
-    def relaunch_app(self):
-        """Terminate and relaunch the app."""
-        from utils.driver import Driver
-
-        app_package = Driver.app
-        print("Relaunching the app...")
-        time.sleep(1)
-        self.driver.terminate_app(app_package)
-        time.sleep(1)
-        self.driver.activate_app(app_package)
-
-    def send_keys(self, locator: tuple[str, str], text: str) -> None:
+    def send_keys(self, locator: Tuple[str, str], text: str) -> None:
         """Send text input to an element."""
-        self.click(locator)
-        self._send_keys(self.wait_for_element(locator), text)
+        self.click(locator=locator)
+        self._send_keys(element=self.wait_for_element(locator=locator), text=text)
 
     def send_keys_to_element(self, element: WebElement, text: str) -> None:
         """Send text input to a given element."""
-        self.click_element(element)
-        self._send_keys(element, text)
+        self.click_element(element=element)
+        self._send_keys(element=element, text=text)
 
-    def _send_keys(self, element: WebElement, text: str) -> None:
+    @staticmethod
+    def _send_keys(element: WebElement, text: str) -> None:
         """Helper method to send keys to an element."""
         if element:
             element.send_keys(text)
 
-    def get_attribute(self, locator: tuple[str, str], attribute: str) -> str:
+    def get_attribute(self, locator: Tuple[str, str], attribute: str) -> str:
         """Retrieve an element's attribute with retry mechanism."""
-        return self._get_element_attribute(lambda: self.wait_for_visibility(locator), attribute, str(locator))
+        return self._get_element_attribute(
+            lambda: self.wait_for_element(locator=locator), attribute=attribute, debug_info=str(locator)
+        )
 
     def get_attribute_for_element(self, element: WebElement, attribute: str) -> str:
         """Retrieve an attribute from a given element with retry mechanism."""
-        return self._get_element_attribute(lambda: element, attribute, str(element))
+        return self._get_element_attribute(lambda: element, attribute=attribute, debug_info=str(element))
 
-    def _get_element_attribute(self, element_provider, attribute: str, debug_info: str) -> str:
+    @staticmethod
+    def _get_element_attribute(element_provider, attribute: str, debug_info: str) -> str:
         """Helper method to get an element attribute with retry."""
         for _ in range(2):  # Retry once if needed
             try:
                 element = element_provider()
-                return element.get_attribute(attribute)
+                return element.get_attribute(attribute=attribute)
             except:
                 print(f"Error retrieving attribute from {debug_info}. Retrying...")
                 time.sleep(1)
         return ""
 
-    def find_elements_by_class(self, class_name: str):
+    def find_elements_by_class(self, class_name: str) -> List[WebElement]:
         """Find elements by class name, handling StaleElementReferenceException."""
         try:
             print(class_name)
-            return self.driver.find_elements(AppiumBy.CLASS_NAME, class_name)
+            return self.driver.find_elements(by=By.CLASS_NAME, value=class_name)
         except StaleElementReferenceException:
             print("Retrying due to stale element issue...")
-            return self.find_elements_by_class(class_name)
+            return self.find_elements_by_class(class_name=class_name)
 
-    def scroll_gesture(self, locator: tuple[str, str], direction: str) -> bool:
+    def scroll_gesture(self, locator: Tuple[str, str], direction: Direction) -> bool:
         """Perform a scroll gesture on an element located by the given locator and returns whether it can be furtherly scrolled."""
-        return self.scroll_gesture_for_element(self.wait_for_visibility(locator), direction)
+        return self.scroll_gesture_for_element(element=self.wait_for_element(locator=locator), direction=direction)
 
-    def scroll_gesture_for_element(self, element: WebElement, direction: str) -> bool:
+    def scroll_gesture_for_element(self, element: WebElement, direction: Direction) -> bool:
         """Perform a scroll gesture on a specific element and returns whether it can be furtherly scrolled."""
         if not element:
             return False
@@ -80,15 +74,9 @@ class AndroidMobileActions(MobileActions):
             "mobile: scrollGesture",
             {
                 "elementId": element.id,
-                "direction": direction,
+                "direction": direction.value,
                 "percent": 0.8,
                 "speed": 2000,
             },
         )
         return bool(can_scroll_more)
-    
-    def start_recording(self) -> None:
-        """Start recording the screen."""
-        self.driver.start_recording_screen()
-        MobileActions.is_recording = True
-        print("Started recording...")
