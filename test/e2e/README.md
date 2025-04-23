@@ -56,13 +56,12 @@ If you are missing one or both you can check our [guide](installation_guide.md)
 ### Mobile actions
 The *mobile_actions* folder houses essential classes for testing across different platforms. Here's what you'll find inside:
 
-- mobile_actions.py: Contains basic actions that can be performed across all platforms. If a new action needs to be added, start here and then extend to platform-specific classes only if necessary.
-- android/android_mobile_actions.py: Contains specific implementation of some actions for Android platform.
-- ios/ios_mobile_actions.py: Contains specific implementation of some actions for iOS platform.
+- `mobile_actions.py`: Contains basic actions that can be performed across all platforms. If a new action needs to be added, start here and then extend to platform-specific classes only if necessary.
+- `android/android_mobile_actions.py`: Contains specific implementation of some actions for Android platform.
+- `ios/ios_mobile_actions.py`: Contains specific implementation of some actions for iOS platform.
 
 ### pages
-In the pages folder, you'll find actions that are specific to each page of the application. Each page should have its own file with locators defined inside the __init__ method. 
-The driver setup is standard, always set as self.driver = Driver.driver. After this you will be able to use all the actions that are inside the BaseTest class (Ex. *self.driver.click(self.button)*)
+In the pages folder, you'll find actions that are specific to each page of the application. Each page should have its own file with locators defined inside the __init__ method.
 
 ### platform_config.yam
 This file contains the configuration necessary for running the tests.
@@ -70,11 +69,17 @@ This file contains the configuration necessary for running the tests.
 ### tests
 All the actual tests reside in this folder. Here are some guidelines for writing tests:
 
-- Use page objects for each test.
+- Use [page objects](https://medium.com/@aifakhri/page-object-models-implementation-with-pytest-b9673744b8c0) for each test.
 - Only perform actions using the page object without directly using gestures from mobile_actions.
+- Use enums wherever it's needed, avoid hard-coded strings and data
 
-### utils
-The utils folder holds miscellaneous functions that are needed but don't fit into any specific category.
+### lib
+The lib folder holds different files used to support the test script development:
+- `configuration.py`: defines the test configuration object. It is initialized when the test session starts and inherits singleton properties
+- `constants.py`: global constants to support the scripts should be put here
+- `enums.py`: enumerators to support the scripts should be put here
+- `fixtures.py`: [pytest fixtures](https://docs.pytest.org/en/stable/explanation/fixtures.html) are collected here
+- `utilities.py`: the file holds miscellaneous functions that are needed but don't fit into any specific category.
 
 ### conftest.py
-conftest.py is where you'll find all the setup and teardown procedures that need to be executed before and after each test session and test.
+`conftest.py` is where you'll find all the hooks to extend the standard pytest behavior.
