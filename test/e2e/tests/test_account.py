@@ -7,6 +7,9 @@ from pages.onboarding_page import OnboardingPage
 
 class TestAccount:
     def test_create_account(self):
+        """
+        Verify the account creation and subsequent display in the dashboard.
+        """
         onboarding = OnboardingPage()
         if Configuration().os == Os.ANDROID:
             onboarding.skip_onboarding()

@@ -12,6 +12,10 @@ from mobile_actions.ios.ios_mobile_actions import IOSMobileActions
 
 
 class Configuration(metaclass=Singleton):
+    """
+    Singleton class to define the test configuration used in the testing session.
+    """
+
     def __init__(self, os: Os = None, rootpath: Path = None):
         self.__loaded_config = self.__load_platform_config(rootpath=rootpath)
 
@@ -43,10 +47,17 @@ class Configuration(metaclass=Singleton):
 
     @staticmethod
     def __load_platform_config(rootpath: Path = None) -> Dict[str, Any]:
+        """
+        Load platform configuration settings from yaml file.
+        """
         with open(os.path.join(rootpath, "config", "platform_config.yaml"), "r") as file:
             return yaml.safe_load(file)
 
     class DriverConfiguration:
+        """
+        Class to include configuration settings used in the web driver.
+        """
+
         def __init__(self, os: Os, config: Dict[str, Any]):
 
             if os == Os.ANDROID:

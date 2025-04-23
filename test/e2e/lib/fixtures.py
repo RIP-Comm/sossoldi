@@ -7,6 +7,11 @@ from lib.enums import Os
 
 @pytest.fixture(scope="session", autouse=True)
 def session_setup_teardown(request: SubRequest) -> None:
+    """
+    Setup and teardown the testing environment.
+    On setup: read args and init the test configuration accordingly.
+    On teardown: quit the webdriver.
+    """
     local = request.config.getoption("--local")
 
     if local == "android":
