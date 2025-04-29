@@ -405,7 +405,7 @@ class _AddPageState extends ConsumerState<AddPage> {
                 ],
               ),
               padding: const EdgeInsets.fromLTRB(
-                Sizes.xl, Sizes.md, Sizes.xl, Sizes.xl),
+                  Sizes.xl, Sizes.md, Sizes.xl, Sizes.xl),
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
