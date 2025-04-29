@@ -38,29 +38,26 @@ class CategoryButton extends StatelessWidget {
               child: Icon(Icons.check_rounded, color: categoryColor, size: 22),
             ),
             const SizedBox(width: Sizes.sm),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: Sizes.sm),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    categoryName,
-                    textAlign: TextAlign.left,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge
-                        ?.copyWith(color: white),
-                  ),
-                  Text(
-                    "BUDGET: ${budget?.amountLimit}€",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge
-                        ?.copyWith(fontSize: 10, color: white),
-                  )
-                ],
-              ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  categoryName,
+                  textAlign: TextAlign.left,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge
+                      ?.copyWith(color: white),
+                ),
+                Text(
+                  "BUDGET: ${budget?.amountLimit}€",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge
+                      ?.copyWith(fontSize: 10, color: white),
+                )
+              ],
             ),
           ],
         ),
@@ -85,20 +82,24 @@ class CategoryButton extends StatelessWidget {
                 color: blue1,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: Sizes.sm),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    categoryName,
-                    textAlign: TextAlign.left,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  Text("ADD BUDGET",
-                      style: Theme.of(context).textTheme.labelMedium),
-                ],
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: Sizes.sm),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      categoryName,
+                      textAlign: TextAlign.left,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text("ADD BUDGET",
+                        style: Theme.of(context).textTheme.labelMedium),
+                  ],
+                ),
               ),
             ),
           ],
