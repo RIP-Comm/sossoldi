@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../custom_widgets/default_container.dart';
+import '../../../ui/widgets/default_container.dart';
 import '../../../model/budget.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/budgets_provider.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
+import '../../../ui/assets.dart';
+import '../../../ui/device.dart';
 import '../../graphs_page/widgets/linear_progress_bar.dart';
 import '../manage_budget_page.dart';
 import 'budget_pie_chart.dart';
@@ -23,7 +25,8 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
   @override
   Widget build(BuildContext context) {
     final budgets = ref.watch(budgetsProvider.notifier).getBudgets();
-    final transactions = ref.watch(transactionsProvider.notifier).getMonthlyTransactions();
+    final transactions =
+        ref.watch(transactionsProvider.notifier).getMonthlyTransactions();
     final currencyState = ref.watch(currencyStateNotifier);
 
     return DefaultContainer(
@@ -44,19 +47,23 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Composition", style: Theme.of(context).textTheme.titleLarge),
+                      Text("Composition",
+                          style: Theme.of(context).textTheme.titleLarge),
                       BudgetPieChart(budgets: budgets as List<Budget>),
-                      Text("Progress", style: Theme.of(context).textTheme.titleLarge),
-                      const SizedBox(height: 10),
+                      Text("Progress",
+                          style: Theme.of(context).textTheme.titleLarge),
+                      const SizedBox(height: Sizes.sm),
                       ListView.separated(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: budgets.length,
                         itemBuilder: (BuildContext context, int index) {
-                          num spent = num.parse((transactions as List<Transaction>)
-                              .where((t) => t.idCategory == budgets[index].idCategory)
-                              .fold(0.0, (sum, t) => sum + t.amount)
-                              .toStringAsFixed(2));
+                          num spent = num.parse(
+                              (transactions as List<Transaction>)
+                                  .where((t) =>
+                                      t.idCategory == budgets[index].idCategory)
+                                  .fold(0.0, (sum, t) => sum + t.amount)
+                                  .toStringAsFixed(2));
                           Budget budget = budgets.elementAt(index);
                           return Column(
                             children: [
@@ -64,32 +71,37 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                                 children: [
                                   Text(
                                     budget.name!,
-                                    style: const TextStyle(fontWeight: FontWeight.normal),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.normal),
                                   ),
                                   const Spacer(),
-                                  spent >= (budget.amountLimit * 0.9)
-                                      ? const Icon(Icons.error_outline, color: Colors.red)
-                                      : Container(),
+                                  if (spent >= (budget.amountLimit * 0.9))
+                                    const Icon(
+                                      Icons.error_outline,
+                                      color: Colors.red,
+                                    ),
                                   Text(
                                     "$spent${currencyState.selectedCurrency.symbol}/${budget.amountLimit}${currencyState.selectedCurrency.symbol}",
-                                    style: const TextStyle(fontWeight: FontWeight.normal),
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                    ),
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 4),
+                              const SizedBox(height: Sizes.xs),
                               LinearProgressBar(
                                 type: BarType.category,
                                 colorIndex: index,
                                 amount: (spent == 0 || budget.amountLimit == 0)
-                                      ? 0
-                                      : spent,
-                                total: budget.amountLimit
+                                    ? 0
+                                    : spent,
+                                total: budget.amountLimit,
                               ),
                             ],
                           );
                         },
                         separatorBuilder: (context, index) {
-                          return const SizedBox(height: 15);
+                          return const SizedBox(height: Sizes.lg);
                         },
                       ),
                     ],
@@ -102,7 +114,7 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                         textAlign: TextAlign.center,
                       ),
                       Image.asset(
-                        'assets/wallet.png',
+                        SossoldiAssets.wallet,
                         width: 240,
                         height: 240,
                       ),
@@ -111,7 +123,7 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                         style: Theme.of(context).textTheme.bodySmall,
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 15),
+                      const SizedBox(height: Sizes.lg),
                       TextButton.icon(
                         icon: Icon(
                           Icons.add_circle,
@@ -123,25 +135,26 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                             isScrollControlled: true,
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20.0),
-                                topRight: Radius.circular(20.0),
+                                topLeft:
+                                    Radius.circular(Sizes.borderRadiusLarge),
+                                topRight:
+                                    Radius.circular(Sizes.borderRadiusLarge),
                               ),
                             ),
                             elevation: 10,
                             builder: (BuildContext context) {
                               return FractionallySizedBox(
-                                  heightFactor: 0.9,
-                                  child:
-                                      ManageBudgetPage(onRefreshBudgets: widget.onRefreshBudgets));
+                                heightFactor: 0.9,
+                                child: ManageBudgetPage(
+                                    onRefreshBudgets: widget.onRefreshBudgets),
+                              );
                             },
                           );
                         },
                         label: Text(
                           "Create budget",
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall!
-                              .apply(color: Theme.of(context).colorScheme.secondary),
+                          style: Theme.of(context).textTheme.titleSmall!.apply(
+                              color: Theme.of(context).colorScheme.secondary),
                         ),
                         style: TextButton.styleFrom(
                           backgroundColor: Colors.white,

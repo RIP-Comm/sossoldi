@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'dart:math'; // used for random number generation in demo data
+import 'dart:developer' as dev;
+
 import 'package:csv/csv.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
@@ -20,7 +22,6 @@ class SossoldiDatabase {
   static Database? _database;
   static String dbName = 'sossoldi.db';
 
-
   // Zero args constructor needed to extend this class
   SossoldiDatabase({String? dbName}) {
     dbName = dbName ?? 'sossoldi.db';
@@ -39,10 +40,11 @@ class SossoldiDatabase {
     final databasePath = await getDatabasesPath();
     final path = join(databasePath, filePath);
     return await openDatabase(
-        path,
-        version: _migrationManager.latestVersion,
-        onCreate: _createDB,
-        onUpgrade: _upgradeDB);
+      path,
+      version: _migrationManager.latestVersion,
+      onCreate: _createDB,
+      onUpgrade: _upgradeDB,
+    );
   }
 
   static Future _createDB(Database database, int version) async {
@@ -51,7 +53,8 @@ class SossoldiDatabase {
     await instance._migrationManager.migrate(database, 0, version);
   }
 
-  static Future _upgradeDB(Database database, int oldVersion, int newVersion) async {
+  static Future _upgradeDB(
+      Database database, int oldVersion, int newVersion) async {
     await instance._migrationManager.migrate(database, oldVersion, newVersion);
   }
 
@@ -105,7 +108,7 @@ class SossoldiDatabase {
           allData.add(csvRow);
         }
       } catch (e) {
-        print('Error exporting table $tableName: $e');
+        dev.log('Error exporting table $tableName: $e');
       }
     }
 
@@ -178,14 +181,14 @@ class SossoldiDatabase {
             }
             results[tableName] = true;
           } catch (e) {
-            print('Error importing table $tableName: $e');
+            dev.log('Error importing table $tableName: $e');
             results[tableName] = false;
           }
         }
       });
     } catch (e) {
-      print('Error during import: $e');
-      throw e;
+      dev.log('Error during import: $e');
+      rethrow;
     }
 
     return results;

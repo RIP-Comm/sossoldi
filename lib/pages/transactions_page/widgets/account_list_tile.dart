@@ -1,11 +1,12 @@
 import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
-import '../../../custom_widgets/rounded_icon.dart';
+import '../../../ui/extensions.dart';
+import '../../../ui/widgets/rounded_icon.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/currency_provider.dart';
+import '../../../ui/device.dart';
 import 'accounts_tab.dart';
 
 class AccountListTile extends ConsumerWidget {
@@ -47,12 +48,12 @@ class AccountListTile extends ConsumerWidget {
           },
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
               color: color.withAlpha(90),
             ),
             padding: const EdgeInsets.symmetric(
-              horizontal: 8.0,
-              vertical: 16.0,
+              horizontal: Sizes.sm,
+              vertical: Sizes.lg,
             ),
             child: Row(
               mainAxisSize: MainAxisSize.max,
@@ -60,9 +61,9 @@ class AccountListTile extends ConsumerWidget {
                 RoundedIcon(
                   icon: icon,
                   backgroundColor: color,
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(Sizes.sm),
                 ),
-                const SizedBox(width: 8.0),
+                const SizedBox(width: Sizes.sm),
                 Expanded(
                   child: Column(
                     children: [
@@ -75,7 +76,10 @@ class AccountListTile extends ConsumerWidget {
                           ),
                           Text(
                             "${amount.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}",
-                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: (amount > 0) ? green : red),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(color: (amount > 0) ? green : red),
                           ),
                         ],
                       ),
@@ -95,9 +99,11 @@ class AccountListTile extends ConsumerWidget {
                     ],
                   ),
                 ),
-                const SizedBox(width: 8.0),
+                const SizedBox(width: Sizes.sm),
                 Icon(
-                  (selectedAccountIndex == index) ? Icons.expand_more : Icons.chevron_right,
+                  (selectedAccountIndex == index)
+                      ? Icons.expand_more
+                      : Icons.chevron_right,
                 ),
               ],
             ),
@@ -129,7 +135,7 @@ class AccountListTile extends ConsumerWidget {
   }
 }
 
-class TransactionRow extends ConsumerWidget with Functions {
+class TransactionRow extends ConsumerWidget {
   const TransactionRow({
     super.key,
     required this.transaction,
@@ -142,13 +148,13 @@ class TransactionRow extends ConsumerWidget with Functions {
     final currencyState = ref.watch(currencyStateNotifier);
     return Container(
       padding: const EdgeInsets.symmetric(
-        horizontal: 8.0,
-        vertical: 16.0,
+        horizontal: Sizes.sm,
+        vertical: Sizes.lg,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
-          const SizedBox(width: 48.0),
+          const SizedBox(width: Sizes.xl * 2),
           Expanded(
             child: Column(
               children: [
@@ -160,11 +166,9 @@ class TransactionRow extends ConsumerWidget with Functions {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(
-                      "${numToCurrency(transaction.amount)} ${currencyState.selectedCurrency.symbol}",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge
-                          ?.copyWith(color: (transaction.amount > 0) ? green : red),
+                      "${transaction.amount.toCurrency()} ${currencyState.selectedCurrency.symbol}",
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: (transaction.amount > 0) ? green : red),
                     ),
                   ],
                 ),
@@ -172,7 +176,8 @@ class TransactionRow extends ConsumerWidget with Functions {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      transaction.categoryName?.toUpperCase() ?? "Uncategorized",
+                      transaction.categoryName?.toUpperCase() ??
+                          "Uncategorized",
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     Text(
@@ -184,7 +189,7 @@ class TransactionRow extends ConsumerWidget with Functions {
               ],
             ),
           ),
-          const SizedBox(width: 8.0),
+          const SizedBox(width: Sizes.sm),
         ],
       ),
     );
@@ -205,7 +210,8 @@ class ExpandedSection extends StatefulWidget {
   State<ExpandedSection> createState() => _ExpandedSectionState();
 }
 
-class _ExpandedSectionState extends State<ExpandedSection> with SingleTickerProviderStateMixin {
+class _ExpandedSectionState extends State<ExpandedSection>
+    with SingleTickerProviderStateMixin {
   late AnimationController expandController;
   late Animation<double> animation;
 

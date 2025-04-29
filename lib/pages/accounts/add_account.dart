@@ -1,12 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/accounts_provider.dart';
 import '../../constants/constants.dart';
-import '../../constants/functions.dart';
 import '../../constants/style.dart';
 import '../../providers/currency_provider.dart';
+import '../../utils/decimal_text_input_formatter.dart';
+import '../../ui/device.dart';
+import '../../ui/extensions.dart';
 import 'widgets/confirm_account_deletion_dialog.dart';
 
 class AddAccount extends ConsumerStatefulWidget {
@@ -16,7 +16,7 @@ class AddAccount extends ConsumerStatefulWidget {
   ConsumerState<AddAccount> createState() => _AddAccountState();
 }
 
-class _AddAccountState extends ConsumerState<AddAccount> with Functions {
+class _AddAccountState extends ConsumerState<AddAccount> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController balanceController = TextEditingController();
   String accountIcon = accountIconList.keys.first;
@@ -31,7 +31,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
     final selectedAccount = ref.read(selectedAccountProvider);
     if (selectedAccount != null) {
       nameController.text = selectedAccount.name;
-      balanceController.text = numToCurrency(selectedAccount.total);
+      balanceController.text = selectedAccount.total?.toCurrency() ?? "";
       accountIcon = selectedAccount.symbol;
       accountColor = selectedAccount.color;
       countNetWorth = selectedAccount.countNetWorth;
@@ -70,12 +70,14 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                     width: double.infinity,
                     margin: const EdgeInsets.symmetric(
                       horizontal: 16,
-                      vertical: 24,
+                      vertical: Sizes.lg,
                     ),
-                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                    padding: const EdgeInsets.fromLTRB(
+                        Sizes.lg, Sizes.md, Sizes.lg, 0),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius:
+                          BorderRadius.circular(Sizes.borderRadiusSmall),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,14 +96,15 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                   ),
                   Container(
                     width: double.infinity,
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    margin: const EdgeInsets.symmetric(horizontal: Sizes.lg),
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16,
                       vertical: 12,
                     ),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius:
+                          BorderRadius.circular(Sizes.borderRadiusSmall),
                     ),
                     child: Column(
                       children: [
@@ -112,12 +115,12 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                             style: Theme.of(context).textTheme.labelLarge,
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: Sizes.xl),
                         Material(
                           color: Colors.transparent,
                           child: InkWell(
                             borderRadius:
-                                const BorderRadius.all(Radius.circular(90)),
+                                BorderRadius.circular(Sizes.borderRadius * 10),
                             onTap: () =>
                                 setState(() => showAccountIcons = true),
                             child: Ink(
@@ -125,7 +128,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                                 shape: BoxShape.circle,
                                 color: accountColorListTheme[accountColor],
                               ),
-                              padding: const EdgeInsets.all(16),
+                              padding: const EdgeInsets.all(Sizes.lg),
                               child: Icon(
                                 accountIconList[accountIcon],
                                 size: 48,
@@ -134,18 +137,18 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 6),
+                        const SizedBox(height: Sizes.sm),
                         Text(
                           "CHOOSE ICON",
                           style: Theme.of(context).textTheme.labelMedium,
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: Sizes.md),
                         if (showAccountIcons) const Divider(color: grey2),
                         if (showAccountIcons)
                           Container(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 8,
+                              horizontal: Sizes.lg,
+                              vertical: Sizes.sm,
                             ),
                             color: Theme.of(context).colorScheme.surface,
                             child: Column(
@@ -184,7 +187,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                                       onTap: () => setState(
                                           () => accountIcon = accountIconName),
                                       child: Container(
-                                        margin: const EdgeInsets.all(4),
+                                        margin: const EdgeInsets.all(Sizes.xs),
                                         decoration: BoxDecoration(
                                           color: accountIconList[accountIcon] ==
                                                   accountIconData
@@ -214,15 +217,16 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                             ),
                           ),
                         const Divider(height: 1, color: grey2),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: Sizes.md),
                         SizedBox(
                           height: 38,
                           child: ListView.separated(
                             scrollDirection: Axis.horizontal,
                             physics: const BouncingScrollPhysics(),
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: Sizes.lg),
                             separatorBuilder: (context, index) =>
-                                const SizedBox(width: 16),
+                                const SizedBox(width: Sizes.lg),
                             itemBuilder: (context, index) {
                               Color color = accountColorListTheme[index];
                               return GestureDetector(
@@ -257,7 +261,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                             itemCount: accountColorListTheme.length,
                           ),
                         ),
-                        const SizedBox(height: 6),
+                        const SizedBox(height: Sizes.sm),
                         Text(
                           "CHOOSE COLOR",
                           style: Theme.of(context)
@@ -266,16 +270,19 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                               .copyWith(
                                   color: Theme.of(context).colorScheme.primary),
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: Sizes.lg),
                       ],
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.fromLTRB(16, 24, 16, 0),
-                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                    margin: const EdgeInsets.fromLTRB(
+                        Sizes.lg, Sizes.xl, Sizes.lg, 0),
+                    padding: const EdgeInsets.fromLTRB(
+                        Sizes.lg, Sizes.md, Sizes.lg, 0),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius:
+                          BorderRadius.circular(Sizes.borderRadiusSmall),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -293,10 +300,8 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                           ),
                           keyboardType:
                               TextInputType.numberWithOptions(decimal: true),
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.allow(
-                              RegExp(r'^\d*\.?\d{0,2}'),
-                            ),
+                          inputFormatters: [
+                            DecimalTextInputFormatter(decimalDigits: 2),
                           ],
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
@@ -305,19 +310,21 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                   ),
                   Container(
                     margin: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 16,
+                      horizontal: Sizes.lg,
+                      vertical: Sizes.lg,
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: Sizes.lg),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius:
+                          BorderRadius.circular(Sizes.borderRadiusSmall),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 12.0),
+                          padding:
+                              const EdgeInsets.symmetric(vertical: Sizes.md),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -335,7 +342,8 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                         ),
                         const Divider(height: 1, color: grey2),
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 12.0),
+                          padding:
+                              const EdgeInsets.symmetric(vertical: Sizes.md),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -357,7 +365,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                   if (selectedAccount != null)
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(Sizes.lg),
                       child: TextButton.icon(
                         onPressed: () {
                           showDialog(
@@ -416,12 +424,13 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                 )
               ],
             ),
-            padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
+            padding: const EdgeInsets.fromLTRB(
+                Sizes.xl, Sizes.md, Sizes.lg, Sizes.lg),
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
                 boxShadow: [defaultShadow],
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(Sizes.borderRadius),
               ),
               child: ElevatedButton(
                 onPressed: () async {
@@ -430,7 +439,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                           name: nameController.text,
                           icon: accountIcon,
                           color: accountColor,
-                          balance: currencyToNum(balanceController.text),
+                          balance: balanceController.text.toNum(),
                           countNetWorth: countNetWorth,
                           mainAccount: mainAccount,
                         );
@@ -441,7 +450,7 @@ class _AddAccountState extends ConsumerState<AddAccount> with Functions {
                           color: accountColor,
                           countNetWorth: countNetWorth,
                           mainAccount: mainAccount,
-                          startingValue: currencyToNum(balanceController.text),
+                          startingValue: balanceController.text.toNum(),
                         );
                   }
                   if (context.mounted) Navigator.of(context).pop();

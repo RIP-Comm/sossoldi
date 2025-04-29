@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:sqflite/sqflite.dart';
 import '../migration_base.dart';
 
@@ -5,10 +7,11 @@ import '../migration_base.dart';
 import '/model/bank_account.dart';
 
 class AccountNetWorth extends Migration {
-  AccountNetWorth() : super(
-      version: 2,
-      description: 'Add account net worth column'
-  );
+  AccountNetWorth()
+      : super(
+          version: 2,
+          description: 'Add account net worth column',
+        );
 
   @override
   Future<void> up(Database db) async {
