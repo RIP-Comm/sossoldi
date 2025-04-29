@@ -146,6 +146,10 @@ class TransactionRow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currencyState = ref.watch(currencyStateNotifier);
+    final amount = transaction.type == TransactionType.income
+        ? transaction.amount
+        : -transaction.amount;
+
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: Sizes.sm,
@@ -166,9 +170,11 @@ class TransactionRow extends ConsumerWidget {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(
-                      "${transaction.amount.toCurrency()} ${currencyState.selectedCurrency.symbol}",
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: (transaction.amount > 0) ? green : red),
+                      "${amount.toCurrency()} ${currencyState.selectedCurrency.symbol}",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge
+                          ?.copyWith(color: (amount > 0) ? green : red),
                     ),
                   ],
                 ),
