@@ -10,8 +10,7 @@ void main() {
         symbol: '\$',
         code: 'USD',
         name: "United States Dollar",
-        mainCurrency: true
-    );
+        mainCurrency: true);
 
     Currency bCopy = b.copy(id: 10);
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../ui/device.dart';
+
 void showSnackBar(
   BuildContext context, {
   required String message,
@@ -16,23 +18,28 @@ void showSnackBar(
         Expanded(
           child: Text(
             message,
+            maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
         ),
         if (onAction != null)
           ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-              ),
-              onPressed: () {
-                onAction.call();
-                closeSnackBar(context);
-              },
-              child: Text(actionLabel ?? 'Close'))
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: Sizes.lg),
+            ),
+            onPressed: () {
+              onAction.call();
+              closeSnackBar(context);
+            },
+            child: Text(
+              actionLabel ?? 'Close',
+            ),
+          )
       ],
     ),
     behavior: SnackBarBehavior.floating,
-    padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+    padding:
+        const EdgeInsets.symmetric(vertical: Sizes.md, horizontal: Sizes.lg),
   );
 
   ScaffoldMessenger.of(context).hideCurrentSnackBar();

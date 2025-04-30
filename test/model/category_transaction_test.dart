@@ -45,8 +45,10 @@ void main() {
     assert(c.symbol == json[CategoryTransactionFields.symbol]);
     assert(c.color == json[CategoryTransactionFields.color]);
     assert(c.note == json[CategoryTransactionFields.note]);
-    assert(c.createdAt?.toUtc().toIso8601String() == json[BaseEntityFields.createdAt]);
-    assert(c.updatedAt?.toUtc().toIso8601String() == json[BaseEntityFields.updatedAt]);
+    assert(c.createdAt?.toUtc().toIso8601String() ==
+        json[BaseEntityFields.createdAt]);
+    assert(c.updatedAt?.toUtc().toIso8601String() ==
+        json[BaseEntityFields.updatedAt]);
   });
 
   test("Test toJson Category Transaction", () {

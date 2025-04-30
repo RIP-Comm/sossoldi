@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
-import '../../../constants/functions.dart';
-import '../../../custom_widgets/default_container.dart';
-import '../../../custom_widgets/transaction_type_button.dart';
+import '../../../ui/widgets/default_container.dart';
+import '../../../ui/widgets/transaction_type_button.dart';
 import '../../../model/bank_account.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/transactions_provider.dart';
+import '../../../ui/device.dart';
 import 'account_list_tile.dart';
 import 'accounts_pie_chart.dart';
 
-final selectedAccountIndexProvider = StateProvider.autoDispose<int>((ref) => -1);
+final selectedAccountIndexProvider =
+    StateProvider.autoDispose<int>((ref) => -1);
 
 class AccountsTab extends ConsumerStatefulWidget {
   const AccountsTab({
@@ -23,7 +24,7 @@ class AccountsTab extends ConsumerStatefulWidget {
   ConsumerState<AccountsTab> createState() => _AccountsTabState();
 }
 
-class _AccountsTabState extends ConsumerState<AccountsTab> with Functions {
+class _AccountsTabState extends ConsumerState<AccountsTab> {
   @override
   Widget build(BuildContext context) {
     final accounts = ref.watch(accountsProvider);
@@ -43,7 +44,8 @@ class _AccountsTabState extends ConsumerState<AccountsTab> with Functions {
         if (accountToTransactionsIncome.containsKey(accountId)) {
           accountToTransactionsIncome[accountId]?.add(transaction);
         } else {
-          accountToTransactionsIncome.putIfAbsent(accountId, () => [transaction]);
+          accountToTransactionsIncome.putIfAbsent(
+              accountId, () => [transaction]);
         }
 
         // update total amount for the account
@@ -52,39 +54,46 @@ class _AccountsTabState extends ConsumerState<AccountsTab> with Functions {
           accountToAmountIncome[accountId] =
               accountToAmountIncome[accountId]! + transaction.amount.toDouble();
         } else {
-          accountToAmountIncome.putIfAbsent(accountId, () => transaction.amount.toDouble());
+          accountToAmountIncome.putIfAbsent(
+              accountId, () => transaction.amount.toDouble());
         }
       } else if (transaction.type == TransactionType.expense) {
         if (accountToTransactionsExpense.containsKey(accountId)) {
           accountToTransactionsExpense[accountId]?.add(transaction);
         } else {
-          accountToTransactionsExpense.putIfAbsent(accountId, () => [transaction]);
+          accountToTransactionsExpense.putIfAbsent(
+              accountId, () => [transaction]);
         }
 
         // update total amount for the account
         totalExpense -= transaction.amount;
         if (accountToAmountExpense.containsKey(accountId)) {
           accountToAmountExpense[accountId] =
-              accountToAmountExpense[accountId]! - transaction.amount.toDouble();
+              accountToAmountExpense[accountId]! -
+                  transaction.amount.toDouble();
         } else {
-          accountToAmountExpense.putIfAbsent(accountId, () => -transaction.amount.toDouble());
+          accountToAmountExpense.putIfAbsent(
+              accountId, () => -transaction.amount.toDouble());
         }
       }
     }
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(vertical: 24),
+      padding: const EdgeInsets.symmetric(vertical: Sizes.xl),
       child: DefaultContainer(
         child: Column(
           children: [
             const TransactionTypeButton(),
-            const SizedBox(height: 16),
+            const SizedBox(height: Sizes.lg),
             accounts.when(
               data: (data) {
-                List<BankAccount> accountIncomeList =
-                    data.where((account) => accountToAmountIncome.containsKey(account.id)).toList();
+                List<BankAccount> accountIncomeList = data
+                    .where((account) =>
+                        accountToAmountIncome.containsKey(account.id))
+                    .toList();
                 List<BankAccount> accountExpenseList = data
-                    .where((account) => accountToAmountExpense.containsKey(account.id))
+                    .where((account) =>
+                        accountToAmountExpense.containsKey(account.id))
                     .toList();
                 return transactionType == TransactionType.income
                     ? accountIncomeList.isEmpty
@@ -101,22 +110,31 @@ class _AccountsTabState extends ConsumerState<AccountsTab> with Functions {
                                 amounts: accountToAmountIncome,
                                 total: totalIncome,
                               ),
-                              const SizedBox(height: 16),
+                              const SizedBox(height: Sizes.lg),
                               ListView.separated(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: accountIncomeList.length,
-                                separatorBuilder: (context, index) => const SizedBox(height: 10),
+                                separatorBuilder: (context, index) =>
+                                    const SizedBox(height: 10),
                                 itemBuilder: (context, index) {
                                   BankAccount b = accountIncomeList[index];
                                   return AccountListTile(
                                     title: b.name,
-                                    nTransactions: accountToTransactionsIncome[b.id]?.length ?? 0,
-                                    transactions: accountToTransactionsIncome[b.id] ?? [],
+                                    nTransactions:
+                                        accountToTransactionsIncome[b.id]
+                                                ?.length ??
+                                            0,
+                                    transactions:
+                                        accountToTransactionsIncome[b.id] ?? [],
                                     amount: accountToAmountIncome[b.id] ?? 0,
-                                    percent: (accountToAmountIncome[b.id] ?? 0) / totalIncome * 100,
+                                    percent:
+                                        (accountToAmountIncome[b.id] ?? 0) /
+                                            totalIncome *
+                                            100,
                                     color: accountColorList[b.color],
-                                    icon: accountIconList[b.symbol] ?? Icons.swap_horiz_rounded,
+                                    icon: accountIconList[b.symbol] ??
+                                        Icons.swap_horiz_rounded,
                                     index: index,
                                   );
                                 },
@@ -137,23 +155,32 @@ class _AccountsTabState extends ConsumerState<AccountsTab> with Functions {
                                 amounts: accountToAmountExpense,
                                 total: totalExpense,
                               ),
-                              const SizedBox(height: 16),
+                              const SizedBox(height: Sizes.lg),
                               ListView.separated(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: accountExpenseList.length,
-                                separatorBuilder: (context, index) => const SizedBox(height: 10),
+                                separatorBuilder: (context, index) =>
+                                    const SizedBox(height: Sizes.sm),
                                 itemBuilder: (context, index) {
                                   BankAccount b = accountExpenseList[index];
                                   return AccountListTile(
                                     title: b.name,
-                                    nTransactions: accountToTransactionsExpense[b.id]?.length ?? 0,
-                                    transactions: accountToTransactionsExpense[b.id] ?? [],
+                                    nTransactions:
+                                        accountToTransactionsExpense[b.id]
+                                                ?.length ??
+                                            0,
+                                    transactions:
+                                        accountToTransactionsExpense[b.id] ??
+                                            [],
                                     amount: accountToAmountExpense[b.id] ?? 0,
                                     percent:
-                                        (accountToAmountExpense[b.id] ?? 0) / totalExpense * 100,
+                                        (accountToAmountExpense[b.id] ?? 0) /
+                                            totalExpense *
+                                            100,
                                     color: accountColorList[b.color],
-                                    icon: accountIconList[b.symbol] ?? Icons.swap_horiz_rounded,
+                                    icon: accountIconList[b.symbol] ??
+                                        Icons.swap_horiz_rounded,
                                     index: index,
                                   );
                                 },

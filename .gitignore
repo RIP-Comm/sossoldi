@@ -43,6 +43,9 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# FVM Version Cache
+.fvm/
+
 # Ignored folders/files used for the e2e tests
 __pycache__
 .pytest_cache

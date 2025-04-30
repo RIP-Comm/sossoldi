@@ -11,13 +11,15 @@ class MigrationManager {
 
   Future<void> migrate(Database db, int oldVersion, int newVersion) async {
     if (kDebugMode) {
-      print('[MigrationManager] Migrating database from $oldVersion to $newVersion');
+      print(
+          '[MigrationManager] Migrating database from $oldVersion to $newVersion');
     }
 
     for (var migration in _migrations) {
       if (migration.version > oldVersion && migration.version <= newVersion) {
         if (kDebugMode) {
-          print('[MigrationManager] Running migration ${migration.version}: ${migration.description}');
+          print(
+              '[MigrationManager] Running migration ${migration.version}: ${migration.description}');
         }
         await migration.up(db);
       }

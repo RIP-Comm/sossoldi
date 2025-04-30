@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
 import '../../../model/budget.dart';
 import '../../../model/category_transaction.dart';
 import '../../../utils/decimal_text_input_formatter.dart';
+import '../../../ui/device.dart';
 
 class BudgetCategorySelector extends ConsumerStatefulWidget {
   final List<CategoryTransaction> categories;
@@ -14,16 +14,18 @@ class BudgetCategorySelector extends ConsumerStatefulWidget {
   final CategoryTransaction initSelectedCategory;
   final Function(Budget) onBudgetChanged;
 
-  const BudgetCategorySelector(
-      {super.key,
-      required this.categories,
-      required this.budget,
-      required this.initSelectedCategory,
-      required this.onBudgetChanged,
-      required this.categoriesAlreadyUsed});
+  const BudgetCategorySelector({
+    super.key,
+    required this.categories,
+    required this.budget,
+    required this.initSelectedCategory,
+    required this.onBudgetChanged,
+    required this.categoriesAlreadyUsed,
+  });
 
   @override
-  ConsumerState<BudgetCategorySelector> createState() => _BudgetCategorySelector();
+  ConsumerState<BudgetCategorySelector> createState() =>
+      _BudgetCategorySelector();
 }
 
 class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
@@ -32,10 +34,12 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
 
   void _modifyBudget() {
     Budget updatedBudget = Budget(
-        idCategory: selectedCategory.id!,
-        name: selectedCategory.name,
-        active: true,
-        amountLimit: _controller.text.isNotEmpty ? double.parse(_controller.text) : 0);
+      idCategory: selectedCategory.id!,
+      name: selectedCategory.name,
+      active: true,
+      amountLimit:
+          _controller.text.isNotEmpty ? double.parse(_controller.text) : 0,
+    );
     widget.onBudgetChanged(updatedBudget);
   }
 
@@ -54,7 +58,7 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(Sizes.lg),
       color: Theme.of(context).colorScheme.surface,
       child: Row(
         children: [
@@ -63,14 +67,14 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
               height: 55,
               width: double.infinity,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(Sizes.borderRadius),
                 border: Border.all(width: 1, color: Colors.grey),
               ),
               child: Container(
-                padding: const EdgeInsets.all(5),
+                padding: const EdgeInsets.all(Sizes.xxs),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.primaryContainer,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(Sizes.borderRadius),
                 ),
                 child: DropdownButton<CategoryTransaction>(
                   value: selectedCategory,
@@ -87,7 +91,7 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
                         child: Row(
                           children: [
                             Icon(icon),
-                            const SizedBox(width: 15),
+                            const SizedBox(width: Sizes.lg),
                             Text(category.name)
                           ],
                         ));
@@ -102,17 +106,17 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
               ),
             ),
           ),
-          const SizedBox(width: 20),
+          const SizedBox(width: Sizes.xl),
           Container(
             width: 100,
             height: 55,
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primaryContainer,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(Sizes.borderRadius),
               border: Border.all(width: 1, color: Colors.grey),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(Sizes.sm),
               child: TextField(
                 controller: _controller,
                 inputFormatters: [
