@@ -30,8 +30,8 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
     super.initState();
 
     final transactionType = ref.read(transactionTypeProvider);
-    categoryType = ref.read(transactionToCategoryProvider(transactionType))
-        ?? CategoryTransactionType.expense;
+    categoryType = ref.read(transactionToCategoryProvider(transactionType)) ??
+        CategoryTransactionType.expense;
 
     final selectedCategory = ref.read(selectedCategoryProvider);
     if (selectedCategory != null) {
