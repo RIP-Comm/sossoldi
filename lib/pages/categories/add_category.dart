@@ -4,6 +4,7 @@ import '../../constants/constants.dart';
 import '../../constants/style.dart';
 import '../../model/category_transaction.dart';
 import '../../providers/categories_provider.dart';
+import '../../providers/transactions_provider.dart';
 import '../../ui/device.dart';
 import '../../ui/extensions.dart';
 
@@ -18,7 +19,7 @@ class AddCategory extends ConsumerStatefulWidget {
 
 class _AddCategoryState extends ConsumerState<AddCategory> {
   final TextEditingController nameController = TextEditingController();
-  CategoryTransactionType categoryType = CategoryTransactionType.income;
+  late CategoryTransactionType categoryType;
   String categoryIcon = iconList.keys.first;
   int categoryColor = 0;
 
@@ -26,9 +27,14 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
 
   @override
   void initState() {
-    if (widget.hideIncome) {
-      categoryType = CategoryTransactionType.expense;
-    }
+    super.initState();
+
+    // Set default category type based on transaction type
+    final transactionType = ref.read(transactionTypeProvider);
+    categoryType = ref.read(transactionToCategoryProvider(transactionType))
+        ?? CategoryTransactionType.expense;
+
+    // If editing an existing category, override values
     final selectedCategory = ref.read(selectedCategoryProvider);
     if (selectedCategory != null) {
       nameController.text = selectedCategory.name;
@@ -36,7 +42,6 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
       categoryIcon = selectedCategory.symbol;
       categoryColor = selectedCategory.color;
     }
-    super.initState();
   }
 
   @override
