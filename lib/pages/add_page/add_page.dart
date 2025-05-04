@@ -130,9 +130,7 @@ class _AddPageState extends ConsumerState<AddPage> {
         .read(accountsProvider.notifier)
         .refreshAccount(ref.read(bankAccountProvider)!)
         .whenComplete(() {
-      if (mounted) {
-        Navigator.of(context).pop();
-      }
+      if (mounted) Navigator.of(context).pop();
     });
   }
 
@@ -389,36 +387,38 @@ class _AddPageState extends ConsumerState<AddPage> {
               ),
             ),
           ),
-          Container(
-            alignment: Alignment.bottomCenter,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              boxShadow: [
-                BoxShadow(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .primary
-                      .withValues(alpha: 0.15),
-                  blurRadius: 5.0,
-                  offset: const Offset(0, -1.0),
-                )
-              ],
-            ),
-            padding: const EdgeInsets.fromLTRB(
-                Sizes.xl, Sizes.md, Sizes.xl, Sizes.xl),
+          SafeArea(
             child: Container(
+              alignment: Alignment.bottomCenter,
               width: double.infinity,
               decoration: BoxDecoration(
-                boxShadow: [defaultShadow],
-                borderRadius: BorderRadius.circular(Sizes.borderRadius),
+                color: Theme.of(context).colorScheme.surface,
+                boxShadow: [
+                  BoxShadow(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .primary
+                        .withValues(alpha: 0.15),
+                    blurRadius: 5.0,
+                    offset: const Offset(0, -1.0),
+                  )
+                ],
               ),
-              child: ElevatedButton(
-                onPressed: _isSaveEnabled ? _createOrUpdateTransaction : null,
-                child: Text(
-                  selectedTransaction != null
-                      ? "UPDATE TRANSACTION"
-                      : "ADD TRANSACTION",
+              padding: const EdgeInsets.fromLTRB(
+                  Sizes.xl, Sizes.md, Sizes.xl, Sizes.xl),
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  boxShadow: [defaultShadow],
+                  borderRadius: BorderRadius.circular(Sizes.borderRadius),
+                ),
+                child: ElevatedButton(
+                  onPressed: _isSaveEnabled ? _createOrUpdateTransaction : null,
+                  child: Text(
+                    selectedTransaction != null
+                        ? "UPDATE TRANSACTION"
+                        : "ADD TRANSACTION",
+                  ),
                 ),
               ),
             ),

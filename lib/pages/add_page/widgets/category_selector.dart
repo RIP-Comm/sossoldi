@@ -22,6 +22,11 @@ class CategorySelector extends ConsumerStatefulWidget {
 }
 
 class _CategorySelectorState extends ConsumerState<CategorySelector> {
+  void _selectCategory(BuildContext context, CategoryTransaction category) {
+    ref.read(categoryProvider.notifier).state = category;
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     final transactionType = ref.watch(transactionTypeProvider);

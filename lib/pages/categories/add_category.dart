@@ -76,7 +76,10 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
         title: Text("${selectedCategory == null ? "New" : "Edit"} Category"),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => Navigator.pop(context),
+          // Result from the .pop is used in lib\pages\planning_page\manage_budget_page.dart.
+          //
+          // If back button is pressed, no category has been added.
+          onPressed: () => Navigator.pop(context, false),
         ),
       ),
       body: Column(

@@ -54,7 +54,11 @@ Route<dynamic> makeRoute(RouteSettings settings) {
     case '/category-list':
       return buildAdaptiveRoute(settings.name, const CategoryList());
     case '/add-category':
-      return buildAdaptiveRoute(settings.name, const AddCategory());
+      final args = settings.arguments as Map<String, dynamic>?;
+      return buildAdaptiveRoute(
+        settings.name,
+        AddCategory(hideIncome: args?['hideIncome'] ?? false),
+      );
     case '/more-info':
       return buildAdaptiveRoute(settings.name, const MoreInfoPage());
     case '/privacy-policy':

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../database/sossoldi_database.dart';
 import '../../ui/device.dart';
 import '../../utils/csv_file_picker.dart';
+import '../../utils/snack_bars/snack_bar.dart';
 
 class BackupPage extends ConsumerStatefulWidget {
   const BackupPage({super.key});
@@ -45,6 +46,7 @@ class _BackupPageState extends ConsumerState<BackupPage> {
     try {
       final file = await CSVFilePicker.pickCSVFile(context);
       if (file != null) {
+        if (!mounted) return;
         CSVFilePicker.showLoading(context, 'Importing data...');
         final results =
             await SossoldiDatabase.instance.importFromCSV(file.path);
@@ -54,7 +56,7 @@ class _BackupPageState extends ConsumerState<BackupPage> {
         if (results.values.every((success) => success)) {
           await CSVFilePicker.showSuccess(
               context, 'Data imported successfully');
-          Phoenix.rebirth(context);
+          if (mounted) Phoenix.rebirth(context);
         } else {
           final failedTables = results.entries
               .where((e) => !e.value)
@@ -62,22 +64,20 @@ class _BackupPageState extends ConsumerState<BackupPage> {
               .join(', ');
 
           if (!mounted) return;
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Failed to import some tables: $failedTables'),
-              backgroundColor: Colors.red,
-            ),
+
+          showSnackBar(
+            context,
+            message: 'Failed to import some tables: $failedTables',
           );
         }
       }
     } catch (e) {
       if (!mounted) return;
       CSVFilePicker.hideLoading(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Import failed: ${e.toString()}'),
-          backgroundColor: Colors.red,
-        ),
+
+      showSnackBar(
+        context,
+        message: 'Import failed: ${e.toString()}',
       );
     }
   }
@@ -95,11 +95,9 @@ class _BackupPageState extends ConsumerState<BackupPage> {
     } catch (e) {
       if (!mounted) return;
       CSVFilePicker.hideLoading(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Export failed: ${e.toString()}'),
-          backgroundColor: Colors.red,
-        ),
+      showSnackBar(
+        context,
+        message: 'Export failed: ${e.toString()}',
       );
     }
   }
