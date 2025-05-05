@@ -16,7 +16,7 @@ class MoreInfoPage extends ConsumerStatefulWidget {
 var moreInfoOptions = const [
   [
     "App Version:",
-    "0.1.2",
+    "0.1.6",
     null,
   ],
   [
