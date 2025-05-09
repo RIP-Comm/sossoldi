@@ -1,0 +1,6 @@
+Sossoldi is a free and open source wealth management / personal finance / Net Worth tracking app, made by Mr. RIP community members, with Flutter.
+
+This app is for you if you want to...
+- track your net worth
+- track your expenses to better understand where they are spending their money
+- keep track of your investments
