@@ -49,9 +49,7 @@ void main() async {
     RecurringTransactionMethods().checkRecurringTransactions();
     // update last recurring transactions runtime
     await _sharedPreferences.setString(
-      'last_recurring_transactions_check',
-      DateTime.now().toIso8601String(),
-    );
+        'last_recurring_transactions_check', DateTime.now().toIso8601String());
   }
 
   initializeDateFormatting('it_IT', null).then(
