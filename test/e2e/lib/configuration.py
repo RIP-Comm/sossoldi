@@ -1,3 +1,4 @@
+import logging
 import os.path
 from pathlib import Path
 from typing import Any, Dict
@@ -16,18 +17,32 @@ class Configuration(metaclass=Singleton):
     Singleton class to define the test configuration used in the testing session.
     """
 
-    def __init__(self, os: Os = None, rootpath: Path = None):
+    def __new__(cls, *args, **kwargs):
+        """
+        Create a new configuration object and make it unique with Singleton properties.
+        """
+        return cls._create_unique(super=super(), *args, **kwargs)
+
+    def __init__(self, platform: Os = None, rootpath: Path = None):
+        """
+        Initialize configuration with necessary attributes.
+
+        :param platform: mobile platform under test.
+        :param rootpath: root path of the pytest project. Used to load config file.
+        """
+        logging.debug(f"creating {self.__class__.__name__} for platform: {platform}; rootpath: {rootpath}")
+
         self.__loaded_config = self.__load_platform_config(rootpath=rootpath)
 
-        self.os = os
+        self.platform = platform
         self.appium_url = self.__loaded_config.get("appiumURL")
 
         if "platforms" in self.__loaded_config and self.__loaded_config.get("platforms"):
-            self.driver_config = self.DriverConfiguration(os=self.os, config=self.__loaded_config)
-            if self.os == Os.ANDROID:
+            self.driver_config = self.DriverConfiguration(os=self.platform, config=self.__loaded_config)
+            if self.platform == Os.ANDROID:
                 self.device_udid = self.__loaded_config.get("platforms")[0].get("udid")
                 self.app = self.__loaded_config.get("platforms")[0].get("appPackage")
-            elif self.os == Os.IOS:
+            elif self.platform == Os.IOS:
                 self.device_udid = self.__loaded_config.get("platforms")[1].get("udid")
                 self.app = self.__loaded_config.get("platforms")[1].get("bundleID")
 
@@ -38,11 +53,16 @@ class Configuration(metaclass=Singleton):
 
         self.driver = (
             AndroidMobileActions(driver=self.__web_driver, driver_elements=self.driver_config.constants)
-            if self.os == Os.ANDROID
+            if self.platform == Os.ANDROID
             else IOSMobileActions(driver=self.__web_driver, driver_elements=self.driver_config.constants)
         )
 
     def quit(self) -> None:
+        """
+        Do needed operations during test session teardown and stop web driver.
+        Preferred to __del__ since it may cause unwanted behavior.
+        """
+        logging.debug("quitting configuration webdriver")
         self.__web_driver.quit()
 
     @staticmethod
@@ -59,7 +79,6 @@ class Configuration(metaclass=Singleton):
         """
 
         def __init__(self, os: Os, config: Dict[str, Any]):
-
             if os == Os.ANDROID:
                 self.capabilities = {
                     "platformName": config.get("platforms")[0].get("platformName"),
@@ -77,3 +96,7 @@ class Configuration(metaclass=Singleton):
                     "appium:bundleId": config.get("platforms")[1].get("bundleID"),
                 }
                 self.constants = config.get("platforms")[1].get("constants")
+
+
+# create configuration object
+configuration = Configuration.__new__(Configuration)

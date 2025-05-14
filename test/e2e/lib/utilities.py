@@ -10,7 +10,17 @@ class Singleton(type):
 
     def __call__(cls, *args, **kwargs):
         if cls not in cls._instances:
-            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+            obj = super(Singleton, cls).__call__(*args, **kwargs)
+            cls._instances[cls] = obj
+        return cls._instances[cls]
+
+    def _create_unique(cls, super=None, *args, **kwargs) -> object:
+        if cls not in cls._instances:
+            if super:
+                obj = super.__new__(cls, *args, **kwargs)
+            else:
+                obj = cls.__new__(*args, **kwargs)
+            cls._instances[cls] = obj
         return cls._instances[cls]
 
 
