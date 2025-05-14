@@ -1,26 +1,24 @@
 import time
 
 from appium.webdriver.common.appiumby import AppiumBy as By
-from lib.configuration import Configuration
-from lib.enums import Os
+from lib.configuration import configuration
+from lib.enums import Platform
 
 
 class ManageAccountPage:
     def __init__(self):
-        self.driver = Configuration().driver
-        if Configuration().os == Os.ANDROID:
+        self.driver = configuration.driver
+        if configuration.platform == Platform.ANDROID:
             pass
-        elif Configuration().os == Os.IOS:
+        elif configuration.platform == Platform.IOS:
             self.__account_name = (By.ACCESSIBILITY_ID, "Account name")
             self.__initial_balance = (By.ACCESSIBILITY_ID, "Initial Balance")
         self.__create_account = (By.ACCESSIBILITY_ID, "CREATE ACCOUNT")
 
     def add_account_info(self, account: str, balance: float) -> None:
-        if Configuration().os == Os.ANDROID:
+        if configuration.platform == Platform.ANDROID:
             time.sleep(1)
-            textfields = self.driver.find_elements_by_class(
-                Configuration().driver_config.constants.get("edit_textfield")
-            )
+            textfields = self.driver.find_elements_by_class(configuration.driver_config.constants.get("edit_textfield"))
             account_name = textfields[0]
             initial_balance = textfields[1]
             self.driver.send_keys_to_element(account_name, account)

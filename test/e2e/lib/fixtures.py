@@ -3,7 +3,7 @@ import logging
 import pytest
 from _pytest.fixtures import SubRequest
 from lib.configuration import configuration
-from lib.enums import Os
+from lib.enums import Platform
 
 import lib.constants as constants
 
@@ -19,17 +19,17 @@ def session_setup_teardown(request: SubRequest) -> None:
     local = request.config.getoption("--local")
 
     if local == "android":
-        tested_os = Os.ANDROID
+        tested_platform = Platform.ANDROID
     elif local == "ios":
-        tested_os = Os.IOS
+        tested_platform = Platform.IOS
     else:
         if local is not None:
-            raise ValueError(f"The local argument must be in {list(Os)}; got {local} instead")
+            raise ValueError(f"The local argument must be in {list(Platform)}; got {local} instead")
 
-        logging.warning(f"'--local' parameter not set, running with default os: {constants.DEFAULT_OS}")
-        tested_os = Os.ANDROID
+        logging.warning(f"'--local' parameter not set, running with default os: {constants.DEFAULT_PLATFORM}")
+        tested_platform = Platform.ANDROID
 
-    configuration.__init__(platform=tested_os, rootpath=request.config.rootpath)
+    configuration.__init__(platform=tested_platform, rootpath=request.config.rootpath)
     logging.info("test configuration has been created")
 
     yield

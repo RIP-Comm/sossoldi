@@ -1,4 +1,4 @@
-from lib.enums import Os
+from lib.enums import Platform
 
 TIMEOUT: int = 10
-DEFAULT_OS: Os = Os.ANDROID
+DEFAULT_PLATFORM: Platform = Platform.ANDROID

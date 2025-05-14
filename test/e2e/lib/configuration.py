@@ -6,7 +6,7 @@ from typing import Any, Dict
 import yaml
 from appium import webdriver
 from appium.options.common import AppiumOptions
-from lib.enums import Os
+from lib.enums import Platform
 from lib.utilities import Singleton
 from mobile_actions.android.android_mobile_actions import AndroidMobileActions
 from mobile_actions.ios.ios_mobile_actions import IOSMobileActions
@@ -23,7 +23,7 @@ class Configuration(metaclass=Singleton):
         """
         return cls._create_unique(super=super(), *args, **kwargs)
 
-    def __init__(self, platform: Os = None, rootpath: Path = None):
+    def __init__(self, platform: Platform = None, rootpath: Path = None):
         """
         Initialize configuration with necessary attributes.
 
@@ -38,11 +38,11 @@ class Configuration(metaclass=Singleton):
         self.appium_url = self.__loaded_config.get("appiumURL")
 
         if "platforms" in self.__loaded_config and self.__loaded_config.get("platforms"):
-            self.driver_config = self.DriverConfiguration(os=self.platform, config=self.__loaded_config)
-            if self.platform == Os.ANDROID:
+            self.driver_config = self.DriverConfiguration(platform=self.platform, config=self.__loaded_config)
+            if self.platform == Platform.ANDROID:
                 self.device_udid = self.__loaded_config.get("platforms")[0].get("udid")
                 self.app = self.__loaded_config.get("platforms")[0].get("appPackage")
-            elif self.platform == Os.IOS:
+            elif self.platform == Platform.IOS:
                 self.device_udid = self.__loaded_config.get("platforms")[1].get("udid")
                 self.app = self.__loaded_config.get("platforms")[1].get("bundleID")
 
@@ -53,7 +53,7 @@ class Configuration(metaclass=Singleton):
 
         self.driver = (
             AndroidMobileActions(driver=self.__web_driver, driver_elements=self.driver_config.constants)
-            if self.platform == Os.ANDROID
+            if self.platform == Platform.ANDROID
             else IOSMobileActions(driver=self.__web_driver, driver_elements=self.driver_config.constants)
         )
 
@@ -78,8 +78,8 @@ class Configuration(metaclass=Singleton):
         Class to include configuration settings used in the web driver.
         """
 
-        def __init__(self, os: Os, config: Dict[str, Any]):
-            if os == Os.ANDROID:
+        def __init__(self, platform: Platform, config: Dict[str, Any]):
+            if platform == Platform.ANDROID:
                 self.capabilities = {
                     "platformName": config.get("platforms")[0].get("platformName"),
                     "automationName": config.get("platforms")[0].get("automationName"),
@@ -88,7 +88,7 @@ class Configuration(metaclass=Singleton):
                     "appActivity": config.get("platforms")[0].get("appActivity"),
                 }
                 self.constants = config.get("platforms")[0].get("constants")
-            elif os == Os.IOS:
+            elif platform == Platform.IOS:
                 self.capabilities = {
                     "platformName": config.get("platforms")[1].get("platformName"),
                     "appium:udid": config.get("platforms")[1].get("udid"),

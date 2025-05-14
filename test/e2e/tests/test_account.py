@@ -1,5 +1,5 @@
-from lib.configuration import Configuration
-from lib.enums import Os
+from lib.configuration import configuration
+from lib.enums import Platform
 from pages.dashboard_page import DashboardPage
 from pages.manage_account_page import ManageAccountPage
 from pages.onboarding_page import OnboardingPage
@@ -11,7 +11,7 @@ class TestAccount:
         Verify the account creation and subsequent display in the dashboard.
         """
         onboarding = OnboardingPage()
-        if Configuration().os == Os.ANDROID:
+        if configuration.platform == Platform.ANDROID:
             onboarding.skip_onboarding()
         dashboard = DashboardPage()
         dashboard.create_account()
