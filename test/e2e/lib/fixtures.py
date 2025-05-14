@@ -1,8 +1,11 @@
+import logging
+
 import pytest
 from _pytest.fixtures import SubRequest
-from colorama import Fore, Style
-from lib.configuration import Configuration
+from lib.configuration import configuration
 from lib.enums import Os
+
+import lib.constants as constants
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -12,6 +15,7 @@ def session_setup_teardown(request: SubRequest) -> None:
     On setup: read args and init the test configuration accordingly.
     On teardown: quit the webdriver.
     """
+    logging.debug("reading command line args")
     local = request.config.getoption("--local")
 
     if local == "android":
@@ -19,21 +23,27 @@ def session_setup_teardown(request: SubRequest) -> None:
     elif local == "ios":
         tested_os = Os.IOS
     else:
-        raise ValueError(f"The local argument must be in {list(Os)}; got {local} instead")
+        if local is not None:
+            raise ValueError(f"The local argument must be in {list(Os)}; got {local} instead")
 
-    Configuration(os=tested_os, rootpath=request.config.rootpath)
+        logging.warning(f"'--local' parameter not set, running with default os: {constants.DEFAULT_OS}")
+        tested_os = Os.ANDROID
+
+    configuration.__init__(platform=tested_os, rootpath=request.config.rootpath)
+    logging.info("test configuration has been created")
+
     yield
-    Configuration().quit()
+
+    logging.info("quitting configuration")
+    configuration.quit()
 
 
 @pytest.fixture(scope="function", autouse=True)
 def test_setup(request: SubRequest) -> None:
     test_name = request.node.name.replace("test_", "")
-    config = Configuration()
-    print(Fore.YELLOW + f"***** Starting {test_name} *****")
-    print(Style.RESET_ALL)
+    logging.info(f"***** starting test: {test_name} *****")
 
-    config.driver.start_recording()
+    configuration.driver.start_recording()
 
     yield
 
@@ -44,12 +54,10 @@ def test_setup(request: SubRequest) -> None:
 
     # Determine if the test has failed or encountered an error
     if any(report and report.failed for report in [setup_report, call_report, teardown_report]):
-        if config.driver.is_recording:
-            # Driver.driver.stop_recording(test_name)
+        if configuration.driver.is_recording:
+            configuration.driver.stop_recording(file_name=test_name)
             pass
-        print()
-        print(Fore.RED + f"***** {test_name} failed. Video recording saved. *****")
+
+        logging.error(f"***** {test_name} failed *****")
     else:
-        print()
-        print(Fore.GREEN + f"***** {test_name} passed. *****")
-    print(Style.RESET_ALL)
+        logging.info(f"***** {test_name} passed *****")

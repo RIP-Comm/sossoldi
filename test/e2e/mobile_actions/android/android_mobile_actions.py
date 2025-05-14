@@ -1,3 +1,4 @@
+import logging
 import time
 from typing import Dict, List, Tuple
 
@@ -12,6 +13,7 @@ from selenium.common.exceptions import StaleElementReferenceException
 class AndroidMobileActions(MobileActions):
     def __init__(self, driver: WebDriver, driver_elements: Dict[str, str]):
         super().__init__(driver=driver, driver_elements=driver_elements)
+        logging.debug(f"driver {self.__class__.__name__} set successfully")
 
     def send_keys(self, locator: Tuple[str, str], text: str) -> None:
         """Send text input to an element."""
@@ -47,17 +49,17 @@ class AndroidMobileActions(MobileActions):
                 element = element_provider()
                 return element.get_attribute(attribute=attribute)
             except:
-                print(f"Error retrieving attribute from {debug_info}. Retrying...")
+                logging.error(f"error retrieving attribute from {debug_info}. Retrying...")
                 time.sleep(1)
         return ""
 
     def find_elements_by_class(self, class_name: str) -> List[WebElement]:
         """Find elements by class name, handling StaleElementReferenceException."""
         try:
-            print(class_name)
+            logging.debug(f"looking for element with class name: {class_name}")
             return self.driver.find_elements(by=By.CLASS_NAME, value=class_name)
         except StaleElementReferenceException:
-            print("Retrying due to stale element issue...")
+            logging.warning("retrying due to stale element issue...")
             return self.find_elements_by_class(class_name=class_name)
 
     def scroll_gesture(self, locator: Tuple[str, str], direction: Direction) -> bool:
@@ -69,7 +71,7 @@ class AndroidMobileActions(MobileActions):
         if not element:
             return False
 
-        print(f"Scrolling element: {element}")
+        logging.debug(f"scrolling element: {element}")
         can_scroll_more = self.driver.execute_script(
             "mobile: scrollGesture",
             {

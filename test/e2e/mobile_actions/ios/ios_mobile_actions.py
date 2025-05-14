@@ -1,3 +1,4 @@
+import logging
 import time
 from typing import Any, Dict, List, Tuple, Union
 
@@ -15,6 +16,7 @@ class IOSMobileActions(MobileActions):
     def __init__(self, driver: WebDriver, driver_elements: Dict[str, str]):
         super().__init__(driver=driver, driver_elements=driver_elements)
         self.__done_text_button = (By.ACCESSIBILITY_ID, "Done")
+        logging.debug(f"driver {self.__class__.__name__} set successfully")
 
     def send_keys(self, locator: Tuple[str, str], text: str) -> None:
         """Send keys to an element and attempt to click the 'Done' button if present."""
@@ -43,7 +45,7 @@ class IOSMobileActions(MobileActions):
                 elements += self.driver.find_elements(by=By.CLASS_NAME, value="XCUIElementTypeStaticText")
             return elements
         except StaleElementReferenceException:
-            print("Retrying due to stale element issue...")
+            logging.warning("retrying due to stale element issue...")
             return self.find_elements_by_class(class_name=class_name)
 
     def get_attribute(self, locator: Tuple[str, str], attribute: str) -> str:
@@ -65,7 +67,7 @@ class IOSMobileActions(MobileActions):
                     attribute=self._driver_elements.get("label", "")
                 )
             except:
-                print(f"Error retrieving attribute from {debug_info}. Retrying...")
+                logging.error(f"error retrieving attribute from {debug_info}. Retrying...")
                 time.sleep(1)
         return ""
 
@@ -79,7 +81,7 @@ class IOSMobileActions(MobileActions):
 
     def scroll_gesture_for_element(self, element: WebElement, direction: Direction) -> bool:
         """Perform a scroll gesture on an element in a given direction."""
-        print(f"Scrolling element: {element}")
+        logging.debug(f"scrolling element: {element}")
         coords = self._get_scroll_coordinates(target=element, direction=direction, is_element=True)
         if coords:
             self.driver.swipe(*coords, duration=500)

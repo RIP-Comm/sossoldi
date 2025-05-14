@@ -1,4 +1,5 @@
 import base64
+import logging
 import os
 import time
 from typing import Dict, List, Tuple, Union
@@ -17,16 +18,15 @@ class MobileActions:
     def __init__(self, driver: WebDriver, driver_elements: Dict[str, str]):
         self.driver = driver
         self._driver_elements = driver_elements
-        self.is_recording = None
-        print("Driver set successfully")
+        self.is_recording = False
 
     def relaunch_app(self) -> None:
         """Terminate and relaunch the app."""
-        from lib.configuration import Configuration
+        from lib.configuration import configuration
 
-        print("Relaunching the app...")
-        self.driver.terminate_app(app_id=Configuration().app)
-        self.driver.activate_app(app_id=Configuration().app)
+        logging.info("relaunching the app...")
+        self.driver.terminate_app(app_id=configuration.app)
+        self.driver.activate_app(app_id=configuration.app)
         time.sleep(4)
 
     def wait_for_element(self, locator: Tuple[str, str], timeout: float = TIMEOUT) -> WebElement:
@@ -41,7 +41,7 @@ class MobileActions:
                 return
             except StaleElementReferenceException:
                 time.sleep(0.5)
-        print(f"Failed to click element: {locator}")
+        logging.error(f"failed to click element: {locator}")
 
     @staticmethod
     def click_element(element: WebElement) -> None:
@@ -56,10 +56,10 @@ class MobileActions:
         """Check if an element is visible."""
         try:
             self.wait_for_element(locator=locator)
-            print(f"Element {locator} is visible")
+            logging.debug(f"element {locator} is visible")
             return True
         except:
-            print(f"Element {locator} is NOT visible")
+            logging.error(f"element {locator} is NOT visible")
             return False
 
     def click_element_by_text(self, class_name: str, target_text: str) -> bool:
@@ -73,7 +73,7 @@ class MobileActions:
                 element.click()
                 return True
 
-        print(f"No element found with text: {target_text}")
+        logging.warning(f"no element found with text: {target_text}")
         return False
 
     def check_element_by_text(self, class_name: str, target_text: str) -> bool:
@@ -101,7 +101,7 @@ class MobileActions:
             if self._matches_target_text(element=element, target_text=target_text):
                 return element
 
-        print(f"No element found with text: {target_text}")
+        logging.warning(f"no element found with text: {target_text}")
         return None
 
     def _matches_target_text(self, element: WebElement, target_text: str) -> bool:
@@ -132,28 +132,27 @@ class MobileActions:
         """Start recording the screen."""
         self.driver.start_recording_screen(video_quality="low")
         self.is_recording = True
-        print("Started recording...")
+        logging.info("starting screen recording")
 
     def stop_recording(self, file_name: str) -> None:
         """Stops the video recording and saves the file."""
-        from lib.configuration import Configuration
+        from lib.configuration import configuration
 
         raw_video = self.driver.stop_recording_screen()
 
         video_dir = os.path.join(
             "videos",
-            Configuration().os.value + "_" + Configuration().device_udid,
+            configuration.platform.value + "_" + configuration.device_udid,
             get_date_time(),
         )
         if not os.path.exists(video_dir):
             os.makedirs(video_dir)
-            print("Created folder at: " + video_dir)
         filepath = os.path.join(video_dir, file_name + ".mp4")
-        with open(filepath, "wb") as vd:
+        with open(filepath, "wb+") as vd:
             vd.write(base64.b64decode(raw_video))
 
         self.is_recording = False
-        print("Raw video saved")
+        logging.info(f"screen video recording has been saved at {filepath}")
 
     def send_keys_to_element(self, element: WebElement, text: str) -> None:
         raise NotImplementedError
