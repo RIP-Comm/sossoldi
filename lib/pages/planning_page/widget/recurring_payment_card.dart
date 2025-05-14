@@ -1,20 +1,22 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
-import '../../../custom_widgets/rounded_icon.dart';
+import '../../../ui/extensions.dart';
+import '../../../ui/widgets/rounded_icon.dart';
 import '../../../model/recurring_transaction.dart';
 import '../../../providers/theme_provider.dart';
+import '../../../ui/device.dart';
 import 'older_recurring_payments.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/currency_provider.dart';
 
-import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/categories_provider.dart';
 
 /// This class shows account summaries in dashboard
-class RecurringPaymentCard extends ConsumerWidget with Functions {
+class RecurringPaymentCard extends ConsumerWidget {
   final RecurringTransaction transaction;
 
   const RecurringPaymentCard({
@@ -41,21 +43,21 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
     final currencyState = ref.watch(currencyStateNotifier);
 
     var cat = categories
-        ?.firstWhere((element) => element.id == transaction.idCategory);
+        ?.firstWhereOrNull((element) => element.id == transaction.idCategory);
 
     return cat != null
         ? Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(Sizes.borderRadius),
               color: Theme.of(context).colorScheme.primaryContainer,
               boxShadow: [defaultShadow],
             ),
             child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: Sizes.sm, vertical: Sizes.md),
               decoration: BoxDecoration(
                 color: categoryColorList[cat.color].withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(Sizes.borderRadius),
               ),
               child: Column(
                 spacing: 16,
@@ -65,10 +67,10 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
                       RoundedIcon(
                         icon: iconList[cat.symbol],
                         backgroundColor: categoryColorList[cat.color],
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(Sizes.sm),
                         size: 25,
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: Sizes.sm),
                       Expanded(
                           flex: 4,
                           child: Column(
@@ -79,10 +81,10 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
                                 transaction.recurrency,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w200,
-                                  fontSize: 10,
+                                  fontSize: Sizes.sm,
                                 ),
                               ),
-                              const SizedBox(height: 10),
+                              const SizedBox(height: Sizes.sm),
                               Text(
                                 transaction.note,
                                 style: const TextStyle(
@@ -90,7 +92,7 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
                                   fontSize: 16,
                                 ),
                               ),
-                              const SizedBox(height: 10),
+                              const SizedBox(height: Sizes.sm),
                               Text(cat.name),
                             ],
                           )),
@@ -101,18 +103,18 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Text("In ${getNextText()} days"),
-                            const SizedBox(height: 10),
+                            const SizedBox(height: Sizes.sm),
                             Text(
                                 "-${transaction.amount}${currencyState.selectedCurrency.symbol}",
                                 style: const TextStyle(color: Colors.red)),
-                            const SizedBox(height: 10),
+                            const SizedBox(height: Sizes.sm),
                             Text(accounts!
                                 .firstWhere((element) =>
                                     element.id == transaction.idBankAccount)
-                                .name)
+                                .name),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                   Row(
@@ -127,17 +129,19 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
                                 context: context,
                                 shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(20.0),
-                                    topRight: Radius.circular(20.0),
+                                    topLeft: Radius.circular(
+                                        Sizes.borderRadiusLarge),
+                                    topRight: Radius.circular(
+                                        Sizes.borderRadiusLarge),
                                   ),
                                 ),
-                                elevation: 10,
+                                elevation: Sizes.sm,
                                 builder: (BuildContext context) {
                                   return ListView(
                                     scrollDirection: Axis.vertical,
                                     padding: const EdgeInsets.symmetric(
-                                      vertical: 20,
-                                      horizontal: 10,
+                                      vertical: Sizes.xl,
+                                      horizontal: Sizes.sm,
                                     ),
                                     children: [
                                       OlderRecurringPayments(
@@ -161,8 +165,8 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
                               overlayColor:
                                   Theme.of(context).colorScheme.primary,
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
+                                horizontal: Sizes.sm,
+                                vertical: Sizes.xs,
                               ),
                             ),
                             icon: Icon(
@@ -183,7 +187,7 @@ class RecurringPaymentCard extends ConsumerWidget with Functions {
                           child: Container(
                             alignment: Alignment.centerRight,
                             child: Text(
-                              "Until ${dateToString(transaction.toDate!)}",
+                              "Until ${transaction.toDate?.formatEDMY()}",
                               style: const TextStyle(fontSize: 8),
                             ),
                           ),

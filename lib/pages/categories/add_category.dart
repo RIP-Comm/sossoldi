@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../constants/constants.dart';
-import '../../constants/functions.dart';
 import '../../constants/style.dart';
 import '../../model/category_transaction.dart';
 import '../../providers/categories_provider.dart';
+import '../../providers/transactions_provider.dart';
+import '../../ui/device.dart';
+import '../../ui/extensions.dart';
 
 class AddCategory extends ConsumerStatefulWidget {
   final bool hideIncome;
@@ -15,9 +17,9 @@ class AddCategory extends ConsumerStatefulWidget {
   ConsumerState<AddCategory> createState() => _AddCategoryState();
 }
 
-class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
+class _AddCategoryState extends ConsumerState<AddCategory> {
   final TextEditingController nameController = TextEditingController();
-  CategoryTransactionType categoryType = CategoryTransactionType.income;
+  late CategoryTransactionType categoryType;
   String categoryIcon = iconList.keys.first;
   int categoryColor = 0;
 
@@ -25,9 +27,12 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
 
   @override
   void initState() {
-    if (widget.hideIncome) {
-      categoryType = CategoryTransactionType.expense;
-    }
+    super.initState();
+
+    final transactionType = ref.read(transactionTypeProvider);
+    categoryType = ref.read(transactionToCategoryProvider(transactionType)) ??
+        CategoryTransactionType.expense;
+
     final selectedCategory = ref.read(selectedCategoryProvider);
     if (selectedCategory != null) {
       nameController.text = selectedCategory.name;
@@ -35,7 +40,6 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
       categoryIcon = selectedCategory.symbol;
       categoryColor = selectedCategory.color;
     }
-    super.initState();
   }
 
   @override
@@ -52,7 +56,10 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
         title: Text("${selectedCategory == null ? "New" : "Edit"} Category"),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => Navigator.pop(context),
+          // Result from the .pop is used in lib\pages\planning_page\manage_budget_page.dart.
+          //
+          // If back button is pressed, no category has been added.
+          onPressed: () => Navigator.pop(context, false),
         ),
       ),
       body: Column(
@@ -64,13 +71,15 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                   Container(
                     width: double.infinity,
                     margin: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
+                      horizontal: Sizes.lg,
+                      vertical: Sizes.md,
                     ),
-                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                    padding: const EdgeInsets.fromLTRB(
+                        Sizes.lg, Sizes.md, Sizes.lg, 0),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius:
+                          BorderRadius.circular(Sizes.borderRadiusSmall),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,10 +108,12 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                       horizontal: 16,
                       vertical: 12,
                     ),
-                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                    padding: const EdgeInsets.fromLTRB(
+                        Sizes.lg, Sizes.md, Sizes.lg, 0),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius:
+                          BorderRadius.circular(Sizes.borderRadiusSmall),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,8 +140,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                             return DropdownMenuItem<CategoryTransactionType>(
                               value: type,
                               child: Text(
-                                capitalizeFirstLetter(
-                                    type.toString().split('.').last),
+                                type.toString().split('.').last.capitalize(),
                                 style: Theme.of(context).textTheme.titleLarge,
                               ),
                             );
@@ -147,16 +157,17 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                   Container(
                     width: double.infinity,
                     margin: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
+                      horizontal: Sizes.lg,
+                      vertical: Sizes.md,
                     ),
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
+                      horizontal: Sizes.lg,
+                      vertical: Sizes.md,
                     ),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius:
+                          BorderRadius.circular(Sizes.borderRadiusSmall),
                     ),
                     child: Column(
                       children: [
@@ -172,12 +183,12 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                                         Theme.of(context).colorScheme.primary),
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: Sizes.xl),
                         Material(
                           color: Colors.transparent,
                           child: InkWell(
                             borderRadius:
-                                const BorderRadius.all(Radius.circular(90)),
+                                BorderRadius.circular(Sizes.borderRadius * 10),
                             onTap: () =>
                                 setState(() => showCategoryIcons = true),
                             child: Ink(
@@ -185,7 +196,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                                 shape: BoxShape.circle,
                                 color: categoryColorListTheme[categoryColor],
                               ),
-                              padding: const EdgeInsets.all(16),
+                              padding: const EdgeInsets.all(Sizes.lg),
                               child: Icon(
                                 iconList[categoryIcon],
                                 size: 48,
@@ -194,7 +205,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 6),
+                        const SizedBox(height: Sizes.sm),
                         Text(
                           "CHOOSE ICON",
                           style: Theme.of(context)
@@ -203,13 +214,13 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                               .copyWith(
                                   color: Theme.of(context).colorScheme.primary),
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: Sizes.md),
                         if (showCategoryIcons)
                           const Divider(height: 1, color: grey1),
                         if (showCategoryIcons)
                           Container(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 8),
+                                horizontal: Sizes.lg, vertical: Sizes.sm),
                             color: Theme.of(context).colorScheme.surface,
                             child: Column(
                               children: [
@@ -246,19 +257,18 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                                       onTap: () => setState(() =>
                                           categoryIcon = categoryIconName),
                                       child: Container(
-                                        margin: const EdgeInsets.all(12),
+                                        margin: const EdgeInsets.all(Sizes.md),
                                         decoration: BoxDecoration(
-                                          color: iconList[categoryIcon] ==
-                                                  categoryIconData
-                                              ? Theme.of(context)
-                                                  .colorScheme
-                                                  .secondary
-                                              : Theme.of(context)
-                                                  .colorScheme
-                                                  .surface,
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(4)),
-                                        ),
+                                            color: iconList[categoryIcon] ==
+                                                    categoryIconData
+                                                ? Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary
+                                                : Theme.of(context)
+                                                    .colorScheme
+                                                    .surface,
+                                            borderRadius: BorderRadius.circular(
+                                                Sizes.borderRadiusSmall)),
                                         child: Icon(
                                           categoryIconData,
                                           color: iconList[categoryIcon] ==
@@ -277,15 +287,16 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                             ),
                           ),
                         const Divider(height: 1, color: grey1),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: Sizes.md),
                         SizedBox(
                           height: 38,
                           child: ListView.separated(
                             scrollDirection: Axis.horizontal,
                             physics: const BouncingScrollPhysics(),
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: Sizes.lg),
                             separatorBuilder: (context, index) =>
-                                const SizedBox(width: 16),
+                                const SizedBox(width: Sizes.lg),
                             itemBuilder: (context, index) {
                               Color color = categoryColorListTheme[index];
                               return GestureDetector(
@@ -322,7 +333,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                             itemCount: categoryColorListTheme.length,
                           ),
                         ),
-                        const SizedBox(height: 6),
+                        const SizedBox(height: Sizes.xs),
                         Text(
                           "CHOOSE COLOR",
                           style: Theme.of(context)
@@ -368,7 +379,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                   if (selectedCategory != null)
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(Sizes.lg),
                       child: TextButton.icon(
                         onPressed: () => ref
                             .read(categoriesProvider.notifier)
@@ -411,12 +422,13 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                 )
               ],
             ),
-            padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
+            padding: const EdgeInsets.fromLTRB(
+                Sizes.xl, Sizes.md, Sizes.xl, Sizes.xl),
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
                 boxShadow: [defaultShadow],
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(Sizes.borderRadius),
               ),
               child: ElevatedButton(
                 onPressed: () async {
@@ -440,7 +452,10 @@ class _AddCategoryState extends ConsumerState<AddCategory> with Functions {
                     }
                     ref.invalidate(selectedCategoryProvider);
                     ref.invalidate(categoryMapProvider);
-                    if (context.mounted) Navigator.of(context).pop();
+                    // Result from the .pop is used in lib\pages\planning_page\manage_budget_page.dart.
+                    //
+                    // If the category has been created correctly, result is true.
+                    if (context.mounted) Navigator.of(context).pop(true);
                   }
                 },
                 child: Text(

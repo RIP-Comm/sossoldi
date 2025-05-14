@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/style.dart';
+import '../ui/device.dart';
 
 class AppTheme {
   static final lightTheme = ThemeData(
@@ -34,7 +35,7 @@ class AppTheme {
     ),
     tabBarTheme: TabBarTheme(
       indicator: BoxDecoration(
-        borderRadius: BorderRadius.circular(50),
+        borderRadius: BorderRadius.circular(Sizes.borderRadius * 6),
         color: blue5,
       ),
       dividerHeight: 0,
@@ -55,9 +56,10 @@ class AppTheme {
       style: ButtonStyle(
         foregroundColor: const WidgetStatePropertyAll(blue5),
         iconColor: const WidgetStatePropertyAll(blue5),
-        padding: const WidgetStatePropertyAll(EdgeInsets.all(12)),
+        padding: const WidgetStatePropertyAll(EdgeInsets.all(Sizes.md)),
         shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(Sizes.borderRadius)),
         ),
         textStyle: const WidgetStatePropertyAll(
           TextStyle(
@@ -78,9 +80,10 @@ class AppTheme {
           return blue5;
         }),
         elevation: WidgetStatePropertyAll(0),
-        padding: WidgetStatePropertyAll(EdgeInsets.all(16)),
+        padding: WidgetStatePropertyAll(EdgeInsets.all(Sizes.lg)),
         shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(Sizes.borderRadius)),
         ),
         textStyle: const WidgetStatePropertyAll(
           TextStyle(
@@ -93,16 +96,17 @@ class AppTheme {
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: ButtonStyle(
-        padding: WidgetStatePropertyAll(EdgeInsets.all(4)),
+        padding: WidgetStatePropertyAll(EdgeInsets.all(Sizes.xs)),
         iconSize: WidgetStatePropertyAll(28),
         shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(Sizes.borderRadius)),
         ),
       ),
     ),
     listTileTheme: const ListTileThemeData(
       tileColor: white,
-      contentPadding: EdgeInsets.all(16),
+      contentPadding: EdgeInsets.all(Sizes.lg),
     ),
     disabledColor: grey2,
     switchTheme: SwitchThemeData(
@@ -201,17 +205,18 @@ class AppTheme {
     ),
     inputDecorationTheme: InputDecorationTheme(
       border: InputBorder.none,
-      contentPadding: const EdgeInsets.all(0),
+      contentPadding: EdgeInsets.zero,
       hintStyle: TextStyle(color: grey2),
     ),
     snackBarTheme: SnackBarThemeData(
-      backgroundColor: customColorScheme.primaryContainer,
+      backgroundColor: customColorScheme.inverseSurface,
       contentTextStyle: TextStyle(
-        color: customColorScheme.onSurface,
+        color: customColorScheme.onInverseSurface,
         fontSize: 16,
       ),
       behavior: SnackBarBehavior.floating,
-      insetPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      insetPadding:
+          EdgeInsets.symmetric(horizontal: Sizes.lg, vertical: Sizes.sm),
     ),
   );
 
@@ -246,7 +251,7 @@ class AppTheme {
     ),
     tabBarTheme: TabBarTheme(
       indicator: BoxDecoration(
-        borderRadius: BorderRadius.circular(50),
+        borderRadius: BorderRadius.circular(Sizes.borderRadius * 6),
         color: darkBlue5,
       ),
       dividerHeight: 0,
@@ -267,9 +272,10 @@ class AppTheme {
       style: ButtonStyle(
         foregroundColor: const WidgetStatePropertyAll(white),
         iconColor: const WidgetStatePropertyAll(white),
-        padding: const WidgetStatePropertyAll(EdgeInsets.all(12)),
+        padding: const WidgetStatePropertyAll(EdgeInsets.all(Sizes.md)),
         shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(Sizes.borderRadius)),
         ),
         textStyle: const WidgetStatePropertyAll(
           TextStyle(
@@ -290,9 +296,10 @@ class AppTheme {
           return darkBlue5;
         }),
         elevation: WidgetStatePropertyAll(0),
-        padding: WidgetStatePropertyAll(EdgeInsets.all(16)),
+        padding: WidgetStatePropertyAll(EdgeInsets.all(Sizes.lg)),
         shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(Sizes.borderRadius)),
         ),
         textStyle: const WidgetStatePropertyAll(
           TextStyle(
@@ -305,16 +312,17 @@ class AppTheme {
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: ButtonStyle(
-        padding: WidgetStatePropertyAll(EdgeInsets.all(4)),
+        padding: WidgetStatePropertyAll(EdgeInsets.all(Sizes.xs)),
         iconSize: WidgetStatePropertyAll(28),
         shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(Sizes.borderRadius)),
         ),
       ),
     ),
     listTileTheme: const ListTileThemeData(
       tileColor: darkGrey4,
-      contentPadding: EdgeInsets.all(16),
+      contentPadding: EdgeInsets.all(Sizes.lg),
     ),
 
     disabledColor: darkGrey2,
@@ -429,13 +437,14 @@ class AppTheme {
       hintStyle: TextStyle(color: grey2),
     ),
     snackBarTheme: SnackBarThemeData(
-      backgroundColor: darkCustomColorScheme.primaryContainer,
+      backgroundColor: darkCustomColorScheme.inverseSurface,
       contentTextStyle: TextStyle(
-        color: darkCustomColorScheme.onSurface,
+        color: darkCustomColorScheme.onInverseSurface,
         fontSize: 16,
       ),
       behavior: SnackBarBehavior.floating,
-      insetPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      insetPadding:
+          EdgeInsets.symmetric(horizontal: Sizes.lg, vertical: Sizes.sm),
     ),
   );
 }

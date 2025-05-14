@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
+import '../../../ui/device.dart';
+import '../../../ui/extensions.dart';
 import '../../../utils/formatted_date_range.dart';
 import '../../graphs_page/widgets/categories/categories_bar_chart.dart';
 
 enum MonthSelectorType { simple, advanced } //advanced = with amount
 
-class MonthSelector extends ConsumerWidget with Functions {
+class MonthSelector extends ConsumerWidget {
   const MonthSelector({
     required this.type,
     super.key,
@@ -42,7 +43,9 @@ class MonthSelector extends ConsumerWidget with Functions {
           ),
           builder: (context, child) => Theme(
             data: Theme.of(context).copyWith(
-              appBarTheme: Theme.of(context).appBarTheme.copyWith(backgroundColor: blue1),
+              appBarTheme: Theme.of(context)
+                  .appBarTheme
+                  .copyWith(backgroundColor: blue1),
             ),
             child: child!,
           ),
@@ -50,34 +53,37 @@ class MonthSelector extends ConsumerWidget with Functions {
         if (range != null) {
           ref.read(filterDateStartProvider.notifier).state = range.start;
           ref.read(filterDateEndProvider.notifier).state = range.end;
-          ref.read(highlightedMonthProvider.notifier).state = range.start.month - 1;
+          ref.read(highlightedMonthProvider.notifier).state =
+              range.start.month - 1;
         }
       },
       child: Container(
         clipBehavior: Clip.antiAlias, // force rounded corners on children
         height: currentHeight,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.tertiary,
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
+            color: Theme.of(context).colorScheme.tertiary,
+            borderRadius: BorderRadius.circular(Sizes.borderRadius)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             GestureDetector(
               onTap: () {
                 // move to previous month
-                DateTime newStartDate = DateTime(startDate.year, startDate.month - 1, 1);
-                DateTime newEndDate = DateTime(newStartDate.year, newStartDate.month + 1, 0);
+                DateTime newStartDate =
+                    DateTime(startDate.year, startDate.month - 1, 1);
+                DateTime newEndDate =
+                    DateTime(newStartDate.year, newStartDate.month + 1, 0);
                 ref.read(filterDateStartProvider.notifier).state = newStartDate;
                 ref.read(filterDateEndProvider.notifier).state = newEndDate;
                 ref.read(transactionsProvider.notifier).filterTransactions();
-                ref.read(highlightedMonthProvider.notifier).state = newStartDate.month - 1;
+                ref.read(highlightedMonthProvider.notifier).state =
+                    newStartDate.month - 1;
               },
               child: Container(
                 height: currentHeight,
                 width: height,
                 color: Theme.of(context).colorScheme.primary,
-                child:  Icon(
+                child: Icon(
                   Icons.chevron_left,
                   color: Theme.of(context).colorScheme.primaryContainer,
                 ),
@@ -91,36 +97,47 @@ class MonthSelector extends ConsumerWidget with Functions {
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 if (type == MonthSelectorType.advanced)
-                    RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: numToCurrency(totalAmount),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge!
-                                  .copyWith(color: totalAmount >= 0 ? green : red),
-                            ),
-                            TextSpan(
-                                text: currencyState.selectedCurrency.symbol,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelLarge!
-                                    .copyWith(color: totalAmount >= 0 ? green : red)),
-                          ],
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: totalAmount.toCurrency(),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge!
+                              .copyWith(color: totalAmount >= 0 ? green : red),
                         ),
-                      ),
+                        TextSpan(
+                            text: currencyState.selectedCurrency.symbol,
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge!
+                                .copyWith(
+                                    color: totalAmount >= 0 ? green : red)),
+                        TextSpan(
+                            text: currencyState.selectedCurrency.symbol,
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge!
+                                .copyWith(
+                                    color: totalAmount >= 0 ? green : red)),
+                      ],
+                    ),
+                  ),
               ],
             ),
             GestureDetector(
               onTap: () {
                 // move to next month
-                DateTime newStartDate = DateTime(startDate.year, startDate.month + 1, 1);
-                DateTime newEndDate = DateTime(newStartDate.year, newStartDate.month + 1, 0);
+                DateTime newStartDate =
+                    DateTime(startDate.year, startDate.month + 1, 1);
+                DateTime newEndDate =
+                    DateTime(newStartDate.year, newStartDate.month + 1, 0);
                 ref.read(filterDateStartProvider.notifier).state = newStartDate;
                 ref.read(filterDateEndProvider.notifier).state = newEndDate;
                 ref.read(transactionsProvider.notifier).filterTransactions();
-                ref.read(highlightedMonthProvider.notifier).state = newStartDate.month - 1;
+                ref.read(highlightedMonthProvider.notifier).state =
+                    newStartDate.month - 1;
               },
               child: Container(
                 height: currentHeight,

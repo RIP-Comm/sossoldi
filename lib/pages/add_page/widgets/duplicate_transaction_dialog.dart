@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../model/transaction.dart';
 import '../../../providers/transactions_provider.dart';
+import '../../../ui/device.dart';
 
 class DuplicateTransactionDialog extends ConsumerWidget {
   const DuplicateTransactionDialog({super.key, required this.transaction});
@@ -28,10 +29,12 @@ class DuplicateTransactionDialog extends ConsumerWidget {
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            padding: const EdgeInsets.symmetric(horizontal: Sizes.lg),
           ),
-          onPressed: () =>
-              ref.read(transactionsProvider.notifier).duplicateTransaction(transaction).then((t) {
+          onPressed: () => ref
+              .read(transactionsProvider.notifier)
+              .duplicateTransaction(transaction)
+              .then((t) {
             if (context.mounted) {
               Navigator.of(context)
                 ..pop()

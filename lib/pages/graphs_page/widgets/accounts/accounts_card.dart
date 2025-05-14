@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../ui/device.dart';
+import '../../../../ui/extensions.dart';
 import '../linear_progress_bar.dart';
-import '../../../../constants/functions.dart';
-import '../../../../custom_widgets/default_container.dart';
+import '../../../../ui/widgets/default_container.dart';
 import '../../../../providers/accounts_provider.dart';
 import '../../../../providers/currency_provider.dart';
 import '../../../../model/bank_account.dart';
 import '../card_label.dart';
 
-class AccountsCard extends ConsumerWidget with Functions {
+class AccountsCard extends ConsumerWidget {
   const AccountsCard({super.key});
 
   @override
@@ -20,7 +21,7 @@ class AccountsCard extends ConsumerWidget with Functions {
     return Column(
       children: [
         const CardLabel(label: "Accounts"),
-        const SizedBox(height: 10),
+        const SizedBox(height: Sizes.sm),
         DefaultContainer(
           child: accountList.when(
             data: (accounts) => ListView.separated(
@@ -28,7 +29,8 @@ class AccountsCard extends ConsumerWidget with Functions {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               scrollDirection: Axis.vertical,
-              separatorBuilder: (context, i) => const SizedBox(height: 4),
+              separatorBuilder: (context, i) =>
+                  const SizedBox(height: Sizes.xs),
               itemBuilder: (context, i) {
                 double total = accounts.isNotEmpty
                     ? accounts
@@ -38,7 +40,7 @@ class AccountsCard extends ConsumerWidget with Functions {
                     : 0.0;
                 BankAccount account = accounts[i];
                 return SizedBox(
-                  height: 50.0,
+                  height: Sizes.xl * 2,
                   child: Column(
                     spacing: 4,
                     children: [
@@ -56,7 +58,7 @@ class AccountsCard extends ConsumerWidget with Functions {
                             ),
                           ),
                           Text(
-                            "${numToCurrency(account.total)}${currencyState.selectedCurrency.symbol}",
+                            "${account.total?.toCurrency()}${currencyState.selectedCurrency.symbol}",
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                         ],

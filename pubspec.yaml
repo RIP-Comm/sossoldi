@@ -1,12 +1,12 @@
 name: sossoldi
 description: A wealth management / personal finance / net worth tracking app.
 
-publish_to: 'none'
+publish_to: "none"
 
-version: 0.1.2+3
+version: 0.1.6+7
 
 environment:
-  sdk: '>=3.3.3 <4.0.0'
+  sdk: ">=3.3.3 <4.0.0"
 
 dependencies:
   flutter:
@@ -47,6 +47,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+    - assets/images/
   fonts:
     - family: NunitoSans
       fonts:

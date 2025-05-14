@@ -4,11 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../constants/functions.dart';
 import '../../constants/style.dart';
 import '../../model/transaction.dart';
 import '../../providers/accounts_provider.dart';
 import '../../providers/transactions_provider.dart';
+import '../../ui/device.dart';
+import '../../ui/extensions.dart';
 import "widgets/account_selector.dart";
 import 'widgets/amount_section.dart';
 import "widgets/category_selector.dart";
@@ -26,7 +27,7 @@ class AddPage extends ConsumerStatefulWidget {
   ConsumerState<AddPage> createState() => _AddPageState();
 }
 
-class _AddPageState extends ConsumerState<AddPage> with Functions {
+class _AddPageState extends ConsumerState<AddPage> {
   final TextEditingController amountController = TextEditingController();
   final TextEditingController noteController = TextEditingController();
   bool? recurrencyEditingPermittedFromRoute;
@@ -38,7 +39,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
       _isSaveEnabled = true;
     }
     amountController.text =
-        numToCurrency(ref.read(selectedTransactionUpdateProvider)?.amount);
+        ref.read(selectedTransactionUpdateProvider)?.amount.toCurrency() ?? '';
     noteController.text =
         ref.read(selectedTransactionUpdateProvider)?.note ?? '';
 
@@ -128,7 +129,9 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
     ref
         .read(accountsProvider.notifier)
         .refreshAccount(ref.read(bankAccountProvider)!)
-        .whenComplete(() => Navigator.of(context).pop());
+        .whenComplete(() {
+      if (mounted) Navigator.of(context).pop();
+    });
   }
 
   void _createOrUpdateTransaction() {
@@ -146,23 +149,20 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
             !selectedTransaction.recurring) {
           ref
               .read(transactionsProvider.notifier)
-              .addRecurringTransaction(
-                  currencyToNum(cleanAmount), noteController.text)
+              .addRecurringTransaction(cleanAmount.toNum(), noteController.text)
               .then((value) {
             if (value != null) {
               ref
                   .read(transactionsProvider.notifier)
                   .updateTransaction(
-                      currencyToNum(cleanAmount), noteController.text, value.id)
+                      cleanAmount.toNum(), noteController.text, value.id)
                   .whenComplete(() => _refreshAccountAndNavigateBack());
             }
           });
         } else {
           ref
               .read(transactionsProvider.notifier)
-              .updateTransaction(
-                  currencyToNum(cleanAmount),
-                  noteController.text,
+              .updateTransaction(cleanAmount.toNum(), noteController.text,
                   selectedTransaction.idRecurringTransaction)
               .whenComplete(() => _refreshAccountAndNavigateBack());
         }
@@ -171,7 +171,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
           if (ref.read(bankAccountTransferProvider) != null) {
             ref
                 .read(transactionsProvider.notifier)
-                .addTransaction(currencyToNum(cleanAmount), noteController.text)
+                .addTransaction(cleanAmount.toNum(), noteController.text)
                 .whenComplete(() => _refreshAccountAndNavigateBack());
           }
         } else {
@@ -181,13 +181,12 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
               ref
                   .read(transactionsProvider.notifier)
                   .addRecurringTransaction(
-                      currencyToNum(cleanAmount), noteController.text)
+                      cleanAmount.toNum(), noteController.text)
                   .whenComplete(() => _refreshAccountAndNavigateBack());
             } else {
               ref
                   .read(transactionsProvider.notifier)
-                  .addTransaction(
-                      currencyToNum(cleanAmount), noteController.text)
+                  .addTransaction(cleanAmount.toNum(), noteController.text)
                   .whenComplete(() => _refreshAccountAndNavigateBack());
             }
           }
@@ -226,9 +225,12 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                 size: 20,
                 color: Theme.of(context).colorScheme.primary,
               ),
-              onPressed: () => showDialog(context: context, builder: (_) => DuplicateTransactionDialog(
-                transaction: selectedTransaction,
-              )),
+              onPressed: () => showDialog(
+                context: context,
+                builder: (_) => DuplicateTransactionDialog(
+                  transaction: selectedTransaction,
+                ),
+              ),
             ),
             IconButton(
               icon: Icon(
@@ -244,14 +246,14 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
         children: [
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.only(bottom: 72),
+              padding: const EdgeInsets.only(bottom: Sizes.md * 6),
               child: Column(
                 children: [
                   AmountSection(amountController),
                   Container(
                     alignment: Alignment.centerLeft,
-                    padding:
-                        const EdgeInsets.only(left: 16, top: 32, bottom: 8),
+                    padding: const EdgeInsets.only(
+                        left: Sizes.lg, top: Sizes.xxl, bottom: Sizes.sm),
                     child: Text(
                       "DETAILS",
                       style: Theme.of(context).textTheme.labelLarge!.copyWith(
@@ -278,8 +280,10 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                                 useSafeArea: true,
                                 shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10.0),
-                                    topRight: Radius.circular(10.0),
+                                    topLeft:
+                                        Radius.circular(Sizes.borderRadius),
+                                    topRight:
+                                        Radius.circular(Sizes.borderRadius),
                                   ),
                                 ),
                                 builder: (_) => DraggableScrollableSheet(
@@ -308,8 +312,10 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                                 useSafeArea: true,
                                 shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10.0),
-                                    topRight: Radius.circular(10.0),
+                                    topLeft:
+                                        Radius.circular(Sizes.borderRadius),
+                                    topRight:
+                                        Radius.circular(Sizes.borderRadius),
                                   ),
                                 ),
                                 builder: (_) => DraggableScrollableSheet(
@@ -329,7 +335,7 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
                         DetailsListTile(
                           title: "Date",
                           icon: Icons.calendar_month,
-                          value: dateToString(ref.watch(dateProvider)),
+                          value: ref.watch(dateProvider).formatEDMY(),
                           callback: () async {
                             FocusManager.instance.primaryFocus?.unfocus();
                             if (Platform.isIOS) {
@@ -381,35 +387,38 @@ class _AddPageState extends ConsumerState<AddPage> with Functions {
               ),
             ),
           ),
-          Container(
-            alignment: Alignment.bottomCenter,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              boxShadow: [
-                BoxShadow(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .primary
-                      .withValues(alpha: 0.15),
-                  blurRadius: 5.0,
-                  offset: const Offset(0, -1.0),
-                )
-              ],
-            ),
-            padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
+          SafeArea(
             child: Container(
+              alignment: Alignment.bottomCenter,
               width: double.infinity,
               decoration: BoxDecoration(
-                boxShadow: [defaultShadow],
-                borderRadius: BorderRadius.circular(8),
+                color: Theme.of(context).colorScheme.surface,
+                boxShadow: [
+                  BoxShadow(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .primary
+                        .withValues(alpha: 0.15),
+                    blurRadius: 5.0,
+                    offset: const Offset(0, -1.0),
+                  )
+                ],
               ),
-              child: ElevatedButton(
-                onPressed: _isSaveEnabled ? _createOrUpdateTransaction : null,
-                child: Text(
-                  selectedTransaction != null
-                      ? "UPDATE TRANSACTION"
-                      : "ADD TRANSACTION",
+              padding: const EdgeInsets.fromLTRB(
+                  Sizes.xl, Sizes.md, Sizes.xl, Sizes.xl),
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  boxShadow: [defaultShadow],
+                  borderRadius: BorderRadius.circular(Sizes.borderRadius),
+                ),
+                child: ElevatedButton(
+                  onPressed: _isSaveEnabled ? _createOrUpdateTransaction : null,
+                  child: Text(
+                    selectedTransaction != null
+                        ? "UPDATE TRANSACTION"
+                        : "ADD TRANSACTION",
+                  ),
                 ),
               ),
             ),

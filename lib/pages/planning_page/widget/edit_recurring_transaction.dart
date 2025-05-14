@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../constants/functions.dart';
 import '../../../constants/style.dart';
 import '../../../providers/transactions_provider.dart';
+import '../../../ui/device.dart';
+import '../../../ui/extensions.dart';
 import '../../add_page/widgets/account_selector.dart';
 import '../../add_page/widgets/amount_widget.dart';
 import '../../add_page/widgets/details_list_tile.dart';
@@ -20,14 +21,17 @@ class EditRecurringTransaction extends ConsumerStatefulWidget {
 }
 
 class _EditRecurringTransactionState
-    extends ConsumerState<EditRecurringTransaction> with Functions {
+    extends ConsumerState<EditRecurringTransaction> {
   final TextEditingController amountController = TextEditingController();
   final TextEditingController noteController = TextEditingController();
 
   @override
   void initState() {
-    amountController.text = numToCurrency(
-        ref.read(selectedRecurringTransactionUpdateProvider)?.amount);
+    amountController.text = ref
+            .read(selectedRecurringTransactionUpdateProvider)
+            ?.amount
+            .toCurrency() ??
+        '';
     noteController.text =
         ref.read(selectedRecurringTransactionUpdateProvider)?.note ?? '';
 
@@ -82,13 +86,14 @@ class _EditRecurringTransactionState
       body: Stack(
         children: [
           SingleChildScrollView(
-            padding: const EdgeInsets.only(bottom: 72),
+            padding: const EdgeInsets.only(bottom: Sizes.md * 6),
             child: Column(
               children: [
                 AmountWidget(amountController),
                 Container(
                   alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.only(left: 16, top: 32, bottom: 8),
+                  padding: const EdgeInsets.only(
+                      left: Sizes.lg, top: Sizes.xxl, bottom: Sizes.sm),
                   child: Text(
                     "DETAILS (any change will affect only future transactions)",
                     style: Theme.of(context)
@@ -116,8 +121,8 @@ class _EditRecurringTransactionState
                             useSafeArea: true,
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10.0),
-                                topRight: Radius.circular(10.0),
+                                topLeft: Radius.circular(Sizes.borderRadius),
+                                topRight: Radius.circular(Sizes.borderRadius),
                               ),
                             ),
                             builder: (_) => DraggableScrollableSheet(
@@ -134,14 +139,15 @@ class _EditRecurringTransactionState
                       ),
                       const Divider(height: 1, color: grey1),
                       NonEditableDetailsListTile(
-                          title: "Category",
-                          icon: Icons.list_alt,
-                          value: ref.watch(categoryProvider)?.name),
+                        title: "Category",
+                        icon: Icons.list_alt,
+                        value: ref.watch(categoryProvider)?.name,
+                      ),
                       const Divider(height: 1, color: grey1),
                       NonEditableDetailsListTile(
                           title: "Date Start",
                           icon: Icons.calendar_month,
-                          value: dateToString(ref.watch(dateProvider))),
+                          value: ref.watch(dateProvider).formatEDMY()),
                       const RecurrenceListTileEdit(),
                     ],
                   ),
@@ -157,27 +163,30 @@ class _EditRecurringTransactionState
                 color: Theme.of(context).colorScheme.surface,
                 boxShadow: [
                   BoxShadow(
-                    color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.15),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .primary
+                        .withValues(alpha: 0.15),
                     blurRadius: 5.0,
                     offset: const Offset(0, -1.0),
                   )
                 ],
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: Sizes.xl, vertical: Sizes.sm),
               child: Container(
                 height: 48,
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.secondary,
                   boxShadow: [defaultShadow],
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(Sizes.borderRadius),
                 ),
                 child: TextButton(
                   onPressed: () {
                     ref
                         .read(transactionsProvider.notifier)
                         .updateRecurringTransaction(
-                            currencyToNum(amountController.text),
-                            noteController.text)
+                            amountController.text.toNum(), noteController.text)
                         .whenComplete(() {
                       if (context.mounted) {
                         Navigator.of(context).pop();
@@ -187,7 +196,8 @@ class _EditRecurringTransactionState
                   style: TextButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.secondary,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
+                        borderRadius:
+                            BorderRadius.circular(Sizes.borderRadius)),
                   ),
                   child: Text(
                     "UPDATE TRANSACTION",

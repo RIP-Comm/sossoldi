@@ -3,7 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../custom_widgets/default_card.dart';
+import '../../ui/widgets/default_card.dart';
+import '../../ui/device.dart';
 
 class MoreInfoPage extends ConsumerStatefulWidget {
   const MoreInfoPage({super.key});
@@ -15,7 +16,7 @@ class MoreInfoPage extends ConsumerStatefulWidget {
 var moreInfoOptions = const [
   [
     "App Version:",
-    "0.1.2",
+    "0.1.6",
     null,
   ],
   [
@@ -42,7 +43,7 @@ class _MoreInfoPageState extends ConsumerState<MoreInfoPage> {
         title: const Text('App Info'),
       ),
       body: ListView.separated(
-        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        padding: const EdgeInsets.symmetric(vertical: Sizes.lg),
         physics: const BouncingScrollPhysics(),
         itemCount: moreInfoOptions.length,
         separatorBuilder: (context, index) => const SizedBox(height: 16),
@@ -56,7 +57,7 @@ class _MoreInfoPageState extends ConsumerState<MoreInfoPage> {
             },
             child: Row(
               children: [
-                const SizedBox(width: 12.0),
+                const SizedBox(width: Sizes.md),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.start,

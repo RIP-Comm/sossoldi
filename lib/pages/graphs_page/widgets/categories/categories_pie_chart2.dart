@@ -4,10 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../constants/constants.dart';
 import '../../../../constants/style.dart';
-import '../../../../custom_widgets/rounded_icon.dart';
+import '../../../../ui/widgets/rounded_icon.dart';
 import '../../../../model/category_transaction.dart';
 import '../../../../providers/categories_provider.dart';
 import '../../../../providers/currency_provider.dart';
+import '../../../../ui/device.dart';
 
 class CategoriesPieChart2 extends ConsumerWidget {
   const CategoriesPieChart2({
@@ -24,7 +25,8 @@ class CategoriesPieChart2 extends ConsumerWidget {
     final selectedCategory = ref.watch(selectedCategoryProvider);
 
     List<PieChartSectionData> sections = categoryMap.entries.map((entry) {
-      bool isSelected = selectedCategory != null && selectedCategory.id == entry.key.id;
+      bool isSelected =
+          selectedCategory != null && selectedCategory.id == entry.key.id;
       return PieChartSectionData(
         color: categoryColorList[entry.key.color],
         value: 360 * entry.value / total,
@@ -51,10 +53,14 @@ class CategoriesPieChart2 extends ConsumerWidget {
                     return;
                   }
                   if (pieTouchResponse?.touchedSection != null) {
-                    int touchedIndex = pieTouchResponse!.touchedSection!.touchedSectionIndex;
-                    if (touchedIndex >= 0 && touchedIndex < categoryMap.length) {
-                      CategoryTransaction touchedCategory = categoryMap.keys.elementAt(touchedIndex);
-                      ref.read(selectedCategoryProvider.notifier).state = touchedCategory;
+                    int touchedIndex =
+                        pieTouchResponse!.touchedSection!.touchedSectionIndex;
+                    if (touchedIndex >= 0 &&
+                        touchedIndex < categoryMap.length) {
+                      CategoryTransaction touchedCategory =
+                          categoryMap.keys.elementAt(touchedIndex);
+                      ref.read(selectedCategoryProvider.notifier).state =
+                          touchedCategory;
                     } else {
                       ref.read(selectedCategoryProvider.notifier).state = null;
                     }
@@ -99,19 +105,23 @@ class PieChartCategoryInfo extends ConsumerWidget {
           RoundedIcon(
             icon: iconList[selectedCategory.symbol] ?? Icons.swap_horiz_rounded,
             backgroundColor: categoryColorList[selectedCategory.color],
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(Sizes.sm),
           ),
         Text(
           categoryValue != null
               ? "${categoryValue.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}"
               : "${total.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}",
           style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-              color: (categoryValue != null && categoryValue >= 0) || (selectedCategory == null && total > 0)
+              color: (categoryValue != null && categoryValue >= 0) ||
+                      (selectedCategory == null && total > 0)
                   ? green
                   : red,
               fontSize: 18),
         ),
-        if (selectedCategory != null) Text(selectedCategory.name) else const Text("Total"),
+        if (selectedCategory != null)
+          Text(selectedCategory.name)
+        else
+          const Text("Total"),
       ],
     );
   }
