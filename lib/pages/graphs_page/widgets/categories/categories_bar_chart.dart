@@ -24,21 +24,12 @@ class CategoriesBarChart extends ConsumerWidget {
 
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text(
-              '$currentYear',
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-          ],
+        Text(
+          '$currentYear',
+          style: Theme.of(context).textTheme.bodySmall,
         ),
         monthlyTotals.when(
           data: (totals) {
-            final maxAmount = totals.isNotEmpty
-                ? totals.reduce((a, b) => a > b ? a : b)
-                : 1.0;
-
             final average = totals.isNotEmpty
                 ? totals.reduce((a, b) => a + b) /
                     totals.where((total) => total > 0).length
@@ -58,7 +49,7 @@ class CategoriesBarChart extends ConsumerWidget {
                   borderData: FlBorderData(show: false),
                   extraLinesData: ExtraLinesData(horizontalLines: [
                     HorizontalLine(
-                      y: (average / maxAmount) * 200.0,
+                      y: average,
                       color: Theme.of(context).colorScheme.secondary,
                       strokeWidth: 2,
                       dashArray: [5, 5],
@@ -95,8 +86,7 @@ class CategoriesBarChart extends ConsumerWidget {
         totals.isNotEmpty ? totals.reduce((a, b) => a > b ? a : b) : 1.0;
 
     return List.generate(12, (index) {
-      final barHeight =
-          maxAmount > 0 ? (totals[index] / maxAmount) * 200.0 : 0.0;
+      final barHeight = maxAmount > 0 ? totals[index] : 0.0;
       final isHighlighted = index == highlightedMonth;
 
       return BarChartGroupData(
@@ -132,8 +122,20 @@ class CategoriesBarChart extends ConsumerWidget {
           },
         ),
       ),
-      leftTitles: const AxisTitles(
-        sideTitles: SideTitles(showTitles: false),
+      leftTitles: AxisTitles(
+        sideTitles: SideTitles(
+            showTitles: true,
+            getTitlesWidget: (value, meta) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 6.0),
+                child: Text(
+                  meta.formattedValue,
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 10),
+                ),
+              );
+            }),
       ),
       rightTitles: const AxisTitles(
         sideTitles: SideTitles(showTitles: false),
