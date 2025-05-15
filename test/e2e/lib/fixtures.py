@@ -26,7 +26,7 @@ def session_setup_teardown(request: SubRequest) -> None:
         if local is not None:
             raise ValueError(f"The local argument must be in {list(Platform)}; got {local} instead")
 
-        logging.warning(f"'--local' parameter not set, running with default os: {constants.DEFAULT_PLATFORM}")
+        logging.warning(f"'--local' parameter not set, running with default os: {constants.DEFAULT_PLATFORM.value}")
         tested_platform = Platform.ANDROID
 
     configuration.__init__(platform=tested_platform, rootpath=request.config.rootpath)
