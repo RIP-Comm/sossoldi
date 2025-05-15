@@ -1,16 +1,17 @@
-import pytest
-
+from lib.configuration import configuration
+from lib.enums import Platform
 from pages.dashboard_page import DashboardPage
-from pages.onboarding_page import OnboardingPage
 from pages.manage_account_page import ManageAccountPage
-from utils.utils import Utils
-from utils.driver import Driver
+from pages.onboarding_page import OnboardingPage
 
-@pytest.mark.usefixtures("driver_setup", "test_setup")
-class TestAccount():
+
+class TestAccount:
     def test_create_account(self):
+        """
+        Verify the account creation and subsequent display in the dashboard.
+        """
         onboarding = OnboardingPage()
-        if Driver.os == Utils.ANDROID:
+        if configuration.platform == Platform.ANDROID:
             onboarding.skip_onboarding()
         dashboard = DashboardPage()
         dashboard.create_account()
