@@ -33,14 +33,13 @@ class Currency extends BaseEntity {
     required this.mainCurrency,
   });
 
-  Currency copy({
-    int? id,
-    String? symbol,
-    String? code,
-    String? name,
-    bool? mainCurrency,
-    t,
-  }) =>
+  Currency copy(
+          {int? id,
+          String? symbol,
+          String? code,
+          String? name,
+          bool? mainCurrency,
+          t}) =>
       Currency(
         id: id ?? this.id,
         symbol: symbol ?? this.symbol,
@@ -82,12 +81,11 @@ class CurrencyMethods extends SossoldiDatabase {
     } else {
       //fallback
       return const Currency(
-        id: 2,
-        symbol: '\$',
-        code: 'USD',
-        name: "United States Dollar",
-        mainCurrency: true,
-      );
+          id: 2,
+          symbol: '\$',
+          code: 'USD',
+          name: "United States Dollar",
+          mainCurrency: true);
     }
   }
 
