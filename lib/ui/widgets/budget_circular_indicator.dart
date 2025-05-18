@@ -23,7 +23,7 @@ class BudgetCircularIndicator extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currencyState = ref.watch(currencyStateNotifier);
-
+    final theme = Theme.of(context);
     return Column(
       children: [
         CircularPercentIndicator(
@@ -61,10 +61,8 @@ class BudgetCircularIndicator extends ConsumerWidget {
               const SizedBox(height: Sizes.sm),
               Text(
                 "LEFT",
-                style: Theme.of(context)
-                    .textTheme
-                    .labelLarge!
-                    .copyWith(color: Theme.of(context).colorScheme.primary),
+                style: theme.textTheme.labelLarge!
+                    .copyWith(color: theme.colorScheme.primary),
               ),
             ],
           ),

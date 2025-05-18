@@ -13,6 +13,7 @@ library;
 
 import '0001_initial_schema.dart';
 import '0002_account_net_worth.dart';
+import '0003_recurring_transaction_type.dart';
 import '../migration_base.dart';
 
 /// Returns all available migrations in execution order.
@@ -25,6 +26,7 @@ List<Migration> getMigrations() {
   return [
     InitialSchema(),
     AccountNetWorth(),
+    RecurringTransactionType(),
     // Add future migrations here
   ];
 }
