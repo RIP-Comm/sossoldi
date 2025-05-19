@@ -10,6 +10,7 @@ import '../constants/style.dart';
 import '../ui/widgets/alert_dialog.dart';
 import '../ui/widgets/default_card.dart';
 import '../database/sossoldi_database.dart';
+import '../model/category_transaction.dart';
 import '../providers/accounts_provider.dart';
 import '../providers/budgets_provider.dart';
 import '../providers/categories_provider.dart';
