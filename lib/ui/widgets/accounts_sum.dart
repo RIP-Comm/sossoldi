@@ -80,9 +80,13 @@ class AccountsSum extends ConsumerWidget {
                               ),
                               TextSpan(
                                 text: currencyState.selectedCurrency.symbol,
-                                style:
-                                    Theme.of(context).textTheme.bodySmall?.apply(
-                                  fontFeatures: [const FontFeature.subscripts()],
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.apply(
+                                  fontFeatures: [
+                                    const FontFeature.subscripts()
+                                  ],
                                 ),
                               ),
                             ],
