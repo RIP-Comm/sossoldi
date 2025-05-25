@@ -13,7 +13,7 @@ import 'transactions_page/transactions_page.dart';
 final StateProvider selectedIndexProvider = StateProvider<int>((ref) => 0);
 
 final StateProvider<bool> visibilityAmountProvider =
-    StateProvider<bool>((ref) => false);
+    StateProvider<bool>((ref) => true);
 
 class Structure extends ConsumerStatefulWidget {
   const Structure({super.key});
@@ -138,6 +138,6 @@ class _StructureState extends ConsumerState<Structure> {
 
   void _onVisibilityTap() {
     ref.read(visibilityAmountProvider.notifier).state =
-        !ref.read(visibilityAmountProvider.notifier).state;
+        !ref.read(visibilityAmountProvider);
   }
 }
