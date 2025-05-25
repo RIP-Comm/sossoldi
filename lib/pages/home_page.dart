@@ -86,8 +86,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                                                     .primary),
                                       ),
                                       TextSpan(
-                                        text:
-                                            currencyState.selectedCurrency.symbol,
+                                        text: currencyState
+                                            .selectedCurrency.symbol,
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyLarge
@@ -122,8 +122,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                                             ?.copyWith(color: green),
                                       ),
                                       TextSpan(
-                                        text:
-                                            currencyState.selectedCurrency.symbol,
+                                        text: currencyState
+                                            .selectedCurrency.symbol,
                                         style: Theme.of(context)
                                             .textTheme
                                             .labelLarge
@@ -155,8 +155,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                                             ?.copyWith(color: red),
                                       ),
                                       TextSpan(
-                                        text:
-                                            currencyState.selectedCurrency.symbol,
+                                        text: currencyState
+                                            .selectedCurrency.symbol,
                                         style: Theme.of(context)
                                             .textTheme
                                             .labelLarge
@@ -321,13 +321,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ),
                 ),
                 lastTransactions.when(
-                  data: (transactions) =>
-                      TransactionsList(transactions: transactions, blurAmounts: !isAmountVisible),
+                  data: (transactions) => TransactionsList(
+                      transactions: transactions,
+                      blurAmounts: !isAmountVisible),
                   loading: () => const SizedBox(),
                   error: (err, stack) => Text('Error: $err'),
                 ),
                 const SizedBox(height: Sizes.xxl),
-                const BudgetsSection(),
+                BudgetsSection(blurAmounts: !isAmountVisible),
               ],
             ),
           ),
