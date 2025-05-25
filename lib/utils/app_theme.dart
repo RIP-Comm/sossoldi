@@ -97,7 +97,9 @@ class AppTheme {
     filledButtonTheme: FilledButtonThemeData(
       style: ButtonStyle(
         padding: WidgetStatePropertyAll(EdgeInsets.all(Sizes.xs)),
-        iconSize: WidgetStatePropertyAll(28),
+        iconSize: WidgetStatePropertyAll(24),
+        maximumSize: WidgetStatePropertyAll(Size.square(32)),
+        minimumSize: WidgetStatePropertyAll(Size.square(32)),
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(Sizes.borderRadius)),

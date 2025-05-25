@@ -4,6 +4,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import '../../providers/currency_provider.dart';
 import '../device.dart';
 import '../extensions.dart';
+import 'blur_widget.dart';
 
 /// This class shows account summaries in dashboard
 class BudgetCircularIndicator extends ConsumerWidget {
@@ -11,6 +12,7 @@ class BudgetCircularIndicator extends ConsumerWidget {
   final num amount;
   final double perc;
   final Color color;
+  final bool blurAmounts;
 
   const BudgetCircularIndicator({
     super.key,
@@ -18,6 +20,7 @@ class BudgetCircularIndicator extends ConsumerWidget {
     required this.amount,
     required this.perc,
     required this.color,
+    required this.blurAmounts,
   });
 
   @override
@@ -35,27 +38,33 @@ class BudgetCircularIndicator extends ConsumerWidget {
           center: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: amount.toCurrency(),
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.primary),
-                    ),
-                    TextSpan(
-                      text: currencyState.selectedCurrency.symbol,
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelMedium!
-                          .copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                          )
-                          .apply(
-                        fontFeatures: [const FontFeature.subscripts()],
+              BlurWidget(
+                blur: blurAmounts,
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: amount.toCurrency(),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(
+                                color: Theme.of(context).colorScheme.primary),
                       ),
-                    ),
-                  ],
+                      TextSpan(
+                        text: currencyState.selectedCurrency.symbol,
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelMedium!
+                            .copyWith(
+                              color: Theme.of(context).colorScheme.primary,
+                            )
+                            .apply(
+                          fontFeatures: [const FontFeature.subscripts()],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(height: Sizes.sm),

@@ -8,7 +8,12 @@ import '../../providers/budgets_provider.dart';
 import '../../ui/device.dart';
 
 class BudgetsSection extends ConsumerWidget {
-  const BudgetsSection({super.key});
+  const BudgetsSection({
+    super.key,
+    this.blurAmounts = false,
+  });
+
+  final bool blurAmounts;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -82,6 +87,7 @@ class BudgetsSection extends ConsumerWidget {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: Sizes.md),
                               child: BudgetCircularIndicator(
+                                blurAmounts: blurAmounts,
                                 title: budgets[index].name!,
                                 amount: budgets[index].amountLimit -
                                             budgets[index].spent >
