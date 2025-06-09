@@ -1,0 +1,9 @@
+Fixed that annoying decimal bug messing with your balances
+Some texts were trying to escape the screen... we brought them back in line
+Transaction amounts now show up properly. No more vanishing numbers!
+Trying to create a budget without categories? Bad boy. We'll now guide you to the right place
+Picking a category is now smoother: one tap and done
+Cleaned up some mess with negative numbers and commas (no more acrobatics to read your data)
+
+To report issues, suggest improvements, or share feedback, you can always use the dedicated section in the settings.
+Thank you for using Sossoldi!

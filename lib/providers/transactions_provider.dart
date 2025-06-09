@@ -115,15 +115,19 @@ class AsyncTransactionsNotifier
       {BankAccount? account, DateTime? date, TransactionType? type}) async {
     state = const AsyncValue.loading();
 
+    final TransactionType t = type ?? ref.read(transactionTypeProvider);
+
     Transaction transaction = Transaction(
       date: date ?? ref.read(dateProvider),
       amount: amount,
-      type: type ?? ref.read(transactionTypeProvider),
+      type: t,
       note: label,
       idBankAccount: (account ?? ref.read(bankAccountProvider))!.id!,
       idBankAccountTransfer:
           account != null ? null : ref.read(bankAccountTransferProvider)?.id,
-      idCategory: account != null ? null : ref.read(categoryProvider)?.id,
+      idCategory: account != null || t == TransactionType.transfer
+          ? null
+          : ref.read(categoryProvider)?.id,
       recurring:
           account != null ? false : ref.read(selectedRecurringPayProvider),
     );
