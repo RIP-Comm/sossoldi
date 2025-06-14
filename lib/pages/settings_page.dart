@@ -278,7 +278,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                     onPressed: () async {
                       await SossoldiDatabase.instance.clearDatabase();
                       await SossoldiDatabase.instance.fillDemoData();
-                      ref.refresh(accountsProvider);  
+                      ref.refresh(accountsProvider);
                       ref.refresh(categoriesProvider(userCategoriesFilter));
                       ref.refresh(transactionsProvider);
                       ref.refresh(budgetsProvider);

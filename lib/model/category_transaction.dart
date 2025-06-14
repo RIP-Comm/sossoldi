@@ -129,9 +129,7 @@ class CategoryTransaction extends BaseEntity {
           color: json[CategoryTransactionFields.color] as int,
           note: json[CategoryTransactionFields.note] as String?,
           parent: json[CategoryTransactionFields.parent] as int?,
-          deleted: json[CategoryTransactionFields.deleted] == 1
-              ? true
-              : false,
+          deleted: json[CategoryTransactionFields.deleted] == 1 ? true : false,
           createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
           updatedAt:
               DateTime.parse(json[BaseEntityFields.updatedAt] as String));

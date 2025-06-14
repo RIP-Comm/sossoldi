@@ -71,7 +71,6 @@ void main() {
     assert(c.symbol == json[CategoryTransactionFields.symbol]);
     assert(c.color == json[CategoryTransactionFields.color]);
     assert(c.note == json[CategoryTransactionFields.note]);
-    assert((c.deleted ? 1 : 0) ==
-        json[CategoryTransactionFields.deleted]);
+    assert((c.deleted ? 1 : 0) == json[CategoryTransactionFields.deleted]);
   });
 }

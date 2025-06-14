@@ -15,7 +15,6 @@ class UncategorizedDefaultCategory extends Migration {
 
   @override
   Future<void> up(Database db) async {
-
     // Default "Uncategorized" Category
     await db.execute('''
       INSERT INTO `$categoryTransactionTable`(`${CategoryTransactionFields.id}`, `${CategoryTransactionFields.name}`, `${CategoryTransactionFields.type}`, `${CategoryTransactionFields.symbol}`, `${CategoryTransactionFields.color}`, `${CategoryTransactionFields.note}`, `${CategoryTransactionFields.parent}`, `${CategoryTransactionFields.deleted}`, `${CategoryTransactionFields.createdAt}`, `${CategoryTransactionFields.updatedAt}`) VALUES
