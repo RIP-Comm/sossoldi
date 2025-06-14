@@ -70,7 +70,7 @@ class RecurringPaymentCard extends ConsumerWidget {
                         backgroundColor: categoryColorList[cat.color],
                         padding: const EdgeInsets.all(Sizes.sm),
                         size: 25,
-                        markedAsDeleted: cat.markedAsDeleted,
+                        deleted: cat.deleted,
                       ),
                       const SizedBox(width: Sizes.sm),
                       Expanded(

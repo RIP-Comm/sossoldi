@@ -8,7 +8,7 @@ class RoundedIcon extends StatelessWidget {
     this.backgroundColor,
     this.size = 24,
     this.padding = const EdgeInsets.all(10.0),
-    this.markedAsDeleted = false,
+    this.deleted = false,
     this.onDelete,
     super.key,
   });
@@ -17,7 +17,7 @@ class RoundedIcon extends StatelessWidget {
   final Color? backgroundColor;
   final double? size;
   final EdgeInsets? padding;
-  final bool markedAsDeleted;
+  final bool deleted;
   final VoidCallback? onDelete;
 
   @override
@@ -38,7 +38,7 @@ class RoundedIcon extends StatelessWidget {
                 )
               : const SizedBox(),
         ),
-        if (markedAsDeleted)
+        if (deleted)
           Positioned(
             right: 0,
             bottom: 0,

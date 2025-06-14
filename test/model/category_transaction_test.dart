@@ -11,7 +11,7 @@ void main() {
         type: CategoryTransactionType.expense,
         symbol: "symbol",
         color: 0,
-        markedAsDeleted: false,
+        deleted: false,
         createdAt: DateTime.utc(2022),
         updatedAt: DateTime.utc(2022));
 
@@ -22,7 +22,7 @@ void main() {
     assert(cCopy.type == c.type);
     assert(cCopy.symbol == c.symbol);
     assert(cCopy.color == c.color);
-    assert(cCopy.markedAsDeleted == c.markedAsDeleted);
+    assert(cCopy.deleted == c.deleted);
     assert(cCopy.createdAt == c.createdAt);
     assert(cCopy.updatedAt == c.updatedAt);
   });
@@ -61,7 +61,7 @@ void main() {
         symbol: "symbol",
         color: 0,
         note: "note",
-        markedAsDeleted: false);
+        deleted: false);
 
     Map<String, Object?> json = c.toJson();
 
@@ -71,7 +71,7 @@ void main() {
     assert(c.symbol == json[CategoryTransactionFields.symbol]);
     assert(c.color == json[CategoryTransactionFields.color]);
     assert(c.note == json[CategoryTransactionFields.note]);
-    assert((c.markedAsDeleted ? 1 : 0) ==
-        json[CategoryTransactionFields.markedAsDeleted]);
+    assert((c.deleted ? 1 : 0) ==
+        json[CategoryTransactionFields.deleted]);
   });
 }

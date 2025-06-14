@@ -87,17 +87,9 @@ class InitialSchema extends Migration {
         `${CategoryTransactionFields.color}` $integerNotNull,
         `${CategoryTransactionFields.note}` $text,
         `${CategoryTransactionFields.parent}` $integer,
-        `${CategoryTransactionFields.markedAsDeleted}` $integerNotNull CHECK (${CategoryTransactionFields.markedAsDeleted} IN (0, 1)),
         `${CategoryTransactionFields.createdAt}` $textNotNull,
         `${CategoryTransactionFields.updatedAt}` $textNotNull
       )
-    ''');
-
-    // Default "Uncategorized" Category
-    await db.execute('''
-      INSERT INTO `$categoryTransactionTable`(`${CategoryTransactionFields.id}`, `${CategoryTransactionFields.name}`, `${CategoryTransactionFields.type}`, `${CategoryTransactionFields.symbol}`, `${CategoryTransactionFields.color}`, `${CategoryTransactionFields.note}`, `${CategoryTransactionFields.parent}`, `${CategoryTransactionFields.markedAsDeleted}`, `${CategoryTransactionFields.createdAt}`, `${CategoryTransactionFields.updatedAt}`) VALUES
-        (0, "Uncategorized", "IN", "question_mark", 0, 'This is a default category for no categorized transactions', null, '0', '${DateTime.now()}', '${DateTime.now()}'),
-        (1, "Uncategorized", "OUT", "question_mark", 0, 'This is a default category for no categorized transactions', null, '0', '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
     // Budget Table

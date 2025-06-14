@@ -12,7 +12,7 @@ class CategoryTransactionFields extends BaseEntityFields {
   static String color = 'color';
   static String note = 'note';
   static String parent = 'parent';
-  static String markedAsDeleted = 'markedAsDeleted';
+  static String deleted = 'deleted';
   static String createdAt = BaseEntityFields.getCreatedAt;
   static String updatedAt = BaseEntityFields.getUpdatedAt;
 
@@ -24,7 +24,7 @@ class CategoryTransactionFields extends BaseEntityFields {
     color,
     note,
     parent,
-    markedAsDeleted,
+    deleted,
     BaseEntityFields.createdAt,
     BaseEntityFields.updatedAt
   ];
@@ -81,7 +81,7 @@ class CategoryTransaction extends BaseEntity {
   final int color;
   final String? note;
   final int? parent;
-  final bool markedAsDeleted;
+  final bool deleted;
 
   const CategoryTransaction({
     super.id,
@@ -91,7 +91,7 @@ class CategoryTransaction extends BaseEntity {
     required this.color,
     this.note,
     this.parent,
-    required this.markedAsDeleted,
+    required this.deleted,
     super.createdAt,
     super.updatedAt,
   });
@@ -104,7 +104,7 @@ class CategoryTransaction extends BaseEntity {
           int? color,
           String? note,
           int? parent,
-          bool? markedAsDeleted,
+          bool? deleted,
           DateTime? createdAt,
           DateTime? updatedAt}) =>
       CategoryTransaction(
@@ -115,7 +115,7 @@ class CategoryTransaction extends BaseEntity {
           color: color ?? this.color,
           note: note ?? this.note,
           parent: parent ?? this.parent,
-          markedAsDeleted: markedAsDeleted ?? this.markedAsDeleted,
+          deleted: deleted ?? this.deleted,
           createdAt: createdAt ?? this.createdAt,
           updatedAt: updatedAt ?? this.updatedAt);
 
@@ -129,7 +129,7 @@ class CategoryTransaction extends BaseEntity {
           color: json[CategoryTransactionFields.color] as int,
           note: json[CategoryTransactionFields.note] as String?,
           parent: json[CategoryTransactionFields.parent] as int?,
-          markedAsDeleted: json[CategoryTransactionFields.markedAsDeleted] == 1
+          deleted: json[CategoryTransactionFields.deleted] == 1
               ? true
               : false,
           createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
@@ -145,7 +145,7 @@ class CategoryTransaction extends BaseEntity {
         CategoryTransactionFields.color: color,
         CategoryTransactionFields.note: note,
         CategoryTransactionFields.parent: parent,
-        CategoryTransactionFields.markedAsDeleted: markedAsDeleted ? 1 : 0,
+        CategoryTransactionFields.deleted: deleted ? 1 : 0,
         BaseEntityFields.createdAt: update
             ? createdAt?.toIso8601String()
             : DateTime.now().toIso8601String(),
@@ -202,12 +202,12 @@ class CategoryTransactionMethods extends SossoldiDatabase {
       whereArgs = [0, 1];
     }
 
-    // showDeletedCategories == false => no markedAsDeleted
+    // showDeletedCategories == false => no deleted
     if (!filter.showDeletedCategories) {
       if (whereClause.isNotEmpty) {
         whereClause += ' AND ';
       }
-      whereClause += '${CategoryTransactionFields.markedAsDeleted} = ?';
+      whereClause += '${CategoryTransactionFields.deleted} = ?';
       whereArgs.add(0);
     }
 
@@ -258,7 +258,7 @@ class CategoryTransactionMethods extends SossoldiDatabase {
 
     return await db.update(
       categoryTransactionTable,
-      {CategoryTransactionFields.markedAsDeleted: 1},
+      {CategoryTransactionFields.deleted: 1},
       where: '${CategoryTransactionFields.id} = ?',
       whereArgs: [id],
     );

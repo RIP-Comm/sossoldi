@@ -160,6 +160,7 @@ class TransactionTile extends ConsumerWidget {
               : Theme.of(context).colorScheme.secondary,
           size: 25,
           padding: const EdgeInsets.all(Sizes.sm),
+          deleted: category != null ? category.deleted : false,
         ),
         title: Text(
           (transaction.note?.isEmpty ?? true)

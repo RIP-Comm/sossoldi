@@ -43,7 +43,7 @@ class AsyncCategoriesNotifier
       symbol: icon,
       type: type,
       color: color,
-      markedAsDeleted: false,
+      deleted: false,
     );
 
     state = const AsyncValue.loading();

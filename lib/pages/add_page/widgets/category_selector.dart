@@ -74,9 +74,8 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
                         final availableCategories = categories
                             .where((category) =>
                                 category.type == categoryType &&
-                                !category.markedAsDeleted)
+                                !category.deleted)
                             .toList();
-
                         return ListView.builder(
                           itemCount: availableCategories.length,
                           scrollDirection: Axis.horizontal,
@@ -138,7 +137,7 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
                       final availableCategories = categories
                           .where((category) =>
                               category.type == categoryType &&
-                              !category.markedAsDeleted)
+                              !category.deleted)
                           .toList();
 
                       return Container(

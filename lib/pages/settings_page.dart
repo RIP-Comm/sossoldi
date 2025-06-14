@@ -7,10 +7,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../constants/style.dart';
+import '../model/category_transaction.dart';
 import '../ui/widgets/alert_dialog.dart';
 import '../ui/widgets/default_card.dart';
 import '../database/sossoldi_database.dart';
-import '../model/category_transaction.dart';
 import '../providers/accounts_provider.dart';
 import '../providers/budgets_provider.dart';
 import '../providers/categories_provider.dart';
@@ -264,7 +264,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                     onPressed: () async {
                       await SossoldiDatabase.instance.resetDatabase();
                       ref.refresh(accountsProvider);
-                      ref.refresh(categoriesProvider);
+                      ref.refresh(categoriesProvider(userCategoriesFilter));
                       ref.refresh(transactionsProvider);
                       ref.refresh(budgetsProvider);
 
@@ -278,8 +278,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                     onPressed: () async {
                       await SossoldiDatabase.instance.clearDatabase();
                       await SossoldiDatabase.instance.fillDemoData();
-                      ref.refresh(accountsProvider);
-                      ref.refresh(categoriesProvider);
+                      ref.refresh(accountsProvider);  
+                      ref.refresh(categoriesProvider(userCategoriesFilter));
                       ref.refresh(transactionsProvider);
                       ref.refresh(budgetsProvider);
                       ref.refresh(dashboardProvider);
