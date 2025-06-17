@@ -1,4 +1,4 @@
-import '../database/sossoldi_database.dart';
+import '../services/database/sossoldi_database.dart';
 import 'base_entity.dart';
 
 const String currencyTable = 'currency';
@@ -143,8 +143,7 @@ class CurrencyMethods extends SossoldiDatabase {
   Future<int> deleteById(int id) async {
     final db = await database;
 
-    return await db.delete(currencyTable,
-        where: '${CurrencyFields.id} = ?', whereArgs: [id]);
+    return await db.delete(currencyTable, where: '${CurrencyFields.id} = ?', whereArgs: [id]);
   }
 
   void changeMainCurrency(int id) async {

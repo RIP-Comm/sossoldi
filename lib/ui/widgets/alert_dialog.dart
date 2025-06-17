@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../utils/app_theme.dart';
+import '../theme/app_theme.dart';
 
 ///
 /// Builder class to create a customized dialog with some options
@@ -76,9 +76,9 @@ class AlertDialogBuilder {
 ///
 /// Shows an info dialog with given text
 ///
-void showInfoDialog(BuildContext context, String text) => AlertDialogBuilder(
-        text: text, dialogType: AlertDialogType.info, primaryActionText: "OK")
-    .show(context);
+void showInfoDialog(BuildContext context, String text) =>
+    AlertDialogBuilder(text: text, dialogType: AlertDialogType.info, primaryActionText: "OK")
+        .show(context);
 
 ///
 /// Shows a success dialog with given text

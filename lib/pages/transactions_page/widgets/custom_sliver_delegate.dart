@@ -9,7 +9,7 @@ import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../ui/device.dart';
 import '../../../ui/extensions.dart';
-import '../../../utils/formatted_date_range.dart';
+import '../../../ui/formatters/formatted_date_range.dart';
 import 'month_selector.dart';
 
 class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
@@ -88,8 +88,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
                 TabBar(
                   controller: tabController,
                   tabs: myTabs,
-                  splashBorderRadius:
-                      BorderRadius.circular(Sizes.borderRadius * 10),
+                  splashBorderRadius: BorderRadius.circular(Sizes.borderRadius * 10),
                   indicatorPadding: EdgeInsets.symmetric(horizontal: Sizes.lg),
                   // TODO: capitalize text of the selected label
                   // not possible from TextStyle https://github.com/flutter/flutter/issues/22695
@@ -155,10 +154,7 @@ class CollapsedWidget extends StatelessWidget {
             child: Text(
               myTabs[tabController.index].text!,
               textAlign: TextAlign.center,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.copyWith(color: Colors.white),
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white),
             ),
           ),
           Text(

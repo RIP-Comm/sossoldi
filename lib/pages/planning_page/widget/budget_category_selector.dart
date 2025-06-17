@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
 import '../../../model/budget.dart';
 import '../../../model/category_transaction.dart';
-import '../../../utils/decimal_text_input_formatter.dart';
+import '../../../ui/formatters/decimal_text_input_formatter.dart';
 import '../../../ui/device.dart';
 
 class BudgetCategorySelector extends ConsumerStatefulWidget {
@@ -24,8 +24,7 @@ class BudgetCategorySelector extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<BudgetCategorySelector> createState() =>
-      _BudgetCategorySelector();
+  ConsumerState<BudgetCategorySelector> createState() => _BudgetCategorySelector();
 }
 
 class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
@@ -37,8 +36,7 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
       idCategory: selectedCategory.id!,
       name: selectedCategory.name,
       active: true,
-      amountLimit:
-          _controller.text.isNotEmpty ? double.parse(_controller.text) : 0,
+      amountLimit: _controller.text.isNotEmpty ? double.parse(_controller.text) : 0,
     );
     widget.onBudgetChanged(updatedBudget);
   }
@@ -122,8 +120,7 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
                 inputFormatters: [
                   DecimalTextInputFormatter(decimalDigits: 2),
                 ],
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 onChanged: (_) {
                   setState(() {
                     _modifyBudget();

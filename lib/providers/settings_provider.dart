@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../utils/notifications_service.dart';
+import '../services/notifications/notifications_service.dart';
 
 enum NotificationReminderType {
   none,
@@ -10,15 +10,11 @@ enum NotificationReminderType {
   monthly,
 }
 
-final transactionReminderSwitchProvider =
-    StateProvider.autoDispose<bool>((ref) => false);
+final transactionReminderSwitchProvider = StateProvider.autoDispose<bool>((ref) => false);
 final transactionReminderCadenceProvider =
-    StateProvider.autoDispose<NotificationReminderType>(
-        (ref) => NotificationReminderType.none);
-final transactionRecReminderSwitchProvider =
-    StateProvider.autoDispose<bool>((ref) => false);
-final transactionRecAddedSwitchProvider =
-    StateProvider.autoDispose<bool>((ref) => false);
+    StateProvider.autoDispose<NotificationReminderType>((ref) => NotificationReminderType.none);
+final transactionRecReminderSwitchProvider = StateProvider.autoDispose<bool>((ref) => false);
+final transactionRecAddedSwitchProvider = StateProvider.autoDispose<bool>((ref) => false);
 
 class AsyncSettingsNotifier extends AutoDisposeAsyncNotifier<dynamic> {
   @override
@@ -30,9 +26,8 @@ class AsyncSettingsNotifier extends AutoDisposeAsyncNotifier<dynamic> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     ref.read(transactionReminderSwitchProvider.notifier).state =
         prefs.getBool('transaction-reminder') ?? false;
-    ref.read(transactionReminderCadenceProvider.notifier).state =
-        NotificationReminderType.values.firstWhere((value) =>
-            value.name == prefs.getString('transaction-reminder-cadence'));
+    ref.read(transactionReminderCadenceProvider.notifier).state = NotificationReminderType.values
+        .firstWhere((value) => value.name == prefs.getString('transaction-reminder-cadence'));
     ref.read(transactionRecReminderSwitchProvider.notifier).state =
         prefs.getBool('transaction-rec-reminder') ?? false;
     ref.read(transactionRecAddedSwitchProvider.notifier).state =
@@ -44,8 +39,7 @@ class AsyncSettingsNotifier extends AutoDisposeAsyncNotifier<dynamic> {
     state = await AsyncValue.guard(() async {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       if (active) {
-        if (ref.read(transactionReminderCadenceProvider) ==
-            NotificationReminderType.none) {
+        if (ref.read(transactionReminderCadenceProvider) == NotificationReminderType.none) {
           ref.read(transactionReminderCadenceProvider.notifier).state =
               NotificationReminderType.daily;
         }
@@ -75,17 +69,15 @@ class AsyncSettingsNotifier extends AutoDisposeAsyncNotifier<dynamic> {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('transaction-rec-reminder',
-          ref.read(transactionRecReminderSwitchProvider));
       await prefs.setBool(
-          'transaction-rec-added', ref.read(transactionRecAddedSwitchProvider));
+          'transaction-rec-reminder', ref.read(transactionRecReminderSwitchProvider));
+      await prefs.setBool('transaction-rec-added', ref.read(transactionRecAddedSwitchProvider));
 
       return _getSettings();
     });
   }
 }
 
-final settingsProvider =
-    AutoDisposeAsyncNotifierProvider<AsyncSettingsNotifier, dynamic>(() {
+final settingsProvider = AutoDisposeAsyncNotifierProvider<AsyncSettingsNotifier, dynamic>(() {
   return AsyncSettingsNotifier();
 });

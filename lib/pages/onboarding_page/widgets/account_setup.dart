@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants/constants.dart';
 import '../../../providers/accounts_provider.dart';
-import '../../../utils/decimal_text_input_formatter.dart';
+import '../../../ui/formatters/decimal_text_input_formatter.dart';
 import '../../../ui/device.dart';
 import '/constants/style.dart';
 
@@ -33,8 +33,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
   }
 
   Future<void> _flagOnBoardingCompleted() async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
+    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setBool('onboarding_completed', true);
   }
 
@@ -55,46 +54,34 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
           padding: const EdgeInsets.all(Sizes.lg),
           child: Column(
             children: [
-              Text("STEP 2 OF 2",
-                  style: Theme.of(context).textTheme.labelSmall),
+              Text("STEP 2 OF 2", style: Theme.of(context).textTheme.labelSmall),
               const SizedBox(height: Sizes.xl),
               Text(
                 "Set the liquidity in your main account",
                 textAlign: TextAlign.center,
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineLarge
-                    ?.copyWith(color: blue1),
+                style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: blue1),
               ),
               const SizedBox(height: Sizes.xl),
               Text(
                 "It will be used as a baseline to which you can add income, expenses and calculate your wealth.",
                 textAlign: TextAlign.center,
                 maxLines: 3,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
-                    ?.copyWith(color: blue1),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: blue1),
               ),
               const SizedBox(height: Sizes.sm),
               Text(
                 "You'll be able to add more accounts within the app.",
                 textAlign: TextAlign.center,
                 maxLines: 3,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
-                    ?.copyWith(color: blue1),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: blue1),
               ),
               const SizedBox(height: Sizes.sm),
               Expanded(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   child: Container(
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: Sizes.xl, vertical: Sizes.lg),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: Sizes.xl, vertical: Sizes.lg),
+                    margin: const EdgeInsets.symmetric(horizontal: Sizes.xl, vertical: Sizes.lg),
+                    padding: const EdgeInsets.symmetric(horizontal: Sizes.xl, vertical: Sizes.lg),
                     decoration: BoxDecoration(
                         color: white,
                         shape: BoxShape.rectangle,
@@ -106,8 +93,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                             offset: const Offset(2, 2),
                           ),
                         ],
-                        borderRadius:
-                            BorderRadius.circular(Sizes.borderRadiusLarge)),
+                        borderRadius: BorderRadius.circular(Sizes.borderRadiusLarge)),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -115,10 +101,8 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text("ACCOUNT NAME ",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelSmall
-                                    ?.copyWith(color: grey1)),
+                                style:
+                                    Theme.of(context).textTheme.labelSmall?.copyWith(color: grey1)),
                             const Icon(Icons.edit, size: 10)
                           ],
                         ),
@@ -138,8 +122,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                             ),
                           ),
                           onTapOutside: (_) {
-                            FocusScopeNode currentFocus =
-                                FocusScope.of(context);
+                            FocusScopeNode currentFocus = FocusScope.of(context);
                             if (!currentFocus.hasPrimaryFocus) {
                               currentFocus.unfocus();
                             }
@@ -150,10 +133,8 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text("SET AMOUNT ",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelSmall
-                                    ?.copyWith(color: grey1)),
+                                style:
+                                    Theme.of(context).textTheme.labelSmall?.copyWith(color: grey1)),
                             const Icon(Icons.edit, size: 10)
                           ],
                         ),
@@ -181,8 +162,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                             ),
                           ),
                           onTapOutside: (_) {
-                            FocusScopeNode currentFocus =
-                                FocusScope.of(context);
+                            FocusScopeNode currentFocus = FocusScope.of(context);
                             if (!currentFocus.hasPrimaryFocus) {
                               currentFocus.unfocus();
                             }
@@ -193,10 +173,8 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text("EDIT ICON AND COLOR ",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelSmall
-                                    ?.copyWith(color: grey1)),
+                                style:
+                                    Theme.of(context).textTheme.labelSmall?.copyWith(color: grey1)),
                             const Icon(Icons.edit, size: 10)
                           ],
                         ),
@@ -219,35 +197,24 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                           child: ListView.separated(
                             scrollDirection: Axis.horizontal,
                             physics: const BouncingScrollPhysics(),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: Sizes.lg),
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(width: Sizes.lg),
+                            padding: const EdgeInsets.symmetric(horizontal: Sizes.lg),
+                            separatorBuilder: (context, index) => const SizedBox(width: Sizes.lg),
                             itemBuilder: (context, index) {
                               Color color = accountColorList[index];
                               return GestureDetector(
-                                onTap: () =>
-                                    setState(() => accountColor = index),
+                                onTap: () => setState(() => accountColor = index),
                                 child: Container(
-                                  height:
-                                      accountColorList[accountColor] == color
-                                          ? 38
-                                          : 32,
-                                  width: accountColorList[accountColor] == color
-                                      ? 38
-                                      : 32,
+                                  height: accountColorList[accountColor] == color ? 38 : 32,
+                                  width: accountColorList[accountColor] == color ? 38 : 32,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: color,
-                                    border:
-                                        accountColorList[accountColor] == color
-                                            ? Border.all(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary,
-                                                width: 3,
-                                              )
-                                            : null,
+                                    border: accountColorList[accountColor] == color
+                                        ? Border.all(
+                                            color: Theme.of(context).colorScheme.primary,
+                                            width: 3,
+                                          )
+                                        : null,
                                   ),
                                 ),
                               );
@@ -264,35 +231,26 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                           child: ListView.separated(
                             scrollDirection: Axis.horizontal,
                             physics: const BouncingScrollPhysics(),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: Sizes.lg),
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(width: Sizes.lg),
+                            padding: const EdgeInsets.symmetric(horizontal: Sizes.lg),
+                            separatorBuilder: (context, index) => const SizedBox(width: Sizes.lg),
                             itemBuilder: (context, index) {
-                              IconData accountIconData =
-                                  accountIconList.values.elementAt(index);
-                              String accountIconName =
-                                  accountIconList.keys.elementAt(index);
+                              IconData accountIconData = accountIconList.values.elementAt(index);
+                              String accountIconName = accountIconList.keys.elementAt(index);
                               return GestureDetector(
-                                onTap: () => setState(
-                                    () => accountIcon = accountIconName),
+                                onTap: () => setState(() => accountIcon = accountIconName),
                                 child: Container(
                                   width: 38,
                                   height: 38,
                                   margin: const EdgeInsets.all(Sizes.xxs),
                                   decoration: BoxDecoration(
-                                    color: accountIconList[accountIcon] ==
-                                            accountIconData
-                                        ? Theme.of(context)
-                                            .colorScheme
-                                            .secondary
+                                    color: accountIconList[accountIcon] == accountIconData
+                                        ? Theme.of(context).colorScheme.secondary
                                         : Theme.of(context).colorScheme.surface,
                                     shape: BoxShape.circle,
                                   ),
                                   child: Icon(
                                     accountIconData,
-                                    color: accountIconList[accountIcon] ==
-                                            accountIconData
+                                    color: accountIconList[accountIcon] == accountIconData
                                         ? Colors.white
                                         : Theme.of(context).colorScheme.primary,
                                     size: 24,
@@ -312,16 +270,12 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                 children: [
                   SizedBox(height: Sizes.lg),
                   Text('Or you can skip this step and start from 0',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall
-                          ?.copyWith(color: blue1)),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(color: blue1)),
                   const SizedBox(height: Sizes.sm),
                   ElevatedButton(
                     onPressed: () {
                       _flagOnBoardingCompleted();
-                      Navigator.of(context)
-                          .pushNamedAndRemoveUntil('/', (route) => false);
+                      Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
                     },
                     style: ElevatedButton.styleFrom(
                       elevation: 0.0,
@@ -335,10 +289,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                           children: [
                             Text(
                               'START FROM 0  ',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(color: blue1),
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: blue1),
                             ),
                             const Icon(
                               Icons.arrow_forward,
@@ -370,12 +321,10 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                                 icon: accountIcon,
                                 color: accountColor,
                                 mainAccount: true,
-                                startingValue:
-                                    num.tryParse(amountController.text) ?? 0,
+                                startingValue: num.tryParse(amountController.text) ?? 0,
                               );
                           _flagOnBoardingCompleted();
-                          Navigator.of(context)
-                              .pushNamedAndRemoveUntil('/', (route) => false);
+                          Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
                         }
                       },
                       style: ElevatedButton.styleFrom(

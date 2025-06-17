@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../model/budget.dart';
 import '../../model/category_transaction.dart';
 import '../../ui/device.dart';
-import '../../utils/snack_bars/snack_bar.dart';
+import '../../ui/snack_bars/snack_bar.dart';
 import 'widget/budget_category_selector.dart';
 import '../../../providers/categories_provider.dart';
 import '../../../providers/budgets_provider.dart';
@@ -24,8 +24,7 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
 
   void _loadCategories() async {
     categories = await ref.read(categoriesProvider.notifier).getCategories();
-    categories.removeWhere(
-        (element) => element.type == CategoryTransactionType.income);
+    categories.removeWhere((element) => element.type == CategoryTransactionType.income);
     budgets = await ref.read(budgetsProvider.notifier).getBudgets();
     setState(() {});
   }
@@ -84,8 +83,7 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
               ),
             ),
             const Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: Sizes.lg, vertical: Sizes.sm),
+              padding: EdgeInsets.symmetric(horizontal: Sizes.lg, vertical: Sizes.sm),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -125,20 +123,16 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
                         child: BudgetCategorySelector(
                           categories: categories,
                           categoriesAlreadyUsed: categories
-                              .where((element) => budgets
-                                  .map((e) => e.name)
-                                  .contains(element.name))
+                              .where((element) => budgets.map((e) => e.name).contains(element.name))
                               .map((e) => e.name)
                               .toList(),
                           budget: budgets[index],
                           initSelectedCategory: categories
-                                  .where((element) =>
-                                      element.id == budgets[index].idCategory)
+                                  .where((element) => element.id == budgets[index].idCategory)
                                   .isEmpty
                               ? categories[0]
                               : categories
-                                  .where((element) =>
-                                      element.id == budgets[index].idCategory)
+                                  .where((element) => element.id == budgets[index].idCategory)
                                   .first,
                           onBudgetChanged: (updatedBudget) {
                             updateBudget(updatedBudget, index);
@@ -148,8 +142,7 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
                     },
                   ),
                   const SizedBox(height: Sizes.sm),
-                  Text("Swipe left to delete",
-                      style: Theme.of(context).textTheme.bodySmall),
+                  Text("Swipe left to delete", style: Theme.of(context).textTheme.bodySmall),
                   const SizedBox(height: Sizes.md),
                   TextButton.icon(
                     icon: Icon(Icons.add_circle, size: 32),

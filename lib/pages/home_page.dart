@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../ui/device.dart';
 import '../ui/extensions.dart';
-import '../utils/snack_bars/transactions_snack_bars.dart';
+import '../ui/snack_bars/transactions_snack_bars.dart';
 import 'home_widget/budgets_home.dart';
 import '../constants/style.dart';
 import '../ui/widgets/accounts_sum.dart';
@@ -32,10 +32,8 @@ class _HomePageState extends ConsumerState<HomePage> {
     final currencyState = ref.watch(currencyStateNotifier);
     final isDarkMode = ref.watch(appThemeStateNotifier).isDarkModeEnabled;
 
-    ref.listen(
-        duplicatedTransactoinProvider,
-        (prev, curr) => showDuplicatedTransactionSnackBar(context,
-            transaction: curr, ref: ref));
+    ref.listen(duplicatedTransactoinProvider,
+        (prev, curr) => showDuplicatedTransactionSnackBar(context, transaction: curr, ref: ref));
 
     return Container(
       color: Theme.of(context).colorScheme.tertiary,
@@ -63,10 +61,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 style: Theme.of(context)
                                     .textTheme
                                     .labelMedium
-                                    ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary),
+                                    ?.copyWith(color: Theme.of(context).colorScheme.primary),
                               ),
                               RichText(
                                 text: TextSpan(
@@ -76,21 +71,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineLarge
-                                          ?.copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary),
+                                          ?.copyWith(color: Theme.of(context).colorScheme.primary),
                                     ),
                                     TextSpan(
-                                      text:
-                                          currencyState.selectedCurrency.symbol,
+                                      text: currencyState.selectedCurrency.symbol,
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyLarge
-                                          ?.copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary),
+                                          ?.copyWith(color: Theme.of(context).colorScheme.primary),
                                     ),
                                   ],
                                 ),
@@ -116,8 +104,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                           ?.copyWith(color: green),
                                     ),
                                     TextSpan(
-                                      text:
-                                          currencyState.selectedCurrency.symbol,
+                                      text: currencyState.selectedCurrency.symbol,
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelLarge
@@ -147,8 +134,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                           ?.copyWith(color: red),
                                     ),
                                     TextSpan(
-                                      text:
-                                          currencyState.selectedCurrency.symbol,
+                                      text: currencyState.selectedCurrency.symbol,
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelLarge
@@ -183,9 +169,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                             style: Theme.of(context)
                                 .textTheme
                                 .labelMedium
-                                ?.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.primary),
+                                ?.copyWith(color: Theme.of(context).colorScheme.primary),
                           ),
                           const SizedBox(width: Sizes.md),
                           Container(
@@ -202,9 +186,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                             style: Theme.of(context)
                                 .textTheme
                                 .labelMedium
-                                ?.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.primary),
+                                ?.copyWith(color: Theme.of(context).colorScheme.primary),
                           ),
                         ],
                       ),
@@ -217,9 +199,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
           Container(
             decoration: BoxDecoration(
-              color: Theme.of(context)
-                  .colorScheme
-                  .primaryContainer, //da modificare in darkMode
+              color: Theme.of(context).colorScheme.primaryContainer, //da modificare in darkMode
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(Sizes.borderRadiusLarge),
                 topRight: Radius.circular(Sizes.borderRadiusLarge),
@@ -229,8 +209,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                      Sizes.lg, Sizes.xl, Sizes.lg, Sizes.sm),
+                  padding: const EdgeInsets.fromLTRB(Sizes.lg, Sizes.xl, Sizes.lg, Sizes.sm),
                   child: Text(
                     "Your accounts",
                     style: Theme.of(context).textTheme.titleLarge,
@@ -248,21 +227,18 @@ class _HomePageState extends ConsumerState<HomePage> {
                       ),
                       physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
-                      separatorBuilder: (context, i) =>
-                          const SizedBox(width: Sizes.lg),
+                      separatorBuilder: (context, i) => const SizedBox(width: Sizes.lg),
                       itemBuilder: (context, i) {
                         if (i == accounts.length) {
                           return Container(
                             width: 140,
                             decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.circular(Sizes.borderRadius),
+                              borderRadius: BorderRadius.circular(Sizes.borderRadius),
                               boxShadow: [defaultShadow],
                             ),
                             child: ElevatedButton.icon(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.surface,
+                                backgroundColor: Theme.of(context).colorScheme.surface,
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: Sizes.md, vertical: Sizes.sm),
                               ),
@@ -273,15 +249,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                               ),
                               label: Text(
                                 "New Account",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .copyWith(
+                                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                                       color: isDarkMode
                                           ? grey3
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
+                                          : Theme.of(context).colorScheme.secondary,
                                     ),
                                 maxLines: 2,
                               ),
@@ -303,8 +274,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                        Sizes.lg, Sizes.xxl, Sizes.lg, Sizes.sm),
+                    padding: const EdgeInsets.fromLTRB(Sizes.lg, Sizes.xxl, Sizes.lg, Sizes.sm),
                     child: Text(
                       "Last transactions",
                       style: Theme.of(context).textTheme.titleLarge,
@@ -312,8 +282,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ),
                 ),
                 lastTransactions.when(
-                  data: (transactions) =>
-                      TransactionsList(transactions: transactions),
+                  data: (transactions) => TransactionsList(transactions: transactions),
                   loading: () => const SizedBox(),
                   error: (err, stack) => Text('Error: $err'),
                 ),
