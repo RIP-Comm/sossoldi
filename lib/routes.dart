@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'pages/account_page/account_page.dart';
-import 'pages/accounts/account_list.dart';
-import 'pages/accounts/add_account.dart';
+import 'pages/accounts/widgets/account_list.dart';
+import 'pages/accounts/create_edit_account.dart';
 import 'pages/add_page/add_page.dart';
 import 'pages/categories/add_category.dart';
 import 'pages/categories/category_list.dart';
@@ -70,7 +70,7 @@ Route<dynamic> makeRoute(RouteSettings settings) {
     case '/account-list':
       return buildAdaptiveRoute(settings.name, const AccountList());
     case '/add-account':
-      return buildAdaptiveRoute(settings.name, const AddAccount());
+      return buildAdaptiveRoute(settings.name, const CreateEditAccount());
     case '/planning':
       return buildAdaptiveRoute(settings.name, const PlanningPage());
     case '/graphs':

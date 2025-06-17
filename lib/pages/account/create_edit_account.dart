@@ -9,14 +9,14 @@ import '../../ui/device.dart';
 import '../../ui/extensions.dart';
 import 'widgets/confirm_account_deletion_dialog.dart';
 
-class AddAccount extends ConsumerStatefulWidget {
-  const AddAccount({super.key});
+class CreateEditAccount extends ConsumerStatefulWidget {
+  const CreateEditAccount({super.key});
 
   @override
-  ConsumerState<AddAccount> createState() => _AddAccountState();
+  ConsumerState<CreateEditAccount> createState() => _CreateEditAccount();
 }
 
-class _AddAccountState extends ConsumerState<AddAccount> {
+class _CreateEditAccount extends ConsumerState<CreateEditAccount> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController balanceController = TextEditingController();
   String accountIcon = accountIconList.keys.first;
