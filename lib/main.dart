@@ -8,7 +8,7 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 import 'model/recurring_transaction.dart';
 import 'providers/theme_provider.dart';
-import 'routes.dart';
+import 'routes/routes.dart';
 import 'ui/theme/app_theme.dart';
 import 'services/notifications/notifications_service.dart';
 
