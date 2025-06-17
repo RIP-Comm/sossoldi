@@ -97,7 +97,7 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
     });
   }
 
-Future<void> reconcileAccount({
+  Future<void> reconcileAccount({
     required BankAccount account,
     required num newBalance,
   }) async {
@@ -128,7 +128,7 @@ Future<void> reconcileAccount({
   Future<void> refreshAccount(BankAccount account) async {
     ref.read(selectedAccountProvider.notifier).state = account;
 
-final currentMonthDailyBalance = await BankAccountMethods()
+    final currentMonthDailyBalance = await BankAccountMethods()
         .accountMonthlyBalance(account.id!,
             dateRangeStart:
                 DateTime(DateTime.now().year, 1, 1), // beginnig of current year
