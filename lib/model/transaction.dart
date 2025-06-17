@@ -46,7 +46,6 @@ Map<String, TransactionType> typeMap = {
   "TRSF": TransactionType.transfer,
 };
 
-<<<<<<< HEAD
 enum TransactionType {
   income,
   expense,
@@ -76,9 +75,6 @@ enum Recurrence {
   semester,
   annual
 }
-=======
-enum Recurrence { daily, weekly, monthly, bimonthly, quarterly, semester, annual }
->>>>>>> 33a46bb (ref: services and utils removal)
 
 class RecurrenceData {
   final Recurrence recurrence;
@@ -189,7 +185,6 @@ class Transaction extends BaseEntity {
       categorySymbol: json[TransactionFields.categorySymbol] as String?,
       idBankAccount: json[TransactionFields.idBankAccount] as int,
       bankAccountName: json[TransactionFields.bankAccountName] as String?,
-<<<<<<< HEAD
       idBankAccountTransfer:
           json[TransactionFields.idBankAccountTransfer] as int?,
       bankAccountTransferName:
@@ -197,18 +192,11 @@ class Transaction extends BaseEntity {
       recurring: json[TransactionFields.recurring] == 1,
       idRecurringTransaction:
           json[TransactionFields.idRecurringTransaction] as int?,
-=======
-      idBankAccountTransfer: json[TransactionFields.idBankAccountTransfer] as int?,
-      bankAccountTransferName: json[TransactionFields.bankAccountTransferName] as String?,
-      recurring: json[TransactionFields.recurring] == 1 ? true : false,
-      idRecurringTransaction: json[TransactionFields.idRecurringTransaction] as int?,
->>>>>>> 33a46bb (ref: services and utils removal)
       createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
       updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String),
     );
   }
 
-<<<<<<< HEAD
   Map<String, Object?> toJson({bool update = false}) {
     final createdAtDate = update
         ? createdAt?.toIso8601String()
@@ -229,23 +217,6 @@ class Transaction extends BaseEntity {
       BaseEntityFields.updatedAt: DateTime.now().toIso8601String(),
     };
   }
-=======
-  Map<String, Object?> toJson({bool update = false}) => {
-        TransactionFields.id: id,
-        TransactionFields.date: date.toIso8601String(),
-        TransactionFields.amount: amount,
-        TransactionFields.type: typeMap.keys.firstWhere((k) => typeMap[k] == type),
-        TransactionFields.note: note,
-        TransactionFields.idCategory: idCategory,
-        TransactionFields.idBankAccount: idBankAccount,
-        TransactionFields.idBankAccountTransfer: idBankAccountTransfer,
-        TransactionFields.recurring: recurring ? 1 : 0,
-        TransactionFields.idRecurringTransaction: idRecurringTransaction,
-        BaseEntityFields.createdAt:
-            update ? createdAt?.toIso8601String() : DateTime.now().toIso8601String(),
-        BaseEntityFields.updatedAt: DateTime.now().toIso8601String(),
-      };
->>>>>>> 33a46bb (ref: services and utils removal)
 }
 
 class TransactionMethods extends SossoldiDatabase {
