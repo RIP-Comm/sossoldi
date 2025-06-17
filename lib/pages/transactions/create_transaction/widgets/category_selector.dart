@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../constants/constants.dart';
-import '../../../constants/style.dart';
-import '../../../ui/widgets/rounded_icon.dart';
-import '../../../model/category_transaction.dart';
-import '../../../providers/categories_provider.dart';
-import '../../../providers/transactions_provider.dart';
-import '../../../ui/device.dart';
+import '../../../../constants/constants.dart';
+import '../../../../constants/style.dart';
+import '../../../../ui/widgets/rounded_icon.dart';
+import '../../../../model/category_transaction.dart';
+import '../../../../providers/categories_provider.dart';
+import '../../../../providers/transactions_provider.dart';
+import '../../../../ui/device.dart';
 
 class CategorySelector extends ConsumerStatefulWidget {
   const CategorySelector({

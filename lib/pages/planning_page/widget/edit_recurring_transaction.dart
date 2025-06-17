@@ -5,12 +5,12 @@ import '../../../constants/style.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../ui/device.dart';
 import '../../../ui/extensions.dart';
-import '../../add_page/widgets/account_selector.dart';
-import '../../add_page/widgets/amount_widget.dart';
-import '../../add_page/widgets/details_list_tile.dart';
-import '../../add_page/widgets/details_list_disabled_tile.dart';
-import '../../add_page/widgets/label_list_tile.dart';
-import '../../add_page/widgets/recurrence_list_tile_edit.dart';
+import '../../transactions/create_transaction/widgets/account_selector.dart';
+import '../../transactions/create_transaction/widgets/amount_widget.dart';
+import '../../transactions/create_transaction/widgets/details_list_tile.dart';
+import '../../transactions/create_transaction/widgets/details_list_disabled_tile.dart';
+import '../../transactions/create_transaction/widgets/label_list_tile.dart';
+import '../../transactions/create_transaction/widgets/recurrence_list_tile_edit.dart';
 
 class EditRecurringTransaction extends ConsumerStatefulWidget {
   const EditRecurringTransaction({super.key});

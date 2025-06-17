@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
-import '../../../constants/constants.dart';
-import "../../../constants/style.dart";
-import '../../../ui/extensions.dart';
-import '../../../ui/widgets/rounded_icon.dart';
-import '../../../model/transaction.dart';
-import '../../../providers/transactions_provider.dart';
-import '../../../pages/add_page/widgets/amount_widget.dart';
-import '../../../ui/device.dart';
+import '../../../../constants/constants.dart';
+import "../../../../constants/style.dart";
+import '../../../../ui/extensions.dart';
+import '../../../../ui/widgets/rounded_icon.dart';
+import '../../../../model/transaction.dart';
+import '../../../../providers/transactions_provider.dart';
+import 'amount_widget.dart';
+import '../../../../ui/device.dart';
 import 'account_selector.dart';
 import 'type_tab.dart';
 

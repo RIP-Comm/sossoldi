@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../ui/widgets/rounded_icon.dart';
-import '../../../constants/style.dart';
-import '../../../providers/theme_provider.dart';
-import '../../../ui/device.dart';
+import '../../../../ui/widgets/rounded_icon.dart';
+import '../../../../constants/style.dart';
+import '../../../../providers/theme_provider.dart';
+import '../../../../ui/device.dart';
 
 class LabelListTile extends ConsumerWidget {
   const LabelListTile(

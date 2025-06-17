@@ -4,13 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
-import "../../../constants/style.dart";
-import '../../../ui/extensions.dart';
-import '../../../ui/widgets/rounded_icon.dart';
-import '../../../providers/theme_provider.dart';
-import '../../../providers/transactions_provider.dart';
-import '../../../model/transaction.dart';
-import '../../../ui/device.dart';
+import "../../../../constants/style.dart";
+import '../../../../ui/extensions.dart';
+import '../../../../ui/widgets/rounded_icon.dart';
+import '../../../../providers/theme_provider.dart';
+import '../../../../providers/transactions_provider.dart';
+import '../../../../model/transaction.dart';
+import '../../../../ui/device.dart';
 import 'recurrence_selector.dart';
 
 class RecurrenceListTile extends ConsumerWidget {
