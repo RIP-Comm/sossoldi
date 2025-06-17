@@ -76,8 +76,9 @@ class Budget extends BaseEntity {
         BudgetFields.name: name,
         BudgetFields.amountLimit: amountLimit,
         BudgetFields.active: active ? 1 : 0,
-        BaseEntityFields.createdAt:
-            update ? createdAt?.toIso8601String() : DateTime.now().toIso8601String(),
+        BaseEntityFields.createdAt: update
+            ? createdAt?.toIso8601String()
+            : DateTime.now().toIso8601String(),
         BaseEntityFields.updatedAt: DateTime.now().toIso8601String(),
       };
 }
@@ -135,8 +136,8 @@ class BudgetMethods extends SossoldiDatabase {
     final db = await database;
 
     try {
-      final exists =
-          await db.rawQuery("SELECT * FROM $budgetTable WHERE ${item.idCategory} = idCategory");
+      final exists = await db.rawQuery(
+          "SELECT * FROM $budgetTable WHERE ${item.idCategory} = idCategory");
       if (exists.isNotEmpty) {
         return true;
       }
@@ -187,9 +188,11 @@ class BudgetMethods extends SossoldiDatabase {
 
     List<Budget> allBudgets = await selectAllActive();
 
-    List<BudgetStats> statsList = result.map((json) => BudgetStats.fromJson(json)).toList();
+    List<BudgetStats> statsList =
+        result.map((json) => BudgetStats.fromJson(json)).toList();
 
-    Set<int> resultBudgetIds = statsList.map((stats) => stats.idCategory).toSet();
+    Set<int> resultBudgetIds =
+        statsList.map((stats) => stats.idCategory).toSet();
 
     // Check for missing budgets and add them with a spent amount of 0
     for (var budget in allBudgets) {
@@ -221,12 +224,14 @@ class BudgetMethods extends SossoldiDatabase {
   Future<int> deleteById(int id) async {
     final db = await database;
 
-    return await db.delete(budgetTable, where: '${BudgetFields.id} = ?', whereArgs: [id]);
+    return await db
+        .delete(budgetTable, where: '${BudgetFields.id} = ?', whereArgs: [id]);
   }
 
   Future<int> deleteByCategory(int id) async {
     final db = await database;
 
-    return await db.delete(budgetTable, where: '${BudgetFields.idCategory} = ?', whereArgs: [id]);
+    return await db.delete(budgetTable,
+        where: '${BudgetFields.idCategory} = ?', whereArgs: [id]);
   }
 }

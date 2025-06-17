@@ -68,7 +68,8 @@ class CSVFilePicker {
       }
 
       final String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
-      final String filePath = join(selectedDirectory, 'sossoldi_export_$timestamp.csv');
+      final String filePath =
+          join(selectedDirectory, 'sossoldi_export_$timestamp.csv');
 
       // Write the CSV content directly to the file
       final file = await File(filePath).writeAsString(csv);
@@ -103,7 +104,8 @@ class CSVFilePicker {
             borderRadius: BorderRadius.circular(Sizes.borderRadius),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: Sizes.lg, horizontal: Sizes.xl),
+            padding: const EdgeInsets.symmetric(
+                vertical: Sizes.lg, horizontal: Sizes.xl),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

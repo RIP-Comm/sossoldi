@@ -15,7 +15,8 @@ class TransactionsPage extends ConsumerStatefulWidget {
   ConsumerState<TransactionsPage> createState() => _TransactionsPageState();
 }
 
-class _TransactionsPageState extends ConsumerState<TransactionsPage> with TickerProviderStateMixin {
+class _TransactionsPageState extends ConsumerState<TransactionsPage>
+    with TickerProviderStateMixin {
   static const List<Tab> myTabs = <Tab>[
     Tab(text: "List", height: 35),
     Tab(text: "Categories", height: 35),
@@ -44,17 +45,22 @@ class _TransactionsPageState extends ConsumerState<TransactionsPage> with Ticker
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(duplicatedTransactoinProvider,
-        (prev, curr) => showDuplicatedTransactionSnackBar(context, transaction: curr, ref: ref));
+    ref.listen(
+        duplicatedTransactoinProvider,
+        (prev, curr) => showDuplicatedTransactionSnackBar(context,
+            transaction: curr, ref: ref));
 
     return NotificationListener<ScrollEndNotification>(
       onNotification: (notification) {
         // snap the header open/close when it's in between the two states
         final double scrollDistance = headerMaxHeight - headerMinHeight;
 
-        if (_scrollController.offset > 0 && _scrollController.offset < scrollDistance) {
+        if (_scrollController.offset > 0 &&
+            _scrollController.offset < scrollDistance) {
           final double snapOffset =
-              (_scrollController.offset / scrollDistance > 0.5) ? scrollDistance + 10 : 0;
+              (_scrollController.offset / scrollDistance > 0.5)
+                  ? scrollDistance + 10
+                  : 0;
 
           //! the app freezes on animateTo
           // // Future.microtask(() => _scrollController.animateTo(snapOffset,

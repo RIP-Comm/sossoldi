@@ -43,7 +43,9 @@ class MonthSelector extends ConsumerWidget {
           ),
           builder: (context, child) => Theme(
             data: Theme.of(context).copyWith(
-              appBarTheme: Theme.of(context).appBarTheme.copyWith(backgroundColor: blue1),
+              appBarTheme: Theme.of(context)
+                  .appBarTheme
+                  .copyWith(backgroundColor: blue1),
             ),
             child: child!,
           ),
@@ -51,7 +53,8 @@ class MonthSelector extends ConsumerWidget {
         if (range != null) {
           ref.read(filterDateStartProvider.notifier).state = range.start;
           ref.read(filterDateEndProvider.notifier).state = range.end;
-          ref.read(highlightedMonthProvider.notifier).state = range.start.month - 1;
+          ref.read(highlightedMonthProvider.notifier).state =
+              range.start.month - 1;
         }
       },
       child: Container(
@@ -66,12 +69,15 @@ class MonthSelector extends ConsumerWidget {
             GestureDetector(
               onTap: () {
                 // move to previous month
-                DateTime newStartDate = DateTime(startDate.year, startDate.month - 1, 1);
-                DateTime newEndDate = DateTime(newStartDate.year, newStartDate.month + 1, 0);
+                DateTime newStartDate =
+                    DateTime(startDate.year, startDate.month - 1, 1);
+                DateTime newEndDate =
+                    DateTime(newStartDate.year, newStartDate.month + 1, 0);
                 ref.read(filterDateStartProvider.notifier).state = newStartDate;
                 ref.read(filterDateEndProvider.notifier).state = newEndDate;
                 ref.read(transactionsProvider.notifier).filterTransactions();
-                ref.read(highlightedMonthProvider.notifier).state = newStartDate.month - 1;
+                ref.read(highlightedMonthProvider.notifier).state =
+                    newStartDate.month - 1;
               },
               child: Container(
                 height: currentHeight,
@@ -106,13 +112,15 @@ class MonthSelector extends ConsumerWidget {
                             style: Theme.of(context)
                                 .textTheme
                                 .labelLarge!
-                                .copyWith(color: totalAmount >= 0 ? green : red)),
+                                .copyWith(
+                                    color: totalAmount >= 0 ? green : red)),
                         TextSpan(
                             text: currencyState.selectedCurrency.symbol,
                             style: Theme.of(context)
                                 .textTheme
                                 .labelLarge!
-                                .copyWith(color: totalAmount >= 0 ? green : red)),
+                                .copyWith(
+                                    color: totalAmount >= 0 ? green : red)),
                       ],
                     ),
                   ),
@@ -121,12 +129,15 @@ class MonthSelector extends ConsumerWidget {
             GestureDetector(
               onTap: () {
                 // move to next month
-                DateTime newStartDate = DateTime(startDate.year, startDate.month + 1, 1);
-                DateTime newEndDate = DateTime(newStartDate.year, newStartDate.month + 1, 0);
+                DateTime newStartDate =
+                    DateTime(startDate.year, startDate.month + 1, 1);
+                DateTime newEndDate =
+                    DateTime(newStartDate.year, newStartDate.month + 1, 0);
                 ref.read(filterDateStartProvider.notifier).state = newStartDate;
                 ref.read(filterDateEndProvider.notifier).state = newEndDate;
                 ref.read(transactionsProvider.notifier).filterTransactions();
-                ref.read(highlightedMonthProvider.notifier).state = newStartDate.month - 1;
+                ref.read(highlightedMonthProvider.notifier).state =
+                    newStartDate.month - 1;
               },
               child: Container(
                 height: currentHeight,

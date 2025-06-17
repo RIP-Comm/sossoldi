@@ -16,7 +16,8 @@ class NotificationService {
   );
 
   Future<void> initializeNotifications() async {
-    var initializeSettingsAndroid = const AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializeSettingsAndroid =
+        const AndroidInitializationSettings('@mipmap/ic_launcher');
     final initializeSettingsIOS = DarwinInitializationSettings(
       requestAlertPermission: true,
       requestBadgePermission: true,
@@ -28,14 +29,16 @@ class NotificationService {
     );
     await notificationsPlugin.initialize(initializationSettings);
     await notificationsPlugin
-        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
   }
 
   Future<void> requestNotificationPermissions() async {
     if (Platform.isIOS) {
       await notificationsPlugin
-          .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()
+          .resolvePlatformSpecificImplementation<
+              IOSFlutterLocalNotificationsPlugin>()
           ?.requestPermissions(
             alert: true,
             badge: true,
@@ -43,24 +46,28 @@ class NotificationService {
           );
     } else if (Platform.isAndroid) {
       bool? notificationEnabled = await notificationsPlugin
-              .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+              .resolvePlatformSpecificImplementation<
+                  AndroidFlutterLocalNotificationsPlugin>()
               ?.areNotificationsEnabled() ??
           false;
       // If notificaitons are not enabled popup the request
       if (!notificationEnabled) {
         notificationEnabled = await notificationsPlugin
-                .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+                .resolvePlatformSpecificImplementation<
+                    AndroidFlutterLocalNotificationsPlugin>()
                 ?.requestNotificationsPermission() ??
             false;
       }
       if (notificationEnabled) {
         bool? canSchedule = await notificationsPlugin
-                .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+                .resolvePlatformSpecificImplementation<
+                    AndroidFlutterLocalNotificationsPlugin>()
                 ?.canScheduleExactNotifications() ??
             false;
         if (!canSchedule) {
           await notificationsPlugin
-              .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+              .resolvePlatformSpecificImplementation<
+                  AndroidFlutterLocalNotificationsPlugin>()
               ?.requestExactAlarmsPermission();
         }
       }
@@ -104,7 +111,8 @@ class NotificationService {
         // If today is Sunday and it's past 21:00, schedule for next Sunday
         daysUntilSunday = 7;
       }
-      scheduledDate = DateTime(now.year, now.month, now.day + daysUntilSunday, 21, 0);
+      scheduledDate =
+          DateTime(now.year, now.month, now.day + daysUntilSunday, 21, 0);
       matchDateTimeComponents = DateTimeComponents.dayOfWeekAndTime;
     } else {
       // Find the nearest first of the next month
@@ -128,7 +136,8 @@ class NotificationService {
       tz.TZDateTime.from(scheduledDate, tz.local),
       notificationDetails,
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: matchDateTimeComponents,
     );
   }

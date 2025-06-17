@@ -88,7 +88,8 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
                 TabBar(
                   controller: tabController,
                   tabs: myTabs,
-                  splashBorderRadius: BorderRadius.circular(Sizes.borderRadius * 10),
+                  splashBorderRadius:
+                      BorderRadius.circular(Sizes.borderRadius * 10),
                   indicatorPadding: EdgeInsets.symmetric(horizontal: Sizes.lg),
                   // TODO: capitalize text of the selected label
                   // not possible from TextStyle https://github.com/flutter/flutter/issues/22695
@@ -154,7 +155,10 @@ class CollapsedWidget extends StatelessWidget {
             child: Text(
               myTabs[tabController.index].text!,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge
+                  ?.copyWith(color: Colors.white),
             ),
           ),
           Text(

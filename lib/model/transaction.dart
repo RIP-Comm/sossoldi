@@ -89,16 +89,20 @@ class RecurrenceData {
 }
 
 Map<Recurrence, RecurrenceData> recurrenceMap = {
-  Recurrence.daily: RecurrenceData(recurrence: Recurrence.daily, label: "Daily", days: 1),
-  Recurrence.weekly: RecurrenceData(recurrence: Recurrence.weekly, label: "Weekly", days: 7),
-  Recurrence.monthly: RecurrenceData(recurrence: Recurrence.monthly, label: "Monthly", days: 30),
-  Recurrence.bimonthly:
-      RecurrenceData(recurrence: Recurrence.bimonthly, label: "Bimonthly", days: 60),
-  Recurrence.quarterly:
-      RecurrenceData(recurrence: Recurrence.quarterly, label: "Quarterly", days: 90),
-  Recurrence.semester:
-      RecurrenceData(recurrence: Recurrence.semester, label: "Semester", days: 180),
-  Recurrence.annual: RecurrenceData(recurrence: Recurrence.annual, label: "Annual", days: 365),
+  Recurrence.daily:
+      RecurrenceData(recurrence: Recurrence.daily, label: "Daily", days: 1),
+  Recurrence.weekly:
+      RecurrenceData(recurrence: Recurrence.weekly, label: "Weekly", days: 7),
+  Recurrence.monthly: RecurrenceData(
+      recurrence: Recurrence.monthly, label: "Monthly", days: 30),
+  Recurrence.bimonthly: RecurrenceData(
+      recurrence: Recurrence.bimonthly, label: "Bimonthly", days: 60),
+  Recurrence.quarterly: RecurrenceData(
+      recurrence: Recurrence.quarterly, label: "Quarterly", days: 90),
+  Recurrence.semester: RecurrenceData(
+      recurrence: Recurrence.semester, label: "Semester", days: 180),
+  Recurrence.annual:
+      RecurrenceData(recurrence: Recurrence.annual, label: "Annual", days: 365),
 };
 
 Recurrence parseRecurrence(String s) {
@@ -166,9 +170,11 @@ class Transaction extends BaseEntity {
           note: note ?? this.note,
           idCategory: idCategory ?? this.idCategory,
           idBankAccount: idBankAccount ?? this.idBankAccount,
-          idBankAccountTransfer: idBankAccountTransfer ?? this.idBankAccountTransfer,
+          idBankAccountTransfer:
+              idBankAccountTransfer ?? this.idBankAccountTransfer,
           recurring: recurring ?? this.recurring,
-          idRecurringTransaction: idRecurringTransaction ?? this.idRecurringTransaction,
+          idRecurringTransaction:
+              idRecurringTransaction ?? this.idRecurringTransaction,
           createdAt: createdAt ?? this.createdAt,
           updatedAt: updatedAt ?? this.updatedAt);
 
@@ -266,7 +272,9 @@ class TransactionMethods extends SossoldiDatabase {
       Map<int, bool>? bankAccounts}) async {
     final db = await database;
 
-    String? where = type != null ? '${TransactionFields.type} = $type' : null; // filter type
+    String? where = type != null
+        ? '${TransactionFields.type} = $type'
+        : null; // filter type
     if (date != null) {
       where =
           "${where != null ? '$where and ' : ''}strftime('%Y-%m-%d', ${TransactionFields.date}) >= '${date.toString().substring(0, 10)}' and ${TransactionFields.date} <= '${date.toIso8601String().substring(0, 10)}'";
@@ -281,12 +289,15 @@ class TransactionMethods extends SossoldiDatabase {
 
     if (transactionType != null) {
       final transactionTypeList = transactionType.map((e) => "'$e'").toList();
-      where = "${where != null ? '$where and ' : ''}t.type IN (${transactionTypeList.join(',')}) ";
+      where =
+          "${where != null ? '$where and ' : ''}t.type IN (${transactionTypeList.join(',')}) ";
     }
 
-    if (bankAccounts != null && !bankAccounts.entries.every((element) => element.value == false)) {
-      final bankAccountIds =
-          bankAccounts.entries.where((bankAccount) => bankAccount.value).map((e) => "'${e.key}'");
+    if (bankAccounts != null &&
+        !bankAccounts.entries.every((element) => element.value == false)) {
+      final bankAccountIds = bankAccounts.entries
+          .where((bankAccount) => bankAccount.value)
+          .map((e) => "'${e.key}'");
       where =
           "${where != null ? '$where and ' : ''}t.${TransactionFields.idBankAccount} IN (${bankAccountIds.join(',')}) ";
     }
@@ -394,8 +405,9 @@ class TransactionMethods extends SossoldiDatabase {
         throw ArgumentError("Query not implemented for frequency $recurrence");
     }
 
-    final accountFilter =
-        accountId != null ? "${TransactionFields.idBankAccount} = $accountId" : "";
+    final accountFilter = accountId != null
+        ? "${TransactionFields.idBankAccount} = $accountId"
+        : "";
     //var periodDateFormatter = "";
     final periodFilterStart = dateRangeStart != null
         ? "strftime('%Y-%m-%d', ${TransactionFields.date}) >= '${dateRangeStart.toString().substring(0, 10)}'"
