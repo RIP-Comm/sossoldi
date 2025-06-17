@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../model/category_transaction.dart';
+import '../model/recurring_transaction.dart';
 import '../model/transaction.dart';
+import 'budgets_provider.dart';
 import 'transactions_provider.dart';
 
 final categoryTransactionTypeList = Provider<List<CategoryTransactionType>>(
@@ -16,14 +18,17 @@ final categoryTypeProvider = StateProvider<CategoryTransactionType>(
 final selectedCategoryIndexProvider =
     StateProvider.autoDispose<int>((ref) => -1);
 
-class AsyncCategoriesNotifier extends AsyncNotifier<List<CategoryTransaction>> {
+class AsyncCategoriesNotifier
+    extends FamilyAsyncNotifier<List<CategoryTransaction>, CategoryFilter> {
   @override
-  Future<List<CategoryTransaction>> build() async {
-    return _getCategories();
+  Future<List<CategoryTransaction>> build(CategoryFilter filter) async {
+    return _getCategories(filter);
   }
 
-  Future<List<CategoryTransaction>> _getCategories() async {
-    final categories = await CategoryTransactionMethods().selectAll();
+  Future<List<CategoryTransaction>> _getCategories(
+      CategoryFilter filter) async {
+    final categories =
+        await CategoryTransactionMethods().selectCategories(filter);
     return categories;
   }
 
@@ -38,13 +43,14 @@ class AsyncCategoriesNotifier extends AsyncNotifier<List<CategoryTransaction>> {
       symbol: icon,
       type: type,
       color: color,
+      deleted: false,
     );
 
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       await CategoryTransactionMethods().insert(category);
       ref.invalidate(categoriesByTypeProvider(category.type));
-      return _getCategories();
+      return _getCategories(arg);
     });
   }
 
@@ -64,28 +70,104 @@ class AsyncCategoriesNotifier extends AsyncNotifier<List<CategoryTransaction>> {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       await CategoryTransactionMethods().updateItem(category);
-      return _getCategories();
+      return _getCategories(arg);
     });
   }
 
-  Future<void> removeCategory(int categoryId) async {
+  Future<void> markAsDeleted(int categoryId) async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
+      await ref.read(deleteBudgetsByCategoryProvider)(categoryId);
+      await CategoryTransactionMethods().markAsDeleted(categoryId);
+      return _getCategories(arg);
+    });
+  }
+
+  final reassignTransactionsProvider =
+      Provider<Future<void> Function(int, CategoryTransactionType)>((ref) {
+    return (int categoryId, CategoryTransactionType categoryType) async {
+      final defaultCategoryId =
+          categoryType == CategoryTransactionType.income ? 0 : 1;
+
+      final transactions = await TransactionMethods().selectAll();
+      final affectedTransactions =
+          transactions.where((t) => t.idCategory == categoryId).toList();
+
+      for (var transaction in affectedTransactions) {
+        final updatedTransaction =
+            transaction.copy(idCategory: defaultCategoryId);
+        await TransactionMethods().updateItem(updatedTransaction);
+      }
+
+      ref.invalidate(transactionsProvider);
+    };
+  });
+
+  final reassignRecurringTransactionsProvider =
+      Provider<Future<void> Function(int, CategoryTransactionType)>((ref) {
+    return (int categoryId, CategoryTransactionType categoryType) async {
+      final defaultCategoryId =
+          categoryType == CategoryTransactionType.income ? 0 : 1;
+
+      final recurringTransactions =
+          await RecurringTransactionMethods().selectAll();
+      final affectedRecurringTransactions = recurringTransactions
+          .where((t) => t.idCategory == categoryId)
+          .toList();
+
+      for (var recurringTransaction in affectedRecurringTransactions) {
+        final updatedTransaction =
+            recurringTransaction.copy(idCategory: defaultCategoryId);
+        await RecurringTransactionMethods().updateItem(updatedTransaction);
+      }
+
+      ref.invalidate(transactionsProvider);
+    };
+  });
+
+  //final reassignBudgetsProvider =
+  //    Provider<Future<void> Function(int, CategoryTransactionType)>((ref) {
+  //  return (int categoryId, CategoryTransactionType categoryType) async {
+  //    final defaultCategoryId = 1;
+//
+  //    final budgets =
+  //        await BudgetMethods().selectAll();
+  //    final affectedBudgets = budgets
+  //        .where((t) => t.idCategory == categoryId)
+  //        .toList();
+//
+  //    for (var budget in affectedBudgets) {
+  //      final updatedBudget =
+  //          budget.copy(idCategory: defaultCategoryId);
+  //      await BudgetMethods().updateItem(updatedBudget);
+  //    }
+//
+  //    ref.invalidate(budgetsProvider);
+  //  };
+  //});
+
+  Future<void> removeCategory(int categoryId) async {
+    final category = await CategoryTransactionMethods().selectById(categoryId);
+
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      await ref.read(reassignTransactionsProvider)(categoryId, category.type);
+      await ref.read(reassignRecurringTransactionsProvider)(
+          categoryId, category.type);
+      await ref.read(deleteBudgetsByCategoryProvider)(categoryId);
+
       await CategoryTransactionMethods().deleteById(categoryId);
-      return _getCategories();
+      return _getCategories(arg);
     });
   }
 
   Future<List<CategoryTransaction>> getCategories() async {
-    return _getCategories();
+    return _getCategories(arg);
   }
 }
 
-final categoriesProvider =
-    AsyncNotifierProvider<AsyncCategoriesNotifier, List<CategoryTransaction>>(
-        () {
-  return AsyncCategoriesNotifier();
-});
+final categoriesProvider = AsyncNotifierProviderFamily<AsyncCategoriesNotifier,
+    List<CategoryTransaction>, CategoryFilter>(() => AsyncCategoriesNotifier());
 
 final categoriesByTypeProvider =
     FutureProvider.family<List<CategoryTransaction>, CategoryTransactionType?>(
@@ -96,6 +178,12 @@ final categoriesByTypeProvider =
         await CategoryTransactionMethods().selectCategoriesByType(type);
   }
   return categories;
+});
+
+final categoryByIdProvider =
+    FutureProvider.family<CategoryTransaction, int>((ref, id) async {
+  final category = await CategoryTransactionMethods().selectById(id);
+  return category;
 });
 
 final categoryMapProvider =

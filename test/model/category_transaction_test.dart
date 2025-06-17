@@ -11,6 +11,7 @@ void main() {
         type: CategoryTransactionType.expense,
         symbol: "symbol",
         color: 0,
+        deleted: false,
         createdAt: DateTime.utc(2022),
         updatedAt: DateTime.utc(2022));
 
@@ -21,6 +22,7 @@ void main() {
     assert(cCopy.type == c.type);
     assert(cCopy.symbol == c.symbol);
     assert(cCopy.color == c.color);
+    assert(cCopy.deleted == c.deleted);
     assert(cCopy.createdAt == c.createdAt);
     assert(cCopy.updatedAt == c.updatedAt);
   });
@@ -53,13 +55,13 @@ void main() {
 
   test("Test toJson Category Transaction", () {
     CategoryTransaction c = const CategoryTransaction(
-      id: 2,
-      name: "name",
-      type: CategoryTransactionType.expense,
-      symbol: "symbol",
-      color: 0,
-      note: "note",
-    );
+        id: 2,
+        name: "name",
+        type: CategoryTransactionType.expense,
+        symbol: "symbol",
+        color: 0,
+        note: "note",
+        deleted: false);
 
     Map<String, Object?> json = c.toJson();
 
@@ -69,5 +71,6 @@ void main() {
     assert(c.symbol == json[CategoryTransactionFields.symbol]);
     assert(c.color == json[CategoryTransactionFields.color]);
     assert(c.note == json[CategoryTransactionFields.note]);
+    assert((c.deleted ? 1 : 0) == json[CategoryTransactionFields.deleted]);
   });
 }

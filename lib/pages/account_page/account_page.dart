@@ -37,7 +37,7 @@ class _AccountPage extends ConsumerState<AccountPage> {
   Widget build(BuildContext context) {
     final account = ref.read(selectedAccountProvider);
     final accountTransactions =
-      ref.watch(selectedAccountCurrentYearMonthlyBalanceProvider);
+        ref.watch(selectedAccountCurrentYearMonthlyBalanceProvider);
     final transactions = ref.watch(selectedAccountLastTransactions);
     final currencyState = ref.watch(currencyStateNotifier);
 

@@ -14,6 +14,8 @@ library;
 import '0001_initial_schema.dart';
 import '0002_account_net_worth.dart';
 import '0003_recurring_transaction_type.dart';
+import '0004_category_marked_as_deleted.dart';
+import '0005_uncategorized_default_category.dart';
 import '../migration_base.dart';
 
 /// Returns all available migrations in execution order.
@@ -27,6 +29,8 @@ List<Migration> getMigrations() {
     InitialSchema(),
     AccountNetWorth(),
     RecurringTransactionType(),
+    CategoryMarkedAsDeleted(),
+    UncategorizedDefaultCategory(),
     // Add future migrations here
   ];
 }
