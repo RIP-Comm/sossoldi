@@ -8,14 +8,14 @@ import '../../model/bank_account.dart';
 import '../../providers/accounts_provider.dart';
 import '../../ui/device.dart';
 
-class AccountList extends ConsumerStatefulWidget {
-  const AccountList({super.key});
+class AccountListPage extends ConsumerStatefulWidget {
+  const AccountListPage({super.key});
 
   @override
-  ConsumerState<AccountList> createState() => _AccountListState();
+  ConsumerState<AccountListPage> createState() => _AccountListPage();
 }
 
-class _AccountListState extends ConsumerState<AccountList> {
+class _AccountListPage extends ConsumerState<AccountListPage> {
   @override
   Widget build(BuildContext context) {
     final accountsList = ref.watch(accountsProvider);

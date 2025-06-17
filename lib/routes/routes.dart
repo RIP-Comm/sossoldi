@@ -68,7 +68,7 @@ Route<dynamic> makeRoute(RouteSettings settings) {
     case '/account':
       return buildAdaptiveRoute(settings.name, const AccountPage());
     case '/account-list':
-      return buildAdaptiveRoute(settings.name, const AccountList());
+      return buildAdaptiveRoute(settings.name, const AccountListPage());
     case '/add-account':
       return buildAdaptiveRoute(settings.name, const CreateEditAccountPage());
     case '/planning':
