@@ -5,9 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/transactions_provider.dart';
 import '../ui/device.dart';
-import 'graphs_page/graphs_page.dart';
+import 'graphs/graphs_page.dart';
 import 'dashboard/dashboard_page.dart';
-import 'planning_page/planning_page.dart';
+import 'planning/planning_page.dart';
 import 'transactions/transactions_page.dart';
 
 final StateProvider selectedIndexProvider = StateProvider<int>((ref) => 0);

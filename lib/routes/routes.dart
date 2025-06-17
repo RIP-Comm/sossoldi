@@ -10,19 +10,19 @@ import '../pages/transactions/create_transaction/create_transaction_page.dart';
 import '../pages/transactions/categories/create_edit_category_page.dart';
 import '../pages/transactions/categories/category_list_page.dart';
 import '../pages/settings/general/general_settings_page.dart';
-import '../pages/graphs_page/graphs_page.dart';
+import '../pages/graphs/graphs_page.dart';
 import '../pages/dashboard/dashboard_page.dart';
 import '../pages/settings/infos/collaborators_page.dart';
 import '../pages/settings/infos/more_info_page.dart';
 import '../pages/settings/infos/privacy_policy_page.dart';
 import '../pages/settings/notifications/notifications_settings.dart';
 import '../pages/onboarding/onboarding_page.dart';
-import '../pages/planning_page/planning_page.dart';
-import '../pages/search_page/search_page.dart';
+import '../pages/planning/planning_page.dart';
+import '../pages/search/search_page.dart';
 import '../pages/settings/settings_page.dart';
 import '../pages/structure.dart';
 import '../pages/transactions/transactions_page.dart';
-import '../pages/planning_page/widget/edit_recurring_transaction.dart';
+import '../pages/planning/widget/edit_recurring_transaction.dart';
 import '../pages/settings/backup/backup_page.dart';
 
 Route<dynamic> makeRoute(RouteSettings settings) {

@@ -10,8 +10,8 @@ import '../../../../providers/categories_provider.dart';
 import '../../../../providers/currency_provider.dart';
 import '../../../../ui/device.dart';
 
-class CategoriesPieChart2 extends ConsumerWidget {
-  const CategoriesPieChart2({
+class CategoriesGraphPieChart extends ConsumerWidget {
+  const CategoriesGraphPieChart({
     required this.categoryMap,
     required this.total,
     super.key,

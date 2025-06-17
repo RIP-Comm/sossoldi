@@ -11,7 +11,7 @@ import '../../../transactions/widgets/month_selector.dart';
 import '../card_label.dart';
 import '../linear_progress_bar.dart';
 import 'categories_bar_chart.dart';
-import 'categories_pie_chart2.dart';
+import 'categories_graph_pie_chart.dart';
 import 'category_label.dart';
 
 class CategoriesCard extends ConsumerStatefulWidget {
@@ -90,7 +90,7 @@ class CategoriesContent extends StatelessWidget {
 
     return Column(
       children: [
-        CategoriesPieChart2(
+        CategoriesGraphPieChart(
           categoryMap: sortedCategories,
           total: totalAmount,
         ),

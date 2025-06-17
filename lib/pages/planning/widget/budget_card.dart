@@ -9,7 +9,7 @@ import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../ui/assets.dart';
 import '../../../ui/device.dart';
-import '../../graphs_page/widgets/linear_progress_bar.dart';
+import '../../graphs/widgets/linear_progress_bar.dart';
 import '../manage_budget_page.dart';
 import 'budget_pie_chart.dart';
 
