@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../constants/constants.dart';
-import '../../constants/style.dart';
-import '../../model/category_transaction.dart';
-import '../../providers/categories_provider.dart';
-import '../../providers/transactions_provider.dart';
-import '../../ui/device.dart';
-import '../../ui/extensions.dart';
+import '../../../constants/constants.dart';
+import '../../../constants/style.dart';
+import '../../../model/category_transaction.dart';
+import '../../../providers/categories_provider.dart';
+import '../../../providers/transactions_provider.dart';
+import '../../../ui/device.dart';
+import '../../../ui/extensions.dart';
 
 class CreateEditCategoryPage extends ConsumerStatefulWidget {
   final bool hideIncome;
@@ -14,10 +14,10 @@ class CreateEditCategoryPage extends ConsumerStatefulWidget {
   const CreateEditCategoryPage({super.key, this.hideIncome = false});
 
   @override
-  ConsumerState<CreateEditCategoryPage> createState() => _AddCategoryState();
+  ConsumerState<CreateEditCategoryPage> createState() => _CreateEditCategoryPage();
 }
 
-class _AddCategoryState extends ConsumerState<CreateEditCategoryPage> {
+class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {
   final TextEditingController nameController = TextEditingController();
   late CategoryTransactionType categoryType;
   String categoryIcon = iconList.keys.first;

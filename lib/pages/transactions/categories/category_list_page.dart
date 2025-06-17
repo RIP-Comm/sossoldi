@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../constants/constants.dart';
-import '../../../model/category_transaction.dart';
-import '../../../providers/categories_provider.dart';
-import '../../ui/widgets/default_card.dart';
-import '../../ui/widgets/rounded_icon.dart';
-import '../../ui/device.dart';
+import '../../../../constants/constants.dart';
+import '../../../../model/category_transaction.dart';
+import '../../../../providers/categories_provider.dart';
+import '../../../ui/widgets/default_card.dart';
+import '../../../ui/widgets/rounded_icon.dart';
+import '../../../ui/device.dart';
 
 class CategoryList extends ConsumerStatefulWidget {
   const CategoryList({super.key});

@@ -1,30 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../ui/device.dart';
-import '../ui/extensions.dart';
-import '../ui/snack_bars/transactions_snack_bars.dart';
-import 'home_widget/budgets_home.dart';
-import '../constants/style.dart';
-import '../ui/widgets/accounts_sum.dart';
-import '../ui/widgets/line_chart.dart';
-import '../ui/widgets/rounded_icon.dart';
-import '../ui/widgets/transactions_list.dart';
-import '../model/bank_account.dart';
-import '../providers/accounts_provider.dart';
-import '../providers/currency_provider.dart';
-import '../providers/dashboard_provider.dart';
-import '../providers/theme_provider.dart';
-import '../providers/transactions_provider.dart';
+import '../../ui/device.dart';
+import '../../ui/extensions.dart';
+import '../../ui/snack_bars/transactions_snack_bars.dart';
+import 'widgets/budgets_home.dart';
+import '../../constants/style.dart';
+import '../../ui/widgets/accounts_sum.dart';
+import '../../ui/widgets/line_chart.dart';
+import '../../ui/widgets/rounded_icon.dart';
+import '../../ui/widgets/transactions_list.dart';
+import '../../model/bank_account.dart';
+import '../../providers/accounts_provider.dart';
+import '../../providers/currency_provider.dart';
+import '../../providers/dashboard_provider.dart';
+import '../../providers/theme_provider.dart';
+import '../../providers/transactions_provider.dart';
 
-class HomePage extends ConsumerStatefulWidget {
-  const HomePage({super.key});
+class DashboardPage extends ConsumerStatefulWidget {
+  const DashboardPage({super.key});
 
   @override
-  ConsumerState<HomePage> createState() => _HomePageState();
+  ConsumerState<DashboardPage> createState() => _HomePageState();
 }
 
-class _HomePageState extends ConsumerState<HomePage> {
+class _HomePageState extends ConsumerState<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     final accountList = ref.watch(accountsProvider);
