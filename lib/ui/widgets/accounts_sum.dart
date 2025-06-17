@@ -8,6 +8,7 @@ import '../../providers/accounts_provider.dart';
 import '../../providers/currency_provider.dart';
 import '../device.dart';
 import '../extensions.dart';
+import 'blur_widget.dart';
 import 'rounded_icon.dart';
 
 /// This class shows account summaries in the dashboard
@@ -69,21 +70,27 @@ class AccountsSum extends ConsumerWidget {
                         account.name,
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: account.total?.toCurrency(),
-                              style: Theme.of(context).textTheme.titleSmall,
-                            ),
-                            TextSpan(
-                              text: currencyState.selectedCurrency.symbol,
-                              style:
-                                  Theme.of(context).textTheme.bodySmall?.apply(
-                                fontFeatures: [const FontFeature.subscripts()],
+                      BlurWidget(
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: account.total?.toCurrency(),
+                                style: Theme.of(context).textTheme.titleSmall,
                               ),
-                            ),
-                          ],
+                              TextSpan(
+                                text: currencyState.selectedCurrency.symbol,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.apply(
+                                  fontFeatures: [
+                                    const FontFeature.subscripts()
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],

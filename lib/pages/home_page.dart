@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../ui/device.dart';
 import '../ui/extensions.dart';
+import '../ui/widgets/blur_widget.dart';
 import '../utils/snack_bars/transactions_snack_bars.dart';
 import 'home_widget/budgets_home.dart';
 import '../constants/style.dart';
@@ -16,6 +17,7 @@ import '../providers/currency_provider.dart';
 import '../providers/dashboard_provider.dart';
 import '../providers/theme_provider.dart';
 import '../providers/transactions_provider.dart';
+import 'structure.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -31,6 +33,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     final lastTransactions = ref.watch(lastTransactionsProvider);
     final currencyState = ref.watch(currencyStateNotifier);
     final isDarkMode = ref.watch(appThemeStateNotifier).isDarkModeEnabled;
+    final isAmountVisible = ref.watch(visibilityAmountProvider);
 
     ref.listen(
         duplicatedTransactoinProvider,
@@ -68,31 +71,33 @@ class _HomePageState extends ConsumerState<HomePage> {
                                             .colorScheme
                                             .primary),
                               ),
-                              RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: total.toCurrency(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headlineLarge
-                                          ?.copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary),
-                                    ),
-                                    TextSpan(
-                                      text:
-                                          currencyState.selectedCurrency.symbol,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyLarge
-                                          ?.copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary),
-                                    ),
-                                  ],
+                              BlurWidget(
+                                child: RichText(
+                                  text: TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: total.toCurrency(),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineLarge
+                                            ?.copyWith(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary),
+                                      ),
+                                      TextSpan(
+                                        text: currencyState
+                                            .selectedCurrency.symbol,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.copyWith(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],
@@ -105,25 +110,27 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 "INCOME",
                                 style: Theme.of(context).textTheme.labelMedium,
                               ),
-                              RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: income.toCurrency(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(color: green),
-                                    ),
-                                    TextSpan(
-                                      text:
-                                          currencyState.selectedCurrency.symbol,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelLarge
-                                          ?.copyWith(color: green),
-                                    ),
-                                  ],
+                              BlurWidget(
+                                child: RichText(
+                                  text: TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: income.toCurrency(),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(color: green),
+                                      ),
+                                      TextSpan(
+                                        text: currencyState
+                                            .selectedCurrency.symbol,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelLarge
+                                            ?.copyWith(color: green),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],
@@ -136,25 +143,27 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 "EXPENSES",
                                 style: Theme.of(context).textTheme.labelMedium,
                               ),
-                              RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: expense.toCurrency(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(color: red),
-                                    ),
-                                    TextSpan(
-                                      text:
-                                          currencyState.selectedCurrency.symbol,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelLarge
-                                          ?.copyWith(color: red),
-                                    ),
-                                  ],
+                              BlurWidget(
+                                child: RichText(
+                                  text: TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: expense.toCurrency(),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(color: red),
+                                      ),
+                                      TextSpan(
+                                        text: currencyState
+                                            .selectedCurrency.symbol,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelLarge
+                                            ?.copyWith(color: red),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],
@@ -312,13 +321,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ),
                 ),
                 lastTransactions.when(
-                  data: (transactions) =>
-                      TransactionsList(transactions: transactions),
+                  data: (transactions) => TransactionsList(
+                      transactions: transactions,
+                      blurAmounts: !isAmountVisible),
                   loading: () => const SizedBox(),
                   error: (err, stack) => Text('Error: $err'),
                 ),
                 const SizedBox(height: Sizes.xxl),
-                const BudgetsSection(),
+                BudgetsSection(blurAmounts: !isAmountVisible),
               ],
             ),
           ),
