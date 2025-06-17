@@ -7,7 +7,7 @@ import '../../../../ui/widgets/default_container.dart';
 import '../../../../model/category_transaction.dart';
 import '../../../../providers/categories_provider.dart';
 import '../../../../ui/device.dart';
-import '../../../transactions_page/widgets/month_selector.dart';
+import '../../../transactions/widgets/month_selector.dart';
 import '../card_label.dart';
 import '../linear_progress_bar.dart';
 import 'categories_bar_chart.dart';

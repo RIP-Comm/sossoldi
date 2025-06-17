@@ -7,23 +7,23 @@ import 'pages/accounts/account_page.dart';
 import 'pages/accounts/create_edit_account_page.dart';
 import 'pages/accounts/account_list_page.dart';
 import 'pages/add_page/add_page.dart';
-import 'pages/categories/create_edit_category_page.dart';
-import 'pages/categories/category_list_page.dart';
-import 'pages/general_options/general_settings.dart';
+import 'pages/transactions/categories/create_edit_category_page.dart';
+import 'pages/transactions/categories/category_list_page.dart';
+import 'pages/settings/general/general_settings_page.dart';
 import 'pages/graphs_page/graphs_page.dart';
-import 'pages/home_page.dart';
-import 'pages/more_info_page/collaborators_page.dart';
-import 'pages/more_info_page/more_info.dart';
-import 'pages/more_info_page/privacy_policy.dart';
-import 'pages/notifications/notifications_settings.dart';
-import 'pages/onboarding_page/onboarding_page.dart';
+import 'pages/dashboard/dashboard_page.dart';
+import 'pages/settings/infos/collaborators_page.dart';
+import 'pages/settings/infos/more_info_page.dart';
+import 'pages/settings/infos/privacy_policy_page.dart';
+import 'pages/settings/notifications/notifications_settings.dart';
+import 'pages/onboarding/onboarding_page.dart';
 import 'pages/planning_page/planning_page.dart';
 import 'pages/search_page/search_page.dart';
-import 'pages/settings_page.dart';
+import 'pages/settings/settings_page.dart';
 import 'pages/structure.dart';
 import 'pages/transactions/transactions_page.dart';
 import 'pages/planning_page/widget/edit_recurring_transaction.dart';
-import 'pages/backup_page/backup_page.dart';
+import 'pages/settings/backup/backup_page.dart';
 
 Route<dynamic> makeRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -32,7 +32,7 @@ Route<dynamic> makeRoute(RouteSettings settings) {
     case '/onboarding':
       return buildAdaptiveRoute(settings.name, const Onboarding());
     case '/dashboard':
-      return buildAdaptiveRoute(settings.name, const HomePage());
+      return buildAdaptiveRoute(settings.name, const DashboardPage());
     case '/add-page':
       Map<String, bool>? args;
       if (settings.arguments is Map<String, bool>?) {
