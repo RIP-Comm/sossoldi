@@ -43,10 +43,10 @@ class RecurringPaymentCard extends ConsumerWidget {
     final isDarkMode = ref.watch(appThemeStateNotifier).isDarkModeEnabled;
     final currencyState = ref.watch(currencyStateNotifier);
 
-    var cat = categories
+    var category = categories
         ?.firstWhereOrNull((element) => element.id == transaction.idCategory);
 
-    return cat != null
+    return category != null
         ? Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(Sizes.borderRadius),
@@ -57,7 +57,7 @@ class RecurringPaymentCard extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(
                   horizontal: Sizes.sm, vertical: Sizes.md),
               decoration: BoxDecoration(
-                color: categoryColorList[cat.color].withValues(alpha: 0.2),
+                color: categoryColorList[category.color].withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(Sizes.borderRadius),
               ),
               child: Column(
@@ -66,8 +66,8 @@ class RecurringPaymentCard extends ConsumerWidget {
                   Row(
                     children: [
                       RoundedIcon(
-                        icon: iconList[cat.symbol],
-                        backgroundColor: categoryColorList[cat.color],
+                        icon: iconList[category.symbol],
+                        backgroundColor: categoryColorList[category.color],
                         padding: const EdgeInsets.all(Sizes.sm),
                         size: 25,
                         deleted: cat.deleted,
@@ -95,7 +95,7 @@ class RecurringPaymentCard extends ConsumerWidget {
                                 ),
                               ),
                               const SizedBox(height: Sizes.sm),
-                              Text(cat.name),
+                              Text(category.name),
                             ],
                           )),
                       Expanded(
@@ -105,15 +105,24 @@ class RecurringPaymentCard extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Text("In ${getNextText()} days"),
-                            const SizedBox(height: Sizes.sm),
+                            const SizedBox(height: 10),
+                            Builder(builder: (context) {
+                              final String prefix = transaction.type.prefix;
+                              final Color amountColor = transaction.type
+                                  .toColor(
+                                      brightness: Theme.of(context).brightness);
+                              return Text(
+                                "$prefix${transaction.amount}${currencyState.selectedCurrency.symbol}",
+                                style: TextStyle(color: amountColor),
+                              );
+                            }),
+                            const SizedBox(height: 10),
                             Text(
-                                "-${transaction.amount}${currencyState.selectedCurrency.symbol}",
-                                style: const TextStyle(color: Colors.red)),
-                            const SizedBox(height: Sizes.sm),
-                            Text(accounts!
-                                .firstWhere((element) =>
-                                    element.id == transaction.idBankAccount)
-                                .name),
+                              accounts!
+                                  .firstWhere((element) =>
+                                      element.id == transaction.idBankAccount)
+                                  .name,
+                            ),
                           ],
                         ),
                       ),
