@@ -8,7 +8,7 @@ import '/constants/constants.dart';
 import '/constants/style.dart';
 import '/model/budget.dart';
 import 'account_setup.dart';
-import 'add_budget.dart';
+import 'add_budget_dialog.dart';
 import '/providers/budgets_provider.dart';
 import '/providers/categories_provider.dart';
 import 'add_category_button.dart';
