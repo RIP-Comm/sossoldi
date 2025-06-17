@@ -9,7 +9,7 @@ import '/model/category_transaction.dart';
 class CategoryMarkedAsDeleted extends Migration {
   CategoryMarkedAsDeleted()
       : super(
-          version: 3,
+          version: 4,
           description: 'Add deleted column to CategoryTransaction model',
         );
 

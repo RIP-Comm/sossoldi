@@ -9,7 +9,7 @@ import '/model/category_transaction.dart';
 class UncategorizedDefaultCategory extends Migration {
   UncategorizedDefaultCategory()
       : super(
-          version: 4,
+          version: 5,
           description: 'Create default "Uncategorized" category',
         );
 
