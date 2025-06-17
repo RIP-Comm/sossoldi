@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../ui/device.dart';
 import '../../ui/extensions.dart';
 import '../../ui/snack_bars/transactions_snack_bars.dart';
-import 'widgets/budgets_home.dart';
+import 'widgets/budgets_section.dart';
 import '../../constants/style.dart';
 import '../../ui/widgets/accounts_sum.dart';
 import '../../ui/widgets/line_chart.dart';
