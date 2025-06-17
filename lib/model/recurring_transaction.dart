@@ -97,7 +97,7 @@ class RecurringTransaction extends BaseEntity {
           createdAt: createdAt ?? this.createdAt,
           updatedAt: updatedAt ?? this.updatedAt);
 
-static RecurringTransaction fromJson(Map<String, Object?> json) =>
+  static RecurringTransaction fromJson(Map<String, Object?> json) =>
       RecurringTransaction(
           id: json[BaseEntityFields.id] as int?,
           fromDate: DateTime.parse(
@@ -122,7 +122,6 @@ static RecurringTransaction fromJson(Map<String, Object?> json) =>
           updatedAt:
               DateTime.parse(json[BaseEntityFields.updatedAt] as String));
 
-
   Map<String, Object?> toJson() => {
         BaseEntityFields.id: id,
         RecurringTransactionFields.fromDate: fromDate.toIso8601String(),
@@ -133,7 +132,8 @@ static RecurringTransaction fromJson(Map<String, Object?> json) =>
         RecurringTransactionFields.recurrency: recurrency,
         RecurringTransactionFields.idCategory: idCategory,
         RecurringTransactionFields.idBankAccount: idBankAccount,
-        RecurringTransactionFields.lastInsertion: lastInsertion?.toIso8601String(),
+        RecurringTransactionFields.lastInsertion:
+            lastInsertion?.toIso8601String(),
         BaseEntityFields.createdAt: createdAt?.toIso8601String(),
         BaseEntityFields.updatedAt: updatedAt?.toIso8601String(),
       };
@@ -225,12 +225,14 @@ class RecurringTransactionMethods extends SossoldiDatabase {
       DateTime lastTransactionDate;
 
       try {
-        lastTransactionDate = await _getLastRecurringTransactionInsertion(transaction.id ?? 0);
+        lastTransactionDate =
+            await _getLastRecurringTransactionInsertion(transaction.id ?? 0);
       } catch (e) {
         lastTransactionDate = transaction.fromDate;
       }
 
-      String entity = recurrenciesMap[transaction.recurrency]?['entity'] ?? 'UNMAPPED';
+      String entity =
+          recurrenciesMap[transaction.recurrency]?['entity'] ?? 'UNMAPPED';
       int entityAmt = recurrenciesMap[transaction.recurrency]?['amount'] ?? 0;
 
       try {
@@ -238,7 +240,8 @@ class RecurringTransactionMethods extends SossoldiDatabase {
           throw Exception('No amount provided for entity "$entity"');
         }
 
-        populateRecurringTransaction(entity, lastTransactionDate, transaction, entityAmt);
+        populateRecurringTransaction(
+            entity, lastTransactionDate, transaction, entityAmt);
       } catch (e) {
         dev.log('$e');
       }
@@ -290,10 +293,11 @@ class RecurringTransactionMethods extends SossoldiDatabase {
         periods = (now.difference(lastTransactionDate).inDays / amount).floor();
         break;
       case 'months':
-        periods =
-            (((now.year - lastTransactionDate.year) * 12 + now.month - lastTransactionDate.month) /
-                    amount)
-                .floor();
+        periods = (((now.year - lastTransactionDate.year) * 12 +
+                    now.month -
+                    lastTransactionDate.month) /
+                amount)
+            .floor();
         break;
       default:
         throw Exception('No scope provided');
@@ -303,8 +307,8 @@ class RecurringTransactionMethods extends SossoldiDatabase {
     for (int i = 0; i < periods; i++) {
       switch (scope) {
         case 'days':
-          lastTransactionDate = DateTime(lastTransactionDate.year, lastTransactionDate.month,
-              lastTransactionDate.day + amount);
+          lastTransactionDate = DateTime(lastTransactionDate.year,
+              lastTransactionDate.month, lastTransactionDate.day + amount);
           break;
         case 'months':
           // get the last day of the next period
@@ -318,8 +322,8 @@ class RecurringTransactionMethods extends SossoldiDatabase {
             dayOfInsertion = lastDayOfNextPeriod;
           }
 
-          lastTransactionDate = DateTime(
-              lastTransactionDate.year, lastTransactionDate.month + amount, dayOfInsertion);
+          lastTransactionDate = DateTime(lastTransactionDate.year,
+              lastTransactionDate.month + amount, dayOfInsertion);
 
           break;
         default:

@@ -24,7 +24,8 @@ class BudgetCategorySelector extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<BudgetCategorySelector> createState() => _BudgetCategorySelector();
+  ConsumerState<BudgetCategorySelector> createState() =>
+      _BudgetCategorySelector();
 }
 
 class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
@@ -36,7 +37,8 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
       idCategory: selectedCategory.id!,
       name: selectedCategory.name,
       active: true,
-      amountLimit: _controller.text.isNotEmpty ? double.parse(_controller.text) : 0,
+      amountLimit:
+          _controller.text.isNotEmpty ? double.parse(_controller.text) : 0,
     );
     widget.onBudgetChanged(updatedBudget);
   }
@@ -120,7 +122,8 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
                 inputFormatters: [
                   DecimalTextInputFormatter(decimalDigits: 2),
                 ],
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
                 onChanged: (_) {
                   setState(() {
                     _modifyBudget();

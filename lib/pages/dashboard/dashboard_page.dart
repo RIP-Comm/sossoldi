@@ -32,8 +32,10 @@ class _HomePageState extends ConsumerState<DashboardPage> {
     final currencyState = ref.watch(currencyStateNotifier);
     final isDarkMode = ref.watch(appThemeStateNotifier).isDarkModeEnabled;
 
-    ref.listen(duplicatedTransactoinProvider,
-        (prev, curr) => showDuplicatedTransactionSnackBar(context, transaction: curr, ref: ref));
+    ref.listen(
+        duplicatedTransactoinProvider,
+        (prev, curr) => showDuplicatedTransactionSnackBar(context,
+            transaction: curr, ref: ref));
 
     return Container(
       color: Theme.of(context).colorScheme.tertiary,
@@ -61,7 +63,10 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                                 style: Theme.of(context)
                                     .textTheme
                                     .labelMedium
-                                    ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                                    ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
                               ),
                               RichText(
                                 text: TextSpan(
@@ -71,14 +76,21 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineLarge
-                                          ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                                          ?.copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary),
                                     ),
                                     TextSpan(
-                                      text: currencyState.selectedCurrency.symbol,
+                                      text:
+                                          currencyState.selectedCurrency.symbol,
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyLarge
-                                          ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                                          ?.copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary),
                                     ),
                                   ],
                                 ),
@@ -104,7 +116,8 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                                           ?.copyWith(color: green),
                                     ),
                                     TextSpan(
-                                      text: currencyState.selectedCurrency.symbol,
+                                      text:
+                                          currencyState.selectedCurrency.symbol,
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelLarge
@@ -134,7 +147,8 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                                           ?.copyWith(color: red),
                                     ),
                                     TextSpan(
-                                      text: currencyState.selectedCurrency.symbol,
+                                      text:
+                                          currencyState.selectedCurrency.symbol,
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelLarge
@@ -169,7 +183,9 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                             style: Theme.of(context)
                                 .textTheme
                                 .labelMedium
-                                ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                                ?.copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
                           ),
                           const SizedBox(width: Sizes.md),
                           Container(
@@ -186,7 +202,9 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                             style: Theme.of(context)
                                 .textTheme
                                 .labelMedium
-                                ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                                ?.copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
                           ),
                         ],
                       ),
@@ -199,7 +217,9 @@ class _HomePageState extends ConsumerState<DashboardPage> {
               ),
           Container(
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primaryContainer, //da modificare in darkMode
+              color: Theme.of(context)
+                  .colorScheme
+                  .primaryContainer, //da modificare in darkMode
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(Sizes.borderRadiusLarge),
                 topRight: Radius.circular(Sizes.borderRadiusLarge),
@@ -209,7 +229,8 @@ class _HomePageState extends ConsumerState<DashboardPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(Sizes.lg, Sizes.xl, Sizes.lg, Sizes.sm),
+                  padding: const EdgeInsets.fromLTRB(
+                      Sizes.lg, Sizes.xl, Sizes.lg, Sizes.sm),
                   child: Text(
                     "Your accounts",
                     style: Theme.of(context).textTheme.titleLarge,
@@ -227,18 +248,21 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                       ),
                       physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
-                      separatorBuilder: (context, i) => const SizedBox(width: Sizes.lg),
+                      separatorBuilder: (context, i) =>
+                          const SizedBox(width: Sizes.lg),
                       itemBuilder: (context, i) {
                         if (i == accounts.length) {
                           return Container(
                             width: 140,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(Sizes.borderRadius),
+                              borderRadius:
+                                  BorderRadius.circular(Sizes.borderRadius),
                               boxShadow: [defaultShadow],
                             ),
                             child: ElevatedButton.icon(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Theme.of(context).colorScheme.surface,
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.surface,
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: Sizes.md, vertical: Sizes.sm),
                               ),
@@ -249,10 +273,15 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                               ),
                               label: Text(
                                 "New Account",
-                                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .copyWith(
                                       color: isDarkMode
                                           ? grey3
-                                          : Theme.of(context).colorScheme.secondary,
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
                                     ),
                                 maxLines: 2,
                               ),
@@ -274,7 +303,8 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(Sizes.lg, Sizes.xxl, Sizes.lg, Sizes.sm),
+                    padding: const EdgeInsets.fromLTRB(
+                        Sizes.lg, Sizes.xxl, Sizes.lg, Sizes.sm),
                     child: Text(
                       "Last transactions",
                       style: Theme.of(context).textTheme.titleLarge,
@@ -282,7 +312,8 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                   ),
                 ),
                 lastTransactions.when(
-                  data: (transactions) => TransactionsList(transactions: transactions),
+                  data: (transactions) =>
+                      TransactionsList(transactions: transactions),
                   loading: () => const SizedBox(),
                   error: (err, stack) => Text('Error: $err'),
                 ),

@@ -21,10 +21,12 @@ import 'widgets/recurrence_list_tile.dart';
 class CreateTransactionPage extends ConsumerStatefulWidget {
   final bool recurrencyEditingPermitted;
 
-  const CreateTransactionPage({super.key, this.recurrencyEditingPermitted = true});
+  const CreateTransactionPage(
+      {super.key, this.recurrencyEditingPermitted = true});
 
   @override
-  ConsumerState<CreateTransactionPage> createState() => _CreateTransactionPage();
+  ConsumerState<CreateTransactionPage> createState() =>
+      _CreateTransactionPage();
 }
 
 class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {

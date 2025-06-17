@@ -14,7 +14,8 @@ class CreateEditCategoryPage extends ConsumerStatefulWidget {
   const CreateEditCategoryPage({super.key, this.hideIncome = false});
 
   @override
-  ConsumerState<CreateEditCategoryPage> createState() => _CreateEditCategoryPage();
+  ConsumerState<CreateEditCategoryPage> createState() =>
+      _CreateEditCategoryPage();
 }
 
 class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {

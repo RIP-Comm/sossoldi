@@ -53,7 +53,8 @@ class SossoldiDatabase {
     await instance._migrationManager.migrate(database, 0, version);
   }
 
-  static Future _upgradeDB(Database database, int oldVersion, int newVersion) async {
+  static Future _upgradeDB(
+      Database database, int oldVersion, int newVersion) async {
     await instance._migrationManager.migrate(database, oldVersion, newVersion);
   }
 
@@ -92,7 +93,8 @@ class SossoldiDatabase {
         final List<Map<String, dynamic>> rows = await db.query(tableName);
 
         for (var row in rows) {
-          List<dynamic> csvRow = List.filled(headers.length, ''); // Initialize with empty strings
+          List<dynamic> csvRow =
+              List.filled(headers.length, ''); // Initialize with empty strings
           csvRow[0] = tableName; // Set table name
 
           // Fill in values for existing columns
@@ -127,7 +129,8 @@ class SossoldiDatabase {
       }
 
       final String csvData = await file.readAsString();
-      final List<List<dynamic>> rows = const CsvToListConverter().convert(csvData);
+      final List<List<dynamic>> rows =
+          const CsvToListConverter().convert(csvData);
 
       if (rows.isEmpty) {
         throw Exception('CSV file is empty');
@@ -284,7 +287,8 @@ class SossoldiDatabase {
       if (rnd.nextInt(10) < 8) {
         randomAmount = rnd.nextDouble() * (19.99 - 1) + 1;
       } else {
-        randomAmount = rnd.nextDouble() * (maxAmountOfSingleTransaction - 100) + 100;
+        randomAmount =
+            rnd.nextDouble() * (maxAmountOfSingleTransaction - 100) + 100;
       }
 
       var randomType = 'OUT';
@@ -293,7 +297,9 @@ class SossoldiDatabase {
       var randomCategory = categories[rnd.nextInt(categories.length)];
       int? idBankAccountTransfer;
       DateTime randomDate = now.subtract(Duration(
-          days: rnd.nextInt(dateInPastMaxRange), hours: rnd.nextInt(20), minutes: rnd.nextInt(50)));
+          days: rnd.nextInt(dateInPastMaxRange),
+          hours: rnd.nextInt(20),
+          minutes: rnd.nextInt(50)));
 
       if (i % (countOfGeneratedTransaction / 100) == 0) {
         // simulating a transfer every 1% of total iterations
@@ -320,14 +326,15 @@ class SossoldiDatabase {
     for (int i = 1; i < dateInPastMaxRange / 30; i++) {
       DateTime randomDate = now.subtract(Duration(days: 30 * i));
       var time = randomDate.toLocal();
-      DateTime salaryDateTime = DateTime(time.year, time.month, 27, time.hour, time.minute,
-          time.second, time.millisecond, time.microsecond);
+      DateTime salaryDateTime = DateTime(time.year, time.month, 27, time.hour,
+          time.minute, time.second, time.millisecond, time.microsecond);
       demoTransactions.add(
           '''('$salaryDateTime', $fakeSalary, 'IN', 'Salary', 16, 70, null, 0, null, '$salaryDateTime', '$salaryDateTime')''');
     }
 
     // finalize query and write!
-    await _database?.execute("$insertDemoTransactionsQuery ${demoTransactions.join(",")};");
+    await _database?.execute(
+        "$insertDemoTransactionsQuery ${demoTransactions.join(",")};");
   }
 
   Future resetDatabase() async {

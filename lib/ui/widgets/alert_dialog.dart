@@ -76,9 +76,9 @@ class AlertDialogBuilder {
 ///
 /// Shows an info dialog with given text
 ///
-void showInfoDialog(BuildContext context, String text) =>
-    AlertDialogBuilder(text: text, dialogType: AlertDialogType.info, primaryActionText: "OK")
-        .show(context);
+void showInfoDialog(BuildContext context, String text) => AlertDialogBuilder(
+        text: text, dialogType: AlertDialogType.info, primaryActionText: "OK")
+    .show(context);
 
 ///
 /// Shows a success dialog with given text
