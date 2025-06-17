@@ -6,7 +6,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "../../../constants/style.dart";
 import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
-import '../../../utils/decimal_text_input_formatter.dart';
+import '../../../ui/formatters/decimal_text_input_formatter.dart';
 import '../../../ui/device.dart';
 import '../../../ui/extensions.dart';
 
@@ -30,8 +30,7 @@ class _AmountWidgetState extends ConsumerState<AmountWidget> {
     final selectedTransaction = ref.read(selectedTransactionUpdateProvider);
 
     return Padding(
-      padding:
-          const EdgeInsets.symmetric(horizontal: Sizes.lg, vertical: Sizes.xl),
+      padding: const EdgeInsets.symmetric(horizontal: Sizes.lg, vertical: Sizes.xl),
       child: TextField(
         controller: widget.amountController,
         decoration: InputDecoration(

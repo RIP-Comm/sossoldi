@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../database/sossoldi_database.dart';
+import '../../services/database/sossoldi_database.dart';
 import '../../ui/device.dart';
-import '../../utils/csv_file_picker.dart';
-import '../../utils/snack_bars/snack_bar.dart';
+import '../../services/csv/csv_file_picker.dart';
+import '../../ui/snack_bars/snack_bar.dart';
 
 class BackupPage extends ConsumerStatefulWidget {
   const BackupPage({super.key});
@@ -48,20 +48,15 @@ class _BackupPageState extends ConsumerState<BackupPage> {
       if (file != null) {
         if (!mounted) return;
         CSVFilePicker.showLoading(context, 'Importing data...');
-        final results =
-            await SossoldiDatabase.instance.importFromCSV(file.path);
+        final results = await SossoldiDatabase.instance.importFromCSV(file.path);
         if (!mounted) return;
         CSVFilePicker.hideLoading(context);
 
         if (results.values.every((success) => success)) {
-          await CSVFilePicker.showSuccess(
-              context, 'Data imported successfully');
+          await CSVFilePicker.showSuccess(context, 'Data imported successfully');
           if (mounted) Phoenix.rebirth(context);
         } else {
-          final failedTables = results.entries
-              .where((e) => !e.value)
-              .map((e) => e.key)
-              .join(', ');
+          final failedTables = results.entries.where((e) => !e.value).map((e) => e.key).join(', ');
 
           if (!mounted) return;
 
@@ -151,8 +146,7 @@ class _BackupPageState extends ConsumerState<BackupPage> {
                 itemCount: options.length,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: Sizes.lg),
+                separatorBuilder: (context, index) => const SizedBox(height: Sizes.lg),
                 itemBuilder: (context, i) {
                   final option = options[i];
                   return Card(
@@ -204,25 +198,15 @@ class _BackupPageState extends ConsumerState<BackupPage> {
                                 children: [
                                   Text(
                                     option.title,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge!
-                                        .copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
+                                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                                          color: Theme.of(context).colorScheme.primary,
                                         ),
                                   ),
                                   const SizedBox(height: Sizes.xs),
                                   Text(
                                     option.description,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium!
-                                        .copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
+                                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                          color: Theme.of(context).colorScheme.primary,
                                         ),
                                   ),
                                 ],

@@ -5,8 +5,8 @@ import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
-import 'snack_bars/snack_bar.dart';
-import '../ui/device.dart';
+import '../../ui/snack_bars/snack_bar.dart';
+import '../../ui/device.dart';
 
 class CSVFilePicker {
   // Request storage permission based on Android version
@@ -68,8 +68,7 @@ class CSVFilePicker {
       }
 
       final String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
-      final String filePath =
-          join(selectedDirectory, 'sossoldi_export_$timestamp.csv');
+      final String filePath = join(selectedDirectory, 'sossoldi_export_$timestamp.csv');
 
       // Write the CSV content directly to the file
       final file = await File(filePath).writeAsString(csv);
@@ -104,8 +103,7 @@ class CSVFilePicker {
             borderRadius: BorderRadius.circular(Sizes.borderRadius),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-                vertical: Sizes.lg, horizontal: Sizes.xl),
+            padding: const EdgeInsets.symmetric(vertical: Sizes.lg, horizontal: Sizes.xl),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

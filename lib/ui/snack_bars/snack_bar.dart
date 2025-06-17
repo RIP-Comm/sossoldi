@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../ui/device.dart';
+import '../device.dart';
 
 void showSnackBar(
   BuildContext context, {
@@ -38,8 +38,7 @@ void showSnackBar(
       ],
     ),
     behavior: SnackBarBehavior.floating,
-    padding:
-        const EdgeInsets.symmetric(vertical: Sizes.md, horizontal: Sizes.lg),
+    padding: const EdgeInsets.symmetric(vertical: Sizes.md, horizontal: Sizes.lg),
   );
 
   ScaffoldMessenger.of(context).hideCurrentSnackBar();

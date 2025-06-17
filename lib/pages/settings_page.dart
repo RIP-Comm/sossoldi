@@ -9,7 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../constants/style.dart';
 import '../ui/widgets/alert_dialog.dart';
 import '../ui/widgets/default_card.dart';
-import '../database/sossoldi_database.dart';
+import '../services/database/sossoldi_database.dart';
 import '../providers/accounts_provider.dart';
 import '../providers/budgets_provider.dart';
 import '../providers/categories_provider.dart';
@@ -101,8 +101,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 onPressed: () => Navigator.pop(context),
                 child: Text(
                   "OK",
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.primary),
+                  style: TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
               ),
             ],
@@ -131,8 +130,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(
-                  vertical: Sizes.xl, horizontal: Sizes.lg),
+              padding: const EdgeInsets.symmetric(vertical: Sizes.xl, horizontal: Sizes.lg),
               child: GestureDetector(
                 onTap: _onSettingsTap,
                 child: Row(
@@ -155,8 +153,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       style: Theme.of(context)
                           .textTheme
                           .headlineLarge!
-                          .copyWith(
-                              color: Theme.of(context).colorScheme.primary),
+                          .copyWith(color: Theme.of(context).colorScheme.primary),
                     ),
                   ],
                 ),
@@ -208,20 +205,14 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleLarge!
-                                    .copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary),
+                                    .copyWith(color: Theme.of(context).colorScheme.primary),
                               ),
                               Text(
                                 setting[2].toString(),
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodySmall!
-                                    .copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary),
+                                    .copyWith(color: Theme.of(context).colorScheme.primary),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 2,
                               ),
@@ -286,8 +277,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       ref.refresh(statisticsProvider);
 
                       if (context.mounted) {
-                        showSuccessDialog(
-                            context, "DB Cleared, and DEMO data added");
+                        showSuccessDialog(context, "DB Cleared, and DEMO data added");
                       }
                     },
                   ),
