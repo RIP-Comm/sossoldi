@@ -7,8 +7,8 @@ import 'pages/accounts/account_page.dart';
 import 'pages/accounts/create_edit_account_page.dart';
 import 'pages/accounts/account_list_page.dart';
 import 'pages/add_page/add_page.dart';
-import 'pages/categories/add_category.dart';
-import 'pages/categories/category_list.dart';
+import 'pages/categories/create_edit_category_page.dart';
+import 'pages/categories/category_list_page.dart';
 import 'pages/general_options/general_settings.dart';
 import 'pages/graphs_page/graphs_page.dart';
 import 'pages/home_page.dart';
@@ -21,7 +21,7 @@ import 'pages/planning_page/planning_page.dart';
 import 'pages/search_page/search_page.dart';
 import 'pages/settings_page.dart';
 import 'pages/structure.dart';
-import 'pages/transactions_page/transactions_page.dart';
+import 'pages/transactions/transactions_page.dart';
 import 'pages/planning_page/widget/edit_recurring_transaction.dart';
 import 'pages/backup_page/backup_page.dart';
 
@@ -57,7 +57,7 @@ Route<dynamic> makeRoute(RouteSettings settings) {
       final args = settings.arguments as Map<String, dynamic>?;
       return buildAdaptiveRoute(
         settings.name,
-        AddCategory(hideIncome: args?['hideIncome'] ?? false),
+        CreateEditCategoryPage(hideIncome: args?['hideIncome'] ?? false),
       );
     case '/more-info':
       return buildAdaptiveRoute(settings.name, const MoreInfoPage());
