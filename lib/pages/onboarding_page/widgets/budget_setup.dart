@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../ui/device.dart';
-import '../../categories/add_category.dart';
+import '../../categories/create_edit_category_page.dart';
 import '/constants/constants.dart';
 import '/constants/style.dart';
 import '/model/budget.dart';
@@ -105,7 +105,7 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      AddCategory(hideIncome: true),
+                                      CreateEditCategoryPage(hideIncome: true),
                                 ),
                               );
                             },

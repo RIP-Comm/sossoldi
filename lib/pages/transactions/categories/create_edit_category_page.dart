@@ -8,16 +8,16 @@ import '../../providers/transactions_provider.dart';
 import '../../ui/device.dart';
 import '../../ui/extensions.dart';
 
-class AddCategory extends ConsumerStatefulWidget {
+class CreateEditCategoryPage extends ConsumerStatefulWidget {
   final bool hideIncome;
 
-  const AddCategory({super.key, this.hideIncome = false});
+  const CreateEditCategoryPage({super.key, this.hideIncome = false});
 
   @override
-  ConsumerState<AddCategory> createState() => _AddCategoryState();
+  ConsumerState<CreateEditCategoryPage> createState() => _AddCategoryState();
 }
 
-class _AddCategoryState extends ConsumerState<AddCategory> {
+class _AddCategoryState extends ConsumerState<CreateEditCategoryPage> {
   final TextEditingController nameController = TextEditingController();
   late CategoryTransactionType categoryType;
   String categoryIcon = iconList.keys.first;
