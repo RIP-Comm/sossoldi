@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../database/sossoldi_database.dart';
+import '../services/database/sossoldi_database.dart';
 import 'base_entity.dart';
 import 'transaction.dart';
 import 'category_transaction.dart';
@@ -360,10 +360,10 @@ class BankAccountMethods extends SossoldiDatabase {
   }
 
   Future<List> accountMonthlyBalance(
-      int accountId, {
-        DateTime? dateRangeStart,
-        DateTime? dateRangeEnd,
-      }) async {
+    int accountId, {
+    DateTime? dateRangeStart,
+    DateTime? dateRangeEnd,
+  }) async {
     final db = await database;
 
     final accountFilter =
@@ -402,8 +402,8 @@ class BankAccountMethods extends SossoldiDatabase {
     if (dateRangeStart != null) {
       return result
           .where((element) => dateRangeStart.isBefore(
-          DateTime.parse(("${element["month"]}-01").toString())
-              .add(const Duration(days: 1))))
+              DateTime.parse(("${element["month"]}-01").toString())
+                  .add(const Duration(days: 1))))
           .toList();
     }
 

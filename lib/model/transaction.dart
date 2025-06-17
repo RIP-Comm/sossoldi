@@ -1,4 +1,4 @@
-import '../database/sossoldi_database.dart';
+import '../services/database/sossoldi_database.dart';
 import 'bank_account.dart';
 import 'base_entity.dart';
 import 'category_transaction.dart';

@@ -1,4 +1,4 @@
-import '../database/sossoldi_database.dart';
+import '../services/database/sossoldi_database.dart';
 import 'base_entity.dart';
 
 const String currencyTable = 'currency';
