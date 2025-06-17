@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'pages/accounts/account_page.dart';
 import 'pages/accounts/create_edit_account_page.dart';
 import 'pages/accounts/account_list_page.dart';
-import 'pages/add_page/add_page.dart';
+import 'pages/transactions/create_transaction/create_transaction_page.dart';
 import 'pages/transactions/categories/create_edit_category_page.dart';
 import 'pages/transactions/categories/category_list_page.dart';
 import 'pages/settings/general/general_settings_page.dart';
@@ -42,7 +42,7 @@ Route<dynamic> makeRoute(RouteSettings settings) {
       }
       return buildAdaptiveRoute(
         settings.name,
-        AddPage(
+        CreateTransactionPage(
             recurrencyEditingPermitted:
                 args?['recurrencyEditingPermitted'] ?? true),
       );

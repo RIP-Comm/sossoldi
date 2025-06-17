@@ -4,12 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../constants/style.dart';
-import '../../model/transaction.dart';
-import '../../providers/accounts_provider.dart';
-import '../../providers/transactions_provider.dart';
-import '../../ui/device.dart';
-import '../../ui/extensions.dart';
+import '../../../constants/style.dart';
+import '../../../model/transaction.dart';
+import '../../../providers/accounts_provider.dart';
+import '../../../providers/transactions_provider.dart';
+import '../../../ui/device.dart';
+import '../../../ui/extensions.dart';
 import "widgets/account_selector.dart";
 import 'widgets/amount_section.dart';
 import "widgets/category_selector.dart";
@@ -18,16 +18,16 @@ import 'widgets/duplicate_transaction_dialog.dart';
 import 'widgets/label_list_tile.dart';
 import 'widgets/recurrence_list_tile.dart';
 
-class AddPage extends ConsumerStatefulWidget {
+class CreateTransactionPage extends ConsumerStatefulWidget {
   final bool recurrencyEditingPermitted;
 
-  const AddPage({super.key, this.recurrencyEditingPermitted = true});
+  const CreateTransactionPage({super.key, this.recurrencyEditingPermitted = true});
 
   @override
-  ConsumerState<AddPage> createState() => _AddPageState();
+  ConsumerState<CreateTransactionPage> createState() => _CreateTransactionPage();
 }
 
-class _AddPageState extends ConsumerState<AddPage> {
+class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
   final TextEditingController amountController = TextEditingController();
   final TextEditingController noteController = TextEditingController();
   bool? recurrencyEditingPermittedFromRoute;
