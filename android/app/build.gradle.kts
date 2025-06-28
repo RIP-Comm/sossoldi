@@ -6,6 +6,14 @@ plugins {
 }
 
 android {
+    flavorDimensions += "store"
+
+    productFlavors {
+        create("fdroid") {
+            dimension = "store"
+        }
+    }
+
     namespace = "com.ripster.sossoldi"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
@@ -55,3 +63,5 @@ dependencies {
     implementation("androidx.window:window:1.0.0")
     implementation("androidx.window:window-java:1.0.0")
 }
+
+apply(from = "setVersionCodeFDroid.gradle")
