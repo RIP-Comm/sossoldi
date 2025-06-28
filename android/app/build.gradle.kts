@@ -9,6 +9,9 @@ android {
     flavorDimensions += "store"
 
     productFlavors {
+        create("default") {
+            dimension = "store"
+        }
         create("fdroid") {
             dimension = "store"
         }
