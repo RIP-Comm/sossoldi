@@ -1,0 +1,28 @@
+def abiCodes = [
+        "armeabi-v7a": 1,
+        "x86_64"     : 2,
+        "arm64-v8a"  : 4
+]
+
+if (!gradle.startParameter.taskNames.any { it.toLowerCase().contains("fdroid") }) {
+    println ">> Skipping versionCodeOverride because not building FDroid"
+    return
+}
+
+android.applicationVariants.all { variant ->
+    if (variant.buildType.name != 'release') return
+
+    variant.outputs.each { output ->
+        def abi = output.getFilter(com.android.build.OutputFile.ABI)
+        def abiCode = abiCodes[abi] ?: 0
+        output.versionCodeOverride = flutter.versionCode * 100 + abiCode
+        println ">> versionCodeOverride = ${output.versionCodeOverride} for ABI $abi"
+    }
+}
+
+android {
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
+    }
+}
