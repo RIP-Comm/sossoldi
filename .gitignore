@@ -19,7 +19,8 @@ migrate_working_dir/
 .idea/
 
 # VS Code related
-.vscode/
+.vscode/*
+!.vscode/launch.json
 
 # Flutter/Dart/Pub related
 **/doc/api/
