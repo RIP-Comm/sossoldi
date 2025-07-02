@@ -20,6 +20,7 @@ const Map<String, IconData> iconList = {
   'device_thermostat': Icons.device_thermostat,
   'dry_cleaning': Icons.dry_cleaning,
   'work': Icons.work,
+  'question_mark': Icons.question_mark,
 };
 
 const Map<String, IconData> accountIconList = {
@@ -31,6 +32,7 @@ const Map<String, IconData> accountIconList = {
 
 // colors
 const categoryColorList = [
+  category0,
   category1,
   category2,
   category3,
@@ -43,6 +45,7 @@ const categoryColorList = [
 ];
 
 const darkCategoryColorList = [
+  darkCategory0,
   darkCategory1,
   darkCategory2,
   darkCategory3,
