@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
+import '../../../model/category_transaction.dart';
 import '../../../ui/extensions.dart';
 import '../../../ui/widgets/rounded_icon.dart';
 import '../../../model/recurring_transaction.dart';
@@ -37,7 +38,7 @@ class RecurringPaymentCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final categories = ref.watch(categoriesProvider).value;
+    final categories = ref.watch(categoriesProvider(allCategoriesFilter)).value;
     final accounts = ref.watch(accountsProvider).value;
     final isDarkMode = ref.watch(appThemeStateNotifier).isDarkModeEnabled;
     final currencyState = ref.watch(currencyStateNotifier);
@@ -69,6 +70,7 @@ class RecurringPaymentCard extends ConsumerWidget {
                         backgroundColor: categoryColorList[category.color],
                         padding: const EdgeInsets.all(Sizes.sm),
                         size: 25,
+                        deleted: category.deleted,
                       ),
                       const SizedBox(width: Sizes.sm),
                       Expanded(
