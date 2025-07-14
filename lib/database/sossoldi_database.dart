@@ -60,12 +60,6 @@ class SossoldiDatabase {
 
   Future<String> exportToCSV() async {
     final db = await database;
-    final Directory documentsDir = await getApplicationDocumentsDirectory();
-    final String csvDir = join(documentsDir.path, 'sossoldi_exports');
-
-    // Create exports directory if it doesn't exist
-    await Directory(csvDir).create(recursive: true);
-
     // Get all table names
     final List<Map<String, dynamic>> tables = await db.rawQuery(
         "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' AND name NOT LIKE 'android_%'");
