@@ -25,4 +25,8 @@ android {
         includeInApk = false
         includeInBundle = false
     }
+
+    aaptOptions {
+        cruncherEnabled = false
+    }
 }
