@@ -23,7 +23,9 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
   List<Budget> deletedBudgets = [];
 
   void _loadCategories() async {
-    categories = await ref.read(categoriesProvider.notifier).getCategories();
+    categories = await ref
+        .read(categoriesProvider(userCategoriesFilter).notifier)
+        .getCategories();
     categories.removeWhere(
         (element) => element.type == CategoryTransactionType.income);
     budgets = await ref.read(budgetsProvider.notifier).getBudgets();

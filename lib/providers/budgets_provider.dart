@@ -57,3 +57,12 @@ final budgetsProvider =
     AsyncNotifierProvider<AsyncBudgetsNotifier, List<Budget>>(() {
   return AsyncBudgetsNotifier();
 });
+
+final deleteBudgetsByCategoryProvider =
+    Provider<Future<void> Function(int)>((ref) {
+  return (int categoryId) async {
+    await BudgetMethods().deleteByCategory(categoryId);
+
+    await ref.read(budgetsProvider.notifier).refreshBudgets();
+  };
+});

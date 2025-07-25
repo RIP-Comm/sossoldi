@@ -18,7 +18,7 @@ class CategoryList extends ConsumerStatefulWidget {
 class _CategoryListState extends ConsumerState<CategoryList> {
   @override
   Widget build(BuildContext context) {
-    final categorysList = ref.watch(categoriesProvider);
+    final categorysList = ref.watch(categoriesProvider(userCategoriesFilter));
     ref.listen(selectedCategoryProvider, (_, __) {});
     return Scaffold(
       appBar: AppBar(

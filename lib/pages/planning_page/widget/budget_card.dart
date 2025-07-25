@@ -5,6 +5,7 @@ import '../../../ui/widgets/default_container.dart';
 import '../../../model/budget.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/budgets_provider.dart';
+import '../../../providers/categories_provider.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../ui/assets.dart';
@@ -65,6 +66,9 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                                   .fold(0.0, (sum, t) => sum + t.amount)
                                   .toStringAsFixed(2));
                           Budget budget = budgets.elementAt(index);
+                          final budgetCategory = ref
+                              .watch(categoryByIdProvider(budget.idCategory))
+                              .value;
                           return Column(
                             children: [
                               Row(

@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../../constants/constants.dart';
 import '../../constants/style.dart';
 import '../../model/transaction.dart';
+import '../../providers/categories_provider.dart';
 import '../../providers/currency_provider.dart';
 import '../../providers/transactions_provider.dart';
 import '../device.dart';
@@ -128,6 +129,10 @@ class TransactionTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currencyState = ref.watch(currencyStateNotifier);
+
+    final category =
+        ref.watch(categoryByIdProvider(transaction.idCategory!)).value;
+
     return Material(
       child: ListTile(
         visualDensity: VisualDensity.compact,
@@ -155,6 +160,7 @@ class TransactionTile extends ConsumerWidget {
               : Theme.of(context).colorScheme.secondary,
           size: 25,
           padding: const EdgeInsets.all(Sizes.sm),
+          deleted: category != null ? category.deleted : false,
         ),
         title: Text(
           (transaction.note?.isEmpty ?? true)

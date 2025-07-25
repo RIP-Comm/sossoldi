@@ -32,7 +32,7 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
     final transactionType = ref.watch(transactionTypeProvider);
     final categoryType =
         ref.watch(transactionToCategoryProvider(transactionType));
-    final categoriesList = ref.watch(categoriesByTypeProvider(categoryType));
+    final categoriesList = ref.watch(categoriesProvider(userCategoriesFilter));
 
     return Container(
       color: Theme.of(context).colorScheme.primaryContainer,
@@ -70,41 +70,53 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
                     height: 74,
                     width: double.infinity,
                     child: categoriesList.when(
-                      data: (categories) => ListView.builder(
-                        itemCount: categories.length, // to prevent range error
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemBuilder: (context, i) {
-                          CategoryTransaction category = categories[i];
-                          return GestureDetector(
-                            onTap: () => _selectCategory(context, category),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: Sizes.lg),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  RoundedIcon(
-                                    icon: iconList[category.symbol],
-                                    backgroundColor:
-                                        categoryColorListTheme[category.color],
-                                  ),
-                                  Text(
-                                    category.name,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelLarge!
-                                        .copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary),
-                                  ),
-                                ],
+                      data: (categories) {
+                        final availableCategories = categories
+                            .where((category) =>
+                                category.type == categoryType &&
+                                !category.deleted)
+                            .toList();
+                        return ListView.builder(
+                          itemCount: availableCategories.length,
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          itemBuilder: (context, i) {
+                            CategoryTransaction category =
+                                availableCategories[i];
+                            return GestureDetector(
+                              onTap: () => {
+                                ref.read(categoryProvider.notifier).state =
+                                    category,
+                                Navigator.of(context).pop(),
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    RoundedIcon(
+                                      icon: iconList[category.symbol],
+                                      backgroundColor: categoryColorListTheme[
+                                          category.color],
+                                    ),
+                                    Text(
+                                      category.name,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge!
+                                          .copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      ),
+                            );
+                          },
+                        );
+                      },
                       loading: () =>
                           const Center(child: CircularProgressIndicator()),
                       error: (err, stack) => Text('Error: $err'),
@@ -121,33 +133,46 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
                     ),
                   ),
                   categoriesList.when(
-                    data: (categories) => Container(
-                      color: Theme.of(context).colorScheme.surface,
-                      child: ListView.separated(
-                        itemCount: categories.length,
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        separatorBuilder: (context, index) =>
-                            const Divider(height: 1, color: grey1),
-                        itemBuilder: (context, i) {
-                          CategoryTransaction category = categories[i];
-                          return ListTile(
-                            onTap: () => _selectCategory(context, category),
-                            leading: RoundedIcon(
-                              icon: iconList[category.symbol],
-                              backgroundColor:
-                                  categoryColorListTheme[category.color],
-                            ),
-                            title: Text(category.name),
-                            trailing:
-                                ref.watch(categoryProvider)?.id == category.id
-                                    ? Icon(Icons.check)
-                                    : null,
-                          );
-                        },
-                      ),
-                    ),
+                    data: (categories) {
+                      final availableCategories = categories
+                          .where((category) =>
+                              category.type == categoryType &&
+                              !category.deleted)
+                          .toList();
+
+                      return Container(
+                        color: Theme.of(context).colorScheme.surface,
+                        child: ListView.separated(
+                          itemCount: availableCategories.length,
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          separatorBuilder: (context, index) =>
+                              const Divider(height: 1, color: grey1),
+                          itemBuilder: (context, i) {
+                            CategoryTransaction category =
+                                availableCategories[i];
+                            return ListTile(
+                              onTap: () => {
+                                ref.read(categoryProvider.notifier).state =
+                                    category,
+                                Navigator.of(context).pop(),
+                              },
+                              leading: RoundedIcon(
+                                icon: iconList[category.symbol],
+                                backgroundColor:
+                                    categoryColorListTheme[category.color],
+                              ),
+                              title: Text(category.name),
+                              trailing:
+                                  ref.watch(categoryProvider)?.id == category.id
+                                      ? Icon(Icons.check)
+                                      : null,
+                            );
+                          },
+                        ),
+                      );
+                    },
                     loading: () =>
                         const Center(child: CircularProgressIndicator()),
                     error: (err, stack) => Text('Error: $err'),

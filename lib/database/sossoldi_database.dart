@@ -205,14 +205,16 @@ class SossoldiDatabase {
 
     // Add fake categories
     await _database?.execute('''
-      INSERT INTO categoryTransaction(id, name, type, symbol, color, note, parent, createdAt, updatedAt) VALUES
-        (10, "Out", "OUT", "restaurant", 0, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (11, "Home", "OUT", "home", 1, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (12, "Furniture","OUT", "home", 2, '', 11, '${DateTime.now()}', '${DateTime.now()}'),
-        (13, "Shopping", "OUT", "shopping_cart", 3, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (14, "Leisure", "OUT", "subscriptions", 4, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (15, "Transports", "OUT", "directions_car_rounded", 6, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (16, "Salary", "IN", "work", 5, '', null, '${DateTime.now()}', '${DateTime.now()}');
+      INSERT OR IGNORE INTO categoryTransaction(id, name, type, symbol, color, note, parent, deleted, createdAt, updatedAt) VALUES
+        (0, "Uncategorized", "IN", "question_mark", 0, 'This is a default category for no categorized transactions', null, '0', '${DateTime.now()}', '${DateTime.now()}'),
+        (1, "Uncategorized", "OUT", "question_mark", 0, 'This is a default category for no categorized transactions', null, '0', '${DateTime.now()}', '${DateTime.now()}'),
+        (10, "Out", "OUT", "restaurant", 1, '', null, 0, '${DateTime.now()}', '${DateTime.now()}'),
+        (11, "Home", "OUT", "home", 2, '', null, 0, '${DateTime.now()}', '${DateTime.now()}'),
+        (12, "Furniture","OUT", "home", 3, '', 11, 0, '${DateTime.now()}', '${DateTime.now()}'),
+        (13, "Shopping", "OUT", "shopping_cart", 4, '', null, 0, '${DateTime.now()}', '${DateTime.now()}'),
+        (14, "Leisure", "OUT", "subscriptions", 5, '', null, 0, '${DateTime.now()}', '${DateTime.now()}'),
+        (15, "Transports", "OUT", "directions_car_rounded", 6, '', null, 0, '${DateTime.now()}', '${DateTime.now()}'),
+        (16, "Salary", "IN", "work", 5, '', null, 0, '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
     // Add currencies
