@@ -1,7 +1,7 @@
 ---
 title: How to contribute to the documentation
 layout: default
-nav_order: 5
+nav_order: 6
 ---
 # How to contribute to the documentation
 
