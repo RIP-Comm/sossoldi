@@ -89,7 +89,6 @@ Also, you can refer to internal docs:
 -   [Design file](https://www.figma.com/file/6NyY9yqunpbU7HIkbNEAL3/Sossoldi-App?node-id=0%3A1)
 -   [UX Research](https://www.federicopozzato.it/portfolio/sossoldi-personal-finance-app)
 -   [Information architecture](https://www.figma.com/file/xjVHAaHznRW1OFAJvp8DXn/Sossoldi-App---Figjam?node-id=0%3A1)
--   [Interface study](https://www.notion.so/Sossoldi-Personal-finance-app-dd37eb9cbb2c44e59dd74f85e843e865)
 
 #### New to Flutter? Here are some good (and free!) resources:
 -   [FreeCodeCampCourses](https://www.youtube.com/c/Freecodecamp/search?query=flutter)

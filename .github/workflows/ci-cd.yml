@@ -50,4 +50,4 @@ jobs:
       - name: Build APK and App Bundle
         if: github.event_name == 'push'
         run: |
-          flutter build appbundle
+          flutter build appbundle --flavor default

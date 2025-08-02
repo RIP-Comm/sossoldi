@@ -166,7 +166,9 @@ class TransactionTile extends ConsumerWidget {
               ),
         ),
         subtitle: Text(
-          transaction.categoryName ?? "Uncategorized",
+          transaction.type == TransactionType.transfer
+              ? ""
+              : transaction.categoryName ?? "Uncategorized",
           overflow: TextOverflow.ellipsis,
           style: Theme.of(context).textTheme.labelMedium!.copyWith(
                 color: Theme.of(context).colorScheme.primary,
