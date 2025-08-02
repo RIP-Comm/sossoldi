@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -8,7 +9,7 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 import 'model/recurring_transaction.dart';
 import 'providers/theme_provider.dart';
-import 'routes/routes.dart';
+import 'routes/app_router.dart';
 import 'ui/theme/app_theme.dart';
 import 'services/notifications/notifications_service.dart';
 
@@ -52,28 +53,31 @@ void main() async {
         'last_recurring_transactions_check', DateTime.now().toIso8601String());
   }
 
-  initializeDateFormatting('it_IT', null).then(
-      (_) => runApp(Phoenix(child: const ProviderScope(child: Launcher()))));
+  initializeDateFormatting('it_IT', null)
+      .then((_) => runApp(Phoenix(child: ProviderScope(child: Launcher()))));
 }
 
 class Launcher extends ConsumerWidget {
-  const Launcher({super.key});
+  Launcher({super.key});
+
+  final _appRouter = AppRouter();
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bool isOnboardingCompleted =
-        _sharedPreferences.getBool('onboarding_completed') ?? false;
-
     final appThemeState = ref.watch(appThemeStateNotifier);
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: _appRouter.config(),
+      routeInformationParser: _appRouter.defaultRouteParser(),
+      routerDelegate: AutoRouterDelegate(
+        _appRouter,
+        navigatorObservers: () => [AutoRouteObserver()],
+      ),
       title: 'Sossoldi',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode:
           appThemeState.isDarkModeEnabled ? ThemeMode.dark : ThemeMode.light,
-      onGenerateRoute: makeRoute,
-      initialRoute: !isOnboardingCompleted ? '/onboarding' : '/',
     );
   }
 }
