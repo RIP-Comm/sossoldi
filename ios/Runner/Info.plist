@@ -58,6 +58,6 @@
 		<key>UISupportsDocumentBrowser</key>
 		<true/>
 		<key>NSFaceIDUsageDescription</key>
-        string>User required authentication</string>
+        <string>User required authentication</string>
 	</dict>
 </plist>
