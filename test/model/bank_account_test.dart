@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
-import 'package:sossoldi/database/sossoldi_database.dart';
+import 'package:sossoldi/services/database/sossoldi_database.dart';
 
 import 'package:sossoldi/model/bank_account.dart';
 import 'package:sossoldi/model/base_entity.dart';
