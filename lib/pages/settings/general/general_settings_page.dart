@@ -36,7 +36,8 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
   Widget build(BuildContext context) {
     final appThemeState = ref.watch(appThemeStateNotifier);
     final currencyState = ref.watch(currencyStateNotifier);
-    final requiresAuthenticationState = ref.watch(requiredAuthenticationStateNotifier);
+    final requiresAuthenticationState =
+        ref.watch(requiredAuthenticationStateNotifier);
 
     return Scaffold(
       appBar: AppBar(
