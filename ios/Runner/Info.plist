@@ -57,5 +57,7 @@
 		<string>Access to documents is needed to import and export CSV files</string>
 		<key>UISupportsDocumentBrowser</key>
 		<true/>
+		<key>NSFaceIDUsageDescription</key>
+        string>User required authentication</string>
 	</dict>
 </plist>

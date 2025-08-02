@@ -33,6 +33,7 @@ dependencies:
   sqlite3_flutter_libs:
   timezone: ^0.10.0
   url_launcher: ^6.3.1
+  local_auth: ^2.3.0
 
 dev_dependencies:
   flutter_test:
