@@ -170,6 +170,7 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                       ),
                       const SizedBox(height: Sizes.lg),
                       LineChartWidget(
+                        ignoreBlur: false,
                         lineData: currentMonthList,
                         line2Data: lastMonthList,
                       ),

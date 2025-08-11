@@ -27,6 +27,7 @@ class LineChartWidget extends StatefulWidget {
   final double minY;
 
   final Color? colorBackground;
+  final bool ignoreBlur;
 
   LineChartWidget({
     super.key,
@@ -36,6 +37,7 @@ class LineChartWidget extends StatefulWidget {
     this.line2Color,
     this.colorBackground,
     this.enableGapFilling = true,
+    this.ignoreBlur = true,
     this.period = Period.month,
     int nXLabel = 10,
     double? minY,
@@ -80,6 +82,7 @@ class _LineChartSample2State extends State<LineChartWidget> {
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
     return BlurWidget(
+      ignore: widget.ignoreBlur,
       child: Stack(
         children: [
           AspectRatio(
