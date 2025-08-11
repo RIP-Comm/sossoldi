@@ -84,8 +84,8 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                                                     .primary),
                                       ),
                                       TextSpan(
-                                        text:
-                                            currencyState.selectedCurrency.symbol,
+                                        text: currencyState
+                                            .selectedCurrency.symbol,
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyLarge
@@ -120,8 +120,8 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                                             ?.copyWith(color: green),
                                       ),
                                       TextSpan(
-                                        text:
-                                            currencyState.selectedCurrency.symbol,
+                                        text: currencyState
+                                            .selectedCurrency.symbol,
                                         style: Theme.of(context)
                                             .textTheme
                                             .labelLarge
@@ -153,8 +153,8 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                                             ?.copyWith(color: red),
                                       ),
                                       TextSpan(
-                                        text:
-                                            currencyState.selectedCurrency.symbol,
+                                        text: currencyState
+                                            .selectedCurrency.symbol,
                                         style: Theme.of(context)
                                             .textTheme
                                             .labelLarge
@@ -320,8 +320,8 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                   ),
                 ),
                 lastTransactions.when(
-                  data: (transactions) =>
-                      TransactionsList(ignoreBlur: false, transactions: transactions),
+                  data: (transactions) => TransactionsList(
+                      ignoreBlur: false, transactions: transactions),
                   loading: () => const SizedBox(),
                   error: (err, stack) => Text('Error: $err'),
                 ),
