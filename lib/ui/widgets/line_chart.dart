@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../device.dart';
+import 'blur_widget.dart';
 
 enum Period { month, year }
 
@@ -78,36 +79,38 @@ class _LineChartSample2State extends State<LineChartWidget> {
   @override
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
-    return Stack(
-      children: [
-        AspectRatio(
-          aspectRatio: 2,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: widget.colorBackground ?? themeData.colorScheme.tertiary,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(top: Sizes.xl),
-              child: Builder(
-                builder: (context) {
-                  if (widget.lineData.length < 2 &&
-                      widget.line2Data.length < 2) {
-                    return Center(
-                      child: Text(
-                        "We are sorry but there is not\nenough data to make the graph...",
-                        style: TextStyle(color: Theme.of(context).hintColor),
-                      ),
+    return BlurWidget(
+      child: Stack(
+        children: [
+          AspectRatio(
+            aspectRatio: 2,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: widget.colorBackground ?? themeData.colorScheme.tertiary,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(top: Sizes.xl),
+                child: Builder(
+                  builder: (context) {
+                    if (widget.lineData.length < 2 &&
+                        widget.line2Data.length < 2) {
+                      return Center(
+                        child: Text(
+                          "We are sorry but there is not\nenough data to make the graph...",
+                          style: TextStyle(color: Theme.of(context).hintColor),
+                        ),
+                      );
+                    }
+                    return LineChart(
+                      mainData(),
                     );
-                  }
-                  return LineChart(
-                    mainData(),
-                  );
-                },
+                  },
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
