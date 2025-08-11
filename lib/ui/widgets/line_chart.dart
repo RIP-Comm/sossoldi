@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../device.dart';
+import 'blur_widget.dart';
 
 enum Period { month, year }
 
@@ -26,6 +27,7 @@ class LineChartWidget extends StatefulWidget {
   final double minY;
 
   final Color? colorBackground;
+  final bool ignoreBlur;
 
   LineChartWidget({
     super.key,
@@ -35,6 +37,7 @@ class LineChartWidget extends StatefulWidget {
     this.line2Color,
     this.colorBackground,
     this.enableGapFilling = true,
+    this.ignoreBlur = true,
     this.period = Period.month,
     int nXLabel = 10,
     double? minY,
@@ -78,36 +81,39 @@ class _LineChartSample2State extends State<LineChartWidget> {
   @override
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
-    return Stack(
-      children: [
-        AspectRatio(
-          aspectRatio: 2,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: widget.colorBackground ?? themeData.colorScheme.tertiary,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(top: Sizes.xl),
-              child: Builder(
-                builder: (context) {
-                  if (widget.lineData.length < 2 &&
-                      widget.line2Data.length < 2) {
-                    return Center(
-                      child: Text(
-                        "We are sorry but there is not\nenough data to make the graph...",
-                        style: TextStyle(color: Theme.of(context).hintColor),
-                      ),
+    return BlurWidget(
+      ignore: widget.ignoreBlur,
+      child: Stack(
+        children: [
+          AspectRatio(
+            aspectRatio: 2,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: widget.colorBackground ?? themeData.colorScheme.tertiary,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(top: Sizes.xl),
+                child: Builder(
+                  builder: (context) {
+                    if (widget.lineData.length < 2 &&
+                        widget.line2Data.length < 2) {
+                      return Center(
+                        child: Text(
+                          "We are sorry but there is not\nenough data to make the graph...",
+                          style: TextStyle(color: Theme.of(context).hintColor),
+                        ),
+                      );
+                    }
+                    return LineChart(
+                      mainData(),
                     );
-                  }
-                  return LineChart(
-                    mainData(),
-                  );
-                },
+                  },
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
