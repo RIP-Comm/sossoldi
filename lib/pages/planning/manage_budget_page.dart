@@ -103,49 +103,51 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
             Expanded(
               child: Column(
                 children: [
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: budgets.length,
-                    itemBuilder: (context, index) {
-                      return Dismissible(
-                        key: Key(budgets[index].idCategory.toString()),
-                        background: Container(
-                          padding: const EdgeInsets.only(right: Sizes.lg),
-                          alignment: Alignment.centerRight,
-                          color: Colors.red,
-                          child: const Text(
-                            'Delete',
-                            textAlign: TextAlign.right,
-                            style: TextStyle(color: Colors.white),
+                  Expanded(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: budgets.length,
+                      itemBuilder: (context, index) {
+                        return Dismissible(
+                          key: Key(budgets[index].idCategory.toString()),
+                          background: Container(
+                            padding: const EdgeInsets.only(right: Sizes.lg),
+                            alignment: Alignment.centerRight,
+                            color: Colors.red,
+                            child: const Text(
+                              'Delete',
+                              textAlign: TextAlign.right,
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
-                        ),
-                        onDismissed: (direction) {
-                          deleteBudget(budgets[index], index);
-                        },
-                        child: BudgetCategorySelector(
-                          categories: categories,
-                          categoriesAlreadyUsed: categories
-                              .where((element) => budgets
-                                  .map((e) => e.name)
-                                  .contains(element.name))
-                              .map((e) => e.name)
-                              .toList(),
-                          budget: budgets[index],
-                          initSelectedCategory: categories
-                                  .where((element) =>
-                                      element.id == budgets[index].idCategory)
-                                  .isEmpty
-                              ? categories[0]
-                              : categories
-                                  .where((element) =>
-                                      element.id == budgets[index].idCategory)
-                                  .first,
-                          onBudgetChanged: (updatedBudget) {
-                            updateBudget(updatedBudget, index);
+                          onDismissed: (direction) {
+                            deleteBudget(budgets[index], index);
                           },
-                        ),
-                      );
-                    },
+                          child: BudgetCategorySelector(
+                            categories: categories,
+                            categoriesAlreadyUsed: categories
+                                .where((element) => budgets
+                                    .map((e) => e.name)
+                                    .contains(element.name))
+                                .map((e) => e.name)
+                                .toList(),
+                            budget: budgets[index],
+                            initSelectedCategory: categories
+                                    .where((element) =>
+                                        element.id == budgets[index].idCategory)
+                                    .isEmpty
+                                ? categories[0]
+                                : categories
+                                    .where((element) =>
+                                        element.id == budgets[index].idCategory)
+                                    .first,
+                            onBudgetChanged: (updatedBudget) {
+                              updateBudget(updatedBudget, index);
+                            },
+                          ),
+                        );
+                      },
+                    ),
                   ),
                   const SizedBox(height: Sizes.sm),
                   Text("Swipe left to delete",
