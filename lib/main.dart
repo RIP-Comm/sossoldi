@@ -53,16 +53,19 @@ void main() async {
         'last_recurring_transactions_check', DateTime.now().toIso8601String());
   }
 
-  // check for authentication if requested by user
-  bool? requiresAuthentication =
-      _sharedPreferences.getBool("user_requires_authentication");
-  if (requiresAuthentication != null && requiresAuthentication == true) {
-    final LocalAuthentication auth = LocalAuthentication();
-    // use use sticky auth to resume auth request when app is going background
-    bool didAuthenticate = await auth.authenticate(
-        localizedReason: 'Please authenticate to use Sossoldi',
-        options: AuthenticationOptions(stickyAuth: true));
-    if (!didAuthenticate) return; // stops app from loading
+  final LocalAuthentication auth = LocalAuthentication();
+  if (await auth.isDeviceSupported()) {
+    // check for authentication if requested by user
+    bool? requiresAuthentication =
+        _sharedPreferences.getBool("user_requires_authentication");
+
+    if (requiresAuthentication != null && requiresAuthentication == true) {
+      // use use sticky auth to resume auth request when app is going background
+      bool didAuthenticate = await auth.authenticate(
+          localizedReason: 'Please authenticate to use Sossoldi',
+          options: AuthenticationOptions(stickyAuth: true));
+      if (!didAuthenticate) return; // stops app from loading
+    }
   }
 
   initializeDateFormatting('it_IT', null).then(
