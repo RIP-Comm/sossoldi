@@ -9,6 +9,7 @@ import '../../providers/currency_provider.dart';
 import '../../providers/transactions_provider.dart';
 import '../device.dart';
 import '../extensions.dart';
+import 'blur_widget.dart';
 import 'default_container.dart';
 import 'rounded_icon.dart';
 
@@ -18,11 +19,13 @@ class TransactionsList extends StatefulWidget {
     required this.transactions,
     this.margin = const EdgeInsets.symmetric(horizontal: Sizes.lg),
     this.padding,
+    this.ignoreBlur = true,
   });
 
   final List<Transaction> transactions;
   final EdgeInsetsGeometry? margin;
   final EdgeInsetsGeometry? padding;
+  final bool ignoreBlur;
 
   @override
   State<TransactionsList> createState() => _TransactionsListState();
@@ -83,6 +86,7 @@ class _TransactionsListState extends State<TransactionsList> {
                 return Column(
                   children: [
                     TransactionTitle(
+                      ignoreBlur: widget.ignoreBlur,
                       date: DateTime.parse(currentDate),
                       total: totals[currentDate] ?? 0,
                     ),
@@ -106,6 +110,7 @@ class _TransactionsListState extends State<TransactionsList> {
                                 .withValues(alpha: 0.4),
                           ),
                           itemBuilder: (context, index) => TransactionTile(
+                            ignoreBlur: widget.ignoreBlur,
                             transaction: dateTransactions[index],
                           ),
                         ),
@@ -121,7 +126,13 @@ class _TransactionsListState extends State<TransactionsList> {
 }
 
 class TransactionTile extends ConsumerWidget {
-  const TransactionTile({required this.transaction, super.key});
+  const TransactionTile({
+    required this.transaction,
+    required this.ignoreBlur,
+    super.key,
+  });
+
+  final bool ignoreBlur;
 
   final Transaction transaction;
 
@@ -178,28 +189,31 @@ class TransactionTile extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  '${transaction.type == TransactionType.expense ? "-" : ""}${transaction.amount.toCurrency()}',
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                        color: transaction.type.toColor(
-                          brightness: Theme.of(context).brightness,
+            BlurWidget(
+              ignore: ignoreBlur,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '${transaction.type == TransactionType.expense ? "-" : ""}${transaction.amount.toCurrency()}',
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          color: transaction.type.toColor(
+                            brightness: Theme.of(context).brightness,
+                          ),
                         ),
-                      ),
-                ),
-                Text(
-                  currencyState.selectedCurrency.symbol,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: transaction.type.toColor(
-                          brightness: Theme.of(context).brightness,
+                  ),
+                  Text(
+                    currencyState.selectedCurrency.symbol,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          color: transaction.type.toColor(
+                            brightness: Theme.of(context).brightness,
+                          ),
                         ),
-                      ),
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
             Text(
               transaction.type == TransactionType.transfer
@@ -219,11 +233,13 @@ class TransactionTile extends ConsumerWidget {
 class TransactionTitle extends ConsumerWidget {
   final DateTime date;
   final num total;
+  final bool ignoreBlur;
 
   const TransactionTitle({
     super.key,
     required this.date,
     required this.total,
+    required this.ignoreBlur,
   });
 
   @override
@@ -242,15 +258,23 @@ class TransactionTitle extends ConsumerWidget {
                 .copyWith(color: Theme.of(context).colorScheme.primary),
           ),
           const Spacer(),
-          Text(
-            total.toCurrency(),
-            style:
-                Theme.of(context).textTheme.bodyLarge!.copyWith(color: color),
+          BlurWidget(
+            ignore: ignoreBlur,
+            child: Text(
+              total.toCurrency(),
+              style:
+                  Theme.of(context).textTheme.bodyLarge!.copyWith(color: color),
+            ),
           ),
-          Text(
-            currencyState.selectedCurrency.symbol,
-            style:
-                Theme.of(context).textTheme.labelMedium!.copyWith(color: color),
+          BlurWidget(
+            ignore: ignoreBlur,
+            child: Text(
+              currencyState.selectedCurrency.symbol,
+              style: Theme.of(context)
+                  .textTheme
+                  .labelMedium!
+                  .copyWith(color: color),
+            ),
           ),
         ],
       ),

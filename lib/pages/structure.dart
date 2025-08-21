@@ -12,6 +12,9 @@ import 'transactions/transactions_page.dart';
 
 final StateProvider selectedIndexProvider = StateProvider<int>((ref) => 0);
 
+final StateProvider<bool> visibilityAmountProvider =
+    StateProvider<bool>((ref) => false);
+
 class Structure extends ConsumerStatefulWidget {
   const Structure({super.key});
 
@@ -39,15 +42,19 @@ class _StructureState extends ConsumerState<Structure> {
   @override
   Widget build(BuildContext context) {
     final selectedIndex = ref.watch(selectedIndexProvider);
+
+    final isVisible = ref.watch(visibilityAmountProvider);
+
     return Scaffold(
       // Prevent the fab moving up when the keyboard is opened
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor:
             selectedIndex == 0 ? Theme.of(context).colorScheme.tertiary : null,
-        title: Text(
-          _pagesTitle.elementAt(selectedIndex),
-        ),
+        title: switch (selectedIndex) {
+          0 => null,
+          _ => Text(_pagesTitle.elementAt(selectedIndex))
+        },
         leading: Padding(
           padding: const EdgeInsets.only(left: Sizes.lg),
           child: FilledButton(
@@ -57,14 +64,24 @@ class _StructureState extends ConsumerState<Structure> {
           ),
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.all(Sizes.sm),
-            child: FilledButton(
-              onPressed: () => Navigator.of(context).pushNamed('/settings'),
-              style: FilledButton.styleFrom(shape: const CircleBorder()),
-              child: Icon(Icons.settings),
-            ),
+          switch (selectedIndex) {
+            0 => FilledButton(
+                onPressed: () {
+                  ref.read(visibilityAmountProvider.notifier).state =
+                      !isVisible;
+                },
+                style: FilledButton.styleFrom(shape: const CircleBorder()),
+                child:
+                    Icon(isVisible ? Icons.visibility : Icons.visibility_off),
+              ),
+            _ => const SizedBox.shrink(),
+          },
+          FilledButton(
+            onPressed: () => Navigator.of(context).pushNamed('/settings'),
+            style: FilledButton.styleFrom(shape: const CircleBorder()),
+            child: Icon(Icons.settings),
           ),
+          SizedBox.square(dimension: Sizes.xs),
         ],
       ),
       body: Center(
