@@ -103,7 +103,7 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
             Expanded(
               child: Column(
                 children: [
-                  Expanded( 
+                  Expanded(
                     child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: budgets.length,
