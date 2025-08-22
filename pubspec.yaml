@@ -33,6 +33,7 @@ dependencies:
   sqlite3_flutter_libs:
   timezone: ^0.10.0
   url_launcher: ^6.3.1
+  auto_route: ^10.1.0+1
 
 dev_dependencies:
   flutter_test:
@@ -42,6 +43,8 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.3
   flutter_lints: ^5.0.0
   test: ^1.25.2
+  build_runner: ^2.5.4
+  auto_route_generator: ^10.1.0
 
 flutter:
   uses-material-design: true

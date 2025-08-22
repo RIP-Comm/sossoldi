@@ -52,3 +52,8 @@ __pycache__
 pyenv
 platform_config.yaml
 videos
+
+# Generated sources
+**/*.g.dart
+**/*.gr.dart
+**/*.freezed.dart
