@@ -113,7 +113,6 @@ class AccountListTile extends ConsumerWidget {
           expand: selectedAccountIndex == index,
           child: Container(
             color: Theme.of(context).colorScheme.primaryContainer,
-            height: 70.0 * nTransactions,
             child: ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
