@@ -10,7 +10,7 @@ import '../../../ui/device.dart';
 class BudgetCategorySelector extends ConsumerStatefulWidget {
   final List<CategoryTransaction> categories;
   final Budget budget;
-  final List<String> categoriesAlreadyUsed;
+  final Set<int> usedCategoryIds;
   final CategoryTransaction initSelectedCategory;
   final Function(Budget) onBudgetChanged;
 
@@ -20,7 +20,7 @@ class BudgetCategorySelector extends ConsumerStatefulWidget {
     required this.budget,
     required this.initSelectedCategory,
     required this.onBudgetChanged,
-    required this.categoriesAlreadyUsed,
+    required this.usedCategoryIds,
   });
 
   @override
@@ -80,25 +80,31 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
                   value: selectedCategory,
                   underline: const SizedBox(),
                   isExpanded: true,
-                  items: widget.categories
-                      .where((e) =>
-                          e.name == selectedCategory.name ||
-                          !widget.categoriesAlreadyUsed.contains(e.name))
-                      .map((CategoryTransaction category) {
+                  items: widget.categories.map((CategoryTransaction category) {
+                    final bool isUsed = widget.usedCategoryIds.contains(category.id);
+                    final bool isCurrent = category.id == selectedCategory.id;
                     IconData? icon = iconList[category.symbol];
                     return DropdownMenuItem<CategoryTransaction>(
-                        value: category,
-                        child: Row(
-                          children: [
-                            Icon(icon),
-                            const SizedBox(width: Sizes.lg),
-                            Text(category.name)
-                          ],
-                        ));
+                      value: category,
+                      enabled: isCurrent || !isUsed,
+                      child: Row(
+                        children: [
+                          Icon(icon, color: isCurrent || !isUsed ? null : Colors.grey),
+                          const SizedBox(width: Sizes.lg),
+                          Text(
+                            category.name,
+                            style: TextStyle(
+                              color: isCurrent || !isUsed ? null : Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
                   }).toList(),
                   onChanged: (CategoryTransaction? newValue) {
+                    if (newValue == null) return;
                     setState(() {
-                      selectedCategory = newValue!;
+                      selectedCategory = newValue;
                       _modifyBudget();
                     });
                   },
