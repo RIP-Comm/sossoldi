@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
 import '../../../model/budget.dart';
 import '../../../model/category_transaction.dart';
+import '../../../providers/currency_provider.dart';
 import '../../../ui/formatters/decimal_text_input_formatter.dart';
 import '../../../ui/device.dart';
 
@@ -57,6 +58,7 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
 
   @override
   Widget build(BuildContext context) {
+    final currencyState = ref.watch(currencyStateNotifier);
     return Container(
       padding: const EdgeInsets.all(Sizes.lg),
       color: Theme.of(context).colorScheme.surface,
@@ -81,7 +83,8 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
                   underline: const SizedBox(),
                   isExpanded: true,
                   items: widget.categories.map((CategoryTransaction category) {
-                    final bool isUsed = widget.usedCategoryIds.contains(category.id);
+                    final bool isUsed =
+                        widget.usedCategoryIds.contains(category.id);
                     final bool isCurrent = category.id == selectedCategory.id;
                     IconData? icon = iconList[category.symbol];
                     return DropdownMenuItem<CategoryTransaction>(
@@ -89,7 +92,8 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
                       enabled: isCurrent || !isUsed,
                       child: Row(
                         children: [
-                          Icon(icon, color: isCurrent || !isUsed ? null : Colors.grey),
+                          Icon(icon,
+                              color: isCurrent || !isUsed ? null : Colors.grey),
                           const SizedBox(width: Sizes.lg),
                           Text(
                             category.name,
@@ -122,28 +126,44 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
               border: Border.all(width: 1, color: Colors.grey),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(Sizes.sm),
-              child: TextField(
-                controller: _controller,
-                inputFormatters: [
-                  DecimalTextInputFormatter(decimalDigits: 2),
+              padding: const EdgeInsets.symmetric(horizontal: Sizes.sm),
+              child: Row(
+                mainAxisAlignment:
+                    MainAxisAlignment.center,
+                crossAxisAlignment:
+                    CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _controller,
+                      textAlign:
+                          TextAlign.center,
+                      inputFormatters: [
+                        DecimalTextInputFormatter(decimalDigits: 2),
+                      ],
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true),
+                      onChanged: (_) {
+                        setState(() {
+                          _modifyBudget();
+                        });
+                      },
+                      decoration: const InputDecoration(
+                        hintText: "-",
+                        border: InputBorder.none,
+                        isDense: true,
+                        contentPadding:
+                            EdgeInsets.zero,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    currencyState.selectedCurrency.symbol
+                  ),
                 ],
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
-                onChanged: (_) {
-                  setState(() {
-                    _modifyBudget();
-                  });
-                },
-                decoration: const InputDecoration(
-                  hintText: "-",
-                  border: InputBorder.none,
-                  prefixText: ' ', // set to center the amount
-                  suffixText: '€',
-                ),
               ),
             ),
-          ),
+          )
         ],
       ),
     );
