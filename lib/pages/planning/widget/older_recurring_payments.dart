@@ -1,22 +1,19 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
 import '../../../constants/style.dart';
 import '../../../model/category_transaction.dart';
 import '../../../model/transaction.dart';
-import 'package:intl/intl.dart';
 
 import '../../../model/recurring_transaction.dart';
 import '../../../providers/categories_provider.dart';
 import '../../../providers/currency_provider.dart';
+import '../../../services/transactions/recurring_transaction_calculator.dart';
 import '../../../ui/device.dart';
 import '../../../ui/extensions.dart';
 import '../../../ui/widgets/default_container.dart';
 import '../../../ui/widgets/rounded_icon.dart';
-import '../../../ui/widgets/transactions_list.dart';
-import '../../transactions/widgets/list_tab.dart';
 
 class OlderRecurringPayments extends ConsumerStatefulWidget {
   final RecurringTransaction transaction;
@@ -50,81 +47,6 @@ class _OlderRecurringPaymentsState
     _generateDataBasedOnRecurrentType();
   }
 
-  void _generateDataBasedOnRecurrentType() {
-    var startDate = widget.transaction.fromDate;
-    var endDate = widget.transaction.toDate ?? DateTime.now();
-    var recurrency = widget.transaction.recurrency;
-    switch (recurrency) {
-      case "MONTHLY":
-        generateRecurringTransactionMonthly(
-          startDate: startDate,
-          endDate: endDate,
-          amount: widget.transaction.amount,
-        );
-        break;
-      case "BIMONTHLY":
-        generateRecurringTransactionBiMonthly(
-            startDate: startDate,
-            endDate: endDate,
-            amount: widget.transaction.amount);
-        break;
-      case "QUARTERLY":
-        generateRecurringTransactionQuarterly(
-            startDate: startDate,
-            endDate: endDate,
-            amount: widget.transaction.amount);
-        break;
-      case "SEMESTER":
-        generateRecurringTransactionSemester(
-            startDate: startDate,
-            endDate: endDate,
-            amount: widget.transaction.amount);
-        break;
-
-      case "ANNUAL":
-        generateRecurringTransactionAnnually(
-            startDate: startDate,
-            endDate: endDate,
-            amount: widget.transaction.amount);
-        break;
-      case "DAILY":
-        generateRecurringTransactionDaily(
-            startDate: startDate,
-            endDate: endDate,
-            amount: widget.transaction.amount);
-        break;
-      case "WEEKLY":
-    }
-  }
-
-  String getNextDueDay() {
-    final now = DateTime.now();
-    final daysPassed = now
-        .difference(
-            widget.transaction.lastInsertion ?? widget.transaction.fromDate)
-        .inDays;
-    final daysInterval =
-        recurrenceMap[parseRecurrence(widget.transaction.recurrency)]!.days;
-    final daysUntilNextTransaction = daysInterval - (daysPassed % daysInterval);
-    return daysUntilNextTransaction.toString();
-  }
-
-  String ordinal(int number) {
-    if (number >= 11 && number <= 13) {
-      return '${number}th';
-    }
-    switch (number % 10) {
-      case 1:
-        return '${number}st';
-      case 2:
-        return '${number}nd';
-      case 3:
-        return '${number}rd';
-      default:
-        return '${number}th';
-    }
-  }
-
   var months = [
     "January",
     "February",
@@ -139,241 +61,6 @@ class _OlderRecurringPaymentsState
     "November",
     "December",
   ];
-
-  void generateRecurringTransactionMonthly({
-    required DateTime startDate, // dec 31st 2022
-    required DateTime endDate, //dec 24 2023
-    required num amount,
-  }) {
-    //clear first
-    groupedMonthlyTransaction.clear();
-    yearlyTotal.clear();
-
-    DateTime current = startDate; //
-
-    while (current.isBefore(endDate) || current.isAtSameMomentAs(endDate)) {
-      DateTime monthKey = DateTime(current.year, current.month, current.day);
-
-      // Store monthly recurring amount
-      groupedMonthlyTransaction[monthKey] =
-          (groupedMonthlyTransaction[monthKey] ?? 0) + amount;
-
-      // Handle month overflow properly
-      if (current.month == 12) {
-        current = DateTime(current.year + 1, 1, current.day); // jan 31
-      } else {
-        // Check if the day exists in the next month
-        int nextMonth = current.month + 1; //feb
-        int year = current.year; //2023
-        int day = current.day; //31
-
-        // Handle cases where day doesn't exist in next month (e.g., Jan 31 -> Feb 31)
-        int daysInNextMonth = DateTime(year, nextMonth + 1, 0).day; //28
-        if (day > daysInNextMonth) {
-          day = daysInNextMonth;
-        } else if (day != startDate.day) {
-          day = startDate.day;
-        }
-
-        current = DateTime(year, nextMonth, day);
-      }
-    }
-    for (var entry in groupedMonthlyTransaction.entries) {
-      int year = entry.key.year;
-      yearlyTotal[year] = (yearlyTotal[year] ?? 0) + entry.value;
-    }
-  }
-
-  void generateRecurringTransactionBiMonthly({
-    required DateTime startDate,
-    required DateTime endDate,
-    required num amount,
-  }) {
-    groupedMonthlyTransaction.clear();
-    yearlyTotal.clear();
-
-    DateTime current = startDate;
-
-    while (current.isBefore(endDate) || current.isAtSameMomentAs(endDate)) {
-      DateTime monthKey = DateTime(current.year, current.month, current.day);
-
-      // store transaction
-      groupedMonthlyTransaction[monthKey] =
-          (groupedMonthlyTransaction[monthKey] ?? 0) + amount;
-
-      // calculate next bi-monthly date
-      int nextMonth = current.month + 2;
-      int year = current.year;
-
-      // adjust year/month if overflow
-      if (nextMonth > 12) {
-        year += (nextMonth - 1) ~/ 12;
-        nextMonth = ((nextMonth - 1) % 12) + 1;
-      }
-
-      // pick correct day
-      int daysInTargetMonth = DateTime(year, nextMonth + 1, 0).day;
-      int desiredDay =
-          startDate.day; // always try to use the original start day
-
-      int day = desiredDay <= daysInTargetMonth
-          ? desiredDay
-          : daysInTargetMonth; // clamp only if necessary
-
-      current = DateTime(year, nextMonth, day);
-    }
-
-    // build yearly totals
-    for (var entry in groupedMonthlyTransaction.entries) {
-      var year = entry.key.year;
-      yearlyTotal[year] = (yearlyTotal[year] ?? 0) + entry.value;
-    }
-  }
-
-  void generateRecurringTransactionQuarterly({
-    required DateTime startDate,
-    required DateTime endDate,
-    required num amount,
-  }) {
-    groupedMonthlyTransaction.clear();
-    yearlyTotal.clear();
-
-    DateTime current = startDate;
-
-    while (current.isBefore(endDate) || current.isAtSameMomentAs(endDate)) {
-      // Insert or accumulate safely
-      groupedMonthlyTransaction[current] =
-          (groupedMonthlyTransaction[current] ?? 0) + amount;
-
-      // Calculate next quarterly date (+3 months, clamped)
-      int nextMonth = current.month + 3;
-      int year = current.year;
-
-      if (nextMonth > 12) {
-        year += (nextMonth - 1) ~/ 12;
-        nextMonth = ((nextMonth - 1) % 12) + 1;
-      }
-
-      int daysInTargetMonth = DateTime(year, nextMonth + 1, 0).day;
-      int desiredDay = startDate.day;
-
-      int day =
-          desiredDay <= daysInTargetMonth ? desiredDay : daysInTargetMonth;
-
-      current = DateTime(year, nextMonth, day);
-    }
-
-    // Build yearly totals
-    for (var entry in groupedMonthlyTransaction.entries) {
-      var year = entry.key.year;
-      yearlyTotal[year] = (yearlyTotal[year] ?? 0) + entry.value;
-    }
-  }
-
-  void generateRecurringTransactionSemester({
-    required DateTime startDate,
-    required DateTime endDate,
-    required num amount,
-  }) {
-    groupedMonthlyTransaction.clear();
-    yearlyTotal.clear();
-
-    DateTime current = startDate;
-
-    while (current.isBefore(endDate) || current.isAtSameMomentAs(endDate)) {
-      // Insert or accumulate safely
-      groupedMonthlyTransaction[current] =
-          (groupedMonthlyTransaction[current] ?? 0) + amount;
-
-      // Calculate next semester date (+6 months, clamped)
-      int nextMonth = current.month + 6;
-      int year = current.year;
-
-      if (nextMonth > 12) {
-        year += (nextMonth - 1) ~/ 12;
-        nextMonth = ((nextMonth - 1) % 12) + 1;
-      }
-
-      int daysInTargetMonth = DateTime(year, nextMonth + 1, 0).day;
-      int desiredDay = startDate.day;
-
-      int day =
-          desiredDay <= daysInTargetMonth ? desiredDay : daysInTargetMonth;
-
-      current = DateTime(year, nextMonth, day);
-    }
-
-    // Build yearly totals
-    for (var entry in groupedMonthlyTransaction.entries) {
-      var year = entry.key.year;
-      yearlyTotal[year] = (yearlyTotal[year] ?? 0) + entry.value;
-    }
-  }
-
-  void generateRecurringTransactionAnnually(
-      {required DateTime startDate,
-      required DateTime endDate,
-      required num amount}) {
-    groupedMonthlyTransaction.clear();
-    yearlyTotal.clear();
-    DateTime current = startDate;
-
-    while (current.isBefore(endDate) || current.isAtSameMomentAs(endDate)) {
-      DateTime dateKey = DateTime(current.year, current.month, current.day);
-      yearlyTotal[current.year] = (yearlyTotal[current.year] ?? 0) + amount;
-      current = DateTime(current.year + 1, current.month, current.day);
-    }
-  }
-
-  void generateRecurringTransactionDaily(
-      {required DateTime startDate,
-      required DateTime endDate,
-      required num amount}) {
-    //clear first
-    groupedMonthlyTransaction.clear();
-    yearlyTotal.clear();
-
-    DateTime current = startDate;
-
-    while (current.isBefore(endDate) || current.isAtSameMomentAs(endDate)) {
-      DateTime monthKey = DateTime(current.year, current.month, current.day);
-
-      var days = daysInMonth(current.year, current.month);
-      num monthlyTotal = days * amount;
-      // Store monthly recurring amount
-      groupedMonthlyTransaction[monthKey] = monthlyTotal;
-
-      // Handle month overflow properly
-      if (current.month == 12) {
-        current = DateTime(current.year + 1, 1, current.day); // jan 31
-      } else {
-        // Check if the day exists in the next month
-        int nextMonth = current.month + 1; //feb
-        int year = current.year; //2023
-        int day = current.day; //31
-
-        // Handle cases where day doesn't exist in next month (e.g., Jan 31 -> Feb 31)
-        int daysInNextMonth = DateTime(year, nextMonth + 1, 0).day; //28
-        if (day > daysInNextMonth) {
-          day = daysInNextMonth;
-        } else if (day != startDate.day) {
-          day = startDate.day;
-        }
-
-        current = DateTime(year, nextMonth, day);
-      }
-    }
-    for (var entry in groupedMonthlyTransaction.entries) {
-      int year = entry.key.year;
-      yearlyTotal[year] = (yearlyTotal[year] ?? 0) + entry.value;
-    }
-  }
-
-  int daysInMonth(int year, int month) {
-    // Go to the next month, then subtract 1 day
-    var lastDay = DateTime(year, month + 1, 0);
-    return lastDay.day;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -438,7 +125,7 @@ class _OlderRecurringPaymentsState
               final label = recurrenceMap[recurrence]!.label;
               return Text(
                 "$label"
-                " on the ${ordinal(int.parse(getNextDueDay()))}",
+                " on the ${ordinal(int.parse(getNextDueDay()))} day",
                 style: Theme.of(context).textTheme.bodyLarge,
               );
             }),
@@ -575,6 +262,99 @@ class _OlderRecurringPaymentsState
         ),
       ),
     );
+  }
+
+  void _generateDataBasedOnRecurrentType() {
+    var startDate = widget.transaction.fromDate;
+    var endDate = widget.transaction.toDate ?? DateTime.now();
+    var recurrency = widget.transaction.recurrency;
+    switch (recurrency) {
+      case "MONTHLY":
+        RecurringTransactionCalculator.generateRecurringTransactionMonthly(
+            startDate: startDate,
+            endDate: endDate,
+            amount: widget.transaction.amount,
+            groupedMonthlyTransaction: groupedMonthlyTransaction,
+            yearlyTotal: yearlyTotal);
+        break;
+      case "BIMONTHLY":
+        RecurringTransactionCalculator.generateRecurringTransactionBiMonthly(
+            startDate: startDate,
+            endDate: endDate,
+            amount: widget.transaction.amount,
+            groupedMonthlyTransaction: groupedMonthlyTransaction,
+            yearlyTotal: yearlyTotal);
+        break;
+      case "QUARTERLY":
+        RecurringTransactionCalculator.generateRecurringTransactionQuarterly(
+            startDate: startDate,
+            endDate: endDate,
+            amount: widget.transaction.amount,
+            groupedMonthlyTransaction: groupedMonthlyTransaction,
+            yearlyTotal: yearlyTotal);
+        break;
+      case "SEMESTER":
+        RecurringTransactionCalculator.generateRecurringTransactionSemester(
+            startDate: startDate,
+            endDate: endDate,
+            amount: widget.transaction.amount,
+            groupedMonthlyTransaction: groupedMonthlyTransaction,
+            yearlyTotal: yearlyTotal);
+        break;
+
+      case "ANNUAL":
+        RecurringTransactionCalculator.generateRecurringTransactionAnnually(
+            startDate: startDate,
+            endDate: endDate,
+            amount: widget.transaction.amount,
+            groupedMonthlyTransaction: groupedMonthlyTransaction,
+            yearlyTotal: yearlyTotal);
+        break;
+      case "DAILY":
+        RecurringTransactionCalculator.generateRecurringTransactionDaily(
+            startDate: startDate,
+            endDate: endDate,
+            amount: widget.transaction.amount,
+            groupedMonthlyTransaction: groupedMonthlyTransaction,
+            yearlyTotal: yearlyTotal);
+        break;
+      case "WEEKLY":
+        RecurringTransactionCalculator.generateRecurringTransactionWeekly(
+            startDate: startDate,
+            endDate: endDate,
+            amount: widget.transaction.amount,
+            groupedMonthlyTransaction: groupedMonthlyTransaction,
+            yearlyTotal: yearlyTotal);
+        break;
+    }
+  }
+
+  String getNextDueDay() {
+    final now = DateTime.now();
+    final daysPassed = now
+        .difference(
+            widget.transaction.lastInsertion ?? widget.transaction.fromDate)
+        .inDays;
+    final daysInterval =
+        recurrenceMap[parseRecurrence(widget.transaction.recurrency)]!.days;
+    final daysUntilNextTransaction = daysInterval - (daysPassed % daysInterval);
+    return daysUntilNextTransaction.toString();
+  }
+
+  String ordinal(int number) {
+    if (number >= 11 && number <= 13) {
+      return '${number}th';
+    }
+    switch (number % 10) {
+      case 1:
+        return '${number}st';
+      case 2:
+        return '${number}nd';
+      case 3:
+        return '${number}rd';
+      default:
+        return '${number}th';
+    }
   }
 
   // Reusable amount display
