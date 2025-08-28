@@ -7,6 +7,7 @@ import '../../../providers/transactions_provider.dart';
 import '../../../model/recurring_transaction.dart';
 import '../../../model/transaction.dart';
 
+
 class RecurringPaymentSection extends ConsumerStatefulWidget {
   const RecurringPaymentSection({super.key});
 
@@ -17,56 +18,49 @@ class RecurringPaymentSection extends ConsumerStatefulWidget {
 
 class _RecurringPaymentSectionState
     extends ConsumerState<RecurringPaymentSection> {
-  Future<List<RecurringTransaction>> recurringTransactions =
-      RecurringTransactionMethods().selectAllActive();
-
-  _refreshData() {
-    setState(() {
-      recurringTransactions = RecurringTransactionMethods().selectAllActive();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    var recurringTransactionsAsync = ref.watch(recurringTransactionProvider);
+
     return Column(
       children: [
-        FutureBuilder<List<RecurringTransaction>>(
-          future: recurringTransactions,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else if (!snapshot.hasData) {
+        recurringTransactionsAsync.when(
+          data: (transactions) {
+            if (transactions.isEmpty) {
               return const Text(
                 "All recurring payments will be displayed here",
                 style: TextStyle(fontWeight: FontWeight.normal, fontSize: 13),
               );
-            } else {
-              final transactions = snapshot.data;
-              return ListView.separated(
-                itemCount: transactions!.length,
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (context, index) => InkWell(
-                  onTap: () {
-                    ref
-                        .read(transactionsProvider.notifier)
-                        .transactionUpdateState(transactions[index])
-                        .whenComplete(() {
-                      if (context.mounted) {
-                        Navigator.of(context)
-                            .pushNamed("/edit-recurring-transaction")
-                            .then((value) => _refreshData());
-                      }
-                    });
-                  },
-                  child: RecurringPaymentCard(transaction: transactions[index]),
-                ),
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: Sizes.lg),
-              );
             }
+            return ListView.separated(
+              itemCount: transactions!.length,
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (context, index) => InkWell(
+                onTap: () {
+                  ref
+                      .read(transactionsProvider.notifier)
+                      .transactionUpdateState(transactions[index])
+                      .whenComplete(() {
+                    if (context.mounted) {
+                      Navigator.of(context)
+                          .pushNamed("/edit-recurring-transaction")
+                          .then((value) =>
+                              ref.refresh(recurringTransactionProvider));
+                    }
+                  });
+                },
+                child: RecurringPaymentCard(transaction: transactions[index]),
+              ),
+              separatorBuilder: (context, index) =>
+                  const SizedBox(height: Sizes.lg),
+            );
+          },
+          loading: () {
+            return const CircularProgressIndicator();
+          },
+          error: (error, _) {
+            return Text('Error: $error');
           },
         ),
         const SizedBox(height: Sizes.xxl),
@@ -82,7 +76,7 @@ class _RecurringPaymentSectionState
             Navigator.of(context).pushNamed(
               "/add-page",
               arguments: {'recurrencyEditingPermitted': false},
-            ).then((value) => _refreshData())
+            ).then((value) => ref.refresh(recurringTransactionProvider))
           },
           label: Text("Add recurring payment"),
         ),

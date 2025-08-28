@@ -14,6 +14,11 @@ final lastTransactionsProvider = FutureProvider<List<Transaction>>((ref) async {
   return transactions;
 });
 
+var recurringTransactionProvider =
+    FutureProvider<List<RecurringTransaction>>((ref) {
+  return RecurringTransactionMethods().selectAllActive();
+});
+
 final transactionTypeList = Provider<List<TransactionType>>((ref) => [
       TransactionType.income,
       TransactionType.expense,
