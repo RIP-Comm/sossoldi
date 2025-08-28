@@ -7,7 +7,6 @@ import '../../../providers/transactions_provider.dart';
 import '../../../model/recurring_transaction.dart';
 import '../../../model/transaction.dart';
 
-
 class RecurringPaymentSection extends ConsumerStatefulWidget {
   const RecurringPaymentSection({super.key});
 
