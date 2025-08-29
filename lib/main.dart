@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,6 +16,8 @@ import 'services/notifications/notifications_service.dart';
 late SharedPreferences _sharedPreferences;
 
 void main() async {
+  await dotenv.load(fileName: ".env");
+
   WidgetsFlutterBinding.ensureInitialized();
   NotificationService().requestNotificationPermissions();
   NotificationService().initializeNotifications();

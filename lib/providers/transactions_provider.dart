@@ -4,6 +4,7 @@ import '../model/bank_account.dart';
 import '../model/category_transaction.dart';
 import '../model/recurring_transaction.dart';
 import '../model/transaction.dart';
+import '../utils/location_bag.dart';
 import 'accounts_provider.dart';
 import 'budgets_provider.dart';
 import 'dashboard_provider.dart';
@@ -28,6 +29,7 @@ final bankAccountProvider =
     StateProvider<BankAccount?>((ref) => ref.read(mainAccountProvider));
 final dateProvider = StateProvider<DateTime>((ref) => DateTime.now());
 final categoryProvider = StateProvider<CategoryTransaction?>((ref) => null);
+final locationTransactionProvider = StateProvider<LocationBag?>((ref) => null);
 
 // Recurring Payment
 final selectedRecurringPayProvider = StateProvider<bool>((ref) => false);
@@ -129,8 +131,11 @@ class AsyncTransactionsNotifier
           : ref.read(categoryProvider)?.id,
       recurring:
           account != null ? false : ref.read(selectedRecurringPayProvider),
+      locationName: ref.read(locationTransactionProvider)?.searchText,
+      lat: ref.read(locationTransactionProvider)?.latitude,
+      lon: ref.read(locationTransactionProvider)?.longitude,
     );
-
+    final a = 1;
     state = await AsyncValue.guard(() async {
       await TransactionMethods().insert(transaction);
       return _getTransactions(update: true);
@@ -163,6 +168,7 @@ class AsyncTransactionsNotifier
     final bankAccount = ref.read(bankAccountProvider)!;
     final category = ref.read(categoryProvider);
     final recurrency = ref.read(intervalProvider.notifier).state;
+    final location = ref.read(locationTransactionProvider);
 
     RecurringTransaction transaction = RecurringTransaction(
         amount: amount,
@@ -175,6 +181,9 @@ class AsyncTransactionsNotifier
         recurrency: recurrency.name.toUpperCase(),
         createdAt: date,
         updatedAt: date,
+        locationName: location?.searchText,
+        lat: location?.latitude,
+        lon: location?.longitude,
         lastInsertion: date);
 
     // Here we need the recurringTransaction just inserted, to get and return a model with also his ID
@@ -200,6 +209,9 @@ class AsyncTransactionsNotifier
         idCategory: category.id!,
         idRecurringTransaction: insertedTransaction!.id,
         recurring: true,
+        locationName: location?.searchText,
+        lat: location?.latitude,
+        lon: location?.longitude,
       );
       await TransactionMethods().insert(transaction);
     }
@@ -214,6 +226,7 @@ class AsyncTransactionsNotifier
     final bankAccount = ref.read(bankAccountProvider)!;
     final bankAccountTransfer = ref.read(bankAccountTransferProvider);
     final category = ref.read(categoryProvider);
+    final location = ref.read(locationTransactionProvider);
 
     Transaction transaction = ref.read(selectedTransactionUpdateProvider)!.copy(
         date: date,
@@ -224,6 +237,9 @@ class AsyncTransactionsNotifier
         idBankAccountTransfer: bankAccountTransfer?.id,
         idCategory: category?.id,
         idRecurringTransaction: recurringTransactionId,
+        locationName: location?.searchText,
+        lat: location?.latitude,
+        lon: location?.longitude,
         recurring: recurringTransactionId != null ? true : false);
 
     state = const AsyncValue.loading();
@@ -237,6 +253,7 @@ class AsyncTransactionsNotifier
     final bankAccount = ref.read(bankAccountProvider)!;
     final recurrency = ref.read(intervalProvider.notifier).state;
     final category = ref.read(categoryProvider);
+    final location = ref.read(locationTransactionProvider);
 
     final RecurringTransaction transaction = ref
         .read(selectedRecurringTransactionUpdateProvider)!
@@ -248,6 +265,9 @@ class AsyncTransactionsNotifier
             note: label,
             idBankAccount: bankAccount.id!,
             idCategory: category?.id,
+            locationName: location?.searchText,
+            lat: location?.latitude,
+            lon: location?.longitude,
             updatedAt: DateTime.now());
 
     state = const AsyncValue.loading();
@@ -261,6 +281,13 @@ class AsyncTransactionsNotifier
       num idTransaction, num idRecurringTransaction) async {}
 
   Future<void> transactionUpdateState(dynamic transaction) async {
+    ref.read(locationTransactionProvider.notifier).state =
+          transaction.locationName != null
+              ? LocationBag(
+                  searchText: transaction.locationName ?? '',
+                  latitude: transaction.lat?.toDouble() ?? 0.0,
+                  longitude: transaction.lon?.toDouble() ?? 0.0)
+              : null;
     if (transaction is Transaction) {
       ref.read(selectedTransactionUpdateProvider.notifier).state = transaction;
       ref.read(selectedRecurringPayProvider.notifier).state =
@@ -331,6 +358,7 @@ class AsyncTransactionsNotifier
     ref.invalidate(bankAccountTransferProvider);
     ref.invalidate(dateProvider);
     ref.invalidate(categoryProvider);
+    ref.invalidate(locationTransactionProvider);
     ref.invalidate(selectedRecurringPayProvider);
     ref.invalidate(intervalProvider);
     ref.invalidate(transactionTypeProvider);
