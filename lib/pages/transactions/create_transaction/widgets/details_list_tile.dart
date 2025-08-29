@@ -41,20 +41,33 @@ class DetailsListTile extends ConsumerWidget {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            value ?? '',
-            style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                color: isDarkMode
-                    ? grey3
-                    : Theme.of(context).colorScheme.secondary),
+          SizedBox(
+            width: 130,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              reverse: true,
+              child: Text(
+                value ?? '',
+                overflow: TextOverflow.visible,
+                softWrap: false,
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      color: isDarkMode
+                          ? grey3
+                          : Theme.of(context).colorScheme.secondary,
+                    ),
+              ),
+            ),
           ),
           const SizedBox(width: Sizes.sm),
           Icon(
             Icons.chevron_right,
-            color: isDarkMode ? grey3 : Theme.of(context).colorScheme.secondary,
+            color: isDarkMode
+                ? grey3
+                : Theme.of(context).colorScheme.secondary,
           ),
         ],
       ),
+
     );
   }
 }

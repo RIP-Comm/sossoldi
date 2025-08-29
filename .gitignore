@@ -52,3 +52,6 @@ __pycache__
 pyenv
 platform_config.yaml
 videos
+
+# Env files
+.env

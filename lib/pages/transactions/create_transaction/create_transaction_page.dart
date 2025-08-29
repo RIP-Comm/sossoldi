@@ -3,6 +3,7 @@ import 'dart:io' show Platform;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../constants/style.dart';
 import '../../../model/transaction.dart';
@@ -16,6 +17,7 @@ import "widgets/category_selector.dart";
 import 'widgets/details_list_tile.dart';
 import 'widgets/duplicate_transaction_dialog.dart';
 import 'widgets/label_list_tile.dart';
+import 'widgets/location_selector.dart';
 import 'widgets/recurrence_list_tile.dart';
 
 class CreateTransactionPage extends ConsumerStatefulWidget {
@@ -379,7 +381,42 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
                               widget.recurrencyEditingPermitted,
                           selectedTransaction:
                               ref.read(selectedTransactionUpdateProvider),
-                        )
+                        ),
+                        if (selectedType != TransactionType.transfer) ...[
+                        const Divider(),
+                        DetailsListTile(
+                            title: "Location",
+                            icon: Icons.location_pin,
+                            value: ref.watch(locationTransactionProvider)?.searchText,
+                            callback: () {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                                ),
+                                builder: (_) => DraggableScrollableSheet(
+                                      expand: false,
+                                      minChildSize: 0.5,
+                                      initialChildSize: 0.8,
+                                      maxChildSize: 0.95,
+                                      builder: (_, scrollController) {
+                                        return LocationSelector(scrollController: scrollController);
+                                      },
+                                ),  
+                              );
+                            },
+                          ),
+                        ],
+                        if (selectedType == TransactionType.expense) ...[
+                          RecurrenceListTile(
+                            recurrencyEditingPermitted:
+                                widget.recurrencyEditingPermitted,
+                            selectedTransaction:
+                                ref.read(selectedTransactionUpdateProvider),
+                          )
+                        ],
                       ],
                     ),
                   ),

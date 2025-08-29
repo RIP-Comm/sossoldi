@@ -20,6 +20,9 @@ class TransactionFields extends BaseEntityFields {
   static String idBankAccountTransfer = 'idBankAccountTransfer';
   static String bankAccountTransferName = 'bankAccountTransferName';
   static String recurring = 'recurring';
+  static String lat = 'lat';
+  static String lon = 'lon';
+  static String locationName = 'locationName';
   static String idRecurringTransaction = 'idRecurringTransaction';
   static String createdAt = BaseEntityFields.getCreatedAt;
   static String updatedAt = BaseEntityFields.getUpdatedAt;
@@ -34,6 +37,9 @@ class TransactionFields extends BaseEntityFields {
     idBankAccount,
     idBankAccountTransfer,
     recurring,
+    lat,
+    lon,
+    locationName,
     idRecurringTransaction,
     BaseEntityFields.createdAt,
     BaseEntityFields.updatedAt
@@ -128,6 +134,9 @@ class Transaction extends BaseEntity {
   final int? idBankAccountTransfer;
   final String? bankAccountTransferName;
   final bool recurring;
+  final num? lat;
+  final num? lon;
+  final String? locationName;
   final int? idRecurringTransaction;
 
   const Transaction(
@@ -145,6 +154,9 @@ class Transaction extends BaseEntity {
       this.idBankAccountTransfer,
       this.bankAccountTransferName,
       required this.recurring,
+      this.lat,
+      this.lon,
+      this.locationName,
       this.idRecurringTransaction,
       super.createdAt,
       super.updatedAt});
@@ -159,6 +171,9 @@ class Transaction extends BaseEntity {
           int? idBankAccount,
           int? idBankAccountTransfer,
           bool? recurring,
+          num? lat,
+          num? lon,
+          String? locationName,
           int? idRecurringTransaction,
           DateTime? createdAt,
           DateTime? updatedAt}) =>
@@ -173,6 +188,9 @@ class Transaction extends BaseEntity {
           idBankAccountTransfer:
               idBankAccountTransfer ?? this.idBankAccountTransfer,
           recurring: recurring ?? this.recurring,
+          lat: lat ?? this.lat,
+          lon: lon ?? this.lon,
+          locationName: locationName ?? this.locationName,
           idRecurringTransaction:
               idRecurringTransaction ?? this.idRecurringTransaction,
           createdAt: createdAt ?? this.createdAt,
@@ -196,6 +214,9 @@ class Transaction extends BaseEntity {
       bankAccountTransferName:
           json[TransactionFields.bankAccountTransferName] as String?,
       recurring: json[TransactionFields.recurring] == 1,
+      lat: json[TransactionFields.lat] as num?,
+      lon: json[TransactionFields.lon] as num?,
+      locationName: json[TransactionFields.locationName] as String?,
       idRecurringTransaction:
           json[TransactionFields.idRecurringTransaction] as int?,
       createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
@@ -218,6 +239,9 @@ class Transaction extends BaseEntity {
       TransactionFields.idBankAccount: idBankAccount,
       TransactionFields.idBankAccountTransfer: idBankAccountTransfer,
       TransactionFields.recurring: recurring ? 1 : 0,
+      TransactionFields.lat: lat,
+      TransactionFields.lon: lon,
+      TransactionFields.locationName: locationName,
       TransactionFields.idRecurringTransaction: idRecurringTransaction,
       BaseEntityFields.createdAt: createdAtDate,
       BaseEntityFields.updatedAt: DateTime.now().toIso8601String(),

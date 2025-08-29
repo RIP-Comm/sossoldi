@@ -57,5 +57,7 @@
 		<string>Access to documents is needed to import and export CSV files</string>
 		<key>UISupportsDocumentBrowser</key>
 		<true/>
+		<key>GOOGLE_API_KEY</key>
+		<string>$(GOOGLE_API_KEY)</string>
 	</dict>
 </plist>
