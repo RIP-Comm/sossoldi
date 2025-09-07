@@ -136,6 +136,7 @@ class RecurringPaymentCard extends ConsumerWidget {
                             onPressed: () => {
                               showModalBottomSheet(
                                 context: context,
+                                isScrollControlled: true,
                                 shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(
@@ -146,17 +147,11 @@ class RecurringPaymentCard extends ConsumerWidget {
                                 ),
                                 elevation: Sizes.sm,
                                 builder: (BuildContext context) {
-                                  return ListView(
-                                    scrollDirection: Axis.vertical,
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: Sizes.xl,
-                                      horizontal: Sizes.sm,
+                                  return FractionallySizedBox(
+                                    heightFactor: 0.9,
+                                    child: OlderRecurringPayments(
+                                      transaction: transaction,
                                     ),
-                                    children: [
-                                      OlderRecurringPayments(
-                                        transaction: transaction,
-                                      ),
-                                    ],
                                   );
                                 },
                               )
