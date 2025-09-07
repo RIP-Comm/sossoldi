@@ -128,16 +128,13 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: Sizes.sm),
               child: Row(
-                mainAxisAlignment:
-                    MainAxisAlignment.center,
-                crossAxisAlignment:
-                    CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
                     child: TextField(
                       controller: _controller,
-                      textAlign:
-                          TextAlign.center,
+                      textAlign: TextAlign.center,
                       inputFormatters: [
                         DecimalTextInputFormatter(decimalDigits: 2),
                       ],
@@ -152,14 +149,11 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
                         hintText: "-",
                         border: InputBorder.none,
                         isDense: true,
-                        contentPadding:
-                            EdgeInsets.zero,
+                        contentPadding: EdgeInsets.zero,
                       ),
                     ),
                   ),
-                  Text(
-                    currencyState.selectedCurrency.symbol
-                  ),
+                  Text(currencyState.selectedCurrency.symbol),
                 ],
               ),
             ),
