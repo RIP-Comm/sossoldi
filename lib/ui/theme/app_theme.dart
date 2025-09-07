@@ -54,12 +54,23 @@ class AppTheme {
     ),
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
-        foregroundColor: const WidgetStatePropertyAll(blue5),
-        iconColor: const WidgetStatePropertyAll(blue5),
+        foregroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+          if (states.contains(WidgetState.disabled)) {
+            return grey2;
+          }
+          return blue5;
+        }),
+        iconColor: WidgetStateProperty.resolveWith<Color>((states) {
+          if (states.contains(WidgetState.disabled)) {
+            return grey2;
+          }
+          return blue5;
+        }),
         padding: const WidgetStatePropertyAll(EdgeInsets.all(Sizes.md)),
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(Sizes.borderRadius)),
+            borderRadius: BorderRadius.circular(Sizes.borderRadius),
+          ),
         ),
         textStyle: const WidgetStatePropertyAll(
           TextStyle(
@@ -270,8 +281,18 @@ class AppTheme {
     ),
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
-        foregroundColor: const WidgetStatePropertyAll(white),
-        iconColor: const WidgetStatePropertyAll(white),
+        foregroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+          if (states.contains(WidgetState.disabled)) {
+            return darkGrey2;
+          }
+          return white;
+        }),
+        iconColor: WidgetStateProperty.resolveWith<Color>((states) {
+          if (states.contains(WidgetState.disabled)) {
+            return darkGrey2;
+          }
+          return white;
+        }),
         padding: const WidgetStatePropertyAll(EdgeInsets.all(Sizes.md)),
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(

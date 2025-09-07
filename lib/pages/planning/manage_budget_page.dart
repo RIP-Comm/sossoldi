@@ -21,13 +21,38 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
   List<CategoryTransaction> categories = [];
   List<Budget> budgets = [];
   List<Budget> deletedBudgets = [];
+  Set<int> usedCategoryIds = {};
 
   void _loadCategories() async {
     categories = await ref.read(categoriesProvider.notifier).getCategories();
     categories.removeWhere(
         (element) => element.type == CategoryTransactionType.income);
     budgets = await ref.read(budgetsProvider.notifier).getBudgets();
+    usedCategoryIds = budgets.map((b) => b.idCategory).toSet();
     setState(() {});
+  }
+
+  void _addBudget(Budget budget) {
+    setState(() {
+      budgets.add(budget);
+      usedCategoryIds.add(budget.idCategory);
+    });
+  }
+
+  void _updateBudget(Budget updatedBudget, int index) {
+    setState(() {
+      deletedBudgets.add(budgets[index]);
+      budgets[index] = updatedBudget;
+      usedCategoryIds.add(updatedBudget.idCategory);
+    });
+  }
+
+  void _deleteBudget(int index) {
+    setState(() {
+      deletedBudgets.add(budgets[index]);
+      usedCategoryIds.remove(budgets[index].idCategory);
+      budgets.removeAt(index);
+    });
   }
 
   Future<void> updateBudget(Budget updatedBudget, int index) async {
@@ -71,6 +96,10 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
 
   @override
   Widget build(BuildContext context) {
+    final availableCategories =
+        categories.where((c) => !usedCategoryIds.contains(c.id)).toList();
+    final canAddCategory = availableCategories.isNotEmpty;
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -108,6 +137,14 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
                       shrinkWrap: true,
                       itemCount: budgets.length,
                       itemBuilder: (context, index) {
+                        final usedExcludingCurrent =
+                            Set<int>.from(usedCategoryIds)
+                              ..remove(budgets[index].idCategory);
+
+                        final initCategory = categories.firstWhere(
+                          (c) => c.id == budgets[index].idCategory,
+                          orElse: () => categories.first,
+                        );
                         return Dismissible(
                           key: Key(budgets[index].idCategory.toString()),
                           background: Container(
@@ -120,30 +157,14 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
-                          onDismissed: (direction) {
-                            deleteBudget(budgets[index], index);
-                          },
+                          onDismissed: (_) => _deleteBudget(index),
                           child: BudgetCategorySelector(
                             categories: categories,
-                            categoriesAlreadyUsed: categories
-                                .where((element) => budgets
-                                    .map((e) => e.name)
-                                    .contains(element.name))
-                                .map((e) => e.name)
-                                .toList(),
+                            usedCategoryIds: usedExcludingCurrent,
                             budget: budgets[index],
-                            initSelectedCategory: categories
-                                    .where((element) =>
-                                        element.id == budgets[index].idCategory)
-                                    .isEmpty
-                                ? categories[0]
-                                : categories
-                                    .where((element) =>
-                                        element.id == budgets[index].idCategory)
-                                    .first,
-                            onBudgetChanged: (updatedBudget) {
-                              updateBudget(updatedBudget, index);
-                            },
+                            initSelectedCategory: initCategory,
+                            onBudgetChanged: (updated) =>
+                                _updateBudget(updated, index),
                           ),
                         );
                       },
@@ -155,24 +176,24 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
                   const SizedBox(height: Sizes.md),
                   TextButton.icon(
                     icon: Icon(Icons.add_circle, size: 32),
-                    onPressed: () {
-                      if (categories.isEmpty) return handleEmptyCategories();
-
-                      setState(
-                        () {
-                          budgets.add(
-                            Budget(
+                    onPressed: canAddCategory
+                        ? () => _addBudget(Budget(
                               active: true,
                               amountLimit: 100,
-                              idCategory: categories[0].id!,
-                              name: categories[0].name,
-                            ),
-                          );
-                        },
-                      );
-                    },
+                              idCategory: availableCategories[0].id!,
+                              name: availableCategories[0].name,
+                            ))
+                        : null,
                     label: Text("Add category budget"),
                   ),
+                  if (!canAddCategory)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Text(
+                        "You have already added all available categories.",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ),
                 ],
               ),
             ),
