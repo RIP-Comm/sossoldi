@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/style.dart';
 import '../../../model/currency.dart';
 import '../../../providers/currency_provider.dart';
+import '../../../providers/required_authentication_provider.dart';
 import '../../../providers/theme_provider.dart';
 import '../../../ui/device.dart';
 import 'widgets/currency_selector_dialog.dart';
@@ -35,6 +36,8 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
   Widget build(BuildContext context) {
     final appThemeState = ref.watch(appThemeStateNotifier);
     final currencyState = ref.watch(currencyStateNotifier);
+    final requiresAuthenticationState =
+        ref.watch(requiredAuthenticationStateNotifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -121,6 +124,41 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
               ],
             ),
             const SizedBox(height: Sizes.lg),
+            Row(
+              children: [
+                Text("Require authentication",
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        color: Theme.of(context).colorScheme.primary)),
+                const Spacer(),
+                CircleAvatar(
+                    radius: 30.0,
+                    backgroundColor: blue5,
+                    child: IconButton(
+                      color: blue5,
+                      onPressed: () {
+                        if (requiresAuthenticationState
+                            .userRequiresAuthentication) {
+                          ref
+                              .read(
+                                  requiredAuthenticationStateNotifier.notifier)
+                              .setNoAuthentication();
+                        } else {
+                          ref
+                              .read(
+                                  requiredAuthenticationStateNotifier.notifier)
+                              .setAuthenticationRequired();
+                        }
+                      },
+                      icon: Icon(
+                        requiresAuthenticationState.userRequiresAuthentication
+                            ? Icons.lock
+                            : Icons.lock_open,
+                        size: 25.0,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
+                    )),
+              ],
+            ),
             /*
             Row(
               children: [

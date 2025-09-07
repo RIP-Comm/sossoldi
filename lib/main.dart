@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
@@ -50,6 +51,21 @@ void main() async {
     // update last recurring transactions runtime
     await _sharedPreferences.setString(
         'last_recurring_transactions_check', DateTime.now().toIso8601String());
+  }
+
+  final LocalAuthentication auth = LocalAuthentication();
+  if (await auth.isDeviceSupported()) {
+    // check for authentication if requested by user
+    bool? requiresAuthentication =
+        _sharedPreferences.getBool("user_requires_authentication");
+
+    if (requiresAuthentication != null && requiresAuthentication == true) {
+      // use use sticky auth to resume auth request when app is going background
+      bool didAuthenticate = await auth.authenticate(
+          localizedReason: 'Please authenticate to use Sossoldi',
+          options: AuthenticationOptions(stickyAuth: true));
+      if (!didAuthenticate) return; // stops app from loading
+    }
   }
 
   initializeDateFormatting('it_IT', null).then(
