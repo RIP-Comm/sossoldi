@@ -177,12 +177,13 @@ class SossoldiDatabase {
                   }
                 }
               }
-              
+
               // Default 'type' to 'OUT' for old recurringTransaction backups
-              if (tableName == 'recurringTransaction' && !row.containsKey('type')) {
+              if (tableName == 'recurringTransaction' &&
+                  !row.containsKey('type')) {
                 row['type'] = 'OUT';
               }
-              
+
               await txn.insert(tableName, row);
             }
             results[tableName] = true;
