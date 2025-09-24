@@ -110,7 +110,6 @@ class CategoryListTile extends ConsumerWidget {
           expand: selectedCategoryIndex == index,
           child: Container(
             color: Theme.of(context).colorScheme.primaryContainer,
-            height: 70.0 * nTransactions,
             child: ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
