@@ -26,6 +26,7 @@ class RecurringTransactionFields extends BaseEntityFields {
     toDate,
     amount,
     note,
+    type,
     recurrency,
     idCategory,
     idBankAccount,
