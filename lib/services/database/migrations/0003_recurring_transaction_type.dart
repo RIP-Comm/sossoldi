@@ -11,11 +11,11 @@ class RecurringTransactionType extends Migration {
 
   @override
   Future<void> up(Database db) async {
-    const realNotNull = 'REAL NOT NULL';
+    const textNotNull = 'TEXT NOT NULL';
 
     // Bank accounts Table
     await db.execute('''
-      ALTER TABLE `$recurringTransactionTable` ADD COLUMN `${RecurringTransactionFields.type}` $realNotNull;
+      ALTER TABLE `$recurringTransactionTable` ADD COLUMN `${RecurringTransactionFields.type}` $textNotNull DEFAULT 'OUT';
       ''');
   }
 }
