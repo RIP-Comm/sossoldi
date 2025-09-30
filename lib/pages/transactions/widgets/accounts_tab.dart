@@ -9,16 +9,11 @@ import '../../../model/transaction.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../ui/device.dart';
-import 'account_list_tile.dart';
 import 'accounts_pie_chart.dart';
-
-final selectedAccountIndexProvider =
-    StateProvider.autoDispose<int>((ref) => -1);
+import 'panel_list_tile.dart';
 
 class AccountsTab extends ConsumerStatefulWidget {
-  const AccountsTab({
-    super.key,
-  });
+  const AccountsTab({super.key});
 
   @override
   ConsumerState<AccountsTab> createState() => _AccountsTabState();
@@ -82,9 +77,9 @@ class _AccountsTabState extends ConsumerState<AccountsTab> {
       padding: const EdgeInsets.symmetric(vertical: Sizes.xl),
       child: DefaultContainer(
         child: Column(
+          spacing: Sizes.lg,
           children: [
             const TransactionTypeButton(),
-            const SizedBox(height: Sizes.lg),
             accounts.when(
               data: (data) {
                 List<BankAccount> accountIncomeList = data
@@ -103,43 +98,11 @@ class _AccountsTabState extends ConsumerState<AccountsTab> {
                               child: Text("No incomes for selected month"),
                             ),
                           )
-                        : Column(
-                            children: [
-                              AccountsPieChart(
-                                accounts: accountIncomeList,
-                                amounts: accountToAmountIncome,
-                                total: totalIncome,
-                              ),
-                              const SizedBox(height: Sizes.lg),
-                              ListView.separated(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: accountIncomeList.length,
-                                separatorBuilder: (context, index) =>
-                                    const SizedBox(height: 10),
-                                itemBuilder: (context, index) {
-                                  BankAccount b = accountIncomeList[index];
-                                  return AccountListTile(
-                                    title: b.name,
-                                    nTransactions:
-                                        accountToTransactionsIncome[b.id]
-                                                ?.length ??
-                                            0,
-                                    transactions:
-                                        accountToTransactionsIncome[b.id] ?? [],
-                                    amount: accountToAmountIncome[b.id] ?? 0,
-                                    percent:
-                                        (accountToAmountIncome[b.id] ?? 0) /
-                                            totalIncome *
-                                            100,
-                                    color: accountColorList[b.color],
-                                    icon: accountIconList[b.symbol] ??
-                                        Icons.swap_horiz_rounded,
-                                    index: index,
-                                  );
-                                },
-                              )
-                            ],
+                        : AccountSection(
+                            accountList: accountIncomeList,
+                            amounts: accountToAmountIncome,
+                            total: totalIncome,
+                            transactions: accountToTransactionsIncome,
                           )
                     : accountExpenseList.isEmpty
                         ? const SizedBox(
@@ -148,44 +111,11 @@ class _AccountsTabState extends ConsumerState<AccountsTab> {
                               child: Text("No expenses for selected month"),
                             ),
                           )
-                        : Column(
-                            children: [
-                              AccountsPieChart(
-                                accounts: accountExpenseList,
-                                amounts: accountToAmountExpense,
-                                total: totalExpense,
-                              ),
-                              const SizedBox(height: Sizes.lg),
-                              ListView.separated(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: accountExpenseList.length,
-                                separatorBuilder: (context, index) =>
-                                    const SizedBox(height: Sizes.sm),
-                                itemBuilder: (context, index) {
-                                  BankAccount b = accountExpenseList[index];
-                                  return AccountListTile(
-                                    title: b.name,
-                                    nTransactions:
-                                        accountToTransactionsExpense[b.id]
-                                                ?.length ??
-                                            0,
-                                    transactions:
-                                        accountToTransactionsExpense[b.id] ??
-                                            [],
-                                    amount: accountToAmountExpense[b.id] ?? 0,
-                                    percent:
-                                        (accountToAmountExpense[b.id] ?? 0) /
-                                            totalExpense *
-                                            100,
-                                    color: accountColorList[b.color],
-                                    icon: accountIconList[b.symbol] ??
-                                        Icons.swap_horiz_rounded,
-                                    index: index,
-                                  );
-                                },
-                              )
-                            ],
+                        : AccountSection(
+                            accountList: accountExpenseList,
+                            amounts: accountToAmountExpense,
+                            total: totalExpense,
+                            transactions: accountToTransactionsExpense,
                           );
               },
               error: (error, stackTrace) => Center(
@@ -198,6 +128,54 @@ class _AccountsTabState extends ConsumerState<AccountsTab> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class AccountSection extends StatelessWidget {
+  const AccountSection({
+    required this.accountList,
+    required this.amounts,
+    required this.total,
+    required this.transactions,
+    super.key,
+  });
+
+  final List<BankAccount> accountList;
+  final Map<int, double> amounts;
+  final double total;
+  final Map<int, List<Transaction>> transactions;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      spacing: Sizes.lg,
+      children: [
+        AccountsPieChart(
+          accounts: accountList,
+          amounts: amounts,
+          total: total,
+        ),
+        ListView.separated(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: accountList.length,
+          separatorBuilder: (context, index) =>
+              const SizedBox(height: Sizes.sm),
+          itemBuilder: (context, index) {
+            BankAccount account = accountList[index];
+            return PanelListTile(
+              name: account.name,
+              color: accountColorList[account.color],
+              icon: accountIconList[account.symbol],
+              transactions: transactions[account.id] ?? [],
+              amount: amounts[account.id] ?? 0,
+              percent: (amounts[account.id] ?? 0) / total * 100,
+              index: index,
+            );
+          },
+        ),
+      ],
     );
   }
 }

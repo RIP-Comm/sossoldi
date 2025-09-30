@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../constants/constants.dart';
 import '../../../ui/widgets/default_container.dart';
 import '../../../ui/widgets/transaction_type_button.dart';
 import '../../../model/category_transaction.dart';
@@ -9,12 +10,10 @@ import '../../../providers/categories_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../ui/device.dart';
 import 'categories_pie_chart.dart';
-import 'category_list_tile.dart';
+import 'panel_list_tile.dart';
 
 class CategoriesTab extends ConsumerStatefulWidget {
-  const CategoriesTab({
-    super.key,
-  });
+  const CategoriesTab({super.key});
 
   @override
   ConsumerState<CategoriesTab> createState() => _CategoriesTabState();
@@ -81,9 +80,9 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
       padding: const EdgeInsets.symmetric(vertical: Sizes.xl),
       child: DefaultContainer(
         child: Column(
+          spacing: Sizes.lg,
           children: [
             const TransactionTypeButton(),
-            const SizedBox(height: Sizes.lg),
             categories.when(
               data: (data) {
                 List<CategoryTransaction> categoryIncomeList = data
@@ -102,41 +101,11 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
                               child: Text("No incomes for selected month"),
                             ),
                           )
-                        : Column(
-                            children: [
-                              CategoriesPieChart(
-                                categories: categoryIncomeList,
-                                amounts: categoryToAmountIncome,
-                                total: totalIncome,
-                              ),
-                              const SizedBox(height: Sizes.lg),
-                              ListView.separated(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: categoryIncomeList.length,
-                                separatorBuilder: (context, index) =>
-                                    const SizedBox(height: 10),
-                                itemBuilder: (context, index) {
-                                  CategoryTransaction category =
-                                      categoryIncomeList[index];
-                                  return CategoryListTile(
-                                    category: category,
-                                    transactions: categoryToTransactionsIncome[
-                                            category.id] ??
-                                        [],
-                                    amount:
-                                        categoryToAmountIncome[category.id] ??
-                                            0,
-                                    percent:
-                                        (categoryToAmountIncome[category.id] ??
-                                                0) /
-                                            totalIncome *
-                                            100,
-                                    index: index,
-                                  );
-                                },
-                              ),
-                            ],
+                        : CategorySection(
+                            categoryList: categoryIncomeList,
+                            amounts: categoryToAmountIncome,
+                            total: totalIncome,
+                            transactions: categoryToTransactionsIncome,
                           )
                     : categoryExpenseList.isEmpty
                         ? const SizedBox(
@@ -145,41 +114,11 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
                               child: Text("No expenses for selected month"),
                             ),
                           )
-                        : Column(
-                            children: [
-                              CategoriesPieChart(
-                                categories: categoryExpenseList,
-                                amounts: categoryToAmountExpense,
-                                total: totalExpense,
-                              ),
-                              const SizedBox(height: Sizes.lg),
-                              ListView.separated(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: categoryExpenseList.length,
-                                separatorBuilder: (context, index) =>
-                                    const SizedBox(height: 10),
-                                itemBuilder: (context, index) {
-                                  CategoryTransaction category =
-                                      categoryExpenseList[index];
-                                  return CategoryListTile(
-                                    category: category,
-                                    transactions: categoryToTransactionsExpense[
-                                            category.id] ??
-                                        [],
-                                    amount:
-                                        categoryToAmountExpense[category.id] ??
-                                            0,
-                                    percent:
-                                        (categoryToAmountExpense[category.id] ??
-                                                0) /
-                                            totalExpense *
-                                            100,
-                                    index: index,
-                                  );
-                                },
-                              ),
-                            ],
+                        : CategorySection(
+                            categoryList: categoryExpenseList,
+                            amounts: categoryToAmountExpense,
+                            total: totalExpense,
+                            transactions: categoryToTransactionsExpense,
                           );
               },
               error: (error, stackTrace) => Center(
@@ -192,6 +131,54 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class CategorySection extends StatelessWidget {
+  const CategorySection({
+    required this.categoryList,
+    required this.amounts,
+    required this.total,
+    required this.transactions,
+    super.key,
+  });
+
+  final List<CategoryTransaction> categoryList;
+  final Map<int, double> amounts;
+  final double total;
+  final Map<int, List<Transaction>> transactions;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      spacing: Sizes.lg,
+      children: [
+        CategoriesPieChart(
+          categories: categoryList,
+          amounts: amounts,
+          total: total,
+        ),
+        ListView.separated(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: categoryList.length,
+          separatorBuilder: (context, index) =>
+              const SizedBox(height: Sizes.sm),
+          itemBuilder: (context, index) {
+            CategoryTransaction category = categoryList[index];
+            return PanelListTile(
+              name: category.name,
+              color: categoryColorList[category.color],
+              icon: iconList[category.symbol],
+              transactions: transactions[category.id] ?? [],
+              amount: amounts[category.id] ?? 0,
+              percent: (amounts[category.id] ?? 0) / total * 100,
+              index: index,
+            );
+          },
+        ),
+      ],
     );
   }
 }

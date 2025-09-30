@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../providers/transactions_provider.dart';
 import '../../ui/snack_bars/transactions_snack_bars.dart';
+import '../../ui/widgets/transaction_type_button.dart';
 import 'widgets/accounts_tab.dart';
 import 'widgets/categories_tab.dart';
 import 'widgets/custom_sliver_delegate.dart';
@@ -33,6 +34,8 @@ class _TransactionsPageState extends ConsumerState<TransactionsPage>
   void initState() {
     super.initState();
     _tabController = TabController(vsync: this, length: myTabs.length);
+    // Reset the selected index when switch tab
+    _tabController.addListener(() => ref.invalidate(selectedListIndexProvider));
     _scrollController = ScrollController();
   }
 
