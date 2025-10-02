@@ -1,0 +1,8 @@
+* Feat: blur balance
+* Fix overflow issue to create new budgets
+* feat: allow user to enable local device authentication
+* fix: state sync issue for transaction and recurring transaction page
+* fix: update budget management functionality by adding category usage tracking by
+* Fix: recurring older payment screen
+* Fix: list tile height & currency symbol in month selector
+* Fix: available liquidity calculation
