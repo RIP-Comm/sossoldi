@@ -3,7 +3,7 @@ description: A wealth management / personal finance / net worth tracking app.
 
 publish_to: "none"
 
-version: 0.1.6+7
+version: 0.2.0+8
 
 environment:
   sdk: ">=3.3.3 <4.0.0"

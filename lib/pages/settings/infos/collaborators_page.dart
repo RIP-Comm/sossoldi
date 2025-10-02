@@ -26,11 +26,6 @@ var collaborators = const [
     "github.com/mikev-cw",
   ],
   [
-    "Federico Bruzzone",
-    "Maintainer",
-    "github.com/FedericoBruzzone",
-  ],
-  [
     "Luca Antonelli",
     "Maintainer",
     "github.com/lucaantonelli",
@@ -79,6 +74,26 @@ var collaborators = const [
     "Alessandro Bongiovanni",
     "Flutter Dev",
     "github.com/bongio94",
+  ],
+  [
+    "Emanuel Passaro",
+    "Social Media Manager e Strategist",
+    "linkedin.com/in/emanuelpassaro/",
+  ],
+  [
+    "Carolina Verdiani",
+    "Social Media Manager e Strategist",
+    "linkedin.com/in/carolina-verdiani/",
+  ],
+  [
+    "Alessia Schina",
+    "UX/UI Designer",
+    "linkedin.com/in/alessiaschina",
+  ],
+  [
+    "Federico Bruzzone",
+    "Former Maintainer",
+    "github.com/FedericoBruzzone",
   ],
 ];
 
