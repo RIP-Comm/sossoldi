@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,6 +9,7 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 import 'model/recurring_transaction.dart';
+import 'providers/settings_provider.dart';
 import 'providers/theme_provider.dart';
 import 'routes/routes.dart';
 import 'ui/theme/app_theme.dart';
@@ -21,6 +23,8 @@ void main() async {
   NotificationService().initializeNotifications();
   tz.initializeTimeZones();
   tz.setLocalLocation(tz.local);
+
+  PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
   _sharedPreferences = await SharedPreferences.getInstance();
 
@@ -69,7 +73,15 @@ void main() async {
   }
 
   initializeDateFormatting('it_IT', null).then(
-      (_) => runApp(Phoenix(child: const ProviderScope(child: Launcher()))));
+    (_) => runApp(
+      Phoenix(
+        child: ProviderScope(
+          overrides: [versionProvider.overrideWithValue(packageInfo.version)],
+          child: Launcher(),
+        ),
+      ),
+    ),
+  );
 }
 
 class Launcher extends ConsumerWidget {

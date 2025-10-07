@@ -3,37 +3,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../providers/settings_provider.dart';
 import '../../../ui/widgets/default_card.dart';
 import '../../../ui/device.dart';
 
-class MoreInfoPage extends ConsumerStatefulWidget {
+class MoreInfoPage extends ConsumerWidget {
   const MoreInfoPage({super.key});
 
   @override
-  ConsumerState<MoreInfoPage> createState() => _MoreInfoPageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final moreInfoOptions = [
+      [
+        "App Version:",
+        ref.watch(versionProvider),
+        null,
+      ],
+      [
+        "Collaborators",
+        "See the team behind this app",
+        "/collaborators",
+      ],
+      [
+        "Privacy Policy",
+        "Read more",
+        "/privacy-policy",
+      ],
+    ];
 
-var moreInfoOptions = const [
-  [
-    "App Version:",
-    "0.1.6",
-    null,
-  ],
-  [
-    "Collaborators",
-    "See the team behind this app",
-    "/collaborators",
-  ],
-  [
-    "Privacy Policy",
-    "Read more",
-    "/privacy-policy",
-  ],
-];
-
-class _MoreInfoPageState extends ConsumerState<MoreInfoPage> {
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -44,42 +40,66 @@ class _MoreInfoPageState extends ConsumerState<MoreInfoPage> {
       ),
       body: ListView.separated(
         padding: const EdgeInsets.symmetric(vertical: Sizes.lg),
-        physics: const BouncingScrollPhysics(),
         itemCount: moreInfoOptions.length,
-        separatorBuilder: (context, index) => const SizedBox(height: 16),
-        itemBuilder: (context, i) {
-          List option = moreInfoOptions[i];
-          return DefaultCard(
-            onTap: () {
-              if (option[2] != null) {
-                Navigator.of(context).pushNamed(option[2] as String);
-              }
-            },
-            child: Row(
-              children: [
-                const SizedBox(width: Sizes.md),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      option[0].toString(),
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.primary),
-                      textAlign: TextAlign.left,
-                    ),
-                    Text(
-                      option[1].toString(),
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                          color: Theme.of(context).colorScheme.primary),
-                      textAlign: TextAlign.left,
-                    ),
-                  ],
-                ),
-              ],
-            ),
+        separatorBuilder: (context, index) => const SizedBox(height: Sizes.lg),
+        itemBuilder: (context, index) {
+          List option = moreInfoOptions[index];
+          return SettingsInfo(
+            title: option[0],
+            value: option[1],
+            link: option[2],
           );
         },
+      ),
+    );
+  }
+}
+
+class SettingsInfo extends StatelessWidget {
+  final String title;
+  final String value;
+  final String? link;
+  const SettingsInfo({
+    super.key,
+    required this.title,
+    required this.value,
+    this.link,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultCard(
+      onTap: () {
+        if (link != null) {
+          Navigator.of(context).pushNamed(link as String);
+        }
+      },
+      child: Row(
+        spacing: Sizes.md,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge!
+                    .copyWith(color: Theme.of(context).colorScheme.primary),
+                textAlign: TextAlign.left,
+              ),
+              Text(
+                value,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodySmall!
+                    .copyWith(color: Theme.of(context).colorScheme.primary),
+                textAlign: TextAlign.left,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
