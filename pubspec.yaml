@@ -3,7 +3,7 @@ description: A wealth management / personal finance / net worth tracking app.
 
 publish_to: "none"
 
-version: 0.2.0+8
+version: 0.2.2+10
 
 environment:
   sdk: ">=3.3.3 <4.0.0"
@@ -23,6 +23,8 @@ dependencies:
   flutter_phoenix: ^1.1.1
   flutter_riverpod: ^2.6.1
   intl: ^0.19.0
+  local_auth: ^2.3.0
+  package_info_plus: ^8.3.1
   path: ^1.9.1
   path_provider: ^2.1.5
   percent_indicator: ^4.2.4
@@ -33,7 +35,6 @@ dependencies:
   sqlite3_flutter_libs:
   timezone: ^0.10.0
   url_launcher: ^6.3.1
-  local_auth: ^2.3.0
 
 dev_dependencies:
   flutter_test:

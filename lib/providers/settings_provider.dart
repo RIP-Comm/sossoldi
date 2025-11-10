@@ -3,6 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../services/notifications/notifications_service.dart';
 
+final versionProvider = Provider<String>((_) => throw UnimplementedError());
+
 enum NotificationReminderType {
   none,
   daily,
