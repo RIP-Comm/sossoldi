@@ -55,7 +55,7 @@ class BudgetPieChartState extends ConsumerState<BudgetPieChart> {
       double value = (budget.amountLimit / totalBudget) * 100;
 
       return PieChartSectionData(
-        color: categoryColorList[i],
+        color: categoryColorList[i % categoryColorList.length],
         value: value,
         title: "",
         radius: 20,

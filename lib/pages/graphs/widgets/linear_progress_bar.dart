@@ -34,8 +34,10 @@ class LinearProgressBar extends StatelessWidget {
       child: LinearProgressIndicator(
         value: amount != 0 ? amount / total : 0,
         minHeight: 16,
-        backgroundColor: colorList[colorIndex].withValues(alpha: 0.3),
-        valueColor: AlwaysStoppedAnimation<Color>(colorList[colorIndex]),
+        backgroundColor:
+            colorList[colorIndex % colorList.length].withValues(alpha: 0.3),
+        valueColor: AlwaysStoppedAnimation<Color>(
+            colorList[colorIndex % colorList.length]),
         borderRadius: BorderRadius.circular(Sizes.borderRadiusLarge),
       ),
     );
