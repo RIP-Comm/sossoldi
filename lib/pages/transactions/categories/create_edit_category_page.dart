@@ -157,8 +157,10 @@ class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {
                   CategoryIconColorSelector(
                     selectedIcon: categoryIcon,
                     selectedColor: categoryColor,
-                    onIconChanged: (icon) => setState(() => categoryIcon = icon),
-                    onColorChanged: (color) => setState(() => categoryColor = color),
+                    onIconChanged: (icon) =>
+                        setState(() => categoryIcon = icon),
+                    onColorChanged: (color) =>
+                        setState(() => categoryColor = color),
                   ),
                   /* temporary hided, see #178
                   Container(

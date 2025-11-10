@@ -56,8 +56,10 @@ class _CategoryIconColorSelectorState extends State<CategoryIconColorSelector> {
             alignment: Alignment.centerLeft,
             child: Text(
               "ICON AND COLOR",
-              style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                  color: Theme.of(context).colorScheme.primary),
+              style: Theme.of(context)
+                  .textTheme
+                  .labelLarge!
+                  .copyWith(color: Theme.of(context).colorScheme.primary),
             ),
           ),
           const SizedBox(height: Sizes.xl),
@@ -83,8 +85,10 @@ class _CategoryIconColorSelectorState extends State<CategoryIconColorSelector> {
           const SizedBox(height: Sizes.sm),
           Text(
             "CHOOSE ICON",
-            style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                color: Theme.of(context).colorScheme.primary),
+            style: Theme.of(context)
+                .textTheme
+                .labelMedium!
+                .copyWith(color: Theme.of(context).colorScheme.primary),
           ),
           const SizedBox(height: Sizes.md),
           if (showCategoryIcons) const Divider(height: 1, color: grey1),
@@ -141,8 +145,8 @@ class _CategoryIconColorSelectorState extends State<CategoryIconColorSelector> {
                         child: PageView(
                           controller: _pageController,
                           onPageChanged: (index) {
-                            setState(() =>
-                                selectedIconCategory = categories[index]);
+                            setState(
+                                () => selectedIconCategory = categories[index]);
                           },
                           children: [
                             _buildIconGrid('Household'),
@@ -165,8 +169,10 @@ class _CategoryIconColorSelectorState extends State<CategoryIconColorSelector> {
           const SizedBox(height: Sizes.xs),
           Text(
             "CHOOSE COLOR",
-            style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                color: Theme.of(context).colorScheme.primary),
+            style: Theme.of(context)
+                .textTheme
+                .labelMedium!
+                .copyWith(color: Theme.of(context).colorScheme.primary),
           ),
         ],
       ),
@@ -175,14 +181,58 @@ class _CategoryIconColorSelectorState extends State<CategoryIconColorSelector> {
 
   Widget _buildColorGrid() {
     final colorOrder = [
-      2, 0, 20, 7, 5, 4, 39, 43,
-      10, 1, 21, 24, 6, 27, 36, 44,
+      2,
+      0,
+      20,
+      7,
+      5,
+      4,
+      39,
+      43,
+      10,
+      1,
+      21,
+      24,
+      6,
+      27,
+      36,
+      44,
       if (showAllColors) ...[
-        48, 13, 8, 25, 28, 37, 40, 45,
-        49, 14, 18, 23, 29, 38, 41, 46,
-        3, 15, 19, 26, 30, 42, 47, 11,
-        50, 16, 22, 31, 32, 33, 34, 35,
-        17, 9, 12,
+        48,
+        13,
+        8,
+        25,
+        28,
+        37,
+        40,
+        45,
+        49,
+        14,
+        18,
+        23,
+        29,
+        38,
+        41,
+        46,
+        3,
+        15,
+        19,
+        26,
+        30,
+        42,
+        47,
+        11,
+        50,
+        16,
+        22,
+        31,
+        32,
+        33,
+        34,
+        35,
+        17,
+        9,
+        12,
       ],
     ];
 
