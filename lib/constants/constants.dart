@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'style.dart';
 
 // icons
-const Map<String, IconData> iconList = {
-  // Household
+const Map<String, IconData> householdIconList = {
   'home': Icons.home,
   'weekend': Icons.weekend,
   'blender': Icons.blender,
@@ -24,16 +23,22 @@ const Map<String, IconData> iconList = {
   'bakery_dining': Icons.bakery_dining,
   'cookie': Icons.cookie,
   'fastfood': Icons.fastfood,
-  'toys': Icons.toys_outlined,
+  'bedroom_baby': Icons.bedroom_baby,
   'cake': Icons.cake,
-  'gavel': Icons.balance,
-  'ramen_dining': Icons.ramen_dining,
+  'balance': Icons.balance,
+  'dinner_dining': Icons.dinner_dining,
   'liquor': Icons.liquor,
   'restaurant': Icons.restaurant,
-  'medical_services': Icons.medical_services,
+  'ramen_dining': Icons.ramen_dining,
   'vaccines': Icons.vaccines,
-
-  // Activities
+  'medication': Icons.medication,
+  'smoking_rooms': Icons.smoking_rooms,
+  'vaping_rooms': Icons.vaping_rooms,
+  'airline_seat_flat': Icons.airline_seat_flat,
+  'child_friendly': Icons.child_friendly,
+  'pets': Icons.pets,
+};
+const Map<String, IconData> activitiesIconList = {
   'work': Icons.work,
   'school': Icons.school,
   'calendar_month': Icons.calendar_month,
@@ -42,30 +47,35 @@ const Map<String, IconData> iconList = {
   'menu_book': Icons.menu_book,
   'palette': Icons.palette,
   'biotech': Icons.biotech,
-  'draw': Icons.draw,
+  'design_services': Icons.design_services,
   'celebration': Icons.celebration,
   'card_giftcard': Icons.card_giftcard,
   'shopping_bag': Icons.shopping_bag,
   'format_paint': Icons.format_paint,
   'park': Icons.park,
   'attractions': Icons.attractions,
+  'festival_outlined': Icons.festival_outlined,
   'stadium': Icons.stadium,
   'theater_comedy': Icons.theater_comedy,
-  'local_movies': Icons.local_movies,
-  'confirmation_number': Icons.local_activity,
-  'subscriptions': Icons.subscriptions,
+  'movie': Icons.movie,
+  'local_activity': Icons.local_activity,
   'church': Icons.church,
-  'storefront': Icons.storefront,
+  'store': Icons.store,
   'beach_access': Icons.beach_access,
   'fitness_center': Icons.fitness_center,
-  'military_tech': Icons.military_tech,
+  'workspace_premium': Icons.workspace_premium,
   'emoji_events': Icons.emoji_events,
   'sports_motorsports': Icons.sports_motorsports,
-
-  // Travel
+  'sports_tennis': Icons.sports_tennis,
+  'golf_course': Icons.golf_course,
+  'sports_volleyball': Icons.sports_volleyball,
+  'sports_football': Icons.sports_football,
+  'sports_soccer': Icons.sports_soccer,
+  'sports_basketball': Icons.sports_basketball,
+};
+const Map<String, IconData> travelIconList = {
   'rocket_launch': Icons.rocket_launch,
   'flight': Icons.flight,
-  'airplane_ticket': Icons.airplane_ticket,
   'local_taxi': Icons.local_taxi,
   'directions_boat': Icons.directions_boat,
   'sailing': Icons.sailing,
@@ -73,13 +83,14 @@ const Map<String, IconData> iconList = {
   'agriculture': Icons.agriculture,
   'commute': Icons.commute,
   'directions_bus': Icons.directions_bus,
-  'subway': Icons.subway,
+  'directions_railway': Icons.directions_railway,
   'tram': Icons.tram,
   'electric_scooter': Icons.electric_scooter,
   'directions_car': Icons.directions_car,
-  'directions_car_rounded': Icons.directions_car_rounded,
   'electric_car': Icons.electric_car,
-  'directions_bike': Icons.directions_bike,
+  'local_shipping': Icons.local_shipping,
+  'electric_rickshaw': Icons.electric_rickshaw,
+  'pedal_bike': Icons.pedal_bike,
   'electric_bike': Icons.electric_bike,
   'two_wheeler': Icons.two_wheeler,
   'moped': Icons.moped,
@@ -88,29 +99,28 @@ const Map<String, IconData> iconList = {
   'place': Icons.place,
   'hotel': Icons.hotel,
   'luggage': Icons.luggage,
+  'airplane_ticket': Icons.airplane_ticket,
   'airline_seat_recline_normal': Icons.airline_seat_recline_normal,
-
-  // Tech
-  'monitor': Icons.monitor,
-  'laptop': Icons.laptop,
+};
+const Map<String, IconData> techIconList = {
   'desktop_mac': Icons.desktop_mac,
+  'laptop': Icons.laptop,
   'devices': Icons.devices,
-  'phone': Icons.phone,
+  'phone_iphone': Icons.phone_iphone,
   'sim_card': Icons.sim_card,
   'camera_alt': Icons.camera_alt,
   'image': Icons.image,
   'language': Icons.language,
-  'album': Icons.album,
-  'video_library': Icons.video_library,
+  'library_music': Icons.library_music,
+  'subscriptions': Icons.subscriptions,
   'music_note': Icons.music_note,
   'cloud': Icons.cloud,
   'call': Icons.call,
   'headphones': Icons.headphones,
   'shield': Icons.shield,
-  'email': Icons.email,
   'drafts': Icons.drafts,
-
-  // People
+};
+const Map<String, IconData> peopleIconList = {
   'wc': Icons.wc,
   'pregnant_woman': Icons.pregnant_woman,
   'diversity_3': Icons.diversity_3,
@@ -119,24 +129,28 @@ const Map<String, IconData> iconList = {
   'elderly': Icons.elderly,
   'elderly_woman': Icons.elderly_woman,
   'self_improvement': Icons.self_improvement,
-  'sports_kabaddi': Icons.sports_kabaddi,
+  'sports_martial_arts': Icons.sports_martial_arts,
   'downhill_skiing': Icons.downhill_skiing,
   'directions_run': Icons.directions_run,
+  'directions_bike': Icons.directions_bike,
   'hiking': Icons.hiking,
+  'face_4': Icons.face_4,
   'child_care': Icons.child_care,
-
-  // Others
+  'face': Icons.face,
+  'face_3': Icons.face_3,
+};
+const Map<String, IconData> othersIconList = {
   'real_estate_agent': Icons.real_estate_agent,
-  'show_chart': Icons.show_chart,
+  'auto_graph': Icons.auto_graph,
   'diamond': Icons.diamond,
   'local_parking': Icons.local_parking,
-  'circle': Icons.circle,
-  'key': Icons.key,
+  'emergency': Icons.emergency,
+  'vpn_key': Icons.vpn_key,
   'bolt': Icons.bolt,
-  'local_florist': Icons.local_florist,
+  'filter_vintage': Icons.filter_vintage,
   'ac_unit': Icons.ac_unit,
   'wb_sunny': Icons.wb_sunny,
-  'nights_stay': Icons.nights_stay,
+  'mode_night': Icons.mode_night,
   'recycling': Icons.recycling,
   'favorite': Icons.favorite,
   'star': Icons.star,
@@ -144,14 +158,30 @@ const Map<String, IconData> iconList = {
   'volunteer_activism': Icons.volunteer_activism,
   'psychology': Icons.psychology,
   'push_pin': Icons.push_pin,
-  'help': Icons.help,
+  'question_mark': Icons.question_mark,
   'flag': Icons.flag,
   'percent': Icons.percent,
+  'alternate_email': Icons.alternate_email,
   'block': Icons.block,
-  'link': Icons.link,
+  'attach_file': Icons.attach_file,
   'sos': Icons.sos,
 };
-
+const Map<String, Map<String, IconData>> mapIconsList = {
+  "Household": householdIconList,
+  "Activities": activitiesIconList,
+  "Travel": travelIconList,
+  "Tech": techIconList,
+  "People": peopleIconList,
+  "Others": othersIconList,
+};
+const Map<String, IconData> iconList = {
+  ...householdIconList,
+  ...activitiesIconList,
+  ...travelIconList,
+  ...techIconList,
+  ...peopleIconList,
+  ...othersIconList,
+};
 const Map<String, IconData> accountIconList = {
   'payments': Icons.payments,
   'credit_card': Icons.credit_card,
@@ -205,13 +235,6 @@ const categoryColorList = [
   category42,
   category43,
   category44,
-  category45,
-  category46,
-  category47,
-  category48,
-  category49,
-  category50,
-  category51,
 ];
 
 const darkCategoryColorList = [
@@ -259,13 +282,6 @@ const darkCategoryColorList = [
   darkCategory42,
   darkCategory43,
   darkCategory44,
-  darkCategory45,
-  darkCategory46,
-  darkCategory47,
-  darkCategory48,
-  darkCategory49,
-  darkCategory50,
-  darkCategory51,
 ];
 
 const accountColorList = [
