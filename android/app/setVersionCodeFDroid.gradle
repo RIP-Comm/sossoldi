@@ -15,7 +15,7 @@ android.applicationVariants.all { variant ->
     variant.outputs.each { output ->
         def abi = output.getFilter(com.android.build.OutputFile.ABI)
         def abiCode = abiCodes[abi] ?: 0
-        output.versionCodeOverride = flutter.versionCode * 100 + abiCode
+        output.versionCodeOverride = flutter.versionCode * 10 + abiCode
         println ">> versionCodeOverride = ${output.versionCodeOverride} for ABI $abi"
     }
 }
