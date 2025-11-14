@@ -1,0 +1,8 @@
+* Feat: blur balance
+* Feat: allow user to enable local biometric authentication
+* Fix: overflow issue to create new budgets
+* Fix: state sync issue for transaction and recurring transaction page
+* Fix: update budget management functionality by adding category usage tracking by
+* Fix: recurring older payment screen
+* Fix: list tile height & currency symbol in month selector
+* Fix: available liquidity calculation
