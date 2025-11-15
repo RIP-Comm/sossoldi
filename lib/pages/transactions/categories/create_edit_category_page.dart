@@ -7,6 +7,7 @@ import '../../../providers/categories_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../ui/device.dart';
 import '../../../ui/extensions.dart';
+import '../../transactions/widgets/category_icon_color_selector.dart';
 
 class CreateEditCategoryPage extends ConsumerStatefulWidget {
   final bool hideIncome;
@@ -23,8 +24,6 @@ class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {
   late CategoryTransactionType categoryType;
   String categoryIcon = iconList.keys.first;
   int categoryColor = 0;
-
-  bool showCategoryIcons = false;
 
   @override
   void initState() {
@@ -155,196 +154,13 @@ class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {
                       ],
                     ),
                   ),
-                  Container(
-                    width: double.infinity,
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: Sizes.lg,
-                      vertical: Sizes.md,
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Sizes.lg,
-                      vertical: Sizes.md,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface,
-                      borderRadius:
-                          BorderRadius.circular(Sizes.borderRadiusSmall),
-                    ),
-                    child: Column(
-                      children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "ICON AND COLOR",
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelLarge!
-                                .copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.primary),
-                          ),
-                        ),
-                        const SizedBox(height: Sizes.xl),
-                        Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            borderRadius:
-                                BorderRadius.circular(Sizes.borderRadius * 10),
-                            onTap: () =>
-                                setState(() => showCategoryIcons = true),
-                            child: Ink(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: categoryColorListTheme[categoryColor],
-                              ),
-                              padding: const EdgeInsets.all(Sizes.lg),
-                              child: Icon(
-                                iconList[categoryIcon],
-                                size: 48,
-                                color: white,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: Sizes.sm),
-                        Text(
-                          "CHOOSE ICON",
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelMedium!
-                              .copyWith(
-                                  color: Theme.of(context).colorScheme.primary),
-                        ),
-                        const SizedBox(height: Sizes.md),
-                        if (showCategoryIcons)
-                          const Divider(height: 1, color: grey1),
-                        if (showCategoryIcons)
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: Sizes.lg, vertical: Sizes.sm),
-                            color: Theme.of(context).colorScheme.surface,
-                            child: Column(
-                              children: [
-                                Align(
-                                  alignment: Alignment.topRight,
-                                  child: TextButton(
-                                    onPressed: () => setState(
-                                        () => showCategoryIcons = false),
-                                    child: Text(
-                                      "Done",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyLarge!
-                                          .copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .secondary),
-                                    ),
-                                  ),
-                                ),
-                                GridView.builder(
-                                  itemCount: iconList.length,
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 6),
-                                  itemBuilder: (context, index) {
-                                    IconData categoryIconData =
-                                        iconList.values.elementAt(index);
-                                    String categoryIconName =
-                                        iconList.keys.elementAt(index);
-                                    return GestureDetector(
-                                      onTap: () => setState(() =>
-                                          categoryIcon = categoryIconName),
-                                      child: Container(
-                                        margin: const EdgeInsets.all(Sizes.md),
-                                        decoration: BoxDecoration(
-                                            color: iconList[categoryIcon] ==
-                                                    categoryIconData
-                                                ? Theme.of(context)
-                                                    .colorScheme
-                                                    .secondary
-                                                : Theme.of(context)
-                                                    .colorScheme
-                                                    .surface,
-                                            borderRadius: BorderRadius.circular(
-                                                Sizes.borderRadiusSmall)),
-                                        child: Icon(
-                                          categoryIconData,
-                                          color: iconList[categoryIcon] ==
-                                                  categoryIconData
-                                              ? Colors.white
-                                              : Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
-                                          size: 24,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        const Divider(height: 1, color: grey1),
-                        const SizedBox(height: Sizes.md),
-                        SizedBox(
-                          height: 38,
-                          child: ListView.separated(
-                            scrollDirection: Axis.horizontal,
-                            physics: const BouncingScrollPhysics(),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: Sizes.lg),
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(width: Sizes.lg),
-                            itemBuilder: (context, index) {
-                              Color color = categoryColorListTheme[index];
-                              return GestureDetector(
-                                onTap: () =>
-                                    setState(() => categoryColor = index),
-                                child: Container(
-                                  height:
-                                      categoryColorListTheme[categoryColor] ==
-                                              color
-                                          ? 38
-                                          : 32,
-                                  width:
-                                      categoryColorListTheme[categoryColor] ==
-                                              color
-                                          ? 38
-                                          : 32,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: color,
-                                    border:
-                                        categoryColorListTheme[categoryColor] ==
-                                                color
-                                            ? Border.all(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary,
-                                                width: 3,
-                                              )
-                                            : null,
-                                  ),
-                                ),
-                              );
-                            },
-                            itemCount: categoryColorListTheme.length,
-                          ),
-                        ),
-                        const SizedBox(height: Sizes.xs),
-                        Text(
-                          "CHOOSE COLOR",
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelMedium!
-                              .copyWith(
-                                  color: Theme.of(context).colorScheme.primary),
-                        ),
-                      ],
-                    ),
+                  CategoryIconColorSelector(
+                    selectedIcon: categoryIcon,
+                    selectedColor: categoryColor,
+                    onIconChanged: (icon) =>
+                        setState(() => categoryIcon = icon),
+                    onColorChanged: (color) =>
+                        setState(() => categoryColor = color),
                   ),
                   /* temporary hided, see #178
                   Container(
