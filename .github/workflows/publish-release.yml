@@ -40,15 +40,19 @@ jobs:
 
       - name: Create key.properties
         run: |
-          cat <<EOF > android/key.properties
-          storeFile=android/app/keystore.jks
+          cat > android/key.properties <<EOF
+          storeFile=app/keystore.jks
           storePassword=${ANDROID_KEYSTORE_PASSWORD}
           keyAlias=${ANDROID_KEY_ALIAS}
           keyPassword=${ANDROID_KEY_PASSWORD}
           EOF
 
       - name: Debug key.properties
-        run: cat android/key.properties
+        run: |
+          echo "Looking for keystore:"
+          ls -la android/app
+          echo "Showing key.properties:"
+          cat android/key.properties
 
       - name: Debug keystore
         run: ls -la android/app
