@@ -79,6 +79,6 @@ jobs:
       - name: Upload to Release
         uses: softprops/action-gh-release@v1
         with:
-          files: sossoldi-fdroid-${{ github.event.release.tag_name }}-arm64.apk
+          files: sossoldi-${{ github.event.release.tag_name }}-arm64.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
