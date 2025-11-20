@@ -48,7 +48,7 @@ jobs:
           EOF
 
       - name: Debug key.properties
-        run: cat key.properties
+        run: cat android/key.properties
 
       - name: Debug keystore
         run: ls -la android/app
