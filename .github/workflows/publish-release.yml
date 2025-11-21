@@ -47,25 +47,6 @@ jobs:
           keyPassword=${ANDROID_KEY_PASSWORD}
           EOF
 
-      - name: Debug key.properties
-        run: |
-          echo "Expecting android/app/keystore.jks"
-          ls -la android/app
-          echo "--- key.properties ---"
-          cat android/key.properties
-
-      - name: Debug keystore
-        run: ls -la android/app
-
-      - name: Debug keystore2
-        run: pwd
-
-      - name: Debug secrets presence
-        run: |
-          if [ -z "$ANDROID_KEYSTORE_PASSWORD" ]; then echo "NO: ANDROID_KEYSTORE_PASSWORD"; else echo "YES: ANDROID_KEYSTORE_PASSWORD"; fi
-          if [ -z "$ANDROID_KEY_ALIAS" ]; then echo "NO: ANDROID_KEY_ALIAS"; else echo "YES: ANDROID_KEY_ALIAS"; fi
-          if [ -z "$ANDROID_KEY_PASSWORD" ]; then echo "NO: ANDROID_KEY_PASSWORD"; else echo "YES: ANDROID_KEY_PASSWORD"; fi
-
       - name: Build FDroid APK (arm64)
         run: |
           flutter build apk --release --flavor fdroid --split-per-abi \
