@@ -55,10 +55,16 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("${selectedAccount == null ? "New" : "Edit"} account"),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => Navigator.pop(context),
+        title: Semantics(
+          label: "create_edit_account_title",
+          child: Text("${selectedAccount == null ? "New" : "Edit"} account"),
+        ),
+        leading: Semantics(
+          label: "create_edit_account_back",
+          child: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new),
+            onPressed: () => Navigator.pop(context),
+          ),
         ),
       ),
       body: Column(
@@ -87,11 +93,14 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                           "NAME",
                           style: Theme.of(context).textTheme.labelLarge,
                         ),
-                        TextField(
-                          controller: nameController,
-                          decoration: InputDecoration(hintText: "Account name"),
-                          style: Theme.of(context).textTheme.titleLarge,
-                        )
+                        Semantics(
+                            label: "create_edit_account_account_name",
+                            child: TextField(
+                              controller: nameController,
+                              decoration:
+                                  InputDecoration(hintText: "Account name"),
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ))
                       ],
                     ),
                   ),
@@ -117,23 +126,26 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                           ),
                         ),
                         const SizedBox(height: Sizes.xl),
-                        Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            borderRadius:
-                                BorderRadius.circular(Sizes.borderRadius * 10),
-                            onTap: () =>
-                                setState(() => showAccountIcons = true),
-                            child: Ink(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: accountColorListTheme[accountColor],
-                              ),
-                              padding: const EdgeInsets.all(Sizes.lg),
-                              child: Icon(
-                                accountIconList[accountIcon],
-                                size: 48,
-                                color: white,
+                        Semantics(
+                          label: "create_edit_account_account_icon",
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(
+                                  Sizes.borderRadius * 10),
+                              onTap: () =>
+                                  setState(() => showAccountIcons = true),
+                              child: Ink(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: accountColorListTheme[accountColor],
+                                ),
+                                padding: const EdgeInsets.all(Sizes.lg),
+                                child: Icon(
+                                  accountIconList[accountIcon],
+                                  size: 48,
+                                  color: white,
+                                ),
                               ),
                             ),
                           ),
@@ -157,19 +169,21 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                                 Align(
                                   alignment: Alignment.topRight,
                                   child: TextButton(
-                                    onPressed: () => setState(
-                                        () => showAccountIcons = false),
-                                    child: Text(
-                                      "Done",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyLarge!
-                                          .copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .secondary),
-                                    ),
-                                  ),
+                                      onPressed: () => setState(
+                                          () => showAccountIcons = false),
+                                      child: Semantics(
+                                        label: "create_edit_account_done",
+                                        child: Text(
+                                          "Done",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge!
+                                              .copyWith(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .secondary),
+                                        ),
+                                      )),
                                 ),
                                 GridView.builder(
                                   itemCount: accountIconList.length,
@@ -292,20 +306,23 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                           "${selectedAccount == null ? "INITIAL" : "CURRENT"} BALANCE",
                           style: Theme.of(context).textTheme.labelLarge,
                         ),
-                        TextField(
-                          controller: balanceController,
-                          decoration: InputDecoration(
-                            hintText:
-                                "${selectedAccount == null ? "Initial" : "Current"} Balance",
-                            suffixText: currencyState.selectedCurrency.symbol,
+                        Semantics(
+                          label: "create_edit_account_balance",
+                          child: TextField(
+                            controller: balanceController,
+                            decoration: InputDecoration(
+                              hintText:
+                                  "${selectedAccount == null ? "Initial" : "Current"} Balance",
+                              suffixText: currencyState.selectedCurrency.symbol,
+                            ),
+                            keyboardType:
+                                TextInputType.numberWithOptions(decimal: true),
+                            inputFormatters: [
+                              DecimalTextInputFormatter(decimalDigits: 2),
+                            ],
+                            style: Theme.of(context).textTheme.titleLarge,
                           ),
-                          keyboardType:
-                              TextInputType.numberWithOptions(decimal: true),
-                          inputFormatters: [
-                            DecimalTextInputFormatter(decimalDigits: 2),
-                          ],
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
+                        )
                       ],
                     ),
                   ),
@@ -333,10 +350,14 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                                 "Set as main account",
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
-                              Switch.adaptive(
-                                value: mainAccount,
-                                onChanged: (value) =>
-                                    setState(() => mainAccount = value),
+                              Semantics(
+                                label:
+                                    "create_edit_account_set_as_main_account",
+                                child: Switch.adaptive(
+                                  value: mainAccount,
+                                  onChanged: (value) =>
+                                      setState(() => mainAccount = value),
+                                ),
                               ),
                             ],
                           ),
@@ -352,11 +373,15 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                                 "Counts for the net worth",
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
-                              Switch.adaptive(
-                                value: countNetWorth,
-                                onChanged: (value) =>
-                                    setState(() => countNetWorth = value),
-                              ),
+                              Semantics(
+                                label:
+                                    "create_edit_account_counts_for_net_worth",
+                                child: Switch.adaptive(
+                                  value: countNetWorth,
+                                  onChanged: (value) =>
+                                      setState(() => countNetWorth = value),
+                                ),
+                              )
                             ],
                           ),
                         ),
@@ -364,47 +389,50 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                     ),
                   ),
                   if (selectedAccount != null)
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(Sizes.lg),
-                      child: TextButton.icon(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return ConfirmAccountDeletionDialog(
-                                account: selectedAccount,
-                                onPressed: () => ref
-                                    .read(accountsProvider.notifier)
-                                    .removeAccount(selectedAccount)
-                                    .whenComplete(
-                                  () {
-                                    if (context.mounted) {
-                                      // Navigate back to the /account-list route.
-                                      Navigator.popUntil(
-                                        context,
-                                        ModalRoute.withName('/account-list'),
-                                      );
-                                    }
-                                  },
-                                ),
-                              );
-                            },
-                          );
-                        },
-                        style: TextButton.styleFrom(
-                          side: const BorderSide(color: red, width: 1),
-                        ),
-                        icon: const Icon(Icons.delete_outlined, color: red),
-                        label: Text(
-                          "Delete account",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge!
-                              .copyWith(color: red),
+                    Semantics(
+                      label: "create_edit_account_delete_account",
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(Sizes.lg),
+                        child: TextButton.icon(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return ConfirmAccountDeletionDialog(
+                                  account: selectedAccount,
+                                  onPressed: () => ref
+                                      .read(accountsProvider.notifier)
+                                      .removeAccount(selectedAccount)
+                                      .whenComplete(
+                                    () {
+                                      if (context.mounted) {
+                                        // Navigate back to the /account-list route.
+                                        Navigator.popUntil(
+                                          context,
+                                          ModalRoute.withName('/account-list'),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          style: TextButton.styleFrom(
+                            side: const BorderSide(color: red, width: 1),
+                          ),
+                          icon: const Icon(Icons.delete_outlined, color: red),
+                          label: Text(
+                            "Delete account",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge!
+                                .copyWith(color: red),
+                          ),
                         ),
                       ),
-                    ),
+                    )
                 ],
               ),
             ),
@@ -427,37 +455,40 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
             ),
             padding: const EdgeInsets.fromLTRB(
                 Sizes.xl, Sizes.md, Sizes.lg, Sizes.lg),
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                boxShadow: [defaultShadow],
-                borderRadius: BorderRadius.circular(Sizes.borderRadius),
-              ),
-              child: ElevatedButton(
-                onPressed: () async {
-                  if (selectedAccount != null) {
-                    await ref.read(accountsProvider.notifier).updateAccount(
-                          name: nameController.text,
-                          icon: accountIcon,
-                          color: accountColor,
-                          balance: balanceController.text.toNum(),
-                          countNetWorth: countNetWorth,
-                          mainAccount: mainAccount,
-                        );
-                  } else {
-                    await ref.read(accountsProvider.notifier).addAccount(
-                          name: nameController.text,
-                          icon: accountIcon,
-                          color: accountColor,
-                          countNetWorth: countNetWorth,
-                          mainAccount: mainAccount,
-                          startingValue: balanceController.text.toNum(),
-                        );
-                  }
-                  if (context.mounted) Navigator.of(context).pop();
-                },
-                child: Text(
-                  "${selectedAccount == null ? "CREATE" : "UPDATE"} ACCOUNT",
+            child: Semantics(
+              label: "create_edit_account_create_update_account",
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  boxShadow: [defaultShadow],
+                  borderRadius: BorderRadius.circular(Sizes.borderRadius),
+                ),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    if (selectedAccount != null) {
+                      await ref.read(accountsProvider.notifier).updateAccount(
+                            name: nameController.text,
+                            icon: accountIcon,
+                            color: accountColor,
+                            balance: balanceController.text.toNum(),
+                            countNetWorth: countNetWorth,
+                            mainAccount: mainAccount,
+                          );
+                    } else {
+                      await ref.read(accountsProvider.notifier).addAccount(
+                            name: nameController.text,
+                            icon: accountIcon,
+                            color: accountColor,
+                            countNetWorth: countNetWorth,
+                            mainAccount: mainAccount,
+                            startingValue: balanceController.text.toNum(),
+                          );
+                    }
+                    if (context.mounted) Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    "${selectedAccount == null ? "CREATE" : "UPDATE"} ACCOUNT",
+                  ),
                 ),
               ),
             ),
