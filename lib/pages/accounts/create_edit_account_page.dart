@@ -56,8 +56,11 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
     return Scaffold(
       appBar: AppBar(
         title: Semantics(
-          label: "create_edit_account_title",
-          child: Text("${selectedAccount == null ? "New" : "Edit"} account"),
+          label: "create_edit_account",
+          container: true,
+          child: ExcludeSemantics(
+            child: Text("${selectedAccount == null ? "New" : "Edit"} account"),
+          ),
         ),
         leading: Semantics(
           label: "create_edit_account_back",
@@ -168,22 +171,23 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                               children: [
                                 Align(
                                   alignment: Alignment.topRight,
-                                  child: TextButton(
+                                  child: Semantics(
+                                    label: "create_edit_account_done",
+                                    child: TextButton(
                                       onPressed: () => setState(
                                           () => showAccountIcons = false),
-                                      child: Semantics(
-                                        label: "create_edit_account_done",
-                                        child: Text(
-                                          "Done",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge!
-                                              .copyWith(
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .secondary),
-                                        ),
-                                      )),
+                                      child: Text(
+                                        "Done",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge!
+                                            .copyWith(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                                 GridView.builder(
                                   itemCount: accountIconList.length,
