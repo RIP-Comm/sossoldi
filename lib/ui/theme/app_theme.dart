@@ -6,7 +6,7 @@ import '../device.dart';
 
 class AppTheme {
   static final lightTheme = ThemeData(
-    adaptations: [SwitchThemeAdaptation()],
+    adaptations: [const SwitchThemeAdaptation()],
     cupertinoOverrideTheme: const CupertinoThemeData(
       brightness: Brightness.light,
     ),
@@ -29,7 +29,7 @@ class AppTheme {
       backgroundColor: grey3,
       unselectedItemColor: grey1,
     ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: blue5,
       shape: CircleBorder(),
     ),
@@ -44,14 +44,12 @@ class AppTheme {
       unselectedLabelColor: blue5,
     ),
     iconTheme: const IconThemeData(color: blue1),
-    dividerTheme: DividerThemeData(
+    dividerTheme: const DividerThemeData(
       color: grey1,
       space: 0.5,
       thickness: 0.5,
     ),
-    bottomSheetTheme: BottomSheetThemeData(
-      backgroundColor: white,
-    ),
+    bottomSheetTheme: const BottomSheetThemeData(backgroundColor: white),
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
         foregroundColor: WidgetStateProperty.resolveWith<Color>((states) {
@@ -90,11 +88,12 @@ class AppTheme {
           }
           return blue5;
         }),
-        elevation: WidgetStatePropertyAll(0),
-        padding: WidgetStatePropertyAll(EdgeInsets.all(Sizes.lg)),
+        elevation: const WidgetStatePropertyAll(0),
+        padding: const WidgetStatePropertyAll(EdgeInsets.all(Sizes.lg)),
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(Sizes.borderRadius)),
+            borderRadius: BorderRadius.circular(Sizes.borderRadius),
+          ),
         ),
         textStyle: const WidgetStatePropertyAll(
           TextStyle(
@@ -107,11 +106,12 @@ class AppTheme {
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: ButtonStyle(
-        padding: WidgetStatePropertyAll(EdgeInsets.all(Sizes.xs)),
-        iconSize: WidgetStatePropertyAll(28),
+        padding: const WidgetStatePropertyAll(EdgeInsets.all(Sizes.xs)),
+        iconSize: const WidgetStatePropertyAll(28),
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(Sizes.borderRadius)),
+            borderRadius: BorderRadius.circular(Sizes.borderRadius),
+          ),
         ),
       ),
     ),
@@ -121,41 +121,32 @@ class AppTheme {
     ),
     disabledColor: grey2,
     switchTheme: SwitchThemeData(
-      trackOutlineColor: WidgetStateColor.resolveWith(
-        (state) {
-          if (state.contains(WidgetState.selected)) {
-            return customColorScheme.secondary;
-          }
+      trackOutlineColor: WidgetStateColor.resolveWith((state) {
+        if (state.contains(WidgetState.selected)) {
+          return customColorScheme.secondary;
+        }
 
-          return grey1;
-        },
-      ),
-      thumbColor: WidgetStateColor.resolveWith(
-        (state) {
-          if (state.contains(WidgetState.selected)) {
-            return customColorScheme.surface;
-          }
+        return grey1;
+      }),
+      thumbColor: WidgetStateColor.resolveWith((state) {
+        if (state.contains(WidgetState.selected)) {
+          return customColorScheme.surface;
+        }
 
-          return grey1;
-        },
-      ),
-      trackColor: WidgetStateColor.resolveWith(
-        (state) {
-          if (state.contains(WidgetState.selected)) {
-            return customColorScheme.secondary;
-          }
+        return grey1;
+      }),
+      trackColor: WidgetStateColor.resolveWith((state) {
+        if (state.contains(WidgetState.selected)) {
+          return customColorScheme.secondary;
+        }
 
-          return grey3;
-        },
-      ),
+        return grey3;
+      }),
     ),
     fontFamily: 'NunitoSans',
     textTheme: const TextTheme(
       // display
-      displayLarge: TextStyle(
-        fontSize: 34.0,
-        fontWeight: FontWeight.w700,
-      ),
+      displayLarge: TextStyle(fontSize: 34.0, fontWeight: FontWeight.w700),
       displayMedium: TextStyle(
         fontSize: 34.0,
         fontWeight: FontWeight.w600,
@@ -163,58 +154,25 @@ class AppTheme {
       ),
 
       // headline
-      headlineLarge: TextStyle(
-        fontSize: 24.0,
-        fontWeight: FontWeight.w700,
-      ),
-      headlineMedium: TextStyle(
-        fontSize: 24.0,
-        fontWeight: FontWeight.w600,
-      ),
+      headlineLarge: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w700),
+      headlineMedium: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600),
 
       // title
-      titleLarge: TextStyle(
-        fontSize: 18.0,
-        fontWeight: FontWeight.w700,
-      ),
-      titleMedium: TextStyle(
-        fontSize: 18.0,
-        fontWeight: FontWeight.w600,
-      ),
-      titleSmall: TextStyle(
-        fontSize: 18.0,
-        fontWeight: FontWeight.w400,
-      ),
+      titleLarge: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w700),
+      titleMedium: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
+      titleSmall: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w400),
 
       // body
-      bodyLarge: TextStyle(
-        fontSize: 14.0,
-        fontWeight: FontWeight.w700,
-      ),
-      bodyMedium: TextStyle(
-        fontSize: 14.0,
-        fontWeight: FontWeight.w600,
-      ),
-      bodySmall: TextStyle(
-        fontSize: 14.0,
-        fontWeight: FontWeight.w400,
-      ),
+      bodyLarge: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
+      bodyMedium: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w600),
+      bodySmall: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400),
 
       // label
-      labelLarge: TextStyle(
-        fontSize: 10.0,
-        fontWeight: FontWeight.w700,
-      ),
-      labelMedium: TextStyle(
-        fontSize: 10.0,
-        fontWeight: FontWeight.w400,
-      ),
-      labelSmall: TextStyle(
-        fontSize: 8.0,
-        fontWeight: FontWeight.w700,
-      ),
+      labelLarge: TextStyle(fontSize: 10.0, fontWeight: FontWeight.w700),
+      labelMedium: TextStyle(fontSize: 10.0, fontWeight: FontWeight.w400),
+      labelSmall: TextStyle(fontSize: 8.0, fontWeight: FontWeight.w700),
     ),
-    inputDecorationTheme: InputDecorationTheme(
+    inputDecorationTheme: const InputDecorationTheme(
       border: InputBorder.none,
       contentPadding: EdgeInsets.zero,
       hintStyle: TextStyle(color: grey2),
@@ -226,13 +184,15 @@ class AppTheme {
         fontSize: 16,
       ),
       behavior: SnackBarBehavior.floating,
-      insetPadding:
-          EdgeInsets.symmetric(horizontal: Sizes.lg, vertical: Sizes.sm),
+      insetPadding: const EdgeInsets.symmetric(
+        horizontal: Sizes.lg,
+        vertical: Sizes.sm,
+      ),
     ),
   );
 
   static final darkTheme = ThemeData(
-    adaptations: [SwitchThemeAdaptation()],
+    adaptations: [const SwitchThemeAdaptation()],
     cupertinoOverrideTheme: const CupertinoThemeData(
       brightness: Brightness.dark,
     ),
@@ -256,7 +216,7 @@ class AppTheme {
       unselectedItemColor: darkGrey1,
       selectedItemColor: darkBlue1,
     ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: darkBlue1,
       shape: CircleBorder(),
     ),
@@ -271,14 +231,12 @@ class AppTheme {
       unselectedLabelColor: grey2,
     ),
     iconTheme: const IconThemeData(color: darkBlue1),
-    dividerTheme: DividerThemeData(
+    dividerTheme: const DividerThemeData(
       color: darkGrey1,
       space: 0.5,
       thickness: 0.5,
     ),
-    bottomSheetTheme: BottomSheetThemeData(
-      backgroundColor: darkGrey4,
-    ),
+    bottomSheetTheme: const BottomSheetThemeData(backgroundColor: darkGrey4),
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
         foregroundColor: WidgetStateProperty.resolveWith<Color>((states) {
@@ -296,7 +254,8 @@ class AppTheme {
         padding: const WidgetStatePropertyAll(EdgeInsets.all(Sizes.md)),
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(Sizes.borderRadius)),
+            borderRadius: BorderRadius.circular(Sizes.borderRadius),
+          ),
         ),
         textStyle: const WidgetStatePropertyAll(
           TextStyle(
@@ -316,11 +275,12 @@ class AppTheme {
           }
           return darkBlue5;
         }),
-        elevation: WidgetStatePropertyAll(0),
-        padding: WidgetStatePropertyAll(EdgeInsets.all(Sizes.lg)),
+        elevation: const WidgetStatePropertyAll(0),
+        padding: const WidgetStatePropertyAll(EdgeInsets.all(Sizes.lg)),
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(Sizes.borderRadius)),
+            borderRadius: BorderRadius.circular(Sizes.borderRadius),
+          ),
         ),
         textStyle: const WidgetStatePropertyAll(
           TextStyle(
@@ -333,11 +293,12 @@ class AppTheme {
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: ButtonStyle(
-        padding: WidgetStatePropertyAll(EdgeInsets.all(Sizes.xs)),
-        iconSize: WidgetStatePropertyAll(28),
+        padding: const WidgetStatePropertyAll(EdgeInsets.all(Sizes.xs)),
+        iconSize: const WidgetStatePropertyAll(28),
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(Sizes.borderRadius)),
+            borderRadius: BorderRadius.circular(Sizes.borderRadius),
+          ),
         ),
       ),
     ),
@@ -348,33 +309,27 @@ class AppTheme {
 
     disabledColor: darkGrey2,
     switchTheme: SwitchThemeData(
-      trackOutlineColor: WidgetStateColor.resolveWith(
-        (state) {
-          if (state.contains(WidgetState.selected)) {
-            return darkCustomColorScheme.secondary;
-          }
+      trackOutlineColor: WidgetStateColor.resolveWith((state) {
+        if (state.contains(WidgetState.selected)) {
+          return darkCustomColorScheme.secondary;
+        }
 
-          return darkGrey1;
-        },
-      ),
-      thumbColor: WidgetStateColor.resolveWith(
-        (state) {
-          if (state.contains(WidgetState.selected)) {
-            return darkCustomColorScheme.surface;
-          }
+        return darkGrey1;
+      }),
+      thumbColor: WidgetStateColor.resolveWith((state) {
+        if (state.contains(WidgetState.selected)) {
+          return darkCustomColorScheme.surface;
+        }
 
-          return darkGrey1;
-        },
-      ),
-      trackColor: WidgetStateColor.resolveWith(
-        (state) {
-          if (state.contains(WidgetState.selected)) {
-            return darkCustomColorScheme.secondary;
-          }
+        return darkGrey1;
+      }),
+      trackColor: WidgetStateColor.resolveWith((state) {
+        if (state.contains(WidgetState.selected)) {
+          return darkCustomColorScheme.secondary;
+        }
 
-          return darkGrey3;
-        },
-      ),
+        return darkGrey3;
+      }),
     ),
     //Text style
     fontFamily: 'NunitoSans',
@@ -452,9 +407,9 @@ class AppTheme {
         color: darkBlack,
       ),
     ),
-    inputDecorationTheme: InputDecorationTheme(
+    inputDecorationTheme: const InputDecorationTheme(
       border: InputBorder.none,
-      contentPadding: const EdgeInsets.all(0),
+      contentPadding: EdgeInsets.all(0),
       hintStyle: TextStyle(color: grey2),
     ),
     snackBarTheme: SnackBarThemeData(
@@ -464,8 +419,10 @@ class AppTheme {
         fontSize: 16,
       ),
       behavior: SnackBarBehavior.floating,
-      insetPadding:
-          EdgeInsets.symmetric(horizontal: Sizes.lg, vertical: Sizes.sm),
+      insetPadding: const EdgeInsets.symmetric(
+        horizontal: Sizes.lg,
+        vertical: Sizes.sm,
+      ),
     ),
   );
 }
@@ -514,11 +471,9 @@ class SwitchThemeAdaptation extends Adaptation<SwitchThemeData> {
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
         return SwitchThemeData(
-          trackColor: WidgetStateProperty.fromMap(
-            {
-              WidgetState.selected: theme.colorScheme.secondary,
-            },
-          ),
+          trackColor: WidgetStateProperty.fromMap({
+            WidgetState.selected: theme.colorScheme.secondary,
+          }),
         );
     }
   }

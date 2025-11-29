@@ -26,26 +26,34 @@ class BudgetPieChartState extends ConsumerState<BudgetPieChart> {
     for (Budget budget in widget.budgets) {
       totalBudget += budget.amountLimit;
     }
-    return Stack(alignment: Alignment.center, children: [
-      AspectRatio(
-        aspectRatio: 1.5,
-        child: PieChart(
-          PieChartData(
-            sectionsSpace: 0,
-            centerSpaceRadius: 70,
-            sections: showingSections(),
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        AspectRatio(
+          aspectRatio: 1.5,
+          child: PieChart(
+            PieChartData(
+              sectionsSpace: 0,
+              centerSpaceRadius: 70,
+              sections: showingSections(),
+            ),
           ),
         ),
-      ),
-      Column(
-        children: [
-          Text("${totalBudget.round()}${currencyState.selectedCurrency.symbol}",
-              style: const TextStyle(fontSize: 25)),
-          const SizedBox(height: Sizes.xs),
-          const Text("PLANNED", style: TextStyle(fontWeight: FontWeight.normal))
-        ],
-      )
-    ]);
+        Column(
+          children: [
+            Text(
+              "${totalBudget.round()}${currencyState.selectedCurrency.symbol}",
+              style: const TextStyle(fontSize: 25),
+            ),
+            const SizedBox(height: Sizes.xs),
+            const Text(
+              "PLANNED",
+              style: TextStyle(fontWeight: FontWeight.normal),
+            ),
+          ],
+        ),
+      ],
+    );
   }
 
   List<PieChartSectionData> showingSections() {

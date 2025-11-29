@@ -7,10 +7,7 @@ import '../../../../providers/theme_provider.dart';
 import '../../../../ui/device.dart';
 
 class LabelListTile extends ConsumerWidget {
-  const LabelListTile(
-    this.labelController, {
-    super.key,
-  });
+  const LabelListTile(this.labelController, {super.key});
 
   final TextEditingController labelController;
 
@@ -19,8 +16,12 @@ class LabelListTile extends ConsumerWidget {
     final isDarkMode = ref.watch(appThemeStateNotifier).isDarkModeEnabled;
 
     return Padding(
-      padding:
-          const EdgeInsets.fromLTRB(Sizes.lg, Sizes.lg, Sizes.xxl, Sizes.lg),
+      padding: const EdgeInsets.fromLTRB(
+        Sizes.lg,
+        Sizes.lg,
+        Sizes.xxl,
+        Sizes.lg,
+      ),
       child: Row(
         children: [
           RoundedIcon(
@@ -30,10 +31,9 @@ class LabelListTile extends ConsumerWidget {
           const SizedBox(width: Sizes.lg),
           Text(
             "Description",
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge!
-                .copyWith(color: Theme.of(context).colorScheme.primary),
+            style: Theme.of(context).textTheme.titleLarge!.copyWith(
+              color: Theme.of(context).colorScheme.primary,
+            ),
           ),
           const SizedBox(width: Sizes.lg),
           Expanded(
@@ -46,10 +46,10 @@ class LabelListTile extends ConsumerWidget {
               ),
               textAlign: TextAlign.end,
               style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                    color: isDarkMode
-                        ? grey3
-                        : Theme.of(context).colorScheme.secondary,
-                  ),
+                color: isDarkMode
+                    ? grey3
+                    : Theme.of(context).colorScheme.secondary,
+              ),
             ),
           ),
         ],

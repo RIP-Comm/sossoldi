@@ -10,10 +10,7 @@ import '../../../../providers/transactions_provider.dart';
 import '../../../../ui/device.dart';
 
 class CategorySelector extends ConsumerStatefulWidget {
-  const CategorySelector({
-    required this.scrollController,
-    super.key,
-  });
+  const CategorySelector({required this.scrollController, super.key});
 
   final ScrollController scrollController;
 
@@ -30,8 +27,9 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
   @override
   Widget build(BuildContext context) {
     final transactionType = ref.watch(transactionTypeProvider);
-    final categoryType =
-        ref.watch(transactionToCategoryProvider(transactionType));
+    final categoryType = ref.watch(
+      transactionToCategoryProvider(transactionType),
+    );
     final categoriesList = ref.watch(categoriesByTypeProvider(categoryType));
 
     return Container(
@@ -58,11 +56,15 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
                   Container(
                     alignment: Alignment.centerLeft,
                     padding: const EdgeInsets.only(
-                        left: Sizes.lg, top: Sizes.xxl, bottom: Sizes.md),
+                      left: Sizes.lg,
+                      top: Sizes.xxl,
+                      bottom: Sizes.md,
+                    ),
                     child: Text(
                       "MORE FREQUENT",
                       style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.primary),
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
                   ),
                   Container(
@@ -80,7 +82,8 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
                             onTap: () => _selectCategory(context, category),
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: Sizes.lg),
+                                horizontal: Sizes.lg,
+                              ),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -95,9 +98,10 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
                                         .textTheme
                                         .labelLarge!
                                         .copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary),
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary,
+                                        ),
                                   ),
                                 ],
                               ),
@@ -113,11 +117,15 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
                   Container(
                     alignment: Alignment.centerLeft,
                     padding: const EdgeInsets.only(
-                        left: Sizes.lg, top: Sizes.xxl, bottom: Sizes.sm),
+                      left: Sizes.lg,
+                      top: Sizes.xxl,
+                      bottom: Sizes.sm,
+                    ),
                     child: Text(
                       "ALL CATEGORIES",
                       style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.primary),
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
                   ),
                   categoriesList.when(
@@ -142,8 +150,8 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
                             title: Text(category.name),
                             trailing:
                                 ref.watch(categoryProvider)?.id == category.id
-                                    ? Icon(Icons.check)
-                                    : null,
+                                ? const Icon(Icons.check)
+                                : null,
                           );
                         },
                       ),

@@ -31,21 +31,24 @@ void main() async {
   // KV migration from the 'is_first_login' key to 'onboarding_completed'
   // to correctly handle the completion of the onboarding process
   // (To consider to remove in later future)
-  final bool? isFirstLoginCachedValue =
-      _sharedPreferences.getBool('is_first_login');
+  final bool? isFirstLoginCachedValue = _sharedPreferences.getBool(
+    'is_first_login',
+  );
   final bool isOnBoardingCompletedKeyNotSaved =
       _sharedPreferences.getBool('onboarding_completed') == null;
   if (isFirstLoginCachedValue != null && isOnBoardingCompletedKeyNotSaved) {
     await _sharedPreferences.setBool(
-        'onboarding_completed', !isFirstLoginCachedValue);
+      'onboarding_completed',
+      !isFirstLoginCachedValue,
+    );
   }
 
   // perform recurring transactions checks
-  DateTime? lastCheckGetPref = _sharedPreferences
-              .getString('last_recurring_transactions_check') !=
-          null
+  DateTime? lastCheckGetPref =
+      _sharedPreferences.getString('last_recurring_transactions_check') != null
       ? DateTime.parse(
-          _sharedPreferences.getString('last_recurring_transactions_check')!)
+          _sharedPreferences.getString('last_recurring_transactions_check')!,
+        )
       : null;
   DateTime? lastRecurringTransactionsCheck = lastCheckGetPref;
 
@@ -54,20 +57,23 @@ void main() async {
     RecurringTransactionMethods().checkRecurringTransactions();
     // update last recurring transactions runtime
     await _sharedPreferences.setString(
-        'last_recurring_transactions_check', DateTime.now().toIso8601String());
+      'last_recurring_transactions_check',
+      DateTime.now().toIso8601String(),
+    );
   }
 
   final LocalAuthentication auth = LocalAuthentication();
   if (await auth.isDeviceSupported()) {
     // check for authentication if requested by user
-    bool? requiresAuthentication =
-        _sharedPreferences.getBool("user_requires_authentication");
+    bool? requiresAuthentication = _sharedPreferences.getBool(
+      "user_requires_authentication",
+    );
 
     if (requiresAuthentication != null && requiresAuthentication == true) {
       // use use sticky auth to resume auth request when app is going background
       bool didAuthenticate = await auth.authenticate(
-          localizedReason: 'Please authenticate to use Sossoldi',
-          persistAcrossBackgrounding: true,
+        localizedReason: 'Please authenticate to use Sossoldi',
+        persistAcrossBackgrounding: true,
       );
       if (!didAuthenticate) return; // stops app from loading
     }
@@ -78,7 +84,7 @@ void main() async {
       Phoenix(
         child: ProviderScope(
           overrides: [versionProvider.overrideWithValue(packageInfo.version)],
-          child: Launcher(),
+          child: const Launcher(),
         ),
       ),
     ),
@@ -99,8 +105,9 @@ class Launcher extends ConsumerWidget {
       title: 'Sossoldi',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode:
-          appThemeState.isDarkModeEnabled ? ThemeMode.dark : ThemeMode.light,
+      themeMode: appThemeState.isDarkModeEnabled
+          ? ThemeMode.dark
+          : ThemeMode.light,
       onGenerateRoute: makeRoute,
       initialRoute: !isOnboardingCompleted ? '/onboarding' : '/',
     );

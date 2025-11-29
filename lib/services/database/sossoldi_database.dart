@@ -54,7 +54,10 @@ class SossoldiDatabase {
   }
 
   static Future _upgradeDB(
-      Database database, int oldVersion, int newVersion) async {
+    Database database,
+    int oldVersion,
+    int newVersion,
+  ) async {
     await instance._migrationManager.migrate(database, oldVersion, newVersion);
   }
 
@@ -68,7 +71,8 @@ class SossoldiDatabase {
 
     // Get all table names
     final List<Map<String, dynamic>> tables = await db.rawQuery(
-        "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' AND name NOT LIKE 'android_%'");
+      "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' AND name NOT LIKE 'android_%'",
+    );
 
     List<List<dynamic>> allData = [];
     Set<String> allColumns = {'table_name'}; // Start with table_name column
@@ -93,8 +97,10 @@ class SossoldiDatabase {
         final List<Map<String, dynamic>> rows = await db.query(tableName);
 
         for (var row in rows) {
-          List<dynamic> csvRow =
-              List.filled(headers.length, ''); // Initialize with empty strings
+          List<dynamic> csvRow = List.filled(
+            headers.length,
+            '',
+          ); // Initialize with empty strings
           csvRow[0] = tableName; // Set table name
 
           // Fill in values for existing columns
@@ -129,8 +135,9 @@ class SossoldiDatabase {
       }
 
       final String csvData = await file.readAsString();
-      final List<List<dynamic>> rows =
-          const CsvToListConverter().convert(csvData);
+      final List<List<dynamic>> rows = const CsvToListConverter().convert(
+        csvData,
+      );
 
       if (rows.isEmpty) {
         throw Exception('CSV file is empty');
@@ -263,11 +270,12 @@ class SossoldiDatabase {
       'CHEK dividends',
       'Babysitter',
       'sono.pove.ro Fees',
-      'Quingentole trip'
+      'Quingentole trip',
     ];
     var categories = [10, 11, 12, 13, 14];
     double maxAmountOfSingleTransaction = 250.00;
-    int dateInPastMaxRange = (countOfGeneratedTransaction / 90).round() *
+    int dateInPastMaxRange =
+        (countOfGeneratedTransaction / 90).round() *
         30; // we want simulate about 90 transactions per month
     num fakeSalary = 5000;
     DateTime now = DateTime.now();
@@ -296,10 +304,13 @@ class SossoldiDatabase {
       var randomNote = outNotes[rnd.nextInt(outNotes.length)];
       var randomCategory = categories[rnd.nextInt(categories.length)];
       int? idBankAccountTransfer;
-      DateTime randomDate = now.subtract(Duration(
+      DateTime randomDate = now.subtract(
+        Duration(
           days: rnd.nextInt(dateInPastMaxRange),
           hours: rnd.nextInt(20),
-          minutes: rnd.nextInt(50)));
+          minutes: rnd.nextInt(50),
+        ),
+      );
 
       if (i % (countOfGeneratedTransaction / 100) == 0) {
         // simulating a transfer every 1% of total iterations
@@ -319,22 +330,33 @@ class SossoldiDatabase {
 
       // put generated transaction in our list
       demoTransactions.add(
-          '''('$randomDate', ${randomAmount.toStringAsFixed(2)}, '$randomType', '$randomNote', $randomCategory, $randomAccount, $idBankAccountTransfer, 0, null, '$randomDate', '$randomDate')''');
+        '''('$randomDate', ${randomAmount.toStringAsFixed(2)}, '$randomType', '$randomNote', $randomCategory, $randomAccount, $idBankAccountTransfer, 0, null, '$randomDate', '$randomDate')''',
+      );
     }
 
     // add salary every month
     for (int i = 1; i < dateInPastMaxRange / 30; i++) {
       DateTime randomDate = now.subtract(Duration(days: 30 * i));
       var time = randomDate.toLocal();
-      DateTime salaryDateTime = DateTime(time.year, time.month, 27, time.hour,
-          time.minute, time.second, time.millisecond, time.microsecond);
+      DateTime salaryDateTime = DateTime(
+        time.year,
+        time.month,
+        27,
+        time.hour,
+        time.minute,
+        time.second,
+        time.millisecond,
+        time.microsecond,
+      );
       demoTransactions.add(
-          '''('$salaryDateTime', $fakeSalary, 'IN', 'Salary', 16, 70, null, 0, null, '$salaryDateTime', '$salaryDateTime')''');
+        '''('$salaryDateTime', $fakeSalary, 'IN', 'Salary', 16, 70, null, 0, null, '$salaryDateTime', '$salaryDateTime')''',
+      );
     }
 
     // finalize query and write!
     await _database?.execute(
-        "$insertDemoTransactionsQuery ${demoTransactions.join(",")};");
+      "$insertDemoTransactionsQuery ${demoTransactions.join(",")};",
+    );
   }
 
   Future resetDatabase() async {

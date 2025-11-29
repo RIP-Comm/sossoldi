@@ -13,10 +13,7 @@ import 'account_selector.dart';
 import 'type_tab.dart';
 
 class AmountSection extends ConsumerStatefulWidget {
-  const AmountSection(
-    this.amountController, {
-    super.key,
-  });
+  const AmountSection(this.amountController, {super.key});
 
   final TextEditingController amountController;
 
@@ -55,8 +52,9 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
           Container(
             height: 30,
             decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primaryContainer,
-                borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall)),
+              color: Theme.of(context).colorScheme.primaryContainer,
+              borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
+            ),
             padding: const EdgeInsets.symmetric(horizontal: Sizes.xxs * 0.5),
             child: ToggleButtons(
               direction: Axis.horizontal,
@@ -98,8 +96,12 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
           ),
           if (selectedType == TransactionType.transfer)
             Padding(
-              padding:
-                  const EdgeInsets.fromLTRB(Sizes.lg, Sizes.sm, Sizes.lg, 0),
+              padding: const EdgeInsets.fromLTRB(
+                Sizes.lg,
+                Sizes.sm,
+                Sizes.lg,
+                0,
+              ),
               child: SizedBox(
                 height: Sizes.xxl * 2,
                 child: Row(
@@ -111,11 +113,10 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
                           const SizedBox(height: Sizes.sm),
                           Text(
                             "FROM:",
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelMedium!
+                            style: Theme.of(context).textTheme.labelMedium!
                                 .copyWith(
-                                  color: Theme.of(context).brightness ==
+                                  color:
+                                      Theme.of(context).brightness ==
                                           Brightness.light
                                       ? grey1
                                       : darkGrey1,
@@ -133,10 +134,12 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
                                   useSafeArea: true,
                                   shape: const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.only(
-                                      topLeft:
-                                          Radius.circular(Sizes.borderRadius),
-                                      topRight:
-                                          Radius.circular(Sizes.borderRadius),
+                                      topLeft: Radius.circular(
+                                        Sizes.borderRadius,
+                                      ),
+                                      topRight: Radius.circular(
+                                        Sizes.borderRadius,
+                                      ),
                                     ),
                                   ),
                                   builder: (_) => DraggableScrollableSheet(
@@ -154,35 +157,38 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
                               child: Container(
                                 height: 35,
                                 decoration: BoxDecoration(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primaryContainer,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.primaryContainer,
                                   borderRadius: BorderRadius.circular(
-                                      Sizes.borderRadiusSmall),
+                                    Sizes.borderRadiusSmall,
+                                  ),
                                   boxShadow: [defaultShadow],
                                 ),
                                 padding: const EdgeInsets.all(Sizes.xxs),
                                 child: Row(
                                   children: [
                                     RoundedIcon(
-                                      icon: ref
+                                      icon:
+                                          ref
                                                   .watch(bankAccountProvider)
                                                   ?.symbol !=
                                               null
                                           ? accountIconList[ref
-                                              .watch(bankAccountProvider)!
-                                              .symbol]
+                                                .watch(bankAccountProvider)!
+                                                .symbol]
                                           : null,
-                                      backgroundColor: ref
+                                      backgroundColor:
+                                          ref
                                                   .watch(bankAccountProvider)
                                                   ?.color !=
                                               null
                                           ? accountColorListTheme[ref
-                                              .watch(bankAccountProvider)!
-                                              .color]
+                                                .watch(bankAccountProvider)!
+                                                .color]
                                           : null,
                                       size: 16,
-                                      padding: EdgeInsets.all(Sizes.xs),
+                                      padding: const EdgeInsets.all(Sizes.xs),
                                     ),
                                     const Spacer(),
                                     Text(
@@ -194,9 +200,9 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
                                           .copyWith(
                                             color:
                                                 Theme.of(context).brightness ==
-                                                        Brightness.light
-                                                    ? grey1
-                                                    : darkGrey1,
+                                                    Brightness.light
+                                                ? grey1
+                                                : darkGrey1,
                                           ),
                                     ),
                                     const Spacer(),
@@ -204,7 +210,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
                                 ),
                               ),
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -216,11 +222,13 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Expanded(
-                              child: VerticalDivider(width: 1, color: grey2)),
+                            child: VerticalDivider(width: 1, color: grey2),
+                          ),
                           Padding(
                             padding: EdgeInsets.symmetric(
-                                vertical: Sizes.xxs * 0.5,
-                                horizontal: Sizes.xl),
+                              vertical: Sizes.xxs * 0.5,
+                              horizontal: Sizes.xl,
+                            ),
                             child: Icon(
                               Icons.change_circle,
                               size: 32,
@@ -240,11 +248,10 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
                           const SizedBox(height: Sizes.sm),
                           Text(
                             "TO:",
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelMedium!
+                            style: Theme.of(context).textTheme.labelMedium!
                                 .copyWith(
-                                  color: Theme.of(context).brightness ==
+                                  color:
+                                      Theme.of(context).brightness ==
                                           Brightness.light
                                       ? grey1
                                       : darkGrey1,
@@ -262,10 +269,12 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
                                   useSafeArea: true,
                                   shape: const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.only(
-                                      topLeft:
-                                          Radius.circular(Sizes.borderRadius),
-                                      topRight:
-                                          Radius.circular(Sizes.borderRadius),
+                                      topLeft: Radius.circular(
+                                        Sizes.borderRadius,
+                                      ),
+                                      topRight: Radius.circular(
+                                        Sizes.borderRadius,
+                                      ),
                                     ),
                                   ),
                                   builder: (_) => DraggableScrollableSheet(
@@ -284,36 +293,44 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
                               child: Container(
                                 height: 35,
                                 decoration: BoxDecoration(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primaryContainer,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.primaryContainer,
                                   borderRadius: BorderRadius.circular(
-                                      Sizes.borderRadiusSmall),
+                                    Sizes.borderRadiusSmall,
+                                  ),
                                   boxShadow: [defaultShadow],
                                 ),
                                 padding: const EdgeInsets.all(Sizes.xs),
                                 child: Row(
                                   children: [
                                     RoundedIcon(
-                                      icon: accountIconList[ref
-                                          .watch(bankAccountTransferProvider)
-                                          ?.symbol],
-                                      backgroundColor: ref.watch(
-                                                  bankAccountTransferProvider) !=
+                                      icon:
+                                          accountIconList[ref
+                                              .watch(
+                                                bankAccountTransferProvider,
+                                              )
+                                              ?.symbol],
+                                      backgroundColor:
+                                          ref.watch(
+                                                bankAccountTransferProvider,
+                                              ) !=
                                               null
                                           ? accountColorListTheme[ref
-                                              .watch(
-                                                  bankAccountTransferProvider)!
-                                              .color]
+                                                .watch(
+                                                  bankAccountTransferProvider,
+                                                )!
+                                                .color]
                                           : null,
                                       size: 16,
-                                      padding: EdgeInsets.all(Sizes.xs),
+                                      padding: const EdgeInsets.all(Sizes.xs),
                                     ),
                                     const Spacer(),
                                     Text(
                                       ref
                                               .watch(
-                                                  bankAccountTransferProvider)
+                                                bankAccountTransferProvider,
+                                              )
                                               ?.name ??
                                           "Select account",
                                       style: Theme.of(context)
@@ -322,9 +339,9 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
                                           .copyWith(
                                             color:
                                                 Theme.of(context).brightness ==
-                                                        Brightness.light
-                                                    ? grey1
-                                                    : darkGrey1,
+                                                    Brightness.light
+                                                ? grey1
+                                                : darkGrey1,
                                           ),
                                     ),
                                     const Spacer(),
@@ -335,7 +352,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
                           ),
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),

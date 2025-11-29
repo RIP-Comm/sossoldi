@@ -36,7 +36,7 @@ class TransactionFields extends BaseEntityFields {
     recurring,
     idRecurringTransaction,
     BaseEntityFields.createdAt,
-    BaseEntityFields.updatedAt
+    BaseEntityFields.updatedAt,
   ];
 }
 
@@ -52,13 +52,15 @@ enum TransactionType {
   transfer;
 
   String get code => switch (this) {
-        TransactionType.income => "IN",
-        TransactionType.expense => "OUT",
-        TransactionType.transfer => "TRSF",
-      };
+    TransactionType.income => "IN",
+    TransactionType.expense => "OUT",
+    TransactionType.transfer => "TRSF",
+  };
 
-  String get prefix =>
-      switch (this) { TransactionType.expense => "-", _ => "" };
+  String get prefix => switch (this) {
+    TransactionType.expense => "-",
+    _ => "",
+  };
 
   static TransactionType fromJson(String code) =>
       TransactionType.values.firstWhere((e) => e.code == code);
@@ -73,7 +75,7 @@ enum Recurrence {
   bimonthly,
   quarterly,
   semester,
-  annual
+  annual,
 }
 
 class RecurrenceData {
@@ -89,20 +91,41 @@ class RecurrenceData {
 }
 
 Map<Recurrence, RecurrenceData> recurrenceMap = {
-  Recurrence.daily:
-      RecurrenceData(recurrence: Recurrence.daily, label: "Daily", days: 1),
-  Recurrence.weekly:
-      RecurrenceData(recurrence: Recurrence.weekly, label: "Weekly", days: 7),
+  Recurrence.daily: RecurrenceData(
+    recurrence: Recurrence.daily,
+    label: "Daily",
+    days: 1,
+  ),
+  Recurrence.weekly: RecurrenceData(
+    recurrence: Recurrence.weekly,
+    label: "Weekly",
+    days: 7,
+  ),
   Recurrence.monthly: RecurrenceData(
-      recurrence: Recurrence.monthly, label: "Monthly", days: 30),
+    recurrence: Recurrence.monthly,
+    label: "Monthly",
+    days: 30,
+  ),
   Recurrence.bimonthly: RecurrenceData(
-      recurrence: Recurrence.bimonthly, label: "Bimonthly", days: 60),
+    recurrence: Recurrence.bimonthly,
+    label: "Bimonthly",
+    days: 60,
+  ),
   Recurrence.quarterly: RecurrenceData(
-      recurrence: Recurrence.quarterly, label: "Quarterly", days: 90),
+    recurrence: Recurrence.quarterly,
+    label: "Quarterly",
+    days: 90,
+  ),
   Recurrence.semester: RecurrenceData(
-      recurrence: Recurrence.semester, label: "Semester", days: 180),
-  Recurrence.annual:
-      RecurrenceData(recurrence: Recurrence.annual, label: "Annual", days: 365),
+    recurrence: Recurrence.semester,
+    label: "Semester",
+    days: 180,
+  ),
+  Recurrence.annual: RecurrenceData(
+    recurrence: Recurrence.annual,
+    label: "Annual",
+    days: 365,
+  ),
 };
 
 Recurrence parseRecurrence(String s) {
@@ -130,53 +153,54 @@ class Transaction extends BaseEntity {
   final bool recurring;
   final int? idRecurringTransaction;
 
-  const Transaction(
-      {super.id,
-      required this.date,
-      required this.amount,
-      required this.type,
-      this.note,
-      this.idCategory,
-      this.categoryName,
-      this.categoryColor,
-      this.categorySymbol,
-      required this.idBankAccount,
-      this.bankAccountName,
-      this.idBankAccountTransfer,
-      this.bankAccountTransferName,
-      required this.recurring,
-      this.idRecurringTransaction,
-      super.createdAt,
-      super.updatedAt});
+  const Transaction({
+    super.id,
+    required this.date,
+    required this.amount,
+    required this.type,
+    this.note,
+    this.idCategory,
+    this.categoryName,
+    this.categoryColor,
+    this.categorySymbol,
+    required this.idBankAccount,
+    this.bankAccountName,
+    this.idBankAccountTransfer,
+    this.bankAccountTransferName,
+    required this.recurring,
+    this.idRecurringTransaction,
+    super.createdAt,
+    super.updatedAt,
+  });
 
-  Transaction copy(
-          {Object? id = _unset,
-          DateTime? date,
-          num? amount,
-          TransactionType? type,
-          String? note,
-          int? idCategory,
-          int? idBankAccount,
-          int? idBankAccountTransfer,
-          bool? recurring,
-          int? idRecurringTransaction,
-          DateTime? createdAt,
-          DateTime? updatedAt}) =>
-      Transaction(
-          id: id == _unset ? this.id : (id as int?),
-          date: date ?? this.date,
-          amount: amount ?? this.amount,
-          type: type ?? this.type,
-          note: note ?? this.note,
-          idCategory: idCategory ?? this.idCategory,
-          idBankAccount: idBankAccount ?? this.idBankAccount,
-          idBankAccountTransfer:
-              idBankAccountTransfer ?? this.idBankAccountTransfer,
-          recurring: recurring ?? this.recurring,
-          idRecurringTransaction:
-              idRecurringTransaction ?? this.idRecurringTransaction,
-          createdAt: createdAt ?? this.createdAt,
-          updatedAt: updatedAt ?? this.updatedAt);
+  Transaction copy({
+    Object? id = _unset,
+    DateTime? date,
+    num? amount,
+    TransactionType? type,
+    String? note,
+    int? idCategory,
+    int? idBankAccount,
+    int? idBankAccountTransfer,
+    bool? recurring,
+    int? idRecurringTransaction,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) => Transaction(
+    id: id == _unset ? this.id : (id as int?),
+    date: date ?? this.date,
+    amount: amount ?? this.amount,
+    type: type ?? this.type,
+    note: note ?? this.note,
+    idCategory: idCategory ?? this.idCategory,
+    idBankAccount: idBankAccount ?? this.idBankAccount,
+    idBankAccountTransfer: idBankAccountTransfer ?? this.idBankAccountTransfer,
+    recurring: recurring ?? this.recurring,
+    idRecurringTransaction:
+        idRecurringTransaction ?? this.idRecurringTransaction,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
 
   static Transaction fromJson(Map<String, Object?> json) {
     return Transaction(
@@ -235,7 +259,8 @@ class TransactionMethods extends SossoldiDatabase {
   Future<Transaction> selectById(int id) async {
     final db = await database;
 
-    final maps = await db.rawQuery('''
+    final maps = await db.rawQuery(
+      '''
       SELECT t.*,
         c.${CategoryTransactionFields.name} as ${TransactionFields.categoryName},
         c.${CategoryTransactionFields.color} as ${TransactionFields.categoryColor},
@@ -252,7 +277,9 @@ class TransactionMethods extends SossoldiDatabase {
         $bankAccountTable as b2 ON t.${TransactionFields.idBankAccountTransfer} = b2.${BankAccountFields.id}
       WHERE
         t.${TransactionFields.id} = ?
-    ''', [id]);
+    ''',
+      [id],
+    );
 
     if (maps.isNotEmpty) {
       return Transaction.fromJson(maps.first);
@@ -261,15 +288,16 @@ class TransactionMethods extends SossoldiDatabase {
     }
   }
 
-  Future<List<Transaction>> selectAll(
-      {int? type,
-      DateTime? date,
-      DateTime? dateRangeStart,
-      DateTime? dateRangeEnd,
-      int? limit,
-      List<String>? transactionType,
-      String? label,
-      Map<int, bool>? bankAccounts}) async {
+  Future<List<Transaction>> selectAll({
+    int? type,
+    DateTime? date,
+    DateTime? dateRangeStart,
+    DateTime? dateRangeEnd,
+    int? limit,
+    List<String>? transactionType,
+    String? label,
+    Map<int, bool>? bankAccounts,
+  }) async {
     final db = await database;
 
     String? where = type != null
@@ -305,7 +333,8 @@ class TransactionMethods extends SossoldiDatabase {
     final orderByDESC = '${TransactionFields.date} DESC';
 
     final result = await db.rawQuery(
-        'SELECT t.*, c.${CategoryTransactionFields.name} as ${TransactionFields.categoryName}, c.${CategoryTransactionFields.color} as ${TransactionFields.categoryColor}, c.${CategoryTransactionFields.symbol} as ${TransactionFields.categorySymbol}, b1.${BankAccountFields.name} as ${TransactionFields.bankAccountName}, b2.${BankAccountFields.name} as ${TransactionFields.bankAccountTransferName} FROM "$transactionTable" as t LEFT JOIN $categoryTransactionTable as c ON t.${TransactionFields.idCategory} = c.${CategoryTransactionFields.id} LEFT JOIN $bankAccountTable as b1 ON t.${TransactionFields.idBankAccount} = b1.${BankAccountFields.id} LEFT JOIN $bankAccountTable as b2 ON t.${TransactionFields.idBankAccountTransfer} = b2.${BankAccountFields.id} ${where != null ? "WHERE $where" : ""} ORDER BY $orderByDESC ${limit != null ? "LIMIT $limit" : ""}');
+      'SELECT t.*, c.${CategoryTransactionFields.name} as ${TransactionFields.categoryName}, c.${CategoryTransactionFields.color} as ${TransactionFields.categoryColor}, c.${CategoryTransactionFields.symbol} as ${TransactionFields.categorySymbol}, b1.${BankAccountFields.name} as ${TransactionFields.bankAccountName}, b2.${BankAccountFields.name} as ${TransactionFields.bankAccountTransferName} FROM "$transactionTable" as t LEFT JOIN $categoryTransactionTable as c ON t.${TransactionFields.idCategory} = c.${CategoryTransactionFields.id} LEFT JOIN $bankAccountTable as b1 ON t.${TransactionFields.idBankAccount} = b1.${BankAccountFields.id} LEFT JOIN $bankAccountTable as b2 ON t.${TransactionFields.idBankAccountTransfer} = b2.${BankAccountFields.id} ${where != null ? "WHERE $where" : ""} ORDER BY $orderByDESC ${limit != null ? "LIMIT $limit" : ""}',
+    );
 
     return result.map((json) => Transaction.fromJson(json)).toList();
   }
@@ -314,7 +343,8 @@ class TransactionMethods extends SossoldiDatabase {
     final db = await database;
 
     final result = await db.rawQuery(
-        'SELECT * FROM "$transactionTable" as t WHERE t.${TransactionFields.idRecurringTransaction} = $id ORDER BY ${TransactionFields.date} DESC');
+      'SELECT * FROM "$transactionTable" as t WHERE t.${TransactionFields.idRecurringTransaction} = $id ORDER BY ${TransactionFields.date} DESC',
+    );
 
     return result.map((json) => Transaction.fromJson(json)).toList();
   }
@@ -330,7 +360,8 @@ class TransactionMethods extends SossoldiDatabase {
     }
 
     final result = await db.rawQuery(
-        'SELECT DISTINCT LOWER(t.note) as note FROM "$transactionTable" as t LEFT JOIN $bankAccountTable as b1 ON t.${TransactionFields.idBankAccount} = b1.${BankAccountFields.id} LEFT JOIN $bankAccountTable as b2 ON t.${TransactionFields.idBankAccountTransfer} = b2.${BankAccountFields.id} ${where.isNotEmpty ? "WHERE $where" : ""} ORDER BY $orderByDESC');
+      'SELECT DISTINCT LOWER(t.note) as note FROM "$transactionTable" as t LEFT JOIN $bankAccountTable as b1 ON t.${TransactionFields.idBankAccount} = b1.${BankAccountFields.id} LEFT JOIN $bankAccountTable as b2 ON t.${TransactionFields.idBankAccountTransfer} = b2.${BankAccountFields.id} ${where.isNotEmpty ? "WHERE $where" : ""} ORDER BY $orderByDESC',
+    );
 
     return (result).map((x) => x["note"] as String).toList();
   }

@@ -30,28 +30,34 @@ void main() {
       mainAccount: false,
     );
 
-    await tester.pumpWidget(MaterialApp(
-      home: Material(
-        child: ProviderScope(child: AccountsSum(account: randomBankAccount)),
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Material(
+          child: ProviderScope(child: AccountsSum(account: randomBankAccount)),
+        ),
       ),
-    ));
+    );
 
     FutureBuilder<num?>(
-        future: BankAccountMethods().getAccountSum(99),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            // Show an error message if the future encounters an error
-            return Text('Error: ${snapshot.error}');
-          } else {
-            final accountSum = snapshot.data ?? 0;
-            // TODO need to test total amount with some transactions too
-            expect(
-                find.text(accountSum.toStringAsFixed(2).replaceAll('.', ','),
-                    findRichText: true),
-                findsOneWidget);
-            return const Text('Ok!');
-          }
-        });
+      future: BankAccountMethods().getAccountSum(99),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          // Show an error message if the future encounters an error
+          return Text('Error: ${snapshot.error}');
+        } else {
+          final accountSum = snapshot.data ?? 0;
+          // TODO need to test total amount with some transactions too
+          expect(
+            find.text(
+              accountSum.toStringAsFixed(2).replaceAll('.', ','),
+              findRichText: true,
+            ),
+            findsOneWidget,
+          );
+          return const Text('Ok!');
+        }
+      },
+    );
 
     expect(find.text(randomAccount), findsOneWidget);
   });

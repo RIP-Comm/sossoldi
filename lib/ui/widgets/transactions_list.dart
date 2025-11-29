@@ -73,7 +73,7 @@ class _TransactionsListState extends State<TransactionsList> {
               padding: widget.padding,
               shrinkWrap: true,
               itemCount: totals.keys.length,
-              separatorBuilder: (_, __) => const SizedBox(height: Sizes.lg),
+              separatorBuilder: (_, _) => const SizedBox(height: Sizes.lg),
               itemBuilder: (context, monthIndex) {
                 // Group transactions by month
                 final dates = totals.keys.toList()
@@ -101,13 +101,12 @@ class _TransactionsListState extends State<TransactionsList> {
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: dateTransactions.length,
-                          separatorBuilder: (_, __) => Divider(
+                          separatorBuilder: (_, _) => Divider(
                             indent: 12,
                             endIndent: 12,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withValues(alpha: 0.4),
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.primary.withValues(alpha: 0.4),
                           ),
                           itemBuilder: (context, index) => TransactionTile(
                             ignoreBlur: widget.ignoreBlur,
@@ -144,18 +143,23 @@ class TransactionTile extends ConsumerWidget {
         visualDensity: VisualDensity.compact,
         dense: true,
         contentPadding: const EdgeInsets.symmetric(
-            horizontal: Sizes.md, vertical: Sizes.xs),
+          horizontal: Sizes.md,
+          vertical: Sizes.xs,
+        ),
         onTap: () async {
           ref
               .read(transactionsProvider.notifier)
               .transactionUpdateState(transaction)
               .whenComplete(() {
-            if (context.mounted) {
-              Navigator.of(context).pushNamed("/add-page", arguments: {
-                'recurrencyEditingPermitted': !transaction.recurring
+                if (context.mounted) {
+                  Navigator.of(context).pushNamed(
+                    "/add-page",
+                    arguments: {
+                      'recurrencyEditingPermitted': !transaction.recurring,
+                    },
+                  );
+                }
               });
-            }
-          });
         },
         leading: RoundedIcon(
           icon: transaction.categorySymbol != null
@@ -173,8 +177,8 @@ class TransactionTile extends ConsumerWidget {
               : transaction.note!,
           overflow: TextOverflow.ellipsis,
           style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                color: Theme.of(context).colorScheme.primary,
-              ),
+            color: Theme.of(context).colorScheme.primary,
+          ),
         ),
         subtitle: Text(
           transaction.type == TransactionType.transfer
@@ -182,8 +186,8 @@ class TransactionTile extends ConsumerWidget {
               : transaction.categoryName ?? "Uncategorized",
           overflow: TextOverflow.ellipsis,
           style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                color: Theme.of(context).colorScheme.primary,
-              ),
+            color: Theme.of(context).colorScheme.primary,
+          ),
         ),
         trailing: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -198,19 +202,19 @@ class TransactionTile extends ConsumerWidget {
                     '${transaction.type == TransactionType.expense ? "-" : ""}${transaction.amount.toCurrency()}',
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          color: transaction.type.toColor(
-                            brightness: Theme.of(context).brightness,
-                          ),
-                        ),
+                      color: transaction.type.toColor(
+                        brightness: Theme.of(context).brightness,
+                      ),
+                    ),
                   ),
                   Text(
                     currencyState.selectedCurrency.symbol,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: transaction.type.toColor(
-                            brightness: Theme.of(context).brightness,
-                          ),
-                        ),
+                      color: transaction.type.toColor(
+                        brightness: Theme.of(context).brightness,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -220,8 +224,8 @@ class TransactionTile extends ConsumerWidget {
                   ? "${transaction.bankAccountName ?? ''}→${transaction.bankAccountTransferName ?? ''}"
                   : transaction.bankAccountName ?? '',
               style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
           ],
         ),
@@ -252,28 +256,27 @@ class TransactionTitle extends ConsumerWidget {
         children: [
           Text(
             date.formatEDMY(),
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall!
-                .copyWith(color: Theme.of(context).colorScheme.primary),
+            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+              color: Theme.of(context).colorScheme.primary,
+            ),
           ),
           const Spacer(),
           BlurWidget(
             ignore: ignoreBlur,
             child: Text(
               total.toCurrency(),
-              style:
-                  Theme.of(context).textTheme.bodyLarge!.copyWith(color: color),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyLarge!.copyWith(color: color),
             ),
           ),
           BlurWidget(
             ignore: ignoreBlur,
             child: Text(
               currencyState.selectedCurrency.symbol,
-              style: Theme.of(context)
-                  .textTheme
-                  .labelMedium!
-                  .copyWith(color: color),
+              style: Theme.of(
+                context,
+              ).textTheme.labelMedium!.copyWith(color: color),
             ),
           ),
         ],

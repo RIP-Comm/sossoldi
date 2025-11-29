@@ -26,9 +26,7 @@ class ListTab extends ConsumerWidget {
           );
         },
         error: (error, stackTrace) {
-          return Center(
-            child: Text(stackTrace.toString()),
-          );
+          return Center(child: Text(stackTrace.toString()));
         },
       ),
     );

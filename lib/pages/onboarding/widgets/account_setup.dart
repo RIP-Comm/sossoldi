@@ -55,36 +55,35 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
           padding: const EdgeInsets.all(Sizes.lg),
           child: Column(
             children: [
-              Text("STEP 2 OF 2",
-                  style: Theme.of(context).textTheme.labelSmall),
+              Text(
+                "STEP 2 OF 2",
+                style: Theme.of(context).textTheme.labelSmall,
+              ),
               const SizedBox(height: Sizes.xl),
               Text(
                 "Set the liquidity in your main account",
                 textAlign: TextAlign.center,
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineLarge
-                    ?.copyWith(color: blue1),
+                style: Theme.of(
+                  context,
+                ).textTheme.headlineLarge?.copyWith(color: blue1),
               ),
               const SizedBox(height: Sizes.xl),
               Text(
                 "It will be used as a baseline to which you can add income, expenses and calculate your wealth.",
                 textAlign: TextAlign.center,
                 maxLines: 3,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
-                    ?.copyWith(color: blue1),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: blue1),
               ),
               const SizedBox(height: Sizes.sm),
               Text(
                 "You'll be able to add more accounts within the app.",
                 textAlign: TextAlign.center,
                 maxLines: 3,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
-                    ?.copyWith(color: blue1),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: blue1),
               ),
               const SizedBox(height: Sizes.sm),
               Expanded(
@@ -92,34 +91,41 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                   physics: const BouncingScrollPhysics(),
                   child: Container(
                     margin: const EdgeInsets.symmetric(
-                        horizontal: Sizes.xl, vertical: Sizes.lg),
+                      horizontal: Sizes.xl,
+                      vertical: Sizes.lg,
+                    ),
                     padding: const EdgeInsets.symmetric(
-                        horizontal: Sizes.xl, vertical: Sizes.lg),
+                      horizontal: Sizes.xl,
+                      vertical: Sizes.lg,
+                    ),
                     decoration: BoxDecoration(
-                        color: white,
-                        shape: BoxShape.rectangle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withValues(alpha: 0.5),
-                            spreadRadius: 2,
-                            blurRadius: 8,
-                            offset: const Offset(2, 2),
-                          ),
-                        ],
-                        borderRadius:
-                            BorderRadius.circular(Sizes.borderRadiusLarge)),
+                      color: white,
+                      shape: BoxShape.rectangle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withValues(alpha: 0.5),
+                          spreadRadius: 2,
+                          blurRadius: 8,
+                          offset: const Offset(2, 2),
+                        ),
+                      ],
+                      borderRadius: BorderRadius.circular(
+                        Sizes.borderRadiusLarge,
+                      ),
+                    ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("ACCOUNT NAME ",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelSmall
-                                    ?.copyWith(color: grey1)),
-                            const Icon(Icons.edit, size: 10)
+                            Text(
+                              "ACCOUNT NAME ",
+                              style: Theme.of(
+                                context,
+                              ).textTheme.labelSmall?.copyWith(color: grey1),
+                            ),
+                            const Icon(Icons.edit, size: 10),
                           ],
                         ),
                         TextField(
@@ -128,9 +134,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                           autofocus: true,
                           decoration: InputDecoration(
                             hintText: "Main Account",
-                            errorStyle: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
+                            errorStyle: Theme.of(context).textTheme.bodyLarge
                                 ?.copyWith(fontSize: 10, color: red),
                             hintStyle: Theme.of(context).textTheme.bodySmall,
                             border: const UnderlineInputBorder(
@@ -138,8 +142,9 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                             ),
                           ),
                           onTapOutside: (_) {
-                            FocusScopeNode currentFocus =
-                                FocusScope.of(context);
+                            FocusScopeNode currentFocus = FocusScope.of(
+                              context,
+                            );
                             if (!currentFocus.hasPrimaryFocus) {
                               currentFocus.unfocus();
                             }
@@ -149,12 +154,13 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("SET AMOUNT ",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelSmall
-                                    ?.copyWith(color: grey1)),
-                            const Icon(Icons.edit, size: 10)
+                            Text(
+                              "SET AMOUNT ",
+                              style: Theme.of(
+                                context,
+                              ).textTheme.labelSmall?.copyWith(color: grey1),
+                            ),
+                            const Icon(Icons.edit, size: 10),
                           ],
                         ),
                         TextField(
@@ -171,9 +177,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                           decoration: InputDecoration(
                             hintText: "e.g 1300 €",
                             suffixText: "€",
-                            errorStyle: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
+                            errorStyle: Theme.of(context).textTheme.bodyLarge
                                 ?.copyWith(fontSize: 10, color: red),
                             hintStyle: Theme.of(context).textTheme.bodySmall,
                             border: const UnderlineInputBorder(
@@ -181,8 +185,9 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                             ),
                           ),
                           onTapOutside: (_) {
-                            FocusScopeNode currentFocus =
-                                FocusScope.of(context);
+                            FocusScopeNode currentFocus = FocusScope.of(
+                              context,
+                            );
                             if (!currentFocus.hasPrimaryFocus) {
                               currentFocus.unfocus();
                             }
@@ -192,12 +197,13 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("EDIT ICON AND COLOR ",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelSmall
-                                    ?.copyWith(color: grey1)),
-                            const Icon(Icons.edit, size: 10)
+                            Text(
+                              "EDIT ICON AND COLOR ",
+                              style: Theme.of(
+                                context,
+                              ).textTheme.labelSmall?.copyWith(color: grey1),
+                            ),
+                            const Icon(Icons.edit, size: 10),
                           ],
                         ),
                         const SizedBox(height: Sizes.xs),
@@ -220,7 +226,8 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                             scrollDirection: Axis.horizontal,
                             physics: const BouncingScrollPhysics(),
                             padding: const EdgeInsets.symmetric(
-                                horizontal: Sizes.lg),
+                              horizontal: Sizes.lg,
+                            ),
                             separatorBuilder: (context, index) =>
                                 const SizedBox(width: Sizes.lg),
                             itemBuilder: (context, index) {
@@ -231,8 +238,8 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                                 child: Container(
                                   height:
                                       accountColorList[accountColor] == color
-                                          ? 38
-                                          : 32,
+                                      ? 38
+                                      : 32,
                                   width: accountColorList[accountColor] == color
                                       ? 38
                                       : 32,
@@ -241,13 +248,13 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                                     color: color,
                                     border:
                                         accountColorList[accountColor] == color
-                                            ? Border.all(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary,
-                                                width: 3,
-                                              )
-                                            : null,
+                                        ? Border.all(
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.primary,
+                                            width: 3,
+                                          )
+                                        : null,
                                   ),
                                 ),
                               );
@@ -265,33 +272,37 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                             scrollDirection: Axis.horizontal,
                             physics: const BouncingScrollPhysics(),
                             padding: const EdgeInsets.symmetric(
-                                horizontal: Sizes.lg),
+                              horizontal: Sizes.lg,
+                            ),
                             separatorBuilder: (context, index) =>
                                 const SizedBox(width: Sizes.lg),
                             itemBuilder: (context, index) {
-                              IconData accountIconData =
-                                  accountIconList.values.elementAt(index);
-                              String accountIconName =
-                                  accountIconList.keys.elementAt(index);
+                              IconData accountIconData = accountIconList.values
+                                  .elementAt(index);
+                              String accountIconName = accountIconList.keys
+                                  .elementAt(index);
                               return GestureDetector(
                                 onTap: () => setState(
-                                    () => accountIcon = accountIconName),
+                                  () => accountIcon = accountIconName,
+                                ),
                                 child: Container(
                                   width: 38,
                                   height: 38,
                                   margin: const EdgeInsets.all(Sizes.xxs),
                                   decoration: BoxDecoration(
-                                    color: accountIconList[accountIcon] ==
+                                    color:
+                                        accountIconList[accountIcon] ==
                                             accountIconData
-                                        ? Theme.of(context)
-                                            .colorScheme
-                                            .secondary
+                                        ? Theme.of(
+                                            context,
+                                          ).colorScheme.secondary
                                         : Theme.of(context).colorScheme.surface,
                                     shape: BoxShape.circle,
                                   ),
                                   child: Icon(
                                     accountIconData,
-                                    color: accountIconList[accountIcon] ==
+                                    color:
+                                        accountIconList[accountIcon] ==
                                             accountIconData
                                         ? Colors.white
                                         : Theme.of(context).colorScheme.primary,
@@ -310,18 +321,20 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
               ),
               Column(
                 children: [
-                  SizedBox(height: Sizes.lg),
-                  Text('Or you can skip this step and start from 0',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall
-                          ?.copyWith(color: blue1)),
+                  const SizedBox(height: Sizes.lg),
+                  Text(
+                    'Or you can skip this step and start from 0',
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(color: blue1),
+                  ),
                   const SizedBox(height: Sizes.sm),
                   ElevatedButton(
                     onPressed: () {
                       _flagOnBoardingCompleted();
-                      Navigator.of(context)
-                          .pushNamedAndRemoveUntil('/', (route) => false);
+                      Navigator.of(
+                        context,
+                      ).pushNamedAndRemoveUntil('/', (route) => false);
                     },
                     style: ElevatedButton.styleFrom(
                       elevation: 0.0,
@@ -335,10 +348,9 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                           children: [
                             Text(
                               'START FROM 0  ',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(color: blue1),
+                              style: Theme.of(
+                                context,
+                              ).textTheme.bodyMedium?.copyWith(color: blue1),
                             ),
                             const Icon(
                               Icons.arrow_forward,
@@ -349,11 +361,8 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                         ),
                         SizedBox(
                           width: MediaQuery.sizeOf(context).width / 3,
-                          child: const Divider(
-                            color: blue1,
-                            thickness: 1,
-                          ),
-                        )
+                          child: const Divider(color: blue1, thickness: 1),
+                        ),
                       ],
                     ),
                   ),
@@ -365,7 +374,9 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (_validAmount) {
-                          ref.watch(accountsProvider.notifier).addAccount(
+                          ref
+                              .watch(accountsProvider.notifier)
+                              .addAccount(
                                 name: accountNameController.text,
                                 icon: accountIcon,
                                 color: accountColor,
@@ -374,22 +385,21 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                                     num.tryParse(amountController.text) ?? 0,
                               );
                           _flagOnBoardingCompleted();
-                          Navigator.of(context)
-                              .pushNamedAndRemoveUntil('/', (route) => false);
+                          Navigator.of(
+                            context,
+                          ).pushNamedAndRemoveUntil('/', (route) => false);
                         }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: _validAmount ? blue5 : grey2,
                       ),
-                      child: Center(
-                        child: Text(
-                          'START TRACKING YOUR EXPENSES',
-                        ),
+                      child: const Center(
+                        child: Text('START TRACKING YOUR EXPENSES'),
                       ),
                     ),
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),

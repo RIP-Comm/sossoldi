@@ -15,10 +15,9 @@ class CurrencySelectorDialog {
       builder: (context) => AlertDialog(
         title: Text(
           'Select a currency',
-          style: Theme.of(context)
-              .textTheme
-              .titleLarge!
-              .copyWith(color: Theme.of(context).colorScheme.primary),
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+            color: Theme.of(context).colorScheme.primary,
+          ),
         ),
         content: SizedBox(
           height: 300,
@@ -43,15 +42,18 @@ class CurrencySelectorDialog {
                         child: ListTile(
                           leading: CircleAvatar(
                             radius: 22,
-                            backgroundColor: state.selectedCurrency.code ==
+                            backgroundColor:
+                                state.selectedCurrency.code ==
                                     snapshot.data![i].code
                                 ? blue5
                                 : grey1,
-                            child: Text(snapshot.data![i].symbol,
-                                style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.onPrimary,
-                                    fontSize: 20)),
+                            child: Text(
+                              snapshot.data![i].symbol,
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                                fontSize: 20,
+                              ),
+                            ),
                           ),
                           title: Text(
                             snapshot.data![i].name,

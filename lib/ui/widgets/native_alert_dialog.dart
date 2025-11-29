@@ -21,12 +21,7 @@ class AdaptiveDialog extends StatelessWidget {
   /// The content of the dialog.
   final Widget? content;
 
-  const AdaptiveDialog({
-    super.key,
-    this.actions,
-    this.title,
-    this.content,
-  });
+  const AdaptiveDialog({super.key, this.actions, this.title, this.content});
 
   @override
   Widget build(BuildContext context) {
@@ -65,11 +60,7 @@ class _AndroidDialog extends StatelessWidget {
   final Widget? title;
   final Widget? content;
 
-  const _AndroidDialog({
-    this.actions,
-    this.title,
-    this.content,
-  });
+  const _AndroidDialog({this.actions, this.title, this.content});
 
   @override
   Widget build(BuildContext context) {
@@ -78,13 +69,13 @@ class _AndroidDialog extends StatelessWidget {
       content: content,
       actions: actions != null
           ? actions!
-              .map(
-                (action) => TextButton(
-                  onPressed: action.onPressed,
-                  child: action.child,
-                ),
-              )
-              .toList()
+                .map(
+                  (action) => TextButton(
+                    onPressed: action.onPressed,
+                    child: action.child,
+                  ),
+                )
+                .toList()
           : [],
     );
   }
@@ -95,11 +86,7 @@ class _CupertinoDialog extends StatelessWidget {
   final Widget? title;
   final Widget? content;
 
-  const _CupertinoDialog({
-    this.actions,
-    this.title,
-    this.content,
-  });
+  const _CupertinoDialog({this.actions, this.title, this.content});
 
   @override
   Widget build(BuildContext context) {
@@ -108,15 +95,15 @@ class _CupertinoDialog extends StatelessWidget {
       content: content,
       actions: actions != null
           ? actions!
-              .map(
-                (action) => CupertinoDialogAction(
-                  isDestructiveAction: action.isDestructiveAction,
-                  isDefaultAction: action.isDefaultAction,
-                  onPressed: action.onPressed,
-                  child: action.child,
-                ),
-              )
-              .toList()
+                .map(
+                  (action) => CupertinoDialogAction(
+                    isDestructiveAction: action.isDestructiveAction,
+                    isDefaultAction: action.isDefaultAction,
+                    onPressed: action.onPressed,
+                    child: action.child,
+                  ),
+                )
+                .toList()
           : [],
     );
   }

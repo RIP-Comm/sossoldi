@@ -22,10 +22,7 @@ class DuplicateTransactionDialog extends ConsumerWidget {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text(
-            "Cancel",
-            style: TextStyle(fontSize: 14),
-          ),
+          child: const Text("Cancel", style: TextStyle(fontSize: 14)),
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
@@ -35,12 +32,12 @@ class DuplicateTransactionDialog extends ConsumerWidget {
               .read(transactionsProvider.notifier)
               .duplicateTransaction(transaction)
               .then((t) {
-            if (context.mounted) {
-              Navigator.of(context)
-                ..pop()
-                ..pop();
-            }
-          }),
+                if (context.mounted) {
+                  Navigator.of(context)
+                    ..pop()
+                    ..pop();
+                }
+              }),
           child: const Text("Duplicate"),
         ),
       ],

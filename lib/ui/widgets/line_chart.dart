@@ -21,8 +21,10 @@ class LineChartWidget extends StatefulWidget {
 
   // Used to decide the bottom label
   final Period period;
-  final int currentMonthDays =
-      DateUtils.getDaysInMonth(DateTime.now().year, DateTime.now().month);
+  final int currentMonthDays = DateUtils.getDaysInMonth(
+    DateTime.now().year,
+    DateTime.now().month,
+  );
   final int nXLabel = 10;
   final double minY;
 
@@ -41,9 +43,9 @@ class LineChartWidget extends StatefulWidget {
     this.period = Period.month,
     int nXLabel = 10,
     double? minY,
-  })  : lineData = enableGapFilling ? fillGaps(lineData) : lineData,
-        line2Data = enableGapFilling ? fillGaps(line2Data) : line2Data,
-        minY = minY ?? calculateMinY(lineData, line2Data);
+  }) : lineData = enableGapFilling ? fillGaps(lineData) : lineData,
+       line2Data = enableGapFilling ? fillGaps(line2Data) : line2Data,
+       minY = minY ?? calculateMinY(lineData, line2Data);
 
   static double calculateMinY(List<FlSpot> line1Data, List<FlSpot> line2Data) {
     if (line1Data.isEmpty && line2Data.isEmpty) {
@@ -104,9 +106,7 @@ class _LineChartSample2State extends State<LineChartWidget> {
                         ),
                       );
                     }
-                    return LineChart(
-                      mainData(),
-                    );
+                    return LineChart(mainData());
                   },
                 ),
               ),
@@ -174,10 +174,7 @@ class _LineChartSample2State extends State<LineChartWidget> {
         }
     }
 
-    return SideTitleWidget(
-      meta: meta,
-      child: text,
-    );
+    return SideTitleWidget(meta: meta, child: text);
   }
 
   LineChartData mainData() {
@@ -191,9 +188,7 @@ class _LineChartSample2State extends State<LineChartWidget> {
         rightTitles: const AxisTitles(
           sideTitles: SideTitles(showTitles: false),
         ),
-        topTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
+        topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
         leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
@@ -208,30 +203,27 @@ class _LineChartSample2State extends State<LineChartWidget> {
       lineTouchData: LineTouchData(
         getTouchedSpotIndicator:
             (LineChartBarData barData, List<int> spotIndexes) {
-          bool allSameX = spotIndexes.toSet().length == 1;
+              bool allSameX = spotIndexes.toSet().length == 1;
 
-          if (!allSameX) {
-            return [];
-          }
-          return spotIndexes.map((spotIndex) {
-            return TouchedSpotIndicatorData(
-              const FlLine(
-                color: Colors.blueGrey,
-                strokeWidth: 2,
-              ),
-              FlDotData(
-                getDotPainter: (spot, percent, barData, index) {
-                  return FlDotCirclePainter(
-                    radius: 2,
-                    color: Colors.grey,
-                    strokeWidth: 2,
-                    strokeColor: Colors.blueGrey,
-                  );
-                },
-              ),
-            );
-          }).toList();
-        },
+              if (!allSameX) {
+                return [];
+              }
+              return spotIndexes.map((spotIndex) {
+                return TouchedSpotIndicatorData(
+                  const FlLine(color: Colors.blueGrey, strokeWidth: 2),
+                  FlDotData(
+                    getDotPainter: (spot, percent, barData, index) {
+                      return FlDotCirclePainter(
+                        radius: 2,
+                        color: Colors.grey,
+                        strokeWidth: 2,
+                        strokeColor: Colors.blueGrey,
+                      );
+                    },
+                  ),
+                );
+              }).toList();
+            },
         touchTooltipData: LineTouchTooltipData(
           fitInsideHorizontally: true,
           getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
@@ -244,7 +236,10 @@ class _LineChartSample2State extends State<LineChartWidget> {
             double x = touchedBarSpots[0].x;
             DateTime date = widget.period == Period.month
                 ? DateTime(
-                    DateTime.now().year, DateTime.now().month, (x + 1).toInt())
+                    DateTime.now().year,
+                    DateTime.now().month,
+                    (x + 1).toInt(),
+                  )
                 : DateTime(DateTime.now().year, (x + 1).toInt(), 1);
             String dateFormat = widget.period == Period.month
                 ? DateFormat(DateFormat.ABBR_MONTH_DAY).format(date)
@@ -272,9 +267,7 @@ class _LineChartSample2State extends State<LineChartWidget> {
 
               return LineTooltipItem(
                 '',
-                const TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
+                const TextStyle(fontWeight: FontWeight.bold),
                 children: [
                   TextSpan(
                     text: flSpot.y.toString(),

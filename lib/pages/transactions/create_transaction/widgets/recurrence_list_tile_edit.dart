@@ -13,9 +13,7 @@ import '../../../../ui/extensions.dart';
 import 'recurrence_selector.dart';
 
 class RecurrenceListTileEdit extends ConsumerWidget {
-  const RecurrenceListTileEdit({
-    super.key,
-  });
+  const RecurrenceListTileEdit({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -33,21 +31,16 @@ class RecurrenceListTileEdit extends ConsumerWidget {
               shape: BoxShape.circle,
               color: Theme.of(context).colorScheme.secondary,
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(Sizes.sm),
-              child: Icon(
-                Icons.autorenew,
-                size: 24.0,
-                color: white,
-              ),
+            child: const Padding(
+              padding: EdgeInsets.all(Sizes.sm),
+              child: Icon(Icons.autorenew, size: 24.0, color: white),
             ),
           ),
           title: Text(
             "Recurring payment",
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge!
-                .copyWith(color: Theme.of(context).colorScheme.primary),
+            style: Theme.of(context).textTheme.titleLarge!.copyWith(
+              color: Theme.of(context).colorScheme.primary,
+            ),
           ),
         ),
         if (isRecurring) ...[
@@ -70,18 +63,18 @@ class RecurrenceListTileEdit extends ConsumerWidget {
                 children: [
                   Text(
                     "Interval",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(color: Theme.of(context).colorScheme.primary),
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                   const Spacer(),
                   Text(
                     recurrenceMap[ref.watch(intervalProvider)]!.label,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: isDarkMode
-                            ? grey3
-                            : Theme.of(context).colorScheme.secondary),
+                      color: isDarkMode
+                          ? grey3
+                          : Theme.of(context).colorScheme.secondary,
+                    ),
                   ),
                   const SizedBox(width: Sizes.xs),
                   Icon(
@@ -113,18 +106,18 @@ class RecurrenceListTileEdit extends ConsumerWidget {
                 children: [
                   Text(
                     "End repetition",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(color: Theme.of(context).colorScheme.primary),
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                   const Spacer(),
                   Text(
                     endDate != null ? endDate.formatEDMY() : "Never",
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: isDarkMode
-                            ? grey3
-                            : Theme.of(context).colorScheme.secondary),
+                      color: isDarkMode
+                          ? grey3
+                          : Theme.of(context).colorScheme.secondary,
+                    ),
                   ),
                   const SizedBox(width: Sizes.xs),
                   Icon(
@@ -137,7 +130,7 @@ class RecurrenceListTileEdit extends ConsumerWidget {
               ),
             ),
           ),
-        ]
+        ],
       ],
     );
   }
@@ -149,64 +142,66 @@ class EndDateSelector extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-        appBar: AppBar(),
-        body: ListView(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          children: [
-            ListTile(
-              visualDensity: const VisualDensity(vertical: -3),
-              trailing: ref.watch(endDateProvider) != null
-                  ? null
-                  : const Icon(Icons.check),
-              title: const Text(
-                "Never",
-              ),
-              onTap: () => {
-                ref.read(endDateProvider.notifier).state = null,
-                Navigator.pop(context)
-              },
+      appBar: AppBar(),
+      body: ListView(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        children: [
+          ListTile(
+            visualDensity: const VisualDensity(vertical: -3),
+            trailing: ref.watch(endDateProvider) != null
+                ? null
+                : const Icon(Icons.check),
+            title: const Text("Never"),
+            onTap: () => {
+              ref.read(endDateProvider.notifier).state = null,
+              Navigator.pop(context),
+            },
+          ),
+          ListTile(
+            visualDensity: const VisualDensity(vertical: -3),
+            title: const Text("On a date"),
+            trailing: ref.watch(endDateProvider) != null
+                ? const Icon(Icons.check)
+                : null,
+            subtitle: Text(
+              ref.read(endDateProvider) != null
+                  ? ref.read(endDateProvider.notifier).state!.formatEDMY()
+                  : '',
             ),
-            ListTile(
-                visualDensity: const VisualDensity(vertical: -3),
-                title: const Text("On a date"),
-                trailing: ref.watch(endDateProvider) != null
-                    ? const Icon(Icons.check)
-                    : null,
-                subtitle: Text(ref.read(endDateProvider) != null
-                    ? ref.read(endDateProvider.notifier).state!.formatEDMY()
-                    : ''),
-                onTap: () async {
-                  FocusManager.instance.primaryFocus?.unfocus();
-                  if (Platform.isIOS) {
-                    showCupertinoModalPopup(
-                      context: context,
-                      builder: (_) => Container(
-                        height: 300,
-                        color: white,
-                        child: CupertinoDatePicker(
-                          initialDateTime: ref.watch(endDateProvider),
-                          minimumYear: 2015,
-                          maximumYear: 2050,
-                          mode: CupertinoDatePickerMode.date,
-                          onDateTimeChanged: (date) =>
-                              ref.read(endDateProvider.notifier).state = date,
-                        ),
-                      ),
-                    );
-                  } else if (Platform.isAndroid) {
-                    final DateTime? pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: ref.watch(endDateProvider),
-                      firstDate: DateTime(2015),
-                      lastDate: DateTime(2050),
-                    );
-                    if (pickedDate != null) {
-                      ref.read(endDateProvider.notifier).state = pickedDate;
-                    }
-                  }
-                })
-          ],
-        ));
+            onTap: () async {
+              FocusManager.instance.primaryFocus?.unfocus();
+              if (Platform.isIOS) {
+                showCupertinoModalPopup(
+                  context: context,
+                  builder: (_) => Container(
+                    height: 300,
+                    color: white,
+                    child: CupertinoDatePicker(
+                      initialDateTime: ref.watch(endDateProvider),
+                      minimumYear: 2015,
+                      maximumYear: 2050,
+                      mode: CupertinoDatePickerMode.date,
+                      onDateTimeChanged: (date) =>
+                          ref.read(endDateProvider.notifier).state = date,
+                    ),
+                  ),
+                );
+              } else if (Platform.isAndroid) {
+                final DateTime? pickedDate = await showDatePicker(
+                  context: context,
+                  initialDate: ref.watch(endDateProvider),
+                  firstDate: DateTime(2015),
+                  lastDate: DateTime(2050),
+                );
+                if (pickedDate != null) {
+                  ref.read(endDateProvider.notifier).state = pickedDate;
+                }
+              }
+            },
+          ),
+        ],
+      ),
+    );
   }
 }

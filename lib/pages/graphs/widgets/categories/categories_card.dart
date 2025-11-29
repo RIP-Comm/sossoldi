@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../ui/widgets/category_type_button.dart';
@@ -53,7 +51,8 @@ class CategoriesCardState extends ConsumerState<CategoriesCard> {
                       : const NoTransactionsContent();
                 },
                 loading: () => LoadingContentWidget(
-                    previousCategoriesCount: _categoriesCount),
+                  previousCategoriesCount: _categoriesCount,
+                ),
                 error: (e, s) => Text("Error: $e"),
               ),
             ],
@@ -77,15 +76,14 @@ class CategoriesContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Map<CategoryTransaction, double> sortedCategories = Map.fromEntries(
-      categories.entries.toList()
-        ..sort((a, b) {
-          int valueSorting = a.value.compareTo(b.value);
-          if (valueSorting == 0) {
-            int categoryNameSorting = a.key.name.compareTo(b.key.name);
-            return categoryNameSorting;
-          }
-          return valueSorting;
-        }),
+      categories.entries.toList()..sort((a, b) {
+        int valueSorting = a.value.compareTo(b.value);
+        if (valueSorting == 0) {
+          int categoryNameSorting = a.key.name.compareTo(b.key.name);
+          return categoryNameSorting;
+        }
+        return valueSorting;
+      }),
     );
 
     return Column(
@@ -135,11 +133,7 @@ class CategoryItem extends StatelessWidget {
       child: Column(
         children: [
           const Padding(padding: EdgeInsets.all(Sizes.xxs * 0.5)),
-          CategoryLabel(
-            category: category,
-            amount: amount,
-            total: totalAmount,
-          ),
+          CategoryLabel(category: category, amount: amount, total: totalAmount),
           const SizedBox(height: Sizes.xs),
           LinearProgressBar(
             type: BarType.category,

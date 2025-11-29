@@ -40,17 +40,16 @@ class RecurrenceListTile extends ConsumerWidget {
           ),
           title: Text(
             "Recurring payment",
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge!
-                .copyWith(color: Theme.of(context).colorScheme.primary),
+            style: Theme.of(context).textTheme.titleLarge!.copyWith(
+              color: Theme.of(context).colorScheme.primary,
+            ),
           ),
           trailing: recurrencyEditingPermitted
               ? Switch.adaptive(
                   value: isRecurring,
-                  onChanged: (select) => ref
-                      .read(selectedRecurringPayProvider.notifier)
-                      .state = select,
+                  onChanged: (select) =>
+                      ref.read(selectedRecurringPayProvider.notifier).state =
+                          select,
                 )
               : GestureDetector(
                   onTap: () {
@@ -65,8 +64,8 @@ class RecurrenceListTile extends ConsumerWidget {
                           )
                           .closed
                           .then((_) {
-                        isSnackBarVisible = false;
-                      });
+                            isSnackBarVisible = false;
+                          });
                     }
                   },
                   child: Tooltip(
@@ -87,35 +86,38 @@ class RecurrenceListTile extends ConsumerWidget {
                   : 0.5,
               child: FilledButton(
                 style: FilledButton.styleFrom(
-                  backgroundColor:
-                      Theme.of(context).colorScheme.primaryContainer,
+                  backgroundColor: Theme.of(
+                    context,
+                  ).colorScheme.primaryContainer,
                   padding: const EdgeInsets.all(Sizes.lg),
                 ),
                 onPressed:
                     selectedTransaction == null || recurrencyEditingPermitted
-                        ? () {
-                            FocusManager.instance.primaryFocus?.unfocus();
-                            showModalBottomSheet(
-                              context: context,
-                              builder: (_) => const RecurrenceSelector(),
-                            );
-                          }
-                        : null,
+                    ? () {
+                        FocusManager.instance.primaryFocus?.unfocus();
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (_) => const RecurrenceSelector(),
+                        );
+                      }
+                    : null,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       "Interval",
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.primary),
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
                     const Spacer(),
                     Text(
                       recurrenceMap[ref.watch(intervalProvider)]!.label,
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: isDarkMode
-                              ? grey3
-                              : Theme.of(context).colorScheme.secondary),
+                        color: isDarkMode
+                            ? grey3
+                            : Theme.of(context).colorScheme.secondary,
+                      ),
                     ),
                     const SizedBox(width: Sizes.xs),
                     Icon(
@@ -137,35 +139,38 @@ class RecurrenceListTile extends ConsumerWidget {
                   : 0.5,
               child: FilledButton(
                 style: FilledButton.styleFrom(
-                  backgroundColor:
-                      Theme.of(context).colorScheme.primaryContainer,
+                  backgroundColor: Theme.of(
+                    context,
+                  ).colorScheme.primaryContainer,
                   padding: const EdgeInsets.all(Sizes.lg),
                 ),
                 onPressed:
                     selectedTransaction == null || recurrencyEditingPermitted
-                        ? () => showModalBottomSheet(
-                              context: context,
-                              elevation: 10,
-                              builder: (BuildContext context) {
-                                return const EndDateSelector();
-                              },
-                            )
-                        : null,
+                    ? () => showModalBottomSheet(
+                        context: context,
+                        elevation: 10,
+                        builder: (BuildContext context) {
+                          return const EndDateSelector();
+                        },
+                      )
+                    : null,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       "End repetition",
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.primary),
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
                     const Spacer(),
                     Text(
                       endDate?.formatEDMY() ?? "Never",
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: isDarkMode
-                              ? grey3
-                              : Theme.of(context).colorScheme.secondary),
+                        color: isDarkMode
+                            ? grey3
+                            : Theme.of(context).colorScheme.secondary,
+                      ),
                     ),
                     const SizedBox(width: Sizes.xs),
                     Icon(
@@ -186,30 +191,24 @@ class RecurrenceListTile extends ConsumerWidget {
                 onPressed: () {
                   Navigator.of(context)
                       .pushNamed(
-                    "/edit-recurring-transaction",
-                    arguments: selectedTransaction,
-                  )
+                        "/edit-recurring-transaction",
+                        arguments: selectedTransaction,
+                      )
                       .then((value) {
-                    if (context.mounted) {
-                      Navigator.of(context).pop();
-                    }
-                  });
+                        if (context.mounted) {
+                          Navigator.of(context).pop();
+                        }
+                      });
                 },
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      Icons.warning,
-                      color: Colors.orange,
-                    ),
+                    Icon(Icons.warning, color: Colors.orange),
                     SizedBox(width: Sizes.sm),
                     Flexible(
                       child: Text(
                         'This is a transaction generated by a recurring one: any change will affect this unique transaction.\nTo change all future transactions options, or recurrency options, TAP HERE',
-                        style: TextStyle(
-                          color: darkBlue5,
-                          fontSize: 13,
-                        ),
+                        style: TextStyle(color: darkBlue5, fontSize: 13),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -218,7 +217,7 @@ class RecurrenceListTile extends ConsumerWidget {
               ),
             ),
           ],
-        ]
+        ],
       ],
     );
   }
@@ -230,62 +229,66 @@ class EndDateSelector extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-        appBar: AppBar(),
-        body: ListView(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          children: [
-            ListTile(
-              visualDensity: const VisualDensity(vertical: -3),
-              trailing: ref.watch(endDateProvider) != null
-                  ? null
-                  : const Icon(Icons.check),
-              title: const Text("Never"),
-              onTap: () {
-                ref.read(endDateProvider.notifier).state = null;
-                Navigator.pop(context);
-              },
+      appBar: AppBar(),
+      body: ListView(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        children: [
+          ListTile(
+            visualDensity: const VisualDensity(vertical: -3),
+            trailing: ref.watch(endDateProvider) != null
+                ? null
+                : const Icon(Icons.check),
+            title: const Text("Never"),
+            onTap: () {
+              ref.read(endDateProvider.notifier).state = null;
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            visualDensity: const VisualDensity(vertical: -3),
+            title: const Text("On a date"),
+            trailing: ref.watch(endDateProvider) != null
+                ? const Icon(Icons.check)
+                : null,
+            subtitle: Text(
+              ref.read(endDateProvider) != null
+                  ? ref.read(endDateProvider.notifier).state!.formatEDMY()
+                  : '',
             ),
-            ListTile(
-                visualDensity: const VisualDensity(vertical: -3),
-                title: const Text("On a date"),
-                trailing: ref.watch(endDateProvider) != null
-                    ? const Icon(Icons.check)
-                    : null,
-                subtitle: Text(ref.read(endDateProvider) != null
-                    ? ref.read(endDateProvider.notifier).state!.formatEDMY()
-                    : ''),
-                onTap: () async {
-                  FocusManager.instance.primaryFocus?.unfocus();
-                  if (Platform.isIOS) {
-                    showCupertinoModalPopup(
-                      context: context,
-                      builder: (_) => Container(
-                        height: 300,
-                        color: white,
-                        child: CupertinoDatePicker(
-                          initialDateTime: ref.watch(endDateProvider),
-                          minimumYear: 2015,
-                          maximumYear: 2050,
-                          mode: CupertinoDatePickerMode.date,
-                          onDateTimeChanged: (date) =>
-                              ref.read(endDateProvider.notifier).state = date,
-                        ),
-                      ),
-                    );
-                  } else if (Platform.isAndroid) {
-                    final DateTime? pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: ref.watch(endDateProvider),
-                      firstDate: DateTime(2015),
-                      lastDate: DateTime(2050),
-                    );
-                    if (pickedDate != null) {
-                      ref.read(endDateProvider.notifier).state = pickedDate;
-                    }
-                  }
-                })
-          ],
-        ));
+            onTap: () async {
+              FocusManager.instance.primaryFocus?.unfocus();
+              if (Platform.isIOS) {
+                showCupertinoModalPopup(
+                  context: context,
+                  builder: (_) => Container(
+                    height: 300,
+                    color: white,
+                    child: CupertinoDatePicker(
+                      initialDateTime: ref.watch(endDateProvider),
+                      minimumYear: 2015,
+                      maximumYear: 2050,
+                      mode: CupertinoDatePickerMode.date,
+                      onDateTimeChanged: (date) =>
+                          ref.read(endDateProvider.notifier).state = date,
+                    ),
+                  ),
+                );
+              } else if (Platform.isAndroid) {
+                final DateTime? pickedDate = await showDatePicker(
+                  context: context,
+                  initialDate: ref.watch(endDateProvider),
+                  firstDate: DateTime(2015),
+                  lastDate: DateTime(2050),
+                );
+                if (pickedDate != null) {
+                  ref.read(endDateProvider.notifier).state = pickedDate;
+                }
+              }
+            },
+          ),
+        ],
+      ),
+    );
   }
 }

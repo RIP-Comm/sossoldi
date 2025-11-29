@@ -6,11 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../pages/structure.dart';
 
 class BlurWidget extends ConsumerWidget {
-  const BlurWidget({
-    super.key,
-    this.ignore = false,
-    required this.child,
-  });
+  const BlurWidget({super.key, this.ignore = false, required this.child});
 
   final bool ignore;
 

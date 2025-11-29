@@ -36,22 +36,24 @@ class _AccountPage extends ConsumerState<AccountPage> {
   @override
   Widget build(BuildContext context) {
     final account = ref.read(selectedAccountProvider);
-    final accountTransactions =
-        ref.watch(selectedAccountCurrentYearMonthlyBalanceProvider);
+    final accountTransactions = ref.watch(
+      selectedAccountCurrentYearMonthlyBalanceProvider,
+    );
     final transactions = ref.watch(selectedAccountLastTransactions);
     final currencyState = ref.watch(currencyStateNotifier);
 
     ref.listen(
-        duplicatedTransactoinProvider,
-        (prev, curr) => showDuplicatedTransactionSnackBar(context,
-            transaction: curr, ref: ref));
+      duplicatedTransactoinProvider,
+      (prev, curr) => showDuplicatedTransactionSnackBar(
+        context,
+        transaction: curr,
+        ref: ref,
+      ),
+    );
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          account?.name ?? "",
-          style: const TextStyle(color: white),
-        ),
+        title: Text(account?.name ?? "", style: const TextStyle(color: white)),
         backgroundColor: Theme.of(context).colorScheme.secondary,
         elevation: 0,
         iconTheme: const IconThemeData(color: white),
@@ -107,16 +109,17 @@ class _AccountPage extends ConsumerState<AccountPage> {
                 padding: const EdgeInsets.all(Sizes.lg),
                 child: Column(
                   children: [
-                    Row(
+                    const Row(
                       spacing: 8,
                       children: [
-                        const Icon(Icons.info_outline),
+                        Icon(Icons.info_outline),
                         Text("Balance Discrepancy?"),
                       ],
                     ),
                     const SizedBox(height: Sizes.sm),
-                    Text(
-                        "Your recorder balance might differ from your bank's statement. Tap below to manually adjust your balance and keep your records accurate."),
+                    const Text(
+                      "Your recorder balance might differ from your bank's statement. Tap below to manually adjust your balance and keep your records accurate.",
+                    ),
                     const SizedBox(height: Sizes.lg),
                     if (isRecoinciling)
                       Column(
@@ -125,19 +128,20 @@ class _AccountPage extends ConsumerState<AccountPage> {
                             focusNode: _focusNode,
                             controller: _newBalanceController,
                             decoration: InputDecoration(
-                                hintText: "New Balance",
-                                border: OutlineInputBorder(),
-                                prefixIcon: SizedBox(
-                                  width: 40,
-                                  child: Center(
-                                    child: Text(
-                                      currencyState.selectedCurrency.symbol,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleLarge,
-                                    ),
+                              hintText: "New Balance",
+                              border: const OutlineInputBorder(),
+                              prefixIcon: SizedBox(
+                                width: 40,
+                                child: Center(
+                                  child: Text(
+                                    currencyState.selectedCurrency.symbol,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.titleLarge,
                                   ),
-                                )),
+                                ),
+                              ),
+                            ),
                             keyboardType: const TextInputType.numberWithOptions(
                               decimal: true,
                             ),
@@ -152,22 +156,25 @@ class _AccountPage extends ConsumerState<AccountPage> {
                               Expanded(
                                 child: ElevatedButton.icon(
                                   style: ElevatedButton.styleFrom(
-                                      iconColor: Colors.white,
-                                      padding: EdgeInsets.zero,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            Sizes.borderRadius),
+                                    iconColor: Colors.white,
+                                    padding: EdgeInsets.zero,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                        Sizes.borderRadius,
                                       ),
-                                      backgroundColor: Colors.green),
+                                    ),
+                                    backgroundColor: Colors.green,
+                                  ),
                                   onPressed: () async {
                                     if (account != null) {
                                       await ref
                                           .read(accountsProvider.notifier)
                                           .reconcileAccount(
-                                              newBalance: _newBalanceController
-                                                  .text
-                                                  .toNum(),
-                                              account: account);
+                                            newBalance: _newBalanceController
+                                                .text
+                                                .toNum(),
+                                            account: account,
+                                          );
                                       if (context.mounted) {
                                         Navigator.of(context).pop();
                                       }
@@ -180,14 +187,16 @@ class _AccountPage extends ConsumerState<AccountPage> {
                               Expanded(
                                 child: OutlinedButton.icon(
                                   style: OutlinedButton.styleFrom(
-                                      iconColor: Colors.red,
-                                      side: const BorderSide(color: Colors.red),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            Sizes.borderRadius),
+                                    iconColor: Colors.red,
+                                    side: const BorderSide(color: Colors.red),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                        Sizes.borderRadius,
                                       ),
-                                      foregroundColor: Colors.red,
-                                      backgroundColor: Colors.transparent),
+                                    ),
+                                    foregroundColor: Colors.red,
+                                    backgroundColor: Colors.transparent,
+                                  ),
                                   onPressed: () =>
                                       setState(() => isRecoinciling = false),
                                   label: const Text(
@@ -203,24 +212,30 @@ class _AccountPage extends ConsumerState<AccountPage> {
                       )
                     else
                       TextButton.icon(
-                          onPressed: () {
-                            setState(() => isRecoinciling = true);
-                            _focusNode.requestFocus();
-                          },
-                          icon: const Icon(Icons.sync),
-                          label: Text(
-                            "Start Reconciliation",
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          )),
+                        onPressed: () {
+                          setState(() => isRecoinciling = true);
+                          _focusNode.requestFocus();
+                        },
+                        icon: const Icon(Icons.sync),
+                        label: Text(
+                          "Start Reconciliation",
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ),
                   ],
                 ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(
-                  left: Sizes.lg, bottom: Sizes.sm, top: Sizes.sm),
-              child: Text("Your last transactions",
-                  style: Theme.of(context).textTheme.titleLarge),
+                left: Sizes.lg,
+                bottom: Sizes.sm,
+                top: Sizes.sm,
+              ),
+              child: Text(
+                "Your last transactions",
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
             ),
             TransactionsList(
               transactions: transactions

@@ -13,7 +13,7 @@ import '/model/transaction.dart';
 
 class InitialSchema extends Migration {
   InitialSchema()
-      : super(version: 1, description: 'Initial database schema creation');
+    : super(version: 1, description: 'Initial database schema creation');
 
   @override
   Future<void> up(Database db) async {

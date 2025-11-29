@@ -41,7 +41,9 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
             categoryToTransactionsIncome[categoryId]?.add(transaction);
           } else {
             categoryToTransactionsIncome.putIfAbsent(
-                categoryId, () => [transaction]);
+              categoryId,
+              () => [transaction],
+            );
           }
 
           // update total amount for the category
@@ -49,17 +51,21 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
           if (categoryToAmountIncome.containsKey(categoryId)) {
             categoryToAmountIncome[categoryId] =
                 categoryToAmountIncome[categoryId]! +
-                    transaction.amount.toDouble();
+                transaction.amount.toDouble();
           } else {
             categoryToAmountIncome.putIfAbsent(
-                categoryId, () => transaction.amount.toDouble());
+              categoryId,
+              () => transaction.amount.toDouble(),
+            );
           }
         } else if (transaction.type == TransactionType.expense) {
           if (categoryToTransactionsExpense.containsKey(categoryId)) {
             categoryToTransactionsExpense[categoryId]?.add(transaction);
           } else {
             categoryToTransactionsExpense.putIfAbsent(
-                categoryId, () => [transaction]);
+              categoryId,
+              () => [transaction],
+            );
           }
 
           // update total amount for the category
@@ -67,10 +73,12 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
           if (categoryToAmountExpense.containsKey(categoryId)) {
             categoryToAmountExpense[categoryId] =
                 categoryToAmountExpense[categoryId]! -
-                    transaction.amount.toDouble();
+                transaction.amount.toDouble();
           } else {
             categoryToAmountExpense.putIfAbsent(
-                categoryId, () => -transaction.amount.toDouble());
+              categoryId,
+              () => -transaction.amount.toDouble(),
+            );
           }
         }
       }
@@ -86,47 +94,48 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
             categories.when(
               data: (data) {
                 List<CategoryTransaction> categoryIncomeList = data
-                    .where((category) =>
-                        categoryToAmountIncome.containsKey(category.id))
+                    .where(
+                      (category) =>
+                          categoryToAmountIncome.containsKey(category.id),
+                    )
                     .toList();
                 List<CategoryTransaction> categoryExpenseList = data
-                    .where((category) =>
-                        categoryToAmountExpense.containsKey(category.id))
+                    .where(
+                      (category) =>
+                          categoryToAmountExpense.containsKey(category.id),
+                    )
                     .toList();
                 return transactionType == TransactionType.income
                     ? categoryIncomeList.isEmpty
-                        ? const SizedBox(
-                            height: 400,
-                            child: Center(
-                              child: Text("No incomes for selected month"),
-                            ),
-                          )
-                        : CategorySection(
-                            categoryList: categoryIncomeList,
-                            amounts: categoryToAmountIncome,
-                            total: totalIncome,
-                            transactions: categoryToTransactionsIncome,
-                          )
+                          ? const SizedBox(
+                              height: 400,
+                              child: Center(
+                                child: Text("No incomes for selected month"),
+                              ),
+                            )
+                          : CategorySection(
+                              categoryList: categoryIncomeList,
+                              amounts: categoryToAmountIncome,
+                              total: totalIncome,
+                              transactions: categoryToTransactionsIncome,
+                            )
                     : categoryExpenseList.isEmpty
-                        ? const SizedBox(
-                            height: 400,
-                            child: Center(
-                              child: Text("No expenses for selected month"),
-                            ),
-                          )
-                        : CategorySection(
-                            categoryList: categoryExpenseList,
-                            amounts: categoryToAmountExpense,
-                            total: totalExpense,
-                            transactions: categoryToTransactionsExpense,
-                          );
+                    ? const SizedBox(
+                        height: 400,
+                        child: Center(
+                          child: Text("No expenses for selected month"),
+                        ),
+                      )
+                    : CategorySection(
+                        categoryList: categoryExpenseList,
+                        amounts: categoryToAmountExpense,
+                        total: totalExpense,
+                        transactions: categoryToTransactionsExpense,
+                      );
               },
-              error: (error, stackTrace) => Center(
-                child: Text(error.toString()),
-              ),
-              loading: () => const Center(
-                child: CircularProgressIndicator(),
-              ),
+              error: (error, stackTrace) =>
+                  Center(child: Text(error.toString())),
+              loading: () => const Center(child: CircularProgressIndicator()),
             ),
           ],
         ),
