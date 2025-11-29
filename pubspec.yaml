@@ -6,7 +6,7 @@ publish_to: "none"
 version: 0.2.2+100
 
 environment:
-  sdk: ">=3.3.3 <4.0.0"
+  sdk: ^3.10.1
 
 dependencies:
   flutter:
@@ -15,35 +15,35 @@ dependencies:
   collection: ^1.19.1
   csv: ^6.0.0
   cupertino_icons: ^1.0.8
-  device_info_plus: ^11.2.0
-  file_picker: ^8.1.7
-  fl_chart: ^0.69.0
-  flutter_local_notifications: ^18.0.1
-  flutter_native_splash: ^2.4.4
+  device_info_plus: ^12.3.0
+  file_picker: ^10.3.7
+  fl_chart: ^1.1.1
+  flutter_local_notifications: ^19.5.0
+  flutter_native_splash: ^2.4.7
   flutter_phoenix: ^1.1.1
   flutter_riverpod: ^2.6.1
-  intl: ^0.19.0
-  local_auth: ^2.3.0
-  package_info_plus: ^8.3.1
+  intl: ^0.20.2
+  local_auth: ^3.0.0
+  package_info_plus: ^9.0.0
   path: ^1.9.1
   path_provider: ^2.1.5
-  percent_indicator: ^4.2.4
-  permission_handler: ^11.3.1
-  shared_preferences: ^2.5.2
+  percent_indicator: ^4.2.5
+  permission_handler: ^12.0.1
+  shared_preferences: ^2.5.3
   sqflite: ^2.4.2
-  sqflite_common_ffi: ^2.3.5
+  sqflite_common_ffi: ^2.4.0
   sqlite3_flutter_libs:
-  timezone: ^0.10.0
-  url_launcher: ^6.3.1
+  timezone: ^0.10.1
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  dependency_validator: ^5.0.2
-  flutter_launcher_icons: ^0.14.3
-  flutter_lints: ^5.0.0
-  test: ^1.25.2
+  dependency_validator: ^5.0.3
+  flutter_launcher_icons: ^0.14.4
+  flutter_lints: ^6.0.0
+  test: ^1.26.3
 
 flutter:
   uses-material-design: true

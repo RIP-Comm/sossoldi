@@ -13,7 +13,7 @@ class AppTheme {
     colorScheme: customColorScheme,
     scaffoldBackgroundColor: white,
     appBarTheme: const AppBarTheme(
-      color: white,
+      backgroundColor: white,
       elevation: 0,
       scrolledUnderElevation: 0,
       centerTitle: true,
@@ -33,7 +33,7 @@ class AppTheme {
       backgroundColor: blue5,
       shape: CircleBorder(),
     ),
-    tabBarTheme: TabBarTheme(
+    tabBarTheme: TabBarThemeData(
       indicator: BoxDecoration(
         borderRadius: BorderRadius.circular(Sizes.borderRadius * 6),
         color: blue5,
@@ -239,7 +239,7 @@ class AppTheme {
     colorScheme: darkCustomColorScheme,
     scaffoldBackgroundColor: darkGrey4,
     appBarTheme: const AppBarTheme(
-      color: darkGrey3,
+      backgroundColor: darkGrey3,
       elevation: 0,
       scrolledUnderElevation: 0,
       centerTitle: true,
@@ -260,7 +260,7 @@ class AppTheme {
       backgroundColor: darkBlue1,
       shape: CircleBorder(),
     ),
-    tabBarTheme: TabBarTheme(
+    tabBarTheme: TabBarThemeData(
       indicator: BoxDecoration(
         borderRadius: BorderRadius.circular(Sizes.borderRadius * 6),
         color: darkBlue5,

@@ -67,7 +67,8 @@ void main() async {
       // use use sticky auth to resume auth request when app is going background
       bool didAuthenticate = await auth.authenticate(
           localizedReason: 'Please authenticate to use Sossoldi',
-          options: AuthenticationOptions(stickyAuth: true));
+          persistAcrossBackgrounding: true,
+      );
       if (!didAuthenticate) return; // stops app from loading
     }
   }
