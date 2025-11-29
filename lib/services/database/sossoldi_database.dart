@@ -205,45 +205,45 @@ class SossoldiDatabase {
     // Add some fake accounts
     await _database?.execute('''
       INSERT INTO bankAccount(id, name, symbol, color, startingValue, active, mainAccount, createdAt, updatedAt) VALUES
-        (70, "Revolut", 'payments', 1, 1235.10, 1, 1, '${DateTime.now()}', '${DateTime.now()}'),
-        (71, "N26", 'credit_card', 2, 3823.56, 1, 0, '${DateTime.now()}', '${DateTime.now()}'),
-        (72, "Fineco", 'account_balance', 3, 0.00, 1, 0, '${DateTime.now()}', '${DateTime.now()}');
+        (70, 'Revolut', 'payments', 1, 1235.10, 1, 1, '${DateTime.now()}', '${DateTime.now()}'),
+        (71, 'N26', 'credit_card', 2, 3823.56, 1, 0, '${DateTime.now()}', '${DateTime.now()}'),
+        (72, 'Fineco', 'account_balance', 3, 0.00, 1, 0, '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
     // Add fake categories
     await _database?.execute('''
       INSERT INTO categoryTransaction(id, name, type, symbol, color, note, parent, createdAt, updatedAt) VALUES
-        (10, "Out", "OUT", "restaurant", 0, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (11, "Home", "OUT", "home", 1, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (12, "Furniture","OUT", "home", 2, '', 11, '${DateTime.now()}', '${DateTime.now()}'),
-        (13, "Shopping", "OUT", "shopping_cart", 3, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (14, "Leisure", "OUT", "subscriptions", 4, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (15, "Transports", "OUT", "directions_car", 6, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (16, "Salary", "IN", "work", 5, '', null, '${DateTime.now()}', '${DateTime.now()}');
+        (10, 'Out', 'OUT', 'restaurant', 0, '', null, '${DateTime.now()}', '${DateTime.now()}'),
+        (11, 'Home', 'OUT', 'home', 1, '', null, '${DateTime.now()}', '${DateTime.now()}'),
+        (12, 'Furniture','OUT', 'home', 2, '', 11, '${DateTime.now()}', '${DateTime.now()}'),
+        (13, 'Shopping', 'OUT', 'shopping_cart', 3, '', null, '${DateTime.now()}', '${DateTime.now()}'),
+        (14, 'Leisure', 'OUT', 'subscriptions', 4, '', null, '${DateTime.now()}', '${DateTime.now()}'),
+        (15, 'Transports', 'OUT', 'directions_car', 6, '', null, '${DateTime.now()}', '${DateTime.now()}'),
+        (16, 'Salary', 'IN', 'work', 5, '', null, '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
     // Add currencies
     await _database?.execute('''
       INSERT INTO currency(symbol, code, name, mainCurrency) VALUES
-        ("€", "EUR", "Euro", 1),
-        ("\$", "USD", "United States Dollar", 0),
-        ("CHF", "CHF", "Switzerland Franc", 0),
-        ("£", "GBP", "United Kingdom Pound", 0);
+        ('€', 'EUR', 'Euro', 1),
+        ('\$', 'USD', 'United States Dollar', 0),
+        ('CHF', 'CHF', 'Switzerland Franc', 0),
+        ('£', 'GBP', 'United Kingdom Pound', 0);
     ''');
 
     // Add fake budgets
     await _database?.execute('''
       INSERT INTO budget(idCategory, name, amountLimit, active, createdAt, updatedAt) VALUES
-        (13, "Grocery", 900.00, 1, '${DateTime.now()}', '${DateTime.now()}'),
-        (11, "Home", 123.45, 0, '${DateTime.now()}', '${DateTime.now()}');
+        (13, 'Grocery', 900.00, 1, '${DateTime.now()}', '${DateTime.now()}'),
+        (11, 'Home', 123.45, 0, '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
     // Add fake recurring transactions
     await _database?.execute('''
       INSERT INTO recurringTransaction(fromDate, toDate, amount,type, note, recurrency, idCategory, idBankAccount, createdAt, updatedAt) VALUES
-        ("2024-02-23", null, 10.99, "OUT", "404 Books", "MONTHLY", 14, 70, '${DateTime.now()}', '${DateTime.now()}'),
-        ("2023-12-13", null, 4.97, "OUT", "ETF Consultant Parcel", "DAILY", 14, 70, '${DateTime.now()}', '${DateTime.now()}'),
-        ("2023-02-11", "2028-02-11", 1193.40, "OUT", "Car Loan", "QUARTERLY", 15, 72, '${DateTime.now()}', '${DateTime.now()}');
+        ('2024-02-23', null, 10.99, 'OUT', '404 Books', 'MONTHLY', 14, 70, '${DateTime.now()}', '${DateTime.now()}'),
+        ('2023-12-13', null, 4.97, 'OUT', 'ETF Consultant Parcel', 'DAILY', 14, 70, '${DateTime.now()}', '${DateTime.now()}'),
+        ('2023-02-11', '2028-02-11', 1193.40, 'OUT', 'Car Loan', 'QUARTERLY', 15, 72, '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
     // Add fake transactions
