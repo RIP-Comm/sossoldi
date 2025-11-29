@@ -77,11 +77,10 @@ class PanelListTile extends ConsumerWidget {
                               ),
                               Text(
                                 "${amount.toCurrency()} ${currencyState.selectedCurrency.symbol}",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge
+                                style: Theme.of(context).textTheme.bodyLarge
                                     ?.copyWith(
-                                        color: (amount > 0) ? green : red),
+                                      color: (amount > 0) ? green : red,
+                                    ),
                               ),
                             ],
                           ),
@@ -111,10 +110,8 @@ class PanelListTile extends ConsumerWidget {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: transactions.length,
-                separatorBuilder: (context, index) => const Divider(
-                  indent: 15,
-                  endIndent: 15,
-                ),
+                separatorBuilder: (context, index) =>
+                    const Divider(indent: 15, endIndent: 15),
                 itemBuilder: (context, index) {
                   final transaction = transactions[index];
                   final amount = transaction.type == TransactionType.income
@@ -138,16 +135,16 @@ class PanelListTile extends ConsumerWidget {
                                 children: [
                                   Text(
                                     transaction.note ?? "",
-                                    style:
-                                        Theme.of(context).textTheme.titleMedium,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.titleMedium,
                                   ),
                                   Text(
                                     "${amount.toCurrency()} ${currencyState.selectedCurrency.symbol}",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge
+                                    style: Theme.of(context).textTheme.bodyLarge
                                         ?.copyWith(
-                                            color: (amount > 0) ? green : red),
+                                          color: (amount > 0) ? green : red,
+                                        ),
                                   ),
                                 ],
                               ),
@@ -158,15 +155,17 @@ class PanelListTile extends ConsumerWidget {
                                   Text(
                                     transaction.categoryName?.toUpperCase() ??
                                         "Uncategorized",
-                                    style:
-                                        Theme.of(context).textTheme.labelLarge,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.labelLarge,
                                   ),
                                   Text(
                                     transaction.bankAccountName
                                             ?.toUpperCase() ??
                                         "",
-                                    style:
-                                        Theme.of(context).textTheme.labelLarge,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.labelLarge,
                                   ),
                                 ],
                               ),

@@ -37,12 +37,14 @@ class _OlderRecurringPaymentsState
     TransactionMethods()
         .getRecurrenceTransactionsById(id: widget.transaction.id)
         .then((value) {
-      setState(() {
-        transactions = value;
-        sum = value.fold(
-            0.0, (previousValue, element) => previousValue + element.amount);
-      });
-    });
+          setState(() {
+            transactions = value;
+            sum = value.fold(
+              0.0,
+              (previousValue, element) => previousValue + element.amount,
+            );
+          });
+        });
 
     _generateDataBasedOnRecurrentType();
   }
@@ -67,18 +69,14 @@ class _OlderRecurringPaymentsState
     final currencyState = ref.watch(currencyStateNotifier);
     final categories = ref.watch(categoriesProvider).value;
     final category = categories?.firstWhereOrNull(
-        (element) => element.id == widget.transaction.idCategory);
+      (element) => element.id == widget.transaction.idCategory,
+    );
 
     // Handle null category case
     if (category == null) {
       return Scaffold(
-        appBar: AppBar(
-          title: Text("Older payments"),
-          centerTitle: true,
-        ),
-        body: Center(
-          child: Text("Category not found"),
-        ),
+        appBar: AppBar(title: const Text("Older payments"), centerTitle: true),
+        body: const Center(child: Text("Category not found")),
       );
     }
 
@@ -94,16 +92,14 @@ class _OlderRecurringPaymentsState
           },
           child: Row(
             children: [
-              const SizedBox(
-                width: Sizes.sm,
-              ),
+              const SizedBox(width: Sizes.sm),
               const Icon(Icons.arrow_back_ios),
               Text(
                 "Back",
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      color: darkBlue5,
-                    ),
-              )
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium!.copyWith(color: darkBlue5),
+              ),
             ],
           ),
         ),
@@ -120,15 +116,17 @@ class _OlderRecurringPaymentsState
               currencyState: currencyState,
             ),
             const SizedBox(height: Sizes.sm),
-            Builder(builder: (ctx) {
-              var recurrence = parseRecurrence(widget.transaction.recurrency);
-              final label = recurrenceMap[recurrence]!.label;
-              return Text(
-                "$label"
-                " on the ${ordinal(int.parse(getNextDueDay()))} day",
-                style: Theme.of(context).textTheme.bodyLarge,
-              );
-            }),
+            Builder(
+              builder: (ctx) {
+                var recurrence = parseRecurrence(widget.transaction.recurrency);
+                final label = recurrenceMap[recurrence]!.label;
+                return Text(
+                  "$label"
+                  " on the ${ordinal(int.parse(getNextDueDay()))} day",
+                  style: Theme.of(context).textTheme.bodyLarge,
+                );
+              },
+            ),
             const SizedBox(height: Sizes.xl),
             yearlyTotal.isNotEmpty
                 ? Expanded(
@@ -138,10 +136,11 @@ class _OlderRecurringPaymentsState
                         var years = yearlyTotal.keys.toList();
                         var year = years[index];
                         var totalyealyAmt = yearlyTotal[year];
-                        var monthlyEntries =
-                            groupedMonthlyTransaction.entries.where((m) {
-                          return m.key.year == year;
-                        }).toList();
+                        var monthlyEntries = groupedMonthlyTransaction.entries
+                            .where((m) {
+                              return m.key.year == year;
+                            })
+                            .toList();
 
                         return DefaultContainer(
                           child: Column(
@@ -149,38 +148,44 @@ class _OlderRecurringPaymentsState
                             children: [
                               Padding(
                                 padding: const EdgeInsets.only(right: 16.0),
-                                child: Row(children: [
-                                  Text(
-                                    '$year',
-                                    style:
-                                        Theme.of(context).textTheme.bodyLarge,
-                                  ),
-                                  const Spacer(),
-                                  _buildAmountText(context, totalyealyAmt,
-                                      currencyState.selectedCurrency.symbol)
-                                ]),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      '$year',
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.bodyLarge,
+                                    ),
+                                    const Spacer(),
+                                    _buildAmountText(
+                                      context,
+                                      totalyealyAmt,
+                                      currencyState.selectedCurrency.symbol,
+                                    ),
+                                  ],
+                                ),
                               ),
-                              const SizedBox(
-                                height: Sizes.sm,
-                              ),
+                              const SizedBox(height: Sizes.sm),
                               monthlyEntries.isNotEmpty
                                   ? Container(
-                                      padding: EdgeInsets.all(Sizes.md),
+                                      padding: const EdgeInsets.all(Sizes.md),
                                       decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primaryContainer,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primaryContainer,
                                         borderRadius: BorderRadius.circular(
-                                            Sizes.borderRadius),
+                                          Sizes.borderRadius,
+                                        ),
                                       ),
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(
-                                            Sizes.borderRadius),
+                                          Sizes.borderRadius,
+                                        ),
                                         child: ListView.separated(
                                           shrinkWrap: true,
                                           itemCount: monthlyEntries.length,
                                           physics:
-                                              NeverScrollableScrollPhysics(),
+                                              const NeverScrollableScrollPhysics(),
                                           itemBuilder: (ctx, index) {
                                             var date =
                                                 monthlyEntries[index].key;
@@ -191,19 +196,24 @@ class _OlderRecurringPaymentsState
                                                 groupedMonthlyTransaction[date];
 
                                             return Container(
-                                              padding: EdgeInsets.all(Sizes.md),
+                                              padding: const EdgeInsets.all(
+                                                Sizes.md,
+                                              ),
                                               child: Row(
                                                 children: [
                                                   Text('$day'),
-                                                  SizedBox(width: Sizes.xs),
+                                                  const SizedBox(
+                                                    width: Sizes.xs,
+                                                  ),
                                                   Text(month),
-                                                  Spacer(),
+                                                  const Spacer(),
                                                   _buildAmountText(
-                                                      context,
-                                                      montlyAmt,
-                                                      currencyState
-                                                          .selectedCurrency
-                                                          .symbol),
+                                                    context,
+                                                    montlyAmt,
+                                                    currencyState
+                                                        .selectedCurrency
+                                                        .symbol,
+                                                  ),
                                                 ],
                                               ),
                                             );
@@ -211,9 +221,7 @@ class _OlderRecurringPaymentsState
                                           separatorBuilder: (ctx, index) {
                                             return const SizedBox(
                                               height: Sizes.xxs,
-                                              child: Divider(
-                                                thickness: 0.3,
-                                              ),
+                                              child: Divider(thickness: 0.3),
                                             );
                                           },
                                         ),
@@ -221,17 +229,18 @@ class _OlderRecurringPaymentsState
                                     )
                                   : Container(
                                       width: double.infinity,
-                                      color:
-                                          Theme.of(context).colorScheme.surface,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.surface,
                                       child: Center(
                                         child: Text(
                                           "No Montly payment history",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall,
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.bodySmall,
                                         ),
                                       ),
-                                    )
+                                    ),
                             ],
                           ),
                         );
@@ -239,9 +248,7 @@ class _OlderRecurringPaymentsState
                       separatorBuilder: (crx, index) {
                         return SizedBox(
                           height: Sizes.lg,
-                          child: Container(
-                            color: Colors.white,
-                          ),
+                          child: Container(color: Colors.white),
                         );
                       },
                     ),
@@ -257,7 +264,7 @@ class _OlderRecurringPaymentsState
                         ),
                       ),
                     ),
-                  )
+                  ),
           ],
         ),
       ),
@@ -271,60 +278,67 @@ class _OlderRecurringPaymentsState
     switch (recurrency) {
       case "MONTHLY":
         RecurringTransactionCalculator.generateRecurringTransactionMonthly(
-            startDate: startDate,
-            endDate: endDate,
-            amount: widget.transaction.amount,
-            groupedMonthlyTransaction: groupedMonthlyTransaction,
-            yearlyTotal: yearlyTotal);
+          startDate: startDate,
+          endDate: endDate,
+          amount: widget.transaction.amount,
+          groupedMonthlyTransaction: groupedMonthlyTransaction,
+          yearlyTotal: yearlyTotal,
+        );
         break;
       case "BIMONTHLY":
         RecurringTransactionCalculator.generateRecurringTransactionBiMonthly(
-            startDate: startDate,
-            endDate: endDate,
-            amount: widget.transaction.amount,
-            groupedMonthlyTransaction: groupedMonthlyTransaction,
-            yearlyTotal: yearlyTotal);
+          startDate: startDate,
+          endDate: endDate,
+          amount: widget.transaction.amount,
+          groupedMonthlyTransaction: groupedMonthlyTransaction,
+          yearlyTotal: yearlyTotal,
+        );
         break;
       case "QUARTERLY":
         RecurringTransactionCalculator.generateRecurringTransactionQuarterly(
-            startDate: startDate,
-            endDate: endDate,
-            amount: widget.transaction.amount,
-            groupedMonthlyTransaction: groupedMonthlyTransaction,
-            yearlyTotal: yearlyTotal);
+          startDate: startDate,
+          endDate: endDate,
+          amount: widget.transaction.amount,
+          groupedMonthlyTransaction: groupedMonthlyTransaction,
+          yearlyTotal: yearlyTotal,
+        );
         break;
       case "SEMESTER":
         RecurringTransactionCalculator.generateRecurringTransactionSemester(
-            startDate: startDate,
-            endDate: endDate,
-            amount: widget.transaction.amount,
-            groupedMonthlyTransaction: groupedMonthlyTransaction,
-            yearlyTotal: yearlyTotal);
+          startDate: startDate,
+          endDate: endDate,
+          amount: widget.transaction.amount,
+          groupedMonthlyTransaction: groupedMonthlyTransaction,
+          yearlyTotal: yearlyTotal,
+        );
         break;
 
       case "ANNUAL":
         RecurringTransactionCalculator.generateRecurringTransactionAnnually(
-            startDate: startDate,
-            endDate: endDate,
-            amount: widget.transaction.amount,
-            groupedMonthlyTransaction: groupedMonthlyTransaction,
-            yearlyTotal: yearlyTotal);
+          startDate: startDate,
+          endDate: endDate,
+          amount: widget.transaction.amount,
+          groupedMonthlyTransaction: groupedMonthlyTransaction,
+          yearlyTotal: yearlyTotal,
+        );
         break;
       case "DAILY":
         RecurringTransactionCalculator.generateRecurringTransactionDaily(
-            startDate: startDate,
-            endDate: endDate,
-            amount: widget.transaction.amount,
-            groupedMonthlyTransaction: groupedMonthlyTransaction,
-            yearlyTotal: yearlyTotal);
+          startDate: startDate,
+          endDate: endDate,
+          amount: widget.transaction.amount,
+          groupedMonthlyTransaction: groupedMonthlyTransaction,
+          yearlyTotal: yearlyTotal,
+        );
         break;
       case "WEEKLY":
         RecurringTransactionCalculator.generateRecurringTransactionWeekly(
-            startDate: startDate,
-            endDate: endDate,
-            amount: widget.transaction.amount,
-            groupedMonthlyTransaction: groupedMonthlyTransaction,
-            yearlyTotal: yearlyTotal);
+          startDate: startDate,
+          endDate: endDate,
+          amount: widget.transaction.amount,
+          groupedMonthlyTransaction: groupedMonthlyTransaction,
+          yearlyTotal: yearlyTotal,
+        );
         break;
     }
   }
@@ -333,7 +347,8 @@ class _OlderRecurringPaymentsState
     final now = DateTime.now();
     final daysPassed = now
         .difference(
-            widget.transaction.lastInsertion ?? widget.transaction.fromDate)
+          widget.transaction.lastInsertion ?? widget.transaction.fromDate,
+        )
         .inDays;
     final daysInterval =
         recurrenceMap[parseRecurrence(widget.transaction.recurrency)]!.days;
@@ -359,26 +374,30 @@ class _OlderRecurringPaymentsState
 
   // Reusable amount display
   Widget _buildAmountText(
-      BuildContext context, num? amount, String currencySymbol) {
-    final prefix =
-        widget.transaction.type == TransactionType.expense ? "-" : "";
+    BuildContext context,
+    num? amount,
+    String currencySymbol,
+  ) {
+    final prefix = widget.transaction.type == TransactionType.expense
+        ? "-"
+        : "";
     return Row(
       children: [
         Text(
           '$prefix${amount ?? 0}',
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: widget.transaction.type.toColor(
-                  brightness: Theme.of(context).brightness,
-                ),
-              ),
+            color: widget.transaction.type.toColor(
+              brightness: Theme.of(context).brightness,
+            ),
+          ),
         ),
         Text(
           currencySymbol,
           style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                color: widget.transaction.type.toColor(
-                  brightness: Theme.of(context).brightness,
-                ),
-              ),
+            color: widget.transaction.type.toColor(
+              brightness: Theme.of(context).brightness,
+            ),
+          ),
         ),
       ],
     );
@@ -386,11 +405,11 @@ class _OlderRecurringPaymentsState
 }
 
 class _CategoryHeader extends StatelessWidget {
-  const _CategoryHeader(
-      {required this.category,
-      required this.transaction,
-      required this.currencyState,
-      super.key});
+  const _CategoryHeader({
+    required this.category,
+    required this.transaction,
+    required this.currencyState,
+  });
 
   final CategoryTransaction category;
   final RecurringTransaction transaction;
@@ -403,27 +422,22 @@ class _CategoryHeader extends StatelessWidget {
       children: [
         RoundedIcon(
           icon: iconList[category.symbol] ?? Icons.help_outline,
-          backgroundColor: categoryColorList[category.color] ?? Colors.grey,
+          backgroundColor: categoryColorList[category.color],
           padding: const EdgeInsets.all(Sizes.sm),
           size: 56,
         ),
-        const SizedBox(
-          height: Sizes.sm,
-        ),
-        Text(
-          transaction.note,
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
+        const SizedBox(height: Sizes.sm),
+        Text(transaction.note, style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: Sizes.sm),
         Text(
           "${transaction.type.prefix}"
           "${transaction.amount}"
           "${currencyState.selectedCurrency.symbol}",
           style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                color: transaction.type.toColor(
-                  brightness: Theme.of(context).brightness,
-                ),
-              ),
+            color: transaction.type.toColor(
+              brightness: Theme.of(context).brightness,
+            ),
+          ),
         ),
       ],
     );

@@ -16,18 +16,19 @@ class ConfirmAccountDeletionDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AdaptiveDialog(
-      title: Text('Delete account'),
+      title: const Text('Delete account'),
       content: Text(
-          'Are you sure you want to delete the account named "${account.name}"?\n\nThis action cannot be undone.'),
+        'Are you sure you want to delete the account named "${account.name}"?\n\nThis action cannot be undone.',
+      ),
       actions: [
         AdaptiveDialogAction(
-          child: Text('Cancel'),
+          child: const Text('Cancel'),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         AdaptiveDialogAction(
-          child: Text('Delete'),
+          child: const Text('Delete'),
           isDestructiveAction: true,
           onPressed: onPressed,
         ),

@@ -55,10 +55,9 @@ class _CategoryIconColorSelectorState extends State<CategoryIconColorSelector> {
             alignment: Alignment.centerLeft,
             child: Text(
               "ICON AND COLOR",
-              style: Theme.of(context)
-                  .textTheme
-                  .labelLarge
-                  ?.copyWith(color: Theme.of(context).colorScheme.primary),
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
           ),
           const SizedBox(height: Sizes.xl),
@@ -84,10 +83,9 @@ class _CategoryIconColorSelectorState extends State<CategoryIconColorSelector> {
           const SizedBox(height: Sizes.sm),
           Text(
             "CHOOSE ICON",
-            style: Theme.of(context)
-                .textTheme
-                .labelMedium
-                ?.copyWith(color: Theme.of(context).colorScheme.primary),
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              color: Theme.of(context).colorScheme.primary,
+            ),
           ),
           const SizedBox(height: Sizes.md),
           if (showCategoryIcons) const Divider(height: 1, color: grey1),
@@ -126,7 +124,8 @@ class _CategoryIconColorSelectorState extends State<CategoryIconColorSelector> {
                   LayoutBuilder(
                     builder: (context, constraints) {
                       final crossAxisCount = 7;
-                      final itemSize = (constraints.maxWidth -
+                      final itemSize =
+                          (constraints.maxWidth -
                               (crossAxisCount - 1) * Sizes.md) /
                           crossAxisCount;
 
@@ -145,15 +144,19 @@ class _CategoryIconColorSelectorState extends State<CategoryIconColorSelector> {
                         child: PageView(
                           controller: _pageController,
                           onPageChanged: (index) {
-                            setState(() => selectedIconCategory =
-                                mapIconsList.keys.elementAt(index));
+                            setState(
+                              () => selectedIconCategory = mapIconsList.keys
+                                  .elementAt(index),
+                            );
                           },
                           children: mapIconsList.entries
-                              .map((e) => IconsGrid(
-                                    icons: e.value,
-                                    selectedIcon: widget.selectedIcon,
-                                    onIconChanged: widget.onIconChanged,
-                                  ))
+                              .map(
+                                (e) => IconsGrid(
+                                  icons: e.value,
+                                  selectedIcon: widget.selectedIcon,
+                                  onIconChanged: widget.onIconChanged,
+                                ),
+                              )
                               .toList(),
                         ),
                       );
@@ -171,10 +174,9 @@ class _CategoryIconColorSelectorState extends State<CategoryIconColorSelector> {
           const SizedBox(height: Sizes.xs),
           Text(
             "CHOOSE COLOR",
-            style: Theme.of(context)
-                .textTheme
-                .labelMedium
-                ?.copyWith(color: Theme.of(context).colorScheme.primary),
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              color: Theme.of(context).colorScheme.primary,
+            ),
           ),
         ],
       ),
@@ -210,15 +212,12 @@ class CategoryTab extends StatelessWidget {
         backgroundColor: white,
         selectedColor: blue5,
         labelStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: isSelected ? white : grey1,
-              fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-            ),
+          color: isSelected ? white : grey1,
+          fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+        ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(Sizes.borderRadius),
-          side: BorderSide(
-            color: isSelected ? blue5 : grey2,
-            width: 1,
-          ),
+          side: BorderSide(color: isSelected ? blue5 : grey2, width: 1),
         ),
         padding: const EdgeInsets.symmetric(
           horizontal: Sizes.md,

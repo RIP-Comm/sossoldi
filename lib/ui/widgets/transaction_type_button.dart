@@ -11,9 +11,7 @@ final selectedTransactionTypeProvider =
 final selectedListIndexProvider = StateProvider.autoDispose<int>((ref) => -1);
 
 class TransactionTypeButton extends ConsumerWidget {
-  const TransactionTypeButton({
-    super.key,
-  });
+  const TransactionTypeButton({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -26,8 +24,9 @@ class TransactionTypeButton extends ConsumerWidget {
     return Container(
       height: 28,
       decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primaryContainer,
-          borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall)),
+        color: Theme.of(context).colorScheme.primaryContainer,
+        borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
+      ),
       child: Stack(
         children: [
           AnimatedAlign(
@@ -41,8 +40,9 @@ class TransactionTypeButton extends ConsumerWidget {
               width: width,
               height: 28,
               decoration: BoxDecoration(
-                  color: blue5,
-                  borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall)),
+                color: blue5,
+                borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
+              ),
             ),
           ),
           GestureDetector(
@@ -59,9 +59,10 @@ class TransactionTypeButton extends ConsumerWidget {
                 child: Text(
                   "Income",
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: (transactionType == TransactionType.income)
-                          ? white
-                          : Theme.of(context).colorScheme.onPrimaryContainer),
+                    color: (transactionType == TransactionType.income)
+                        ? white
+                        : Theme.of(context).colorScheme.onPrimaryContainer,
+                  ),
                 ),
               ),
             ),
@@ -80,9 +81,10 @@ class TransactionTypeButton extends ConsumerWidget {
                 child: Text(
                   'Expenses',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: (transactionType == TransactionType.expense)
-                          ? white
-                          : Theme.of(context).colorScheme.onPrimaryContainer),
+                    color: (transactionType == TransactionType.expense)
+                        ? white
+                        : Theme.of(context).colorScheme.onPrimaryContainer,
+                  ),
                 ),
               ),
             ),

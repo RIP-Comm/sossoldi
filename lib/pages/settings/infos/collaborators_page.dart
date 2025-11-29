@@ -15,66 +15,18 @@ class CollaboratorsPage extends ConsumerStatefulWidget {
 }
 
 var collaborators = const [
-  [
-    "Marco Perugini",
-    "Project Manager",
-    "github.com/theperu",
-  ],
-  [
-    "Michele Vulcano",
-    "Maintainer, Backend Dev",
-    "github.com/mikev-cw",
-  ],
-  [
-    "Luca Antonelli",
-    "Maintainer",
-    "github.com/lucaantonelli",
-  ],
-  [
-    "Federico Pozzato",
-    "UX/UI Designer",
-    "federicopozzato.it",
-  ],
-  [
-    "GBergatto",
-    "Full Stack Dev",
-    "github.com/GBergatto",
-  ],
-  [
-    "0xBaggi",
-    "Frontend Dev",
-    "github.com/0xbaggi",
-  ],
-  [
-    "Alessandro Mariani",
-    "Full Stack Dev",
-    "github.com/marianialessandro",
-  ],
-  [
-    "filippoml",
-    "Full Stack Dev",
-    "github.com/Filippoml",
-  ],
-  [
-    "sainzrow",
-    "Backend Dev",
-    "github.com/sainzrow",
-  ],
-  [
-    "Alessandro Guerra",
-    "Full Stack Dev",
-    "github.com/K-w-e",
-  ],
-  [
-    "napitek",
-    "Full Stack Dev",
-    "github.com/napitek",
-  ],
-  [
-    "Alessandro Bongiovanni",
-    "Flutter Dev",
-    "github.com/bongio94",
-  ],
+  ["Marco Perugini", "Project Manager", "github.com/theperu"],
+  ["Michele Vulcano", "Maintainer, Backend Dev", "github.com/mikev-cw"],
+  ["Luca Antonelli", "Maintainer", "github.com/lucaantonelli"],
+  ["Federico Pozzato", "UX/UI Designer", "federicopozzato.it"],
+  ["GBergatto", "Full Stack Dev", "github.com/GBergatto"],
+  ["0xBaggi", "Frontend Dev", "github.com/0xbaggi"],
+  ["Alessandro Mariani", "Full Stack Dev", "github.com/marianialessandro"],
+  ["filippoml", "Full Stack Dev", "github.com/Filippoml"],
+  ["sainzrow", "Backend Dev", "github.com/sainzrow"],
+  ["Alessandro Guerra", "Full Stack Dev", "github.com/K-w-e"],
+  ["napitek", "Full Stack Dev", "github.com/napitek"],
+  ["Alessandro Bongiovanni", "Flutter Dev", "github.com/bongio94"],
   [
     "Emanuel Passaro",
     "Social Media Manager e Strategist",
@@ -85,16 +37,8 @@ var collaborators = const [
     "(digital) Marketing Project Manager",
     "linkedin.com/in/carolina-verdiani/",
   ],
-  [
-    "Alessia Schina",
-    "UX/UI Designer",
-    "linkedin.com/in/alessiaschina",
-  ],
-  [
-    "Federico Bruzzone",
-    "Former Maintainer",
-    "github.com/FedericoBruzzone",
-  ],
+  ["Alessia Schina", "UX/UI Designer", "linkedin.com/in/alessiaschina"],
+  ["Federico Bruzzone", "Former Maintainer", "github.com/FedericoBruzzone"],
 ];
 
 class _CollaboratorsPageState extends ConsumerState<CollaboratorsPage> {
@@ -126,28 +70,25 @@ class _CollaboratorsPageState extends ConsumerState<CollaboratorsPage> {
                 children: [
                   Text(
                     option[0].toString(),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(color: Theme.of(context).colorScheme.primary),
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                     textAlign: TextAlign.left,
                   ),
                   const SizedBox(height: Sizes.xs),
                   Text(
                     option[1].toString(),
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(color: Theme.of(context).colorScheme.primary),
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                     textAlign: TextAlign.left,
                   ),
                   const SizedBox(height: Sizes.xs),
                   Text(
                     option[2].toString(),
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .copyWith(color: Theme.of(context).colorScheme.primary),
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                     textAlign: TextAlign.left,
                   ),
                 ],

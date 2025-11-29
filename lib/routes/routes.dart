@@ -43,12 +43,15 @@ Route<dynamic> makeRoute(RouteSettings settings) {
       return buildAdaptiveRoute(
         settings.name,
         CreateTransactionPage(
-            recurrencyEditingPermitted:
-                args?['recurrencyEditingPermitted'] ?? true),
+          recurrencyEditingPermitted:
+              args?['recurrencyEditingPermitted'] ?? true,
+        ),
       );
     case '/edit-recurring-transaction':
       return buildAdaptiveRoute(
-          settings.name, const EditRecurringTransaction());
+        settings.name,
+        const EditRecurringTransaction(),
+      );
     case '/transactions':
       return buildAdaptiveRoute(settings.name, const TransactionsPage());
     case '/category-list':
@@ -100,18 +103,14 @@ PageRoute buildAdaptiveRoute(String? routeName, Widget viewToShow) {
 
 PageRoute _cupertinoPageRoute(String? routeName, Widget viewToShow) {
   return CupertinoPageRoute(
-    settings: RouteSettings(
-      name: routeName,
-    ),
+    settings: RouteSettings(name: routeName),
     builder: (_) => viewToShow,
   );
 }
 
 PageRoute _materialPageRoute(String? routeName, Widget viewToShow) {
   return MaterialPageRoute(
-    settings: RouteSettings(
-      name: routeName,
-    ),
+    settings: RouteSettings(name: routeName),
     builder: (_) => viewToShow,
   );
 }

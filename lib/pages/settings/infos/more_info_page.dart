@@ -13,21 +13,9 @@ class MoreInfoPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final moreInfoOptions = [
-      [
-        "App Version:",
-        ref.watch(versionProvider),
-        null,
-      ],
-      [
-        "Collaborators",
-        "See the team behind this app",
-        "/collaborators",
-      ],
-      [
-        "Privacy Policy",
-        "Read more",
-        "/privacy-policy",
-      ],
+      ["App Version:", ref.watch(versionProvider), null],
+      ["Collaborators", "See the team behind this app", "/collaborators"],
+      ["Privacy Policy", "Read more", "/privacy-policy"],
     ];
 
     return Scaffold(
@@ -83,18 +71,16 @@ class SettingsInfo extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(color: Theme.of(context).colorScheme.primary),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
                 textAlign: TextAlign.left,
               ),
               Text(
                 value,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall!
-                    .copyWith(color: Theme.of(context).colorScheme.primary),
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
                 textAlign: TextAlign.left,
               ),
             ],

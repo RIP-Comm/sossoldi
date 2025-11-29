@@ -42,5 +42,7 @@ int getLatestVersion() {
   if (migrations.isEmpty) return 1;
 
   return migrations.fold<int>(
-      1, (max, migration) => migration.version > max ? migration.version : max);
+    1,
+    (max, migration) => migration.version > max ? migration.version : max,
+  );
 }

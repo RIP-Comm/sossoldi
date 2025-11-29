@@ -27,7 +27,8 @@ class _EditRecurringTransactionState
 
   @override
   void initState() {
-    amountController.text = ref
+    amountController.text =
+        ref
             .read(selectedRecurringTransactionUpdateProvider)
             ?.amount
             .toCurrency() ??
@@ -47,8 +48,9 @@ class _EditRecurringTransactionState
 
   @override
   Widget build(BuildContext context) {
-    final selectedRecurringTransaction =
-        ref.watch(selectedRecurringTransactionUpdateProvider);
+    final selectedRecurringTransaction = ref.watch(
+      selectedRecurringTransactionUpdateProvider,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -56,7 +58,7 @@ class _EditRecurringTransactionState
         leadingWidth: 100,
         leading: TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text('Cancel'),
+          child: const Text('Cancel'),
         ),
         actions: [
           selectedRecurringTransaction != null
@@ -71,12 +73,13 @@ class _EditRecurringTransactionState
                       ref
                           .read(transactionsProvider.notifier)
                           .deleteRecurringTransaction(
-                              selectedRecurringTransaction.id!)
+                            selectedRecurringTransaction.id!,
+                          )
                           .whenComplete(() {
-                        if (context.mounted) {
-                          Navigator.pop(context);
-                        }
-                      });
+                            if (context.mounted) {
+                              Navigator.pop(context);
+                            }
+                          });
                     },
                   ),
                 )
@@ -93,13 +96,15 @@ class _EditRecurringTransactionState
                 Container(
                   alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.only(
-                      left: Sizes.lg, top: Sizes.xxl, bottom: Sizes.sm),
+                    left: Sizes.lg,
+                    top: Sizes.xxl,
+                    bottom: Sizes.sm,
+                  ),
                   child: Text(
                     "DETAILS (any change will affect only future transactions)",
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelLarge!
-                        .copyWith(color: Theme.of(context).colorScheme.primary),
+                    style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                 ),
                 Container(
@@ -130,9 +135,8 @@ class _EditRecurringTransactionState
                               minChildSize: 0.5,
                               initialChildSize: 0.7,
                               maxChildSize: 0.9,
-                              builder: (_, controller) => AccountSelector(
-                                scrollController: controller,
-                              ),
+                              builder: (_, controller) =>
+                                  AccountSelector(scrollController: controller),
                             ),
                           );
                         },
@@ -145,9 +149,10 @@ class _EditRecurringTransactionState
                       ),
                       const Divider(height: 1, color: grey1),
                       NonEditableDetailsListTile(
-                          title: "Date Start",
-                          icon: Icons.calendar_month,
-                          value: ref.watch(dateProvider).formatEDMY()),
+                        title: "Date Start",
+                        icon: Icons.calendar_month,
+                        value: ref.watch(dateProvider).formatEDMY(),
+                      ),
                       const RecurrenceListTileEdit(),
                     ],
                   ),
@@ -163,17 +168,18 @@ class _EditRecurringTransactionState
                 color: Theme.of(context).colorScheme.surface,
                 boxShadow: [
                   BoxShadow(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .primary
-                        .withValues(alpha: 0.15),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.primary.withValues(alpha: 0.15),
                     blurRadius: 5.0,
                     offset: const Offset(0, -1.0),
-                  )
+                  ),
                 ],
               ),
               padding: const EdgeInsets.symmetric(
-                  horizontal: Sizes.xl, vertical: Sizes.sm),
+                horizontal: Sizes.xl,
+                vertical: Sizes.sm,
+              ),
               child: Container(
                 height: 48,
                 decoration: BoxDecoration(
@@ -186,23 +192,26 @@ class _EditRecurringTransactionState
                     ref
                         .read(transactionsProvider.notifier)
                         .updateRecurringTransaction(
-                            amountController.text.toNum(), noteController.text)
+                          amountController.text.toNum(),
+                          noteController.text,
+                        )
                         .whenComplete(() {
-                      if (context.mounted) {
-                        Navigator.of(context).pop();
-                      }
-                    });
+                          if (context.mounted) {
+                            Navigator.of(context).pop();
+                          }
+                        });
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.secondary,
                     shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(Sizes.borderRadius)),
+                      borderRadius: BorderRadius.circular(Sizes.borderRadius),
+                    ),
                   ),
                   child: Text(
                     "UPDATE TRANSACTION",
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimary),
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
                   ),
                 ),
               ),

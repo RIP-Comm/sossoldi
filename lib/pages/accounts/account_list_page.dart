@@ -19,7 +19,7 @@ class _AccountListPage extends ConsumerState<AccountListPage> {
   @override
   Widget build(BuildContext context) {
     final accountsList = ref.watch(accountsProvider);
-    ref.listen(selectedAccountProvider, (_, __) {});
+    ref.listen(selectedAccountProvider, (_, _) {});
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -43,7 +43,9 @@ class _AccountListPage extends ConsumerState<AccountListPage> {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(
-                  vertical: Sizes.xl, horizontal: Sizes.lg),
+                vertical: Sizes.xl,
+                horizontal: Sizes.lg,
+              ),
               child: Row(
                 children: [
                   Container(
@@ -61,10 +63,9 @@ class _AccountListPage extends ConsumerState<AccountListPage> {
                   const SizedBox(width: Sizes.md),
                   Text(
                     "Your accounts",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineLarge!
-                        .copyWith(color: Theme.of(context).colorScheme.primary),
+                    style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                 ],
               ),
@@ -94,11 +95,10 @@ class _AccountListPage extends ConsumerState<AccountListPage> {
                         const SizedBox(width: Sizes.md),
                         Text(
                           account.name,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge!
+                          style: Theme.of(context).textTheme.titleLarge!
                               .copyWith(
-                                  color: Theme.of(context).colorScheme.primary),
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                         ),
                       ],
                     ),

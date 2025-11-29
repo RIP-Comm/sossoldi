@@ -77,35 +77,37 @@ class AlertDialogBuilder {
 /// Shows an info dialog with given text
 ///
 void showInfoDialog(BuildContext context, String text) => AlertDialogBuilder(
-        text: text, dialogType: AlertDialogType.info, primaryActionText: "OK")
-    .show(context);
+  text: text,
+  dialogType: AlertDialogType.info,
+  primaryActionText: "OK",
+).show(context);
 
 ///
 /// Shows a success dialog with given text
 ///
 void showSuccessDialog(BuildContext context, String text) => AlertDialogBuilder(
-      text: text,
-      dialogType: AlertDialogType.success,
-      primaryActionText: "OK",
-    ).show(context);
+  text: text,
+  dialogType: AlertDialogType.success,
+  primaryActionText: "OK",
+).show(context);
 
 ///
 /// Shows a warning dialog with given text
 ///
 void showWarningDialog(BuildContext context, String text) => AlertDialogBuilder(
-      text: text,
-      dialogType: AlertDialogType.warning,
-      primaryActionText: "OK",
-    ).show(context);
+  text: text,
+  dialogType: AlertDialogType.warning,
+  primaryActionText: "OK",
+).show(context);
 
 ///
 /// Shows an error dialog with given text
 ///
 void showErrorDialog(BuildContext context, String text) => AlertDialogBuilder(
-      text: text,
-      dialogType: AlertDialogType.error,
-      primaryActionText: "OK",
-    ).show(context);
+  text: text,
+  dialogType: AlertDialogType.error,
+  primaryActionText: "OK",
+).show(context);
 
 enum AlertDialogType { info, success, warning, error }
 
@@ -131,11 +133,7 @@ class _AlertDialog extends StatelessWidget {
     Widget icon = _getIcon();
     List<Widget> actions = _getActions(context);
 
-    return AlertDialog(
-      icon: icon,
-      content: Text(_text),
-      actions: actions,
-    );
+    return AlertDialog(icon: icon, content: Text(_text), actions: actions);
   }
 
   Widget _getIcon() {
@@ -156,28 +154,32 @@ class _AlertDialog extends StatelessWidget {
 
     // Secondary action comes first, since actions are displayed on screen left to right //
     if (_secondaryActionText != null) {
-      actionWidgets.add(TextButton(
+      actionWidgets.add(
+        TextButton(
+          onPressed: () {
+            _secondaryActionFunction?.call();
+            Navigator.of(context).pop();
+          },
+          child: Text(
+            _secondaryActionText,
+            style: TextStyle(color: Theme.of(context).colorScheme.primary),
+          ),
+        ),
+      );
+    }
+
+    actionWidgets.add(
+      TextButton(
         onPressed: () {
-          _secondaryActionFunction?.call();
+          _primaryActionFunction?.call();
           Navigator.of(context).pop();
         },
         child: Text(
-          _secondaryActionText,
+          _primaryActionText,
           style: TextStyle(color: Theme.of(context).colorScheme.primary),
         ),
-      ));
-    }
-
-    actionWidgets.add(TextButton(
-      onPressed: () {
-        _primaryActionFunction?.call();
-        Navigator.of(context).pop();
-      },
-      child: Text(
-        _primaryActionText,
-        style: TextStyle(color: Theme.of(context).colorScheme.primary),
       ),
-    ));
+    );
 
     return actionWidgets;
   }

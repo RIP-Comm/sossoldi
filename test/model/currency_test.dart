@@ -6,11 +6,12 @@ import 'package:sossoldi/model/base_entity.dart';
 void main() {
   test('Test Copy Currency', () {
     Currency b = const Currency(
-        id: 2,
-        symbol: '\$',
-        code: 'USD',
-        name: "United States Dollar",
-        mainCurrency: true);
+      id: 2,
+      symbol: '\$',
+      code: 'USD',
+      name: "United States Dollar",
+      mainCurrency: true,
+    );
 
     Currency bCopy = b.copy(id: 10);
 
@@ -40,11 +41,12 @@ void main() {
 
   test("Test toJson Currency", () {
     Currency b = const Currency(
-        id: 2,
-        symbol: '\$',
-        code: 'USD',
-        name: "United States Dollar",
-        mainCurrency: true);
+      id: 2,
+      symbol: '\$',
+      code: 'USD',
+      name: "United States Dollar",
+      mainCurrency: true,
+    );
 
     Map<String, Object?> json = b.toJson();
 

@@ -34,9 +34,10 @@ class AccountsCard extends ConsumerWidget {
               itemBuilder: (context, i) {
                 double total = accounts.isNotEmpty
                     ? accounts
-                        .map((account) => account.total!.toDouble())
-                        .reduce(
-                            (first, second) => first > second ? first : second)
+                          .map((account) => account.total!.toDouble())
+                          .reduce(
+                            (first, second) => first > second ? first : second,
+                          )
                     : 0.0;
                 BankAccount account = accounts[i];
                 return SizedBox(

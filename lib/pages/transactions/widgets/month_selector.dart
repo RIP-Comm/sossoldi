@@ -12,10 +12,7 @@ import '../../graphs/widgets/categories/categories_bar_chart.dart';
 enum MonthSelectorType { simple, advanced } //advanced = with amount
 
 class MonthSelector extends ConsumerWidget {
-  const MonthSelector({
-    required this.type,
-    super.key,
-  });
+  const MonthSelector({required this.type, super.key});
 
   final MonthSelectorType type;
   final double height = 60;
@@ -37,15 +34,12 @@ class MonthSelector extends ConsumerWidget {
           firstDate: DateTime(1970, 1, 1),
           lastDate: DateTime(2100, 12, 31),
           currentDate: DateTime.now(),
-          initialDateRange: DateTimeRange(
-            start: startDate,
-            end: endDate,
-          ),
+          initialDateRange: DateTimeRange(start: startDate, end: endDate),
           builder: (context, child) => Theme(
             data: Theme.of(context).copyWith(
-              appBarTheme: Theme.of(context)
-                  .appBarTheme
-                  .copyWith(backgroundColor: blue1),
+              appBarTheme: Theme.of(
+                context,
+              ).appBarTheme.copyWith(backgroundColor: blue1),
             ),
             child: child!,
           ),
@@ -61,18 +55,25 @@ class MonthSelector extends ConsumerWidget {
         clipBehavior: Clip.antiAlias, // force rounded corners on children
         height: currentHeight,
         decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.tertiary,
-            borderRadius: BorderRadius.circular(Sizes.borderRadius)),
+          color: Theme.of(context).colorScheme.tertiary,
+          borderRadius: BorderRadius.circular(Sizes.borderRadius),
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             GestureDetector(
               onTap: () {
                 // move to previous month
-                DateTime newStartDate =
-                    DateTime(startDate.year, startDate.month - 1, 1);
-                DateTime newEndDate =
-                    DateTime(newStartDate.year, newStartDate.month + 1, 0);
+                DateTime newStartDate = DateTime(
+                  startDate.year,
+                  startDate.month - 1,
+                  1,
+                );
+                DateTime newEndDate = DateTime(
+                  newStartDate.year,
+                  newStartDate.month + 1,
+                  0,
+                );
                 ref.read(filterDateStartProvider.notifier).state = newStartDate;
                 ref.read(filterDateEndProvider.notifier).state = newEndDate;
                 ref.read(transactionsProvider.notifier).filterTransactions();
@@ -102,18 +103,14 @@ class MonthSelector extends ConsumerWidget {
                       children: [
                         TextSpan(
                           text: totalAmount.toCurrency(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge!
+                          style: Theme.of(context).textTheme.bodyLarge!
                               .copyWith(color: totalAmount >= 0 ? green : red),
                         ),
                         TextSpan(
-                            text: currencyState.selectedCurrency.symbol,
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelLarge!
-                                .copyWith(
-                                    color: totalAmount >= 0 ? green : red)),
+                          text: currencyState.selectedCurrency.symbol,
+                          style: Theme.of(context).textTheme.labelLarge!
+                              .copyWith(color: totalAmount >= 0 ? green : red),
+                        ),
                       ],
                     ),
                   ),
@@ -122,10 +119,16 @@ class MonthSelector extends ConsumerWidget {
             GestureDetector(
               onTap: () {
                 // move to next month
-                DateTime newStartDate =
-                    DateTime(startDate.year, startDate.month + 1, 1);
-                DateTime newEndDate =
-                    DateTime(newStartDate.year, newStartDate.month + 1, 0);
+                DateTime newStartDate = DateTime(
+                  startDate.year,
+                  startDate.month + 1,
+                  1,
+                );
+                DateTime newEndDate = DateTime(
+                  newStartDate.year,
+                  newStartDate.month + 1,
+                  0,
+                );
                 ref.read(filterDateStartProvider.notifier).state = newStartDate;
                 ref.read(filterDateEndProvider.notifier).state = newEndDate;
                 ref.read(transactionsProvider.notifier).filterTransactions();

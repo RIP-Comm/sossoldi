@@ -22,23 +22,29 @@ class GraphsPage extends ConsumerStatefulWidget {
 class _GraphsPageState extends ConsumerState<GraphsPage> {
   @override
   Widget build(BuildContext context) {
-    final currentYearMonthlyTransactions =
-        ref.watch(currentYearMontlyTransactionsProvider);
+    final currentYearMonthlyTransactions = ref.watch(
+      currentYearMontlyTransactionsProvider,
+    );
     final currencyState = ref.watch(currencyStateNotifier);
 
     return ListView(
       children: [
         const SizedBox(height: Sizes.lg),
-        ref.watch(statisticsProvider).when(
+        ref
+            .watch(statisticsProvider)
+            .when(
               data: (value) {
                 double percentGainLoss = 0;
                 if (currentYearMonthlyTransactions.length > 1) {
-                  percentGainLoss = ((currentYearMonthlyTransactions.last.y -
-                              currentYearMonthlyTransactions[
-                                      currentYearMonthlyTransactions.length - 2]
+                  percentGainLoss =
+                      ((currentYearMonthlyTransactions.last.y -
+                              currentYearMonthlyTransactions[currentYearMonthlyTransactions
+                                          .length -
+                                      2]
                                   .y) /
-                          currentYearMonthlyTransactions[
-                                  currentYearMonthlyTransactions.length - 2]
+                          currentYearMonthlyTransactions[currentYearMonthlyTransactions
+                                      .length -
+                                  2]
                               .y) *
                       100;
                 }
@@ -55,23 +61,24 @@ class _GraphsPageState extends ConsumerState<GraphsPage> {
                             children: [
                               Text(
                                 "Available liquidity",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge
+                                style: Theme.of(context).textTheme.titleLarge
                                     ?.copyWith(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.primary,
                                     ),
                               ),
                               RichText(
                                 text: TextSpan(
                                   children: [
                                     TextSpan(
-                                      text: currentYearMonthlyTransactions
+                                      text:
+                                          currentYearMonthlyTransactions
                                               .isNotEmpty
                                           ? currentYearMonthlyTransactions
-                                              .last.y
-                                              .toCurrency()
+                                                .last
+                                                .y
+                                                .toCurrency()
                                           : '0',
                                       style: Theme.of(context)
                                           .textTheme
@@ -79,9 +86,10 @@ class _GraphsPageState extends ConsumerState<GraphsPage> {
                                           ?.copyWith(
                                             color: TransactionType.transfer
                                                 .toColor(
-                                              brightness:
-                                                  Theme.of(context).brightness,
-                                            ),
+                                                  brightness: Theme.of(
+                                                    context,
+                                                  ).brightness,
+                                                ),
                                           ),
                                     ),
                                     TextSpan(
@@ -93,9 +101,10 @@ class _GraphsPageState extends ConsumerState<GraphsPage> {
                                           ?.copyWith(
                                             color: TransactionType.transfer
                                                 .toColor(
-                                              brightness:
-                                                  Theme.of(context).brightness,
-                                            ),
+                                                  brightness: Theme.of(
+                                                    context,
+                                                  ).brightness,
+                                                ),
                                           ),
                                     ),
                                   ],
@@ -110,26 +119,24 @@ class _GraphsPageState extends ConsumerState<GraphsPage> {
                                 decoration: BoxDecoration(
                                   color: Theme.of(context).colorScheme.surface,
                                   borderRadius: BorderRadius.circular(
-                                      Sizes.borderRadiusSmall),
+                                    Sizes.borderRadiusSmall,
+                                  ),
                                 ),
                                 padding: const EdgeInsets.all(Sizes.xxs),
                                 child: Text(
                                   "${percentGainLoss.toCurrency()}%",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
+                                  style: Theme.of(context).textTheme.bodyMedium
                                       ?.copyWith(
-                                        color:
-                                            percentGainLoss < 0 ? red : green,
+                                        color: percentGainLoss < 0
+                                            ? red
+                                            : green,
                                         fontWeight: FontWeight.w600,
                                       ),
                                 ),
                               ),
                               Text(
                                 " VS last month",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelLarge
+                                style: Theme.of(context).textTheme.labelLarge
                                     ?.copyWith(fontWeight: FontWeight.w300),
                               ),
                             ],

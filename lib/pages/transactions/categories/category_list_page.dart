@@ -19,7 +19,7 @@ class _CategoryListState extends ConsumerState<CategoryList> {
   @override
   Widget build(BuildContext context) {
     final categorysList = ref.watch(categoriesProvider);
-    ref.listen(selectedCategoryProvider, (_, __) {});
+    ref.listen(selectedCategoryProvider, (_, _) {});
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -43,7 +43,9 @@ class _CategoryListState extends ConsumerState<CategoryList> {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(
-                  vertical: Sizes.xl, horizontal: Sizes.lg),
+                vertical: Sizes.xl,
+                horizontal: Sizes.lg,
+              ),
               child: Row(
                 children: [
                   Container(
@@ -61,10 +63,9 @@ class _CategoryListState extends ConsumerState<CategoryList> {
                   const SizedBox(width: Sizes.md),
                   Text(
                     "Your categories",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineLarge!
-                        .copyWith(color: Theme.of(context).colorScheme.primary),
+                    style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                 ],
               ),
@@ -95,11 +96,10 @@ class _CategoryListState extends ConsumerState<CategoryList> {
                         const SizedBox(width: Sizes.md),
                         Text(
                           category.name,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge!
+                          style: Theme.of(context).textTheme.titleLarge!
                               .copyWith(
-                                  color: Theme.of(context).colorScheme.primary),
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                         ),
                       ],
                     ),

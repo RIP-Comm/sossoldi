@@ -25,8 +25,9 @@ class CategoriesPieChart extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedIndex = ref.watch(selectedListIndexProvider);
-    final selectedCategory =
-        (selectedIndex >= 0) ? categories[selectedIndex] : null;
+    final selectedCategory = (selectedIndex >= 0)
+        ? categories[selectedIndex]
+        : null;
     final currencyState = ref.watch(currencyStateNotifier);
     return SizedBox(
       height: 200,
@@ -59,7 +60,8 @@ class CategoriesPieChart extends ConsumerWidget {
             children: [
               if (selectedCategory != null)
                 RoundedIcon(
-                  icon: iconList[selectedCategory.symbol] ??
+                  icon:
+                      iconList[selectedCategory.symbol] ??
                       Icons.swap_horiz_rounded,
                   backgroundColor: categoryColorList[selectedCategory.color],
                   padding: const EdgeInsets.all(Sizes.lg),
@@ -69,11 +71,13 @@ class CategoriesPieChart extends ConsumerWidget {
                     ? "${amounts[selectedCategory.id]!.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}"
                     : "${total.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}",
                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                    color: ((selectedCategory != null &&
-                                amounts[selectedCategory.id]! > 0) ||
-                            (selectedCategory == null && total > 0))
-                        ? green
-                        : red),
+                  color:
+                      ((selectedCategory != null &&
+                              amounts[selectedCategory.id]! > 0) ||
+                          (selectedCategory == null && total > 0))
+                      ? green
+                      : red,
+                ),
               ),
               (selectedCategory != null)
                   ? Text(selectedCategory.name)
@@ -86,19 +90,16 @@ class CategoriesPieChart extends ConsumerWidget {
   }
 
   List<PieChartSectionData>? showingSections(int index) {
-    return List.generate(
-      amounts.values.length,
-      (i) {
-        final isTouched = (i == index);
+    return List.generate(amounts.values.length, (i) {
+      final isTouched = (i == index);
 
-        final radius = isTouched ? 30.0 : 25.0;
-        return PieChartSectionData(
-          color: categoryColorList[categories[i].color],
-          value: 360 * amounts[categories[i].id]!,
-          radius: radius,
-          showTitle: false,
-        );
-      },
-    );
+      final radius = isTouched ? 30.0 : 25.0;
+      return PieChartSectionData(
+        color: categoryColorList[categories[i].color],
+        value: 360 * amounts[categories[i].id]!,
+        radius: radius,
+        showTitle: false,
+      );
+    });
   }
 }

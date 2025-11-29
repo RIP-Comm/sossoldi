@@ -19,10 +19,7 @@ import '../../../providers/categories_provider.dart';
 class RecurringPaymentCard extends ConsumerWidget {
   final RecurringTransaction transaction;
 
-  const RecurringPaymentCard({
-    super.key,
-    required this.transaction,
-  });
+  const RecurringPaymentCard({super.key, required this.transaction});
 
   String getNextText() {
     final now = DateTime.now();
@@ -42,8 +39,9 @@ class RecurringPaymentCard extends ConsumerWidget {
     final isDarkMode = ref.watch(appThemeStateNotifier).isDarkModeEnabled;
     final currencyState = ref.watch(currencyStateNotifier);
 
-    var category = categories
-        ?.firstWhereOrNull((element) => element.id == transaction.idCategory);
+    var category = categories?.firstWhereOrNull(
+      (element) => element.id == transaction.idCategory,
+    );
 
     return category != null
         ? Container(
@@ -54,7 +52,9 @@ class RecurringPaymentCard extends ConsumerWidget {
             ),
             child: Container(
               padding: const EdgeInsets.symmetric(
-                  horizontal: Sizes.sm, vertical: Sizes.md),
+                horizontal: Sizes.sm,
+                vertical: Sizes.md,
+              ),
               decoration: BoxDecoration(
                 color: categoryColorList[category.color].withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(Sizes.borderRadius),
@@ -72,30 +72,31 @@ class RecurringPaymentCard extends ConsumerWidget {
                       ),
                       const SizedBox(width: Sizes.sm),
                       Expanded(
-                          flex: 4,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                transaction.recurrency,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w200,
-                                  fontSize: Sizes.sm,
-                                ),
+                        flex: 4,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              transaction.recurrency,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w200,
+                                fontSize: Sizes.sm,
                               ),
-                              const SizedBox(height: Sizes.sm),
-                              Text(
-                                transaction.note,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w900,
-                                  fontSize: 16,
-                                ),
+                            ),
+                            const SizedBox(height: Sizes.sm),
+                            Text(
+                              transaction.note,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w900,
+                                fontSize: 16,
                               ),
-                              const SizedBox(height: Sizes.sm),
-                              Text(category.name),
-                            ],
-                          )),
+                            ),
+                            const SizedBox(height: Sizes.sm),
+                            Text(category.name),
+                          ],
+                        ),
+                      ),
                       Expanded(
                         flex: 2,
                         child: Column(
@@ -104,21 +105,26 @@ class RecurringPaymentCard extends ConsumerWidget {
                           children: [
                             Text("In ${getNextText()} days"),
                             const SizedBox(height: 10),
-                            Builder(builder: (context) {
-                              final String prefix = transaction.type.prefix;
-                              final Color amountColor = transaction.type
-                                  .toColor(
-                                      brightness: Theme.of(context).brightness);
-                              return Text(
-                                "$prefix${transaction.amount}${currencyState.selectedCurrency.symbol}",
-                                style: TextStyle(color: amountColor),
-                              );
-                            }),
+                            Builder(
+                              builder: (context) {
+                                final String prefix = transaction.type.prefix;
+                                final Color amountColor = transaction.type
+                                    .toColor(
+                                      brightness: Theme.of(context).brightness,
+                                    );
+                                return Text(
+                                  "$prefix${transaction.amount}${currencyState.selectedCurrency.symbol}",
+                                  style: TextStyle(color: amountColor),
+                                );
+                              },
+                            ),
                             const SizedBox(height: 10),
                             Text(
                               accounts!
-                                  .firstWhere((element) =>
-                                      element.id == transaction.idBankAccount)
+                                  .firstWhere(
+                                    (element) =>
+                                        element.id == transaction.idBankAccount,
+                                  )
                                   .name,
                             ),
                           ],
@@ -140,9 +146,11 @@ class RecurringPaymentCard extends ConsumerWidget {
                                 shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(
-                                        Sizes.borderRadiusLarge),
+                                      Sizes.borderRadiusLarge,
+                                    ),
                                     topRight: Radius.circular(
-                                        Sizes.borderRadiusLarge),
+                                      Sizes.borderRadiusLarge,
+                                    ),
                                   ),
                                 ),
                                 elevation: Sizes.sm,
@@ -154,33 +162,30 @@ class RecurringPaymentCard extends ConsumerWidget {
                                     ),
                                   );
                                 },
-                              )
+                              ),
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Theme.of(context)
-                                  .colorScheme
-                                  .primaryContainer,
+                              backgroundColor: Theme.of(
+                                context,
+                              ).colorScheme.primaryContainer,
                               foregroundColor: isDarkMode
                                   ? Theme.of(context).colorScheme.primary
                                   : Theme.of(context).colorScheme.secondary,
                               iconColor: isDarkMode
                                   ? Theme.of(context).colorScheme.primary
                                   : Theme.of(context).colorScheme.secondary,
-                              overlayColor:
-                                  Theme.of(context).colorScheme.primary,
+                              overlayColor: Theme.of(
+                                context,
+                              ).colorScheme.primary,
                               padding: const EdgeInsets.symmetric(
                                 horizontal: Sizes.sm,
                                 vertical: Sizes.xs,
                               ),
                             ),
-                            icon: Icon(
-                              Icons.checklist_rtl_outlined,
-                            ),
-                            label: Text(
+                            icon: const Icon(Icons.checklist_rtl_outlined),
+                            label: const Text(
                               "See older payments",
-                              style: TextStyle(
-                                fontSize: 14,
-                              ),
+                              style: TextStyle(fontSize: 14),
                             ),
                           ),
                         ),

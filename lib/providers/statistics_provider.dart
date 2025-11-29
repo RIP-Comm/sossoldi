@@ -4,17 +4,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../model/transaction.dart';
 import 'accounts_provider.dart';
 
-final currentYearMontlyTransactionsProvider =
-    StateProvider<List<FlSpot>>((ref) => const []);
+final currentYearMontlyTransactionsProvider = StateProvider<List<FlSpot>>(
+  (ref) => const [],
+);
 
 final statisticsProvider = FutureProvider<void>((ref) async {
-  final currentYearMontlyTransaction =
-      await TransactionMethods().currentYearMontlyTransactions();
+  final currentYearMontlyTransaction = await TransactionMethods()
+      .currentYearMontlyTransactions();
 
   final accountsAsync = ref.read(accountsProvider);
   final accounts = accountsAsync.value ?? [];
-  double currentBalance =
-      accounts.fold(0.0, (sum, account) => sum + (account.total ?? 0));
+  double currentBalance = accounts.fold(
+    0.0,
+    (sum, account) => sum + (account.total ?? 0),
+  );
 
   List<FlSpot> spots = [];
   double runningBalance = currentBalance;
@@ -26,7 +29,8 @@ final statisticsProvider = FutureProvider<void>((ref) async {
     final monthIndex = double.parse(monthData['month'].substring(5)) - 1;
 
     spots.add(
-        FlSpot(monthIndex, double.parse(runningBalance.toStringAsFixed(2))));
+      FlSpot(monthIndex, double.parse(runningBalance.toStringAsFixed(2))),
+    );
 
     if (i < reversedTransactions.length - 1) {
       runningBalance =

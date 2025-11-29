@@ -6,13 +6,14 @@ import 'package:sossoldi/model/base_entity.dart';
 void main() {
   test('Test Copy Budget', () {
     Budget b = Budget(
-        id: 2,
-        idCategory: 2,
-        name: 'Test',
-        amountLimit: 100,
-        active: true,
-        createdAt: DateTime.utc(2022),
-        updatedAt: DateTime.utc(2022));
+      id: 2,
+      idCategory: 2,
+      name: 'Test',
+      amountLimit: 100,
+      active: true,
+      createdAt: DateTime.utc(2022),
+      updatedAt: DateTime.utc(2022),
+    );
 
     Budget bCopy = b.copy(id: 10);
 
@@ -43,15 +44,24 @@ void main() {
     assert(b.name == json[BudgetFields.name]);
     assert(b.amountLimit == json[BudgetFields.amountLimit]);
     assert(b.active == json[BudgetFields.active]);
-    assert(b.createdAt?.toUtc().toIso8601String() ==
-        json[BaseEntityFields.createdAt]);
-    assert(b.updatedAt?.toUtc().toIso8601String() ==
-        json[BaseEntityFields.updatedAt]);
+    assert(
+      b.createdAt?.toUtc().toIso8601String() ==
+          json[BaseEntityFields.createdAt],
+    );
+    assert(
+      b.updatedAt?.toUtc().toIso8601String() ==
+          json[BaseEntityFields.updatedAt],
+    );
   });
 
   test("Test toJson Budget", () {
     Budget b = const Budget(
-        id: 2, idCategory: 2, name: 'Test', amountLimit: 100, active: true);
+      id: 2,
+      idCategory: 2,
+      name: 'Test',
+      amountLimit: 100,
+      active: true,
+    );
 
     Map<String, Object?> json = b.toJson(update: true);
 

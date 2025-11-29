@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 
 class DecimalTextInputFormatter extends TextInputFormatter {
   DecimalTextInputFormatter({this.decimalDigits})
-      : assert(decimalDigits == null || decimalDigits > 0);
+    : assert(decimalDigits == null || decimalDigits > 0);
 
   final int? decimalDigits;
   final String decimalSeparator = ".";

@@ -30,8 +30,11 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
   @override
   Widget build(BuildContext context) {
     budgetsList = ref.watch(budgetsProvider).value;
-    totalBudget = budgetsList?.fold<num>(
-            0, (total, budget) => total + budget.amountLimit) ??
+    totalBudget =
+        budgetsList?.fold<num>(
+          0,
+          (total, budget) => total + budget.amountLimit,
+        ) ??
         0;
     final categoriesGrid = ref.watch(categoriesProvider);
     return Scaffold(
@@ -41,25 +44,25 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
           padding: const EdgeInsets.all(Sizes.lg),
           child: Column(
             children: [
-              Text("STEP 1 OF 2",
-                  style: Theme.of(context).textTheme.labelSmall),
+              Text(
+                "STEP 1 OF 2",
+                style: Theme.of(context).textTheme.labelSmall,
+              ),
               const SizedBox(height: Sizes.xl),
               Text(
                 "Set up your monthly\nbudgets",
                 textAlign: TextAlign.center,
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineLarge
-                    ?.copyWith(color: blue1),
+                style: Theme.of(
+                  context,
+                ).textTheme.headlineLarge?.copyWith(color: blue1),
               ),
               const SizedBox(height: Sizes.xxl),
               Text(
                 "Choose which categories you want to set a budget for",
                 textAlign: TextAlign.center,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
-                    ?.copyWith(color: blue1),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: blue1),
               ),
               const SizedBox(height: Sizes.lg),
               Expanded(
@@ -74,30 +77,34 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                       scrollDirection: Axis.vertical,
                       gridDelegate:
                           const SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 300,
-                        childAspectRatio: 3,
-                        crossAxisSpacing: 18,
-                        mainAxisSpacing: 12,
-                      ),
+                            maxCrossAxisExtent: 300,
+                            childAspectRatio: 3,
+                            crossAxisSpacing: 18,
+                            mainAxisSpacing: 12,
+                          ),
                       itemBuilder: (context, i) {
                         if (i < categories.length) {
                           return GestureDetector(
-                              onTap: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) =>
-                                      AddBudget(categories.elementAt(i)),
-                                );
-                              },
-                              child: CategoryButton(
-                                categoryColor: categoryColorList[
-                                    categories.elementAt(i).color],
-                                categoryName: categories.elementAt(i).name,
-                                budget: budgetsList?.firstWhereOrNull(
-                                    (budget) =>
-                                        budget.idCategory ==
-                                        categories.elementAt(i).id),
-                              ));
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) =>
+                                    AddBudget(categories.elementAt(i)),
+                              );
+                            },
+                            child: CategoryButton(
+                              categoryColor:
+                                  categoryColorList[categories
+                                      .elementAt(i)
+                                      .color],
+                              categoryName: categories.elementAt(i).name,
+                              budget: budgetsList?.firstWhereOrNull(
+                                (budget) =>
+                                    budget.idCategory ==
+                                    categories.elementAt(i).id,
+                              ),
+                            ),
+                          );
                         } else {
                           return GestureDetector(
                             onTap: () {
@@ -105,7 +112,9 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      CreateEditCategoryPage(hideIncome: true),
+                                      const CreateEditCategoryPage(
+                                        hideIncome: true,
+                                      ),
                                 ),
                               );
                             },
@@ -127,27 +136,28 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                       child: Column(
                         children: [
                           const SizedBox(height: Sizes.sm),
-                          Text("Monthly budget total:",
-                              style: Theme.of(context).textTheme.bodySmall),
+                          Text(
+                            "Monthly budget total:",
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
                           const SizedBox(height: Sizes.sm),
                           RichText(
                             text: TextSpan(
                               children: [
                                 TextSpan(
                                   text: totalBudget.toString(),
-                                  style:
-                                      Theme.of(context).textTheme.displayMedium,
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.displayMedium,
                                 ),
                                 TextSpan(
                                   text: "€",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
+                                  style: Theme.of(context).textTheme.bodyMedium
                                       ?.apply(
-                                    fontFeatures: [
-                                      const FontFeature.subscripts()
-                                    ],
-                                  ),
+                                        fontFeatures: [
+                                          const FontFeature.subscripts(),
+                                        ],
+                                      ),
                                 ),
                               ],
                             ),
@@ -161,22 +171,23 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          const AccountSetup()),
+                                    builder: (context) => const AccountSetup(),
+                                  ),
                                 );
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: blue5,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(Sizes.borderRadius),
+                                  borderRadius: BorderRadius.circular(
+                                    Sizes.borderRadius,
+                                  ),
                                 ),
                               ),
-                              child: Text('NEXT STEP',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(color: Colors.white)),
+                              child: Text(
+                                'NEXT STEP',
+                                style: Theme.of(context).textTheme.bodyMedium
+                                    ?.copyWith(color: Colors.white),
+                              ),
                             ),
                           ),
                         ],
@@ -187,7 +198,8 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const AccountSetup()),
+                            builder: (context) => const AccountSetup(),
+                          ),
                         );
                       },
                       style: ElevatedButton.styleFrom(
@@ -200,22 +212,23 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('CONTINUE WITHOUT BUDGET  ',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(color: blue1)),
-                              const Icon(Icons.arrow_forward,
-                                  size: 15, color: blue1),
+                              Text(
+                                'CONTINUE WITHOUT BUDGET  ',
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.bodyMedium?.copyWith(color: blue1),
+                              ),
+                              const Icon(
+                                Icons.arrow_forward,
+                                size: 15,
+                                color: blue1,
+                              ),
                             ],
                           ),
                           SizedBox(
                             width: MediaQuery.sizeOf(context).width / 1.6,
-                            child: const Divider(
-                              color: blue1,
-                              thickness: 1,
-                            ),
-                          )
+                            child: const Divider(color: blue1, thickness: 1),
+                          ),
                         ],
                       ),
                     ),

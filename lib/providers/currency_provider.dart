@@ -3,9 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../model/currency.dart';
 
-final currencyStateNotifier = ChangeNotifierProvider(
-  (ref) => CurrencyState(),
-);
+final currencyStateNotifier = ChangeNotifierProvider((ref) => CurrencyState());
 
 class CurrencyState extends ChangeNotifier {
   //Initial currency selected

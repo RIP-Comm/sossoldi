@@ -74,11 +74,16 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                       vertical: Sizes.lg,
                     ),
                     padding: const EdgeInsets.fromLTRB(
-                        Sizes.lg, Sizes.md, Sizes.lg, 0),
+                      Sizes.lg,
+                      Sizes.md,
+                      Sizes.lg,
+                      0,
+                    ),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius:
-                          BorderRadius.circular(Sizes.borderRadiusSmall),
+                      borderRadius: BorderRadius.circular(
+                        Sizes.borderRadiusSmall,
+                      ),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,9 +94,11 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                         ),
                         TextField(
                           controller: nameController,
-                          decoration: InputDecoration(hintText: "Account name"),
+                          decoration: const InputDecoration(
+                            hintText: "Account name",
+                          ),
                           style: Theme.of(context).textTheme.titleLarge,
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -104,8 +111,9 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                     ),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius:
-                          BorderRadius.circular(Sizes.borderRadiusSmall),
+                      borderRadius: BorderRadius.circular(
+                        Sizes.borderRadiusSmall,
+                      ),
                     ),
                     child: Column(
                       children: [
@@ -120,8 +128,9 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                         Material(
                           color: Colors.transparent,
                           child: InkWell(
-                            borderRadius:
-                                BorderRadius.circular(Sizes.borderRadius * 10),
+                            borderRadius: BorderRadius.circular(
+                              Sizes.borderRadius * 10,
+                            ),
                             onTap: () =>
                                 setState(() => showAccountIcons = true),
                             child: Ink(
@@ -158,16 +167,18 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                                   alignment: Alignment.topRight,
                                   child: TextButton(
                                     onPressed: () => setState(
-                                        () => showAccountIcons = false),
+                                      () => showAccountIcons = false,
+                                    ),
                                     child: Text(
                                       "Done",
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyLarge!
                                           .copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .secondary),
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.secondary,
+                                          ),
                                     ),
                                   ),
                                 ),
@@ -177,37 +188,42 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                                   physics: const NeverScrollableScrollPhysics(),
                                   gridDelegate:
                                       const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 6,
-                                  ),
+                                        crossAxisCount: 6,
+                                      ),
                                   itemBuilder: (context, index) {
-                                    IconData accountIconData =
-                                        accountIconList.values.elementAt(index);
-                                    String accountIconName =
-                                        accountIconList.keys.elementAt(index);
+                                    IconData accountIconData = accountIconList
+                                        .values
+                                        .elementAt(index);
+                                    String accountIconName = accountIconList
+                                        .keys
+                                        .elementAt(index);
                                     return GestureDetector(
                                       onTap: () => setState(
-                                          () => accountIcon = accountIconName),
+                                        () => accountIcon = accountIconName,
+                                      ),
                                       child: Container(
                                         margin: const EdgeInsets.all(Sizes.xs),
                                         decoration: BoxDecoration(
-                                          color: accountIconList[accountIcon] ==
+                                          color:
+                                              accountIconList[accountIcon] ==
                                                   accountIconData
-                                              ? Theme.of(context)
-                                                  .colorScheme
-                                                  .secondary
-                                              : Theme.of(context)
-                                                  .colorScheme
-                                                  .surface,
+                                              ? Theme.of(
+                                                  context,
+                                                ).colorScheme.secondary
+                                              : Theme.of(
+                                                  context,
+                                                ).colorScheme.surface,
                                           shape: BoxShape.circle,
                                         ),
                                         child: Icon(
                                           accountIconData,
-                                          color: accountIconList[accountIcon] ==
+                                          color:
+                                              accountIconList[accountIcon] ==
                                                   accountIconData
                                               ? white
-                                              : Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
+                                              : Theme.of(
+                                                  context,
+                                                ).colorScheme.primary,
                                           size: 24,
                                         ),
                                       ),
@@ -225,7 +241,8 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                             scrollDirection: Axis.horizontal,
                             physics: const BouncingScrollPhysics(),
                             padding: const EdgeInsets.symmetric(
-                                horizontal: Sizes.lg),
+                              horizontal: Sizes.lg,
+                            ),
                             separatorBuilder: (context, index) =>
                                 const SizedBox(width: Sizes.lg),
                             itemBuilder: (context, index) {
@@ -234,11 +251,13 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                                 onTap: () =>
                                     setState(() => accountColor = index),
                                 child: Container(
-                                  height: accountColorListTheme[accountColor] ==
+                                  height:
+                                      accountColorListTheme[accountColor] ==
                                           color
                                       ? 38
                                       : 32,
-                                  width: accountColorListTheme[accountColor] ==
+                                  width:
+                                      accountColorListTheme[accountColor] ==
                                           color
                                       ? 38
                                       : 32,
@@ -247,14 +266,14 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                                     color: color,
                                     border:
                                         accountColorListTheme[accountColor] ==
-                                                color
-                                            ? Border.all(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary,
-                                                width: 3,
-                                              )
-                                            : null,
+                                            color
+                                        ? Border.all(
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.primary,
+                                            width: 3,
+                                          )
+                                        : null,
                                   ),
                                 ),
                               );
@@ -265,11 +284,10 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                         const SizedBox(height: Sizes.sm),
                         Text(
                           "CHOOSE COLOR",
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelMedium!
+                          style: Theme.of(context).textTheme.labelMedium!
                               .copyWith(
-                                  color: Theme.of(context).colorScheme.primary),
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                         ),
                         const SizedBox(height: Sizes.lg),
                       ],
@@ -277,13 +295,22 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                   ),
                   Container(
                     margin: const EdgeInsets.fromLTRB(
-                        Sizes.lg, Sizes.xl, Sizes.lg, 0),
+                      Sizes.lg,
+                      Sizes.xl,
+                      Sizes.lg,
+                      0,
+                    ),
                     padding: const EdgeInsets.fromLTRB(
-                        Sizes.lg, Sizes.md, Sizes.lg, 0),
+                      Sizes.lg,
+                      Sizes.md,
+                      Sizes.lg,
+                      0,
+                    ),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius:
-                          BorderRadius.circular(Sizes.borderRadiusSmall),
+                      borderRadius: BorderRadius.circular(
+                        Sizes.borderRadiusSmall,
+                      ),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -299,8 +326,9 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                                 "${selectedAccount == null ? "Initial" : "Current"} Balance",
                             suffixText: currencyState.selectedCurrency.symbol,
                           ),
-                          keyboardType:
-                              TextInputType.numberWithOptions(decimal: true),
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
                           inputFormatters: [
                             DecimalTextInputFormatter(decimalDigits: 2),
                           ],
@@ -317,15 +345,17 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                     padding: const EdgeInsets.symmetric(horizontal: Sizes.lg),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius:
-                          BorderRadius.circular(Sizes.borderRadiusSmall),
+                      borderRadius: BorderRadius.circular(
+                        Sizes.borderRadiusSmall,
+                      ),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding:
-                              const EdgeInsets.symmetric(vertical: Sizes.md),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: Sizes.md,
+                          ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -343,8 +373,9 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                         ),
                         const Divider(height: 1, color: grey2),
                         Padding(
-                          padding:
-                              const EdgeInsets.symmetric(vertical: Sizes.md),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: Sizes.md,
+                          ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -377,17 +408,15 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                                 onPressed: () => ref
                                     .read(accountsProvider.notifier)
                                     .removeAccount(selectedAccount)
-                                    .whenComplete(
-                                  () {
-                                    if (context.mounted) {
-                                      // Navigate back to the /account-list route.
-                                      Navigator.popUntil(
-                                        context,
-                                        ModalRoute.withName('/account-list'),
-                                      );
-                                    }
-                                  },
-                                ),
+                                    .whenComplete(() {
+                                      if (context.mounted) {
+                                        // Navigate back to the /account-list route.
+                                        Navigator.popUntil(
+                                          context,
+                                          ModalRoute.withName('/account-list'),
+                                        );
+                                      }
+                                    }),
                               );
                             },
                           );
@@ -398,10 +427,9 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                         icon: const Icon(Icons.delete_outlined, color: red),
                         label: Text(
                           "Delete account",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge!
-                              .copyWith(color: red),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodyLarge!.copyWith(color: red),
                         ),
                       ),
                     ),
@@ -416,17 +444,20 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
               color: Theme.of(context).colorScheme.surface,
               boxShadow: [
                 BoxShadow(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .primary
-                      .withValues(alpha: 0.15),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.primary.withValues(alpha: 0.15),
                   blurRadius: 5.0,
                   offset: const Offset(0, -1.0),
-                )
+                ),
               ],
             ),
             padding: const EdgeInsets.fromLTRB(
-                Sizes.xl, Sizes.md, Sizes.lg, Sizes.lg),
+              Sizes.xl,
+              Sizes.md,
+              Sizes.lg,
+              Sizes.lg,
+            ),
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
@@ -436,7 +467,9 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
               child: ElevatedButton(
                 onPressed: () async {
                   if (selectedAccount != null) {
-                    await ref.read(accountsProvider.notifier).updateAccount(
+                    await ref
+                        .read(accountsProvider.notifier)
+                        .updateAccount(
                           name: nameController.text,
                           icon: accountIcon,
                           color: accountColor,
@@ -445,7 +478,9 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                           mainAccount: mainAccount,
                         );
                   } else {
-                    await ref.read(accountsProvider.notifier).addAccount(
+                    await ref
+                        .read(accountsProvider.notifier)
+                        .addAccount(
                           name: nameController.text,
                           icon: accountIcon,
                           color: accountColor,

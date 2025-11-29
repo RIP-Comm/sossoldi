@@ -15,15 +15,12 @@ import 'rounded_icon.dart';
 class AccountsSum extends ConsumerWidget {
   final BankAccount account;
 
-  const AccountsSum({
-    required this.account,
-    super.key,
-  });
+  const AccountsSum({required this.account, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currencyState = ref.watch(currencyStateNotifier);
-    ref.listen(selectedAccountProvider, (_, __) {});
+    ref.listen(selectedAccountProvider, (_, _) {});
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primaryContainer,
@@ -44,14 +41,16 @@ class AccountsSum extends ConsumerWidget {
                   .read(accountsProvider.notifier)
                   .refreshAccount(account)
                   .whenComplete(() {
-                if (context.mounted) {
-                  Navigator.of(context).pushNamed('/account');
-                }
-              });
+                    if (context.mounted) {
+                      Navigator.of(context).pushNamed('/account');
+                    }
+                  });
             },
             child: Container(
               padding: const EdgeInsets.symmetric(
-                  horizontal: Sizes.md, vertical: Sizes.sm),
+                horizontal: Sizes.md,
+                vertical: Sizes.sm,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 spacing: Sizes.sm,
@@ -80,14 +79,12 @@ class AccountsSum extends ConsumerWidget {
                               ),
                               TextSpan(
                                 text: currencyState.selectedCurrency.symbol,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall
+                                style: Theme.of(context).textTheme.bodySmall
                                     ?.apply(
-                                  fontFeatures: [
-                                    const FontFeature.subscripts()
-                                  ],
-                                ),
+                                      fontFeatures: [
+                                        const FontFeature.subscripts(),
+                                      ],
+                                    ),
                               ),
                             ],
                           ),

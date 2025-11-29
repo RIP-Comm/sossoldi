@@ -37,16 +37,19 @@ class _RecurrenceSelectorState extends ConsumerState<RecurrenceSelector> {
                     recurrence.keys.first,
                 child: ListTile(
                   contentPadding: const EdgeInsets.fromLTRB(
-                      Sizes.xxl, Sizes.lg, Sizes.lg, Sizes.lg),
+                    Sizes.xxl,
+                    Sizes.lg,
+                    Sizes.lg,
+                    Sizes.lg,
+                  ),
                   title: Text(
                     recurrence.values.first,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .copyWith(color: Theme.of(context).colorScheme.primary),
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                   trailing: ref.watch(intervalProvider) == recurrence.keys.first
-                      ? Icon(Icons.check)
+                      ? const Icon(Icons.check)
                       : null,
                 ),
               ),

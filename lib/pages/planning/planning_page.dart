@@ -52,18 +52,21 @@ class _PlanningPageState extends State<PlanningPage> {
                     builder: (BuildContext context) {
                       return FractionallySizedBox(
                         heightFactor: 0.9,
-                        child:
-                            ManageBudgetPage(onRefreshBudgets: _forceRefresh),
+                        child: ManageBudgetPage(
+                          onRefreshBudgets: _forceRefresh,
+                        ),
                       );
                     },
                   );
                 },
                 child: Row(
                   children: [
-                    Text("MANAGE",
-                        style: Theme.of(context).textTheme.labelLarge),
+                    Text(
+                      "MANAGE",
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
                     const SizedBox(width: Sizes.xs),
-                    const Icon(Icons.edit, size: 13)
+                    const Icon(Icons.edit, size: 13),
                   ],
                 ),
               ),
@@ -72,10 +75,12 @@ class _PlanningPageState extends State<PlanningPage> {
           const SizedBox(height: Sizes.sm),
           BudgetCard(_forceRefresh),
           const SizedBox(height: Sizes.xl),
-          Text("Recurring payments",
-              style: Theme.of(context).textTheme.titleLarge),
+          Text(
+            "Recurring payments",
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
           const SizedBox(height: Sizes.sm),
-          RecurringPaymentSection(),
+          const RecurringPaymentSection(),
         ],
       ),
     );

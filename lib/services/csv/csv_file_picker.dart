@@ -28,10 +28,7 @@ class CSVFilePicker {
     bool permissionGranted = await _requestStoragePermission();
     if (!permissionGranted) {
       if (context.mounted) {
-        showSnackBar(
-          context,
-          message: 'Storage permission is required',
-        );
+        showSnackBar(context, message: 'Storage permission is required');
       }
       return null;
     }
@@ -48,10 +45,7 @@ class CSVFilePicker {
       }
     } catch (e) {
       if (context.mounted) {
-        showSnackBar(
-          context,
-          message: 'Error picking file: ${e.toString()}',
-        );
+        showSnackBar(context, message: 'Error picking file: ${e.toString()}');
       }
     }
     return null;
@@ -68,25 +62,21 @@ class CSVFilePicker {
       }
 
       final String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
-      final String filePath =
-          join(selectedDirectory, 'sossoldi_export_$timestamp.csv');
+      final String filePath = join(
+        selectedDirectory,
+        'sossoldi_export_$timestamp.csv',
+      );
 
       // Write the CSV content directly to the file
       final file = await File(filePath).writeAsString(csv);
 
       // Show success message
       if (context.mounted) {
-        showSnackBar(
-          context,
-          message: 'File saved to: ${file.path}',
-        );
+        showSnackBar(context, message: 'File saved to: ${file.path}');
       }
     } catch (e) {
       if (context.mounted) {
-        showSnackBar(
-          context,
-          message: 'Error saving file: ${e.toString()}',
-        );
+        showSnackBar(context, message: 'Error saving file: ${e.toString()}');
       }
     }
   }
@@ -105,7 +95,9 @@ class CSVFilePicker {
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(
-                vertical: Sizes.lg, horizontal: Sizes.xl),
+              vertical: Sizes.lg,
+              horizontal: Sizes.xl,
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

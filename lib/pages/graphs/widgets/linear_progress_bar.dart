@@ -25,8 +25,8 @@ class LinearProgressBar extends StatelessWidget {
     final isDarkMode = brightness == Brightness.dark;
     final colorList = isDarkMode
         ? (type == BarType.account
-            ? darkAccountColorList
-            : darkCategoryColorList)
+              ? darkAccountColorList
+              : darkCategoryColorList)
         : (type == BarType.account ? accountColorList : categoryColorList);
 
     return ClipRRect(
@@ -34,10 +34,12 @@ class LinearProgressBar extends StatelessWidget {
       child: LinearProgressIndicator(
         value: amount != 0 ? amount / total : 0,
         minHeight: 16,
-        backgroundColor:
-            colorList[colorIndex % colorList.length].withValues(alpha: 0.3),
+        backgroundColor: colorList[colorIndex % colorList.length].withValues(
+          alpha: 0.3,
+        ),
         valueColor: AlwaysStoppedAnimation<Color>(
-            colorList[colorIndex % colorList.length]),
+          colorList[colorIndex % colorList.length],
+        ),
         borderRadius: BorderRadius.circular(Sizes.borderRadiusLarge),
       ),
     );

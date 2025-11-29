@@ -4,9 +4,7 @@ import '../../../constants/style.dart';
 import '../../../ui/device.dart';
 
 class AddCategoryButton extends StatelessWidget {
-  const AddCategoryButton({
-    super.key,
-  });
+  const AddCategoryButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +29,9 @@ class AddCategoryButton extends StatelessWidget {
             children: [
               Text(
                 "Add category",
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium
-                    ?.copyWith(color: grey1),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: grey1),
               ),
             ],
           ),

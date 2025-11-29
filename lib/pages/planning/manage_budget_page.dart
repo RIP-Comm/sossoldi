@@ -26,7 +26,8 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
   void _loadCategories() async {
     categories = await ref.read(categoriesProvider.notifier).getCategories();
     categories.removeWhere(
-        (element) => element.type == CategoryTransactionType.income);
+      (element) => element.type == CategoryTransactionType.income,
+    );
     budgets = await ref.read(budgetsProvider.notifier).getBudgets();
     usedCategoryIds = budgets.map((b) => b.idCategory).toSet();
     setState(() {});
@@ -77,11 +78,13 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
       message: "Add a category first to set a budget",
       actionLabel: "ADD",
       onAction: () async {
-        final categoryAdded = await Navigator.pushNamed(
-          context,
-          '/add-category',
-          arguments: {'hideIncome': true},
-        ) as bool?;
+        final categoryAdded =
+            await Navigator.pushNamed(
+                  context,
+                  '/add-category',
+                  arguments: {'hideIncome': true},
+                )
+                as bool?;
 
         if (categoryAdded ?? false) _loadCategories();
       },
@@ -96,8 +99,9 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
 
   @override
   Widget build(BuildContext context) {
-    final availableCategories =
-        categories.where((c) => !usedCategoryIds.contains(c.id)).toList();
+    final availableCategories = categories
+        .where((c) => !usedCategoryIds.contains(c.id))
+        .toList();
     final canAddCategory = availableCategories.isNotEmpty;
 
     return Scaffold(
@@ -114,18 +118,14 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
             ),
             const Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: Sizes.lg, vertical: Sizes.sm),
+                horizontal: Sizes.lg,
+                vertical: Sizes.sm,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'CATEGORY',
-                    textAlign: TextAlign.left,
-                  ),
-                  Text(
-                    'AMOUNT',
-                    textAlign: TextAlign.right,
-                  ),
+                  Text('CATEGORY', textAlign: TextAlign.left),
+                  Text('AMOUNT', textAlign: TextAlign.right),
                 ],
               ),
             ),
@@ -137,9 +137,9 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
                       shrinkWrap: true,
                       itemCount: budgets.length,
                       itemBuilder: (context, index) {
-                        final usedExcludingCurrent =
-                            Set<int>.from(usedCategoryIds)
-                              ..remove(budgets[index].idCategory);
+                        final usedExcludingCurrent = Set<int>.from(
+                          usedCategoryIds,
+                        )..remove(budgets[index].idCategory);
 
                         final initCategory = categories.firstWhere(
                           (c) => c.id == budgets[index].idCategory,
@@ -171,24 +171,28 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
                     ),
                   ),
                   const SizedBox(height: Sizes.sm),
-                  Text("Swipe left to delete",
-                      style: Theme.of(context).textTheme.bodySmall),
+                  Text(
+                    "Swipe left to delete",
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
                   const SizedBox(height: Sizes.md),
                   TextButton.icon(
-                    icon: Icon(Icons.add_circle, size: 32),
+                    icon: const Icon(Icons.add_circle, size: 32),
                     onPressed: canAddCategory
-                        ? () => _addBudget(Budget(
+                        ? () => _addBudget(
+                            Budget(
                               active: true,
                               amountLimit: 100,
                               idCategory: availableCategories[0].id!,
                               name: availableCategories[0].name,
-                            ))
+                            ),
+                          )
                         : null,
-                    label: Text("Add category budget"),
+                    label: const Text("Add category budget"),
                   ),
                   if (!canAddCategory)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
+                    const Padding(
+                      padding: EdgeInsets.only(top: 8.0),
                       child: Text(
                         "You have already added all available categories.",
                         style: TextStyle(color: Colors.grey),
@@ -222,7 +226,7 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
                     Navigator.of(context).pop();
                   }
                 },
-                child: Text("SAVE BUDGET"),
+                child: const Text("SAVE BUDGET"),
               ),
             ),
           ],

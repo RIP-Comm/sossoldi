@@ -8,8 +8,9 @@ import '../../../../providers/categories_provider.dart';
 import '../../../../providers/transactions_provider.dart';
 import '../../../../ui/device.dart';
 
-final highlightedMonthProvider =
-    StateProvider<int>((ref) => DateTime.now().month - 1);
+final highlightedMonthProvider = StateProvider<int>(
+  (ref) => DateTime.now().month - 1,
+);
 
 class CategoriesBarChart extends ConsumerWidget {
   const CategoriesBarChart({super.key});
@@ -24,15 +25,12 @@ class CategoriesBarChart extends ConsumerWidget {
 
     return Column(
       children: [
-        Text(
-          '$currentYear',
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
+        Text('$currentYear', style: Theme.of(context).textTheme.bodySmall),
         monthlyTotals.when(
           data: (totals) {
             final average = totals.isNotEmpty
                 ? totals.reduce((a, b) => a + b) /
-                    totals.where((total) => total > 0).length
+                      totals.where((total) => total > 0).length
                 : 0.0;
 
             return SizedBox(
@@ -47,20 +45,22 @@ class CategoriesBarChart extends ConsumerWidget {
                   titlesData: _titlesData(context),
                   barTouchData: _barTouchData(ref, currentYear),
                   borderData: FlBorderData(show: false),
-                  extraLinesData: ExtraLinesData(horizontalLines: [
-                    HorizontalLine(
-                      y: average,
-                      color: Theme.of(context).colorScheme.secondary,
-                      strokeWidth: 2,
-                      dashArray: [5, 5],
-                      label: HorizontalLineLabel(
-                        show: true,
-                        labelResolver: (line) => "avg",
-                        alignment: Alignment.topRight,
-                        style: Theme.of(context).textTheme.bodySmall,
+                  extraLinesData: ExtraLinesData(
+                    horizontalLines: [
+                      HorizontalLine(
+                        y: average,
+                        color: Theme.of(context).colorScheme.secondary,
+                        strokeWidth: 2,
+                        dashArray: [5, 5],
+                        label: HorizontalLineLabel(
+                          show: true,
+                          labelResolver: (line) => "avg",
+                          alignment: Alignment.topRight,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
                       ),
-                    ),
-                  ]),
+                    ],
+                  ),
                 ),
               ),
             );
@@ -82,8 +82,9 @@ class CategoriesBarChart extends ConsumerWidget {
       topRight: Radius.circular(Sizes.borderRadiusSmall),
     );
 
-    final maxAmount =
-        totals.isNotEmpty ? totals.reduce((a, b) => a > b ? a : b) : 1.0;
+    final maxAmount = totals.isNotEmpty
+        ? totals.reduce((a, b) => a > b ? a : b)
+        : 1.0;
 
     return List.generate(12, (index) {
       final barHeight = maxAmount > 0 ? totals[index] : 0.0;
@@ -96,8 +97,9 @@ class CategoriesBarChart extends ConsumerWidget {
             toY: barHeight,
             width: 20,
             borderRadius: rodBorderRadius,
-            color:
-                isHighlighted ? Theme.of(context).colorScheme.secondary : grey2,
+            color: isHighlighted
+                ? Theme.of(context).colorScheme.secondary
+                : grey2,
           ),
         ],
       );
@@ -116,7 +118,9 @@ class CategoriesBarChart extends ConsumerWidget {
               child: Text(
                 DateFormat('MMM').format(DateTime(0, value.toInt() + 1)),
                 style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary, fontSize: 10),
+                  color: Theme.of(context).colorScheme.primary,
+                  fontSize: 10,
+                ),
               ),
             );
           },
@@ -124,25 +128,23 @@ class CategoriesBarChart extends ConsumerWidget {
       ),
       leftTitles: AxisTitles(
         sideTitles: SideTitles(
-            showTitles: true,
-            getTitlesWidget: (value, meta) {
-              return Padding(
-                padding: const EdgeInsets.only(top: 6.0),
-                child: Text(
-                  meta.formattedValue,
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontSize: 10),
+          showTitles: true,
+          getTitlesWidget: (value, meta) {
+            return Padding(
+              padding: const EdgeInsets.only(top: 6.0),
+              child: Text(
+                meta.formattedValue,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontSize: 10,
                 ),
-              );
-            }),
+              ),
+            );
+          },
+        ),
       ),
-      rightTitles: const AxisTitles(
-        sideTitles: SideTitles(showTitles: false),
-      ),
-      topTitles: const AxisTitles(
-        sideTitles: SideTitles(showTitles: false),
-      ),
+      rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+      topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
     );
   }
 
@@ -171,9 +173,15 @@ class CategoriesBarChart extends ConsumerWidget {
 
   void _updateSelectedMonth(WidgetRef ref, int year, int monthIndex) {
     final selectedMonth = DateTime(year, monthIndex + 1, 1);
-    ref.read(filterDateStartProvider.notifier).state =
-        DateTime(selectedMonth.year, selectedMonth.month, 1);
-    ref.read(filterDateEndProvider.notifier).state =
-        DateTime(selectedMonth.year, selectedMonth.month + 1, 0);
+    ref.read(filterDateStartProvider.notifier).state = DateTime(
+      selectedMonth.year,
+      selectedMonth.month,
+      1,
+    );
+    ref.read(filterDateEndProvider.notifier).state = DateTime(
+      selectedMonth.year,
+      selectedMonth.month + 1,
+      0,
+    );
   }
 }

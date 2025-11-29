@@ -33,36 +33,36 @@ class Currency extends BaseEntity {
     required this.mainCurrency,
   });
 
-  Currency copy(
-          {int? id,
-          String? symbol,
-          String? code,
-          String? name,
-          bool? mainCurrency,
-          t}) =>
-      Currency(
-        id: id ?? this.id,
-        symbol: symbol ?? this.symbol,
-        code: code ?? this.code,
-        name: name ?? this.name,
-        mainCurrency: mainCurrency ?? this.mainCurrency,
-      );
+  Currency copy({
+    int? id,
+    String? symbol,
+    String? code,
+    String? name,
+    bool? mainCurrency,
+    t,
+  }) => Currency(
+    id: id ?? this.id,
+    symbol: symbol ?? this.symbol,
+    code: code ?? this.code,
+    name: name ?? this.name,
+    mainCurrency: mainCurrency ?? this.mainCurrency,
+  );
 
   static Currency fromJson(Map<String, Object?> json) => Currency(
-        id: json[BaseEntityFields.id] as int?,
-        symbol: json[CurrencyFields.symbol] as String,
-        code: json[CurrencyFields.code] as String,
-        name: json[CurrencyFields.name] as String,
-        mainCurrency: json[CurrencyFields.mainCurrency] == 1 ? true : false,
-      );
+    id: json[BaseEntityFields.id] as int?,
+    symbol: json[CurrencyFields.symbol] as String,
+    code: json[CurrencyFields.code] as String,
+    name: json[CurrencyFields.name] as String,
+    mainCurrency: json[CurrencyFields.mainCurrency] == 1 ? true : false,
+  );
 
   Map<String, Object?> toJson() => {
-        BaseEntityFields.id: id,
-        CurrencyFields.symbol: symbol,
-        CurrencyFields.code: code,
-        CurrencyFields.name: name,
-        CurrencyFields.mainCurrency: mainCurrency ? 1 : 0,
-      };
+    BaseEntityFields.id: id,
+    CurrencyFields.symbol: symbol,
+    CurrencyFields.code: code,
+    CurrencyFields.name: name,
+    CurrencyFields.mainCurrency: mainCurrency ? 1 : 0,
+  };
 }
 
 class CurrencyMethods extends SossoldiDatabase {
@@ -81,11 +81,12 @@ class CurrencyMethods extends SossoldiDatabase {
     } else {
       //fallback
       return const Currency(
-          id: 2,
-          symbol: '\$',
-          code: 'USD',
-          name: "United States Dollar",
-          mainCurrency: true);
+        id: 2,
+        symbol: '\$',
+        code: 'USD',
+        name: "United States Dollar",
+        mainCurrency: true,
+      );
     }
   }
 
@@ -143,8 +144,11 @@ class CurrencyMethods extends SossoldiDatabase {
   Future<int> deleteById(int id) async {
     final db = await database;
 
-    return await db.delete(currencyTable,
-        where: '${CurrencyFields.id} = ?', whereArgs: [id]);
+    return await db.delete(
+      currencyTable,
+      where: '${CurrencyFields.id} = ?',
+      whereArgs: [id],
+    );
   }
 
   void changeMainCurrency(int id) async {

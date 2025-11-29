@@ -4,7 +4,6 @@ import '../../../ui/device.dart';
 import 'recurring_payment_card.dart';
 import '../../../providers/transactions_provider.dart';
 
-import '../../../model/recurring_transaction.dart';
 import '../../../model/transaction.dart';
 
 class RecurringPaymentSection extends ConsumerStatefulWidget {
@@ -32,7 +31,7 @@ class _RecurringPaymentSectionState
               );
             }
             return ListView.separated(
-              itemCount: transactions!.length,
+              itemCount: transactions.length,
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemBuilder: (context, index) => InkWell(
@@ -41,13 +40,15 @@ class _RecurringPaymentSectionState
                       .read(transactionsProvider.notifier)
                       .transactionUpdateState(transactions[index])
                       .whenComplete(() {
-                    if (context.mounted) {
-                      Navigator.of(context)
-                          .pushNamed("/edit-recurring-transaction")
-                          .then((value) =>
-                              ref.refresh(recurringTransactionProvider));
-                    }
-                  });
+                        if (context.mounted) {
+                          Navigator.of(context)
+                              .pushNamed("/edit-recurring-transaction")
+                              .then(
+                                (value) =>
+                                    ref.refresh(recurringTransactionProvider),
+                              );
+                        }
+                      });
                 },
                 child: RecurringPaymentCard(transaction: transactions[index]),
               ),
@@ -64,7 +65,7 @@ class _RecurringPaymentSectionState
         ),
         const SizedBox(height: Sizes.xxl),
         TextButton.icon(
-          icon: Icon(Icons.add_circle, size: 32),
+          icon: const Icon(Icons.add_circle, size: 32),
           onPressed: () => {
             ref.read(selectedTransactionUpdateProvider.notifier).state = null,
             ref.read(selectedRecurringPayProvider.notifier).state = true,
@@ -72,12 +73,14 @@ class _RecurringPaymentSectionState
             ref.read(categoryProvider.notifier).state = null,
             ref.read(intervalProvider.notifier).state = Recurrence.monthly,
             ref.read(endDateProvider.notifier).state = null,
-            Navigator.of(context).pushNamed(
-              "/add-page",
-              arguments: {'recurrencyEditingPermitted': false},
-            ).then((value) => ref.refresh(recurringTransactionProvider))
+            Navigator.of(context)
+                .pushNamed(
+                  "/add-page",
+                  arguments: {'recurrencyEditingPermitted': false},
+                )
+                .then((value) => ref.refresh(recurringTransactionProvider)),
           },
-          label: Text("Add recurring payment"),
+          label: const Text("Add recurring payment"),
         ),
         const SizedBox(height: Sizes.xxl),
       ],

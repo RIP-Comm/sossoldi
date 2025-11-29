@@ -40,7 +40,9 @@ class _AccountsTabState extends ConsumerState<AccountsTab> {
           accountToTransactionsIncome[accountId]?.add(transaction);
         } else {
           accountToTransactionsIncome.putIfAbsent(
-              accountId, () => [transaction]);
+            accountId,
+            () => [transaction],
+          );
         }
 
         // update total amount for the account
@@ -50,14 +52,18 @@ class _AccountsTabState extends ConsumerState<AccountsTab> {
               accountToAmountIncome[accountId]! + transaction.amount.toDouble();
         } else {
           accountToAmountIncome.putIfAbsent(
-              accountId, () => transaction.amount.toDouble());
+            accountId,
+            () => transaction.amount.toDouble(),
+          );
         }
       } else if (transaction.type == TransactionType.expense) {
         if (accountToTransactionsExpense.containsKey(accountId)) {
           accountToTransactionsExpense[accountId]?.add(transaction);
         } else {
           accountToTransactionsExpense.putIfAbsent(
-              accountId, () => [transaction]);
+            accountId,
+            () => [transaction],
+          );
         }
 
         // update total amount for the account
@@ -65,10 +71,12 @@ class _AccountsTabState extends ConsumerState<AccountsTab> {
         if (accountToAmountExpense.containsKey(accountId)) {
           accountToAmountExpense[accountId] =
               accountToAmountExpense[accountId]! -
-                  transaction.amount.toDouble();
+              transaction.amount.toDouble();
         } else {
           accountToAmountExpense.putIfAbsent(
-              accountId, () => -transaction.amount.toDouble());
+            accountId,
+            () => -transaction.amount.toDouble(),
+          );
         }
       }
     }
@@ -83,47 +91,48 @@ class _AccountsTabState extends ConsumerState<AccountsTab> {
             accounts.when(
               data: (data) {
                 List<BankAccount> accountIncomeList = data
-                    .where((account) =>
-                        accountToAmountIncome.containsKey(account.id))
+                    .where(
+                      (account) =>
+                          accountToAmountIncome.containsKey(account.id),
+                    )
                     .toList();
                 List<BankAccount> accountExpenseList = data
-                    .where((account) =>
-                        accountToAmountExpense.containsKey(account.id))
+                    .where(
+                      (account) =>
+                          accountToAmountExpense.containsKey(account.id),
+                    )
                     .toList();
                 return transactionType == TransactionType.income
                     ? accountIncomeList.isEmpty
-                        ? const SizedBox(
-                            height: 400,
-                            child: Center(
-                              child: Text("No incomes for selected month"),
-                            ),
-                          )
-                        : AccountSection(
-                            accountList: accountIncomeList,
-                            amounts: accountToAmountIncome,
-                            total: totalIncome,
-                            transactions: accountToTransactionsIncome,
-                          )
+                          ? const SizedBox(
+                              height: 400,
+                              child: Center(
+                                child: Text("No incomes for selected month"),
+                              ),
+                            )
+                          : AccountSection(
+                              accountList: accountIncomeList,
+                              amounts: accountToAmountIncome,
+                              total: totalIncome,
+                              transactions: accountToTransactionsIncome,
+                            )
                     : accountExpenseList.isEmpty
-                        ? const SizedBox(
-                            height: 400,
-                            child: Center(
-                              child: Text("No expenses for selected month"),
-                            ),
-                          )
-                        : AccountSection(
-                            accountList: accountExpenseList,
-                            amounts: accountToAmountExpense,
-                            total: totalExpense,
-                            transactions: accountToTransactionsExpense,
-                          );
+                    ? const SizedBox(
+                        height: 400,
+                        child: Center(
+                          child: Text("No expenses for selected month"),
+                        ),
+                      )
+                    : AccountSection(
+                        accountList: accountExpenseList,
+                        amounts: accountToAmountExpense,
+                        total: totalExpense,
+                        transactions: accountToTransactionsExpense,
+                      );
               },
-              error: (error, stackTrace) => Center(
-                child: Text(error.toString()),
-              ),
-              loading: () => const Center(
-                child: CircularProgressIndicator(),
-              ),
+              error: (error, stackTrace) =>
+                  Center(child: Text(error.toString())),
+              loading: () => const Center(child: CircularProgressIndicator()),
             ),
           ],
         ),
@@ -151,11 +160,7 @@ class AccountSection extends StatelessWidget {
     return Column(
       spacing: Sizes.lg,
       children: [
-        AccountsPieChart(
-          accounts: accountList,
-          amounts: amounts,
-          total: total,
-        ),
+        AccountsPieChart(accounts: accountList, amounts: amounts, total: total),
         ListView.separated(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),

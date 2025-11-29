@@ -21,8 +21,10 @@ import 'widgets/recurrence_list_tile.dart';
 class CreateTransactionPage extends ConsumerStatefulWidget {
   final bool recurrencyEditingPermitted;
 
-  const CreateTransactionPage(
-      {super.key, this.recurrencyEditingPermitted = true});
+  const CreateTransactionPage({
+    super.key,
+    this.recurrencyEditingPermitted = true,
+  });
 
   @override
   ConsumerState<CreateTransactionPage> createState() =>
@@ -59,7 +61,7 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
       final argsMap = args as Map<String, dynamic>?;
       recurrencyEditingPermittedFromRoute =
           argsMap?['recurrencyEditingPermitted'] ??
-              widget.recurrencyEditingPermitted;
+          widget.recurrencyEditingPermitted;
     }
   }
 
@@ -72,13 +74,17 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
 
   String getCleanAmountString() {
     // Remove all non-numeric characters
-    var cleanNumberString =
-        amountController.text.replaceAll(RegExp(r'[^0-9\.]'), '');
+    var cleanNumberString = amountController.text.replaceAll(
+      RegExp(r'[^0-9\.]'),
+      '',
+    );
 
     // Remove leading zeros only if the number does not start with "0."
     if (!cleanNumberString.startsWith('0.')) {
-      cleanNumberString =
-          cleanNumberString.replaceAll(RegExp(r'^0+(?!\.)'), '');
+      cleanNumberString = cleanNumberString.replaceAll(
+        RegExp(r'^0+(?!\.)'),
+        '',
+      );
     }
 
     if (cleanNumberString.startsWith('.')) {
@@ -133,8 +139,8 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
         .read(accountsProvider.notifier)
         .refreshAccount(ref.read(bankAccountProvider)!)
         .whenComplete(() {
-      if (mounted) Navigator.of(context).pop();
-    });
+          if (mounted) Navigator.of(context).pop();
+        });
   }
 
   void _createOrUpdateTransaction() {
@@ -153,21 +159,30 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
           ref
               .read(transactionsProvider.notifier)
               .addRecurringTransaction(
-                  cleanAmount.toNum(), noteController.text, selectedType)
+                cleanAmount.toNum(),
+                noteController.text,
+                selectedType,
+              )
               .then((value) {
-            if (value != null) {
-              ref
-                  .read(transactionsProvider.notifier)
-                  .updateTransaction(
-                      cleanAmount.toNum(), noteController.text, value.id)
-                  .whenComplete(() => _refreshAccountAndNavigateBack());
-            }
-          });
+                if (value != null) {
+                  ref
+                      .read(transactionsProvider.notifier)
+                      .updateTransaction(
+                        cleanAmount.toNum(),
+                        noteController.text,
+                        value.id,
+                      )
+                      .whenComplete(() => _refreshAccountAndNavigateBack());
+                }
+              });
         } else {
           ref
               .read(transactionsProvider.notifier)
-              .updateTransaction(cleanAmount.toNum(), noteController.text,
-                  selectedTransaction.idRecurringTransaction)
+              .updateTransaction(
+                cleanAmount.toNum(),
+                noteController.text,
+                selectedTransaction.idRecurringTransaction,
+              )
               .whenComplete(() => _refreshAccountAndNavigateBack());
         }
       } else {
@@ -185,7 +200,10 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
               ref
                   .read(transactionsProvider.notifier)
                   .addRecurringTransaction(
-                      cleanAmount.toNum(), noteController.text, selectedType)
+                    cleanAmount.toNum(),
+                    noteController.text,
+                    selectedType,
+                  )
                   .whenComplete(() => _refreshAccountAndNavigateBack());
             } else {
               ref
@@ -243,7 +261,7 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
               ),
               onPressed: _deleteTransaction,
             ),
-          ]
+          ],
         ],
       ),
       body: Column(
@@ -257,11 +275,15 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
                   Container(
                     alignment: Alignment.centerLeft,
                     padding: const EdgeInsets.only(
-                        left: Sizes.lg, top: Sizes.xxl, bottom: Sizes.sm),
+                      left: Sizes.lg,
+                      top: Sizes.xxl,
+                      bottom: Sizes.sm,
+                    ),
                     child: Text(
                       "DETAILS",
                       style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.primary),
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
                   ),
                   Container(
@@ -284,10 +306,12 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
                                 useSafeArea: true,
                                 shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(
-                                    topLeft:
-                                        Radius.circular(Sizes.borderRadius),
-                                    topRight:
-                                        Radius.circular(Sizes.borderRadius),
+                                    topLeft: Radius.circular(
+                                      Sizes.borderRadius,
+                                    ),
+                                    topRight: Radius.circular(
+                                      Sizes.borderRadius,
+                                    ),
                                   ),
                                 ),
                                 builder: (_) => DraggableScrollableSheet(
@@ -316,10 +340,12 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
                                 useSafeArea: true,
                                 shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(
-                                    topLeft:
-                                        Radius.circular(Sizes.borderRadius),
-                                    topRight:
-                                        Radius.circular(Sizes.borderRadius),
+                                    topLeft: Radius.circular(
+                                      Sizes.borderRadius,
+                                    ),
+                                    topRight: Radius.circular(
+                                      Sizes.borderRadius,
+                                    ),
                                   ),
                                 ),
                                 builder: (_) => DraggableScrollableSheet(
@@ -356,9 +382,9 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
                                     minimumYear: 2015,
                                     maximumYear: 2050,
                                     mode: CupertinoDatePickerMode.date,
-                                    onDateTimeChanged: (date) => ref
-                                        .read(dateProvider.notifier)
-                                        .state = date,
+                                    onDateTimeChanged: (date) =>
+                                        ref.read(dateProvider.notifier).state =
+                                            date,
                                   ),
                                 ),
                               );
@@ -379,9 +405,10 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
                         RecurrenceListTile(
                           recurrencyEditingPermitted:
                               widget.recurrencyEditingPermitted,
-                          selectedTransaction:
-                              ref.read(selectedTransactionUpdateProvider),
-                        )
+                          selectedTransaction: ref.read(
+                            selectedTransactionUpdateProvider,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -397,17 +424,20 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
                 color: Theme.of(context).colorScheme.surface,
                 boxShadow: [
                   BoxShadow(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .primary
-                        .withValues(alpha: 0.15),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.primary.withValues(alpha: 0.15),
                     blurRadius: 5.0,
                     offset: const Offset(0, -1.0),
-                  )
+                  ),
                 ],
               ),
               padding: const EdgeInsets.fromLTRB(
-                  Sizes.xl, Sizes.md, Sizes.xl, Sizes.xl),
+                Sizes.xl,
+                Sizes.md,
+                Sizes.xl,
+                Sizes.xl,
+              ),
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(

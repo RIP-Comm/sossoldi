@@ -24,12 +24,17 @@ class _AddBudgetState extends ConsumerState<AddBudget> {
     super.didChangeDependencies();
     // Initialize the text controller with the current budget amount
     budgetsList = ref.watch(budgetsProvider).value;
-    const Budget defaultBudget =
-        Budget(idCategory: 99999, name: '', amountLimit: 9999, active: false);
+    const Budget defaultBudget = Budget(
+      idCategory: 99999,
+      name: '',
+      amountLimit: 9999,
+      active: false,
+    );
 
     final Budget? budget = budgetsList?.firstWhere(
-        (element) => element.idCategory == widget.category.id,
-        orElse: () => defaultBudget);
+      (element) => element.idCategory == widget.category.id,
+      orElse: () => defaultBudget,
+    );
 
     if (budget != null) {
       amountController.text = budget.amountLimit.toString();
@@ -66,18 +71,20 @@ class _AddBudgetState extends ConsumerState<AddBudget> {
           onPressed: () async {
             await ref
                 .watch(budgetsProvider.notifier)
-                .addBudget(Budget(
-                  name: widget.category.name,
-                  createdAt: DateTime.now(),
-                  idCategory: widget.category.id!,
-                  amountLimit: num.tryParse(amountController.text) ?? 0,
-                  active: true,
-                ))
+                .addBudget(
+                  Budget(
+                    name: widget.category.name,
+                    createdAt: DateTime.now(),
+                    idCategory: widget.category.id!,
+                    amountLimit: num.tryParse(amountController.text) ?? 0,
+                    active: true,
+                  ),
+                )
                 .whenComplete(() {
-              if (context.mounted) {
-                Navigator.pop(context);
-              }
-            });
+                  if (context.mounted) {
+                    Navigator.pop(context);
+                  }
+                });
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: blue5,

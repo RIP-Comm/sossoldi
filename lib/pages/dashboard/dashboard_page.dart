@@ -34,15 +34,21 @@ class _HomePageState extends ConsumerState<DashboardPage> {
     final isDarkMode = ref.watch(appThemeStateNotifier).isDarkModeEnabled;
 
     ref.listen(
-        duplicatedTransactoinProvider,
-        (prev, curr) => showDuplicatedTransactionSnackBar(context,
-            transaction: curr, ref: ref));
+      duplicatedTransactoinProvider,
+      (prev, curr) => showDuplicatedTransactionSnackBar(
+        context,
+        transaction: curr,
+        ref: ref,
+      ),
+    );
 
     return Container(
       color: Theme.of(context).colorScheme.tertiary,
       child: ListView(
         children: [
-          ref.watch(dashboardProvider).when(
+          ref
+              .watch(dashboardProvider)
+              .when(
                 data: (value) {
                   final income = ref.watch(incomeProvider);
                   final expense = ref.watch(expenseProvider);
@@ -61,13 +67,12 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                             children: [
                               Text(
                                 "MONTHLY BALANCE",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelMedium
+                                style: Theme.of(context).textTheme.labelMedium
                                     ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary),
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.primary,
+                                    ),
                               ),
                               BlurWidget(
                                 child: RichText(
@@ -79,20 +84,23 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                                             .textTheme
                                             .headlineLarge
                                             ?.copyWith(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary),
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.primary,
+                                            ),
                                       ),
                                       TextSpan(
                                         text: currencyState
-                                            .selectedCurrency.symbol,
+                                            .selectedCurrency
+                                            .symbol,
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyLarge
                                             ?.copyWith(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary),
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.primary,
+                                            ),
                                       ),
                                     ],
                                   ),
@@ -121,7 +129,8 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                                       ),
                                       TextSpan(
                                         text: currencyState
-                                            .selectedCurrency.symbol,
+                                            .selectedCurrency
+                                            .symbol,
                                         style: Theme.of(context)
                                             .textTheme
                                             .labelLarge
@@ -154,7 +163,8 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                                       ),
                                       TextSpan(
                                         text: currencyState
-                                            .selectedCurrency.symbol,
+                                            .selectedCurrency
+                                            .symbol,
                                         style: Theme.of(context)
                                             .textTheme
                                             .labelLarge
@@ -188,12 +198,10 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                           const SizedBox(width: Sizes.xs),
                           Text(
                             "Current month",
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelMedium
+                            style: Theme.of(context).textTheme.labelMedium
                                 ?.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.primary),
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
                           ),
                           const SizedBox(width: Sizes.md),
                           Container(
@@ -207,12 +215,10 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                           const SizedBox(width: Sizes.xs),
                           Text(
                             "Last month",
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelMedium
+                            style: Theme.of(context).textTheme.labelMedium
                                 ?.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.primary),
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
                           ),
                         ],
                       ),
@@ -225,9 +231,9 @@ class _HomePageState extends ConsumerState<DashboardPage> {
               ),
           Container(
             decoration: BoxDecoration(
-              color: Theme.of(context)
-                  .colorScheme
-                  .primaryContainer, //da modificare in darkMode
+              color: Theme.of(
+                context,
+              ).colorScheme.primaryContainer, //da modificare in darkMode
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(Sizes.borderRadiusLarge),
                 topRight: Radius.circular(Sizes.borderRadiusLarge),
@@ -238,7 +244,11 @@ class _HomePageState extends ConsumerState<DashboardPage> {
               children: [
                 Padding(
                   padding: const EdgeInsets.fromLTRB(
-                      Sizes.lg, Sizes.xl, Sizes.lg, Sizes.sm),
+                    Sizes.lg,
+                    Sizes.xl,
+                    Sizes.lg,
+                    Sizes.sm,
+                  ),
                   child: Text(
                     "Your accounts",
                     style: Theme.of(context).textTheme.titleLarge,
@@ -263,33 +273,35 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                           return Container(
                             width: 140,
                             decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.circular(Sizes.borderRadius),
+                              borderRadius: BorderRadius.circular(
+                                Sizes.borderRadius,
+                              ),
                               boxShadow: [defaultShadow],
                             ),
                             child: ElevatedButton.icon(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.surface,
+                                backgroundColor: Theme.of(
+                                  context,
+                                ).colorScheme.surface,
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: Sizes.md, vertical: Sizes.sm),
+                                  horizontal: Sizes.md,
+                                  vertical: Sizes.sm,
+                                ),
                               ),
-                              icon: RoundedIcon(
+                              icon: const RoundedIcon(
                                 icon: Icons.add_rounded,
                                 backgroundColor: blue5,
                                 padding: EdgeInsets.all(Sizes.xs),
                               ),
                               label: Text(
                                 "New Account",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
+                                style: Theme.of(context).textTheme.bodyLarge!
                                     .copyWith(
                                       color: isDarkMode
                                           ? grey3
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
+                                          : Theme.of(
+                                              context,
+                                            ).colorScheme.secondary,
                                     ),
                                 maxLines: 2,
                               ),
@@ -312,7 +324,11 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                   alignment: Alignment.centerLeft,
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(
-                        Sizes.lg, Sizes.xxl, Sizes.lg, Sizes.sm),
+                      Sizes.lg,
+                      Sizes.xxl,
+                      Sizes.lg,
+                      Sizes.sm,
+                    ),
                     child: Text(
                       "Last transactions",
                       style: Theme.of(context).textTheme.titleLarge,
@@ -321,7 +337,9 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                 ),
                 lastTransactions.when(
                   data: (transactions) => TransactionsList(
-                      ignoreBlur: false, transactions: transactions),
+                    ignoreBlur: false,
+                    transactions: transactions,
+                  ),
                   loading: () => const SizedBox(),
                   error: (err, stack) => Text('Error: $err'),
                 ),

@@ -284,13 +284,7 @@ const darkCategoryColorList = [
   darkCategory44,
 ];
 
-const accountColorList = [
-  account1,
-  account2,
-  account3,
-  account4,
-  account5,
-];
+const accountColorList = [account1, account2, account3, account4, account5];
 
 const darkAccountColorList = [
   darkAccount1,

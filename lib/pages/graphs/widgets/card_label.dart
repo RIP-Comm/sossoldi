@@ -13,16 +13,18 @@ class CardLabel extends StatelessWidget {
       alignment: Alignment.centerLeft,
       child: Container(
         padding: const EdgeInsets.symmetric(
-            horizontal: Sizes.lg, vertical: Sizes.sm),
+          horizontal: Sizes.lg,
+          vertical: Sizes.sm,
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               label,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.w600,
-                  ),
+                color: Theme.of(context).colorScheme.primary,
+                fontWeight: FontWeight.w600,
+              ),
               textAlign: TextAlign.left,
             ),
             /*Text(

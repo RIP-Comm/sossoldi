@@ -37,12 +37,7 @@ var settingsOptions = [
     "Add/edit categories and subcategories",
     "/category-list",
   ],
-  [
-    Icons.attach_money,
-    "Budget",
-    "Add or edit your budgets",
-    null,
-  ],
+  [Icons.attach_money, "Budget", "Add or edit your budgets", null],
   [
     Icons.download_for_offline,
     "Import/Export",
@@ -61,12 +56,7 @@ var settingsOptions = [
     "Complete a small form to report a bug or leave a feedback",
     "https://feedback.sossoldi.com",
   ],
-  [
-    Icons.info,
-    "App Info",
-    "Learn more about us and the app",
-    "/more-info",
-  ],
+  [Icons.info, "App Info", "Learn more about us and the app", "/more-info"],
 ];
 
 class SettingsPage extends ConsumerStatefulWidget {
@@ -95,14 +85,16 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           builder: (context) => AlertDialog(
             title: const Text("Developer options activated."),
             content: const Text(
-                "WARNING: tapping on any button on the red bar, erases permanently your data. Do it at your own risk"),
+              "WARNING: tapping on any button on the red bar, erases permanently your data. Do it at your own risk",
+            ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
                 child: Text(
                   "OK",
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.primary),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
               ),
             ],
@@ -132,7 +124,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(
-                  vertical: Sizes.xl, horizontal: Sizes.lg),
+                vertical: Sizes.xl,
+                horizontal: Sizes.lg,
+              ),
               child: GestureDetector(
                 onTap: _onSettingsTap,
                 child: Row(
@@ -152,11 +146,10 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                     const SizedBox(width: Sizes.md),
                     Text(
                       "Settings",
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineLarge!
+                      style: Theme.of(context).textTheme.headlineLarge!
                           .copyWith(
-                              color: Theme.of(context).colorScheme.primary),
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                     ),
                   ],
                 ),
@@ -205,23 +198,21 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                             children: [
                               Text(
                                 setting[1].toString(),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge!
+                                style: Theme.of(context).textTheme.titleLarge!
                                     .copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary),
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.primary,
+                                    ),
                               ),
                               Text(
                                 setting[2].toString(),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall!
+                                style: Theme.of(context).textTheme.bodySmall!
                                     .copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary),
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.primary,
+                                    ),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 2,
                               ),
@@ -287,7 +278,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
                       if (context.mounted) {
                         showSuccessDialog(
-                            context, "DB Cleared, and DEMO data added");
+                          context,
+                          "DB Cleared, and DEMO data added",
+                        );
                       }
                     },
                   ),

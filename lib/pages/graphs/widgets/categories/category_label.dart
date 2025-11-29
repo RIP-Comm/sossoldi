@@ -25,10 +25,9 @@ class CategoryLabel extends ConsumerWidget {
       children: [
         Text(
           category.name,
-          style: Theme.of(context)
-              .textTheme
-              .bodySmall
-              ?.copyWith(color: Theme.of(context).colorScheme.primary),
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: Theme.of(context).colorScheme.primary,
+          ),
         ),
         RichText(
           text: TextSpan(
@@ -36,17 +35,16 @@ class CategoryLabel extends ConsumerWidget {
               TextSpan(
                 text:
                     "${amount.toStringAsFixed(2)}${currencyState.selectedCurrency.symbol}    ",
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
-                    ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
               ),
               TextSpan(
                 text: "${((amount / total) * 100).abs().toStringAsFixed(2)}%",
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),

@@ -12,8 +12,9 @@ import 'transactions/transactions_page.dart';
 
 final StateProvider selectedIndexProvider = StateProvider<int>((ref) => 0);
 
-final StateProvider<bool> visibilityAmountProvider =
-    StateProvider<bool>((ref) => false);
+final StateProvider<bool> visibilityAmountProvider = StateProvider<bool>(
+  (ref) => false,
+);
 
 class Structure extends ConsumerStatefulWidget {
   const Structure({super.key});
@@ -49,44 +50,41 @@ class _StructureState extends ConsumerState<Structure> {
       // Prevent the fab moving up when the keyboard is opened
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor:
-            selectedIndex == 0 ? Theme.of(context).colorScheme.tertiary : null,
+        backgroundColor: selectedIndex == 0
+            ? Theme.of(context).colorScheme.tertiary
+            : null,
         title: switch (selectedIndex) {
           0 => null,
-          _ => Text(_pagesTitle.elementAt(selectedIndex))
+          _ => Text(_pagesTitle.elementAt(selectedIndex)),
         },
         leading: Padding(
           padding: const EdgeInsets.only(left: Sizes.lg),
           child: FilledButton(
             onPressed: () => Navigator.of(context).pushNamed('/search'),
             style: FilledButton.styleFrom(shape: const CircleBorder()),
-            child: Icon(Icons.search),
+            child: const Icon(Icons.search),
           ),
         ),
         actions: [
           switch (selectedIndex) {
             0 => FilledButton(
-                onPressed: () {
-                  ref.read(visibilityAmountProvider.notifier).state =
-                      !isVisible;
-                },
-                style: FilledButton.styleFrom(shape: const CircleBorder()),
-                child:
-                    Icon(isVisible ? Icons.visibility : Icons.visibility_off),
-              ),
+              onPressed: () {
+                ref.read(visibilityAmountProvider.notifier).state = !isVisible;
+              },
+              style: FilledButton.styleFrom(shape: const CircleBorder()),
+              child: Icon(isVisible ? Icons.visibility : Icons.visibility_off),
+            ),
             _ => const SizedBox.shrink(),
           },
           FilledButton(
             onPressed: () => Navigator.of(context).pushNamed('/settings'),
             style: FilledButton.styleFrom(shape: const CircleBorder()),
-            child: Icon(Icons.settings),
+            child: const Icon(Icons.settings),
           ),
-          SizedBox.square(dimension: Sizes.xs),
+          const SizedBox.square(dimension: Sizes.xs),
         ],
       ),
-      body: Center(
-        child: _pages[selectedIndex],
-      ),
+      body: Center(child: _pages[selectedIndex]),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         selectedFontSize: 8,
@@ -101,22 +99,28 @@ class _StructureState extends ConsumerState<Structure> {
             label: "DASHBOARD",
           ),
           BottomNavigationBarItem(
-            icon: Icon(selectedIndex == 1
-                ? Icons.swap_horizontal_circle
-                : Icons.swap_horizontal_circle_outlined),
+            icon: Icon(
+              selectedIndex == 1
+                  ? Icons.swap_horizontal_circle
+                  : Icons.swap_horizontal_circle_outlined,
+            ),
             label: "TRANSACTIONS",
           ),
           const BottomNavigationBarItem(icon: Text(""), label: ""),
           BottomNavigationBarItem(
-            icon: Icon(selectedIndex == 3
-                ? Icons.calendar_today
-                : Icons.calendar_today_outlined),
+            icon: Icon(
+              selectedIndex == 3
+                  ? Icons.calendar_today
+                  : Icons.calendar_today_outlined,
+            ),
             label: "PLANNING",
           ),
           BottomNavigationBarItem(
-            icon: Icon(selectedIndex == 4
-                ? Icons.data_exploration
-                : Icons.data_exploration_outlined),
+            icon: Icon(
+              selectedIndex == 4
+                  ? Icons.data_exploration
+                  : Icons.data_exploration_outlined,
+            ),
             label: "GRAPHS",
           ),
         ],

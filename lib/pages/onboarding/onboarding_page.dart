@@ -24,15 +24,12 @@ class _OnboardingState extends State<Onboarding> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
-                  height: MediaQuery.sizeOf(context).height / 9,
-                ),
+                SizedBox(height: MediaQuery.sizeOf(context).height / 9),
                 Text(
                   'Set up the app',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineLarge
-                      ?.copyWith(color: blue1),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.headlineLarge?.copyWith(color: blue1),
                 ),
                 const SizedBox(height: 80),
                 Image.asset(
@@ -43,16 +40,17 @@ class _OnboardingState extends State<Onboarding> {
                 Text(
                   'In a few steps you\'ll be ready to start keeping\ntrack of your personal finances (almost) like\nMr. Rip',
                   textAlign: TextAlign.center,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall
-                      ?.copyWith(color: blue1),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: blue1),
                 ),
               ],
             ),
             Padding(
               padding: const EdgeInsets.symmetric(
-                  horizontal: Sizes.xl, vertical: Sizes.sm),
+                horizontal: Sizes.xl,
+                vertical: Sizes.sm,
+              ),
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.push(
@@ -62,7 +60,7 @@ class _OnboardingState extends State<Onboarding> {
                     ),
                   );
                 },
-                child: Center(child: Text('START THE SET UP')),
+                child: const Center(child: Text('START THE SET UP')),
               ),
             ),
           ],
