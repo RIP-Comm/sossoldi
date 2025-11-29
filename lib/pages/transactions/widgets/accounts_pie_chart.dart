@@ -8,7 +8,7 @@ import '../../../ui/widgets/rounded_icon.dart';
 import '../../../model/bank_account.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../ui/device.dart';
-import 'accounts_tab.dart';
+import '../../../ui/widgets/transaction_type_button.dart';
 
 class AccountsPieChart extends ConsumerWidget {
   const AccountsPieChart({
@@ -24,7 +24,7 @@ class AccountsPieChart extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedAccountIndex = ref.watch(selectedAccountIndexProvider);
+    final selectedIndex = ref.watch(selectedListIndexProvider);
     final currencyState = ref.watch(currencyStateNotifier);
     return SizedBox(
       height: 200,
@@ -37,7 +37,7 @@ class AccountsPieChart extends ConsumerWidget {
               centerSpaceRadius: 70,
               sectionsSpace: 0,
               borderData: FlBorderData(show: false),
-              sections: showingSections(selectedAccountIndex),
+              sections: showingSections(selectedIndex),
               pieTouchData: PieTouchData(
                 touchCallback: (FlTouchEvent event, pieTouchResponse) {
                   // expand category when tapped
@@ -46,7 +46,7 @@ class AccountsPieChart extends ConsumerWidget {
                       pieTouchResponse.touchedSection == null) {
                     return;
                   }
-                  ref.read(selectedAccountIndexProvider.notifier).state =
+                  ref.read(selectedListIndexProvider.notifier).state =
                       pieTouchResponse.touchedSection!.touchedSectionIndex;
                 },
               ),
@@ -55,30 +55,27 @@ class AccountsPieChart extends ConsumerWidget {
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              (selectedAccountIndex != -1)
-                  ? RoundedIcon(
-                      icon: accountIconList[
-                              accounts[selectedAccountIndex].symbol] ??
-                          Icons.swap_horiz_rounded,
-                      backgroundColor: accountColorList[
-                          accounts[selectedAccountIndex].color],
-                      padding: const EdgeInsets.all(Sizes.sm),
-                    )
-                  : const SizedBox(),
+              if (selectedIndex != -1)
+                RoundedIcon(
+                  icon: accountIconList[accounts[selectedIndex].symbol] ??
+                      Icons.swap_horiz_rounded,
+                  backgroundColor:
+                      accountColorList[accounts[selectedIndex].color],
+                  padding: const EdgeInsets.all(Sizes.sm),
+                ),
               Text(
-                (selectedAccountIndex != -1)
-                    ? "${amounts[accounts[selectedAccountIndex].id]!.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}"
+                (selectedIndex != -1)
+                    ? "${amounts[accounts[selectedIndex].id]!.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}"
                     : "${total.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}",
                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                    color: ((selectedAccountIndex != -1 &&
-                                amounts[accounts[selectedAccountIndex].id]! >
-                                    0) ||
-                            (selectedAccountIndex == -1 && total > 0))
+                    color: ((selectedIndex != -1 &&
+                                amounts[accounts[selectedIndex].id]! > 0) ||
+                            (selectedIndex == -1 && total > 0))
                         ? green
                         : red),
               ),
-              (selectedAccountIndex != -1)
-                  ? Text(accounts[selectedAccountIndex].name)
+              (selectedIndex != -1)
+                  ? Text(accounts[selectedIndex].name)
                   : const Text("Total"),
             ],
           ),

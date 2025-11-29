@@ -6,9 +6,9 @@ import '../../../constants/constants.dart';
 import '../../../constants/style.dart';
 import '../../../ui/widgets/rounded_icon.dart';
 import '../../../model/category_transaction.dart';
-import '../../../providers/categories_provider.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../ui/device.dart';
+import '../../../ui/widgets/transaction_type_button.dart';
 
 class CategoriesPieChart extends ConsumerWidget {
   const CategoriesPieChart({
@@ -24,9 +24,9 @@ class CategoriesPieChart extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedCategoryIndex = ref.watch(selectedCategoryIndexProvider);
+    final selectedIndex = ref.watch(selectedListIndexProvider);
     final selectedCategory =
-        (selectedCategoryIndex >= 0) ? categories[selectedCategoryIndex] : null;
+        (selectedIndex >= 0) ? categories[selectedIndex] : null;
     final currencyState = ref.watch(currencyStateNotifier);
     return SizedBox(
       height: 200,
@@ -39,7 +39,7 @@ class CategoriesPieChart extends ConsumerWidget {
               centerSpaceRadius: 70,
               sectionsSpace: 0,
               borderData: FlBorderData(show: false),
-              sections: showingSections(selectedCategoryIndex),
+              sections: showingSections(selectedIndex),
               pieTouchData: PieTouchData(
                 touchCallback: (FlTouchEvent event, pieTouchResponse) {
                   // expand category when tapped
@@ -48,7 +48,7 @@ class CategoriesPieChart extends ConsumerWidget {
                       pieTouchResponse.touchedSection == null) {
                     return;
                   }
-                  ref.read(selectedCategoryIndexProvider.notifier).state =
+                  ref.read(selectedListIndexProvider.notifier).state =
                       pieTouchResponse.touchedSection!.touchedSectionIndex;
                 },
               ),
@@ -57,15 +57,13 @@ class CategoriesPieChart extends ConsumerWidget {
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              (selectedCategory != null)
-                  ? RoundedIcon(
-                      icon: iconList[selectedCategory.symbol] ??
-                          Icons.swap_horiz_rounded,
-                      backgroundColor:
-                          categoryColorList[selectedCategory.color],
-                      padding: const EdgeInsets.all(Sizes.lg),
-                    )
-                  : const SizedBox(),
+              if (selectedCategory != null)
+                RoundedIcon(
+                  icon: iconList[selectedCategory.symbol] ??
+                      Icons.swap_horiz_rounded,
+                  backgroundColor: categoryColorList[selectedCategory.color],
+                  padding: const EdgeInsets.all(Sizes.lg),
+                ),
               Text(
                 (selectedCategory != null)
                     ? "${amounts[selectedCategory.id]!.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}"
