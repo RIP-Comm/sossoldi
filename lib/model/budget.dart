@@ -49,38 +49,37 @@ class Budget extends BaseEntity {
     bool? active,
     DateTime? createdAt,
     DateTime? updatedAt,
-  }) =>
-      Budget(
-        id: id ?? this.id,
-        idCategory: idCategory ?? this.idCategory,
-        name: name ?? this.name,
-        amountLimit: amountLimit ?? this.amountLimit,
-        active: active ?? this.active,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
-      );
+  }) => Budget(
+    id: id ?? this.id,
+    idCategory: idCategory ?? this.idCategory,
+    name: name ?? this.name,
+    amountLimit: amountLimit ?? this.amountLimit,
+    active: active ?? this.active,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
 
   static Budget fromJson(Map<String, Object?> json) => Budget(
-        id: json[BaseEntityFields.id] as int,
-        idCategory: json[BudgetFields.idCategory] as int,
-        name: json[BudgetFields.name] as String?,
-        amountLimit: json[BudgetFields.amountLimit] as num,
-        active: json[BudgetFields.active] == 1 ? true : false,
-        createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
-        updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String),
-      );
+    id: json[BaseEntityFields.id] as int,
+    idCategory: json[BudgetFields.idCategory] as int,
+    name: json[BudgetFields.name] as String?,
+    amountLimit: json[BudgetFields.amountLimit] as num,
+    active: json[BudgetFields.active] == 1 ? true : false,
+    createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
+    updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String),
+  );
 
   Map<String, Object?> toJson({bool update = false}) => {
-        BaseEntityFields.id: id,
-        BudgetFields.idCategory: idCategory,
-        BudgetFields.name: name,
-        BudgetFields.amountLimit: amountLimit,
-        BudgetFields.active: active ? 1 : 0,
-        BaseEntityFields.createdAt: update
-            ? createdAt?.toIso8601String()
-            : DateTime.now().toIso8601String(),
-        BaseEntityFields.updatedAt: DateTime.now().toIso8601String(),
-      };
+    BaseEntityFields.id: id,
+    BudgetFields.idCategory: idCategory,
+    BudgetFields.name: name,
+    BudgetFields.amountLimit: amountLimit,
+    BudgetFields.active: active ? 1 : 0,
+    BaseEntityFields.createdAt: update
+        ? createdAt?.toIso8601String()
+        : DateTime.now().toIso8601String(),
+    BaseEntityFields.updatedAt: DateTime.now().toIso8601String(),
+  };
 }
 
 class BudgetStats extends BaseEntity {
@@ -97,18 +96,18 @@ class BudgetStats extends BaseEntity {
   });
 
   static BudgetStats fromJson(Map<String, Object?> json) => BudgetStats(
-        idCategory: json[BudgetFields.idCategory] as int,
-        name: json[BudgetFields.name] as String?,
-        amountLimit: json[BudgetFields.amountLimit] as num,
-        spent: json['spent'] as num,
-      );
+    idCategory: json[BudgetFields.idCategory] as int,
+    name: json[BudgetFields.name] as String?,
+    amountLimit: json[BudgetFields.amountLimit] as num,
+    spent: json['spent'] as num,
+  );
 
   Map<String, Object?> toJson() => {
-        BudgetFields.idCategory: idCategory,
-        BudgetFields.name: name,
-        BudgetFields.amountLimit: amountLimit,
-        'spent': spent,
-      };
+    BudgetFields.idCategory: idCategory,
+    BudgetFields.name: name,
+    BudgetFields.amountLimit: amountLimit,
+    'spent': spent,
+  };
 }
 
 class BudgetMethods extends SossoldiDatabase {
@@ -124,7 +123,8 @@ class BudgetMethods extends SossoldiDatabase {
     final exists = await checkIfExists(item);
     if (exists) {
       await db.rawQuery(
-          "UPDATE $budgetTable SET amountLimit = ${item.amountLimit} WHERE idCategory = ${item.idCategory}");
+        "UPDATE $budgetTable SET amountLimit = ${item.amountLimit} WHERE idCategory = ${item.idCategory}",
+      );
     } else {
       await db.insert(budgetTable, item.toJson());
     }
@@ -137,7 +137,8 @@ class BudgetMethods extends SossoldiDatabase {
 
     try {
       final exists = await db.rawQuery(
-          "SELECT * FROM $budgetTable WHERE ${item.idCategory} = idCategory");
+        "SELECT * FROM $budgetTable WHERE ${item.idCategory} = idCategory",
+      );
       if (exists.isNotEmpty) {
         return true;
       }
@@ -168,7 +169,8 @@ class BudgetMethods extends SossoldiDatabase {
     final db = await database;
     final orderByASC = '${BudgetFields.createdAt} ASC';
     final result = await db.rawQuery(
-        'SELECT bt.*, ct.name FROM $budgetTable as bt LEFT JOIN $categoryTransactionTable as ct ON bt.${BudgetFields.idCategory} = ct.${CategoryTransactionFields.id} ORDER BY $orderByASC');
+      'SELECT bt.*, ct.name FROM $budgetTable as bt LEFT JOIN $categoryTransactionTable as ct ON bt.${BudgetFields.idCategory} = ct.${CategoryTransactionFields.id} ORDER BY $orderByASC',
+    );
     return result.map((json) => Budget.fromJson(json)).toList();
   }
 
@@ -176,7 +178,8 @@ class BudgetMethods extends SossoldiDatabase {
     final db = await database;
     final orderByASC = '${BudgetFields.createdAt} ASC';
     final result = await db.rawQuery(
-        'SELECT bt.*, ct.name FROM $budgetTable as bt LEFT JOIN $categoryTransactionTable as ct ON bt.${BudgetFields.idCategory} = ct.${CategoryTransactionFields.id} WHERE bt.active = 1 ORDER BY $orderByASC');
+      'SELECT bt.*, ct.name FROM $budgetTable as bt LEFT JOIN $categoryTransactionTable as ct ON bt.${BudgetFields.idCategory} = ct.${CategoryTransactionFields.id} WHERE bt.active = 1 ORDER BY $orderByASC',
+    );
     return result.map((json) => Budget.fromJson(json)).toList();
   }
 
@@ -188,21 +191,25 @@ class BudgetMethods extends SossoldiDatabase {
 
     List<Budget> allBudgets = await selectAllActive();
 
-    List<BudgetStats> statsList =
-        result.map((json) => BudgetStats.fromJson(json)).toList();
+    List<BudgetStats> statsList = result
+        .map((json) => BudgetStats.fromJson(json))
+        .toList();
 
-    Set<int> resultBudgetIds =
-        statsList.map((stats) => stats.idCategory).toSet();
+    Set<int> resultBudgetIds = statsList
+        .map((stats) => stats.idCategory)
+        .toSet();
 
     // Check for missing budgets and add them with a spent amount of 0
     for (var budget in allBudgets) {
       if (!resultBudgetIds.contains(budget.idCategory)) {
-        statsList.add(BudgetStats(
-          idCategory: budget.idCategory,
-          name: budget.name,
-          spent: 0,
-          amountLimit: budget.amountLimit,
-        ));
+        statsList.add(
+          BudgetStats(
+            idCategory: budget.idCategory,
+            name: budget.name,
+            spent: 0,
+            amountLimit: budget.amountLimit,
+          ),
+        );
       }
     }
 
@@ -224,14 +231,20 @@ class BudgetMethods extends SossoldiDatabase {
   Future<int> deleteById(int id) async {
     final db = await database;
 
-    return await db
-        .delete(budgetTable, where: '${BudgetFields.id} = ?', whereArgs: [id]);
+    return await db.delete(
+      budgetTable,
+      where: '${BudgetFields.id} = ?',
+      whereArgs: [id],
+    );
   }
 
   Future<int> deleteByCategory(int id) async {
     final db = await database;
 
-    return await db.delete(budgetTable,
-        where: '${BudgetFields.idCategory} = ?', whereArgs: [id]);
+    return await db.delete(
+      budgetTable,
+      where: '${BudgetFields.idCategory} = ?',
+      whereArgs: [id],
+    );
   }
 }

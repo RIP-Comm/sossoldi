@@ -27,7 +27,7 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
     ["🇬🇧", "English"],
     ["🇮🇹", "Italiano"],
     ["🇫🇷", "Français"],
-    ["🇩🇪", "Deutsch"]
+    ["🇩🇪", "Deutsch"],
   ];
 
   Future<List<Currency>> currencyList = CurrencyMethods().selectAll();
@@ -36,8 +36,9 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
   Widget build(BuildContext context) {
     final appThemeState = ref.watch(appThemeStateNotifier);
     final currencyState = ref.watch(currencyStateNotifier);
-    final requiresAuthenticationState =
-        ref.watch(requiredAuthenticationStateNotifier);
+    final requiresAuthenticationState = ref.watch(
+      requiredAuthenticationStateNotifier,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -49,7 +50,10 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(
-            left: Sizes.lg, right: Sizes.lg, top: Sizes.xl),
+          left: Sizes.lg,
+          right: Sizes.lg,
+          top: Sizes.xl,
+        ),
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
@@ -57,10 +61,9 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
               children: [
                 Text(
                   "Appearance",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(color: Theme.of(context).colorScheme.primary),
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
                 const Spacer(),
                 CircleAvatar(
@@ -94,17 +97,19 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
               children: [
                 Text(
                   "Currency",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(color: Theme.of(context).colorScheme.primary),
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
                 const Spacer(),
                 GestureDetector(
                   onTap: () {
                     setState(() {
                       CurrencySelectorDialog.selectCurrencyDialog(
-                          context, currencyState, currencyList);
+                        context,
+                        currencyState,
+                        currencyList,
+                      );
                     });
                   },
                   child: CircleAvatar(
@@ -126,37 +131,39 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
             const SizedBox(height: Sizes.lg),
             Row(
               children: [
-                Text("Require authentication",
-                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        color: Theme.of(context).colorScheme.primary)),
+                Text(
+                  "Require authentication",
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
                 const Spacer(),
                 CircleAvatar(
-                    radius: 30.0,
-                    backgroundColor: blue5,
-                    child: IconButton(
-                      color: blue5,
-                      onPressed: () {
-                        if (requiresAuthenticationState
-                            .userRequiresAuthentication) {
-                          ref
-                              .read(
-                                  requiredAuthenticationStateNotifier.notifier)
-                              .setNoAuthentication();
-                        } else {
-                          ref
-                              .read(
-                                  requiredAuthenticationStateNotifier.notifier)
-                              .setAuthenticationRequired();
-                        }
-                      },
-                      icon: Icon(
-                        requiresAuthenticationState.userRequiresAuthentication
-                            ? Icons.lock
-                            : Icons.lock_open,
-                        size: 25.0,
-                        color: Theme.of(context).colorScheme.onPrimary,
-                      ),
-                    )),
+                  radius: 30.0,
+                  backgroundColor: blue5,
+                  child: IconButton(
+                    color: blue5,
+                    onPressed: () {
+                      if (requiresAuthenticationState
+                          .userRequiresAuthentication) {
+                        ref
+                            .read(requiredAuthenticationStateNotifier.notifier)
+                            .setNoAuthentication();
+                      } else {
+                        ref
+                            .read(requiredAuthenticationStateNotifier.notifier)
+                            .setAuthenticationRequired();
+                      }
+                    },
+                    icon: Icon(
+                      requiresAuthenticationState.userRequiresAuthentication
+                          ? Icons.lock
+                          : Icons.lock_open,
+                      size: 25.0,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                  ),
+                ),
               ],
             ),
             /*
@@ -183,43 +190,46 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
     );
   }
 
-  selectLanguage() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Select a language',
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge!
-                .copyWith(color: Theme.of(context).colorScheme.primary)),
-        content: SizedBox(
-          height: 220,
-          width: 220,
-          child: ListView.builder(
-            itemCount: languages.length,
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemBuilder: (BuildContext context, int index) {
-              return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    selectedLanguage = languages.elementAt(index)[0];
-                  });
-                  Navigator.pop(context);
-                },
-                child: ListTile(
-                  leading: Text(languages.elementAt(index)[0],
-                      style: const TextStyle(fontSize: 30)),
-                  title: Text(
-                    languages.elementAt(index)[1],
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      ),
-    );
-  }
+  // selectLanguage() {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) => AlertDialog(
+  //       title: Text(
+  //         'Select a language',
+  //         style: Theme.of(context).textTheme.titleLarge!.copyWith(
+  //           color: Theme.of(context).colorScheme.primary,
+  //         ),
+  //       ),
+  //       content: SizedBox(
+  //         height: 220,
+  //         width: 220,
+  //         child: ListView.builder(
+  //           itemCount: languages.length,
+  //           physics: const NeverScrollableScrollPhysics(),
+  //           shrinkWrap: true,
+  //           itemBuilder: (BuildContext context, int index) {
+  //             return GestureDetector(
+  //               onTap: () {
+  //                 setState(() {
+  //                   selectedLanguage = languages.elementAt(index)[0];
+  //                 });
+  //                 Navigator.pop(context);
+  //               },
+  //               child: ListTile(
+  //                 leading: Text(
+  //                   languages.elementAt(index)[0],
+  //                   style: const TextStyle(fontSize: 30),
+  //                 ),
+  //                 title: Text(
+  //                   languages.elementAt(index)[1],
+  //                   textAlign: TextAlign.center,
+  //                 ),
+  //               ),
+  //             );
+  //           },
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 }

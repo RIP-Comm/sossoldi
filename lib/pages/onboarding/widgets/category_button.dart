@@ -7,11 +7,12 @@ import '../../../model/budget.dart';
 import '../../../ui/device.dart';
 
 class CategoryButton extends StatelessWidget {
-  const CategoryButton(
-      {super.key,
-      required this.categoryColor,
-      required this.categoryName,
-      this.budget});
+  const CategoryButton({
+    super.key,
+    required this.categoryColor,
+    required this.categoryName,
+    this.budget,
+  });
 
   final Color categoryColor;
   final String categoryName;
@@ -45,18 +46,16 @@ class CategoryButton extends StatelessWidget {
                 Text(
                   categoryName,
                   textAlign: TextAlign.left,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge
-                      ?.copyWith(color: white),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(color: white),
                 ),
                 Text(
                   "BUDGET: ${budget?.amountLimit}€",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge
-                      ?.copyWith(fontSize: 10, color: white),
-                )
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(fontSize: 10, color: white),
+                ),
               ],
             ),
           ],
@@ -66,9 +65,9 @@ class CategoryButton extends StatelessWidget {
       return Container(
         decoration: BoxDecoration(
           border: Border.all(color: categoryColor, width: 2.5),
-          color: HSLColor.fromColor(categoryColor)
-              .withLightness(clampDouble(0.99, 0.0, 0.9))
-              .toColor(),
+          color: HSLColor.fromColor(
+            categoryColor,
+          ).withLightness(clampDouble(0.99, 0.0, 0.9)).toColor(),
           borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
         ),
         alignment: Alignment.center,
@@ -96,8 +95,10 @@ class CategoryButton extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    Text("ADD BUDGET",
-                        style: Theme.of(context).textTheme.labelMedium),
+                    Text(
+                      "ADD BUDGET",
+                      style: Theme.of(context).textTheme.labelMedium,
+                    ),
                   ],
                 ),
               ),

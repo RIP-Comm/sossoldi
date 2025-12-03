@@ -41,19 +41,18 @@ class BudgetCircularIndicator extends ConsumerWidget {
                     TextSpan(
                       text: amount.toCurrency(),
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.primary),
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
                     TextSpan(
                       text: currencyState.selectedCurrency.symbol,
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelMedium!
+                      style: Theme.of(context).textTheme.labelMedium!
                           .copyWith(
                             color: Theme.of(context).colorScheme.primary,
                           )
                           .apply(
-                        fontFeatures: [const FontFeature.subscripts()],
-                      ),
+                            fontFeatures: [const FontFeature.subscripts()],
+                          ),
                     ),
                   ],
                 ),
@@ -61,8 +60,9 @@ class BudgetCircularIndicator extends ConsumerWidget {
               const SizedBox(height: Sizes.sm),
               Text(
                 "LEFT",
-                style: theme.textTheme.labelLarge!
-                    .copyWith(color: theme.colorScheme.primary),
+                style: theme.textTheme.labelLarge!.copyWith(
+                  color: theme.colorScheme.primary,
+                ),
               ),
             ],
           ),
@@ -71,13 +71,15 @@ class BudgetCircularIndicator extends ConsumerWidget {
           progressColor: color,
         ),
         const SizedBox(height: Sizes.sm),
-        Row(children: [
-          perc >= 0.9
-              ? const Icon(Icons.error_outline, color: Colors.red, size: 15)
-              : Container(),
-          const SizedBox(width: Sizes.xxs),
-          Text(title, style: Theme.of(context).textTheme.bodyLarge),
-        ])
+        Row(
+          children: [
+            perc >= 0.9
+                ? const Icon(Icons.error_outline, color: Colors.red, size: 15)
+                : Container(),
+            const SizedBox(width: Sizes.xxs),
+            Text(title, style: Theme.of(context).textTheme.bodyLarge),
+          ],
+        ),
       ],
     );
   }

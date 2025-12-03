@@ -16,11 +16,7 @@ void showSnackBar(
       spacing: 8,
       children: [
         Expanded(
-          child: Text(
-            message,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
+          child: Text(message, maxLines: 2, overflow: TextOverflow.ellipsis),
         ),
         if (onAction != null)
           ElevatedButton(
@@ -31,15 +27,15 @@ void showSnackBar(
               onAction.call();
               closeSnackBar(context);
             },
-            child: Text(
-              actionLabel ?? 'Close',
-            ),
-          )
+            child: Text(actionLabel ?? 'Close'),
+          ),
       ],
     ),
     behavior: SnackBarBehavior.floating,
-    padding:
-        const EdgeInsets.symmetric(vertical: Sizes.md, horizontal: Sizes.lg),
+    padding: const EdgeInsets.symmetric(
+      vertical: Sizes.md,
+      horizontal: Sizes.lg,
+    ),
   );
 
   ScaffoldMessenger.of(context).hideCurrentSnackBar();

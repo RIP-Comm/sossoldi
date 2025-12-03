@@ -13,7 +13,7 @@ import '/model/transaction.dart';
 
 class InitialSchema extends Migration {
   InitialSchema()
-      : super(version: 1, description: 'Initial database schema creation');
+    : super(version: 1, description: 'Initial database schema creation');
 
   @override
   Future<void> up(Database db) async {
@@ -115,10 +115,10 @@ class InitialSchema extends Migration {
 
     await db.execute('''
       INSERT INTO `$currencyTable`(`${CurrencyFields.symbol}`, `${CurrencyFields.code}`, `${CurrencyFields.name}`, `${CurrencyFields.mainCurrency}`) VALUES
-        ("€", "EUR", "Euro", 1),
-        ("\$", "USD", "United States Dollar", 0),
-        ("CHF", "CHF", "Switzerland Franc", 0),
-        ("£", "GBP", "United Kingdom Pound", 0);
+        ('€', 'EUR', 'Euro', 1),
+        ('\$', 'USD', 'United States Dollar', 0),
+        ('CHF', 'CHF', 'Switzerland Franc', 0),
+        ('£', 'GBP', 'United Kingdom Pound', 0);
     ''');
   }
 }

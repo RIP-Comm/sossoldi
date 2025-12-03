@@ -24,7 +24,7 @@ class CategoryTransactionFields extends BaseEntityFields {
     note,
     parent,
     BaseEntityFields.createdAt,
-    BaseEntityFields.updatedAt
+    BaseEntityFields.updatedAt,
   ];
 }
 
@@ -55,55 +55,56 @@ class CategoryTransaction extends BaseEntity {
     super.updatedAt,
   });
 
-  CategoryTransaction copy(
-          {int? id,
-          String? name,
-          CategoryTransactionType? type,
-          String? symbol,
-          int? color,
-          String? note,
-          int? parent,
-          DateTime? createdAt,
-          DateTime? updatedAt}) =>
-      CategoryTransaction(
-          id: id ?? this.id,
-          name: name ?? this.name,
-          type: type ?? this.type,
-          symbol: symbol ?? this.symbol,
-          color: color ?? this.color,
-          note: note ?? this.note,
-          parent: parent ?? this.parent,
-          createdAt: createdAt ?? this.createdAt,
-          updatedAt: updatedAt ?? this.updatedAt);
+  CategoryTransaction copy({
+    int? id,
+    String? name,
+    CategoryTransactionType? type,
+    String? symbol,
+    int? color,
+    String? note,
+    int? parent,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) => CategoryTransaction(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    type: type ?? this.type,
+    symbol: symbol ?? this.symbol,
+    color: color ?? this.color,
+    note: note ?? this.note,
+    parent: parent ?? this.parent,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
 
   static CategoryTransaction fromJson(Map<String, Object?> json) =>
       CategoryTransaction(
-          id: json[BaseEntityFields.id] as int?,
-          name: json[CategoryTransactionFields.name] as String,
-          type:
-              categoryTypeMap[json[CategoryTransactionFields.type] as String]!,
-          symbol: json[CategoryTransactionFields.symbol] as String,
-          color: json[CategoryTransactionFields.color] as int,
-          note: json[CategoryTransactionFields.note] as String?,
-          parent: json[CategoryTransactionFields.parent] as int?,
-          createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
-          updatedAt:
-              DateTime.parse(json[BaseEntityFields.updatedAt] as String));
+        id: json[BaseEntityFields.id] as int?,
+        name: json[CategoryTransactionFields.name] as String,
+        type: categoryTypeMap[json[CategoryTransactionFields.type] as String]!,
+        symbol: json[CategoryTransactionFields.symbol] as String,
+        color: json[CategoryTransactionFields.color] as int,
+        note: json[CategoryTransactionFields.note] as String?,
+        parent: json[CategoryTransactionFields.parent] as int?,
+        createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
+        updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String),
+      );
 
   Map<String, Object?> toJson({bool update = false}) => {
-        BaseEntityFields.id: id,
-        CategoryTransactionFields.name: name,
-        CategoryTransactionFields.type:
-            categoryTypeMap.keys.firstWhere((k) => categoryTypeMap[k] == type),
-        CategoryTransactionFields.symbol: symbol,
-        CategoryTransactionFields.color: color,
-        CategoryTransactionFields.note: note,
-        CategoryTransactionFields.parent: parent,
-        BaseEntityFields.createdAt: update
-            ? createdAt?.toIso8601String()
-            : DateTime.now().toIso8601String(),
-        BaseEntityFields.updatedAt: DateTime.now().toIso8601String(),
-      };
+    BaseEntityFields.id: id,
+    CategoryTransactionFields.name: name,
+    CategoryTransactionFields.type: categoryTypeMap.keys.firstWhere(
+      (k) => categoryTypeMap[k] == type,
+    ),
+    CategoryTransactionFields.symbol: symbol,
+    CategoryTransactionFields.color: color,
+    CategoryTransactionFields.note: note,
+    CategoryTransactionFields.parent: parent,
+    BaseEntityFields.createdAt: update
+        ? createdAt?.toIso8601String()
+        : DateTime.now().toIso8601String(),
+    BaseEntityFields.updatedAt: DateTime.now().toIso8601String(),
+  };
 }
 
 class CategoryTransactionMethods extends SossoldiDatabase {
@@ -135,24 +136,30 @@ class CategoryTransactionMethods extends SossoldiDatabase {
   Future<List<CategoryTransaction>> selectAll() async {
     final db = await database;
 
-    final result =
-        await db.query(categoryTransactionTable, orderBy: orderByASC);
+    final result = await db.query(
+      categoryTransactionTable,
+      orderBy: orderByASC,
+    );
 
     return result.map((json) => CategoryTransaction.fromJson(json)).toList();
   }
 
   Future<List<CategoryTransaction>> selectCategoriesByType(
-      CategoryTransactionType type) async {
+    CategoryTransactionType type,
+  ) async {
     final db = await database;
 
-    var key =
-        categoryTypeMap.entries.firstWhere((entry) => entry.value == type).key;
+    var key = categoryTypeMap.entries
+        .firstWhere((entry) => entry.value == type)
+        .key;
 
-    final result = await db.query(categoryTransactionTable,
-        columns: CategoryTransactionFields.allFields,
-        where: '${CategoryTransactionFields.type} = ?',
-        whereArgs: [key],
-        orderBy: orderByASC);
+    final result = await db.query(
+      categoryTransactionTable,
+      columns: CategoryTransactionFields.allFields,
+      where: '${CategoryTransactionFields.type} = ?',
+      whereArgs: [key],
+      orderBy: orderByASC,
+    );
 
     if (result.isNotEmpty) {
       return result.map((json) => CategoryTransaction.fromJson(json)).toList();
@@ -176,8 +183,11 @@ class CategoryTransactionMethods extends SossoldiDatabase {
   Future<int> deleteById(int id) async {
     final db = await database;
 
-    return await db.delete(categoryTransactionTable,
-        where: '${CategoryTransactionFields.id} = ?', whereArgs: [id]);
+    return await db.delete(
+      categoryTransactionTable,
+      where: '${CategoryTransactionFields.id} = ?',
+      whereArgs: [id],
+    );
   }
 
   CategoryTransactionType? transactionToCategoryType(TransactionType type) {

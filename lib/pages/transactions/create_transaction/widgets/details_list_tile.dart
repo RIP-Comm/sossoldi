@@ -33,10 +33,9 @@ class DetailsListTile extends ConsumerWidget {
       ),
       title: Text(
         title,
-        style: Theme.of(context)
-            .textTheme
-            .titleLarge!
-            .copyWith(color: Theme.of(context).colorScheme.primary),
+        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+          color: Theme.of(context).colorScheme.primary,
+        ),
       ),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
@@ -44,9 +43,10 @@ class DetailsListTile extends ConsumerWidget {
           Text(
             value ?? '',
             style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                color: isDarkMode
-                    ? grey3
-                    : Theme.of(context).colorScheme.secondary),
+              color: isDarkMode
+                  ? grey3
+                  : Theme.of(context).colorScheme.secondary,
+            ),
           ),
           const SizedBox(width: Sizes.sm),
           Icon(

@@ -49,9 +49,13 @@ class _TransactionsPageState extends ConsumerState<TransactionsPage>
   @override
   Widget build(BuildContext context) {
     ref.listen(
-        duplicatedTransactoinProvider,
-        (prev, curr) => showDuplicatedTransactionSnackBar(context,
-            transaction: curr, ref: ref));
+      duplicatedTransactoinProvider,
+      (prev, curr) => showDuplicatedTransactionSnackBar(
+        context,
+        transaction: curr,
+        ref: ref,
+      ),
+    );
 
     return NotificationListener<ScrollEndNotification>(
       onNotification: (notification) {
@@ -62,8 +66,8 @@ class _TransactionsPageState extends ConsumerState<TransactionsPage>
             _scrollController.offset < scrollDistance) {
           final double snapOffset =
               (_scrollController.offset / scrollDistance > 0.5)
-                  ? scrollDistance + 10
-                  : 0;
+              ? scrollDistance + 10
+              : 0;
 
           //! the app freezes on animateTo
           // // Future.microtask(() => _scrollController.animateTo(snapOffset,
@@ -93,11 +97,7 @@ class _TransactionsPageState extends ConsumerState<TransactionsPage>
         },
         body: TabBarView(
           controller: _tabController,
-          children: const [
-            ListTab(),
-            CategoriesTab(),
-            AccountsTab(),
-          ],
+          children: const [ListTab(), CategoriesTab(), AccountsTab()],
         ),
       ),
     );

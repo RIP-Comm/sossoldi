@@ -48,14 +48,17 @@ class _BackupPageState extends ConsumerState<BackupPage> {
       if (file != null) {
         if (!mounted) return;
         CSVFilePicker.showLoading(context, 'Importing data...');
-        final results =
-            await SossoldiDatabase.instance.importFromCSV(file.path);
+        final results = await SossoldiDatabase.instance.importFromCSV(
+          file.path,
+        );
         if (!mounted) return;
         CSVFilePicker.hideLoading(context);
 
         if (results.values.every((success) => success)) {
           await CSVFilePicker.showSuccess(
-              context, 'Data imported successfully');
+            context,
+            'Data imported successfully',
+          );
           if (mounted) Phoenix.rebirth(context);
         } else {
           final failedTables = results.entries
@@ -75,10 +78,7 @@ class _BackupPageState extends ConsumerState<BackupPage> {
       if (!mounted) return;
       CSVFilePicker.hideLoading(context);
 
-      showSnackBar(
-        context,
-        message: 'Import failed: ${e.toString()}',
-      );
+      showSnackBar(context, message: 'Import failed: ${e.toString()}');
     }
   }
 
@@ -95,10 +95,7 @@ class _BackupPageState extends ConsumerState<BackupPage> {
     } catch (e) {
       if (!mounted) return;
       CSVFilePicker.hideLoading(context);
-      showSnackBar(
-        context,
-        message: 'Export failed: ${e.toString()}',
-      );
+      showSnackBar(context, message: 'Export failed: ${e.toString()}');
     }
   }
 
@@ -128,17 +125,14 @@ class _BackupPageState extends ConsumerState<BackupPage> {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_new,
-          ),
+          icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           'Manage your data',
-          style: Theme.of(context)
-              .textTheme
-              .headlineLarge!
-              .copyWith(color: Theme.of(context).colorScheme.primary),
+          style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+            color: Theme.of(context).colorScheme.primary,
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -164,22 +158,23 @@ class _BackupPageState extends ConsumerState<BackupPage> {
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: Text('Warning: Data Overwrite'),
-                              content: Text(
-                                  'Importing this file will permanently replace your existing data. This action cannot be undone. Ensure you have a backup before proceeding.'),
+                              title: const Text('Warning: Data Overwrite'),
+                              content: const Text(
+                                'Importing this file will permanently replace your existing data. This action cannot be undone. Ensure you have a backup before proceeding.',
+                              ),
                               actions: [
                                 TextButton(
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
-                                  child: Text('Cancel'),
+                                  child: const Text('Cancel'),
                                 ),
                                 TextButton(
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                     _handleImport();
                                   },
-                                  child: Text('Proceed with Import'),
+                                  child: const Text('Proceed with Import'),
                                 ),
                               ],
                             ),
@@ -208,9 +203,9 @@ class _BackupPageState extends ConsumerState<BackupPage> {
                                         .textTheme
                                         .titleLarge!
                                         .copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary,
                                         ),
                                   ),
                                   const SizedBox(height: Sizes.xs),
@@ -220,9 +215,9 @@ class _BackupPageState extends ConsumerState<BackupPage> {
                                         .textTheme
                                         .bodyMedium!
                                         .copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary,
                                         ),
                                   ),
                                 ],

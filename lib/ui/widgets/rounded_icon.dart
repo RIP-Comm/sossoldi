@@ -20,17 +20,10 @@ class RoundedIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: backgroundColor,
-      ),
+      decoration: BoxDecoration(shape: BoxShape.circle, color: backgroundColor),
       padding: padding,
       child: icon != null
-          ? Icon(
-              icon,
-              size: size,
-              color: white,
-            )
+          ? Icon(icon, size: size, color: white)
           : const SizedBox(),
     );
   }

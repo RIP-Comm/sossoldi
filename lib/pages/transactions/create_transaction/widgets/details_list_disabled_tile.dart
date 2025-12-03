@@ -11,9 +11,7 @@ class NonEditableDetailsListTile extends DetailsListTile {
     required super.icon,
     required super.value,
     super.key,
-  }) : super(
-          callback: () {},
-        );
+  }) : super(callback: () {});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,22 +25,20 @@ class NonEditableDetailsListTile extends DetailsListTile {
       ),
       title: Text(
         title,
-        style: Theme.of(context)
-            .textTheme
-            .titleLarge!
-            .copyWith(color: Theme.of(context).colorScheme.primary),
+        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+          color: Theme.of(context).colorScheme.primary,
+        ),
       ),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             value ?? '',
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall!
-                .copyWith(color: Colors.grey),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall!.copyWith(color: Colors.grey),
           ),
-          const SizedBox(width: Sizes.sm)
+          const SizedBox(width: Sizes.sm),
         ],
       ),
     );

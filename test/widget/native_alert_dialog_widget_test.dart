@@ -24,7 +24,7 @@ void main() {
     return Builder(
       builder: (context) {
         return TextButton(
-          child: Text(buttonLabel),
+          child: const Text(buttonLabel),
           onPressed: () {
             showDialog(
               context: context,
@@ -33,11 +33,11 @@ void main() {
                   key: adaptiveDialogKey,
                   actions: [
                     AdaptiveDialogAction(
-                      child: Text(firstAction),
+                      child: const Text(firstAction),
                       onPressed: completer.complete,
                     ),
                     AdaptiveDialogAction(
-                      child: Text(secondAction),
+                      child: const Text(secondAction),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
@@ -52,93 +52,72 @@ void main() {
     );
   }
 
-  testWidgets(
-    'GIVEN an AdaptiveDialog widget '
-    'WHEN the dialog is shown '
-    'THEN it can be found through its key',
-    (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Material(
-            child: ProviderScope(
-              child: buildDialog(),
-            ),
-          ),
-        ),
-      );
+  testWidgets('GIVEN an AdaptiveDialog widget '
+      'WHEN the dialog is shown '
+      'THEN it can be found through its key', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Material(child: ProviderScope(child: buildDialog())),
+      ),
+    );
 
-      final findButton = find.text(buttonLabel);
-      expect(findButton, findsOneWidget);
+    final findButton = find.text(buttonLabel);
+    expect(findButton, findsOneWidget);
 
-      await tester.tap(findButton);
-      await tester.pumpAndSettle();
+    await tester.tap(findButton);
+    await tester.pumpAndSettle();
 
-      final findDialogByKey = find.byKey(adaptiveDialogKey);
-      expect(findDialogByKey, findsOneWidget);
-    },
-  );
+    final findDialogByKey = find.byKey(adaptiveDialogKey);
+    expect(findDialogByKey, findsOneWidget);
+  });
 
-  testWidgets(
-    'GIVEN an AdaptiveDialog widget '
-    'WHEN the dialog is shown '
-    'AND a button is tapped '
-    'THEN the completer completes',
-    (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Material(
-            child: ProviderScope(
-              child: buildDialog(),
-            ),
-          ),
-        ),
-      );
+  testWidgets('GIVEN an AdaptiveDialog widget '
+      'WHEN the dialog is shown '
+      'AND a button is tapped '
+      'THEN the completer completes', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Material(child: ProviderScope(child: buildDialog())),
+      ),
+    );
 
-      final findButton = find.text(buttonLabel);
-      expect(findButton, findsOneWidget);
+    final findButton = find.text(buttonLabel);
+    expect(findButton, findsOneWidget);
 
-      await tester.tap(findButton);
-      await tester.pumpAndSettle();
+    await tester.tap(findButton);
+    await tester.pumpAndSettle();
 
-      final findFirstAction = find.text(firstAction);
-      expect(findFirstAction, findsOneWidget);
+    final findFirstAction = find.text(firstAction);
+    expect(findFirstAction, findsOneWidget);
 
-      expect(completer.isCompleted, isFalse);
-      await tester.tap(findFirstAction);
-      expect(completer.isCompleted, isTrue);
-    },
-  );
+    expect(completer.isCompleted, isFalse);
+    await tester.tap(findFirstAction);
+    expect(completer.isCompleted, isTrue);
+  });
 
-  testWidgets(
-    'GIVEN an AdaptiveDialog widget '
-    'WHEN the dialog is shown '
-    'AND a pop is invoked '
-    'THEN the dialog route is popped',
-    (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Material(
-            child: ProviderScope(
-              child: buildDialog(),
-            ),
-          ),
-        ),
-      );
+  testWidgets('GIVEN an AdaptiveDialog widget '
+      'WHEN the dialog is shown '
+      'AND a pop is invoked '
+      'THEN the dialog route is popped', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Material(child: ProviderScope(child: buildDialog())),
+      ),
+    );
 
-      final findButton = find.text(buttonLabel);
-      expect(findButton, findsOneWidget);
+    final findButton = find.text(buttonLabel);
+    expect(findButton, findsOneWidget);
 
-      await tester.tap(findButton);
-      await tester.pumpAndSettle();
+    await tester.tap(findButton);
+    await tester.pumpAndSettle();
 
-      final findSecondAction = find.text(secondAction);
-      expect(findSecondAction, findsOneWidget);
+    final findSecondAction = find.text(secondAction);
+    expect(findSecondAction, findsOneWidget);
 
-      await tester.tap(findSecondAction);
-      await tester.pumpAndSettle();
+    await tester.tap(findSecondAction);
+    await tester.pumpAndSettle();
 
-      final findDialog = find.byKey(adaptiveDialogKey);
-      expect(findDialog, findsNothing);
-    },
-  );
+    final findDialog = find.byKey(adaptiveDialogKey);
+    expect(findDialog, findsNothing);
+  });
 }

@@ -1,10 +1,11 @@
 class RecurringTransactionCalculator {
-  static void generateRecurringTransactionMonthly(
-      {required DateTime startDate,
-      required DateTime endDate,
-      required num amount,
-      required Map<DateTime, num> groupedMonthlyTransaction,
-      required Map<int, num> yearlyTotal}) {
+  static void generateRecurringTransactionMonthly({
+    required DateTime startDate,
+    required DateTime endDate,
+    required num amount,
+    required Map<DateTime, num> groupedMonthlyTransaction,
+    required Map<int, num> yearlyTotal,
+  }) {
     //clear first
     groupedMonthlyTransaction.clear();
     yearlyTotal.clear();
@@ -44,12 +45,13 @@ class RecurringTransactionCalculator {
     }
   }
 
-  static void generateRecurringTransactionBiMonthly(
-      {required DateTime startDate,
-      required DateTime endDate,
-      required num amount,
-      required Map<DateTime, num> groupedMonthlyTransaction,
-      required Map<int, num> yearlyTotal}) {
+  static void generateRecurringTransactionBiMonthly({
+    required DateTime startDate,
+    required DateTime endDate,
+    required num amount,
+    required Map<DateTime, num> groupedMonthlyTransaction,
+    required Map<int, num> yearlyTotal,
+  }) {
     groupedMonthlyTransaction.clear();
     yearlyTotal.clear();
 
@@ -89,12 +91,13 @@ class RecurringTransactionCalculator {
     }
   }
 
-  static void generateRecurringTransactionQuarterly(
-      {required DateTime startDate,
-      required DateTime endDate,
-      required num amount,
-      required Map<DateTime, num> groupedMonthlyTransaction,
-      required Map<int, num> yearlyTotal}) {
+  static void generateRecurringTransactionQuarterly({
+    required DateTime startDate,
+    required DateTime endDate,
+    required num amount,
+    required Map<DateTime, num> groupedMonthlyTransaction,
+    required Map<int, num> yearlyTotal,
+  }) {
     groupedMonthlyTransaction.clear();
     yearlyTotal.clear();
 
@@ -117,8 +120,9 @@ class RecurringTransactionCalculator {
       int daysInTargetMonth = DateTime(year, nextMonth + 1, 0).day;
       int desiredDay = startDate.day;
 
-      int day =
-          desiredDay <= daysInTargetMonth ? desiredDay : daysInTargetMonth;
+      int day = desiredDay <= daysInTargetMonth
+          ? desiredDay
+          : daysInTargetMonth;
 
       current = DateTime(year, nextMonth, day);
     }
@@ -130,12 +134,13 @@ class RecurringTransactionCalculator {
     }
   }
 
-  static void generateRecurringTransactionSemester(
-      {required DateTime startDate,
-      required DateTime endDate,
-      required num amount,
-      required Map<DateTime, num> groupedMonthlyTransaction,
-      required Map<int, num> yearlyTotal}) {
+  static void generateRecurringTransactionSemester({
+    required DateTime startDate,
+    required DateTime endDate,
+    required num amount,
+    required Map<DateTime, num> groupedMonthlyTransaction,
+    required Map<int, num> yearlyTotal,
+  }) {
     groupedMonthlyTransaction.clear();
     yearlyTotal.clear();
 
@@ -158,8 +163,9 @@ class RecurringTransactionCalculator {
       int daysInTargetMonth = DateTime(year, nextMonth + 1, 0).day;
       int desiredDay = startDate.day;
 
-      int day =
-          desiredDay <= daysInTargetMonth ? desiredDay : daysInTargetMonth;
+      int day = desiredDay <= daysInTargetMonth
+          ? desiredDay
+          : daysInTargetMonth;
 
       current = DateTime(year, nextMonth, day);
     }
@@ -171,12 +177,13 @@ class RecurringTransactionCalculator {
     }
   }
 
-  static void generateRecurringTransactionAnnually(
-      {required DateTime startDate,
-      required DateTime endDate,
-      required num amount,
-      required Map<DateTime, num> groupedMonthlyTransaction,
-      required Map<int, num> yearlyTotal}) {
+  static void generateRecurringTransactionAnnually({
+    required DateTime startDate,
+    required DateTime endDate,
+    required num amount,
+    required Map<DateTime, num> groupedMonthlyTransaction,
+    required Map<int, num> yearlyTotal,
+  }) {
     groupedMonthlyTransaction.clear();
     yearlyTotal.clear();
     DateTime current = startDate;
@@ -187,12 +194,13 @@ class RecurringTransactionCalculator {
     }
   }
 
-  static void generateRecurringTransactionDaily(
-      {required DateTime startDate,
-      required DateTime endDate,
-      required num amount,
-      required Map<DateTime, num> groupedMonthlyTransaction,
-      required Map<int, num> yearlyTotal}) {
+  static void generateRecurringTransactionDaily({
+    required DateTime startDate,
+    required DateTime endDate,
+    required num amount,
+    required Map<DateTime, num> groupedMonthlyTransaction,
+    required Map<int, num> yearlyTotal,
+  }) {
     //clear first
     groupedMonthlyTransaction.clear();
     yearlyTotal.clear();
@@ -238,12 +246,13 @@ class RecurringTransactionCalculator {
     }
   }
 
-  static void generateRecurringTransactionWeekly(
-      {required DateTime startDate,
-      required DateTime endDate,
-      required num amount,
-      required Map<DateTime, num> groupedMonthlyTransaction,
-      required Map<int, num> yearlyTotal}) {
+  static void generateRecurringTransactionWeekly({
+    required DateTime startDate,
+    required DateTime endDate,
+    required num amount,
+    required Map<DateTime, num> groupedMonthlyTransaction,
+    required Map<int, num> yearlyTotal,
+  }) {
     //clear first
     groupedMonthlyTransaction.clear();
     yearlyTotal.clear();

@@ -8,8 +8,9 @@ import 'transactions_provider.dart';
 
 final mainAccountProvider = StateProvider<BankAccount?>((ref) => null);
 
-final selectedAccountProvider =
-    StateProvider.autoDispose<BankAccount?>((ref) => null);
+final selectedAccountProvider = StateProvider.autoDispose<BankAccount?>(
+  (ref) => null,
+);
 final selectedAccountCurrentYearMonthlyBalanceProvider =
     StateProvider<List<FlSpot>>((ref) => const []);
 final selectedAccountLastTransactions = StateProvider<List>((ref) => const []);
@@ -73,7 +74,9 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
     bool? countNetWorth,
     bool active = true,
   }) async {
-    BankAccount account = ref.read(selectedAccountProvider)!.copy(
+    BankAccount account = ref
+        .read(selectedAccountProvider)!
+        .copy(
           name: name,
           symbol: icon,
           color: color,
@@ -129,18 +132,28 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
     ref.read(selectedAccountProvider.notifier).state = account;
 
     final currentMonthDailyBalance = await BankAccountMethods()
-        .accountMonthlyBalance(account.id!,
-            dateRangeStart:
-                DateTime(DateTime.now().year, 1, 1), // beginnig of current year
-            dateRangeEnd:
-                DateTime(DateTime.now().year + 1, 1, 1) // beginnig of next year
-            );
+        .accountMonthlyBalance(
+          account.id!,
+          dateRangeStart: DateTime(
+            DateTime.now().year,
+            1,
+            1,
+          ), // beginnig of current year
+          dateRangeEnd: DateTime(
+            DateTime.now().year + 1,
+            1,
+            1,
+          ), // beginnig of next year
+        );
 
-    ref.read(selectedAccountCurrentYearMonthlyBalanceProvider.notifier).state =
-        currentMonthDailyBalance.map((e) {
+    ref
+        .read(selectedAccountCurrentYearMonthlyBalanceProvider.notifier)
+        .state = currentMonthDailyBalance.map((e) {
       DateTime pointDT = DateTime.parse(e['month'] + "-01");
       return FlSpot(
-          pointDT.month - 1, double.parse(e['balance'].toStringAsFixed(2)));
+        pointDT.month - 1,
+        double.parse(e['balance'].toStringAsFixed(2)),
+      );
     }).toList();
 
     ref.read(selectedAccountLastTransactions.notifier).state =
@@ -164,5 +177,5 @@ class AsyncAccountsNotifier extends AsyncNotifier<List<BankAccount>> {
 
 final accountsProvider =
     AsyncNotifierProvider<AsyncAccountsNotifier, List<BankAccount>>(() {
-  return AsyncAccountsNotifier();
-});
+      return AsyncAccountsNotifier();
+    });

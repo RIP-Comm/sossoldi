@@ -30,7 +30,8 @@ class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {
     super.initState();
 
     final transactionType = ref.read(transactionTypeProvider);
-    categoryType = ref.read(transactionToCategoryProvider(transactionType)) ??
+    categoryType =
+        ref.read(transactionToCategoryProvider(transactionType)) ??
         CategoryTransactionType.expense;
 
     final selectedCategory = ref.read(selectedCategoryProvider);
@@ -75,30 +76,34 @@ class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {
                       vertical: Sizes.md,
                     ),
                     padding: const EdgeInsets.fromLTRB(
-                        Sizes.lg, Sizes.md, Sizes.lg, 0),
+                      Sizes.lg,
+                      Sizes.md,
+                      Sizes.lg,
+                      0,
+                    ),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius:
-                          BorderRadius.circular(Sizes.borderRadiusSmall),
+                      borderRadius: BorderRadius.circular(
+                        Sizes.borderRadiusSmall,
+                      ),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           "NAME",
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelLarge!
+                          style: Theme.of(context).textTheme.labelLarge!
                               .copyWith(
-                                  color: Theme.of(context).colorScheme.primary),
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                         ),
                         TextField(
                           controller: nameController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: "Category name",
                           ),
                           style: Theme.of(context).textTheme.titleLarge,
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -109,42 +114,56 @@ class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {
                       vertical: 12,
                     ),
                     padding: const EdgeInsets.fromLTRB(
-                        Sizes.lg, Sizes.md, Sizes.lg, 0),
+                      Sizes.lg,
+                      Sizes.md,
+                      Sizes.lg,
+                      0,
+                    ),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius:
-                          BorderRadius.circular(Sizes.borderRadiusSmall),
+                      borderRadius: BorderRadius.circular(
+                        Sizes.borderRadiusSmall,
+                      ),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           "TYPE",
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelLarge!
+                          style: Theme.of(context).textTheme.labelLarge!
                               .copyWith(
-                                  color: Theme.of(context).colorScheme.primary),
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                         ),
                         DropdownButton<CategoryTransactionType>(
                           value: categoryType,
                           underline: const SizedBox(),
                           isExpanded: true,
-                          items: (widget.hideIncome
-                                  ? [
-                                      CategoryTransactionType.expense
-                                    ] // Only show 'expense' if true
-                                  : CategoryTransactionType
-                                      .values) // Otherwise, show all values
-                              .map((CategoryTransactionType type) {
-                            return DropdownMenuItem<CategoryTransactionType>(
-                              value: type,
-                              child: Text(
-                                type.toString().split('.').last.capitalize(),
-                                style: Theme.of(context).textTheme.titleLarge,
-                              ),
-                            );
-                          }).toList(),
+                          items:
+                              (widget.hideIncome
+                                      ? [
+                                          CategoryTransactionType.expense,
+                                        ] // Only show 'expense' if true
+                                      : CategoryTransactionType
+                                            .values) // Otherwise, show all values
+                                  .map((CategoryTransactionType type) {
+                                    return DropdownMenuItem<
+                                      CategoryTransactionType
+                                    >(
+                                      value: type,
+                                      child: Text(
+                                        type
+                                            .toString()
+                                            .split('.')
+                                            .last
+                                            .capitalize(),
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.titleLarge,
+                                      ),
+                                    );
+                                  })
+                                  .toList(),
                           onChanged: (CategoryTransactionType? newType) {
                             if (newType != categoryType) {
                               setState(() => categoryType = newType!);
@@ -202,20 +221,19 @@ class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {
                             .read(categoriesProvider.notifier)
                             .removeCategory(selectedCategory.id!)
                             .whenComplete(() {
-                          if (context.mounted) {
-                            Navigator.of(context).pop();
-                          }
-                        }),
+                              if (context.mounted) {
+                                Navigator.of(context).pop();
+                              }
+                            }),
                         style: TextButton.styleFrom(
                           side: const BorderSide(color: red, width: 1),
                         ),
                         icon: const Icon(Icons.delete_outlined, color: red),
                         label: Text(
                           "Delete category",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge!
-                              .copyWith(color: red),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodyLarge!.copyWith(color: red),
                         ),
                       ),
                     ),
@@ -230,17 +248,20 @@ class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {
               color: Theme.of(context).colorScheme.surface,
               boxShadow: [
                 BoxShadow(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .primary
-                      .withValues(alpha: 0.15),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.primary.withValues(alpha: 0.15),
                   blurRadius: 5.0,
                   offset: const Offset(0, -1.0),
-                )
+                ),
               ],
             ),
             padding: const EdgeInsets.fromLTRB(
-                Sizes.xl, Sizes.md, Sizes.xl, Sizes.xl),
+              Sizes.xl,
+              Sizes.md,
+              Sizes.xl,
+              Sizes.xl,
+            ),
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
@@ -260,7 +281,9 @@ class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {
                             color: categoryColor,
                           );
                     } else {
-                      await ref.read(categoriesProvider.notifier).addCategory(
+                      await ref
+                          .read(categoriesProvider.notifier)
+                          .addCategory(
                             name: nameController.text,
                             type: categoryType,
                             icon: categoryIcon,

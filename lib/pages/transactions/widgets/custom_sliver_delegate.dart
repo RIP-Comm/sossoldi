@@ -42,9 +42,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
       padding: const EdgeInsets.symmetric(horizontal: Sizes.lg),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primaryContainer,
-        border: const Border(
-          bottom: BorderSide(color: grey2),
-        ),
+        border: const Border(bottom: BorderSide(color: grey2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -72,7 +70,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
     );
   }
 
-  _buildExtendedWidget(BuildContext context, double shrinkPercentage) {
+  Widget _buildExtendedWidget(BuildContext context, double shrinkPercentage) {
     return ClipRect(
       child: FittedBox(
         fit: BoxFit.fitHeight,
@@ -88,9 +86,12 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
                 TabBar(
                   controller: tabController,
                   tabs: myTabs,
-                  splashBorderRadius:
-                      BorderRadius.circular(Sizes.borderRadius * 10),
-                  indicatorPadding: EdgeInsets.symmetric(horizontal: Sizes.lg),
+                  splashBorderRadius: BorderRadius.circular(
+                    Sizes.borderRadius * 10,
+                  ),
+                  indicatorPadding: const EdgeInsets.symmetric(
+                    horizontal: Sizes.lg,
+                  ),
                   // TODO: capitalize text of the selected label
                   // not possible from TextStyle https://github.com/flutter/flutter/issues/22695
                   labelStyle: Theme.of(context).textTheme.bodyLarge,
@@ -135,58 +136,57 @@ class CollapsedWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer(builder: (context, ref, child) {
-      final totalAmount = ref.watch(totalAmountProvider);
-      final startDate = ref.watch(filterDateStartProvider);
-      final endDate = ref.watch(filterDateEndProvider);
-      final currencyState = ref.watch(currencyStateNotifier);
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(
-              vertical: Sizes.xxs,
-              horizontal: Sizes.sm,
+    return Consumer(
+      builder: (context, ref, child) {
+        final totalAmount = ref.watch(totalAmountProvider);
+        final startDate = ref.watch(filterDateStartProvider);
+        final endDate = ref.watch(filterDateEndProvider);
+        final currencyState = ref.watch(currencyStateNotifier);
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(
+                vertical: Sizes.xxs,
+                horizontal: Sizes.sm,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(Sizes.borderRadius * 10),
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+              child: Text(
+                myTabs[tabController.index].text!,
+                textAlign: TextAlign.center,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(color: Colors.white),
+              ),
             ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(Sizes.borderRadius * 10),
-              color: Theme.of(context).colorScheme.secondary,
+            Text(
+              getFormattedDateRange(startDate, endDate),
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
-            child: Text(
-              myTabs[tabController.index].text!,
-              textAlign: TextAlign.center,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.copyWith(color: Colors.white),
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: totalAmount.toCurrency(),
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      color: totalAmount >= 0 ? green : red,
+                    ),
+                  ),
+                  TextSpan(
+                    text: currencyState.selectedCurrency.symbol,
+                    style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                      color: totalAmount >= 0 ? green : red,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Text(
-            getFormattedDateRange(startDate, endDate),
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
-          RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: totalAmount.toCurrency(),
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge!
-                      .copyWith(color: totalAmount >= 0 ? green : red),
-                ),
-                TextSpan(
-                  text: currencyState.selectedCurrency.symbol,
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelLarge!
-                      .copyWith(color: totalAmount >= 0 ? green : red),
-                ),
-              ],
-            ),
-          ),
-        ],
-      );
-    });
+          ],
+        );
+      },
+    );
   }
 }

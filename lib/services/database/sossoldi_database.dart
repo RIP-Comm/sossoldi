@@ -54,7 +54,10 @@ class SossoldiDatabase {
   }
 
   static Future _upgradeDB(
-      Database database, int oldVersion, int newVersion) async {
+    Database database,
+    int oldVersion,
+    int newVersion,
+  ) async {
     await instance._migrationManager.migrate(database, oldVersion, newVersion);
   }
 
@@ -68,7 +71,8 @@ class SossoldiDatabase {
 
     // Get all table names
     final List<Map<String, dynamic>> tables = await db.rawQuery(
-        "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' AND name NOT LIKE 'android_%'");
+      "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' AND name NOT LIKE 'android_%'",
+    );
 
     List<List<dynamic>> allData = [];
     Set<String> allColumns = {'table_name'}; // Start with table_name column
@@ -93,8 +97,10 @@ class SossoldiDatabase {
         final List<Map<String, dynamic>> rows = await db.query(tableName);
 
         for (var row in rows) {
-          List<dynamic> csvRow =
-              List.filled(headers.length, ''); // Initialize with empty strings
+          List<dynamic> csvRow = List.filled(
+            headers.length,
+            '',
+          ); // Initialize with empty strings
           csvRow[0] = tableName; // Set table name
 
           // Fill in values for existing columns
@@ -129,8 +135,9 @@ class SossoldiDatabase {
       }
 
       final String csvData = await file.readAsString();
-      final List<List<dynamic>> rows =
-          const CsvToListConverter().convert(csvData);
+      final List<List<dynamic>> rows = const CsvToListConverter().convert(
+        csvData,
+      );
 
       if (rows.isEmpty) {
         throw Exception('CSV file is empty');
@@ -198,45 +205,45 @@ class SossoldiDatabase {
     // Add some fake accounts
     await _database?.execute('''
       INSERT INTO bankAccount(id, name, symbol, color, startingValue, active, mainAccount, createdAt, updatedAt) VALUES
-        (70, "Revolut", 'payments', 1, 1235.10, 1, 1, '${DateTime.now()}', '${DateTime.now()}'),
-        (71, "N26", 'credit_card', 2, 3823.56, 1, 0, '${DateTime.now()}', '${DateTime.now()}'),
-        (72, "Fineco", 'account_balance', 3, 0.00, 1, 0, '${DateTime.now()}', '${DateTime.now()}');
+        (70, 'Revolut', 'payments', 1, 1235.10, 1, 1, '${DateTime.now()}', '${DateTime.now()}'),
+        (71, 'N26', 'credit_card', 2, 3823.56, 1, 0, '${DateTime.now()}', '${DateTime.now()}'),
+        (72, 'Fineco', 'account_balance', 3, 0.00, 1, 0, '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
     // Add fake categories
     await _database?.execute('''
       INSERT INTO categoryTransaction(id, name, type, symbol, color, note, parent, createdAt, updatedAt) VALUES
-        (10, "Out", "OUT", "restaurant", 0, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (11, "Home", "OUT", "home", 1, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (12, "Furniture","OUT", "home", 2, '', 11, '${DateTime.now()}', '${DateTime.now()}'),
-        (13, "Shopping", "OUT", "shopping_cart", 3, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (14, "Leisure", "OUT", "subscriptions", 4, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (15, "Transports", "OUT", "directions_car", 6, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (16, "Salary", "IN", "work", 5, '', null, '${DateTime.now()}', '${DateTime.now()}');
+        (10, 'Out', 'OUT', 'restaurant', 0, '', null, '${DateTime.now()}', '${DateTime.now()}'),
+        (11, 'Home', 'OUT', 'home', 1, '', null, '${DateTime.now()}', '${DateTime.now()}'),
+        (12, 'Furniture','OUT', 'home', 2, '', 11, '${DateTime.now()}', '${DateTime.now()}'),
+        (13, 'Shopping', 'OUT', 'shopping_cart', 3, '', null, '${DateTime.now()}', '${DateTime.now()}'),
+        (14, 'Leisure', 'OUT', 'subscriptions', 4, '', null, '${DateTime.now()}', '${DateTime.now()}'),
+        (15, 'Transports', 'OUT', 'directions_car', 6, '', null, '${DateTime.now()}', '${DateTime.now()}'),
+        (16, 'Salary', 'IN', 'work', 5, '', null, '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
     // Add currencies
     await _database?.execute('''
       INSERT INTO currency(symbol, code, name, mainCurrency) VALUES
-        ("€", "EUR", "Euro", 1),
-        ("\$", "USD", "United States Dollar", 0),
-        ("CHF", "CHF", "Switzerland Franc", 0),
-        ("£", "GBP", "United Kingdom Pound", 0);
+        ('€', 'EUR', 'Euro', 1),
+        ('\$', 'USD', 'United States Dollar', 0),
+        ('CHF', 'CHF', 'Switzerland Franc', 0),
+        ('£', 'GBP', 'United Kingdom Pound', 0);
     ''');
 
     // Add fake budgets
     await _database?.execute('''
       INSERT INTO budget(idCategory, name, amountLimit, active, createdAt, updatedAt) VALUES
-        (13, "Grocery", 900.00, 1, '${DateTime.now()}', '${DateTime.now()}'),
-        (11, "Home", 123.45, 0, '${DateTime.now()}', '${DateTime.now()}');
+        (13, 'Grocery', 900.00, 1, '${DateTime.now()}', '${DateTime.now()}'),
+        (11, 'Home', 123.45, 0, '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
     // Add fake recurring transactions
     await _database?.execute('''
       INSERT INTO recurringTransaction(fromDate, toDate, amount,type, note, recurrency, idCategory, idBankAccount, createdAt, updatedAt) VALUES
-        ("2024-02-23", null, 10.99, "OUT", "404 Books", "MONTHLY", 14, 70, '${DateTime.now()}', '${DateTime.now()}'),
-        ("2023-12-13", null, 4.97, "OUT", "ETF Consultant Parcel", "DAILY", 14, 70, '${DateTime.now()}', '${DateTime.now()}'),
-        ("2023-02-11", "2028-02-11", 1193.40, "OUT", "Car Loan", "QUARTERLY", 15, 72, '${DateTime.now()}', '${DateTime.now()}');
+        ('2024-02-23', null, 10.99, 'OUT', '404 Books', 'MONTHLY', 14, 70, '${DateTime.now()}', '${DateTime.now()}'),
+        ('2023-12-13', null, 4.97, 'OUT', 'ETF Consultant Parcel', 'DAILY', 14, 70, '${DateTime.now()}', '${DateTime.now()}'),
+        ('2023-02-11', '2028-02-11', 1193.40, 'OUT', 'Car Loan', 'QUARTERLY', 15, 72, '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
     // Add fake transactions
@@ -263,11 +270,12 @@ class SossoldiDatabase {
       'CHEK dividends',
       'Babysitter',
       'sono.pove.ro Fees',
-      'Quingentole trip'
+      'Quingentole trip',
     ];
     var categories = [10, 11, 12, 13, 14];
     double maxAmountOfSingleTransaction = 250.00;
-    int dateInPastMaxRange = (countOfGeneratedTransaction / 90).round() *
+    int dateInPastMaxRange =
+        (countOfGeneratedTransaction / 90).round() *
         30; // we want simulate about 90 transactions per month
     num fakeSalary = 5000;
     DateTime now = DateTime.now();
@@ -296,10 +304,13 @@ class SossoldiDatabase {
       var randomNote = outNotes[rnd.nextInt(outNotes.length)];
       var randomCategory = categories[rnd.nextInt(categories.length)];
       int? idBankAccountTransfer;
-      DateTime randomDate = now.subtract(Duration(
+      DateTime randomDate = now.subtract(
+        Duration(
           days: rnd.nextInt(dateInPastMaxRange),
           hours: rnd.nextInt(20),
-          minutes: rnd.nextInt(50)));
+          minutes: rnd.nextInt(50),
+        ),
+      );
 
       if (i % (countOfGeneratedTransaction / 100) == 0) {
         // simulating a transfer every 1% of total iterations
@@ -319,22 +330,33 @@ class SossoldiDatabase {
 
       // put generated transaction in our list
       demoTransactions.add(
-          '''('$randomDate', ${randomAmount.toStringAsFixed(2)}, '$randomType', '$randomNote', $randomCategory, $randomAccount, $idBankAccountTransfer, 0, null, '$randomDate', '$randomDate')''');
+        '''('$randomDate', ${randomAmount.toStringAsFixed(2)}, '$randomType', '$randomNote', $randomCategory, $randomAccount, $idBankAccountTransfer, 0, null, '$randomDate', '$randomDate')''',
+      );
     }
 
     // add salary every month
     for (int i = 1; i < dateInPastMaxRange / 30; i++) {
       DateTime randomDate = now.subtract(Duration(days: 30 * i));
       var time = randomDate.toLocal();
-      DateTime salaryDateTime = DateTime(time.year, time.month, 27, time.hour,
-          time.minute, time.second, time.millisecond, time.microsecond);
+      DateTime salaryDateTime = DateTime(
+        time.year,
+        time.month,
+        27,
+        time.hour,
+        time.minute,
+        time.second,
+        time.millisecond,
+        time.microsecond,
+      );
       demoTransactions.add(
-          '''('$salaryDateTime', $fakeSalary, 'IN', 'Salary', 16, 70, null, 0, null, '$salaryDateTime', '$salaryDateTime')''');
+        '''('$salaryDateTime', $fakeSalary, 'IN', 'Salary', 16, 70, null, 0, null, '$salaryDateTime', '$salaryDateTime')''',
+      );
     }
 
     // finalize query and write!
     await _database?.execute(
-        "$insertDemoTransactionsQuery ${demoTransactions.join(",")};");
+      "$insertDemoTransactionsQuery ${demoTransactions.join(",")};",
+    );
   }
 
   Future resetDatabase() async {

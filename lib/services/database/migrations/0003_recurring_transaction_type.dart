@@ -6,8 +6,7 @@ import '/model/recurring_transaction.dart';
 
 class RecurringTransactionType extends Migration {
   RecurringTransactionType()
-      : super(
-            version: 3, description: 'Add type to recurring transaction table');
+    : super(version: 3, description: 'Add type to recurring transaction table');
 
   @override
   Future<void> up(Database db) async {

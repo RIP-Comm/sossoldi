@@ -57,7 +57,8 @@ class AccountsPieChart extends ConsumerWidget {
             children: [
               if (selectedIndex != -1)
                 RoundedIcon(
-                  icon: accountIconList[accounts[selectedIndex].symbol] ??
+                  icon:
+                      accountIconList[accounts[selectedIndex].symbol] ??
                       Icons.swap_horiz_rounded,
                   backgroundColor:
                       accountColorList[accounts[selectedIndex].color],
@@ -68,11 +69,13 @@ class AccountsPieChart extends ConsumerWidget {
                     ? "${amounts[accounts[selectedIndex].id]!.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}"
                     : "${total.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}",
                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                    color: ((selectedIndex != -1 &&
-                                amounts[accounts[selectedIndex].id]! > 0) ||
-                            (selectedIndex == -1 && total > 0))
-                        ? green
-                        : red),
+                  color:
+                      ((selectedIndex != -1 &&
+                              amounts[accounts[selectedIndex].id]! > 0) ||
+                          (selectedIndex == -1 && total > 0))
+                      ? green
+                      : red,
+                ),
               ),
               (selectedIndex != -1)
                   ? Text(accounts[selectedIndex].name)
@@ -85,19 +88,16 @@ class AccountsPieChart extends ConsumerWidget {
   }
 
   List<PieChartSectionData> showingSections(int index) {
-    return List.generate(
-      amounts.values.length,
-      (i) {
-        final isTouched = (i == index);
+    return List.generate(amounts.values.length, (i) {
+      final isTouched = (i == index);
 
-        final radius = isTouched ? 30.0 : 25.0;
-        return PieChartSectionData(
-          color: accountColorList[accounts[i].color],
-          value: 360 * amounts[accounts[i].id]!,
-          radius: radius,
-          showTitle: false,
-        );
-      },
-    );
+      final radius = isTouched ? 30.0 : 25.0;
+      return PieChartSectionData(
+        color: accountColorList[accounts[i].color],
+        value: 360 * amounts[accounts[i].id]!,
+        radius: radius,
+        showTitle: false,
+      );
+    });
   }
 }

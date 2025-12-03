@@ -2,8 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../model/budget.dart';
 
-final monthlyBudgetsStatsProvider =
-    FutureProvider<List<BudgetStats>>((ref) async {
+final monthlyBudgetsStatsProvider = FutureProvider<List<BudgetStats>>((
+  ref,
+) async {
   final budgets = await BudgetMethods().selectMonthlyBudgetsStats();
   return budgets;
 });
@@ -55,5 +56,5 @@ class AsyncBudgetsNotifier extends AsyncNotifier<List<Budget>> {
 
 final budgetsProvider =
     AsyncNotifierProvider<AsyncBudgetsNotifier, List<Budget>>(() {
-  return AsyncBudgetsNotifier();
-});
+      return AsyncBudgetsNotifier();
+    });

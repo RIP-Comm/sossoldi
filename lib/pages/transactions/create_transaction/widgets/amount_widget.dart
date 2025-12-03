@@ -11,10 +11,7 @@ import '../../../../ui/device.dart';
 import '../../../../ui/extensions.dart';
 
 class AmountWidget extends ConsumerStatefulWidget {
-  const AmountWidget(
-    this.amountController, {
-    super.key,
-  });
+  const AmountWidget(this.amountController, {super.key});
 
   final TextEditingController amountController;
 
@@ -27,11 +24,12 @@ class _AmountWidgetState extends ConsumerState<AmountWidget> {
   Widget build(BuildContext context) {
     final selectedType = ref.watch(transactionTypeProvider);
     final currencyState = ref.watch(currencyStateNotifier);
-    final selectedTransaction = ref.read(selectedTransactionUpdateProvider);
 
     return Padding(
-      padding:
-          const EdgeInsets.symmetric(horizontal: Sizes.lg, vertical: Sizes.xl),
+      padding: const EdgeInsets.symmetric(
+        horizontal: Sizes.lg,
+        vertical: Sizes.xl,
+      ),
       child: TextField(
         controller: widget.amountController,
         decoration: InputDecoration(
@@ -40,26 +38,22 @@ class _AmountWidgetState extends ConsumerState<AmountWidget> {
           prefixText: ' ',
           suffixText: currencyState.selectedCurrency.symbol,
           suffixStyle: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                color: selectedType.toColor(
-                  brightness: Theme.of(context).brightness,
-                ),
-              ),
+            color: selectedType.toColor(
+              brightness: Theme.of(context).brightness,
+            ),
+          ),
         ),
         keyboardType: TextInputType.numberWithOptions(
           decimal: true,
           // Leaving the default behaviour on Android which seems to be working as expeceted.
           signed: Platform.isAndroid,
         ),
-        inputFormatters: [
-          DecimalTextInputFormatter(decimalDigits: 2),
-        ],
+        inputFormatters: [DecimalTextInputFormatter(decimalDigits: 2)],
         autofocus: false,
         textAlign: TextAlign.center,
         cursorColor: grey1,
         style: TextStyle(
-          color: selectedType.toColor(
-            brightness: Theme.of(context).brightness,
-          ),
+          color: selectedType.toColor(brightness: Theme.of(context).brightness),
           fontSize: 58,
           fontWeight: FontWeight.bold,
         ),

@@ -38,8 +38,9 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
       idCategory: selectedCategory.id!,
       name: selectedCategory.name,
       active: true,
-      amountLimit:
-          _controller.text.isNotEmpty ? double.parse(_controller.text) : 0,
+      amountLimit: _controller.text.isNotEmpty
+          ? double.parse(_controller.text)
+          : 0,
     );
     widget.onBudgetChanged(updatedBudget);
   }
@@ -83,8 +84,9 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
                   underline: const SizedBox(),
                   isExpanded: true,
                   items: widget.categories.map((CategoryTransaction category) {
-                    final bool isUsed =
-                        widget.usedCategoryIds.contains(category.id);
+                    final bool isUsed = widget.usedCategoryIds.contains(
+                      category.id,
+                    );
                     final bool isCurrent = category.id == selectedCategory.id;
                     IconData? icon = iconList[category.symbol];
                     return DropdownMenuItem<CategoryTransaction>(
@@ -92,8 +94,10 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
                       enabled: isCurrent || !isUsed,
                       child: Row(
                         children: [
-                          Icon(icon,
-                              color: isCurrent || !isUsed ? null : Colors.grey),
+                          Icon(
+                            icon,
+                            color: isCurrent || !isUsed ? null : Colors.grey,
+                          ),
                           const SizedBox(width: Sizes.lg),
                           Text(
                             category.name,
@@ -138,8 +142,9 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
                       inputFormatters: [
                         DecimalTextInputFormatter(decimalDigits: 2),
                       ],
-                      keyboardType:
-                          const TextInputType.numberWithOptions(decimal: true),
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
                       onChanged: (_) {
                         setState(() {
                           _modifyBudget();
@@ -157,7 +162,7 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );

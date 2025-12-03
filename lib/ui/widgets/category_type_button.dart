@@ -16,9 +16,10 @@ class CategoryTypeButton extends ConsumerWidget {
 
     TextStyle textStyleFromType(CategoryTransactionType type) =>
         Theme.of(context).textTheme.bodyLarge!.copyWith(
-            color: categoryType == type
-                ? white
-                : Theme.of(context).colorScheme.onPrimaryContainer);
+          color: categoryType == type
+              ? white
+              : Theme.of(context).colorScheme.onPrimaryContainer,
+        );
 
     void onTap(CategoryTransactionType type) {
       ref.invalidate(totalAmountProvider);
@@ -29,21 +30,25 @@ class CategoryTypeButton extends ConsumerWidget {
     return Container(
       height: 28,
       decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primaryContainer,
-          borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall)),
+        color: Theme.of(context).colorScheme.primaryContainer,
+        borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
+      ),
       child: Stack(
         children: [
           AnimatedAlign(
             alignment: Alignment(
-                (categoryType == CategoryTransactionType.income) ? -1 : 1, 0),
+              (categoryType == CategoryTransactionType.income) ? -1 : 1,
+              0,
+            ),
             curve: Curves.decelerate,
             duration: const Duration(milliseconds: 180),
             child: Container(
               width: width,
               height: 28,
               decoration: BoxDecoration(
-                  color: blue5,
-                  borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall)),
+                color: blue5,
+                borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
+              ),
             ),
           ),
           Align(
@@ -54,8 +59,10 @@ class CategoryTypeButton extends ConsumerWidget {
                 width: width,
                 color: Colors.transparent,
                 alignment: Alignment.center,
-                child: Text("Income",
-                    style: textStyleFromType(CategoryTransactionType.income)),
+                child: Text(
+                  "Income",
+                  style: textStyleFromType(CategoryTransactionType.income),
+                ),
               ),
             ),
           ),
@@ -67,8 +74,10 @@ class CategoryTypeButton extends ConsumerWidget {
                 width: width,
                 color: Colors.transparent,
                 alignment: Alignment.center,
-                child: Text('Expenses',
-                    style: textStyleFromType(CategoryTransactionType.expense)),
+                child: Text(
+                  'Expenses',
+                  style: textStyleFromType(CategoryTransactionType.expense),
+                ),
               ),
             ),
           ),
