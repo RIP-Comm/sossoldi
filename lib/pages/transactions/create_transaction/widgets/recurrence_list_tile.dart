@@ -112,7 +112,7 @@ class RecurrenceListTile extends ConsumerWidget {
                     ),
                     const Spacer(),
                     Text(
-                      recurrenceMap[ref.watch(intervalProvider)]!.label,
+                      ref.watch(intervalProvider).label,
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: isDarkMode
                             ? grey3

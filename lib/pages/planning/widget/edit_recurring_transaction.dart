@@ -61,29 +61,28 @@ class _EditRecurringTransactionState
           child: const Text('Cancel'),
         ),
         actions: [
-          selectedRecurringTransaction != null
-              ? Container(
-                  alignment: Alignment.centerRight,
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.delete_outline,
-                      color: Theme.of(context).colorScheme.error,
-                    ),
-                    onPressed: () async {
-                      ref
-                          .read(transactionsProvider.notifier)
-                          .deleteRecurringTransaction(
-                            selectedRecurringTransaction.id!,
-                          )
-                          .whenComplete(() {
-                            if (context.mounted) {
-                              Navigator.pop(context);
-                            }
-                          });
-                    },
-                  ),
-                )
-              : const SizedBox(),
+          if (selectedRecurringTransaction != null)
+            Container(
+              alignment: Alignment.centerRight,
+              child: IconButton(
+                icon: Icon(
+                  Icons.delete_outline,
+                  color: Theme.of(context).colorScheme.error,
+                ),
+                onPressed: () async {
+                  ref
+                      .read(transactionsProvider.notifier)
+                      .deleteRecurringTransaction(
+                        selectedRecurringTransaction.id!,
+                      )
+                      .whenComplete(() {
+                        if (context.mounted) {
+                          Navigator.pop(context);
+                        }
+                      });
+                },
+              ),
+            ),
         ],
       ),
       body: Stack(

@@ -111,16 +111,8 @@ final categoryMapProvider = FutureProvider<Map<CategoryTransaction, double>>((
     categoryType,
   );
 
-  final transactionType = CategoryTransactionMethods()
-      .categoryToTransactionType(categoryType);
-
-  final transactionTypeList = typeMap.entries
-      .where((entry) => entry.value == transactionType)
-      .map((entry) => entry.key)
-      .toList();
-
   final transactions = await TransactionMethods().selectAll(
-    transactionType: transactionTypeList,
+    transactionType: [categoryType.transactionType.code],
     dateRangeStart: dateStart,
     dateRangeEnd: dateEnd,
   );
@@ -149,16 +141,9 @@ final categoryTotalAmountProvider = FutureProvider<double>((ref) async {
   final categoryType = ref.watch(categoryTypeProvider);
   final dateStart = ref.watch(filterDateStartProvider);
   final dateEnd = ref.watch(filterDateEndProvider);
-  final transactionType = CategoryTransactionMethods()
-      .categoryToTransactionType(categoryType);
-
-  List<String> transactionTypeList = typeMap.entries
-      .where((entry) => entry.value == transactionType)
-      .map((entry) => entry.key)
-      .toList();
 
   final transactions = await TransactionMethods().selectAll(
-    transactionType: transactionTypeList,
+    transactionType: [categoryType.transactionType.code],
     dateRangeStart: dateStart,
     dateRangeEnd: dateEnd,
   );
@@ -193,15 +178,8 @@ final monthlyTotalsProvider = FutureProvider<List<double>>((ref) async {
   final startOfYear = DateTime(dateStart.year, 1, 1);
   final endOfYear = DateTime(dateStart.year, 12, 31);
 
-  final transactionType = CategoryTransactionMethods()
-      .categoryToTransactionType(categoryType);
-
-  List<String> transactionTypeList = typeMap.entries
-      .where((entry) => entry.value == transactionType)
-      .map((entry) => entry.key)
-      .toList();
   final transactions = await TransactionMethods().selectAll(
-    transactionType: transactionTypeList,
+    transactionType: [categoryType.transactionType.code],
     dateRangeStart: startOfYear,
     dateRangeEnd: endOfYear,
   );

@@ -12,7 +12,6 @@ import '../../../providers/accounts_provider.dart';
 import '../../../providers/currency_provider.dart';
 
 import '../../../constants/style.dart';
-import '../../../model/transaction.dart';
 import '../../../providers/categories_provider.dart';
 
 /// This class shows account summaries in dashboard
@@ -26,8 +25,7 @@ class RecurringPaymentCard extends ConsumerWidget {
     final daysPassed = now
         .difference(transaction.lastInsertion ?? transaction.fromDate)
         .inDays;
-    final daysInterval =
-        recurrenceMap[parseRecurrence(transaction.recurrency)]!.days;
+    final daysInterval = transaction.recurrency.days;
     final daysUntilNextTransaction = daysInterval - (daysPassed % daysInterval);
     return daysUntilNextTransaction.toString();
   }
@@ -76,15 +74,15 @@ class RecurringPaymentCard extends ConsumerWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
+                          spacing: Sizes.sm,
                           children: [
                             Text(
-                              transaction.recurrency,
+                              transaction.recurrency.label,
                               style: const TextStyle(
                                 fontWeight: FontWeight.w200,
                                 fontSize: Sizes.sm,
                               ),
                             ),
-                            const SizedBox(height: Sizes.sm),
                             Text(
                               transaction.note,
                               style: const TextStyle(
@@ -92,7 +90,6 @@ class RecurringPaymentCard extends ConsumerWidget {
                                 fontSize: 16,
                               ),
                             ),
-                            const SizedBox(height: Sizes.sm),
                             Text(category.name),
                           ],
                         ),
@@ -102,9 +99,9 @@ class RecurringPaymentCard extends ConsumerWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisAlignment: MainAxisAlignment.end,
+                          spacing: Sizes.sm,
                           children: [
                             Text("In ${getNextText()} days"),
-                            const SizedBox(height: 10),
                             Builder(
                               builder: (context) {
                                 final String prefix = transaction.type.prefix;
@@ -118,7 +115,6 @@ class RecurringPaymentCard extends ConsumerWidget {
                                 );
                               },
                             ),
-                            const SizedBox(height: 10),
                             Text(
                               accounts!
                                   .firstWhere(

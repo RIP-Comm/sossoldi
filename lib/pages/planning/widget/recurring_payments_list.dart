@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../ui/device.dart';
-import 'recurring_payment_card.dart';
-import '../../../providers/transactions_provider.dart';
 
-import '../../../model/transaction.dart';
+import 'recurring_payment_card.dart';
+import '../../../model/recurring_transaction.dart';
+import '../../../providers/transactions_provider.dart';
+import '../../../ui/device.dart';
 
 class RecurringPaymentSection extends ConsumerStatefulWidget {
   const RecurringPaymentSection({super.key});
