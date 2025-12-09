@@ -3,12 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants/style.dart';
 import '../../model/transaction.dart';
+import '../../providers/transactions_provider.dart';
 import '../device.dart';
-
-final selectedTransactionTypeProvider =
-    StateProvider.autoDispose<TransactionType>((ref) => TransactionType.income);
-
-final selectedListIndexProvider = StateProvider.autoDispose<int>((ref) => -1);
 
 class TransactionTypeButton extends ConsumerWidget {
   const TransactionTypeButton({super.key});
@@ -47,8 +43,9 @@ class TransactionTypeButton extends ConsumerWidget {
           ),
           GestureDetector(
             onTap: () {
-              ref.read(selectedTransactionTypeProvider.notifier).state =
-                  TransactionType.income;
+              ref
+                  .read(selectedTransactionTypeProvider.notifier)
+                  .setType(TransactionType.income);
             },
             child: Align(
               alignment: const Alignment(-1, 0),
@@ -69,8 +66,9 @@ class TransactionTypeButton extends ConsumerWidget {
           ),
           GestureDetector(
             onTap: () {
-              ref.read(selectedTransactionTypeProvider.notifier).state =
-                  TransactionType.expense;
+              ref
+                  .read(selectedTransactionTypeProvider.notifier)
+                  .setType(TransactionType.expense);
             },
             child: Align(
               alignment: const Alignment(1, 0),

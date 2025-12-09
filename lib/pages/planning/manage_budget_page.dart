@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../model/budget.dart';
 import '../../model/category_transaction.dart';
+import '../../services/database/repositories/budget_repository.dart';
 import '../../ui/device.dart';
 import '../../ui/snack_bars/snack_bar.dart';
 import 'widget/budget_category_selector.dart';
@@ -215,10 +216,14 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
               child: ElevatedButton(
                 onPressed: () async {
                   for (var item in deletedBudgets) {
-                    await BudgetMethods().deleteByCategory(item.idCategory);
+                    await ref
+                        .read(budgetRepositoryProvider)
+                        .deleteByCategory(item.idCategory);
                   }
                   for (var item in budgets) {
-                    await BudgetMethods().insertOrUpdate(item);
+                    await ref
+                        .read(budgetRepositoryProvider)
+                        .insertOrUpdate(item);
                   }
 
                   widget.onRefreshBudgets();

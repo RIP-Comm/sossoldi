@@ -1,14 +1,28 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sossoldi/services/database/sossoldi_database.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:flutter/material.dart';
 import "dart:math";
-import 'package:sossoldi/ui/widgets/accounts_sum.dart';
+
 import 'package:sossoldi/model/bank_account.dart';
+import 'package:sossoldi/services/database/repositories/account_repository.dart';
+import 'package:sossoldi/pages/dashboard/widgets/accounts_sum.dart';
 
 void main() {
   // Initialize the database factory with sqflite_common_ffi
   databaseFactory = databaseFactoryFfi;
+
+  late SossoldiDatabase sossoldiDatabase;
+
+  setUpAll(() async {
+    sossoldiDatabase = SossoldiDatabase(dbName: 'test.db');
+    await sossoldiDatabase.clearDatabase();
+  });
+
+  tearDown(() async => await sossoldiDatabase.clearDatabase());
+
+  tearDownAll(() async => await sossoldiDatabase.close());
 
   testWidgets('Properly Render Accounts Widget', (WidgetTester tester) async {
     var accountsList = ['N26', 'Fineco', 'Crypto.com', 'Mediolanum'];
@@ -39,7 +53,7 @@ void main() {
     );
 
     FutureBuilder<num?>(
-      future: BankAccountMethods().getAccountSum(99),
+      future: AccountRepository(database: sossoldiDatabase).getAccountSum(99),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           // Show an error message if the future encounters an error

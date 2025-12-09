@@ -27,7 +27,7 @@ class _RecurrenceSelectorState extends ConsumerState<RecurrenceSelector> {
             return Material(
               child: InkWell(
                 onTap: () =>
-                    ref.read(intervalProvider.notifier).state = recurrence,
+                    ref.read(intervalProvider.notifier).setValue(recurrence),
                 child: ListTile(
                   contentPadding: const EdgeInsets.fromLTRB(
                     Sizes.xxl,

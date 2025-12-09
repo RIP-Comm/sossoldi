@@ -13,11 +13,11 @@ void showDuplicatedTransactionSnackBar(
   context,
   actionLabel: "Edit",
   onAction: transaction != null
-      ? () {
+      ? () async {
+          await ref
+              .read(transactionsProvider.notifier)
+              .transactionSelect(transaction);
           if (context.mounted) {
-            ref
-                .read(transactionsProvider.notifier)
-                .transactionUpdateState(transaction);
             Navigator.of(context).pushNamed("/add-page");
           }
         }

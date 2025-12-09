@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'widgets/account_section.dart';
+import 'widgets/budgets_section.dart';
+import '../../constants/style.dart';
+import '../../providers/categories_provider.dart';
+import '../../providers/currency_provider.dart';
+import '../../providers/dashboard_provider.dart';
+import '../../providers/transactions_provider.dart';
 import '../../ui/device.dart';
 import '../../ui/extensions.dart';
 import '../../ui/snack_bars/transactions_snack_bars.dart';
 import '../../ui/widgets/blur_widget.dart';
-import 'widgets/budgets_section.dart';
-import '../../constants/style.dart';
-import '../../ui/widgets/accounts_sum.dart';
 import '../../ui/widgets/line_chart.dart';
-import '../../ui/widgets/rounded_icon.dart';
 import '../../ui/widgets/transactions_list.dart';
-import '../../model/bank_account.dart';
-import '../../providers/accounts_provider.dart';
-import '../../providers/currency_provider.dart';
-import '../../providers/dashboard_provider.dart';
-import '../../providers/theme_provider.dart';
-import '../../providers/transactions_provider.dart';
 
 class DashboardPage extends ConsumerStatefulWidget {
   const DashboardPage({super.key});
@@ -28,13 +25,16 @@ class DashboardPage extends ConsumerStatefulWidget {
 class _HomePageState extends ConsumerState<DashboardPage> {
   @override
   Widget build(BuildContext context) {
-    final accountList = ref.watch(accountsProvider);
+    ref.read(categoriesProvider);
     final lastTransactions = ref.watch(lastTransactionsProvider);
-    final currencyState = ref.watch(currencyStateNotifier);
-    final isDarkMode = ref.watch(appThemeStateNotifier).isDarkModeEnabled;
+    final currencyState = ref.watch(currencyStateProvider);
+    final income = ref.watch(incomeProvider);
+    final expense = ref.watch(expenseProvider);
+    final currentMonthList = ref.watch(currentMonthListProvider);
+    final lastMonthList = ref.watch(lastMonthListProvider);
 
     ref.listen(
-      duplicatedTransactoinProvider,
+      duplicatedTransactionProvider,
       (prev, curr) => showDuplicatedTransactionSnackBar(
         context,
         transaction: curr,
@@ -49,13 +49,7 @@ class _HomePageState extends ConsumerState<DashboardPage> {
           ref
               .watch(dashboardProvider)
               .when(
-                data: (value) {
-                  final income = ref.watch(incomeProvider);
-                  final expense = ref.watch(expenseProvider);
-                  final total = income + expense;
-                  final currentMonthList = ref.watch(currentMonthListProvider);
-                  final lastMonthList = ref.watch(lastMonthListProvider);
-
+                data: (_) {
                   return Column(
                     children: [
                       const SizedBox(height: Sizes.xl),
@@ -79,7 +73,7 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                                   text: TextSpan(
                                     children: [
                                       TextSpan(
-                                        text: total.toCurrency(),
+                                        text: (income + expense).toCurrency(),
                                         style: Theme.of(context)
                                             .textTheme
                                             .headlineLarge
@@ -90,9 +84,7 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                                             ),
                                       ),
                                       TextSpan(
-                                        text: currencyState
-                                            .selectedCurrency
-                                            .symbol,
+                                        text: currencyState.symbol,
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyLarge
@@ -128,9 +120,7 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                                             ?.copyWith(color: green),
                                       ),
                                       TextSpan(
-                                        text: currencyState
-                                            .selectedCurrency
-                                            .symbol,
+                                        text: currencyState.symbol,
                                         style: Theme.of(context)
                                             .textTheme
                                             .labelLarge
@@ -162,9 +152,7 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                                             ?.copyWith(color: red),
                                       ),
                                       TextSpan(
-                                        text: currencyState
-                                            .selectedCurrency
-                                            .symbol,
+                                        text: currencyState.symbol,
                                         style: Theme.of(context)
                                             .textTheme
                                             .labelLarge
@@ -254,72 +242,7 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ),
-                SizedBox(
-                  height: 80.0,
-                  child: accountList.when(
-                    data: (accounts) => ListView.separated(
-                      itemCount: accounts.length + 1,
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: Sizes.lg,
-                        vertical: Sizes.xs,
-                      ),
-                      physics: const BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      separatorBuilder: (context, i) =>
-                          const SizedBox(width: Sizes.lg),
-                      itemBuilder: (context, i) {
-                        if (i == accounts.length) {
-                          return Container(
-                            width: 140,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(
-                                Sizes.borderRadius,
-                              ),
-                              boxShadow: [defaultShadow],
-                            ),
-                            child: ElevatedButton.icon(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Theme.of(
-                                  context,
-                                ).colorScheme.surface,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: Sizes.md,
-                                  vertical: Sizes.sm,
-                                ),
-                              ),
-                              icon: const RoundedIcon(
-                                icon: Icons.add_rounded,
-                                backgroundColor: blue5,
-                                padding: EdgeInsets.all(Sizes.xs),
-                              ),
-                              label: Text(
-                                "New Account",
-                                style: Theme.of(context).textTheme.bodyLarge!
-                                    .copyWith(
-                                      color: isDarkMode
-                                          ? grey3
-                                          : Theme.of(
-                                              context,
-                                            ).colorScheme.secondary,
-                                    ),
-                                maxLines: 2,
-                              ),
-                              onPressed: () {
-                                ref.read(accountsProvider.notifier).reset();
-                                Navigator.of(context).pushNamed('/add-account');
-                              },
-                            ),
-                          );
-                        }
-                        BankAccount account = accounts[i];
-                        return AccountsSum(account: account);
-                      },
-                    ),
-                    loading: () => const SizedBox(),
-                    error: (err, stack) => Text('Error: $err'),
-                  ),
-                ),
+                const AccountSection(),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(

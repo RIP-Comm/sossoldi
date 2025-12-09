@@ -34,6 +34,10 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
+      - name: Run build_runner
+        run: |
+          dart run build_runner build --delete-conflicting-outputs
+
       - name: Check formatting
         run: |
           echo "Checking code formatting (default line length 80)..."

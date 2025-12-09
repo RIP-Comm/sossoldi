@@ -30,10 +30,9 @@ class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {
   void initState() {
     super.initState();
 
-    final transactionType = ref.read(transactionTypeProvider);
+    final transactionType = ref.read(selectedTransactionTypeProvider);
     categoryType =
-        ref.read(transactionToCategoryProvider(transactionType)) ??
-        CategoryTransactionType.expense;
+        transactionType.categoryType ?? CategoryTransactionType.expense;
 
     final selectedCategory = ref.read(selectedCategoryProvider);
     if (selectedCategory != null) {

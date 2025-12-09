@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
 
+  analyzer_plugin: ^0.13.1
   collection: ^1.19.1
   csv: ^6.0.0
   cupertino_icons: ^1.0.8
@@ -21,7 +22,7 @@ dependencies:
   flutter_local_notifications: ^19.5.0
   flutter_native_splash: ^2.4.7
   flutter_phoenix: ^1.1.1
-  flutter_riverpod: ^2.6.1
+  flutter_riverpod: ^3.0.3
   intl: ^0.20.2
   local_auth: ^3.0.0
   package_info_plus: ^9.0.0
@@ -29,6 +30,7 @@ dependencies:
   path_provider: ^2.1.5
   percent_indicator: ^4.2.5
   permission_handler: ^12.0.1
+  riverpod_annotation: ^3.0.3
   shared_preferences: ^2.5.3
   sqflite: ^2.4.2
   sqflite_common_ffi: ^2.4.0
@@ -40,9 +42,14 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  build_runner: ^2.6.1
   dependency_validator: ^5.0.3
   flutter_launcher_icons: ^0.14.4
   flutter_lints: ^6.0.0
+  freezed: ^3.2.3
+  json_serializable: ^6.11.2
+  riverpod_generator: ^3.0.3
+  riverpod_lint: ^3.0.3
   test: ^1.26.3
 
 flutter:

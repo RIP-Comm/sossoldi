@@ -12,16 +12,11 @@ import '../../../ui/device.dart';
 import 'accounts_pie_chart.dart';
 import 'panel_list_tile.dart';
 
-class AccountsTab extends ConsumerStatefulWidget {
+class AccountsTab extends ConsumerWidget {
   const AccountsTab({super.key});
 
   @override
-  ConsumerState<AccountsTab> createState() => _AccountsTabState();
-}
-
-class _AccountsTabState extends ConsumerState<AccountsTab> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final accounts = ref.watch(accountsProvider);
     final transactions = ref.watch(transactionsProvider);
     final transactionType = ref.watch(selectedTransactionTypeProvider);
