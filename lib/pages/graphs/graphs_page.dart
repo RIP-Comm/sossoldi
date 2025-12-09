@@ -24,7 +24,7 @@ class _GraphsPageState extends ConsumerState<GraphsPage> {
     final currentYearMonthlyTransactions = ref.watch(
       currentYearMontlyTransactionsProvider,
     );
-    final currencyState = ref.watch(currencyStateNotifier);
+    final currencyState = ref.watch(currencyStateProvider);
 
     return ListView(
       children: [
@@ -92,8 +92,7 @@ class _GraphsPageState extends ConsumerState<GraphsPage> {
                                           ),
                                     ),
                                     TextSpan(
-                                      text:
-                                          currencyState.selectedCurrency.symbol,
+                                      text: currencyState.symbol,
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelLarge

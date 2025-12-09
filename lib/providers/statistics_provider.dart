@@ -1,44 +1,67 @@
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../model/transaction.dart';
+import '../services/database/repositories/transactions_repository.dart';
 import 'accounts_provider.dart';
 
-final currentYearMontlyTransactionsProvider = StateProvider<List<FlSpot>>(
-  (ref) => const [],
-);
+part 'statistics_provider.g.dart';
 
-final statisticsProvider = FutureProvider<void>((ref) async {
-  final currentYearMontlyTransaction = await TransactionMethods()
-      .currentYearMontlyTransactions();
+@Riverpod(keepAlive: true)
+class HighlightedMonth extends _$HighlightedMonth {
+  @override
+  int build() => DateTime.now().month - 1;
 
-  final accountsAsync = ref.read(accountsProvider);
-  final accounts = accountsAsync.value ?? [];
-  double currentBalance = accounts.fold(
-    0.0,
-    (sum, account) => sum + (account.total ?? 0),
-  );
+  void setValue(int value) => state = value;
+}
 
-  List<FlSpot> spots = [];
-  double runningBalance = currentBalance;
+@Riverpod(keepAlive: true)
+class CurrentYearMontlyTransactions extends _$CurrentYearMontlyTransactions {
+  @override
+  List<FlSpot> build() => const [];
 
-  final reversedTransactions = currentYearMontlyTransaction.reversed.toList();
+  void setValue(List<FlSpot> value) => state = value;
+}
 
-  for (int i = 0; i < reversedTransactions.length; i++) {
-    final monthData = reversedTransactions[i];
-    final monthIndex = double.parse(monthData['month'].substring(5)) - 1;
-
-    spots.add(
-      FlSpot(monthIndex, double.parse(runningBalance.toStringAsFixed(2))),
-    );
-
-    if (i < reversedTransactions.length - 1) {
-      runningBalance =
-          runningBalance - monthData['income'] + monthData['expense'];
-    }
+@Riverpod(keepAlive: true)
+class Statistics extends _$Statistics {
+  @override
+  Future<void> build() async {
+    await updateStatistics();
   }
 
-  spots.sort((a, b) => a.x.compareTo(b.x));
+  Future<void> updateStatistics() async {
+    final currentYearMontlyTransaction = await ref
+        .read(transactionsRepositoryProvider)
+        .currentYearMontlyTransactions();
 
-  ref.read(currentYearMontlyTransactionsProvider.notifier).state = spots;
-});
+    final accountsAsync = ref.read(accountsProvider);
+    final accounts = accountsAsync.value ?? [];
+    double currentBalance = accounts.fold(
+      0.0,
+      (sum, account) => sum + (account.total ?? 0),
+    );
+
+    List<FlSpot> spots = [];
+    double runningBalance = currentBalance;
+
+    final reversedTransactions = currentYearMontlyTransaction.reversed.toList();
+
+    for (int i = 0; i < reversedTransactions.length; i++) {
+      final monthData = reversedTransactions[i];
+      final monthIndex = double.parse(monthData['month'].substring(5)) - 1;
+
+      spots.add(
+        FlSpot(monthIndex, double.parse(runningBalance.toStringAsFixed(2))),
+      );
+
+      if (i < reversedTransactions.length - 1) {
+        runningBalance =
+            runningBalance - monthData['income'] + monthData['expense'];
+      }
+    }
+
+    spots.sort((a, b) => a.x.compareTo(b.x));
+
+    ref.read(currentYearMontlyTransactionsProvider.notifier).setValue(spots);
+  }
+}

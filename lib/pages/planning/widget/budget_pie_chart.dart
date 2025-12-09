@@ -21,7 +21,7 @@ class BudgetPieChartState extends ConsumerState<BudgetPieChart> {
 
   @override
   Widget build(BuildContext context) {
-    final currencyState = ref.watch(currencyStateNotifier);
+    final currencyState = ref.watch(currencyStateProvider);
     totalBudget = 0;
     for (Budget budget in widget.budgets) {
       totalBudget += budget.amountLimit;
@@ -42,7 +42,7 @@ class BudgetPieChartState extends ConsumerState<BudgetPieChart> {
         Column(
           children: [
             Text(
-              "${totalBudget.round()}${currencyState.selectedCurrency.symbol}",
+              "${totalBudget.round()}${currencyState.symbol}",
               style: const TextStyle(fontSize: 25),
             ),
             const SizedBox(height: Sizes.xs),

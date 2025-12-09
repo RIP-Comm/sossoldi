@@ -16,7 +16,7 @@ class AccountsCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final accountList = ref.watch(accountsProvider);
-    final currencyState = ref.watch(currencyStateNotifier);
+    final currencyState = ref.watch(currencyStateProvider);
 
     return Column(
       children: [
@@ -59,7 +59,7 @@ class AccountsCard extends ConsumerWidget {
                             ),
                           ),
                           Text(
-                            "${account.total?.toCurrency()}${currencyState.selectedCurrency.symbol}",
+                            "${account.total?.toCurrency()}${currencyState.symbol}",
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                         ],

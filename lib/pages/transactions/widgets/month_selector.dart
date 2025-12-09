@@ -3,11 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/style.dart';
 import '../../../providers/currency_provider.dart';
+import '../../../providers/statistics_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../ui/device.dart';
 import '../../../ui/extensions.dart';
 import '../../../ui/formatters/formatted_date_range.dart';
-import '../../graphs/widgets/categories/categories_bar_chart.dart';
 
 enum MonthSelectorType { simple, advanced } //advanced = with amount
 
@@ -22,7 +22,7 @@ class MonthSelector extends ConsumerWidget {
     final totalAmount = ref.watch(totalAmountProvider);
     final startDate = ref.watch(filterDateStartProvider);
     final endDate = ref.watch(filterDateEndProvider);
-    final currencyState = ref.watch(currencyStateNotifier);
+    final currencyState = ref.watch(currencyStateProvider);
 
     double currentHeight = type == MonthSelectorType.advanced ? 60 : 30;
 
@@ -45,10 +45,11 @@ class MonthSelector extends ConsumerWidget {
           ),
         );
         if (range != null) {
-          ref.read(filterDateStartProvider.notifier).state = range.start;
-          ref.read(filterDateEndProvider.notifier).state = range.end;
-          ref.read(highlightedMonthProvider.notifier).state =
-              range.start.month - 1;
+          ref.read(filterDateStartProvider.notifier).setDate(range.start);
+          ref.read(filterDateEndProvider.notifier).setDate(range.end);
+          ref
+              .read(highlightedMonthProvider.notifier)
+              .setValue(range.start.month - 1);
         }
       },
       child: Container(
@@ -74,11 +75,14 @@ class MonthSelector extends ConsumerWidget {
                   newStartDate.month + 1,
                   0,
                 );
-                ref.read(filterDateStartProvider.notifier).state = newStartDate;
-                ref.read(filterDateEndProvider.notifier).state = newEndDate;
+                ref
+                    .read(filterDateStartProvider.notifier)
+                    .setDate(newStartDate);
+                ref.read(filterDateEndProvider.notifier).setDate(newEndDate);
                 ref.read(transactionsProvider.notifier).filterTransactions();
-                ref.read(highlightedMonthProvider.notifier).state =
-                    newStartDate.month - 1;
+                ref
+                    .read(highlightedMonthProvider.notifier)
+                    .setValue(newStartDate.month - 1);
               },
               child: Container(
                 height: currentHeight,
@@ -91,7 +95,7 @@ class MonthSelector extends ConsumerWidget {
               ),
             ),
             Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   getFormattedDateRange(startDate, endDate),
@@ -107,7 +111,7 @@ class MonthSelector extends ConsumerWidget {
                               .copyWith(color: totalAmount.toColor()),
                         ),
                         TextSpan(
-                          text: currencyState.selectedCurrency.symbol,
+                          text: currencyState.symbol,
                           style: Theme.of(context).textTheme.labelLarge!
                               .copyWith(color: totalAmount.toColor()),
                         ),
@@ -129,11 +133,14 @@ class MonthSelector extends ConsumerWidget {
                   newStartDate.month + 1,
                   0,
                 );
-                ref.read(filterDateStartProvider.notifier).state = newStartDate;
-                ref.read(filterDateEndProvider.notifier).state = newEndDate;
+                ref
+                    .read(filterDateStartProvider.notifier)
+                    .setDate(newStartDate);
+                ref.read(filterDateEndProvider.notifier).setDate(newEndDate);
                 ref.read(transactionsProvider.notifier).filterTransactions();
-                ref.read(highlightedMonthProvider.notifier).state =
-                    newStartDate.month - 1;
+                ref
+                    .read(highlightedMonthProvider.notifier)
+                    .setValue(newStartDate.month - 1);
               },
               child: Container(
                 height: currentHeight,

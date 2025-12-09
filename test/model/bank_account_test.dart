@@ -1,7 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
-import 'package:sossoldi/services/database/sossoldi_database.dart';
 
+import 'package:sossoldi/services/database/repositories/account_repository.dart';
+import 'package:sossoldi/services/database/sossoldi_database.dart';
 import 'package:sossoldi/model/bank_account.dart';
 import 'package:sossoldi/model/base_entity.dart';
 import 'package:sossoldi/model/transaction.dart';
@@ -222,7 +223,9 @@ void main() {
       transactions = await db.rawQuery("SELECT * FROM `transaction`");
       expect(13, transactions.length);
 
-      var result = await BankAccountMethods().selectAll();
+      var result = await AccountRepository(
+        database: sossoldiDatabase,
+      ).selectAll();
       expect(result.length, 3);
 
       var initialAccountAmount = 1235.10; // taken from fillDemoData
@@ -358,19 +361,20 @@ void main() {
       transactions = await db.rawQuery("SELECT * FROM `transaction`");
       expect(15, transactions.length);
 
-      var result = await BankAccountMethods().accountDailyBalance(
-        70,
-        dateRangeStart: DateTime(
-          DateTime.now().year,
-          DateTime.now().month,
-          1,
-        ), // beginnig of current month
-        dateRangeEnd: DateTime(
-          DateTime.now().year,
-          DateTime.now().month + 1,
-          1,
-        ),
-      ); // beginnig of next month
+      var result = await AccountRepository(database: sossoldiDatabase)
+          .accountDailyBalance(
+            70,
+            dateRangeStart: DateTime(
+              DateTime.now().year,
+              DateTime.now().month,
+              1,
+            ), // beginnig of current month
+            dateRangeEnd: DateTime(
+              DateTime.now().year,
+              DateTime.now().month + 1,
+              1,
+            ),
+          ); // beginnig of next month
       expect(result.length, 3);
 
       final DateFormat formatter = DateFormat('yyyy-MM-dd');
@@ -389,15 +393,20 @@ void main() {
       );
       expect(result[2]['balance'] - initialAccountAmount, 49.5);
 
-      result = await BankAccountMethods().accountDailyBalance(
-        71,
-        dateRangeStart: DateTime(DateTime.now().year, DateTime.now().month, 1),
-        dateRangeEnd: DateTime(
-          DateTime.now().year,
-          DateTime.now().month + 1,
-          1,
-        ),
-      ); // beginnig of next month;
+      result = await AccountRepository(database: sossoldiDatabase)
+          .accountDailyBalance(
+            71,
+            dateRangeStart: DateTime(
+              DateTime.now().year,
+              DateTime.now().month,
+              1,
+            ),
+            dateRangeEnd: DateTime(
+              DateTime.now().year,
+              DateTime.now().month + 1,
+              1,
+            ),
+          ); // beginnig of next month;
       expect(result.length, 3);
 
       initialAccountAmount = 3823.56; // taken from fillDemoData

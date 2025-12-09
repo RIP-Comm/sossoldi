@@ -70,13 +70,11 @@ class CategoryList extends ConsumerWidget {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: categorys.length,
-
                 onReorder: (oldIndex, newIndex) {
                   ref
                       .read(categoriesProvider.notifier)
                       .reorderCategories(oldIndex, newIndex);
                 },
-
                 proxyDecorator: (child, index, animation) {
                   return Material(
                     elevation: 5,
@@ -84,7 +82,6 @@ class CategoryList extends ConsumerWidget {
                     child: child,
                   );
                 },
-
                 itemBuilder: (context, i) {
                   CategoryTransaction category = categorys[i];
                   return Container(
@@ -92,8 +89,9 @@ class CategoryList extends ConsumerWidget {
                     margin: const EdgeInsets.only(bottom: Sizes.lg),
                     child: DefaultCard(
                       onTap: () {
-                        ref.read(selectedCategoryProvider.notifier).state =
-                            category;
+                        ref
+                            .read(selectedCategoryProvider.notifier)
+                            .setCategory(category);
                         Navigator.of(context).pushNamed('/add-category');
                       },
                       child: Row(

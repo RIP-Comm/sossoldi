@@ -39,11 +39,11 @@ class _AccountPage extends ConsumerState<AccountPage> {
     final accountTransactions = ref.watch(
       selectedAccountCurrentYearMonthlyBalanceProvider,
     );
-    final transactions = ref.watch(selectedAccountLastTransactions);
-    final currencyState = ref.watch(currencyStateNotifier);
+    final transactions = ref.watch(selectedAccountLastTransactionsProvider);
+    final currencyState = ref.watch(currencyStateProvider);
 
     ref.listen(
-      duplicatedTransactoinProvider,
+      duplicatedTransactionProvider,
       (prev, curr) => showDuplicatedTransactionSnackBar(
         context,
         transaction: curr,
@@ -80,7 +80,7 @@ class _AccountPage extends ConsumerState<AccountPage> {
                         ),
                       ),
                       Text(
-                        currencyState.selectedCurrency.symbol,
+                        currencyState.symbol,
                         style: const TextStyle(
                           color: white,
                           fontSize: 22.0,
@@ -134,7 +134,7 @@ class _AccountPage extends ConsumerState<AccountPage> {
                                 width: 40,
                                 child: Center(
                                   child: Text(
-                                    currencyState.selectedCurrency.symbol,
+                                    currencyState.symbol,
                                     style: Theme.of(
                                       context,
                                     ).textTheme.titleLarge,

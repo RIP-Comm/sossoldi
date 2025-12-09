@@ -59,7 +59,7 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
 
   @override
   Widget build(BuildContext context) {
-    final currencyState = ref.watch(currencyStateNotifier);
+    final currencyState = ref.watch(currencyStateProvider);
     return Container(
       padding: const EdgeInsets.all(Sizes.lg),
       color: Theme.of(context).colorScheme.surface,
@@ -158,7 +158,7 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
                       ),
                     ),
                   ),
-                  Text(currencyState.selectedCurrency.symbol),
+                  Text(currencyState.symbol),
                 ],
               ),
             ),

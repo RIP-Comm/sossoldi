@@ -5,12 +5,9 @@ import 'package:intl/intl.dart';
 
 import '../../../../constants/style.dart';
 import '../../../../providers/categories_provider.dart';
+import '../../../../providers/statistics_provider.dart';
 import '../../../../providers/transactions_provider.dart';
 import '../../../../ui/device.dart';
-
-final highlightedMonthProvider = StateProvider<int>(
-  (ref) => DateTime.now().month - 1,
-);
 
 class CategoriesBarChart extends ConsumerWidget {
   const CategoriesBarChart({super.key});
@@ -86,7 +83,7 @@ class CategoriesBarChart extends ConsumerWidget {
         ? totals.reduce((a, b) => a > b ? a : b)
         : 1.0;
 
-    return List.generate(12, (index) {
+    return List.generate(totals.length, (index) {
       final barHeight = maxAmount > 0 ? totals[index] : 0.0;
       final isHighlighted = index == highlightedMonth;
 
@@ -163,8 +160,9 @@ class CategoriesBarChart extends ConsumerWidget {
             response.spot != null &&
             event is FlTapUpEvent) {
           final selectedMonthIndex = response.spot!.touchedBarGroup.x;
-          ref.read(highlightedMonthProvider.notifier).state =
-              selectedMonthIndex;
+          ref
+              .read(highlightedMonthProvider.notifier)
+              .setValue(selectedMonthIndex);
           _updateSelectedMonth(ref, currentYear, selectedMonthIndex);
         }
       },
@@ -173,15 +171,11 @@ class CategoriesBarChart extends ConsumerWidget {
 
   void _updateSelectedMonth(WidgetRef ref, int year, int monthIndex) {
     final selectedMonth = DateTime(year, monthIndex + 1, 1);
-    ref.read(filterDateStartProvider.notifier).state = DateTime(
-      selectedMonth.year,
-      selectedMonth.month,
-      1,
-    );
-    ref.read(filterDateEndProvider.notifier).state = DateTime(
-      selectedMonth.year,
-      selectedMonth.month + 1,
-      0,
-    );
+    ref
+        .read(filterDateStartProvider.notifier)
+        .setDate(DateTime(selectedMonth.year, selectedMonth.month, 1));
+    ref
+        .read(filterDateEndProvider.notifier)
+        .setDate(DateTime(selectedMonth.year, selectedMonth.month + 1, 0));
   }
 }

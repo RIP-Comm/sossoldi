@@ -8,14 +8,13 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 
-import 'model/recurring_transaction.dart';
 import 'providers/settings_provider.dart';
 import 'providers/theme_provider.dart';
 import 'routes/routes.dart';
-import 'ui/theme/app_theme.dart';
+import 'services/database/repositories/recurring_transactions_repository.dart';
+import 'services/database/sossoldi_database.dart';
 import 'services/notifications/notifications_service.dart';
-
-late SharedPreferences _sharedPreferences;
+import 'ui/theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,18 +25,19 @@ void main() async {
 
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
-  _sharedPreferences = await SharedPreferences.getInstance();
+  final SharedPreferences sharedPreferences =
+      await SharedPreferences.getInstance();
 
   // KV migration from the 'is_first_login' key to 'onboarding_completed'
   // to correctly handle the completion of the onboarding process
   // (To consider to remove in later future)
-  final bool? isFirstLoginCachedValue = _sharedPreferences.getBool(
+  final bool? isFirstLoginCachedValue = sharedPreferences.getBool(
     'is_first_login',
   );
   final bool isOnBoardingCompletedKeyNotSaved =
-      _sharedPreferences.getBool('onboarding_completed') == null;
+      sharedPreferences.getBool('onboarding_completed') == null;
   if (isFirstLoginCachedValue != null && isOnBoardingCompletedKeyNotSaved) {
-    await _sharedPreferences.setBool(
+    await sharedPreferences.setBool(
       'onboarding_completed',
       !isFirstLoginCachedValue,
     );
@@ -45,18 +45,20 @@ void main() async {
 
   // perform recurring transactions checks
   DateTime? lastCheckGetPref =
-      _sharedPreferences.getString('last_recurring_transactions_check') != null
+      sharedPreferences.getString('last_recurring_transactions_check') != null
       ? DateTime.parse(
-          _sharedPreferences.getString('last_recurring_transactions_check')!,
+          sharedPreferences.getString('last_recurring_transactions_check')!,
         )
       : null;
   DateTime? lastRecurringTransactionsCheck = lastCheckGetPref;
 
   if (lastRecurringTransactionsCheck == null ||
       DateTime.now().difference(lastRecurringTransactionsCheck).inDays >= 1) {
-    RecurringTransactionMethods().checkRecurringTransactions();
+    RecurringTransactionRepository(
+      database: SossoldiDatabase.instance,
+    ).checkRecurringTransactions();
     // update last recurring transactions runtime
-    await _sharedPreferences.setString(
+    await sharedPreferences.setString(
       'last_recurring_transactions_check',
       DateTime.now().toIso8601String(),
     );
@@ -65,12 +67,12 @@ void main() async {
   final LocalAuthentication auth = LocalAuthentication();
   if (await auth.isDeviceSupported()) {
     // check for authentication if requested by user
-    bool? requiresAuthentication = _sharedPreferences.getBool(
+    bool? requiresAuthentication = sharedPreferences.getBool(
       "user_requires_authentication",
     );
 
     if (requiresAuthentication != null && requiresAuthentication == true) {
-      // use use sticky auth to resume auth request when app is going background
+      // use sticky auth to resume auth request when app is going background
       bool didAuthenticate = await auth.authenticate(
         localizedReason: 'Please authenticate to use Sossoldi',
         persistAcrossBackgrounding: true,
@@ -83,7 +85,10 @@ void main() async {
     (_) => runApp(
       Phoenix(
         child: ProviderScope(
-          overrides: [versionProvider.overrideWithValue(packageInfo.version)],
+          overrides: [
+            versionProvider.overrideWithValue(packageInfo.version),
+            sharedPrefProvider.overrideWithValue(sharedPreferences),
+          ],
           child: const Launcher(),
         ),
       ),
@@ -94,13 +99,10 @@ void main() async {
 class Launcher extends ConsumerWidget {
   const Launcher({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bool isOnboardingCompleted =
-        _sharedPreferences.getBool('onboarding_completed') ?? false;
-
-    final appThemeState = ref.watch(appThemeStateNotifier);
+    final appThemeState = ref.watch(appThemeStateProvider);
+    final bool isOnboardingCompleted = ref.watch(onBoardingCompletedProvider);
     return MaterialApp(
       title: 'Sossoldi',
       theme: AppTheme.lightTheme,

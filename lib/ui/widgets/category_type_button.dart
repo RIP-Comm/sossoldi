@@ -23,8 +23,8 @@ class CategoryTypeButton extends ConsumerWidget {
 
     void onTap(CategoryTransactionType type) {
       ref.invalidate(totalAmountProvider);
-      ref.read(categoryTypeProvider.notifier).state = type;
-      ref.read(selectedCategoryProvider.notifier).state = null;
+      ref.read(categoryTypeProvider.notifier).setType(type);
+      ref.read(selectedCategoryProvider.notifier).setCategory(null);
     }
 
     return Container(

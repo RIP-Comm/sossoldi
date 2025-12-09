@@ -1,13 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../model/currency.dart';
+import '../services/database/repositories/currency_repository.dart';
 
-final currencyStateNotifier = ChangeNotifierProvider((ref) => CurrencyState());
+part 'currency_provider.g.dart';
 
-class CurrencyState extends ChangeNotifier {
-  //Initial currency selected
-  Currency selectedCurrency = const Currency(
+@Riverpod(keepAlive: true)
+class CurrencyState extends _$CurrencyState {
+  //Initial currency selected (fallback)
+  final Currency _defaultCurrency = const Currency(
     id: 2,
     symbol: '\$',
     code: 'USD',
@@ -15,18 +16,21 @@ class CurrencyState extends ChangeNotifier {
     mainCurrency: true,
   );
 
-  CurrencyState() {
+  @override
+  Currency build() {
     _initializeState();
+    return _defaultCurrency;
   }
 
   Future<void> _initializeState() async {
-    selectedCurrency = await CurrencyMethods().getSelectedCurrency();
-    notifyListeners();
+    final currency = await ref
+        .read(currencyRepositoryProvider)
+        .getSelectedCurrency();
+    state = currency;
   }
 
-  void setSelectedCurrency(Currency currency) {
-    selectedCurrency = currency;
-    CurrencyMethods().changeMainCurrency(currency.id!);
-    notifyListeners();
+  Future<void> setSelectedCurrency(Currency currency) async {
+    await ref.read(currencyRepositoryProvider).changeMainCurrency(currency.id!);
+    state = currency;
   }
 }

@@ -132,12 +132,11 @@ class TransactionTile extends ConsumerWidget {
   });
 
   final bool ignoreBlur;
-
   final Transaction transaction;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currencyState = ref.watch(currencyStateNotifier);
+    final currencyState = ref.watch(currencyStateProvider);
     return Material(
       child: ListTile(
         visualDensity: VisualDensity.compact,
@@ -147,16 +146,14 @@ class TransactionTile extends ConsumerWidget {
           vertical: Sizes.xs,
         ),
         onTap: () async {
-          ref
+          await ref
               .read(transactionsProvider.notifier)
-              .transactionUpdateState(transaction)
+              .transactionSelect(transaction)
               .whenComplete(() {
                 if (context.mounted) {
                   Navigator.of(context).pushNamed(
                     "/add-page",
-                    arguments: {
-                      'recurrencyEditingPermitted': !transaction.recurring,
-                    },
+                    arguments: {'transaction': transaction},
                   );
                 }
               });
@@ -208,7 +205,7 @@ class TransactionTile extends ConsumerWidget {
                     ),
                   ),
                   Text(
-                    currencyState.selectedCurrency.symbol,
+                    currencyState.symbol,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
                       color: transaction.type.toColor(
@@ -248,7 +245,7 @@ class TransactionTitle extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currencyState = ref.watch(currencyStateNotifier);
+    final currencyState = ref.watch(currencyStateProvider);
     final color = total < 0 ? red : (total > 0 ? green : blue3);
     return Padding(
       padding: const EdgeInsets.only(bottom: Sizes.md),
@@ -273,7 +270,7 @@ class TransactionTitle extends ConsumerWidget {
           BlurWidget(
             ignore: ignoreBlur,
             child: Text(
-              currencyState.selectedCurrency.symbol,
+              currencyState.symbol,
               style: Theme.of(
                 context,
               ).textTheme.labelMedium!.copyWith(color: color),
