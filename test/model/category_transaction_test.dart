@@ -7,6 +7,7 @@ void main() {
   test('Test Copy Category Transaction', () {
     CategoryTransaction c = CategoryTransaction(
       id: 2,
+      order: 2,
       name: "name",
       type: CategoryTransactionType.expense,
       symbol: "symbol",
@@ -59,11 +60,12 @@ void main() {
   test("Test toJson Category Transaction", () {
     CategoryTransaction c = const CategoryTransaction(
       id: 2,
+      order: 2,
       name: "name",
       type: CategoryTransactionType.expense,
       symbol: "symbol",
       color: 0,
-      note: "note",
+      note: "note", 
     );
 
     Map<String, Object?> json = c.toJson();

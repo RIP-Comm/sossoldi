@@ -6,6 +6,7 @@ const String categoryTransactionTable = 'categoryTransaction';
 
 class CategoryTransactionFields extends BaseEntityFields {
   static String id = BaseEntityFields.getId;
+  static String order = 'position';
   static String name = 'name';
   static String type = 'type';
   static String symbol = 'symbol';
@@ -17,6 +18,7 @@ class CategoryTransactionFields extends BaseEntityFields {
 
   static final List<String> allFields = [
     BaseEntityFields.id,
+    order,
     name,
     type,
     symbol,
@@ -36,6 +38,7 @@ Map<String, CategoryTransactionType> categoryTypeMap = {
 };
 
 class CategoryTransaction extends BaseEntity {
+  final int? order;
   final String name;
   final CategoryTransactionType type;
   final String symbol;
@@ -45,6 +48,7 @@ class CategoryTransaction extends BaseEntity {
 
   const CategoryTransaction({
     super.id,
+    required this.order,
     required this.name,
     required this.type,
     required this.symbol,
@@ -57,6 +61,7 @@ class CategoryTransaction extends BaseEntity {
 
   CategoryTransaction copy({
     int? id,
+    int? order,
     String? name,
     CategoryTransactionType? type,
     String? symbol,
@@ -75,11 +80,13 @@ class CategoryTransaction extends BaseEntity {
     parent: parent ?? this.parent,
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
+    order: order ?? this.order,
   );
 
   static CategoryTransaction fromJson(Map<String, Object?> json) =>
       CategoryTransaction(
         id: json[BaseEntityFields.id] as int?,
+        order: json[CategoryTransactionFields.order] as int,
         name: json[CategoryTransactionFields.name] as String,
         type: categoryTypeMap[json[CategoryTransactionFields.type] as String]!,
         symbol: json[CategoryTransactionFields.symbol] as String,
@@ -92,6 +99,7 @@ class CategoryTransaction extends BaseEntity {
 
   Map<String, Object?> toJson({bool update = false}) => {
     BaseEntityFields.id: id,
+    CategoryTransactionFields.order: order,
     CategoryTransactionFields.name: name,
     CategoryTransactionFields.type: categoryTypeMap.keys.firstWhere(
       (k) => categoryTypeMap[k] == type,
@@ -108,12 +116,20 @@ class CategoryTransaction extends BaseEntity {
 }
 
 class CategoryTransactionMethods extends SossoldiDatabase {
-  final orderByASC = '${CategoryTransactionFields.createdAt} ASC';
+  final orderByASC = '${CategoryTransactionFields.order} ASC';
 
   Future<CategoryTransaction> insert(CategoryTransaction item) async {
     final db = await database;
-    final id = await db.insert(categoryTransactionTable, item.toJson());
-    return item.copy(id: id);
+
+    final result = await db.rawQuery(
+      'SELECT COUNT(*) AS count FROM $categoryTransactionTable',
+    );
+    final nextOrder = result.first['count'] as int;
+
+    final newItem = item.copy(order: nextOrder);
+
+    final id = await db.insert(categoryTransactionTable, newItem.toJson());
+    return newItem.copy(id: id);
   }
 
   Future<CategoryTransaction> selectById(int id) async {
@@ -183,11 +199,28 @@ class CategoryTransactionMethods extends SossoldiDatabase {
   Future<int> deleteById(int id) async {
     final db = await database;
 
-    return await db.delete(
+    final rows = await db.delete(
       categoryTransactionTable,
       where: '${CategoryTransactionFields.id} = ?',
       whereArgs: [id],
     );
+    await normalizeOrders();
+    return rows;
+  }
+
+  Future<void> updateOrders(List<CategoryTransaction> items) async {
+    final db = await database;
+
+    await db.transaction((txn) async {
+      for (int i = 0; i < items.length; i++) {
+        await txn.update(
+          categoryTransactionTable,
+          {CategoryTransactionFields.order: i},
+          where: '${CategoryTransactionFields.id} = ?',
+          whereArgs: [items[i].id],
+        );
+      }
+    });
   }
 
   CategoryTransactionType? transactionToCategoryType(TransactionType type) {
@@ -207,6 +240,25 @@ class CategoryTransactionMethods extends SossoldiDatabase {
         return TransactionType.income;
       case CategoryTransactionType.expense:
         return TransactionType.expense;
+    }
+  }
+
+  Future<void> normalizeOrders() async {
+    final db = await database;
+
+    final result = await db.query(
+      categoryTransactionTable,
+      columns: [CategoryTransactionFields.id],
+      orderBy: orderByASC,
+    );
+
+    for (int i = 0; i < result.length; i++) {
+      await db.update(
+        categoryTransactionTable,
+        {CategoryTransactionFields.order: i},
+        where: '${CategoryTransactionFields.id} = ?',
+        whereArgs: [result[i][CategoryTransactionFields.id]],
+      );
     }
   }
 }
