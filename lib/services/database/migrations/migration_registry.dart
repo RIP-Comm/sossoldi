@@ -14,7 +14,7 @@ library;
 import '0001_initial_schema.dart';
 import '0002_account_net_worth.dart';
 import '0003_recurring_transaction_type.dart';
-import '0004_add_category_position.dart';
+import '0004_add_category_order.dart';
 
 import '../migration_base.dart';
 
@@ -30,7 +30,7 @@ List<Migration> getMigrations() {
     AccountNetWorth(),
     RecurringTransactionType(),
     // Add future migrations here
-    AddCategoryPosition(),
+    AddCategoryOrder(),
   ];
 }
 

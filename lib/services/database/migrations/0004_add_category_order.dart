@@ -4,8 +4,8 @@ import '../migration_base.dart';
 // Models
 import '/model/category_transaction.dart';
 
-class AddCategoryPosition extends Migration {
-  AddCategoryPosition()
+class AddCategoryOrder extends Migration {
+  AddCategoryOrder()
     : super(version: 4, description: 'Add position column to category transaction');
 
   @override

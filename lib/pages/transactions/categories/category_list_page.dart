@@ -8,13 +8,13 @@ import '../../../ui/widgets/default_card.dart';
 import '../../../ui/widgets/rounded_icon.dart';
 import '../../../ui/device.dart';
 
-class CategoryList extends ConsumerWidget { 
+class CategoryList extends ConsumerWidget {
   const CategoryList({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final categorysList = ref.watch(categoriesProvider);
-    
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -70,9 +70,11 @@ class CategoryList extends ConsumerWidget {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: categorys.length,
-                
-                 onReorder: (oldIndex, newIndex) {
-                  ref.read(categoriesProvider.notifier).reorderCategories(oldIndex, newIndex);
+
+                onReorder: (oldIndex, newIndex) {
+                  ref
+                      .read(categoriesProvider.notifier)
+                      .reorderCategories(oldIndex, newIndex);
                 },
 
                 proxyDecorator: (child, index, animation) {
@@ -86,18 +88,20 @@ class CategoryList extends ConsumerWidget {
                 itemBuilder: (context, i) {
                   CategoryTransaction category = categorys[i];
                   return Container(
-                    key: ValueKey(category.id), 
+                    key: ValueKey(category.id),
                     margin: const EdgeInsets.only(bottom: Sizes.lg),
                     child: DefaultCard(
                       onTap: () {
-                        ref.read(selectedCategoryProvider.notifier).state = category;
+                        ref.read(selectedCategoryProvider.notifier).state =
+                            category;
                         Navigator.of(context).pushNamed('/add-category');
                       },
                       child: Row(
                         children: [
                           RoundedIcon(
                             icon: iconList[category.symbol],
-                            backgroundColor: categoryColorListTheme[category.color],
+                            backgroundColor:
+                                categoryColorListTheme[category.color],
                             size: 30,
                           ),
                           const SizedBox(width: Sizes.md),
@@ -106,7 +110,9 @@ class CategoryList extends ConsumerWidget {
                               category.name,
                               style: Theme.of(context).textTheme.titleLarge!
                                   .copyWith(
-                                    color: Theme.of(context).colorScheme.primary,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
                                   ),
                             ),
                           ),

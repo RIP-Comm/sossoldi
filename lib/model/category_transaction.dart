@@ -6,25 +6,25 @@ const String categoryTransactionTable = 'categoryTransaction';
 
 class CategoryTransactionFields extends BaseEntityFields {
   static String id = BaseEntityFields.getId;
-  static String order = 'position';
   static String name = 'name';
   static String type = 'type';
   static String symbol = 'symbol';
   static String color = 'color';
   static String note = 'note';
   static String parent = 'parent';
+  static String order = 'position';
   static String createdAt = BaseEntityFields.getCreatedAt;
   static String updatedAt = BaseEntityFields.getUpdatedAt;
 
   static final List<String> allFields = [
     BaseEntityFields.id,
-    order,
     name,
     type,
     symbol,
     color,
     note,
     parent,
+    order,
     BaseEntityFields.createdAt,
     BaseEntityFields.updatedAt,
   ];
@@ -38,36 +38,36 @@ Map<String, CategoryTransactionType> categoryTypeMap = {
 };
 
 class CategoryTransaction extends BaseEntity {
-  final int? order;
   final String name;
   final CategoryTransactionType type;
   final String symbol;
   final int color;
   final String? note;
   final int? parent;
+  final int? order;
 
   const CategoryTransaction({
     super.id,
-    required this.order,
     required this.name,
     required this.type,
     required this.symbol,
     required this.color,
     this.note,
     this.parent,
+    required this.order,
     super.createdAt,
     super.updatedAt,
   });
 
   CategoryTransaction copy({
     int? id,
-    int? order,
     String? name,
     CategoryTransactionType? type,
     String? symbol,
     int? color,
     String? note,
     int? parent,
+    int? order,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) => CategoryTransaction(
@@ -78,28 +78,27 @@ class CategoryTransaction extends BaseEntity {
     color: color ?? this.color,
     note: note ?? this.note,
     parent: parent ?? this.parent,
+    order: order ?? this.order,
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
-    order: order ?? this.order,
   );
 
   static CategoryTransaction fromJson(Map<String, Object?> json) =>
       CategoryTransaction(
         id: json[BaseEntityFields.id] as int?,
-        order: json[CategoryTransactionFields.order] as int,
         name: json[CategoryTransactionFields.name] as String,
         type: categoryTypeMap[json[CategoryTransactionFields.type] as String]!,
         symbol: json[CategoryTransactionFields.symbol] as String,
         color: json[CategoryTransactionFields.color] as int,
         note: json[CategoryTransactionFields.note] as String?,
         parent: json[CategoryTransactionFields.parent] as int?,
+        order: json[CategoryTransactionFields.order] as int,
         createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
         updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String),
       );
 
   Map<String, Object?> toJson({bool update = false}) => {
     BaseEntityFields.id: id,
-    CategoryTransactionFields.order: order,
     CategoryTransactionFields.name: name,
     CategoryTransactionFields.type: categoryTypeMap.keys.firstWhere(
       (k) => categoryTypeMap[k] == type,
@@ -108,6 +107,7 @@ class CategoryTransaction extends BaseEntity {
     CategoryTransactionFields.color: color,
     CategoryTransactionFields.note: note,
     CategoryTransactionFields.parent: parent,
+    CategoryTransactionFields.order: order,
     BaseEntityFields.createdAt: update
         ? createdAt?.toIso8601String()
         : DateTime.now().toIso8601String(),
@@ -116,7 +116,7 @@ class CategoryTransaction extends BaseEntity {
 }
 
 class CategoryTransactionMethods extends SossoldiDatabase {
-  final orderByASC = '${CategoryTransactionFields.order} ASC';
+  final orderByASC = '"${CategoryTransactionFields.order}" ASC';
 
   Future<CategoryTransaction> insert(CategoryTransaction item) async {
     final db = await database;

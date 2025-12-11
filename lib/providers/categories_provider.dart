@@ -77,28 +77,24 @@ class AsyncCategoriesNotifier extends AsyncNotifier<List<CategoryTransaction>> {
     return _getCategories();
   }
 
-Future<void> reorderCategories(int oldIndex, int newIndex) async {
+  Future<void> reorderCategories(int oldIndex, int newIndex) async {
     final currentList = state.value;
     if (currentList == null) return;
 
-     if (oldIndex < newIndex) {
+    if (oldIndex < newIndex) {
       newIndex -= 1;
     }
 
-     final newList = List<CategoryTransaction>.from(currentList);
+    final newList = List<CategoryTransaction>.from(currentList);
     final item = newList.removeAt(oldIndex);
     newList.insert(newIndex, item);
 
- 
     state = AsyncData(newList);
 
-   
     await AsyncValue.guard(() async {
       await CategoryTransactionMethods().updateOrders(newList);
-     
     });
   }
-
 }
 
 final categoriesProvider =
