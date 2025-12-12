@@ -29,16 +29,15 @@ class CategoriesCardState extends ConsumerState<CategoriesCard> {
         ref.watch(categoryTotalAmountProvider).value ?? 0;
 
     return Column(
+      spacing: Sizes.sm,
       children: [
         const CardLabel(label: "Categories"),
-        const SizedBox(height: Sizes.sm),
         DefaultContainer(
           child: Column(
+            spacing: Sizes.xl,
             children: [
               const MonthSelector(type: MonthSelectorType.simple),
-              const SizedBox(height: Sizes.xxl),
               const CategoryTypeButton(),
-              const SizedBox(height: Sizes.xl),
               categoryMap.when(
                 data: (categories) {
                   _categoriesCount = categories.length;
@@ -87,12 +86,12 @@ class CategoriesContent extends StatelessWidget {
     );
 
     return Column(
+      spacing: Sizes.xl,
       children: [
         CategoriesGraphPieChart(
           categoryMap: sortedCategories,
           total: totalAmount,
         ),
-        const SizedBox(height: Sizes.xl),
         ListView.builder(
           itemCount: sortedCategories.length,
           shrinkWrap: true,
@@ -107,7 +106,6 @@ class CategoriesContent extends StatelessWidget {
             );
           },
         ),
-        const SizedBox(height: Sizes.xxl),
         const CategoriesBarChart(),
       ],
     );

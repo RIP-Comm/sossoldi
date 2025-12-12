@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../model/transaction.dart';
+import '../../../../model/recurring_transaction.dart';
 import '../../../../providers/transactions_provider.dart';
 import '../../../../ui/device.dart';
 
@@ -19,22 +19,15 @@ class _RecurrenceSelectorState extends ConsumerState<RecurrenceSelector> {
       body: Container(
         color: Theme.of(context).colorScheme.surface,
         child: ListView.builder(
-          itemCount: recurrenceMap.length,
+          itemCount: Recurrence.values.length,
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           itemBuilder: (context, i) {
-            var j = 0;
-            late Map<Recurrence, String> recurrence;
-            recurrenceMap.forEach((key, value) {
-              if (j == i) {
-                recurrence = {key: value.label};
-              }
-              j++;
-            });
+            Recurrence recurrence = Recurrence.values[i];
             return Material(
               child: InkWell(
-                onTap: () => ref.read(intervalProvider.notifier).state =
-                    recurrence.keys.first,
+                onTap: () =>
+                    ref.read(intervalProvider.notifier).state = recurrence,
                 child: ListTile(
                   contentPadding: const EdgeInsets.fromLTRB(
                     Sizes.xxl,
@@ -43,12 +36,12 @@ class _RecurrenceSelectorState extends ConsumerState<RecurrenceSelector> {
                     Sizes.lg,
                   ),
                   title: Text(
-                    recurrence.values.first,
+                    recurrence.label,
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
-                  trailing: ref.watch(intervalProvider) == recurrence.keys.first
+                  trailing: ref.watch(intervalProvider) == recurrence
                       ? const Icon(Icons.check)
                       : null,
                 ),

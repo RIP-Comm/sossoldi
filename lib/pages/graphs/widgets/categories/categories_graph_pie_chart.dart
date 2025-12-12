@@ -114,7 +114,7 @@ class PieChartCategoryInfo extends ConsumerWidget {
           style: Theme.of(context).textTheme.headlineLarge?.copyWith(
             color:
                 (categoryValue != null && categoryValue >= 0) ||
-                    (selectedCategory == null && total > 0)
+                    (selectedCategory == null && total >= 0)
                 ? green
                 : red,
             fontSize: 18,

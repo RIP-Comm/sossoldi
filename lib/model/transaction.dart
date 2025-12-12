@@ -1,7 +1,11 @@
+import 'package:flutter/material.dart';
+
+import '../constants/style.dart';
 import '../services/database/sossoldi_database.dart';
 import 'bank_account.dart';
 import 'base_entity.dart';
 import 'category_transaction.dart';
+import 'recurring_transaction.dart';
 
 const String transactionTable = 'transaction';
 
@@ -40,12 +44,6 @@ class TransactionFields extends BaseEntityFields {
   ];
 }
 
-Map<String, TransactionType> typeMap = {
-  "IN": TransactionType.income,
-  "OUT": TransactionType.expense,
-  "TRSF": TransactionType.transfer,
-};
-
 enum TransactionType {
   income,
   expense,
@@ -62,76 +60,24 @@ enum TransactionType {
     _ => "",
   };
 
+  Color toColor({Brightness brightness = Brightness.light}) {
+    switch (this) {
+      case TransactionType.income:
+        return green;
+      case TransactionType.expense:
+        return red;
+      case TransactionType.transfer:
+        if (brightness == Brightness.light) {
+          return blue3;
+        }
+        return darkBlue6;
+    }
+  }
+
   static TransactionType fromJson(String code) =>
       TransactionType.values.firstWhere((e) => e.code == code);
 
   String toJson() => code;
-}
-
-enum Recurrence {
-  daily,
-  weekly,
-  monthly,
-  bimonthly,
-  quarterly,
-  semester,
-  annual,
-}
-
-class RecurrenceData {
-  final Recurrence recurrence;
-  final String label;
-  final int days;
-
-  RecurrenceData({
-    required this.recurrence,
-    required this.label,
-    required this.days,
-  });
-}
-
-Map<Recurrence, RecurrenceData> recurrenceMap = {
-  Recurrence.daily: RecurrenceData(
-    recurrence: Recurrence.daily,
-    label: "Daily",
-    days: 1,
-  ),
-  Recurrence.weekly: RecurrenceData(
-    recurrence: Recurrence.weekly,
-    label: "Weekly",
-    days: 7,
-  ),
-  Recurrence.monthly: RecurrenceData(
-    recurrence: Recurrence.monthly,
-    label: "Monthly",
-    days: 30,
-  ),
-  Recurrence.bimonthly: RecurrenceData(
-    recurrence: Recurrence.bimonthly,
-    label: "Bimonthly",
-    days: 60,
-  ),
-  Recurrence.quarterly: RecurrenceData(
-    recurrence: Recurrence.quarterly,
-    label: "Quarterly",
-    days: 90,
-  ),
-  Recurrence.semester: RecurrenceData(
-    recurrence: Recurrence.semester,
-    label: "Semester",
-    days: 180,
-  ),
-  Recurrence.annual: RecurrenceData(
-    recurrence: Recurrence.annual,
-    label: "Annual",
-    days: 365,
-  ),
-};
-
-Recurrence parseRecurrence(String s) {
-  return recurrenceMap.entries
-      .firstWhere((entry) => entry.value.label.toLowerCase() == s.toLowerCase())
-      .key;
 }
 
 class Transaction extends BaseEntity {

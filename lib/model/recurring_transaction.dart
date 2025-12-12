@@ -1,6 +1,7 @@
 import 'dart:developer' as dev;
 
 import '../services/database/sossoldi_database.dart';
+import '../ui/extensions.dart';
 import 'transaction.dart';
 import 'base_entity.dart';
 
@@ -36,22 +37,81 @@ class RecurringTransactionFields extends BaseEntityFields {
   ];
 }
 
-Map<String, dynamic> recurrenciesMap = {
-  'DAILY': {'label': 'Daily', 'entity': 'days', 'amount': 1},
-  'WEEKLY': {'label': 'Weekly', 'entity': 'days', 'amount': 7},
-  'MONTHLY': {'label': 'Monthly', 'entity': 'months', 'amount': 1},
-  'BIMONTHLY': {'label': 'Bimonthly', 'entity': 'months', 'amount': 2},
-  'QUARTERLY': {'label': 'Quarterly', 'entity': 'months', 'amount': 3},
-  'SEMESTER': {'label': 'Half Yearly', 'entity': 'months', 'amount': 6},
-  'YEARLY': {'label': 'Yearly', 'entity': 'months', 'amount': 12},
-};
+enum Recurrence {
+  daily,
+  weekly,
+  monthly,
+  bimonthly,
+  quarterly,
+  semester,
+  annual;
+
+  String get label => name.capitalize();
+
+  int get days {
+    switch (this) {
+      case Recurrence.daily:
+        return 1;
+      case Recurrence.weekly:
+        return 7;
+      case Recurrence.monthly:
+        return 30;
+      case Recurrence.bimonthly:
+        return 60;
+      case Recurrence.quarterly:
+        return 90;
+      case Recurrence.semester:
+        return 180;
+      case Recurrence.annual:
+        return 365;
+    }
+  }
+
+  String get entity {
+    switch (this) {
+      case Recurrence.daily:
+      case Recurrence.weekly:
+        return 'days';
+      case Recurrence.monthly:
+      case Recurrence.bimonthly:
+      case Recurrence.quarterly:
+      case Recurrence.semester:
+      case Recurrence.annual:
+        return 'months';
+    }
+  }
+
+  int get amount {
+    switch (this) {
+      case Recurrence.daily:
+        return 1;
+      case Recurrence.weekly:
+        return 7;
+      case Recurrence.monthly:
+        return 1;
+      case Recurrence.bimonthly:
+        return 2;
+      case Recurrence.quarterly:
+        return 3;
+      case Recurrence.semester:
+        return 6;
+      case Recurrence.annual:
+        return 12;
+    }
+  }
+
+  static Recurrence fromJson(String value) =>
+      Recurrence.values.firstWhere((e) => e.name.toUpperCase() == value);
+
+  String toJson() => name.toUpperCase();
+}
 
 class RecurringTransaction extends BaseEntity {
   final DateTime fromDate;
   final DateTime? toDate;
   final num amount;
   final String note;
-  final String recurrency;
+  final Recurrence recurrency;
   final int idCategory;
   final int idBankAccount;
   final TransactionType type;
@@ -78,7 +138,7 @@ class RecurringTransaction extends BaseEntity {
     DateTime? toDate,
     num? amount,
     String? note,
-    String? recurrency,
+    Recurrence? recurrency,
     int? idCategory,
     TransactionType? type,
     int? idBankAccount,
@@ -111,7 +171,9 @@ class RecurringTransaction extends BaseEntity {
             : null,
         amount: json[RecurringTransactionFields.amount] as num,
         note: json[RecurringTransactionFields.note] as String,
-        recurrency: json[RecurringTransactionFields.recurrency] as String,
+        recurrency: Recurrence.fromJson(
+          json[RecurringTransactionFields.recurrency] as String,
+        ),
         idCategory: json[RecurringTransactionFields.idCategory] as int,
         type: TransactionType.fromJson(
           json[RecurringTransactionFields.type] as String,
@@ -133,7 +195,7 @@ class RecurringTransaction extends BaseEntity {
     RecurringTransactionFields.amount: amount,
     RecurringTransactionFields.note: note,
     RecurringTransactionFields.type: type.toJson(),
-    RecurringTransactionFields.recurrency: recurrency,
+    RecurringTransactionFields.recurrency: recurrency.toJson(),
     RecurringTransactionFields.idCategory: idCategory,
     RecurringTransactionFields.idBankAccount: idBankAccount,
     RecurringTransactionFields.lastInsertion: lastInsertion?.toIso8601String(),
@@ -238,21 +300,8 @@ class RecurringTransactionMethods extends SossoldiDatabase {
         lastTransactionDate = transaction.fromDate;
       }
 
-      String entity =
-          recurrenciesMap[transaction.recurrency]?['entity'] ?? 'UNMAPPED';
-      int entityAmt = recurrenciesMap[transaction.recurrency]?['amount'] ?? 0;
-
       try {
-        if (entityAmt == 0) {
-          throw Exception('No amount provided for entity "$entity"');
-        }
-
-        populateRecurringTransaction(
-          entity,
-          lastTransactionDate,
-          transaction,
-          entityAmt,
-        );
+        populateRecurringTransaction(lastTransactionDate, transaction);
       } catch (e) {
         dev.log('$e');
       }
@@ -282,11 +331,12 @@ class RecurringTransactionMethods extends SossoldiDatabase {
   }
 
   void populateRecurringTransaction(
-    String scope,
     DateTime lastTransactionDate,
     RecurringTransaction transaction,
-    int amount,
   ) {
+    String scope = transaction.recurrency.entity;
+    int amount = transaction.recurrency.amount;
+
     if (amount == 0) {
       throw Exception('No amount provided for entity "$scope"');
     }

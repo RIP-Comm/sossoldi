@@ -172,13 +172,13 @@ class CollapsedWidget extends StatelessWidget {
                   TextSpan(
                     text: totalAmount.toCurrency(),
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: totalAmount >= 0 ? green : red,
+                      color: totalAmount.toColor(),
                     ),
                   ),
                   TextSpan(
                     text: currencyState.selectedCurrency.symbol,
                     style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                      color: totalAmount >= 0 ? green : red,
+                      color: totalAmount.toColor(),
                     ),
                   ),
                 ],

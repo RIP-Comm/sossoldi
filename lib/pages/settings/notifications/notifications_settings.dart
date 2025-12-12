@@ -188,12 +188,7 @@ class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
                     ],
                   ),
                   // TODO: Implement this feature
-                  // const SizedBox(height: 12),
-                  // Divider(
-                  //   height: 1,
-                  //   color: Theme.of(context).colorScheme.primary.withOpacity(0.4),
-                  // ),
-                  // const SizedBox(height: 12),
+                  // const Divider(height: 1, color: grey2),
                   // Row(
                   //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   //   children: [

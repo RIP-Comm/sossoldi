@@ -8,7 +8,6 @@ import '../../../../providers/currency_provider.dart';
 import '../../../../providers/transactions_provider.dart';
 import '../../../../ui/formatters/decimal_text_input_formatter.dart';
 import '../../../../ui/device.dart';
-import '../../../../ui/extensions.dart';
 
 class AmountWidget extends ConsumerStatefulWidget {
   const AmountWidget(this.amountController, {super.key});
