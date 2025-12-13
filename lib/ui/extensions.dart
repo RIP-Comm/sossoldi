@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../constants/style.dart';
-import '../model/transaction.dart';
 
 /// Adds extensions to num  to make creating durations more succint:
 ///
@@ -53,6 +52,8 @@ extension StringExtension on String {
 /// ```
 extension NumExtension on num {
   String toCurrency() => toStringAsFixed(2);
+
+  Color toColor() => this >= 0 ? green : red;
 }
 
 /// Adds a method to [DateTime] to convert it to a string.
@@ -72,27 +73,5 @@ extension DateTimeExtension on DateTime {
 
   bool isSameDay(DateTime other) {
     return year == other.year && month == other.month && day == other.day;
-  }
-}
-
-/// Adds a method to [TransactionType] to convert it to a color.
-///
-/// ```
-/// TransactionType.income.toColor(); // green
-/// TransactionType.expense.toColor(); // red
-/// TransactionType.transfer.toColor(); // blue3
-extension TransactionTypeExtension on TransactionType {
-  Color toColor({Brightness brightness = Brightness.light}) {
-    switch (this) {
-      case TransactionType.income:
-        return green;
-      case TransactionType.expense:
-        return red;
-      case TransactionType.transfer:
-        if (brightness == Brightness.light) {
-          return blue3;
-        }
-        return darkBlue6;
-    }
   }
 }

@@ -5,6 +5,7 @@ import '../../../services/database/sossoldi_database.dart';
 import '../../../ui/device.dart';
 import '../../../services/csv/csv_file_picker.dart';
 import '../../../ui/snack_bars/snack_bar.dart';
+import '../../../ui/widgets/default_card.dart';
 
 class BackupPage extends ConsumerStatefulWidget {
   const BackupPage({super.key});
@@ -135,108 +136,80 @@ class _BackupPageState extends ConsumerState<BackupPage> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Padding(
-          padding: const EdgeInsets.all(Sizes.lg),
-          child: Column(
-            children: [
-              ListView.separated(
-                itemCount: options.length,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: Sizes.lg),
-                itemBuilder: (context, i) {
-                  final option = options[i];
-                  return Card(
-                    elevation: 2,
-                    child: InkWell(
-                      onTap: () {
-                        if (i == 0) {
-                          // Show confirmation dialog for the first option
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text('Warning: Data Overwrite'),
-                              content: const Text(
-                                'Importing this file will permanently replace your existing data. This action cannot be undone. Ensure you have a backup before proceeding.',
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text('Cancel'),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                    _handleImport();
-                                  },
-                                  child: const Text('Proceed with Import'),
-                                ),
-                              ],
-                            ),
-                          );
-                        } else {
-                          _handleExport();
-                        }
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(Sizes.lg),
-                        child: Row(
-                          children: [
-                            Icon(
-                              option.icon,
-                              color: Theme.of(context).colorScheme.primary,
-                              size: 32,
-                            ),
-                            const SizedBox(width: Sizes.lg),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    option.title,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge!
-                                        .copyWith(
-                                          color: Theme.of(
-                                            context,
-                                          ).colorScheme.primary,
-                                        ),
-                                  ),
-                                  const SizedBox(height: Sizes.xs),
-                                  Text(
-                                    option.description,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium!
-                                        .copyWith(
-                                          color: Theme.of(
-                                            context,
-                                          ).colorScheme.primary,
-                                        ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Icon(
-                              Icons.chevron_right,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          ],
+      body: ListView.separated(
+        padding: const EdgeInsets.symmetric(vertical: Sizes.lg),
+        itemCount: options.length,
+        separatorBuilder: (context, index) => const SizedBox(height: Sizes.lg),
+        itemBuilder: (context, index) {
+          final option = options[index];
+          return DefaultCard(
+            onTap: () {
+              if (index == 0) {
+                // Show confirmation dialog for the first option
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('Warning: Data Overwrite'),
+                    content: const Text(
+                      'Importing this file will permanently replace your existing data. This action cannot be undone. Ensure you have a backup before proceeding.',
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          _handleImport();
+                        },
+                        child: const Text('Proceed with Import'),
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                _handleExport();
+              }
+            },
+            child: Row(
+              children: [
+                Icon(
+                  option.icon,
+                  color: Theme.of(context).colorScheme.primary,
+                  size: 32,
+                ),
+                const SizedBox(width: Sizes.lg),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        option.title,
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
+                      const SizedBox(height: Sizes.xs),
+                      Text(
+                        option.description,
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(
+                  Icons.chevron_right,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

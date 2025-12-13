@@ -4,9 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../constants/constants.dart';
 import '../../../../model/category_transaction.dart';
 import '../../../../providers/categories_provider.dart';
+import '../../../ui/device.dart';
 import '../../../ui/widgets/default_card.dart';
 import '../../../ui/widgets/rounded_icon.dart';
-import '../../../ui/device.dart';
 
 class CategoryList extends ConsumerWidget {
   const CategoryList({super.key});
@@ -14,7 +14,7 @@ class CategoryList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final categorysList = ref.watch(categoriesProvider);
-
+    ref.listen(selectedCategoryProvider, (_, _) {});
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(

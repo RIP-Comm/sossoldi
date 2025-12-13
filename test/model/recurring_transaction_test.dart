@@ -13,7 +13,7 @@ void main() {
       toDate: toDateValue,
       amount: 14,
       note: 'Test Transaction',
-      recurrency: 'MONTHLY',
+      recurrency: Recurrence.monthly,
       type: TransactionType.expense,
       idBankAccount: 34,
       idCategory: 24,
@@ -63,7 +63,9 @@ void main() {
     );
     assert(t.amount == json[RecurringTransactionFields.amount]);
     assert(t.note == json[RecurringTransactionFields.note]);
-    assert(t.recurrency == json[RecurringTransactionFields.recurrency]);
+    assert(
+      t.recurrency.toJson() == json[RecurringTransactionFields.recurrency],
+    );
     assert(t.idBankAccount == json[RecurringTransactionFields.idBankAccount]);
     assert(t.idCategory == json[RecurringTransactionFields.idCategory]);
     assert(
@@ -84,7 +86,7 @@ void main() {
       amount: 0,
       type: TransactionType.expense,
       note: "Test transaction",
-      recurrency: "MONTHLY",
+      recurrency: Recurrence.monthly,
       idBankAccount: 4,
       idCategory: 45,
       createdAt: DateTime.utc(2022),
@@ -104,7 +106,9 @@ void main() {
     );
     assert(t.amount == json[RecurringTransactionFields.amount]);
     assert(t.note == json[RecurringTransactionFields.note]);
-    assert(t.recurrency == json[RecurringTransactionFields.recurrency]);
+    assert(
+      t.recurrency.toJson() == json[RecurringTransactionFields.recurrency],
+    );
     assert(t.idBankAccount == json[RecurringTransactionFields.idBankAccount]);
     assert(t.idCategory == json[RecurringTransactionFields.idCategory]);
     assert(

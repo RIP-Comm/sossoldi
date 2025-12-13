@@ -30,12 +30,31 @@ class CategoryTransactionFields extends BaseEntityFields {
   ];
 }
 
-enum CategoryTransactionType { income, expense }
+enum CategoryTransactionType {
+  income,
+  expense;
 
-Map<String, CategoryTransactionType> categoryTypeMap = {
-  "IN": CategoryTransactionType.income,
-  "OUT": CategoryTransactionType.expense,
-};
+  String get code => switch (this) {
+    CategoryTransactionType.income => "IN",
+    CategoryTransactionType.expense => "OUT",
+  };
+
+  TransactionType get transactionType => switch (this) {
+    CategoryTransactionType.income => TransactionType.income,
+    CategoryTransactionType.expense => TransactionType.expense,
+  };
+
+  static CategoryTransactionType fromJson(String value) {
+    switch (value) {
+      case "IN":
+        return CategoryTransactionType.income;
+      case "OUT":
+        return CategoryTransactionType.expense;
+      default:
+        throw ArgumentError('Invalid : $value');
+    }
+  }
+}
 
 class CategoryTransaction extends BaseEntity {
   final String name;
@@ -87,7 +106,9 @@ class CategoryTransaction extends BaseEntity {
       CategoryTransaction(
         id: json[BaseEntityFields.id] as int?,
         name: json[CategoryTransactionFields.name] as String,
-        type: categoryTypeMap[json[CategoryTransactionFields.type] as String]!,
+        type: CategoryTransactionType.fromJson(
+          json[CategoryTransactionFields.type] as String,
+        ),
         symbol: json[CategoryTransactionFields.symbol] as String,
         color: json[CategoryTransactionFields.color] as int,
         note: json[CategoryTransactionFields.note] as String?,
@@ -100,9 +121,7 @@ class CategoryTransaction extends BaseEntity {
   Map<String, Object?> toJson({bool update = false}) => {
     BaseEntityFields.id: id,
     CategoryTransactionFields.name: name,
-    CategoryTransactionFields.type: categoryTypeMap.keys.firstWhere(
-      (k) => categoryTypeMap[k] == type,
-    ),
+    CategoryTransactionFields.type: type.code,
     CategoryTransactionFields.symbol: symbol,
     CategoryTransactionFields.color: color,
     CategoryTransactionFields.note: note,
@@ -165,15 +184,11 @@ class CategoryTransactionMethods extends SossoldiDatabase {
   ) async {
     final db = await database;
 
-    var key = categoryTypeMap.entries
-        .firstWhere((entry) => entry.value == type)
-        .key;
-
     final result = await db.query(
       categoryTransactionTable,
       columns: CategoryTransactionFields.allFields,
       where: '${CategoryTransactionFields.type} = ?',
-      whereArgs: [key],
+      whereArgs: [type.code],
       orderBy: orderByASC,
     );
 
