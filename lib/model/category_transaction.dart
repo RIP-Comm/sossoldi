@@ -44,7 +44,7 @@ class CategoryTransaction extends BaseEntity {
   final int color;
   final String? note;
   final int? parent;
-  final int? order;
+  final int order;
 
   const CategoryTransaction({
     super.id,
