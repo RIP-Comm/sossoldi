@@ -134,8 +134,9 @@ class PanelListTile extends ConsumerWidget {
                                   Expanded(
                                     child: Text(
                                       (transaction.note?.isEmpty ?? true)
-                                          ? DateFormat("dd MMMM - HH:mm")
-                                              .format(transaction.date)
+                                          ? DateFormat(
+                                              "dd MMMM - HH:mm",
+                                            ).format(transaction.date)
                                           : transaction.note!,
                                       overflow: TextOverflow.ellipsis,
                                       style: Theme.of(
