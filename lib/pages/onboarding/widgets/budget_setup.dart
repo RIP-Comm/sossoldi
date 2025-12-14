@@ -2,15 +2,15 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../constants/constants.dart';
+import '../../../constants/style.dart';
+import '../../../model/budget.dart';
+import '../../../providers/budgets_provider.dart';
+import '../../../providers/categories_provider.dart';
 import '../../../ui/device.dart';
-import '../../transactions/categories/create_edit_category_page.dart';
-import '/constants/constants.dart';
-import '/constants/style.dart';
-import '/model/budget.dart';
+import '../../categories/create_edit_category_page.dart';
 import 'account_setup.dart';
 import 'add_budget_dialog.dart';
-import '/providers/budgets_provider.dart';
-import '/providers/categories_provider.dart';
 import 'add_category_button.dart';
 import 'category_button.dart';
 

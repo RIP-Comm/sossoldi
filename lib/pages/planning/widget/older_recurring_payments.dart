@@ -11,7 +11,6 @@ import '../../../providers/categories_provider.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../services/transactions/recurring_transaction_calculator.dart';
 import '../../../ui/device.dart';
-import '../../../ui/extensions.dart';
 import '../../../ui/widgets/default_container.dart';
 import '../../../ui/widgets/rounded_icon.dart';
 
@@ -118,10 +117,8 @@ class _OlderRecurringPaymentsState
             const SizedBox(height: Sizes.sm),
             Builder(
               builder: (ctx) {
-                var recurrence = parseRecurrence(widget.transaction.recurrency);
-                final label = recurrenceMap[recurrence]!.label;
                 return Text(
-                  "$label"
+                  "${widget.transaction.recurrency.label}"
                   " on the ${ordinal(int.parse(getNextDueDay()))} day",
                   style: Theme.of(context).textTheme.bodyLarge,
                 );
@@ -274,9 +271,8 @@ class _OlderRecurringPaymentsState
   void _generateDataBasedOnRecurrentType() {
     var startDate = widget.transaction.fromDate;
     var endDate = widget.transaction.toDate ?? DateTime.now();
-    var recurrency = widget.transaction.recurrency;
-    switch (recurrency) {
-      case "MONTHLY":
+    switch (widget.transaction.recurrency) {
+      case Recurrence.monthly:
         RecurringTransactionCalculator.generateRecurringTransactionMonthly(
           startDate: startDate,
           endDate: endDate,
@@ -285,7 +281,7 @@ class _OlderRecurringPaymentsState
           yearlyTotal: yearlyTotal,
         );
         break;
-      case "BIMONTHLY":
+      case Recurrence.bimonthly:
         RecurringTransactionCalculator.generateRecurringTransactionBiMonthly(
           startDate: startDate,
           endDate: endDate,
@@ -294,7 +290,7 @@ class _OlderRecurringPaymentsState
           yearlyTotal: yearlyTotal,
         );
         break;
-      case "QUARTERLY":
+      case Recurrence.quarterly:
         RecurringTransactionCalculator.generateRecurringTransactionQuarterly(
           startDate: startDate,
           endDate: endDate,
@@ -303,7 +299,7 @@ class _OlderRecurringPaymentsState
           yearlyTotal: yearlyTotal,
         );
         break;
-      case "SEMESTER":
+      case Recurrence.semester:
         RecurringTransactionCalculator.generateRecurringTransactionSemester(
           startDate: startDate,
           endDate: endDate,
@@ -313,7 +309,7 @@ class _OlderRecurringPaymentsState
         );
         break;
 
-      case "ANNUAL":
+      case Recurrence.annual:
         RecurringTransactionCalculator.generateRecurringTransactionAnnually(
           startDate: startDate,
           endDate: endDate,
@@ -322,7 +318,7 @@ class _OlderRecurringPaymentsState
           yearlyTotal: yearlyTotal,
         );
         break;
-      case "DAILY":
+      case Recurrence.daily:
         RecurringTransactionCalculator.generateRecurringTransactionDaily(
           startDate: startDate,
           endDate: endDate,
@@ -331,7 +327,7 @@ class _OlderRecurringPaymentsState
           yearlyTotal: yearlyTotal,
         );
         break;
-      case "WEEKLY":
+      case Recurrence.weekly:
         RecurringTransactionCalculator.generateRecurringTransactionWeekly(
           startDate: startDate,
           endDate: endDate,
@@ -350,8 +346,7 @@ class _OlderRecurringPaymentsState
           widget.transaction.lastInsertion ?? widget.transaction.fromDate,
         )
         .inDays;
-    final daysInterval =
-        recurrenceMap[parseRecurrence(widget.transaction.recurrency)]!.days;
+    final daysInterval = widget.transaction.recurrency.days;
     final daysUntilNextTransaction = daysInterval - (daysPassed % daysInterval);
     return daysUntilNextTransaction.toString();
   }

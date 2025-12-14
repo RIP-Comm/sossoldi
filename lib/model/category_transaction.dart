@@ -12,6 +12,7 @@ class CategoryTransactionFields extends BaseEntityFields {
   static String color = 'color';
   static String note = 'note';
   static String parent = 'parent';
+  static String order = 'position';
   static String createdAt = BaseEntityFields.getCreatedAt;
   static String updatedAt = BaseEntityFields.getUpdatedAt;
 
@@ -23,17 +24,37 @@ class CategoryTransactionFields extends BaseEntityFields {
     color,
     note,
     parent,
+    order,
     BaseEntityFields.createdAt,
     BaseEntityFields.updatedAt,
   ];
 }
 
-enum CategoryTransactionType { income, expense }
+enum CategoryTransactionType {
+  income,
+  expense;
 
-Map<String, CategoryTransactionType> categoryTypeMap = {
-  "IN": CategoryTransactionType.income,
-  "OUT": CategoryTransactionType.expense,
-};
+  String get code => switch (this) {
+    CategoryTransactionType.income => "IN",
+    CategoryTransactionType.expense => "OUT",
+  };
+
+  TransactionType get transactionType => switch (this) {
+    CategoryTransactionType.income => TransactionType.income,
+    CategoryTransactionType.expense => TransactionType.expense,
+  };
+
+  static CategoryTransactionType fromJson(String value) {
+    switch (value) {
+      case "IN":
+        return CategoryTransactionType.income;
+      case "OUT":
+        return CategoryTransactionType.expense;
+      default:
+        throw ArgumentError('Invalid : $value');
+    }
+  }
+}
 
 class CategoryTransaction extends BaseEntity {
   final String name;
@@ -42,6 +63,7 @@ class CategoryTransaction extends BaseEntity {
   final int color;
   final String? note;
   final int? parent;
+  final int order;
 
   const CategoryTransaction({
     super.id,
@@ -51,6 +73,7 @@ class CategoryTransaction extends BaseEntity {
     required this.color,
     this.note,
     this.parent,
+    required this.order,
     super.createdAt,
     super.updatedAt,
   });
@@ -63,6 +86,7 @@ class CategoryTransaction extends BaseEntity {
     int? color,
     String? note,
     int? parent,
+    int? order,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) => CategoryTransaction(
@@ -73,6 +97,7 @@ class CategoryTransaction extends BaseEntity {
     color: color ?? this.color,
     note: note ?? this.note,
     parent: parent ?? this.parent,
+    order: order ?? this.order,
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
   );
@@ -81,11 +106,14 @@ class CategoryTransaction extends BaseEntity {
       CategoryTransaction(
         id: json[BaseEntityFields.id] as int?,
         name: json[CategoryTransactionFields.name] as String,
-        type: categoryTypeMap[json[CategoryTransactionFields.type] as String]!,
+        type: CategoryTransactionType.fromJson(
+          json[CategoryTransactionFields.type] as String,
+        ),
         symbol: json[CategoryTransactionFields.symbol] as String,
         color: json[CategoryTransactionFields.color] as int,
         note: json[CategoryTransactionFields.note] as String?,
         parent: json[CategoryTransactionFields.parent] as int?,
+        order: json[CategoryTransactionFields.order] as int,
         createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
         updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String),
       );
@@ -93,13 +121,12 @@ class CategoryTransaction extends BaseEntity {
   Map<String, Object?> toJson({bool update = false}) => {
     BaseEntityFields.id: id,
     CategoryTransactionFields.name: name,
-    CategoryTransactionFields.type: categoryTypeMap.keys.firstWhere(
-      (k) => categoryTypeMap[k] == type,
-    ),
+    CategoryTransactionFields.type: type.code,
     CategoryTransactionFields.symbol: symbol,
     CategoryTransactionFields.color: color,
     CategoryTransactionFields.note: note,
     CategoryTransactionFields.parent: parent,
+    CategoryTransactionFields.order: order,
     BaseEntityFields.createdAt: update
         ? createdAt?.toIso8601String()
         : DateTime.now().toIso8601String(),
@@ -108,12 +135,20 @@ class CategoryTransaction extends BaseEntity {
 }
 
 class CategoryTransactionMethods extends SossoldiDatabase {
-  final orderByASC = '${CategoryTransactionFields.createdAt} ASC';
+  final orderByASC = '"${CategoryTransactionFields.order}" ASC';
 
   Future<CategoryTransaction> insert(CategoryTransaction item) async {
     final db = await database;
-    final id = await db.insert(categoryTransactionTable, item.toJson());
-    return item.copy(id: id);
+
+    final result = await db.rawQuery(
+      'SELECT COUNT(*) AS count FROM $categoryTransactionTable',
+    );
+    final nextOrder = result.first['count'] as int;
+
+    final newItem = item.copy(order: nextOrder);
+
+    final id = await db.insert(categoryTransactionTable, newItem.toJson());
+    return newItem.copy(id: id);
   }
 
   Future<CategoryTransaction> selectById(int id) async {
@@ -149,15 +184,11 @@ class CategoryTransactionMethods extends SossoldiDatabase {
   ) async {
     final db = await database;
 
-    var key = categoryTypeMap.entries
-        .firstWhere((entry) => entry.value == type)
-        .key;
-
     final result = await db.query(
       categoryTransactionTable,
       columns: CategoryTransactionFields.allFields,
       where: '${CategoryTransactionFields.type} = ?',
-      whereArgs: [key],
+      whereArgs: [type.code],
       orderBy: orderByASC,
     );
 
@@ -183,11 +214,28 @@ class CategoryTransactionMethods extends SossoldiDatabase {
   Future<int> deleteById(int id) async {
     final db = await database;
 
-    return await db.delete(
+    final rows = await db.delete(
       categoryTransactionTable,
       where: '${CategoryTransactionFields.id} = ?',
       whereArgs: [id],
     );
+    await normalizeOrders();
+    return rows;
+  }
+
+  Future<void> updateOrders(List<CategoryTransaction> items) async {
+    final db = await database;
+
+    await db.transaction((txn) async {
+      for (int i = 0; i < items.length; i++) {
+        await txn.update(
+          categoryTransactionTable,
+          {CategoryTransactionFields.order: i},
+          where: '${CategoryTransactionFields.id} = ?',
+          whereArgs: [items[i].id],
+        );
+      }
+    });
   }
 
   CategoryTransactionType? transactionToCategoryType(TransactionType type) {
@@ -207,6 +255,25 @@ class CategoryTransactionMethods extends SossoldiDatabase {
         return TransactionType.income;
       case CategoryTransactionType.expense:
         return TransactionType.expense;
+    }
+  }
+
+  Future<void> normalizeOrders() async {
+    final db = await database;
+
+    final result = await db.query(
+      categoryTransactionTable,
+      columns: [CategoryTransactionFields.id],
+      orderBy: orderByASC,
+    );
+
+    for (int i = 0; i < result.length; i++) {
+      await db.update(
+        categoryTransactionTable,
+        {CategoryTransactionFields.order: i},
+        where: '${CategoryTransactionFields.id} = ?',
+        whereArgs: [result[i][CategoryTransactionFields.id]],
+      );
     }
   }
 }

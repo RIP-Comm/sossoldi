@@ -37,6 +37,7 @@ class AsyncCategoriesNotifier extends AsyncNotifier<List<CategoryTransaction>> {
       symbol: icon,
       type: type,
       color: color,
+      order: 0,
     );
 
     state = const AsyncValue.loading();
@@ -75,6 +76,25 @@ class AsyncCategoriesNotifier extends AsyncNotifier<List<CategoryTransaction>> {
   Future<List<CategoryTransaction>> getCategories() async {
     return _getCategories();
   }
+
+  Future<void> reorderCategories(int oldIndex, int newIndex) async {
+    final currentList = state.value;
+    if (currentList == null) return;
+
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+
+    final newList = List<CategoryTransaction>.from(currentList);
+    final item = newList.removeAt(oldIndex);
+    newList.insert(newIndex, item);
+
+    state = AsyncData(newList);
+
+    await AsyncValue.guard(() async {
+      await CategoryTransactionMethods().updateOrders(newList);
+    });
+  }
 }
 
 final categoriesProvider =
@@ -111,16 +131,8 @@ final categoryMapProvider = FutureProvider<Map<CategoryTransaction, double>>((
     categoryType,
   );
 
-  final transactionType = CategoryTransactionMethods()
-      .categoryToTransactionType(categoryType);
-
-  final transactionTypeList = typeMap.entries
-      .where((entry) => entry.value == transactionType)
-      .map((entry) => entry.key)
-      .toList();
-
   final transactions = await TransactionMethods().selectAll(
-    transactionType: transactionTypeList,
+    transactionType: [categoryType.transactionType.code],
     dateRangeStart: dateStart,
     dateRangeEnd: dateEnd,
   );
@@ -149,16 +161,9 @@ final categoryTotalAmountProvider = FutureProvider<double>((ref) async {
   final categoryType = ref.watch(categoryTypeProvider);
   final dateStart = ref.watch(filterDateStartProvider);
   final dateEnd = ref.watch(filterDateEndProvider);
-  final transactionType = CategoryTransactionMethods()
-      .categoryToTransactionType(categoryType);
-
-  List<String> transactionTypeList = typeMap.entries
-      .where((entry) => entry.value == transactionType)
-      .map((entry) => entry.key)
-      .toList();
 
   final transactions = await TransactionMethods().selectAll(
-    transactionType: transactionTypeList,
+    transactionType: [categoryType.transactionType.code],
     dateRangeStart: dateStart,
     dateRangeEnd: dateEnd,
   );
@@ -193,15 +198,8 @@ final monthlyTotalsProvider = FutureProvider<List<double>>((ref) async {
   final startOfYear = DateTime(dateStart.year, 1, 1);
   final endOfYear = DateTime(dateStart.year, 12, 31);
 
-  final transactionType = CategoryTransactionMethods()
-      .categoryToTransactionType(categoryType);
-
-  List<String> transactionTypeList = typeMap.entries
-      .where((entry) => entry.value == transactionType)
-      .map((entry) => entry.key)
-      .toList();
   final transactions = await TransactionMethods().selectAll(
-    transactionType: transactionTypeList,
+    transactionType: [categoryType.transactionType.code],
     dateRangeStart: startOfYear,
     dateRangeEnd: endOfYear,
   );

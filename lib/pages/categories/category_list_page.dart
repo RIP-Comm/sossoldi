@@ -4,20 +4,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../constants/constants.dart';
 import '../../../../model/category_transaction.dart';
 import '../../../../providers/categories_provider.dart';
+import '../../../ui/device.dart';
 import '../../../ui/widgets/default_card.dart';
 import '../../../ui/widgets/rounded_icon.dart';
-import '../../../ui/device.dart';
 
-class CategoryList extends ConsumerStatefulWidget {
+class CategoryList extends ConsumerWidget {
   const CategoryList({super.key});
 
   @override
-  ConsumerState<CategoryList> createState() => _CategoryListState();
-}
-
-class _CategoryListState extends ConsumerState<CategoryList> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final categorysList = ref.watch(categoriesProvider);
     ref.listen(selectedCategoryProvider, (_, _) {});
     return Scaffold(
@@ -71,37 +66,62 @@ class _CategoryListState extends ConsumerState<CategoryList> {
               ),
             ),
             categorysList.when(
-              data: (categorys) => ListView.separated(
-                itemCount: categorys.length,
+              data: (categorys) => ReorderableListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: Sizes.lg),
+                itemCount: categorys.length,
+
+                onReorder: (oldIndex, newIndex) {
+                  ref
+                      .read(categoriesProvider.notifier)
+                      .reorderCategories(oldIndex, newIndex);
+                },
+
+                proxyDecorator: (child, index, animation) {
+                  return Material(
+                    elevation: 5,
+                    color: Colors.transparent,
+                    child: child,
+                  );
+                },
+
                 itemBuilder: (context, i) {
                   CategoryTransaction category = categorys[i];
-                  return DefaultCard(
-                    onTap: () {
-                      ref.read(selectedCategoryProvider.notifier).state =
-                          category;
-                      Navigator.of(context).pushNamed('/add-category');
-                    },
-                    child: Row(
-                      children: [
-                        RoundedIcon(
-                          icon: iconList[category.symbol],
-                          backgroundColor:
-                              categoryColorListTheme[category.color],
-                          size: 30,
-                        ),
-                        const SizedBox(width: Sizes.md),
-                        Text(
-                          category.name,
-                          style: Theme.of(context).textTheme.titleLarge!
-                              .copyWith(
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                        ),
-                      ],
+                  return Container(
+                    key: ValueKey(category.id),
+                    margin: const EdgeInsets.only(bottom: Sizes.lg),
+                    child: DefaultCard(
+                      onTap: () {
+                        ref.read(selectedCategoryProvider.notifier).state =
+                            category;
+                        Navigator.of(context).pushNamed('/add-category');
+                      },
+                      child: Row(
+                        children: [
+                          RoundedIcon(
+                            icon: iconList[category.symbol],
+                            backgroundColor:
+                                categoryColorListTheme[category.color],
+                            size: 30,
+                          ),
+                          const SizedBox(width: Sizes.md),
+                          Expanded(
+                            child: Text(
+                              category.name,
+                              style: Theme.of(context).textTheme.titleLarge!
+                                  .copyWith(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
+                                  ),
+                            ),
+                          ),
+                          Icon(
+                            Icons.drag_handle,
+                            color: Theme.of(context).colorScheme.outline,
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },

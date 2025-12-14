@@ -7,7 +7,6 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "../../../../constants/style.dart";
 import '../../../../providers/theme_provider.dart';
 import '../../../../providers/transactions_provider.dart';
-import '../../../../model/transaction.dart';
 import '../../../../ui/device.dart';
 import '../../../../ui/extensions.dart';
 import 'recurrence_selector.dart';
@@ -69,7 +68,7 @@ class RecurrenceListTileEdit extends ConsumerWidget {
                   ),
                   const Spacer(),
                   Text(
-                    recurrenceMap[ref.watch(intervalProvider)]!.label,
+                    ref.watch(intervalProvider).label,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       color: isDarkMode
                           ? grey3

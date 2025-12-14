@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../../constants/style.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../ui/device.dart';
@@ -79,9 +78,7 @@ class PanelListTile extends ConsumerWidget {
                               Text(
                                 "${amount.toCurrency()} ${currencyState.selectedCurrency.symbol}",
                                 style: Theme.of(context).textTheme.bodyLarge
-                                    ?.copyWith(
-                                      color: (amount > 0) ? green : red,
-                                    ),
+                                    ?.copyWith(color: amount.toColor()),
                               ),
                             ],
                           ),
@@ -149,9 +146,7 @@ class PanelListTile extends ConsumerWidget {
                                   Text(
                                     "${amount.toCurrency()} ${currencyState.selectedCurrency.symbol}",
                                     style: Theme.of(context).textTheme.bodyLarge
-                                        ?.copyWith(
-                                          color: (amount > 0) ? green : red,
-                                        ),
+                                        ?.copyWith(color: amount.toColor()),
                                   ),
                                 ],
                               ),

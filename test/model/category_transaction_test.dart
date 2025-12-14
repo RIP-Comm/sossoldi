@@ -11,6 +11,7 @@ void main() {
       type: CategoryTransactionType.expense,
       symbol: "symbol",
       color: 0,
+      order: 2,
       createdAt: DateTime.utc(2022),
       updatedAt: DateTime.utc(2022),
     );
@@ -22,6 +23,8 @@ void main() {
     assert(cCopy.type == c.type);
     assert(cCopy.symbol == c.symbol);
     assert(cCopy.color == c.color);
+    assert(cCopy.order == c.order);
+
     assert(cCopy.createdAt == c.createdAt);
     assert(cCopy.updatedAt == c.updatedAt);
   });
@@ -34,6 +37,8 @@ void main() {
       CategoryTransactionFields.symbol: "symbol",
       CategoryTransactionFields.color: 0,
       CategoryTransactionFields.note: "note",
+      CategoryTransactionFields.order: 0,
+
       BaseEntityFields.createdAt: DateTime.utc(2022).toIso8601String(),
       BaseEntityFields.updatedAt: DateTime.utc(2022).toIso8601String(),
     };
@@ -42,10 +47,12 @@ void main() {
 
     assert(c.id == json[BaseEntityFields.id]);
     assert(c.name == json[CategoryTransactionFields.name]);
-    assert(c.type == categoryTypeMap[json[CategoryTransactionFields.type]]);
+    assert(c.type.code == json[CategoryTransactionFields.type] as String);
     assert(c.symbol == json[CategoryTransactionFields.symbol]);
     assert(c.color == json[CategoryTransactionFields.color]);
     assert(c.note == json[CategoryTransactionFields.note]);
+    assert(c.order == json[CategoryTransactionFields.order]);
+
     assert(
       c.createdAt?.toUtc().toIso8601String() ==
           json[BaseEntityFields.createdAt],
@@ -64,15 +71,17 @@ void main() {
       symbol: "symbol",
       color: 0,
       note: "note",
+      order: 2,
     );
 
     Map<String, Object?> json = c.toJson();
 
     assert(c.id == json[BaseEntityFields.id]);
     assert(c.name == json[CategoryTransactionFields.name]);
-    assert(c.type == categoryTypeMap[json[CategoryTransactionFields.type]]);
+    assert(c.type.code == json[CategoryTransactionFields.type] as String);
     assert(c.symbol == json[CategoryTransactionFields.symbol]);
     assert(c.color == json[CategoryTransactionFields.color]);
     assert(c.note == json[CategoryTransactionFields.note]);
+    assert(c.order == json[CategoryTransactionFields.order]);
   });
 }

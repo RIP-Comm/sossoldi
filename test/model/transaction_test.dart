@@ -97,7 +97,10 @@ void main() {
     assert(t.id == json[BaseEntityFields.id]);
     assert(t.date.toUtc().toIso8601String() == json[TransactionFields.date]);
     assert(t.amount == json[TransactionFields.amount]);
-    assert(t.type == typeMap[json[TransactionFields.type]]);
+    assert(
+      t.type ==
+          TransactionType.fromJson(json[TransactionFields.type] as String),
+    );
     assert(t.note == json[TransactionFields.note]);
     assert(t.idBankAccount == json[TransactionFields.idBankAccount]);
     assert(
@@ -138,7 +141,10 @@ void main() {
     assert(t.id == json[BaseEntityFields.id]);
     assert(t.date.toUtc().toIso8601String() == json[TransactionFields.date]);
     assert(t.amount == json[TransactionFields.amount]);
-    assert(t.type == typeMap[json[TransactionFields.type]]);
+    assert(
+      t.type ==
+          TransactionType.fromJson(json[TransactionFields.type] as String),
+    );
     assert(t.note == json[TransactionFields.note]);
     assert(t.idCategory == json[TransactionFields.idCategory]);
     assert(t.idBankAccount == json[TransactionFields.idBankAccount]);

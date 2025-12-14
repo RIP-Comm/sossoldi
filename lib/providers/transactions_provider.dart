@@ -191,7 +191,7 @@ class AsyncTransactionsNotifier
     final toDate = ref.read(endDateProvider);
     final bankAccount = ref.read(bankAccountProvider)!;
     final category = ref.read(categoryProvider);
-    final recurrency = ref.read(intervalProvider.notifier).state;
+    final recurrency = ref.read(intervalProvider);
 
     RecurringTransaction transaction = RecurringTransaction(
       amount: amount,
@@ -201,7 +201,7 @@ class AsyncTransactionsNotifier
       type: type,
       idBankAccount: bankAccount.id!,
       idCategory: category!.id!,
-      recurrency: recurrency.name.toUpperCase(),
+      recurrency: recurrency,
       createdAt: date,
       updatedAt: date,
       lastInsertion: date,
@@ -272,7 +272,7 @@ class AsyncTransactionsNotifier
 
   Future<void> updateRecurringTransaction(num amount, String label) async {
     final bankAccount = ref.read(bankAccountProvider)!;
-    final recurrency = ref.read(intervalProvider.notifier).state;
+    final recurrency = ref.read(intervalProvider);
     final category = ref.read(categoryProvider);
 
     final RecurringTransaction transaction = ref
@@ -280,7 +280,7 @@ class AsyncTransactionsNotifier
         .copy(
           fromDate: ref.read(dateProvider),
           toDate: ref.read(endDateProvider),
-          recurrency: recurrency.name.toUpperCase(),
+          recurrency: recurrency,
           amount: amount,
           note: label,
           idBankAccount: bankAccount.id!,
@@ -338,9 +338,7 @@ class AsyncTransactionsNotifier
           .watch(accountsProvider)
           .value!
           .firstWhere((element) => element.id == transaction.idBankAccount);
-      ref.read(intervalProvider.notifier).state = parseRecurrence(
-        transaction.recurrency,
-      );
+      ref.read(intervalProvider.notifier).state = transaction.recurrency;
       ref.read(endDateProvider.notifier).state = transaction.toDate;
     }
   }

@@ -1,16 +1,6 @@
 import 'package:flutter/material.dart';
 
-// extra fonts
-const TextStyle displayXLL = TextStyle(
-  fontSize: 58.0,
-  fontWeight: FontWeight.w700,
-);
-
-const TextStyle labelLight = TextStyle(
-  fontSize: 8.0,
-  fontWeight: FontWeight.w400,
-);
-
+// Container shadow
 BoxShadow defaultShadow = BoxShadow(
   color: blue1.withValues(alpha: 0.20),
   blurRadius: 2.0,

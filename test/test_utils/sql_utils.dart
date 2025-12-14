@@ -1,4 +1,4 @@
-import 'package:sossoldi/model/transaction.dart';
+import 'package:sossoldi/model/recurring_transaction.dart';
 
 String createInsertSqlTransaction({
   DateTime? date,

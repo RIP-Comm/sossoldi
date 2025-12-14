@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../constants/constants.dart';
 import '../../../constants/style.dart';
 import '../../../model/category_transaction.dart';
@@ -7,7 +8,7 @@ import '../../../providers/categories_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../ui/device.dart';
 import '../../../ui/extensions.dart';
-import '../../transactions/widgets/category_icon_color_selector.dart';
+import 'widgets/category_icon_color_selector.dart';
 
 class CreateEditCategoryPage extends ConsumerStatefulWidget {
   final bool hideIncome;
