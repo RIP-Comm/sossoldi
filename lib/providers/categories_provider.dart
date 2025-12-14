@@ -37,6 +37,7 @@ class AsyncCategoriesNotifier extends AsyncNotifier<List<CategoryTransaction>> {
       symbol: icon,
       type: type,
       color: color,
+      order: 0,
     );
 
     state = const AsyncValue.loading();
@@ -74,6 +75,25 @@ class AsyncCategoriesNotifier extends AsyncNotifier<List<CategoryTransaction>> {
 
   Future<List<CategoryTransaction>> getCategories() async {
     return _getCategories();
+  }
+
+  Future<void> reorderCategories(int oldIndex, int newIndex) async {
+    final currentList = state.value;
+    if (currentList == null) return;
+
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+
+    final newList = List<CategoryTransaction>.from(currentList);
+    final item = newList.removeAt(oldIndex);
+    newList.insert(newIndex, item);
+
+    state = AsyncData(newList);
+
+    await AsyncValue.guard(() async {
+      await CategoryTransactionMethods().updateOrders(newList);
+    });
   }
 }
 
