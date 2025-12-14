@@ -40,6 +40,7 @@ class CurrencySelectorDialog {
                           Navigator.pop(context);
                         },
                         child: ListTile(
+                          tileColor: Colors.transparent,
                           leading: CircleAvatar(
                             radius: 22,
                             backgroundColor:

@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../../../constants/style.dart';
 import '../../../model/transaction.dart';
@@ -133,11 +134,17 @@ class PanelListTile extends ConsumerWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    transaction.note ?? "",
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.titleMedium,
+                                  Expanded(
+                                    child: Text(
+                                      (transaction.note?.isEmpty ?? true)
+                                          ? DateFormat("dd MMMM - HH:mm")
+                                              .format(transaction.date)
+                                          : transaction.note!,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.titleMedium,
+                                    ),
                                   ),
                                   Text(
                                     "${amount.toCurrency()} ${currencyState.selectedCurrency.symbol}",
