@@ -76,7 +76,7 @@ class CategoriesContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final Map<CategoryTransaction, double> sortedCategories = Map.fromEntries(
       categories.entries.toList()..sort((a, b) {
-        int valueSorting = a.value.compareTo(b.value);
+        int valueSorting = b.value.abs().compareTo(a.value.abs());
         if (valueSorting == 0) {
           int categoryNameSorting = a.key.name.compareTo(b.key.name);
           return categoryNameSorting;

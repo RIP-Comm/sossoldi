@@ -289,7 +289,9 @@ class _SearchPage extends ConsumerState<SearchPage> {
                   if (snapshot.hasData &&
                       snapshot.data != null &&
                       snapshot.connectionState == ConnectionState.done) {
-                    return TransactionsList(transactions: snapshot.data!);
+                    return SingleChildScrollView(
+                      child: TransactionsList(transactions: snapshot.data!),
+                    );
                   } else if (snapshot.hasError) {
                     return Text('Something went wrong: ${snapshot.error}');
                   } else {
