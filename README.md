@@ -15,7 +15,10 @@
         <img src="./docs/assets/app-store-badge.svg" height="50" alt="Download on the App Store">
     </a>
     <a href="https://android.sossoldi.com">
-        <img src="./docs/assets/google-play-badge.png" height="50" alt="Get it on Google Play">
+        <img src="./docs/assets/google-play-badge.png" height="40" alt="Get it on Google Play">
+    </a>
+    <a href="https://f-droid.org/it/packages/com.ripster.sossoldi/">
+        <img src="./docs/assets/fdroid-badge.png" height="40" alt="Get it on F-Droid">
     </a>
 </div>
 
@@ -34,7 +37,7 @@
 
 [Mr. Rip](https://retireinprogress.com/) is a blogger that has a [spreadsheet](https://docs.google.com/spreadsheets/d/1ilL6rBdzIQ6yRotqOKLUKI7KXFxu5_cZ5FQgdYTSHJk/edit#gid=138629885) in which he tracks his net worth. Sossoldi is a Mobile + Desktop app that aims at replacing that spreadsheet and make it easier for everyone to track their net worth even if they are not as skilled with Google Sheets or Excel.
 
-The app is being developed using the [Flutter](https://docs.flutter.dev/get-started/install) framework which makes it possible to have one codebase for different platforms (Android, iOS, Windows, macOS, Linux). We are currently working on a beta which hopefully will be out soon.
+The app is being developed using the [Flutter](https://docs.flutter.dev/get-started/install) framework which makes it possible to have one codebase for different platforms (Android, iOS, Windows, macOS, Linux). We are currently working on a stable release.
 
 ## This app is for you if you want to...
 
