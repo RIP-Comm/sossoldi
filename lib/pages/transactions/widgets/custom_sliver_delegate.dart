@@ -141,7 +141,7 @@ class CollapsedWidget extends StatelessWidget {
         final totalAmount = ref.watch(totalAmountProvider);
         final startDate = ref.watch(filterDateStartProvider);
         final endDate = ref.watch(filterDateEndProvider);
-        final currencyState = ref.watch(currencyStateNotifier);
+        final currencyState = ref.watch(currencyStateProvider);
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -176,7 +176,7 @@ class CollapsedWidget extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text: currencyState.selectedCurrency.symbol,
+                    text: currencyState.symbol,
                     style: Theme.of(context).textTheme.labelLarge!.copyWith(
                       color: totalAmount.toColor(),
                     ),

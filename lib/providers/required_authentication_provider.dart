@@ -1,35 +1,30 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final requiredAuthenticationStateNotifier = ChangeNotifierProvider(
-  (ref) => RequiredAuthenticationState(),
-);
+part 'required_authentication_provider.g.dart';
 
-class RequiredAuthenticationState extends ChangeNotifier {
+@Riverpod(keepAlive: true)
+class RequiredAuthenticationState extends _$RequiredAuthenticationState {
   late SharedPreferences _prefs;
-  bool userRequiresAuthentication = false;
 
-  RequiredAuthenticationState() {
+  @override
+  bool build() {
     _initializeState();
+    return false;
   }
 
   Future<void> _initializeState() async {
     _prefs = await SharedPreferences.getInstance();
-    userRequiresAuthentication =
-        _prefs.getBool("user_requires_authentication") ?? false;
-    notifyListeners();
+    state = _prefs.getBool("user_requires_authentication") ?? false;
   }
 
-  void setAuthenticationRequired() async {
-    userRequiresAuthentication = true;
-    _prefs.setBool("user_requires_authentication", true);
-    notifyListeners();
+  Future<void> setAuthenticationRequired() async {
+    state = true;
+    await _prefs.setBool("user_requires_authentication", true);
   }
 
-  void setNoAuthentication() async {
-    userRequiresAuthentication = false;
-    _prefs.setBool("user_requires_authentication", false);
-    notifyListeners();
+  Future<void> setNoAuthentication() async {
+    state = false;
+    await _prefs.setBool("user_requires_authentication", false);
   }
 }

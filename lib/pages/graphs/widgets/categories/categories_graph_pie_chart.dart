@@ -52,20 +52,20 @@ class CategoriesGraphPieChart extends ConsumerWidget {
                   if (!event.isInterestedForInteractions) {
                     return;
                   }
-                  if (pieTouchResponse?.touchedSection != null) {
-                    int touchedIndex =
-                        pieTouchResponse!.touchedSection!.touchedSectionIndex;
-                    if (touchedIndex >= 0 &&
-                        touchedIndex < categoryMap.length) {
-                      CategoryTransaction touchedCategory = categoryMap.keys
-                          .elementAt(touchedIndex);
-                      ref.read(selectedCategoryProvider.notifier).state =
-                          touchedCategory;
-                    } else {
-                      ref.read(selectedCategoryProvider.notifier).state = null;
-                    }
+                  int? touchedIndex =
+                      pieTouchResponse?.touchedSection?.touchedSectionIndex;
+                  if (touchedIndex != null &&
+                      touchedIndex >= 0 &&
+                      touchedIndex < categoryMap.length) {
+                    CategoryTransaction touchedCategory = categoryMap.keys
+                        .elementAt(touchedIndex);
+                    ref
+                        .read(selectedCategoryProvider.notifier)
+                        .setCategory(touchedCategory);
                   } else {
-                    ref.read(selectedCategoryProvider.notifier).state = null;
+                    ref
+                        .read(selectedCategoryProvider.notifier)
+                        .setCategory(null);
                   }
                 },
               ),
@@ -91,7 +91,7 @@ class PieChartCategoryInfo extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedCategory = ref.watch(selectedCategoryProvider);
-    final currencyState = ref.watch(currencyStateNotifier);
+    final currencyState = ref.watch(currencyStateProvider);
 
     double? categoryValue;
     if (selectedCategory != null && categoryMap.containsKey(selectedCategory)) {
@@ -109,8 +109,8 @@ class PieChartCategoryInfo extends ConsumerWidget {
           ),
         Text(
           categoryValue != null
-              ? "${categoryValue.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}"
-              : "${total.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}",
+              ? "${categoryValue.toStringAsFixed(2)} ${currencyState.symbol}"
+              : "${total.toStringAsFixed(2)} ${currencyState.symbol}",
           style: Theme.of(context).textTheme.headlineLarge?.copyWith(
             color:
                 (categoryValue != null && categoryValue >= 0) ||

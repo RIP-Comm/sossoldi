@@ -8,12 +8,13 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 
-import 'model/recurring_transaction.dart';
 import 'providers/settings_provider.dart';
 import 'providers/theme_provider.dart';
 import 'routes/routes.dart';
-import 'ui/theme/app_theme.dart';
+import 'services/database/repositories/recurring_transactions_repository.dart';
+import 'services/database/sossoldi_database.dart';
 import 'services/notifications/notifications_service.dart';
+import 'ui/theme/app_theme.dart';
 
 late SharedPreferences _sharedPreferences;
 
@@ -54,7 +55,9 @@ void main() async {
 
   if (lastRecurringTransactionsCheck == null ||
       DateTime.now().difference(lastRecurringTransactionsCheck).inDays >= 1) {
-    RecurringTransactionMethods().checkRecurringTransactions();
+    RecurringTransactionRepository(
+      database: SossoldiDatabase.instance,
+    ).checkRecurringTransactions();
     // update last recurring transactions runtime
     await _sharedPreferences.setString(
       'last_recurring_transactions_check',
@@ -70,7 +73,7 @@ void main() async {
     );
 
     if (requiresAuthentication != null && requiresAuthentication == true) {
-      // use use sticky auth to resume auth request when app is going background
+      // use sticky auth to resume auth request when app is going background
       bool didAuthenticate = await auth.authenticate(
         localizedReason: 'Please authenticate to use Sossoldi',
         persistAcrossBackgrounding: true,
@@ -82,25 +85,37 @@ void main() async {
   initializeDateFormatting('it_IT', null).then(
     (_) => runApp(
       Phoenix(
-        child: ProviderScope(
-          overrides: [versionProvider.overrideWithValue(packageInfo.version)],
-          child: const Launcher(),
-        ),
+        child: ProviderScope(child: Launcher(version: packageInfo.version)),
       ),
     ),
   );
 }
 
-class Launcher extends ConsumerWidget {
-  const Launcher({super.key});
+class Launcher extends ConsumerStatefulWidget {
+  final String version;
 
-  // This widget is the root of your application.
+  const Launcher({super.key, required this.version});
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<Launcher> createState() => _LauncherState();
+}
+
+class _LauncherState extends ConsumerState<Launcher> {
+  @override
+  void initState() {
+    super.initState();
+    // Set the version after the provider is available
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(versionProvider.notifier).setVersion(widget.version);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final bool isOnboardingCompleted =
         _sharedPreferences.getBool('onboarding_completed') ?? false;
 
-    final appThemeState = ref.watch(appThemeStateNotifier);
+    final appThemeState = ref.watch(appThemeStateProvider);
     return MaterialApp(
       title: 'Sossoldi',
       theme: AppTheme.lightTheme,

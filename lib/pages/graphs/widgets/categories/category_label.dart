@@ -18,7 +18,7 @@ class CategoryLabel extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currencyState = ref.watch(currencyStateNotifier);
+    final currencyState = ref.watch(currencyStateProvider);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -33,8 +33,7 @@ class CategoryLabel extends ConsumerWidget {
           text: TextSpan(
             children: [
               TextSpan(
-                text:
-                    "${amount.toStringAsFixed(2)}${currencyState.selectedCurrency.symbol}    ",
+                text: "${amount.toStringAsFixed(2)}${currencyState.symbol}    ",
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(context).colorScheme.primary,
                 ),

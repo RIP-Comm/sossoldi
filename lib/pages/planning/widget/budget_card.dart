@@ -28,7 +28,7 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
     final transactions = ref
         .watch(transactionsProvider.notifier)
         .getMonthlyTransactions();
-    final currencyState = ref.watch(currencyStateNotifier);
+    final currencyState = ref.watch(currencyStateProvider);
 
     return DefaultContainer(
       margin: EdgeInsets.zero,
@@ -88,7 +88,7 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                                       color: Colors.red,
                                     ),
                                   Text(
-                                    "$spent${currencyState.selectedCurrency.symbol}/${budget.amountLimit}${currencyState.selectedCurrency.symbol}",
+                                    "$spent${currencyState.symbol}/${budget.amountLimit}${currencyState.symbol}",
                                     style: const TextStyle(
                                       fontWeight: FontWeight.normal,
                                     ),

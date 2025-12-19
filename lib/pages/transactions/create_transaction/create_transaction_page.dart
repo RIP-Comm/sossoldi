@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/style.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/accounts_provider.dart';
+import '../../../providers/categories_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../ui/device.dart';
 import '../../../ui/extensions.dart';
@@ -19,12 +20,9 @@ import 'widgets/label_list_tile.dart';
 import 'widgets/recurrence_list_tile.dart';
 
 class CreateTransactionPage extends ConsumerStatefulWidget {
-  final bool recurrencyEditingPermitted;
+  const CreateTransactionPage({super.key, this.transaction});
 
-  const CreateTransactionPage({
-    super.key,
-    this.recurrencyEditingPermitted = true,
-  });
+  final Transaction? transaction;
 
   @override
   ConsumerState<CreateTransactionPage> createState() =>
@@ -34,35 +32,20 @@ class CreateTransactionPage extends ConsumerStatefulWidget {
 class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
   final TextEditingController amountController = TextEditingController();
   final TextEditingController noteController = TextEditingController();
-  bool? recurrencyEditingPermittedFromRoute;
+  bool recurrencyEditingPermitted = true;
   bool _isSaveEnabled = false;
 
   @override
   void initState() {
-    if (ref.read(selectedTransactionUpdateProvider) != null) {
+    if (widget.transaction != null) {
       _isSaveEnabled = true;
+      recurrencyEditingPermitted = !widget.transaction!.recurring;
+      amountController.text = widget.transaction?.amount.toCurrency() ?? '';
+      noteController.text = widget.transaction?.note ?? '';
     }
-    amountController.text =
-        ref.read(selectedTransactionUpdateProvider)?.amount.toCurrency() ?? '';
-    noteController.text =
-        ref.read(selectedTransactionUpdateProvider)?.note ?? '';
     amountController.addListener(_updateAmount);
 
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Check if arguments are being passed
-    final args = ModalRoute.of(context)?.settings.arguments;
-
-    if (recurrencyEditingPermittedFromRoute == null) {
-      final argsMap = args as Map<String, dynamic>?;
-      recurrencyEditingPermittedFromRoute =
-          argsMap?['recurrencyEditingPermitted'] ??
-          widget.recurrencyEditingPermitted;
-    }
   }
 
   @override
@@ -95,7 +78,7 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
   }
 
   void _updateAmount() {
-    final selectedType = ref.read(transactionTypeProvider);
+    final selectedType = ref.read(selectedTransactionTypeProvider);
 
     var toBeWritten = getCleanAmountString();
 
@@ -113,10 +96,10 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
         TextPosition(offset: toBeWritten.length),
       );
     }
-    final selectedAccount = ref.watch(bankAccountProvider) != null;
+    final selectedAccount = ref.read(selectedBankAccountProvider) != null;
     final selectedAccountTransfer =
-        ref.watch(bankAccountTransferProvider) != null;
-    final selectedCategory = ref.watch(categoryProvider) != null;
+        ref.read(bankAccountTransferProvider) != null;
+    final selectedCategory = ref.read(selectedCategoryProvider) != null;
     setState(() {
       _isSaveEnabled = amountController.text.isNotEmpty && selectedAccount;
       switch (selectedType) {
@@ -132,42 +115,38 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
   }
 
   // TODO: This should be inside addTransaction
-  void _refreshAccountAndNavigateBack() {
+  void _refreshAccountAndNavigateBack() async {
     ref.invalidate(transactionsProvider);
     ref.invalidate(recurringTransactionProvider);
     ref
         .read(accountsProvider.notifier)
-        .refreshAccount(ref.read(bankAccountProvider)!)
+        .refreshAccount(ref.read(selectedBankAccountProvider)!)
         .whenComplete(() {
           if (mounted) Navigator.of(context).pop();
         });
   }
 
-  void _createOrUpdateTransaction() {
-    final selectedType = ref.read(transactionTypeProvider);
-    final selectedTransaction = ref.read(selectedTransactionUpdateProvider);
+  void _createOrUpdateTransaction() async {
+    final selectedType = ref.read(selectedTransactionTypeProvider);
 
     final cleanAmount = getCleanAmountString();
 
     // Check that an amount has been provided
     if (cleanAmount != '') {
-      if (selectedTransaction != null) {
+      if (widget.transaction != null) {
         // if the original transaction is not recurrent, but user sets a recurrency, add the corrispondent record
         // and edit the original transaction
         if (ref.read(selectedRecurringPayProvider) &&
-            !selectedTransaction.recurring) {
-          ref
-              .read(transactionsProvider.notifier)
-              .addRecurringTransaction(
-                cleanAmount.toNum(),
-                noteController.text,
-                selectedType,
-              )
-              .then((value) {
+            !widget.transaction!.recurring) {
+          await ref
+              .read(recurringTransactionProvider.notifier)
+              .create(cleanAmount.toNum(), noteController.text, selectedType)
+              .then((value) async {
                 if (value != null) {
-                  ref
+                  await ref
                       .read(transactionsProvider.notifier)
                       .updateTransaction(
+                        widget.transaction!,
                         cleanAmount.toNum(),
                         noteController.text,
                         value.id,
@@ -176,39 +155,40 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
                 }
               });
         } else {
-          ref
+          await ref
               .read(transactionsProvider.notifier)
               .updateTransaction(
+                widget.transaction!,
                 cleanAmount.toNum(),
                 noteController.text,
-                selectedTransaction.idRecurringTransaction,
+                widget.transaction!.idRecurringTransaction,
               )
               .whenComplete(() => _refreshAccountAndNavigateBack());
         }
       } else {
         if (selectedType == TransactionType.transfer) {
           if (ref.read(bankAccountTransferProvider) != null) {
-            ref
+            await ref
                 .read(transactionsProvider.notifier)
-                .addTransaction(cleanAmount.toNum(), noteController.text)
+                .create(cleanAmount.toNum(), noteController.text)
                 .whenComplete(() => _refreshAccountAndNavigateBack());
           }
         } else {
           // It's an income or an expense
-          if (ref.read(categoryProvider) != null) {
+          if (ref.read(selectedCategoryProvider) != null) {
             if (ref.read(selectedRecurringPayProvider)) {
-              ref
-                  .read(transactionsProvider.notifier)
-                  .addRecurringTransaction(
+              await ref
+                  .read(recurringTransactionProvider.notifier)
+                  .create(
                     cleanAmount.toNum(),
                     noteController.text,
                     selectedType,
                   )
                   .whenComplete(() => _refreshAccountAndNavigateBack());
             } else {
-              ref
+              await ref
                   .read(transactionsProvider.notifier)
-                  .addTransaction(cleanAmount.toNum(), noteController.text)
+                  .create(cleanAmount.toNum(), noteController.text)
                   .whenComplete(() => _refreshAccountAndNavigateBack());
             }
           }
@@ -217,30 +197,28 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
     }
   }
 
-  void _deleteTransaction() {
-    final selectedTransaction = ref.read(selectedTransactionUpdateProvider);
-    ref
+  void _deleteTransaction() async {
+    await ref
         .read(transactionsProvider.notifier)
-        .deleteTransaction(selectedTransaction!.id!)
+        .delete(widget.transaction!.id!)
         .whenComplete(() => _refreshAccountAndNavigateBack());
   }
 
   @override
   Widget build(BuildContext context) {
-    final selectedType = ref.watch(transactionTypeProvider);
-    final selectedTransaction = ref.watch(selectedTransactionUpdateProvider);
+    final selectedType = ref.watch(selectedTransactionTypeProvider);
 
     _updateAmount();
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          (selectedTransaction != null)
+          (widget.transaction != null)
               ? "Editing transaction"
               : "New transaction",
         ),
         actions: [
-          if (selectedTransaction != null) ...[
+          if (widget.transaction != null) ...[
             IconButton(
               icon: Icon(
                 Icons.copy,
@@ -250,7 +228,7 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
               onPressed: () => showDialog(
                 context: context,
                 builder: (_) => DuplicateTransactionDialog(
-                  transaction: selectedTransaction,
+                  transaction: widget.transaction!,
                 ),
               ),
             ),
@@ -296,7 +274,7 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
                           DetailsListTile(
                             title: "Account",
                             icon: Icons.account_balance_wallet,
-                            value: ref.watch(bankAccountProvider)?.name,
+                            value: ref.watch(selectedBankAccountProvider)?.name,
                             callback: () {
                               FocusManager.instance.primaryFocus?.unfocus();
                               showModalBottomSheet(
@@ -330,7 +308,7 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
                           DetailsListTile(
                             title: "Category",
                             icon: Icons.list_alt,
-                            value: ref.watch(categoryProvider)?.name,
+                            value: ref.watch(selectedCategoryProvider)?.name,
                             callback: () {
                               FocusManager.instance.primaryFocus?.unfocus();
                               showModalBottomSheet(
@@ -365,7 +343,7 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
                         DetailsListTile(
                           title: "Date",
                           icon: Icons.calendar_month,
-                          value: ref.watch(dateProvider).formatEDMY(),
+                          value: ref.watch(selectedDateProvider).formatEDMY(),
                           callback: () async {
                             FocusManager.instance.primaryFocus?.unfocus();
                             if (Platform.isIOS) {
@@ -378,36 +356,37 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
                                     context,
                                   ),
                                   child: CupertinoDatePicker(
-                                    initialDateTime: ref.watch(dateProvider),
+                                    initialDateTime: ref.watch(
+                                      selectedDateProvider,
+                                    ),
                                     minimumYear: 2015,
                                     maximumYear: 2050,
                                     mode: CupertinoDatePickerMode.date,
-                                    onDateTimeChanged: (date) =>
-                                        ref.read(dateProvider.notifier).state =
-                                            date,
+                                    onDateTimeChanged: (date) => ref
+                                        .read(selectedDateProvider.notifier)
+                                        .setDate(date),
                                   ),
                                 ),
                               );
                             } else if (Platform.isAndroid) {
                               final DateTime? pickedDate = await showDatePicker(
                                 context: context,
-                                initialDate: ref.watch(dateProvider),
+                                initialDate: ref.watch(selectedDateProvider),
                                 firstDate: DateTime(2015),
                                 lastDate: DateTime(2050),
                               );
                               if (pickedDate != null) {
-                                ref.read(dateProvider.notifier).state =
-                                    pickedDate;
+                                ref
+                                    .read(selectedDateProvider.notifier)
+                                    .setDate(pickedDate);
                               }
                             }
                           },
                         ),
                         RecurrenceListTile(
                           recurrencyEditingPermitted:
-                              widget.recurrencyEditingPermitted,
-                          selectedTransaction: ref.read(
-                            selectedTransactionUpdateProvider,
-                          ),
+                              recurrencyEditingPermitted,
+                          selectedTransaction: widget.transaction,
                         ),
                       ],
                     ),
@@ -447,7 +426,7 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
                 child: ElevatedButton(
                   onPressed: _isSaveEnabled ? _createOrUpdateTransaction : null,
                   child: Text(
-                    selectedTransaction != null
+                    widget.transaction != null
                         ? "UPDATE TRANSACTION"
                         : "ADD TRANSACTION",
                   ),

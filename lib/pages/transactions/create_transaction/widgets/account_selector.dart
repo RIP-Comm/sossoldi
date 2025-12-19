@@ -27,7 +27,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> {
   @override
   Widget build(BuildContext context) {
     final accountsList = ref.watch(accountsProvider);
-    final fromAccount = ref.watch(bankAccountProvider);
+    final fromAccount = ref.watch(selectedBankAccountProvider);
     final toAccount = ref.watch(bankAccountTransferProvider);
 
     return Container(
@@ -88,19 +88,18 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> {
                                 ? () {
                                     if (widget.transfer) {
                                       ref
-                                              .read(
-                                                bankAccountTransferProvider
-                                                    .notifier,
-                                              )
-                                              .state =
-                                          account;
+                                          .read(
+                                            bankAccountTransferProvider
+                                                .notifier,
+                                          )
+                                          .setAccount(account);
                                     } else {
                                       ref
-                                              .read(
-                                                bankAccountProvider.notifier,
-                                              )
-                                              .state =
-                                          account;
+                                          .read(
+                                            selectedBankAccountProvider
+                                                .notifier,
+                                          )
+                                          .setAccount(account);
                                     }
                                     Navigator.pop(context);
                                   }
@@ -176,14 +175,12 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> {
                             onTap: () {
                               if (widget.transfer) {
                                 ref
-                                        .read(
-                                          bankAccountTransferProvider.notifier,
-                                        )
-                                        .state =
-                                    account;
+                                    .read(bankAccountTransferProvider.notifier)
+                                    .setAccount(account);
                               } else {
-                                ref.read(bankAccountProvider.notifier).state =
-                                    account;
+                                ref
+                                    .read(selectedBankAccountProvider.notifier)
+                                    .setAccount(account);
                               }
                               Navigator.pop(context);
                             },

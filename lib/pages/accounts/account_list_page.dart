@@ -81,8 +81,9 @@ class _AccountListPage extends ConsumerState<AccountListPage> {
                   BankAccount account = accounts[i];
                   return DefaultCard(
                     onTap: () {
-                      ref.read(selectedAccountProvider.notifier).state =
-                          account;
+                      ref
+                          .read(selectedAccountProvider.notifier)
+                          .setAccount(account);
                       Navigator.of(context).pushNamed('/add-account');
                     },
                     child: Row(

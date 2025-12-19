@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'recurring_payment_card.dart';
 import '../../../model/recurring_transaction.dart';
+import '../../../providers/categories_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../ui/device.dart';
 
@@ -18,7 +19,7 @@ class _RecurringPaymentSectionState
     extends ConsumerState<RecurringPaymentSection> {
   @override
   Widget build(BuildContext context) {
-    var recurringTransactionsAsync = ref.watch(recurringTransactionProvider);
+    var recurringTransactionsAsync = ref.watch(recurringTransactionsProvider);
 
     return Column(
       children: [
@@ -37,8 +38,8 @@ class _RecurringPaymentSectionState
               itemBuilder: (context, index) => InkWell(
                 onTap: () {
                   ref
-                      .read(transactionsProvider.notifier)
-                      .transactionUpdateState(transactions[index])
+                      .read(recurringTransactionProvider.notifier)
+                      .transactionSelect(transactions[index])
                       .whenComplete(() {
                         if (context.mounted) {
                           Navigator.of(context)
@@ -67,12 +68,11 @@ class _RecurringPaymentSectionState
         TextButton.icon(
           icon: const Icon(Icons.add_circle, size: 32),
           onPressed: () => {
-            ref.read(selectedTransactionUpdateProvider.notifier).state = null,
-            ref.read(selectedRecurringPayProvider.notifier).state = true,
-            ref.read(bankAccountProvider.notifier).state = null,
-            ref.read(categoryProvider.notifier).state = null,
-            ref.read(intervalProvider.notifier).state = Recurrence.monthly,
-            ref.read(endDateProvider.notifier).state = null,
+            ref.read(selectedRecurringPayProvider.notifier).setValue(true),
+            ref.read(selectedBankAccountProvider.notifier).setAccount(null),
+            ref.read(selectedCategoryProvider.notifier).setCategory(null),
+            ref.read(intervalProvider.notifier).setValue(Recurrence.monthly),
+            ref.read(endDateProvider.notifier).setDate(null),
             Navigator.of(context)
                 .pushNamed(
                   "/add-page",
