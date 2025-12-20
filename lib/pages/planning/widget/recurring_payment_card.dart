@@ -61,6 +61,7 @@ class RecurringPaymentCard extends ConsumerWidget {
                 spacing: 16,
                 children: [
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       RoundedIcon(
                         icon: iconList[category.symbol],
@@ -77,20 +78,17 @@ class RecurringPaymentCard extends ConsumerWidget {
                           spacing: Sizes.sm,
                           children: [
                             Text(
-                              transaction.recurrency.label,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w200,
-                                fontSize: Sizes.sm,
-                              ),
+                              transaction.recurrency.label.toUpperCase(),
+                              style: Theme.of(context).textTheme.labelLarge,
                             ),
                             Text(
                               transaction.note,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w900,
-                                fontSize: 16,
-                              ),
+                              style: Theme.of(context).textTheme.titleLarge,
                             ),
-                            Text(category.name),
+                            Text(
+                              category.name.toUpperCase(),
+                              style: Theme.of(context).textTheme.labelMedium,
+                            ),
                           ],
                         ),
                       ),
@@ -101,17 +99,20 @@ class RecurringPaymentCard extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.end,
                           spacing: Sizes.sm,
                           children: [
-                            Text("In ${getNextText()} days"),
+                            Text(
+                              "IN ${getNextText()} DAYS".toUpperCase(),
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
                             Builder(
                               builder: (context) {
-                                final String prefix = transaction.type.prefix;
                                 final Color amountColor = transaction.type
                                     .toColor(
                                       brightness: Theme.of(context).brightness,
                                     );
                                 return Text(
-                                  "$prefix${transaction.amount}${currencyState.symbol}",
-                                  style: TextStyle(color: amountColor),
+                                  "${transaction.type.prefix}${transaction.amount}${currencyState.symbol}",
+                                  style: Theme.of(context).textTheme.bodyLarge
+                                      ?.copyWith(color: amountColor),
                                 );
                               },
                             ),
@@ -121,7 +122,9 @@ class RecurringPaymentCard extends ConsumerWidget {
                                     (element) =>
                                         element.id == transaction.idBankAccount,
                                   )
-                                  .name,
+                                  .name
+                                  .toUpperCase(),
+                              style: Theme.of(context).textTheme.labelMedium,
                             ),
                           ],
                         ),

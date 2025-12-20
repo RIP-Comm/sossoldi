@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../model/budget.dart';
 import '../../model/category_transaction.dart';
+import '../../providers/currency_provider.dart';
 import '../../services/database/repositories/budget_repository.dart';
 import '../../ui/device.dart';
+import '../../ui/extensions.dart';
 import '../../ui/snack_bars/snack_bar.dart';
 import 'widget/budget_category_selector.dart';
 import '../../../providers/categories_provider.dart';
@@ -104,6 +106,7 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
         .where((c) => !usedCategoryIds.contains(c.id))
         .toList();
     final canAddCategory = availableCategories.isNotEmpty;
+    final currencyState = ref.watch(currencyStateProvider);
 
     return Scaffold(
       body: SafeArea(
@@ -135,7 +138,6 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
                 children: [
                   Expanded(
                     child: ListView.builder(
-                      shrinkWrap: true,
                       itemCount: budgets.length,
                       itemBuilder: (context, index) {
                         final usedExcludingCurrent = Set<int>.from(
@@ -203,10 +205,35 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
               ),
             ),
             const SizedBox(height: Sizes.lg),
-            Center(
-              child: Text(
-                "Your monthly budget will be: ${budgets.isEmpty ? 0 : budgets.fold(0, (sum, e) => sum + e.amountLimit.toInt())}€",
-                style: Theme.of(context).textTheme.titleMedium,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Your monthly budget will be: ",
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  Text.rich(
+                    TextSpan(
+                      text:
+                          "${(budgets.isEmpty ? 0 : budgets.fold<num>(0, (sum, e) => sum + e.amountLimit)).toCurrency()} ",
+                      style: Theme.of(context).textTheme.headlineLarge
+                          ?.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                      children: [
+                        TextSpan(
+                          text: currencyState.symbol,
+                          style: Theme.of(context).textTheme.bodyLarge
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: Sizes.lg),

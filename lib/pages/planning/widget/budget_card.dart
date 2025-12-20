@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../constants/style.dart';
+import '../../../ui/extensions.dart';
 import '../../../ui/widgets/default_container.dart';
 import '../../../model/budget.dart';
 import '../../../model/transaction.dart';
@@ -68,7 +70,7 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                                       t.idCategory == budgets[index].idCategory,
                                 )
                                 .fold(0.0, (sum, t) => sum + t.amount)
-                                .toStringAsFixed(2),
+                                .toCurrency(),
                           );
                           Budget budget = budgets.elementAt(index);
                           return Column(
@@ -88,7 +90,7 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                                       color: Colors.red,
                                     ),
                                   Text(
-                                    "$spent${currencyState.symbol}/${budget.amountLimit}${currencyState.symbol}",
+                                    "$spent/${budget.amountLimit.toCurrency()}${currencyState.symbol}",
                                     style: const TextStyle(
                                       fontWeight: FontWeight.normal,
                                     ),
@@ -131,44 +133,60 @@ class _BudgetCardState extends ConsumerState<BudgetCard> {
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: Sizes.lg),
-                      TextButton.icon(
-                        icon: Icon(
-                          Icons.add_circle,
-                          color: Theme.of(context).colorScheme.secondary,
+                      Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                            Sizes.borderRadius,
+                          ),
+                          boxShadow: [defaultShadow],
                         ),
-                        onPressed: () {
-                          showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(
-                                  Sizes.borderRadiusLarge,
-                                ),
-                                topRight: Radius.circular(
-                                  Sizes.borderRadiusLarge,
+                        child: TextButton.icon(
+                          icon: Icon(
+                            Icons.add_circle,
+                            color: Theme.of(context).colorScheme.secondary,
+                            size: Sizes.xl,
+                          ),
+                          onPressed: () {
+                            showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(
+                                    Sizes.borderRadiusLarge,
+                                  ),
+                                  topRight: Radius.circular(
+                                    Sizes.borderRadiusLarge,
+                                  ),
                                 ),
                               ),
-                            ),
-                            elevation: 10,
-                            builder: (BuildContext context) {
-                              return FractionallySizedBox(
-                                heightFactor: 0.9,
-                                child: ManageBudgetPage(
-                                  onRefreshBudgets: widget.onRefreshBudgets,
+                              elevation: 10,
+                              builder: (BuildContext context) {
+                                return FractionallySizedBox(
+                                  heightFactor: 0.9,
+                                  child: ManageBudgetPage(
+                                    onRefreshBudgets: widget.onRefreshBudgets,
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          label: Text(
+                            "Create budget",
+                            style: Theme.of(context).textTheme.titleLarge!
+                                .apply(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.secondary,
                                 ),
-                              );
-                            },
-                          );
-                        },
-                        label: Text(
-                          "Create budget",
-                          style: Theme.of(context).textTheme.titleSmall!.apply(
-                            color: Theme.of(context).colorScheme.secondary,
                           ),
-                        ),
-                        style: TextButton.styleFrom(
-                          backgroundColor: Colors.white,
+                          style: TextButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                              vertical: Sizes.md,
+                            ),
+                          ),
                         ),
                       ),
                     ],
