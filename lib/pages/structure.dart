@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../providers/transactions_provider.dart';
 import '../ui/device.dart';
@@ -12,9 +13,29 @@ import 'transactions/transactions_page.dart';
 
 final StateProvider selectedIndexProvider = StateProvider<int>((ref) => 0);
 
-final StateProvider<bool> visibilityAmountProvider = StateProvider<bool>(
-  (ref) => false,
-);
+final visibilityAmountProvider =
+    StateNotifierProvider<VisibilityAmountNotifier, bool>(
+      (ref) => VisibilityAmountNotifier(),
+    );
+
+class VisibilityAmountNotifier extends StateNotifier<bool> {
+  VisibilityAmountNotifier() : super(false) {
+    _loadVisibility();
+  }
+
+  static const _visibilityKey = 'visibilityAmount';
+
+  Future<void> _loadVisibility() async {
+    final prefs = await SharedPreferences.getInstance();
+    state = prefs.getBool(_visibilityKey) ?? false;
+  }
+
+  Future<void> toggleVisibility() async {
+    final prefs = await SharedPreferences.getInstance();
+    state = !state;
+    await prefs.setBool(_visibilityKey, state);
+  }
+}
 
 class Structure extends ConsumerStatefulWidget {
   const Structure({super.key});
@@ -50,9 +71,8 @@ class _StructureState extends ConsumerState<Structure> {
       // Prevent the fab moving up when the keyboard is opened
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: selectedIndex == 0
-            ? Theme.of(context).colorScheme.tertiary
-            : null,
+        backgroundColor:
+            selectedIndex == 0 ? Theme.of(context).colorScheme.tertiary : null,
         title: switch (selectedIndex) {
           0 => null,
           _ => Text(_pagesTitle.elementAt(selectedIndex)),
@@ -69,7 +89,7 @@ class _StructureState extends ConsumerState<Structure> {
           switch (selectedIndex) {
             0 => FilledButton(
               onPressed: () {
-                ref.read(visibilityAmountProvider.notifier).state = !isVisible;
+                ref.read(visibilityAmountProvider.notifier).toggleVisibility();
               },
               style: FilledButton.styleFrom(shape: const CircleBorder()),
               child: Icon(isVisible ? Icons.visibility : Icons.visibility_off),
@@ -90,9 +110,11 @@ class _StructureState extends ConsumerState<Structure> {
         selectedFontSize: 8,
         unselectedFontSize: 8,
         currentIndex: selectedIndex,
-        onTap: (index) => index != 2
-            ? ref.read(selectedIndexProvider.notifier).state = index
-            : null,
+        onTap:
+            (index) =>
+                index != 2
+                    ? ref.read(selectedIndexProvider.notifier).state = index
+                    : null,
         items: [
           BottomNavigationBarItem(
             icon: Icon(selectedIndex == 0 ? Icons.home : Icons.home_outlined),
