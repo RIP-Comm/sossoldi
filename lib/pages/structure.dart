@@ -14,9 +14,9 @@ import 'transactions/transactions_page.dart';
 final StateProvider selectedIndexProvider = StateProvider<int>((ref) => 0);
 
 final visibilityAmountProvider =
-StateNotifierProvider<VisibilityAmountNotifier, bool>(
+    StateNotifierProvider<VisibilityAmountNotifier, bool>(
       (ref) => VisibilityAmountNotifier(),
-);
+    );
 
 class VisibilityAmountNotifier extends StateNotifier<bool> {
   VisibilityAmountNotifier() : super(false) {
@@ -71,9 +71,8 @@ class _StructureState extends ConsumerState<Structure> {
       // Prevent the fab moving up when the keyboard is opened
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: selectedIndex == 0
-            ? Theme.of(context).colorScheme.tertiary
-            : null,
+        backgroundColor:
+            selectedIndex == 0 ? Theme.of(context).colorScheme.tertiary : null,
         title: switch (selectedIndex) {
           0 => null,
           _ => Text(_pagesTitle.elementAt(selectedIndex)),
@@ -111,9 +110,11 @@ class _StructureState extends ConsumerState<Structure> {
         selectedFontSize: 8,
         unselectedFontSize: 8,
         currentIndex: selectedIndex,
-        onTap: (index) => index != 2
-            ? ref.read(selectedIndexProvider.notifier).state = index
-            : null,
+        onTap:
+            (index) =>
+                index != 2
+                    ? ref.read(selectedIndexProvider.notifier).state = index
+                    : null,
         items: [
           BottomNavigationBarItem(
             icon: Icon(selectedIndex == 0 ? Icons.home : Icons.home_outlined),
