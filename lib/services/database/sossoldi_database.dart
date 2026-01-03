@@ -5,6 +5,7 @@ import 'dart:developer' as dev;
 import 'package:csv/csv.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
 
 // Models
@@ -15,6 +16,11 @@ import '../../model/currency.dart';
 import '../../model/recurring_transaction.dart';
 import '../../model/transaction.dart';
 import 'migration_manager.dart';
+
+part 'sossoldi_database.g.dart';
+
+@Riverpod(keepAlive: true)
+SossoldiDatabase database(Ref ref) => SossoldiDatabase.instance;
 
 class SossoldiDatabase {
   static final SossoldiDatabase instance = SossoldiDatabase._init();

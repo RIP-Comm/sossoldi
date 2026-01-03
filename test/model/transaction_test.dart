@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
+import 'package:sossoldi/services/database/repositories/transactions_repository.dart';
 import 'package:sossoldi/services/database/sossoldi_database.dart';
 
 import 'package:sossoldi/model/transaction.dart';
@@ -242,7 +243,9 @@ void main() {
         "$insertDemoTransactionsQuery ${demoTransactions.join(",")};",
       );
 
-      var result = await TransactionMethods().lastMonthDailyTransactions();
+      var result = await TransactionsRepository(
+        database: sossoldiDatabase,
+      ).lastMonthDailyTransactions();
       expect(result.length, 3);
 
       final DateFormat formatter = DateFormat('yyyy-MM-dd');
@@ -336,7 +339,9 @@ void main() {
         "$insertDemoTransactionsQuery ${demoTransactions.join(",")};",
       );
 
-      var result = await TransactionMethods().currentMonthDailyTransactions();
+      var result = await TransactionsRepository(
+        database: sossoldiDatabase,
+      ).currentMonthDailyTransactions();
       expect(result.length, 3);
 
       final DateFormat formatter = DateFormat('yyyy-MM-dd');
@@ -445,9 +450,9 @@ void main() {
         "$insertDemoTransactionsQuery ${demoTransactions.join(",")};",
       );
 
-      var result = await TransactionMethods().currentMonthDailyTransactions(
-        accountId: 70,
-      );
+      var result = await TransactionsRepository(
+        database: sossoldiDatabase,
+      ).currentMonthDailyTransactions(accountId: 70);
       expect(result.length, 3);
 
       final DateFormat formatter = DateFormat('yyyy-MM-dd');
@@ -573,7 +578,9 @@ void main() {
         "$insertDemoTransactionsQuery ${demoTransactions.join(",")};",
       );
 
-      var result = await TransactionMethods().currentYearMontlyTransactions();
+      var result = await TransactionsRepository(
+        database: sossoldiDatabase,
+      ).currentYearMontlyTransactions();
       expect(result.length, 2);
 
       final DateFormat formatter = DateFormat('yyyy-MM');

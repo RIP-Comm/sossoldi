@@ -4,11 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
 import '../../../constants/style.dart';
+import '../../../providers/transactions_provider.dart';
 import '../../../ui/widgets/rounded_icon.dart';
 import '../../../model/bank_account.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../ui/device.dart';
-import '../../../ui/widgets/transaction_type_button.dart';
 
 class AccountsPieChart extends ConsumerWidget {
   const AccountsPieChart({
@@ -25,7 +25,7 @@ class AccountsPieChart extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedIndex = ref.watch(selectedListIndexProvider);
-    final currencyState = ref.watch(currencyStateNotifier);
+    final currencyState = ref.watch(currencyStateProvider);
     return SizedBox(
       height: 200,
       child: Stack(
@@ -46,8 +46,11 @@ class AccountsPieChart extends ConsumerWidget {
                       pieTouchResponse.touchedSection == null) {
                     return;
                   }
-                  ref.read(selectedListIndexProvider.notifier).state =
-                      pieTouchResponse.touchedSection!.touchedSectionIndex;
+                  ref
+                      .read(selectedListIndexProvider.notifier)
+                      .setIndex(
+                        pieTouchResponse.touchedSection!.touchedSectionIndex,
+                      );
                 },
               ),
             ),
@@ -66,8 +69,8 @@ class AccountsPieChart extends ConsumerWidget {
                 ),
               Text(
                 (selectedIndex != -1)
-                    ? "${amounts[accounts[selectedIndex].id]!.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}"
-                    : "${total.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}",
+                    ? "${amounts[accounts[selectedIndex].id]!.toStringAsFixed(2)} ${currencyState.symbol}"
+                    : "${total.toStringAsFixed(2)} ${currencyState.symbol}",
                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                   color:
                       ((selectedIndex != -1 &&

@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../pages/structure.dart';
+import '../../providers/settings_provider.dart';
 
 class BlurWidget extends ConsumerWidget {
   const BlurWidget({super.key, this.ignore = false, required this.child});

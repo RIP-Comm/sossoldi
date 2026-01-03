@@ -34,18 +34,13 @@ Route<dynamic> makeRoute(RouteSettings settings) {
     case '/dashboard':
       return buildAdaptiveRoute(settings.name, const DashboardPage());
     case '/add-page':
-      Map<String, bool>? args;
-      if (settings.arguments is Map<String, bool>?) {
-        args = settings.arguments as Map<String, bool>?;
-      } else {
-        args = null;
+      Map<String, dynamic>? args;
+      if (settings.arguments is Map<String, dynamic>?) {
+        args = settings.arguments as Map<String, dynamic>?;
       }
       return buildAdaptiveRoute(
         settings.name,
-        CreateTransactionPage(
-          recurrencyEditingPermitted:
-              args?['recurrencyEditingPermitted'] ?? true,
-        ),
+        CreateTransactionPage(transaction: args?['transaction']),
       );
     case '/edit-recurring-transaction':
       return buildAdaptiveRoute(

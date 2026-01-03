@@ -20,17 +20,16 @@ class CategorySelector extends ConsumerStatefulWidget {
 
 class _CategorySelectorState extends ConsumerState<CategorySelector> {
   void _selectCategory(BuildContext context, CategoryTransaction category) {
-    ref.read(categoryProvider.notifier).state = category;
+    ref.read(selectedCategoryProvider.notifier).setCategory(category);
     Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    final transactionType = ref.watch(transactionTypeProvider);
-    final categoryType = ref.watch(
-      transactionToCategoryProvider(transactionType),
+    final transactionType = ref.watch(selectedTransactionTypeProvider);
+    final categoriesList = ref.watch(
+      categoriesByTypeProvider(transactionType.categoryType),
     );
-    final categoriesList = ref.watch(categoriesByTypeProvider(categoryType));
 
     return Container(
       color: Theme.of(context).colorScheme.primaryContainer,
@@ -149,7 +148,8 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
                             ),
                             title: Text(category.name),
                             trailing:
-                                ref.watch(categoryProvider)?.id == category.id
+                                ref.watch(selectedCategoryProvider)?.id ==
+                                    category.id
                                 ? const Icon(Icons.check)
                                 : null,
                           );

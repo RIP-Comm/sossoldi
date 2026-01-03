@@ -330,11 +330,13 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                   ),
                   const SizedBox(height: Sizes.sm),
                   ElevatedButton(
-                    onPressed: () {
-                      _flagOnBoardingCompleted();
-                      Navigator.of(
-                        context,
-                      ).pushNamedAndRemoveUntil('/', (route) => false);
+                    onPressed: () async {
+                      await _flagOnBoardingCompleted();
+                      if (context.mounted) {
+                        Navigator.of(
+                          context,
+                        ).pushNamedAndRemoveUntil('/', (route) => false);
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       elevation: 0.0,
@@ -372,9 +374,9 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                       vertical: Sizes.lg,
                     ),
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (_validAmount) {
-                          ref
+                          await ref
                               .watch(accountsProvider.notifier)
                               .addAccount(
                                 name: accountNameController.text,
@@ -384,10 +386,12 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                                 startingValue:
                                     num.tryParse(amountController.text) ?? 0,
                               );
-                          _flagOnBoardingCompleted();
-                          Navigator.of(
-                            context,
-                          ).pushNamedAndRemoveUntil('/', (route) => false);
+                          await _flagOnBoardingCompleted();
+                          if (context.mounted) {
+                            Navigator.of(
+                              context,
+                            ).pushNamedAndRemoveUntil('/', (route) => false);
+                          }
                         }
                       },
                       style: ElevatedButton.styleFrom(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/transactions_provider.dart';
+import '../../services/database/repositories/transactions_repository.dart';
 import '../../ui/widgets/transactions_list.dart';
 import '../../model/transaction.dart';
 import '../../ui/device.dart';
@@ -24,25 +25,28 @@ class _SearchPage extends ConsumerState<SearchPage> {
         element.key: element.value,
     };
     setState(() {
-      futureTransactions = TransactionMethods().selectAll(
-        limit: 100,
-        transactionType: ref
-            .read(typeFilterProvider)
-            .entries
-            .map((f) => f.value == true ? f.key : "")
-            .toList(),
-        label: labelFilter,
-        bankAccounts: filterAccountList,
-      );
+      futureTransactions = ref
+          .read(transactionsRepositoryProvider)
+          .selectAll(
+            limit: 100,
+            transactionType: ref
+                .read(typeFilterProvider)
+                .entries
+                .map((f) => f.value == true ? f.key : "")
+                .toList(),
+            label: labelFilter,
+            bankAccounts: filterAccountList,
+          );
     });
   }
 
   @override
   void initState() {
     super.initState();
-    TransactionMethods().getAllLabels().then(
-      (List<String> value) => suggetions.addAll(value),
-    );
+    ref
+        .read(transactionsRepositoryProvider)
+        .getAllLabels()
+        .then((List<String> value) => suggetions.addAll(value));
   }
 
   @override
@@ -121,12 +125,12 @@ class _SearchPage extends ConsumerState<SearchPage> {
                               ),
                             ),
                             onSelected: (_) {
-                              ref.read(typeFilterProvider.notifier).state = {
+                              ref.read(typeFilterProvider.notifier).setFilter({
                                 ...filterType,
                                 "IN": filterType["IN"] != null
                                     ? !filterType["IN"]!
                                     : false,
-                              };
+                              });
                               _updateFutureTransactions();
                             },
                           ),
@@ -158,12 +162,12 @@ class _SearchPage extends ConsumerState<SearchPage> {
                               ),
                             ),
                             onSelected: (_) {
-                              ref.read(typeFilterProvider.notifier).state = {
+                              ref.read(typeFilterProvider.notifier).setFilter({
                                 ...filterType,
                                 "OUT": filterType["OUT"] != null
                                     ? !filterType["OUT"]!
                                     : false,
-                              };
+                              });
                               _updateFutureTransactions();
                             },
                           ),
@@ -195,12 +199,12 @@ class _SearchPage extends ConsumerState<SearchPage> {
                               ),
                             ),
                             onSelected: (_) {
-                              ref.read(typeFilterProvider.notifier).state = {
+                              ref.read(typeFilterProvider.notifier).setFilter({
                                 ...filterType,
                                 "TR": filterType["TR"] != null
                                     ? !filterType["TR"]!
                                     : false,
-                              };
+                              });
                               _updateFutureTransactions();
                             },
                           ),
@@ -256,18 +260,18 @@ class _SearchPage extends ConsumerState<SearchPage> {
                                 onSelected: (_) {
                                   ref
                                       .read(filterAccountProvider.notifier)
-                                      .state = {
-                                    ...ref.read(filterAccountProvider),
-                                    account.id!:
-                                        ref.read(
-                                              filterAccountProvider,
-                                            )[account.id] !=
-                                            null
-                                        ? !ref.read(
-                                            filterAccountProvider,
-                                          )[account.id]!
-                                        : false,
-                                  };
+                                      .setAccounts({
+                                        ...ref.read(filterAccountProvider),
+                                        account.id!:
+                                            ref.read(
+                                                  filterAccountProvider,
+                                                )[account.id] !=
+                                                null
+                                            ? !ref.read(
+                                                filterAccountProvider,
+                                              )[account.id]!
+                                            : false,
+                                      });
                                   _updateFutureTransactions();
                                 },
                               ),

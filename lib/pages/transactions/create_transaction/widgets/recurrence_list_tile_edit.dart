@@ -16,7 +16,7 @@ class RecurrenceListTileEdit extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isDarkMode = ref.watch(appThemeStateNotifier).isDarkModeEnabled;
+    final isDarkMode = ref.watch(appThemeStateProvider).isDarkModeEnabled;
     final isRecurring = ref.watch(selectedRecurringPayProvider);
     final endDate = ref.watch(endDateProvider);
 
@@ -152,9 +152,9 @@ class EndDateSelector extends ConsumerWidget {
                 ? null
                 : const Icon(Icons.check),
             title: const Text("Never"),
-            onTap: () => {
-              ref.read(endDateProvider.notifier).state = null,
-              Navigator.pop(context),
+            onTap: () {
+              ref.read(endDateProvider.notifier).setDate(null);
+              Navigator.pop(context);
             },
           ),
           ListTile(
@@ -165,7 +165,7 @@ class EndDateSelector extends ConsumerWidget {
                 : null,
             subtitle: Text(
               ref.read(endDateProvider) != null
-                  ? ref.read(endDateProvider.notifier).state!.formatEDMY()
+                  ? ref.read(endDateProvider)!.formatEDMY()
                   : '',
             ),
             onTap: () async {
@@ -182,7 +182,7 @@ class EndDateSelector extends ConsumerWidget {
                       maximumYear: 2050,
                       mode: CupertinoDatePickerMode.date,
                       onDateTimeChanged: (date) =>
-                          ref.read(endDateProvider.notifier).state = date,
+                          ref.read(endDateProvider.notifier).setDate(date),
                     ),
                   ),
                 );
@@ -194,7 +194,7 @@ class EndDateSelector extends ConsumerWidget {
                   lastDate: DateTime(2050),
                 );
                 if (pickedDate != null) {
-                  ref.read(endDateProvider.notifier).state = pickedDate;
+                  ref.read(endDateProvider.notifier).setDate(pickedDate);
                 }
               }
             },
