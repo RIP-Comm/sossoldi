@@ -22,7 +22,7 @@ class BudgetCircularIndicator extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currencyState = ref.watch(currencyStateNotifier);
+    final currencyState = ref.watch(currencyStateProvider);
     final theme = Theme.of(context);
     return Column(
       children: [
@@ -45,7 +45,7 @@ class BudgetCircularIndicator extends ConsumerWidget {
                       ),
                     ),
                     TextSpan(
-                      text: currencyState.selectedCurrency.symbol,
+                      text: currencyState.symbol,
                       style: Theme.of(context).textTheme.labelMedium!
                           .copyWith(
                             color: Theme.of(context).colorScheme.primary,

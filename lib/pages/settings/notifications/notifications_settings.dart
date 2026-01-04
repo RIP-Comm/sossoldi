@@ -18,8 +18,8 @@ class NotificationsSettings extends ConsumerStatefulWidget {
 class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
   @override
   Widget build(BuildContext context) {
-    final isReminderEnabled = ref.watch(transactionReminderSwitchProvider);
-    ref.listen(settingsProvider, (_, _) {});
+    final isTrscReminderEnabled = ref.watch(transactionReminderSwitchProvider);
+    ref.listen(notificationsProvider, (_, _) {});
 
     return Scaffold(
       appBar: AppBar(
@@ -84,25 +84,22 @@ class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
                         ),
                       ),
                       Switch.adaptive(
-                        value: isReminderEnabled,
+                        value: isTrscReminderEnabled,
                         onChanged: (value) async {
                           await NotificationService()
                               .requestNotificationPermissions();
                           ref
-                                  .read(
-                                    transactionReminderSwitchProvider.notifier,
-                                  )
-                                  .state =
-                              value;
+                              .read(transactionReminderSwitchProvider.notifier)
+                              .setValue(value);
                           ref
-                              .read(settingsProvider.notifier)
+                              .read(notificationsProvider.notifier)
                               .updateNotificationReminder(active: value);
                         },
                       ),
                     ],
                   ),
                   AnimatedCrossFade(
-                    crossFadeState: isReminderEnabled
+                    crossFadeState: isTrscReminderEnabled
                         ? CrossFadeState.showSecond
                         : CrossFadeState.showFirst,
                     duration: const Duration(milliseconds: 150),
@@ -117,14 +114,13 @@ class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
                               type: type,
                               setNotificationTypeCallback: () {
                                 ref
-                                        .watch(
-                                          transactionReminderCadenceProvider
-                                              .notifier,
-                                        )
-                                        .state =
-                                    type;
+                                    .watch(
+                                      transactionReminderCadenceProvider
+                                          .notifier,
+                                    )
+                                    .setValue(type);
                                 ref
-                                    .read(settingsProvider.notifier)
+                                    .read(notificationsProvider.notifier)
                                     .updateNotificationReminder();
                               },
                             );
@@ -161,6 +157,7 @@ class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
                 borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
               ),
               child: Column(
+                spacing: Sizes.md,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -175,13 +172,10 @@ class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
                         value: ref.watch(transactionRecAddedSwitchProvider),
                         onChanged: (value) {
                           ref
-                                  .read(
-                                    transactionRecAddedSwitchProvider.notifier,
-                                  )
-                                  .state =
-                              value;
+                              .read(transactionRecAddedSwitchProvider.notifier)
+                              .setValue(value);
                           ref
-                              .read(settingsProvider.notifier)
+                              .read(notificationsProvider.notifier)
                               .updateNotificationRecurring(active: value);
                         },
                       ),
@@ -201,23 +195,13 @@ class _NotificationsSettingsState extends ConsumerState<NotificationsSettings> {
                   //     Switch.adaptive(
                   //       value: ref.watch(transactionRecReminderSwitchProvider),
                   //       onChanged: (value) {
-                  //         ref.read(transactionRecReminderSwitchProvider.notifier).state = value;
-                  //         ref.read(settingsProvider.notifier).updateNotifications(active: value);
+                  //         ref.read(transactionRecReminderSwitchProvider.notifier).setValue(value);
+                  //         // ref.read(notificationsProvider.notifier).updateNotifications(active: value);
                   //       },
                   //     ),
                   //   ],
                   // ),
                 ],
-              ),
-            ),
-            Container(
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.only(left: Sizes.xxl, top: Sizes.sm),
-              child: Text(
-                "Remind me before a recurring transaction is added",
-                style: Theme.of(
-                  context,
-                ).textTheme.labelMedium!.copyWith(color: grey1),
               ),
             ),
           ],

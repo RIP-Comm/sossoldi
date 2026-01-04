@@ -6,6 +6,7 @@ import '../../../model/currency.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../providers/required_authentication_provider.dart';
 import '../../../providers/theme_provider.dart';
+import '../../../services/database/repositories/currency_repository.dart';
 import '../../../ui/device.dart';
 import 'widgets/currency_selector_dialog.dart';
 
@@ -30,14 +31,15 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
     ["🇩🇪", "Deutsch"],
   ];
 
-  Future<List<Currency>> currencyList = CurrencyMethods().selectAll();
-
   @override
   Widget build(BuildContext context) {
-    final appThemeState = ref.watch(appThemeStateNotifier);
-    final currencyState = ref.watch(currencyStateNotifier);
+    final appThemeState = ref.watch(appThemeStateProvider);
+    final currencyState = ref.watch(currencyStateProvider);
+    Future<List<Currency>> currencyList = ref
+        .read(currencyRepositoryProvider)
+        .selectAll();
     final requiresAuthenticationState = ref.watch(
-      requiredAuthenticationStateNotifier,
+      requiredAuthenticationStateProvider,
     );
 
     return Scaffold(
@@ -75,10 +77,10 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                       // Toggle dark mode using the provider
                       if (appThemeState.isDarkModeEnabled) {
                         ref
-                            .read(appThemeStateNotifier.notifier)
+                            .read(appThemeStateProvider.notifier)
                             .setLightTheme();
                       } else {
-                        ref.read(appThemeStateNotifier.notifier).setDarkTheme();
+                        ref.read(appThemeStateProvider.notifier).setDarkTheme();
                       }
                     },
                     icon: Icon(
@@ -117,7 +119,7 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                     backgroundColor: blue5,
                     child: Center(
                       child: Text(
-                        currencyState.selectedCurrency.symbol,
+                        currencyState.symbol,
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.onPrimary,
                           fontSize: 25,
@@ -144,19 +146,18 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                   child: IconButton(
                     color: blue5,
                     onPressed: () {
-                      if (requiresAuthenticationState
-                          .userRequiresAuthentication) {
+                      if (requiresAuthenticationState) {
                         ref
-                            .read(requiredAuthenticationStateNotifier.notifier)
+                            .read(requiredAuthenticationStateProvider.notifier)
                             .setNoAuthentication();
                       } else {
                         ref
-                            .read(requiredAuthenticationStateNotifier.notifier)
+                            .read(requiredAuthenticationStateProvider.notifier)
                             .setAuthenticationRequired();
                       }
                     },
                     icon: Icon(
-                      requiresAuthenticationState.userRequiresAuthentication
+                      requiresAuthenticationState
                           ? Icons.lock
                           : Icons.lock_open,
                       size: 25.0,

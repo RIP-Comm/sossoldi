@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../constants/constants.dart';
-import '../../model/bank_account.dart';
-import '../../constants/style.dart';
-import '../../providers/accounts_provider.dart';
-import '../../providers/currency_provider.dart';
-import '../device.dart';
-import '../extensions.dart';
-import 'blur_widget.dart';
-import 'rounded_icon.dart';
+import '../../../constants/constants.dart';
+import '../../../model/bank_account.dart';
+import '../../../constants/style.dart';
+import '../../../providers/accounts_provider.dart';
+import '../../../providers/currency_provider.dart';
+import '../../../ui/device.dart';
+import '../../../ui/extensions.dart';
+import '../../../ui/widgets/blur_widget.dart';
+import '../../../ui/widgets/rounded_icon.dart';
 
 /// This class shows account summaries in the dashboard
 class AccountsSum extends ConsumerWidget {
-  final BankAccount account;
-
   const AccountsSum({required this.account, super.key});
+
+  final BankAccount account;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currencyState = ref.watch(currencyStateNotifier);
+    final currencyState = ref.watch(currencyStateProvider);
     ref.listen(selectedAccountProvider, (_, _) {});
     return Container(
       decoration: BoxDecoration(
@@ -78,7 +78,7 @@ class AccountsSum extends ConsumerWidget {
                                 style: Theme.of(context).textTheme.titleSmall,
                               ),
                               TextSpan(
-                                text: currencyState.selectedCurrency.symbol,
+                                text: currencyState.symbol,
                                 style: Theme.of(context).textTheme.bodySmall
                                     ?.apply(
                                       fontFeatures: [

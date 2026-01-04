@@ -4,11 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
 import '../../../constants/style.dart';
+import '../../../providers/transactions_provider.dart';
 import '../../../ui/widgets/rounded_icon.dart';
 import '../../../model/category_transaction.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../ui/device.dart';
-import '../../../ui/widgets/transaction_type_button.dart';
 
 class CategoriesPieChart extends ConsumerWidget {
   const CategoriesPieChart({
@@ -28,7 +28,7 @@ class CategoriesPieChart extends ConsumerWidget {
     final selectedCategory = (selectedIndex >= 0)
         ? categories[selectedIndex]
         : null;
-    final currencyState = ref.watch(currencyStateNotifier);
+    final currencyState = ref.watch(currencyStateProvider);
     return SizedBox(
       height: 200,
       child: Stack(
@@ -49,8 +49,11 @@ class CategoriesPieChart extends ConsumerWidget {
                       pieTouchResponse.touchedSection == null) {
                     return;
                   }
-                  ref.read(selectedListIndexProvider.notifier).state =
-                      pieTouchResponse.touchedSection!.touchedSectionIndex;
+                  ref
+                      .read(selectedListIndexProvider.notifier)
+                      .setIndex(
+                        pieTouchResponse.touchedSection!.touchedSectionIndex,
+                      );
                 },
               ),
             ),
@@ -68,8 +71,8 @@ class CategoriesPieChart extends ConsumerWidget {
                 ),
               Text(
                 (selectedCategory != null)
-                    ? "${amounts[selectedCategory.id]!.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}"
-                    : "${total.toStringAsFixed(2)} ${currencyState.selectedCurrency.symbol}",
+                    ? "${amounts[selectedCategory.id]!.toStringAsFixed(2)} ${currencyState.symbol}"
+                    : "${total.toStringAsFixed(2)} ${currencyState.symbol}",
                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                   color:
                       ((selectedCategory != null &&

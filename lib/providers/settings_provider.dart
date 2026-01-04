@@ -1,34 +1,73 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../services/notifications/notifications_service.dart';
 
-final versionProvider = Provider<String>((_) => throw UnimplementedError());
+part 'settings_provider.g.dart';
+
+@Riverpod(keepAlive: true)
+String version(Ref ref) => '0.0.0'; // Default value until initialized
+
+@Riverpod(keepAlive: true)
+SharedPreferences sharedPref(Ref ref) => throw UnimplementedError();
+
+@Riverpod(keepAlive: true)
+bool onBoardingCompleted(Ref ref) {
+  final SharedPreferences prefs = ref.watch(sharedPrefProvider);
+  return prefs.getBool('onboarding_completed') ?? false;
+}
+
+@Riverpod(keepAlive: true)
+class VisibilityAmount extends _$VisibilityAmount {
+  @override
+  bool build() => false;
+
+  void setVisibility(bool visibility) => state = visibility;
+}
 
 enum NotificationReminderType { none, daily, weekly, monthly }
 
-final transactionReminderSwitchProvider = StateProvider.autoDispose<bool>(
-  (ref) => false,
-);
-final transactionReminderCadenceProvider =
-    StateProvider.autoDispose<NotificationReminderType>(
-      (ref) => NotificationReminderType.none,
-    );
-final transactionRecReminderSwitchProvider = StateProvider.autoDispose<bool>(
-  (ref) => false,
-);
-final transactionRecAddedSwitchProvider = StateProvider.autoDispose<bool>(
-  (ref) => false,
-);
+@Riverpod(keepAlive: true)
+class TransactionReminderSwitch extends _$TransactionReminderSwitch {
+  @override
+  bool build() => false;
 
-class AsyncSettingsNotifier extends AutoDisposeAsyncNotifier<dynamic> {
+  void setValue(bool value) => state = value;
+}
+
+@Riverpod(keepAlive: true)
+class TransactionReminderCadence extends _$TransactionReminderCadence {
+  @override
+  NotificationReminderType build() => NotificationReminderType.none;
+
+  void setValue(NotificationReminderType value) => state = value;
+}
+
+@Riverpod(keepAlive: true)
+class TransactionRecReminderSwitch extends _$TransactionRecReminderSwitch {
+  @override
+  bool build() => false;
+
+  void setValue(bool value) => state = value;
+}
+
+@Riverpod(keepAlive: true)
+class TransactionRecAddedSwitch extends _$TransactionRecAddedSwitch {
+  @override
+  bool build() => false;
+
+  void setValue(bool value) => state = value;
+}
+
+@Riverpod(keepAlive: true)
+class Notifications extends _$Notifications {
   @override
   Future<dynamic> build() async {
     return _getSettings();
   }
 
   Future<void> _getSettings() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = ref.watch(sharedPrefProvider);
     ref.read(transactionReminderSwitchProvider.notifier).state =
         prefs.getBool('transaction-reminder') ?? false;
     ref
@@ -43,7 +82,7 @@ class AsyncSettingsNotifier extends AutoDisposeAsyncNotifier<dynamic> {
   }
 
   Future<void> updateNotificationReminder({bool active = true}) async {
-    state = const AsyncValue.loading();
+    state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       if (active) {
@@ -75,7 +114,7 @@ class AsyncSettingsNotifier extends AutoDisposeAsyncNotifier<dynamic> {
   }
 
   Future<void> updateNotificationRecurring({bool active = true}) async {
-    state = const AsyncValue.loading();
+    state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setBool(
@@ -91,8 +130,3 @@ class AsyncSettingsNotifier extends AutoDisposeAsyncNotifier<dynamic> {
     });
   }
 }
-
-final settingsProvider =
-    AutoDisposeAsyncNotifierProvider<AsyncSettingsNotifier, dynamic>(() {
-      return AsyncSettingsNotifier();
-    });

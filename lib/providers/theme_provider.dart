@@ -1,46 +1,48 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants/constants.dart';
-// import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final appThemeStateNotifier = ChangeNotifierProvider((ref) => AppThemeState());
+part 'theme_provider.g.dart';
 
-class AppThemeState extends ChangeNotifier {
+class ThemeState {
+  final bool isDarkModeEnabled;
+
+  ThemeState(this.isDarkModeEnabled);
+}
+
+@Riverpod(keepAlive: true)
+class AppThemeState extends _$AppThemeState {
   static const String _themeKey = 'isDarkMode';
-  late SharedPreferences _prefs;
-  var isDarkModeEnabled = false;
 
-  AppThemeState() {
+  @override
+  ThemeState build() {
     _loadTheme();
+    return ThemeState(false);
   }
 
-  // Initialize and load saved theme
   Future<void> _loadTheme() async {
-    _prefs = await SharedPreferences.getInstance();
-    isDarkModeEnabled = _prefs.getBool(_themeKey) ?? false;
-    updateColorsBasedOnTheme(isDarkModeEnabled);
-    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    final isDark = prefs.getBool(_themeKey) ?? false;
+    state = ThemeState(isDark);
+    updateColorsBasedOnTheme(isDark);
   }
 
   // Save theme preference
   Future<void> _saveTheme(bool isDark) async {
-    _prefs = await SharedPreferences.getInstance();
-    await _prefs.setBool(_themeKey, isDark);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_themeKey, isDark);
   }
 
   void setLightTheme() {
-    isDarkModeEnabled = false;
-    updateColorsBasedOnTheme(isDarkModeEnabled);
-    _saveTheme(isDarkModeEnabled);
-    notifyListeners();
+    state = ThemeState(false);
+    updateColorsBasedOnTheme(false);
+    _saveTheme(false);
   }
 
   void setDarkTheme() {
-    isDarkModeEnabled = true;
-    updateColorsBasedOnTheme(isDarkModeEnabled);
-    _saveTheme(isDarkModeEnabled);
-    notifyListeners();
+    state = ThemeState(true);
+    updateColorsBasedOnTheme(true);
+    _saveTheme(true);
   }
 }

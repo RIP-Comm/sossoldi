@@ -12,16 +12,11 @@ import '../../../ui/device.dart';
 import 'categories_pie_chart.dart';
 import 'panel_list_tile.dart';
 
-class CategoriesTab extends ConsumerStatefulWidget {
+class CategoriesTab extends ConsumerWidget {
   const CategoriesTab({super.key});
 
   @override
-  ConsumerState<CategoriesTab> createState() => _CategoriesTabState();
-}
-
-class _CategoriesTabState extends ConsumerState<CategoriesTab> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final categories = ref.watch(categoriesProvider);
     final transactions = ref.watch(transactionsProvider);
     final transactionType = ref.watch(selectedTransactionTypeProvider);

@@ -13,7 +13,7 @@ class LabelListTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isDarkMode = ref.watch(appThemeStateNotifier).isDarkModeEnabled;
+    final isDarkMode = ref.watch(appThemeStateProvider).isDarkModeEnabled;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(

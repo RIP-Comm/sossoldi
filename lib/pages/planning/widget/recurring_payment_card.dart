@@ -34,8 +34,8 @@ class RecurringPaymentCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final categories = ref.watch(categoriesProvider).value;
     final accounts = ref.watch(accountsProvider).value;
-    final isDarkMode = ref.watch(appThemeStateNotifier).isDarkModeEnabled;
-    final currencyState = ref.watch(currencyStateNotifier);
+    final isDarkMode = ref.watch(appThemeStateProvider).isDarkModeEnabled;
+    final currencyState = ref.watch(currencyStateProvider);
 
     var category = categories?.firstWhereOrNull(
       (element) => element.id == transaction.idCategory,
@@ -110,7 +110,7 @@ class RecurringPaymentCard extends ConsumerWidget {
                                       brightness: Theme.of(context).brightness,
                                     );
                                 return Text(
-                                  "$prefix${transaction.amount}${currencyState.selectedCurrency.symbol}",
+                                  "$prefix${transaction.amount}${currencyState.symbol}",
                                   style: TextStyle(color: amountColor),
                                 );
                               },

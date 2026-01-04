@@ -51,7 +51,7 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
   @override
   Widget build(BuildContext context) {
     final selectedAccount = ref.watch(selectedAccountProvider);
-    final currencyState = ref.watch(currencyStateNotifier);
+    final currencyState = ref.watch(currencyStateProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -324,7 +324,7 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                           decoration: InputDecoration(
                             hintText:
                                 "${selectedAccount == null ? "Initial" : "Current"} Balance",
-                            suffixText: currencyState.selectedCurrency.symbol,
+                            suffixText: currencyState.symbol,
                           ),
                           keyboardType: const TextInputType.numberWithOptions(
                             decimal: true,
