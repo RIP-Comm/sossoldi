@@ -4,23 +4,32 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
 import '../../../model/budget.dart';
+import '../../../model/category_transaction.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../ui/device.dart';
 import '../../../ui/extensions.dart';
 
 class BudgetPieChart extends ConsumerWidget {
-  const BudgetPieChart({required this.budgets, super.key});
+  const BudgetPieChart({
+    required this.budgets,
+    required this.categories,
+    super.key,
+  });
 
   final List<Budget> budgets;
+  final List<CategoryTransaction> categories;
 
   List<PieChartSectionData> showingSections(double totalBudget) {
     return List.generate(budgets.length, (i) {
       final Budget budget = budgets.elementAt(i);
+      final CategoryTransaction category = categories.firstWhere(
+        (cat) => cat.id == budget.idCategory,
+      );
 
       double value = (budget.amountLimit / totalBudget) * 100;
 
       return PieChartSectionData(
-        color: categoryColorList[i % categoryColorList.length],
+        color: categoryColorList[category.color],
         value: value,
         title: "",
         radius: 20,

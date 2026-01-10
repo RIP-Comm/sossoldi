@@ -142,6 +142,7 @@ class RecurringPaymentCard extends ConsumerWidget {
                               showModalBottomSheet(
                                 context: context,
                                 isScrollControlled: true,
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
                                 shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(

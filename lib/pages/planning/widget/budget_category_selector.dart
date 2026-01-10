@@ -140,14 +140,11 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
               child: TextField(
                 controller: _controller,
                 textAlign: TextAlign.center,
-                // expands: true,
                 inputFormatters: [DecimalTextInputFormatter(decimalDigits: 2)],
                 keyboardType: const TextInputType.numberWithOptions(
                   decimal: true,
                 ),
-                onChanged: (_) {
-                  setState(() => _modifyBudget());
-                },
+                onChanged: (_) => _modifyBudget(),
                 decoration: InputDecoration(
                   hintText: "-",
                   suffix: Text(

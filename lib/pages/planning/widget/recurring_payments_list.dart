@@ -22,12 +22,10 @@ class RecurringPaymentSection extends ConsumerWidget {
       ref.read(selectedCategoryProvider.notifier).setCategory(null);
       ref.read(intervalProvider.notifier).setValue(Recurrence.monthly);
       ref.read(endDateProvider.notifier).setDate(null);
-      Navigator.of(context)
-          .pushNamed(
-            "/add-page",
-            arguments: {'recurrencyEditingPermitted': false},
-          )
-          .then((value) => ref.refresh(recurringTransactionProvider));
+      Navigator.of(context).pushNamed(
+        "/add-page",
+        arguments: {'recurrencyEditingPermitted': false},
+      );
     }
 
     return Padding(
@@ -89,16 +87,13 @@ class RecurringPaymentSection extends ConsumerWidget {
                 itemBuilder: (context, index) => InkWell(
                   onTap: () {
                     ref
-                        .read(recurringTransactionProvider.notifier)
+                        .read(recurringTransactionsProvider.notifier)
                         .transactionSelect(transactions[index])
                         .whenComplete(() {
                           if (context.mounted) {
-                            Navigator.of(context)
-                                .pushNamed("/edit-recurring-transaction")
-                                .then(
-                                  (value) =>
-                                      ref.refresh(recurringTransactionProvider),
-                                );
+                            Navigator.of(
+                              context,
+                            ).pushNamed("/edit-recurring-transaction");
                           }
                         });
                   },

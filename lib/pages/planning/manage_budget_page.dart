@@ -13,8 +13,7 @@ import '../../../providers/categories_provider.dart';
 import '../../../providers/budgets_provider.dart';
 
 class ManageBudgetPage extends ConsumerStatefulWidget {
-  final Function() onRefreshBudgets;
-  const ManageBudgetPage({required this.onRefreshBudgets, super.key});
+  const ManageBudgetPage({super.key});
 
   @override
   ConsumerState<ManageBudgetPage> createState() => _ManageBudgetPageState();
@@ -46,6 +45,7 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
   void _updateBudget(Budget updatedBudget, int index) {
     setState(() {
       deletedBudgets.add(budgets[index]);
+      usedCategoryIds.remove(budgets[index].idCategory);
       budgets[index] = updatedBudget;
       usedCategoryIds.add(updatedBudget.idCategory);
     });
@@ -109,102 +109,15 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
     final currencyState = ref.watch(currencyStateProvider);
 
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+      persistentFooterDecoration: const BoxDecoration(),
+      persistentFooterButtons: [
+        Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(Sizes.lg),
-              child: Text(
-                "Select the categories to create your budget",
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
+            Text(
+              "Swipe left to delete",
+              style: Theme.of(context).textTheme.bodySmall,
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: Sizes.lg,
-                vertical: Sizes.sm,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('CATEGORY', textAlign: TextAlign.left),
-                  Text('AMOUNT', textAlign: TextAlign.right),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: budgets.length,
-                      itemBuilder: (context, index) {
-                        final usedExcludingCurrent = Set<int>.from(
-                          usedCategoryIds,
-                        )..remove(budgets[index].idCategory);
-
-                        final initCategory = categories.firstWhere(
-                          (c) => c.id == budgets[index].idCategory,
-                          orElse: () => categories.first,
-                        );
-                        return Dismissible(
-                          key: Key(budgets[index].idCategory.toString()),
-                          background: Container(
-                            padding: const EdgeInsets.only(right: Sizes.lg),
-                            alignment: Alignment.centerRight,
-                            color: Colors.red,
-                            child: const Text(
-                              'Delete',
-                              textAlign: TextAlign.right,
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                          onDismissed: (_) => _deleteBudget(index),
-                          child: BudgetCategorySelector(
-                            categories: categories,
-                            usedCategoryIds: usedExcludingCurrent,
-                            budget: budgets[index],
-                            initSelectedCategory: initCategory,
-                            onBudgetChanged: (updated) =>
-                                _updateBudget(updated, index),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: Sizes.sm),
-                  Text(
-                    "Swipe left to delete",
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                  const SizedBox(height: Sizes.md),
-                  TextButton.icon(
-                    icon: const Icon(Icons.add_circle, size: 32),
-                    onPressed: canAddCategory
-                        ? () => _addBudget(
-                            Budget(
-                              active: true,
-                              amountLimit: 100,
-                              idCategory: availableCategories[0].id!,
-                              name: availableCategories[0].name,
-                            ),
-                          )
-                        : null,
-                    label: const Text("Add category budget"),
-                  ),
-                  if (!canAddCategory)
-                    const Padding(
-                      padding: EdgeInsets.only(top: 8.0),
-                      child: Text(
-                        "You have already added all available categories.",
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ),
-                ],
-              ),
-            ),
-            const SizedBox(height: Sizes.lg),
+            const SizedBox(height: Sizes.md),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
@@ -238,8 +151,9 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
             ),
             const SizedBox(height: Sizes.lg),
             const Divider(indent: 16, endIndent: 16),
-            Padding(
+            Container(
               padding: const EdgeInsets.all(Sizes.lg),
+              width: double.infinity,
               child: ElevatedButton(
                 onPressed: () async {
                   for (var item in deletedBudgets) {
@@ -253,12 +167,115 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
                         .insertOrUpdate(item);
                   }
 
-                  widget.onRefreshBudgets();
+                  await ref.read(budgetsProvider.notifier).refreshBudgets();
+
                   if (context.mounted) {
                     Navigator.of(context).pop();
                   }
                 },
                 child: const Text("SAVE BUDGET"),
+              ),
+            ),
+          ],
+        ),
+      ],
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(Sizes.lg),
+              child: Text(
+                "Select the categories to create your budget",
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: Sizes.lg,
+                vertical: Sizes.sm,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('CATEGORY', textAlign: TextAlign.left),
+                  Text('AMOUNT', textAlign: TextAlign.right),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: budgets.length + 1,
+                      itemBuilder: (context, index) {
+                        if (index == budgets.length) {
+                          if (canAddCategory) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: Sizes.md,
+                                horizontal: Sizes.xxl,
+                              ),
+                              child: TextButton.icon(
+                                icon: const Icon(Icons.add_circle, size: 32),
+                                onPressed: () => _addBudget(
+                                  Budget(
+                                    active: true,
+                                    amountLimit: 100,
+                                    idCategory: availableCategories[0].id!,
+                                    name: availableCategories[0].name,
+                                  ),
+                                ),
+                                label: const Text("Add category budget"),
+                              ),
+                            );
+                          } else {
+                            return const Padding(
+                              padding: EdgeInsets.only(top: 8.0),
+                              child: Center(
+                                child: Text(
+                                  "You have already added all available categories.",
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              ),
+                            );
+                          }
+                        }
+
+                        final usedExcludingCurrent = Set<int>.from(
+                          usedCategoryIds,
+                        )..remove(budgets[index].idCategory);
+                        final initCategory = categories.firstWhere(
+                          (c) => c.id == budgets[index].idCategory,
+                          orElse: () => categories.first,
+                        );
+                        return Dismissible(
+                          key: Key(budgets[index].idCategory.toString()),
+                          background: Container(
+                            padding: const EdgeInsets.only(right: Sizes.lg),
+                            alignment: Alignment.centerRight,
+                            color: Colors.red,
+                            child: const Text(
+                              'Delete',
+                              textAlign: TextAlign.right,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          onDismissed: (_) => _deleteBudget(index),
+                          child: BudgetCategorySelector(
+                            categories: categories,
+                            usedCategoryIds: usedExcludingCurrent,
+                            budget: budgets[index],
+                            initSelectedCategory: initCategory,
+                            onBudgetChanged: (updated) =>
+                                _updateBudget(updated, index),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
