@@ -30,8 +30,8 @@ class BudgetsSection extends ConsumerWidget {
           data: (budgets) {
             if (budgets.isEmpty) {
               return Container(
-                height: 90,
-                width: MediaQuery.of(context).size.width,
+                height: 120,
+                padding: const EdgeInsets.only(bottom: Sizes.xl),
                 alignment: Alignment.center,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

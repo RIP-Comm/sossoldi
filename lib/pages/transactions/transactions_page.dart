@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../constants/style.dart';
 import '../../providers/transactions_provider.dart';
+import '../../ui/assets.dart';
+import '../../ui/device.dart';
 import '../../ui/snack_bars/transactions_snack_bars.dart';
+import '../../ui/widgets/default_container.dart';
 import 'widgets/accounts_tab.dart';
 import 'widgets/categories_tab.dart';
 import 'widgets/custom_sliver_delegate.dart';
@@ -55,48 +59,120 @@ class _TransactionsPageState extends ConsumerState<TransactionsPage>
         ref: ref,
       ),
     );
+    final transactionsAsync = ref.watch(transactionsProvider);
 
-    return NotificationListener<ScrollEndNotification>(
-      onNotification: (notification) {
-        // snap the header open/close when it's in between the two states
-        final double scrollDistance = headerMaxHeight - headerMinHeight;
-
-        if (_scrollController.offset > 0 &&
-            _scrollController.offset < scrollDistance) {
-          final double snapOffset =
-              (_scrollController.offset / scrollDistance > 0.5)
-              ? scrollDistance + 10
-              : 0;
-
-          //! the app freezes on animateTo
-          // // Future.microtask(() => _scrollController.animateTo(snapOffset,
-          // //     duration: Duration(milliseconds: 200), curve: Curves.easeIn));
-
-          // microtask() runs the callback after the build ends
-          Future.microtask(() => _scrollController.jumpTo(snapOffset));
-        }
-        return false;
-      },
-      child: NestedScrollView(
-        controller: _scrollController,
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
-            SliverPersistentHeader(
-              delegate: CustomSliverDelegate(
-                ticker: this,
-                myTabs: myTabs,
-                tabController: _tabController,
-                expandedHeight: headerMaxHeight,
-                minHeight: headerMinHeight,
+    return transactionsAsync.when(
+      data: (data) {
+        if (data.isEmpty) {
+          return Align(
+            alignment: Alignment.topCenter,
+            child: DefaultContainer(
+              margin: const EdgeInsets.symmetric(
+                horizontal: Sizes.lg,
+                vertical: Sizes.xl,
               ),
-              pinned: true,
-              floating: true,
+              child: Column(
+                spacing: 16,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "There are no transactions added yet",
+                    style: Theme.of(context).textTheme.bodySmall,
+                    textAlign: TextAlign.center,
+                  ),
+                  Image.asset(
+                    SossoldiAssets.calculator,
+                    width: 240,
+                    height: 240,
+                  ),
+                  Text(
+                    "Add a transaction to make this section more appealing",
+                    style: Theme.of(context).textTheme.bodySmall,
+                    textAlign: TextAlign.center,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(Sizes.borderRadius),
+                      boxShadow: [defaultShadow],
+                    ),
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed("/add-page");
+                      },
+                      icon: Icon(
+                        Icons.add_circle,
+                        color: Theme.of(context).colorScheme.secondary,
+                        size: Sizes.xl,
+                      ),
+                      label: Text(
+                        "Add transaction",
+                        style: Theme.of(context).textTheme.titleLarge!.apply(
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: Sizes.md),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ];
-        },
-        body: TabBarView(
-          controller: _tabController,
-          children: const [ListTab(), CategoriesTab(), AccountsTab()],
+          );
+        } else {
+          return NotificationListener<ScrollEndNotification>(
+            onNotification: (notification) {
+              // snap the header open/close when it's in between the two states
+              final double scrollDistance = headerMaxHeight - headerMinHeight;
+
+              if (_scrollController.offset > 0 &&
+                  _scrollController.offset < scrollDistance) {
+                final double snapOffset =
+                    (_scrollController.offset / scrollDistance > 0.5)
+                    ? scrollDistance + 10
+                    : 0;
+
+                //! the app freezes on animateTo
+                // // Future.microtask(() => _scrollController.animateTo(snapOffset,
+                // //     duration: Duration(milliseconds: 200), curve: Curves.easeIn));
+
+                // microtask() runs the callback after the build ends
+                Future.microtask(() => _scrollController.jumpTo(snapOffset));
+              }
+              return false;
+            },
+            child: NestedScrollView(
+              controller: _scrollController,
+              headerSliverBuilder: (context, innerBoxIsScrolled) {
+                return [
+                  SliverPersistentHeader(
+                    delegate: CustomSliverDelegate(
+                      ticker: this,
+                      myTabs: myTabs,
+                      tabController: _tabController,
+                      expandedHeight: headerMaxHeight,
+                      minHeight: headerMinHeight,
+                    ),
+                    pinned: true,
+                    floating: true,
+                  ),
+                ];
+              },
+              body: TabBarView(
+                controller: _tabController,
+                children: const [ListTab(), CategoriesTab(), AccountsTab()],
+              ),
+            ),
+          );
+        }
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stack) => Center(
+        child: Text(
+          "An error occurred: $error",
+          style: Theme.of(context).textTheme.bodySmall,
         ),
       ),
     );
