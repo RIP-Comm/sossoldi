@@ -4,26 +4,44 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
 import '../../../model/budget.dart';
+import '../../../model/category_transaction.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../ui/device.dart';
+import '../../../ui/extensions.dart';
 
-class BudgetPieChart extends ConsumerStatefulWidget {
-  const BudgetPieChart({super.key, required this.budgets});
+class BudgetPieChart extends ConsumerWidget {
+  const BudgetPieChart({
+    required this.budgets,
+    required this.categories,
+    super.key,
+  });
 
   final List<Budget> budgets;
+  final List<CategoryTransaction> categories;
+
+  List<PieChartSectionData> showingSections(double totalBudget) {
+    return List.generate(budgets.length, (i) {
+      final Budget budget = budgets.elementAt(i);
+      final CategoryTransaction category = categories.firstWhere(
+        (cat) => cat.id == budget.idCategory,
+      );
+
+      double value = (budget.amountLimit / totalBudget) * 100;
+
+      return PieChartSectionData(
+        color: categoryColorList[category.color],
+        value: value,
+        title: "",
+        radius: 20,
+      );
+    });
+  }
 
   @override
-  BudgetPieChartState createState() => BudgetPieChartState();
-}
-
-class BudgetPieChartState extends ConsumerState<BudgetPieChart> {
-  double totalBudget = 0;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final currencyState = ref.watch(currencyStateProvider);
-    totalBudget = 0;
-    for (Budget budget in widget.budgets) {
+    double totalBudget = 0;
+    for (Budget budget in budgets) {
       totalBudget += budget.amountLimit;
     }
     return Stack(
@@ -35,17 +53,17 @@ class BudgetPieChartState extends ConsumerState<BudgetPieChart> {
             PieChartData(
               sectionsSpace: 0,
               centerSpaceRadius: 70,
-              sections: showingSections(),
+              sections: showingSections(totalBudget),
             ),
           ),
         ),
         Column(
+          spacing: Sizes.xs,
           children: [
             Text(
-              "${totalBudget.round()}${currencyState.symbol}",
+              "${totalBudget.toCurrency()}${currencyState.symbol}",
               style: const TextStyle(fontSize: 25),
             ),
-            const SizedBox(height: Sizes.xs),
             const Text(
               "PLANNED",
               style: TextStyle(fontWeight: FontWeight.normal),
@@ -54,20 +72,5 @@ class BudgetPieChartState extends ConsumerState<BudgetPieChart> {
         ),
       ],
     );
-  }
-
-  List<PieChartSectionData> showingSections() {
-    return List.generate(widget.budgets.length, (i) {
-      final Budget budget = widget.budgets.elementAt(i);
-
-      double value = (budget.amountLimit / totalBudget) * 100;
-
-      return PieChartSectionData(
-        color: categoryColorList[i % categoryColorList.length],
-        value: value,
-        title: "",
-        radius: 20,
-      );
-    });
   }
 }

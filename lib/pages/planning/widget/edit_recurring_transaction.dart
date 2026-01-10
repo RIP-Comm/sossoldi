@@ -72,7 +72,7 @@ class _EditRecurringTransactionState
                 ),
                 onPressed: () async {
                   ref
-                      .read(recurringTransactionProvider.notifier)
+                      .read(recurringTransactionsProvider.notifier)
                       .delete(selectedRecurringTransaction.id!)
                       .whenComplete(() {
                         if (context.mounted) {
@@ -188,8 +188,8 @@ class _EditRecurringTransactionState
                 child: TextButton(
                   onPressed: () {
                     ref
-                        .read(recurringTransactionProvider.notifier)
-                        .update(
+                        .read(recurringTransactionsProvider.notifier)
+                        .updateTransaction(
                           amountController.text.toNum(),
                           noteController.text,
                         )

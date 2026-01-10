@@ -13,6 +13,7 @@ import '../../../providers/currency_provider.dart';
 import '../../../services/database/repositories/transactions_repository.dart';
 import '../../../services/transactions/recurring_transaction_calculator.dart';
 import '../../../ui/device.dart';
+import '../../../ui/extensions.dart';
 import '../../../ui/widgets/default_container.dart';
 import '../../../ui/widgets/rounded_icon.dart';
 
@@ -107,7 +108,7 @@ class _OlderRecurringPaymentsState
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(Sizes.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -128,14 +129,14 @@ class _OlderRecurringPaymentsState
               },
             ),
             const SizedBox(height: Sizes.xl),
-            yearlyTotal.isNotEmpty
-                ? Expanded(
-                    child: ListView.separated(
+            Expanded(
+              child: yearlyTotal.isNotEmpty
+                  ? ListView.separated(
                       itemCount: yearlyTotal.length,
                       itemBuilder: (ctx, index) {
                         var years = yearlyTotal.keys.toList();
                         var year = years[index];
-                        var totalyealyAmt = yearlyTotal[year];
+                        var totalyearlyAmt = yearlyTotal[year];
                         var monthlyEntries = groupedMonthlyTransaction.entries
                             .where((m) {
                               return m.key.year == year;
@@ -160,7 +161,7 @@ class _OlderRecurringPaymentsState
                                     const Spacer(),
                                     _buildAmountText(
                                       context,
-                                      totalyealyAmt,
+                                      totalyearlyAmt,
                                       currencyState.symbol,
                                     ),
                                   ],
@@ -249,10 +250,8 @@ class _OlderRecurringPaymentsState
                           child: Container(color: Colors.white),
                         );
                       },
-                    ),
-                  )
-                : Expanded(
-                    child: Container(
+                    )
+                  : Container(
                       width: double.infinity,
                       color: Theme.of(context).colorScheme.surface,
                       child: Center(
@@ -262,7 +261,7 @@ class _OlderRecurringPaymentsState
                         ),
                       ),
                     ),
-                  ),
+            ),
           ],
         ),
       ),
@@ -374,13 +373,10 @@ class _OlderRecurringPaymentsState
     num? amount,
     String currencySymbol,
   ) {
-    final prefix = widget.transaction.type == TransactionType.expense
-        ? "-"
-        : "";
     return Row(
       children: [
         Text(
-          '$prefix${amount ?? 0}',
+          '${widget.transaction.type.prefix}${(amount ?? 0).toCurrency()}',
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             color: widget.transaction.type.toColor(
               brightness: Theme.of(context).brightness,

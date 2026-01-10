@@ -16,19 +16,14 @@ Future<List<BudgetStats>> monthlyBudgetsStats(Ref ref) async {
 @Riverpod(keepAlive: true)
 class Budgets extends _$Budgets {
   @override
-  Future<List<Budget>> build() async {
-    return _getBudgets();
-  }
-
-  Future<List<Budget>> getBudgets() async {
-    final budgets = await ref.read(budgetRepositoryProvider).selectAllActive();
-    return budgets;
-  }
+  Future<List<Budget>> build() async => _getBudgets();
 
   Future<List<Budget>> _getBudgets() async {
     final budgets = await ref.read(budgetRepositoryProvider).selectAllActive();
     return budgets;
   }
+
+  Future<List<Budget>> getBudgets() async => _getBudgets();
 
   Future<void> addBudget(Budget budget) async {
     state = const AsyncLoading();
