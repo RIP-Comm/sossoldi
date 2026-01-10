@@ -3,4 +3,5 @@
 abstract final class SossoldiAssets {
   static String get openVault => "assets/images/open_vault.png";
   static String get wallet => "assets/images/wallet.png";
+  static String get calculator => "assets/images/calculator.png";
 }
