@@ -87,7 +87,6 @@ class _OlderRecurringPaymentsState
       appBar: AppBar(
         title: const Text("Older payments"),
         centerTitle: true,
-        backgroundColor: grey3,
         leadingWidth: 80.0,
         leading: InkWell(
           onTap: () {
@@ -144,6 +143,7 @@ class _OlderRecurringPaymentsState
                             .toList();
 
                         return DefaultContainer(
+                          margin: EdgeInsets.zero,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             spacing: Sizes.sm,
@@ -244,12 +244,8 @@ class _OlderRecurringPaymentsState
                           ),
                         );
                       },
-                      separatorBuilder: (crx, index) {
-                        return SizedBox(
-                          height: Sizes.lg,
-                          child: Container(color: Colors.white),
-                        );
-                      },
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: Sizes.lg),
                     )
                   : Container(
                       width: double.infinity,
