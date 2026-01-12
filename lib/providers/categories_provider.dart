@@ -208,6 +208,20 @@ Future<List<CategoryTransaction>> subcategories(Ref ref, int categoryId) async {
   return categories;
 }
 
+@riverpod
+Future<List<CategoryTransaction>> frequentCategories(
+  Ref ref,
+  CategoryTransactionType? type,
+) async {
+  List<CategoryTransaction> categories = [];
+  if (type != null) {
+    categories = await ref
+        .read(categoryRepositoryProvider)
+        .selectFrequentCategories(type);
+  }
+  return categories;
+}
+
 @Riverpod(keepAlive: true)
 Future<Map<CategoryTransaction, double>> categoryMap(Ref ref) async {
   final categoryType = ref.watch(categoryTypeProvider);
