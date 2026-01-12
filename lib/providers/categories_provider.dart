@@ -16,6 +16,14 @@ class SelectedCategory extends _$SelectedCategory {
 }
 
 @Riverpod(keepAlive: true)
+class SelectedSubcategory extends _$SelectedSubcategory {
+  @override
+  CategoryTransaction? build() => null;
+
+  void setCategory(CategoryTransaction? category) => state = category;
+}
+
+@Riverpod(keepAlive: true)
 class CategoryType extends _$CategoryType {
   @override
   CategoryTransactionType build() => CategoryTransactionType.expense;
@@ -52,7 +60,34 @@ class Categories extends _$Categories {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       await ref.read(categoryRepositoryProvider).insert(category);
+      ref.invalidate(selectedCategoryProvider);
+      ref.invalidate(categoryMapProvider);
       ref.invalidate(categoriesByTypeProvider(category.type));
+      return _getCategories();
+    });
+  }
+
+  Future<void> addSubcategory({
+    required String name,
+    required String icon,
+  }) async {
+    final parentCategory = ref.read(selectedCategoryProvider)!;
+    CategoryTransaction category = CategoryTransaction(
+      name: name,
+      symbol: icon,
+      type: parentCategory.type,
+      color: parentCategory.color,
+      order: 0,
+      parent: parentCategory.id,
+    );
+
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      await ref.read(categoryRepositoryProvider).insert(category);
+      ref.invalidate(selectedSubcategoryProvider);
+      ref.invalidate(categoryMapProvider);
+      ref.invalidate(categoriesByTypeProvider(category.type));
+      ref.invalidate(subcategoriesProvider(parentCategory.id!));
       return _getCategories();
     });
   }
@@ -70,6 +105,28 @@ class Categories extends _$Categories {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       await ref.read(categoryRepositoryProvider).updateItem(category);
+      ref.invalidate(selectedCategoryProvider);
+      ref.invalidate(categoryMapProvider);
+      return _getCategories();
+    });
+  }
+
+  Future<void> updateSubcategory({
+    required String name,
+    required String icon,
+  }) async {
+    CategoryTransaction category = ref
+        .read(selectedSubcategoryProvider)!
+        .copy(name: name, symbol: icon);
+
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      await ref.read(categoryRepositoryProvider).updateItem(category);
+      ref.invalidate(selectedSubcategoryProvider);
+      ref.invalidate(categoryMapProvider);
+      ref.invalidate(
+        subcategoriesProvider(ref.read(selectedCategoryProvider)!.id!),
+      );
       return _getCategories();
     });
   }
@@ -78,6 +135,11 @@ class Categories extends _$Categories {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       await ref.read(categoryRepositoryProvider).deleteById(categoryId);
+      ref.invalidate(selectedSubcategoryProvider);
+      ref.invalidate(categoryMapProvider);
+      ref.invalidate(
+        subcategoriesProvider(ref.read(selectedCategoryProvider)!.id!),
+      );
       return _getCategories();
     });
   }
@@ -107,16 +169,41 @@ class Categories extends _$Categories {
 }
 
 @Riverpod(keepAlive: true)
+Future<List<CategoryTransaction>> allParentCategories(Ref ref) async {
+  final categories =
+      ref
+          .watch(categoriesProvider)
+          .value
+          ?.where((category) => category.parent == null)
+          .toList() ??
+      [];
+  return categories;
+}
+
+@Riverpod(keepAlive: true)
 Future<List<CategoryTransaction>> categoriesByType(
   Ref ref,
-  CategoryTransactionType? type,
-) async {
+  CategoryTransactionType? type, {
+  bool includeSubcategories = false,
+}) async {
   List<CategoryTransaction> categories = [];
   if (type != null) {
     categories = await ref
         .read(categoryRepositoryProvider)
-        .selectCategoriesByType(type);
+        .selectCategoriesByType(
+          type,
+          includeSubcategories: includeSubcategories,
+        );
   }
+  return categories;
+}
+
+@riverpod
+Future<List<CategoryTransaction>> subcategories(Ref ref, int categoryId) async {
+  List<CategoryTransaction> categories = [];
+  categories = await ref
+      .read(categoryRepositoryProvider)
+      .selectSubCategory(categoryId);
   return categories;
 }
 

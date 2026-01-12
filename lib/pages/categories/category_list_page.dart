@@ -13,7 +13,7 @@ class CategoryList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final categorysList = ref.watch(categoriesProvider);
+    final categorysList = ref.watch(allParentCategoriesProvider);
     ref.listen(selectedCategoryProvider, (_, _) {});
     return Scaffold(
       appBar: AppBar(
