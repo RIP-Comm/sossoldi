@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../providers/settings_provider.dart';
 import '../../../../ui/device.dart';
 
-class NotificationTypeTile extends ConsumerWidget {
+class NotificationTypeTile extends StatelessWidget {
   final NotificationReminderType type;
+  final bool selected;
   final VoidCallback setNotificationTypeCallback;
 
   const NotificationTypeTile({
     super.key,
     required this.type,
+    required this.selected,
     required this.setNotificationTypeCallback,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final transactionReminderCadence = ref.watch(
-      transactionReminderCadenceProvider,
-    );
-
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: setNotificationTypeCallback.call,
       child: Container(
@@ -28,7 +25,7 @@ class NotificationTypeTile extends ConsumerWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.primaryContainer,
           border: Border.all(
-            color: transactionReminderCadence == type
+            color: selected
                 ? Theme.of(context).colorScheme.secondary
                 : Colors.grey,
           ),
@@ -37,20 +34,21 @@ class NotificationTypeTile extends ConsumerWidget {
         child: Padding(
           padding: const EdgeInsets.all(Sizes.md),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 "${type.name[0].toUpperCase()}${type.name.substring(1)}",
                 style: TextStyle(
-                  color: transactionReminderCadence == type
+                  color: selected
                       ? Theme.of(context).colorScheme.secondary
                       : Theme.of(context).colorScheme.primary,
                 ),
               ),
-              const Spacer(),
-              if (transactionReminderCadence == type)
+              if (selected)
                 Icon(
                   Icons.check,
                   color: Theme.of(context).colorScheme.secondary,
+                  size: 20,
                 ),
             ],
           ),

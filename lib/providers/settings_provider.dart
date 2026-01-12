@@ -62,45 +62,56 @@ class TransactionRecAddedSwitch extends _$TransactionRecAddedSwitch {
 @Riverpod(keepAlive: true)
 class Notifications extends _$Notifications {
   @override
-  Future<dynamic> build() async {
-    return _getSettings();
+  Future<void> build() async {
+    return await _getSettings();
   }
 
   Future<void> _getSettings() async {
-    final SharedPreferences prefs = ref.watch(sharedPrefProvider);
-    ref.read(transactionReminderSwitchProvider.notifier).state =
-        prefs.getBool('transaction-reminder') ?? false;
-    ref
-        .read(transactionReminderCadenceProvider.notifier)
-        .state = NotificationReminderType.values.firstWhere(
-      (value) => value.name == prefs.getString('transaction-reminder-cadence'),
-    );
-    ref.read(transactionRecReminderSwitchProvider.notifier).state =
-        prefs.getBool('transaction-rec-reminder') ?? false;
-    ref.read(transactionRecAddedSwitchProvider.notifier).state =
-        prefs.getBool('transaction-rec-added') ?? false;
-  }
-
-  Future<void> updateNotificationReminder({bool active = true}) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      if (active) {
-        if (ref.read(transactionReminderCadenceProvider) ==
-            NotificationReminderType.none) {
-          ref.read(transactionReminderCadenceProvider.notifier).state =
-              NotificationReminderType.daily;
+      final SharedPreferences prefs = ref.watch(sharedPrefProvider);
+      final trscReminder = prefs.getBool('transaction-reminder') ?? false;
+      final cadenceStr = prefs.getString('transaction-reminder-cadence');
+      final recReminder = prefs.getBool('transaction-rec-reminder') ?? false;
+      final recAdded = prefs.getBool('transaction-rec-added') ?? false;
+      Future.microtask(() {
+        ref
+            .read(transactionReminderSwitchProvider.notifier)
+            .setValue(trscReminder);
+        if (cadenceStr != null) {
+          final cadence = NotificationReminderType.values.firstWhere(
+            (value) => value.name == cadenceStr,
+            orElse: () => NotificationReminderType.none,
+          );
+          ref
+              .read(transactionReminderCadenceProvider.notifier)
+              .setValue(cadence);
         }
+        ref
+            .read(transactionRecReminderSwitchProvider.notifier)
+            .setValue(recReminder);
+        ref.read(transactionRecAddedSwitchProvider.notifier).setValue(recAdded);
+      });
+    });
+  }
+
+  Future<void> updateNotificationReminder({
+    bool active = true,
+    NotificationReminderType type = NotificationReminderType.daily,
+  }) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      final SharedPreferences prefs = ref.watch(sharedPrefProvider);
+      ref.read(transactionReminderSwitchProvider.notifier).setValue(active);
+      if (active) {
+        ref.read(transactionReminderCadenceProvider.notifier).setValue(type);
         await prefs.setBool('transaction-reminder', true);
-        await prefs.setString(
-          'transaction-reminder-cadence',
-          ref.read(transactionReminderCadenceProvider).name,
-        );
+        await prefs.setString('transaction-reminder-cadence', type.name);
         await NotificationService.scheduleNotification(
           title: "Remember to log new expenses!",
           body:
               "Sossoldi is waiting for your latest transactions. Don't lose sight of your financial movements, and input your most recent expenses.",
-          recurrence: ref.read(transactionReminderCadenceProvider),
+          recurrence: type,
         );
       } else {
         ref.invalidate(transactionReminderCadenceProvider);
@@ -116,15 +127,13 @@ class Notifications extends _$Notifications {
   Future<void> updateNotificationRecurring({bool active = true}) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setBool(
-        'transaction-rec-reminder',
-        ref.read(transactionRecReminderSwitchProvider),
-      );
-      await prefs.setBool(
-        'transaction-rec-added',
-        ref.read(transactionRecAddedSwitchProvider),
-      );
+      final SharedPreferences prefs = ref.watch(sharedPrefProvider);
+      ref.read(transactionRecAddedSwitchProvider.notifier).setValue(active);
+      if (active) {
+        await prefs.setBool('transaction-rec-added', active);
+      } else {
+        await prefs.remove('transaction-rec-added');
+      }
 
       return _getSettings();
     });
