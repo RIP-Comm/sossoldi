@@ -13,18 +13,6 @@ import 'statistics_provider.dart';
 
 part 'transactions_provider.g.dart';
 
-// @riverpod
-// class SelectedTransactionType extends _$SelectedTransactionType {
-//   @override
-//   TransactionType build() {
-//     return TransactionType.income;
-//   }
-
-//   void setType(TransactionType type) {
-//     state = type;
-//   }
-// }
-
 @riverpod
 class SelectedTransactionType extends _$SelectedTransactionType {
   @override
@@ -48,31 +36,6 @@ Future<List<Transaction>> lastTransactions(Ref ref) async {
       .selectAll(limit: 5);
   return transactions;
 }
-
-@Riverpod(keepAlive: true)
-Future<List<RecurringTransaction>> recurringTransactions(Ref ref) async {
-  return await ref
-      .read(recurringTransactionRepositoryProvider)
-      .selectAllActive();
-}
-
-// final transactionTypeList = Provider<List<TransactionType>>((ref) => [
-//       TransactionType.income,
-//       TransactionType.expense,
-//       TransactionType.transfer
-//     ]);
-
-// @Riverpod(keepAlive: true)
-// class TransactionType extends _$TransactionType {
-//   @override
-//   TransactionType build() {
-//     return TransactionType.expense;
-//   }
-
-//   void setType(TransactionType type) {
-//     state = type;
-//   }
-// }
 
 @Riverpod(keepAlive: true)
 class BankAccountTransfer extends _$BankAccountTransfer {
@@ -192,6 +155,7 @@ class TransactionsNotifier extends _$TransactionsNotifier {
     ref.invalidate(lastTransactionsProvider);
     ref.invalidate(accountsProvider);
     ref.invalidate(monthlyBudgetsStatsProvider);
+    ref.invalidate(monthlyTransactionsProvider);
     ref.invalidate(dashboardProvider);
     ref.invalidate(statisticsProvider);
     final dateStart = ref.watch(filterDateStartProvider);
@@ -212,16 +176,6 @@ class TransactionsNotifier extends _$TransactionsNotifier {
           ? prev - transaction.amount
           : prev + transaction.amount,
     );
-    return transactions;
-  }
-
-  Future<List<Transaction>> getMonthlyTransactions() async {
-    final now = DateTime.now();
-    final firstDayOfMonth = DateTime(now.year, now.month, 1);
-    final transactions = await ref
-        .read(transactionsRepositoryProvider)
-        .selectAll(dateRangeStart: firstDayOfMonth, dateRangeEnd: now);
-
     return transactions;
   }
 
@@ -378,11 +332,29 @@ class TransactionsNotifier extends _$TransactionsNotifier {
   }
 }
 
-@riverpod
-class RecurringTransactionNotifier extends _$RecurringTransactionNotifier {
+@Riverpod(keepAlive: true)
+Future<List> monthlyTransactions(Ref ref) async {
+  final now = DateTime.now();
+  final firstDayOfMonth = DateTime(now.year, now.month, 1);
+  final transactions = await ref
+      .read(transactionsRepositoryProvider)
+      .selectAll(dateRangeStart: firstDayOfMonth, dateRangeEnd: now);
+
+  return transactions;
+}
+
+@Riverpod(keepAlive: true)
+class RecurringTransactionsNotifier extends _$RecurringTransactionsNotifier {
   @override
-  AsyncValue<RecurringTransaction?> build() {
-    return const AsyncValue.data(null);
+  Future<List<RecurringTransaction>> build() {
+    return _getRecurringTransactions();
+  }
+
+  Future<List<RecurringTransaction>> _getRecurringTransactions() async {
+    final transactions = await ref
+        .read(recurringTransactionRepositoryProvider)
+        .selectAllActive();
+    return transactions;
   }
 
   Future<RecurringTransaction?> create(
@@ -414,36 +386,37 @@ class RecurringTransactionNotifier extends _$RecurringTransactionNotifier {
 
     // Here we need the recurringTransaction just inserted, to get and return a model with also his ID
     RecurringTransaction? insertedTransaction;
+
     state = await AsyncValue.guard(() async {
       insertedTransaction = await ref
           .read(recurringTransactionRepositoryProvider)
           .insert(transaction);
-      return insertedTransaction;
+
+      // check if fromDate is today, and add the first recurrence of the transaction
+      DateTime now = DateTime.now();
+
+      if (date.year == now.year &&
+          date.month == now.month &&
+          date.day == now.day) {
+        final transaction = Transaction(
+          date: date,
+          amount: amount,
+          type: type,
+          note: label,
+          idBankAccount: bankAccount.id!,
+          idCategory: category.id!,
+          idRecurringTransaction: insertedTransaction!.id,
+          recurring: true,
+        );
+        await ref.read(transactionsRepositoryProvider).insert(transaction);
+      }
+      return await _getRecurringTransactions();
     });
-
-    // check if fromDate is today, and add the first recurrence of the transaction
-    DateTime now = DateTime.now();
-
-    if (date.year == now.year &&
-        date.month == now.month &&
-        date.day == now.day) {
-      final transaction = Transaction(
-        date: date,
-        amount: amount,
-        type: type,
-        note: label,
-        idBankAccount: bankAccount.id!,
-        idCategory: category.id!,
-        idRecurringTransaction: insertedTransaction!.id,
-        recurring: true,
-      );
-      await ref.read(transactionsRepositoryProvider).insert(transaction);
-    }
 
     return insertedTransaction;
   }
 
-  Future<void> update(num amount, String label) async {
+  Future<void> updateTransaction(num amount, String label) async {
     final bankAccount = ref.read(selectedBankAccountProvider)!;
     final recurrency = ref.read(intervalProvider);
     final category = ref.read(selectedCategoryProvider);
@@ -466,17 +439,11 @@ class RecurringTransactionNotifier extends _$RecurringTransactionNotifier {
       await ref
           .read(recurringTransactionRepositoryProvider)
           .updateItem(transaction);
-      return transaction;
+      return await _getRecurringTransactions();
     });
   }
 
-  Future<void> addRecurringDataToTransaction(
-    num idTransaction,
-    num idRecurringTransaction,
-  ) async {}
-
   Future<void> transactionSelect(RecurringTransaction transaction) async {
-    state = const AsyncLoading();
     ref
         .read(selectedRecurringTransactionUpdateProvider.notifier)
         .setValue(transaction);
@@ -491,7 +458,6 @@ class RecurringTransactionNotifier extends _$RecurringTransactionNotifier {
         .firstWhere((element) => element.id == transaction.idBankAccount);
     ref.read(intervalProvider.notifier).setValue(transaction.recurrency);
     ref.read(endDateProvider.notifier).setDate(transaction.toDate);
-    state = await AsyncValue.guard(() async => transaction);
   }
 
   Future<void> delete(int transactionId) async {
@@ -500,7 +466,7 @@ class RecurringTransactionNotifier extends _$RecurringTransactionNotifier {
       await ref
           .read(recurringTransactionRepositoryProvider)
           .deleteById(transactionId);
-      return null;
+      return _getRecurringTransactions();
     });
   }
 }

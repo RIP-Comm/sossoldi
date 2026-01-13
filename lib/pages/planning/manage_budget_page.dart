@@ -3,16 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../model/budget.dart';
 import '../../model/category_transaction.dart';
+import '../../providers/currency_provider.dart';
 import '../../services/database/repositories/budget_repository.dart';
 import '../../ui/device.dart';
+import '../../ui/extensions.dart';
 import '../../ui/snack_bars/snack_bar.dart';
 import 'widget/budget_category_selector.dart';
 import '../../../providers/categories_provider.dart';
 import '../../../providers/budgets_provider.dart';
 
 class ManageBudgetPage extends ConsumerStatefulWidget {
-  final Function() onRefreshBudgets;
-  const ManageBudgetPage({required this.onRefreshBudgets, super.key});
+  const ManageBudgetPage({super.key});
 
   @override
   ConsumerState<ManageBudgetPage> createState() => _ManageBudgetPageState();
@@ -44,6 +45,7 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
   void _updateBudget(Budget updatedBudget, int index) {
     setState(() {
       deletedBudgets.add(budgets[index]);
+      usedCategoryIds.remove(budgets[index].idCategory);
       budgets[index] = updatedBudget;
       usedCategoryIds.add(updatedBudget.idCategory);
     });
@@ -104,8 +106,79 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
         .where((c) => !usedCategoryIds.contains(c.id))
         .toList();
     final canAddCategory = availableCategories.isNotEmpty;
+    final currencyState = ref.watch(currencyStateProvider);
 
     return Scaffold(
+      persistentFooterDecoration: const BoxDecoration(),
+      persistentFooterButtons: [
+        Column(
+          children: [
+            Text(
+              "Swipe left to delete",
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+            const SizedBox(height: Sizes.md),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Your monthly budget will be: ",
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  Text.rich(
+                    TextSpan(
+                      text:
+                          "${(budgets.isEmpty ? 0 : budgets.fold<num>(0, (sum, e) => sum + e.amountLimit)).toCurrency()} ",
+                      style: Theme.of(context).textTheme.headlineLarge
+                          ?.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                      children: [
+                        TextSpan(
+                          text: currencyState.symbol,
+                          style: Theme.of(context).textTheme.bodyLarge
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: Sizes.lg),
+            const Divider(indent: 16, endIndent: 16),
+            Container(
+              padding: const EdgeInsets.all(Sizes.lg),
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () async {
+                  for (var item in deletedBudgets) {
+                    await ref
+                        .read(budgetRepositoryProvider)
+                        .deleteByCategory(item.idCategory);
+                  }
+                  for (var item in budgets) {
+                    await ref
+                        .read(budgetRepositoryProvider)
+                        .insertOrUpdate(item);
+                  }
+
+                  await ref.read(budgetsProvider.notifier).refreshBudgets();
+
+                  if (context.mounted) {
+                    Navigator.of(context).pop();
+                  }
+                },
+                child: const Text("SAVE BUDGET"),
+              ),
+            ),
+          ],
+        ),
+      ],
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -135,13 +208,44 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
                 children: [
                   Expanded(
                     child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: budgets.length,
+                      itemCount: budgets.length + 1,
                       itemBuilder: (context, index) {
+                        if (index == budgets.length) {
+                          if (canAddCategory) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: Sizes.md,
+                                horizontal: Sizes.xxl,
+                              ),
+                              child: TextButton.icon(
+                                icon: const Icon(Icons.add_circle, size: 32),
+                                onPressed: () => _addBudget(
+                                  Budget(
+                                    active: true,
+                                    amountLimit: 100,
+                                    idCategory: availableCategories[0].id!,
+                                    name: availableCategories[0].name,
+                                  ),
+                                ),
+                                label: const Text("Add category budget"),
+                              ),
+                            );
+                          } else {
+                            return const Padding(
+                              padding: EdgeInsets.only(top: 8.0),
+                              child: Center(
+                                child: Text(
+                                  "You have already added all available categories.",
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              ),
+                            );
+                          }
+                        }
+
                         final usedExcludingCurrent = Set<int>.from(
                           usedCategoryIds,
                         )..remove(budgets[index].idCategory);
-
                         final initCategory = categories.firstWhere(
                           (c) => c.id == budgets[index].idCategory,
                           orElse: () => categories.first,
@@ -171,67 +275,7 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
                       },
                     ),
                   ),
-                  const SizedBox(height: Sizes.sm),
-                  Text(
-                    "Swipe left to delete",
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                  const SizedBox(height: Sizes.md),
-                  TextButton.icon(
-                    icon: const Icon(Icons.add_circle, size: 32),
-                    onPressed: canAddCategory
-                        ? () => _addBudget(
-                            Budget(
-                              active: true,
-                              amountLimit: 100,
-                              idCategory: availableCategories[0].id!,
-                              name: availableCategories[0].name,
-                            ),
-                          )
-                        : null,
-                    label: const Text("Add category budget"),
-                  ),
-                  if (!canAddCategory)
-                    const Padding(
-                      padding: EdgeInsets.only(top: 8.0),
-                      child: Text(
-                        "You have already added all available categories.",
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ),
                 ],
-              ),
-            ),
-            const SizedBox(height: Sizes.lg),
-            Center(
-              child: Text(
-                "Your monthly budget will be: ${budgets.isEmpty ? 0 : budgets.fold(0, (sum, e) => sum + e.amountLimit.toInt())}€",
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-            ),
-            const SizedBox(height: Sizes.lg),
-            const Divider(indent: 16, endIndent: 16),
-            Padding(
-              padding: const EdgeInsets.all(Sizes.lg),
-              child: ElevatedButton(
-                onPressed: () async {
-                  for (var item in deletedBudgets) {
-                    await ref
-                        .read(budgetRepositoryProvider)
-                        .deleteByCategory(item.idCategory);
-                  }
-                  for (var item in budgets) {
-                    await ref
-                        .read(budgetRepositoryProvider)
-                        .insertOrUpdate(item);
-                  }
-
-                  widget.onRefreshBudgets();
-                  if (context.mounted) {
-                    Navigator.of(context).pop();
-                  }
-                },
-                child: const Text("SAVE BUDGET"),
               ),
             ),
           ],

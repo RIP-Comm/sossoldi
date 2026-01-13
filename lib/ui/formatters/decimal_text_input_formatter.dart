@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:flutter/services.dart';
 
 class DecimalTextInputFormatter extends TextInputFormatter {
@@ -48,10 +47,19 @@ class DecimalTextInputFormatter extends TextInputFormatter {
       value = oldValue.text;
     }
 
-    newSelection = newValue.selection.copyWith(
-      baseOffset: math.min(value.length, value.length + 1),
-      extentOffset: math.min(value.length, value.length + 1),
+    // Preserve the cursor/selection relative position when the formatter
+    // changes the text length. Compute the length delta and shift the
+    // incoming selection by that delta, clamping to valid bounds.
+    final int delta = value.length - newValue.text.length;
+    final int base = (newValue.selection.baseOffset + delta).clamp(
+      0,
+      value.length,
     );
+    final int extent = (newValue.selection.extentOffset + delta).clamp(
+      0,
+      value.length,
+    );
+    newSelection = TextSelection(baseOffset: base, extentOffset: extent);
 
     return TextEditingValue(
       text: value,

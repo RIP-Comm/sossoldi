@@ -117,7 +117,7 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
   // TODO: This should be inside addTransaction
   void _refreshAccountAndNavigateBack() async {
     ref.invalidate(transactionsProvider);
-    ref.invalidate(recurringTransactionProvider);
+    ref.invalidate(recurringTransactionsProvider);
     ref
         .read(accountsProvider.notifier)
         .refreshAccount(ref.read(selectedBankAccountProvider)!)
@@ -139,7 +139,7 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
         if (ref.read(selectedRecurringPayProvider) &&
             !widget.transaction!.recurring) {
           await ref
-              .read(recurringTransactionProvider.notifier)
+              .read(recurringTransactionsProvider.notifier)
               .create(cleanAmount.toNum(), noteController.text, selectedType)
               .then((value) async {
                 if (value != null) {
@@ -178,19 +178,18 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
           if (ref.read(selectedCategoryProvider) != null) {
             if (ref.read(selectedRecurringPayProvider)) {
               await ref
-                  .read(recurringTransactionProvider.notifier)
+                  .read(recurringTransactionsProvider.notifier)
                   .create(
                     cleanAmount.toNum(),
                     noteController.text,
                     selectedType,
-                  )
-                  .whenComplete(() => _refreshAccountAndNavigateBack());
+                  );
             } else {
               await ref
                   .read(transactionsProvider.notifier)
-                  .create(cleanAmount.toNum(), noteController.text)
-                  .whenComplete(() => _refreshAccountAndNavigateBack());
+                  .create(cleanAmount.toNum(), noteController.text);
             }
+            _refreshAccountAndNavigateBack();
           }
         }
       }
