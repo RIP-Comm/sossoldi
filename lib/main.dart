@@ -88,6 +88,9 @@ void main() async {
           overrides: [
             versionProvider.overrideWithValue(packageInfo.version),
             sharedPrefProvider.overrideWithValue(sharedPreferences),
+            visibilityAmountProvider.overrideWith(
+              () => VisibilityAmount(sharedPreferences),
+            ),
           ],
           child: const Launcher(),
         ),

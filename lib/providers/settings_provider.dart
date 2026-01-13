@@ -19,10 +19,21 @@ bool onBoardingCompleted(Ref ref) {
 
 @Riverpod(keepAlive: true)
 class VisibilityAmount extends _$VisibilityAmount {
-  @override
-  bool build() => false;
+  VisibilityAmount([SharedPreferences? prefs]) : _prefs = prefs;
 
-  void setVisibility(bool visibility) => state = visibility;
+  final SharedPreferences? _prefs;
+
+  @override
+  bool build() {
+    final SharedPreferences prefs = ref.watch(sharedPrefProvider);
+    return prefs.getBool('visibility_amount') ?? false;
+  }
+
+  Future<void> setVisibility(bool visibility) async {
+    final SharedPreferences prefs = ref.read(sharedPrefProvider);
+    await prefs.setBool('visibility_amount', visibility);
+    state = visibility;
+  }
 }
 
 enum NotificationReminderType { none, daily, weekly, monthly }
