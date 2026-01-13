@@ -242,199 +242,178 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
           ],
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.only(bottom: Sizes.md * 6),
-              child: Column(
-                children: [
-                  AmountSection(amountController),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.only(
-                      left: Sizes.lg,
-                      top: Sizes.xxl,
-                      bottom: Sizes.sm,
-                    ),
-                    child: Text(
-                      "DETAILS",
-                      style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    color: Theme.of(context).colorScheme.surface,
-                    child: Column(
-                      children: [
-                        LabelListTile(noteController),
-                        const Divider(),
-                        if (selectedType != TransactionType.transfer) ...[
-                          DetailsListTile(
-                            title: "Account",
-                            icon: Icons.account_balance_wallet,
-                            value: ref.watch(selectedBankAccountProvider)?.name,
-                            callback: () {
-                              FocusManager.instance.primaryFocus?.unfocus();
-                              showModalBottomSheet(
-                                context: context,
-                                clipBehavior: Clip.antiAliasWithSaveLayer,
-                                isScrollControlled: true,
-                                useSafeArea: true,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(
-                                      Sizes.borderRadius,
-                                    ),
-                                    topRight: Radius.circular(
-                                      Sizes.borderRadius,
-                                    ),
-                                  ),
-                                ),
-                                builder: (_) => DraggableScrollableSheet(
-                                  expand: false,
-                                  minChildSize: 0.5,
-                                  initialChildSize: 0.7,
-                                  maxChildSize: 0.9,
-                                  builder: (_, controller) => AccountSelector(
-                                    scrollController: controller,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          const Divider(),
-                          DetailsListTile(
-                            title: "Category",
-                            icon: Icons.list_alt,
-                            value: ref.watch(selectedCategoryProvider)?.name,
-                            callback: () {
-                              FocusManager.instance.primaryFocus?.unfocus();
-                              showModalBottomSheet(
-                                context: context,
-                                clipBehavior: Clip.antiAliasWithSaveLayer,
-                                isScrollControlled: true,
-                                useSafeArea: true,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(
-                                      Sizes.borderRadius,
-                                    ),
-                                    topRight: Radius.circular(
-                                      Sizes.borderRadius,
-                                    ),
-                                  ),
-                                ),
-                                builder: (_) => DraggableScrollableSheet(
-                                  expand: false,
-                                  minChildSize: 0.5,
-                                  initialChildSize: 0.7,
-                                  maxChildSize: 0.9,
-                                  builder: (_, controller) => CategorySelector(
-                                    scrollController: controller,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          const Divider(),
-                        ],
-                        DetailsListTile(
-                          title: "Date",
-                          icon: Icons.calendar_month,
-                          value: ref.watch(selectedDateProvider).formatEDMY(),
-                          callback: () async {
-                            FocusManager.instance.primaryFocus?.unfocus();
-                            if (Platform.isIOS) {
-                              showCupertinoModalPopup(
-                                context: context,
-                                builder: (_) => Container(
-                                  height: 300,
-                                  color: CupertinoDynamicColor.resolve(
-                                    CupertinoColors.secondarySystemBackground,
-                                    context,
-                                  ),
-                                  child: CupertinoDatePicker(
-                                    initialDateTime: ref.watch(
-                                      selectedDateProvider,
-                                    ),
-                                    minimumYear: 2015,
-                                    maximumYear: 2050,
-                                    mode: CupertinoDatePickerMode.date,
-                                    onDateTimeChanged: (date) => ref
-                                        .read(selectedDateProvider.notifier)
-                                        .setDate(date),
-                                  ),
-                                ),
-                              );
-                            } else if (Platform.isAndroid) {
-                              final DateTime? pickedDate = await showDatePicker(
-                                context: context,
-                                initialDate: ref.watch(selectedDateProvider),
-                                firstDate: DateTime(2015),
-                                lastDate: DateTime(2050),
-                              );
-                              if (pickedDate != null) {
-                                ref
-                                    .read(selectedDateProvider.notifier)
-                                    .setDate(pickedDate);
-                              }
-                            }
-                          },
-                        ),
-                        RecurrenceListTile(
-                          recurrencyEditingPermitted:
-                              recurrencyEditingPermitted,
-                          selectedTransaction: widget.transaction,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          SafeArea(
-            child: Container(
-              alignment: Alignment.bottomCenter,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-                boxShadow: [
-                  BoxShadow(
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.primary.withValues(alpha: 0.15),
-                    blurRadius: 5.0,
-                    offset: const Offset(0, -1.0),
-                  ),
-                ],
-              ),
-              padding: const EdgeInsets.fromLTRB(
-                Sizes.xl,
-                Sizes.md,
-                Sizes.xl,
-                Sizes.xl,
-              ),
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  boxShadow: [defaultShadow],
-                  borderRadius: BorderRadius.circular(Sizes.borderRadius),
-                ),
-                child: ElevatedButton(
-                  onPressed: _isSaveEnabled ? _createOrUpdateTransaction : null,
-                  child: Text(
-                    widget.transaction != null
-                        ? "UPDATE TRANSACTION"
-                        : "ADD TRANSACTION",
-                  ),
-                ),
-              ),
-            ),
+      persistentFooterDecoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        boxShadow: [
+          BoxShadow(
+            color: Theme.of(
+              context,
+            ).colorScheme.primary.withValues(alpha: 0.15),
+            blurRadius: 5.0,
+            offset: const Offset(0, -1.0),
           ),
         ],
+      ),
+      persistentFooterButtons: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(
+            Sizes.sm,
+            Sizes.xs,
+            Sizes.sm,
+            Sizes.sm,
+          ),
+          child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              boxShadow: [defaultShadow],
+              borderRadius: BorderRadius.circular(Sizes.borderRadius),
+            ),
+            child: ElevatedButton(
+              onPressed: _isSaveEnabled ? _createOrUpdateTransaction : null,
+              child: Text(
+                widget.transaction != null
+                    ? "UPDATE TRANSACTION"
+                    : "ADD TRANSACTION",
+              ),
+            ),
+          ),
+        ),
+      ],
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.only(bottom: Sizes.md * 6),
+        child: Column(
+          children: [
+            AmountSection(amountController),
+            Container(
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.only(
+                left: Sizes.lg,
+                top: Sizes.xxl,
+                bottom: Sizes.sm,
+              ),
+              child: Text(
+                "DETAILS",
+                style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            ),
+            Container(
+              color: Theme.of(context).colorScheme.surface,
+              child: Column(
+                children: [
+                  LabelListTile(noteController),
+                  const Divider(),
+                  if (selectedType != TransactionType.transfer) ...[
+                    DetailsListTile(
+                      title: "Account",
+                      icon: Icons.account_balance_wallet,
+                      value: ref.watch(selectedBankAccountProvider)?.name,
+                      callback: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
+                        showModalBottomSheet(
+                          context: context,
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          isScrollControlled: true,
+                          useSafeArea: true,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(Sizes.borderRadius),
+                              topRight: Radius.circular(Sizes.borderRadius),
+                            ),
+                          ),
+                          builder: (_) => DraggableScrollableSheet(
+                            expand: false,
+                            minChildSize: 0.5,
+                            initialChildSize: 0.7,
+                            maxChildSize: 0.9,
+                            builder: (_, controller) =>
+                                AccountSelector(scrollController: controller),
+                          ),
+                        );
+                      },
+                    ),
+                    const Divider(),
+                    DetailsListTile(
+                      title: "Category",
+                      icon: Icons.list_alt,
+                      value: ref.watch(selectedCategoryProvider)?.name,
+                      callback: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
+                        showModalBottomSheet(
+                          context: context,
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          isScrollControlled: true,
+                          useSafeArea: true,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(Sizes.borderRadius),
+                              topRight: Radius.circular(Sizes.borderRadius),
+                            ),
+                          ),
+                          builder: (_) => DraggableScrollableSheet(
+                            expand: false,
+                            minChildSize: 0.5,
+                            initialChildSize: 0.7,
+                            maxChildSize: 0.9,
+                            builder: (_, controller) =>
+                                CategorySelector(scrollController: controller),
+                          ),
+                        );
+                      },
+                    ),
+                    const Divider(),
+                  ],
+                  DetailsListTile(
+                    title: "Date",
+                    icon: Icons.calendar_month,
+                    value: ref.watch(selectedDateProvider).formatEDMY(),
+                    callback: () async {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      if (Platform.isIOS) {
+                        showCupertinoModalPopup(
+                          context: context,
+                          builder: (_) => Container(
+                            height: 300,
+                            color: CupertinoDynamicColor.resolve(
+                              CupertinoColors.secondarySystemBackground,
+                              context,
+                            ),
+                            child: CupertinoDatePicker(
+                              initialDateTime: ref.watch(selectedDateProvider),
+                              minimumYear: 2015,
+                              maximumYear: 2050,
+                              mode: CupertinoDatePickerMode.date,
+                              onDateTimeChanged: (date) => ref
+                                  .read(selectedDateProvider.notifier)
+                                  .setDate(date),
+                            ),
+                          ),
+                        );
+                      } else if (Platform.isAndroid) {
+                        final DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: ref.watch(selectedDateProvider),
+                          firstDate: DateTime(2015),
+                          lastDate: DateTime(2050),
+                        );
+                        if (pickedDate != null) {
+                          ref
+                              .read(selectedDateProvider.notifier)
+                              .setDate(pickedDate);
+                        }
+                      }
+                    },
+                  ),
+                  RecurrenceListTile(
+                    recurrencyEditingPermitted: recurrencyEditingPermitted,
+                    selectedTransaction: widget.transaction,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
