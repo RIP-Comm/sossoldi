@@ -105,6 +105,14 @@ class TotalAmount extends _$TotalAmount {
 }
 
 // Filters
+@riverpod
+class FilterLabel extends _$FilterLabel {
+  @override
+  String? build() => null;
+
+  void setLabel(String value) => state = value;
+}
+
 @Riverpod(keepAlive: true)
 class FilterDateStart extends _$FilterDateStart {
   @override
@@ -122,15 +130,13 @@ class FilterDateEnd extends _$FilterDateEnd {
   void setDate(DateTime date) => state = date;
 }
 
-@Riverpod(keepAlive: true)
+@riverpod
 class TypeFilter extends _$TypeFilter {
   @override
   Map<String, bool> build() {
-    return {
-      TransactionType.income.code: false,
-      TransactionType.expense.code: false,
-      TransactionType.transfer.code: false,
-    };
+    return TransactionType.values.asMap().map(
+      (index, type) => MapEntry(type.code, false),
+    );
   }
 
   void setFilter(Map<String, bool> filter) => state = filter;
@@ -333,7 +339,7 @@ class TransactionsNotifier extends _$TransactionsNotifier {
 }
 
 @Riverpod(keepAlive: true)
-Future<List> monthlyTransactions(Ref ref) async {
+Future<List<Transaction>> monthlyTransactions(Ref ref) async {
   final now = DateTime.now();
   final firstDayOfMonth = DateTime(now.year, now.month, 1);
   final transactions = await ref
@@ -469,4 +475,29 @@ class RecurringTransactionsNotifier extends _$RecurringTransactionsNotifier {
       return _getRecurringTransactions();
     });
   }
+}
+
+@riverpod
+Future<List<Transaction>> searchTransactions(Ref ref) async {
+  List<String> transactionType = ref
+      .watch(typeFilterProvider)
+      .entries
+      .map((f) => f.value == true ? f.key : "")
+      .toList();
+  Map<int, bool> filteredAccounts = ref.watch(filterAccountProvider);
+  Map<int, bool> filterAccountList = {
+    for (var element in filteredAccounts.entries) element.key: element.value,
+  };
+  String? label = ref.watch(filterLabelProvider);
+
+  final transactions = await ref
+      .read(transactionsRepositoryProvider)
+      .selectAll(
+        limit: 100,
+        label: label,
+        transactionType: transactionType,
+        bankAccounts: filterAccountList,
+      );
+
+  return transactions;
 }

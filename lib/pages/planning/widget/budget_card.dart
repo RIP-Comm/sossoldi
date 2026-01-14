@@ -7,7 +7,6 @@ import '../../../providers/categories_provider.dart';
 import '../../../ui/extensions.dart';
 import '../../../ui/widgets/default_container.dart';
 import '../../../model/budget.dart';
-import '../../../model/transaction.dart';
 import '../../../providers/budgets_provider.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
@@ -56,7 +55,7 @@ class BudgetCard extends ConsumerWidget {
                           itemCount: budgets.length,
                           itemBuilder: (BuildContext context, int index) {
                             num spent = num.parse(
-                              (transactions as List<Transaction>)
+                              transactions
                                   .where(
                                     (t) =>
                                         t.idCategory ==

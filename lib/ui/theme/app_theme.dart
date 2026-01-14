@@ -115,6 +115,20 @@ class AppTheme {
         ),
       ),
     ),
+    chipTheme: ChipThemeData(
+      backgroundColor: grey3,
+      selectedColor: blue5,
+      disabledColor: grey2,
+      labelStyle: const TextStyle(fontSize: 14.0, color: blue5),
+      padding: const EdgeInsets.symmetric(
+        horizontal: Sizes.sm,
+        vertical: Sizes.xs,
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(Sizes.borderRadius * 10),
+        side: const BorderSide(color: blue5, width: 2.0),
+      ),
+    ),
     listTileTheme: const ListTileThemeData(
       tileColor: white,
       contentPadding: EdgeInsets.all(Sizes.lg),
@@ -300,6 +314,20 @@ class AppTheme {
             borderRadius: BorderRadius.circular(Sizes.borderRadius),
           ),
         ),
+      ),
+    ),
+    chipTheme: ChipThemeData(
+      backgroundColor: darkBlue7,
+      selectedColor: darkBlue5,
+      disabledColor: grey2,
+      labelStyle: const TextStyle(fontSize: 14.0, color: blue5),
+      padding: const EdgeInsets.symmetric(
+        horizontal: Sizes.sm,
+        vertical: Sizes.xs,
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(Sizes.borderRadius * 10),
+        side: const BorderSide(color: darkBlue5, width: 2.0),
       ),
     ),
     listTileTheme: const ListTileThemeData(
