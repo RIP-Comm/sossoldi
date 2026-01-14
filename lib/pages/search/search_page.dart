@@ -107,12 +107,14 @@ class _SearchPage extends ConsumerState<SearchPage> {
                             label: Text(
                               "Income",
                               style: TextStyle(
-                                color: filterType["IN"]!
+                                color: filterType[TransactionType.income.code]!
                                     ? Colors.white
                                     : Colors.blue.shade700,
                               ),
                             ),
-                            selected: filterType["IN"] ?? false,
+                            selected:
+                                filterType[TransactionType.income.code] ??
+                                false,
                             backgroundColor: Colors.white,
                             selectedColor: Colors.blue.shade700,
                             shape: RoundedRectangleBorder(
@@ -127,8 +129,10 @@ class _SearchPage extends ConsumerState<SearchPage> {
                             onSelected: (_) {
                               ref.read(typeFilterProvider.notifier).setFilter({
                                 ...filterType,
-                                "IN": filterType["IN"] != null
-                                    ? !filterType["IN"]!
+                                TransactionType.income.code:
+                                    filterType[TransactionType.income.code] !=
+                                        null
+                                    ? !filterType[TransactionType.income.code]!
                                     : false,
                               });
                               _updateFutureTransactions();
@@ -144,12 +148,14 @@ class _SearchPage extends ConsumerState<SearchPage> {
                             label: Text(
                               "Outcome",
                               style: TextStyle(
-                                color: filterType["OUT"]!
+                                color: filterType[TransactionType.expense.code]!
                                     ? Colors.white
                                     : Colors.blue.shade700,
                               ),
                             ),
-                            selected: filterType["OUT"] ?? false,
+                            selected:
+                                filterType[TransactionType.expense.code] ??
+                                false,
                             backgroundColor: Colors.white,
                             selectedColor: Colors.blue.shade700,
                             shape: RoundedRectangleBorder(
@@ -164,8 +170,10 @@ class _SearchPage extends ConsumerState<SearchPage> {
                             onSelected: (_) {
                               ref.read(typeFilterProvider.notifier).setFilter({
                                 ...filterType,
-                                "OUT": filterType["OUT"] != null
-                                    ? !filterType["OUT"]!
+                                TransactionType.expense.code:
+                                    filterType[TransactionType.expense.code] !=
+                                        null
+                                    ? !filterType[TransactionType.expense.code]!
                                     : false,
                               });
                               _updateFutureTransactions();
@@ -181,12 +189,15 @@ class _SearchPage extends ConsumerState<SearchPage> {
                             label: Text(
                               "Transfer",
                               style: TextStyle(
-                                color: filterType["TR"]!
+                                color:
+                                    filterType[TransactionType.transfer.code]!
                                     ? Colors.white
                                     : Colors.blue.shade700,
                               ),
                             ),
-                            selected: filterType["TR"] ?? false,
+                            selected:
+                                filterType[TransactionType.transfer.code] ??
+                                false,
                             backgroundColor: Colors.white,
                             selectedColor: Colors.blue.shade700,
                             shape: RoundedRectangleBorder(
@@ -201,8 +212,12 @@ class _SearchPage extends ConsumerState<SearchPage> {
                             onSelected: (_) {
                               ref.read(typeFilterProvider.notifier).setFilter({
                                 ...filterType,
-                                "TR": filterType["TR"] != null
-                                    ? !filterType["TR"]!
+                                TransactionType.transfer.code:
+                                    filterType[TransactionType.transfer.code] !=
+                                        null
+                                    ? !filterType[TransactionType
+                                          .transfer
+                                          .code]!
                                     : false,
                               });
                               _updateFutureTransactions();
