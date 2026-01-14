@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants/constants.dart';
+import 'settings_provider.dart';
 
 part 'theme_provider.g.dart';
 
@@ -17,32 +17,16 @@ class AppThemeState extends _$AppThemeState {
 
   @override
   ThemeState build() {
-    _loadTheme();
-    return ThemeState(false);
-  }
-
-  Future<void> _loadTheme() async {
-    final prefs = await SharedPreferences.getInstance();
+    final prefs = ref.read(sharedPrefProvider);
     final isDark = prefs.getBool(_themeKey) ?? false;
-    state = ThemeState(isDark);
-    updateColorsBasedOnTheme(isDark);
+    return ThemeState(isDark);
   }
 
-  // Save theme preference
-  Future<void> _saveTheme(bool isDark) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_themeKey, isDark);
-  }
-
-  void setLightTheme() {
-    state = ThemeState(false);
-    updateColorsBasedOnTheme(false);
-    _saveTheme(false);
-  }
-
-  void setDarkTheme() {
-    state = ThemeState(true);
-    updateColorsBasedOnTheme(true);
-    _saveTheme(true);
+  Future<void> updateTheme() async {
+    final prefs = ref.read(sharedPrefProvider);
+    final isDarkMode = state.isDarkModeEnabled;
+    updateColorsBasedOnTheme(!isDarkMode);
+    await prefs.setBool(_themeKey, !isDarkMode);
+    state = ThemeState(!isDarkMode);
   }
 }

@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/style.dart';
 import '../../../model/currency.dart';
 import '../../../providers/currency_provider.dart';
-import '../../../providers/required_authentication_provider.dart';
+import '../../../providers/authentication_provider.dart';
 import '../../../providers/theme_provider.dart';
 import '../../../services/database/repositories/currency_repository.dart';
 import '../../../ui/device.dart';
@@ -38,9 +38,7 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
     Future<List<Currency>> currencyList = ref
         .read(currencyRepositoryProvider)
         .selectAll();
-    final requiresAuthenticationState = ref.watch(
-      requiredAuthenticationStateProvider,
-    );
+    final requiresAuthenticationState = ref.watch(authenticationStateProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -58,6 +56,7 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
         ),
         physics: const BouncingScrollPhysics(),
         child: Column(
+          spacing: Sizes.lg,
           children: [
             Row(
               children: [
@@ -74,14 +73,7 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                   child: IconButton(
                     color: blue5,
                     onPressed: () {
-                      // Toggle dark mode using the provider
-                      if (appThemeState.isDarkModeEnabled) {
-                        ref
-                            .read(appThemeStateProvider.notifier)
-                            .setLightTheme();
-                      } else {
-                        ref.read(appThemeStateProvider.notifier).setDarkTheme();
-                      }
+                      ref.read(appThemeStateProvider.notifier).updateTheme();
                     },
                     icon: Icon(
                       appThemeState.isDarkModeEnabled
@@ -94,7 +86,6 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                 ),
               ],
             ),
-            const SizedBox(height: Sizes.lg),
             Row(
               children: [
                 Text(
@@ -130,7 +121,6 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                 ),
               ],
             ),
-            const SizedBox(height: Sizes.lg),
             Row(
               children: [
                 Text(
@@ -146,15 +136,9 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                   child: IconButton(
                     color: blue5,
                     onPressed: () {
-                      if (requiresAuthenticationState) {
-                        ref
-                            .read(requiredAuthenticationStateProvider.notifier)
-                            .setNoAuthentication();
-                      } else {
-                        ref
-                            .read(requiredAuthenticationStateProvider.notifier)
-                            .setAuthenticationRequired();
-                      }
+                      ref
+                          .read(authenticationStateProvider.notifier)
+                          .updateAuthentication();
                     },
                     icon: Icon(
                       requiresAuthenticationState
