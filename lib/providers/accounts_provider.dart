@@ -92,6 +92,7 @@ class Accounts extends _$Accounts {
       active: active,
       countNetWorth: countNetWorth,
       mainAccount: mainAccount,
+      order: 0,
     );
 
     state = const AsyncLoading();
@@ -211,6 +212,25 @@ class Accounts extends _$Accounts {
       await ref.read(accountRepositoryProvider).deactivateById(account.id!);
       if (account.mainAccount) ref.invalidate(mainAccountProvider);
       return _getAccounts();
+    });
+  }
+
+  Future<void> reorderAccounts(int oldIndex, int newIndex) async {
+    final currentList = state.value;
+    if (currentList == null) return;
+
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+
+    final newList = List<BankAccount>.from(currentList);
+    final item = newList.removeAt(oldIndex);
+    newList.insert(newIndex, item);
+
+    state = AsyncData(newList);
+
+    await AsyncValue.guard(() async {
+      await ref.read(accountRepositoryProvider).updateOrders(newList);
     });
   }
 

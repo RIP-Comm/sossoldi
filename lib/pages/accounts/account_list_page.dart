@@ -71,37 +71,60 @@ class _AccountListPage extends ConsumerState<AccountListPage> {
               ),
             ),
             accountsList.when(
-              data: (accounts) => ListView.separated(
-                itemCount: accounts.length,
+              data: (accounts) => ReorderableListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: Sizes.lg),
+                itemCount: accounts.length,
+                onReorder: (oldIndex, newIndex) {
+                  ref
+                      .read(accountsProvider.notifier)
+                      .reorderAccounts(oldIndex, newIndex);
+                },
+                proxyDecorator: (child, index, animation) {
+                  return Material(
+                    elevation: 5,
+                    color: Colors.transparent,
+                    child: child,
+                  );
+                },
                 itemBuilder: (context, i) {
                   BankAccount account = accounts[i];
-                  return DefaultCard(
-                    onTap: () {
-                      ref
-                          .read(selectedAccountProvider.notifier)
-                          .setAccount(account);
-                      Navigator.of(context).pushNamed('/add-account');
-                    },
-                    child: Row(
-                      children: [
-                        RoundedIcon(
-                          icon: accountIconList[account.symbol],
-                          backgroundColor: accountColorListTheme[account.color],
-                          size: 30,
-                        ),
-                        const SizedBox(width: Sizes.md),
-                        Text(
-                          account.name,
-                          style: Theme.of(context).textTheme.titleLarge!
-                              .copyWith(
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                        ),
-                      ],
+                  return Container(
+                    key: ValueKey(account.id),
+                    margin: const EdgeInsets.only(bottom: Sizes.lg),
+                    child: DefaultCard(
+                      onTap: () {
+                        ref
+                            .read(selectedAccountProvider.notifier)
+                            .setAccount(account);
+                        Navigator.of(context).pushNamed('/add-account');
+                      },
+                      child: Row(
+                        spacing: Sizes.md,
+                        children: [
+                          RoundedIcon(
+                            icon: accountIconList[account.symbol],
+                            backgroundColor:
+                                accountColorListTheme[account.color],
+                            size: 30,
+                          ),
+                          Expanded(
+                            child: Text(
+                              account.name,
+                              style: Theme.of(context).textTheme.titleLarge!
+                                  .copyWith(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
+                                  ),
+                            ),
+                          ),
+                          Icon(
+                            Icons.drag_handle,
+                            color: Theme.of(context).colorScheme.outline,
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },

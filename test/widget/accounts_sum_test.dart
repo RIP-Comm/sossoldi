@@ -42,6 +42,7 @@ void main() {
       active: true,
       countNetWorth: true,
       mainAccount: false,
+      order: 2,
     );
 
     await tester.pumpWidget(
