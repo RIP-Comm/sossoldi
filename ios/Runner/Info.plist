@@ -28,6 +28,8 @@
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Use Face ID to protect sensitive personal data stored in the app and to authenticate the user before accessing or exporting private information.</string>
 	<key>NSDocumentsUsageDescription</key>
 	<string>Access to documents is needed to import and export CSV files</string>
 	<key>NSPhotoLibraryUsageDescription</key>
