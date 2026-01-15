@@ -19,10 +19,6 @@ bool onBoardingCompleted(Ref ref) {
 
 @Riverpod(keepAlive: true)
 class VisibilityAmount extends _$VisibilityAmount {
-  VisibilityAmount([SharedPreferences? prefs]) : _prefs = prefs;
-
-  final SharedPreferences? _prefs;
-
   @override
   bool build() {
     final SharedPreferences prefs = ref.watch(sharedPrefProvider);
