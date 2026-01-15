@@ -16,6 +16,14 @@ class SelectedCategory extends _$SelectedCategory {
 }
 
 @Riverpod(keepAlive: true)
+class SelectedSubcategory extends _$SelectedSubcategory {
+  @override
+  CategoryTransaction? build() => null;
+
+  void setCategory(CategoryTransaction? category) => state = category;
+}
+
+@Riverpod(keepAlive: true)
 class CategoryType extends _$CategoryType {
   @override
   CategoryTransactionType build() => CategoryTransactionType.expense;
@@ -31,7 +39,9 @@ class Categories extends _$Categories {
   }
 
   Future<List<CategoryTransaction>> _getCategories() async {
-    final categories = await ref.read(categoryRepositoryProvider).selectAll();
+    final categories = await ref
+        .read(categoryRepositoryProvider)
+        .selectAllParent();
     return categories;
   }
 
@@ -57,6 +67,30 @@ class Categories extends _$Categories {
     });
   }
 
+  Future<void> addSubcategory({
+    required String name,
+    required String icon,
+  }) async {
+    CategoryTransaction category = CategoryTransaction(
+      name: name,
+      symbol: icon,
+      type: ref.read(selectedCategoryProvider)!.type,
+      color: ref.read(selectedCategoryProvider)!.color,
+      order: 0,
+      parent: ref.read(selectedCategoryProvider)!.id,
+    );
+
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      await ref.read(categoryRepositoryProvider).insert(category);
+      ref.invalidate(categoriesByTypeProvider(category.type));
+      ref.invalidate(
+        subcategoriesProvider(ref.read(selectedCategoryProvider)!.id!),
+      );
+      return _getCategories();
+    });
+  }
+
   Future<void> updateCategory({
     required String name,
     required CategoryTransactionType type,
@@ -74,10 +108,33 @@ class Categories extends _$Categories {
     });
   }
 
+  Future<void> updateSubcategory({
+    required String name,
+    required String icon,
+  }) async {
+    CategoryTransaction category = ref
+        .read(selectedSubcategoryProvider)!
+        .copy(name: name, symbol: icon);
+
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      await ref.read(categoryRepositoryProvider).updateItem(category);
+      ref.invalidate(
+        subcategoriesProvider(ref.read(selectedCategoryProvider)!.id!),
+      );
+      return _getCategories();
+    });
+  }
+
   Future<void> removeCategory(int categoryId) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       await ref.read(categoryRepositoryProvider).deleteById(categoryId);
+      ref.invalidate(selectedSubcategoryProvider);
+      ref.invalidate(categoryMapProvider);
+      ref.invalidate(
+        subcategoriesProvider(ref.read(selectedCategoryProvider)!.id!),
+      );
       return _getCategories();
     });
   }
@@ -109,14 +166,27 @@ class Categories extends _$Categories {
 @Riverpod(keepAlive: true)
 Future<List<CategoryTransaction>> categoriesByType(
   Ref ref,
-  CategoryTransactionType? type,
-) async {
+  CategoryTransactionType? type, {
+  bool includeSubcategories = false,
+}) async {
   List<CategoryTransaction> categories = [];
   if (type != null) {
     categories = await ref
         .read(categoryRepositoryProvider)
-        .selectCategoriesByType(type);
+        .selectCategoriesByType(
+          type,
+          includeSubcategories: includeSubcategories,
+        );
   }
+  return categories;
+}
+
+@riverpod
+Future<List<CategoryTransaction>> subcategories(Ref ref, int categoryId) async {
+  List<CategoryTransaction> categories = [];
+  categories = await ref
+      .read(categoryRepositoryProvider)
+      .selectSubCategory(categoryId);
   return categories;
 }
 

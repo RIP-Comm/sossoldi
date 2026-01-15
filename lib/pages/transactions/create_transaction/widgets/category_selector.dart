@@ -21,7 +21,7 @@ class CategorySelector extends ConsumerStatefulWidget {
 class _CategorySelectorState extends ConsumerState<CategorySelector> {
   void _selectCategory(BuildContext context, CategoryTransaction category) {
     ref.read(selectedCategoryProvider.notifier).setCategory(category);
-    Navigator.pop(context);
+    // Navigator.pop(context);
   }
 
   @override
@@ -30,6 +30,7 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
     final categoriesList = ref.watch(
       categoriesByTypeProvider(transactionType.categoryType),
     );
+    final selectedCategory = ref.watch(selectedCategoryProvider);
 
     return Container(
       color: Theme.of(context).colorScheme.primaryContainer,
@@ -139,19 +140,74 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
                             const Divider(height: 1, color: grey1),
                         itemBuilder: (context, i) {
                           CategoryTransaction category = categories[i];
-                          return ListTile(
-                            onTap: () => _selectCategory(context, category),
-                            leading: RoundedIcon(
-                              icon: iconList[category.symbol],
-                              backgroundColor:
-                                  categoryColorListTheme[category.color],
-                            ),
-                            title: Text(category.name),
-                            trailing:
-                                ref.watch(selectedCategoryProvider)?.id ==
-                                    category.id
-                                ? const Icon(Icons.check)
-                                : null,
+                          final subcategories = ref.watch(
+                            subcategoriesProvider(category.id!),
+                          );
+                          return Column(
+                            children: [
+                              ListTile(
+                                onTap: () => _selectCategory(context, category),
+                                leading: RoundedIcon(
+                                  icon: iconList[category.symbol],
+                                  backgroundColor:
+                                      categoryColorListTheme[category.color],
+                                ),
+                                title: Text(category.name),
+                                trailing: selectedCategory?.id == category.id
+                                    ? const Icon(Icons.check)
+                                    : null,
+                              ),
+                              AnimatedCrossFade(
+                                crossFadeState:
+                                    selectedCategory?.id == category.id ||
+                                        selectedCategory?.parent == category.id
+                                    ? CrossFadeState.showSecond
+                                    : CrossFadeState.showFirst,
+                                duration: const Duration(milliseconds: 150),
+                                firstChild: const SizedBox.shrink(),
+                                secondChild: subcategories.when(
+                                  data: (data) {
+                                    return ListView(
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      children: data.map((subcategory) {
+                                        return ListTile(
+                                          contentPadding: const EdgeInsets.only(
+                                            left: Sizes.xxl,
+                                            right: Sizes.lg,
+                                          ),
+                                          onTap: () => _selectCategory(
+                                            context,
+                                            subcategory,
+                                          ),
+                                          leading: RoundedIcon(
+                                            icon: iconList[subcategory.symbol],
+                                            backgroundColor:
+                                                categoryColorListTheme[subcategory
+                                                    .color],
+                                          ),
+                                          title: Text(subcategory.name),
+                                          trailing:
+                                              ref
+                                                      .watch(
+                                                        selectedCategoryProvider,
+                                                      )
+                                                      ?.id ==
+                                                  subcategory.id
+                                              ? const Icon(Icons.check)
+                                              : null,
+                                        );
+                                      }).toList(),
+                                    );
+                                  },
+                                  loading: () => const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                  error: (err, stack) => Text('Error: $err'),
+                                ),
+                              ),
+                            ],
                           );
                         },
                       ),

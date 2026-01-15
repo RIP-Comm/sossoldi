@@ -60,16 +60,48 @@ class CategoryRepository {
     return result.map((json) => CategoryTransaction.fromJson(json)).toList();
   }
 
-  Future<List<CategoryTransaction>> selectCategoriesByType(
-    CategoryTransactionType type,
-  ) async {
+  Future<List<CategoryTransaction>> selectAllParent() async {
     final db = await _sossoldiDB.database;
 
     final result = await db.query(
       categoryTransactionTable,
+      where: '${CategoryTransactionFields.parent} IS NULL',
+      orderBy: orderByASC,
+    );
+
+    return result.map((json) => CategoryTransaction.fromJson(json)).toList();
+  }
+
+  Future<List<CategoryTransaction>> selectSubCategory(int categoryId) async {
+    final db = await _sossoldiDB.database;
+
+    final result = await db.query(
+      categoryTransactionTable,
+      where: '${CategoryTransactionFields.parent} = ?',
+      whereArgs: [categoryId],
+      orderBy: orderByASC,
+    );
+
+    return result.map((json) => CategoryTransaction.fromJson(json)).toList();
+  }
+
+  Future<List<CategoryTransaction>> selectCategoriesByType(
+    CategoryTransactionType type, {
+    bool includeSubcategories = false,
+  }) async {
+    final db = await _sossoldiDB.database;
+
+    String where = '${CategoryTransactionFields.type} = ?';
+    List<dynamic> args = [type.code];
+    if (!includeSubcategories) {
+      where += ' AND ${CategoryTransactionFields.parent} IS NULL';
+    }
+
+    final result = await db.query(
+      categoryTransactionTable,
       columns: CategoryTransactionFields.allFields,
-      where: '${CategoryTransactionFields.type} = ?',
-      whereArgs: [type.code],
+      where: where,
+      whereArgs: args,
       orderBy: orderByASC,
     );
 
