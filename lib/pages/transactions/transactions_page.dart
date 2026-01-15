@@ -97,24 +97,28 @@ class _TransactionsPageState extends ConsumerState<TransactionsPage>
                       boxShadow: [defaultShadow],
                     ),
                     child: ElevatedButton.icon(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed("/add-page");
-                      },
                       icon: Icon(
                         Icons.add_circle,
-                        color: Theme.of(context).colorScheme.secondary,
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
                         size: Sizes.xl,
                       ),
                       label: Text(
                         "Add transaction",
                         style: Theme.of(context).textTheme.titleLarge!.apply(
-                          color: Theme.of(context).colorScheme.secondary,
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onPrimaryContainer,
                         ),
                       ),
                       style: TextButton.styleFrom(
-                        backgroundColor: Colors.white,
+                        backgroundColor: Theme.of(
+                          context,
+                        ).colorScheme.primaryContainer,
                         padding: const EdgeInsets.symmetric(vertical: Sizes.md),
                       ),
+                      onPressed: () {
+                        Navigator.of(context).pushNamed("/add-page");
+                      },
                     ),
                   ),
                 ],
