@@ -63,8 +63,8 @@ class _StructureState extends ConsumerState<Structure> {
         actions: [
           switch (selectedIndex) {
             0 => FilledButton(
-              onPressed: () {
-                ref
+              onPressed: () async {
+                await ref
                     .read(visibilityAmountProvider.notifier)
                     .setVisibility(!isVisible);
               },

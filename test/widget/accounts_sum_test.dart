@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sossoldi/services/database/sossoldi_database.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:flutter/material.dart';
@@ -8,16 +9,20 @@ import "dart:math";
 import 'package:sossoldi/model/bank_account.dart';
 import 'package:sossoldi/services/database/repositories/account_repository.dart';
 import 'package:sossoldi/pages/dashboard/widgets/accounts_sum.dart';
+import 'package:sossoldi/providers/settings_provider.dart';
 
 void main() {
   // Initialize the database factory with sqflite_common_ffi
   databaseFactory = databaseFactoryFfi;
 
   late SossoldiDatabase sossoldiDatabase;
+  late SharedPreferences sharedPreferences;
 
   setUpAll(() async {
     sossoldiDatabase = SossoldiDatabase(dbName: 'test.db');
     await sossoldiDatabase.clearDatabase();
+    SharedPreferences.setMockInitialValues({'visibility_amount': false});
+    sharedPreferences = await SharedPreferences.getInstance();
   });
 
   tearDown(() async => await sossoldiDatabase.clearDatabase());
@@ -47,7 +52,12 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: ProviderScope(child: AccountsSum(account: randomBankAccount)),
+          child: ProviderScope(
+            overrides: [
+              sharedPrefProvider.overrideWithValue(sharedPreferences),
+            ],
+            child: AccountsSum(account: randomBankAccount),
+          ),
         ),
       ),
     );
