@@ -4,6 +4,12 @@ on:
   pull_request:
   push:
 
+env:
+  ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+  ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+  ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+  ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+
 concurrency:
   group: ${{ github.head_ref != '' && github.head_ref || github.ref  }}
   cancel-in-progress: true
@@ -50,6 +56,24 @@ jobs:
 
       - name: Run tests
         run: flutter test --concurrency=1
+
+      - name: Dump keystore
+        if: github.event_name == 'push'
+        uses: timheuer/base64-to-file@v1.2.4
+        with:
+          fileName: keystore.jks
+          fileDir: android/app
+          encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+
+      - name: Create key.properties
+        if: github.event_name == 'push'
+        run: |
+          cat > android/key.properties <<EOF
+          storeFile=keystore.jks
+          storePassword=${ANDROID_KEYSTORE_PASSWORD}
+          keyAlias=${ANDROID_KEY_ALIAS}
+          keyPassword=${ANDROID_KEY_PASSWORD}
+          EOF
 
       - name: Build APK and App Bundle
         if: github.event_name == 'push'
