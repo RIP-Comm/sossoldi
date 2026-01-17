@@ -272,7 +272,6 @@ class TransactionsNotifier extends _$TransactionsNotifier {
   }
 
   Future<void> transactionSelect(Transaction transaction) async {
-    state = const AsyncLoading();
     ref.read(selectedRecurringPayProvider.notifier).state =
         transaction.recurring;
     if (transaction.type != TransactionType.transfer &&
@@ -298,10 +297,6 @@ class TransactionsNotifier extends _$TransactionsNotifier {
         : null;
     ref.read(selectedTransactionTypeProvider.notifier).state = transaction.type;
     ref.read(selectedDateProvider.notifier).state = transaction.date;
-
-    state = await AsyncValue.guard(() async {
-      return await _getTransactions();
-    });
   }
 
   Future<void> delete(int transactionId) async {
