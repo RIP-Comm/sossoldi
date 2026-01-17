@@ -229,8 +229,15 @@ class _LineChartSample2State extends State<LineChartWidget> {
           getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
             bool allSameX = touchedBarSpots.map((e) => e.x).toSet().length == 1;
 
-            if (!allSameX || touchedBarSpots.isEmpty) {
+            if (touchedBarSpots.isEmpty) {
               return [];
+            }
+
+            if (!allSameX) {
+              return List.generate(
+                touchedBarSpots.length,
+                (_) => const LineTooltipItem('', TextStyle()),
+              );
             }
 
             double x = touchedBarSpots[0].x;
