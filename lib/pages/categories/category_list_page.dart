@@ -95,6 +95,7 @@ class CategoryList extends ConsumerWidget {
                         Navigator.of(context).pushNamed('/add-category');
                       },
                       child: Row(
+                        spacing: Sizes.md,
                         children: [
                           RoundedIcon(
                             icon: iconList[category.symbol],
@@ -102,7 +103,6 @@ class CategoryList extends ConsumerWidget {
                                 categoryColorListTheme[category.color],
                             size: 30,
                           ),
-                          const SizedBox(width: Sizes.md),
                           Expanded(
                             child: Text(
                               category.name,

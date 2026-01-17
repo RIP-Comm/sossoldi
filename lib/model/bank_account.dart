@@ -12,6 +12,7 @@ class BankAccountFields extends BaseEntityFields {
   static String countNetWorth = 'countNetWorth';
   static String mainAccount = 'mainAccount';
   static String total = 'total';
+  static String order = 'position';
   static String createdAt = BaseEntityFields.getCreatedAt;
   static String updatedAt = BaseEntityFields.getUpdatedAt;
 
@@ -24,6 +25,7 @@ class BankAccountFields extends BaseEntityFields {
     active,
     countNetWorth,
     mainAccount,
+    order,
     BaseEntityFields.createdAt,
     BaseEntityFields.updatedAt,
   ];
@@ -37,6 +39,7 @@ class BankAccount extends BaseEntity {
   final bool active;
   final bool countNetWorth;
   final bool mainAccount;
+  final int order;
   final num? total;
 
   const BankAccount({
@@ -48,6 +51,7 @@ class BankAccount extends BaseEntity {
     required this.active,
     required this.countNetWorth,
     required this.mainAccount,
+    required this.order,
     this.total,
     super.createdAt,
     super.updatedAt,
@@ -62,6 +66,7 @@ class BankAccount extends BaseEntity {
     bool? active,
     bool? countNetWorth,
     bool? mainAccount,
+    int? order,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) => BankAccount(
@@ -73,6 +78,7 @@ class BankAccount extends BaseEntity {
     active: active ?? this.active,
     countNetWorth: countNetWorth ?? this.countNetWorth,
     mainAccount: mainAccount ?? this.mainAccount,
+    order: order ?? this.order,
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
     total: total,
@@ -87,6 +93,7 @@ class BankAccount extends BaseEntity {
     active: json[BankAccountFields.active] == 1 ? true : false,
     countNetWorth: json[BankAccountFields.countNetWorth] == 1 ? true : false,
     mainAccount: json[BankAccountFields.mainAccount] == 1 ? true : false,
+    order: json[BankAccountFields.order] as int,
     total: json[BankAccountFields.total] as num?,
     createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
     updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String),
@@ -101,6 +108,7 @@ class BankAccount extends BaseEntity {
     BankAccountFields.active: active ? 1 : 0,
     BankAccountFields.countNetWorth: countNetWorth ? 1 : 0,
     BankAccountFields.mainAccount: mainAccount ? 1 : 0,
+    BankAccountFields.order: order,
     BaseEntityFields.createdAt: update
         ? createdAt?.toIso8601String()
         : DateTime.now().toIso8601String(),
