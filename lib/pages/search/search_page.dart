@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../services/database/repositories/transactions_repository.dart';
+import '../../ui/extensions.dart';
 import '../../ui/widgets/transactions_list.dart';
 import '../../model/transaction.dart';
 import '../../ui/device.dart';
@@ -15,30 +16,8 @@ class SearchPage extends ConsumerStatefulWidget {
 }
 
 class _SearchPage extends ConsumerState<SearchPage> {
-  Future<List<Transaction>>? futureTransactions;
-  List<String> suggetions = [""];
+  late List<String> suggetions = [""];
   String? labelFilter;
-
-  void _updateFutureTransactions() {
-    Map<int, bool> filterAccountList = {
-      for (var element in ref.read(filterAccountProvider).entries)
-        element.key: element.value,
-    };
-    setState(() {
-      futureTransactions = ref
-          .read(transactionsRepositoryProvider)
-          .selectAll(
-            limit: 100,
-            transactionType: ref
-                .read(typeFilterProvider)
-                .entries
-                .map((f) => f.value == true ? f.key : "")
-                .toList(),
-            label: labelFilter,
-            bankAccounts: filterAccountList,
-          );
-    });
-  }
 
   @override
   void initState() {
@@ -54,6 +33,7 @@ class _SearchPage extends ConsumerState<SearchPage> {
     final filterType = ref.watch(typeFilterProvider);
     final accountList = ref.watch(accountsProvider);
     final filterAccountList = ref.watch(filterAccountProvider);
+    final searchTransactions = ref.watch(searchTransactionsProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -64,251 +44,142 @@ class _SearchPage extends ConsumerState<SearchPage> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: Sizes.sm),
+        padding: const EdgeInsets.all(Sizes.sm),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            InputDecorator(
-              decoration: const InputDecoration(
-                icon: Icon(Icons.search),
-                border: InputBorder.none,
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: BorderRadius.circular(Sizes.borderRadius),
               ),
-              child: Autocomplete(
-                optionsBuilder: (TextEditingValue textEditingValue) {
-                  if (textEditingValue.text == '') {
-                    return const Iterable<String>.empty();
-                  }
-                  return suggetions.where((String option) {
-                    return option.contains(textEditingValue.text.toLowerCase());
-                  });
-                },
-                onSelected: (option) {
-                  labelFilter = option;
-                  _updateFutureTransactions();
-                },
-              ),
-            ),
-            Container(
-              alignment: Alignment.centerLeft,
-              child: const Text("SEARCH FOR:"),
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: Sizes.sm,
-                          ),
-                          child: FilterChip(
-                            showCheckmark: false,
-                            label: Text(
-                              "Income",
-                              style: TextStyle(
-                                color: filterType["IN"]!
-                                    ? Colors.white
-                                    : Colors.blue.shade700,
-                              ),
-                            ),
-                            selected: filterType["IN"] ?? false,
-                            backgroundColor: Colors.white,
-                            selectedColor: Colors.blue.shade700,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                Sizes.borderRadius * 10,
-                              ),
-                              side: BorderSide(
-                                color: Colors.blue.shade700,
-                                width: 2.0,
-                              ),
-                            ),
-                            onSelected: (_) {
-                              ref.read(typeFilterProvider.notifier).setFilter({
-                                ...filterType,
-                                "IN": filterType["IN"] != null
-                                    ? !filterType["IN"]!
-                                    : false,
-                              });
-                              _updateFutureTransactions();
-                            },
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: Sizes.sm,
-                          ),
-                          child: FilterChip(
-                            showCheckmark: false,
-                            label: Text(
-                              "Outcome",
-                              style: TextStyle(
-                                color: filterType["OUT"]!
-                                    ? Colors.white
-                                    : Colors.blue.shade700,
-                              ),
-                            ),
-                            selected: filterType["OUT"] ?? false,
-                            backgroundColor: Colors.white,
-                            selectedColor: Colors.blue.shade700,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                Sizes.borderRadius * 10,
-                              ),
-                              side: BorderSide(
-                                color: Colors.blue.shade700,
-                                width: 2.0,
-                              ),
-                            ),
-                            onSelected: (_) {
-                              ref.read(typeFilterProvider.notifier).setFilter({
-                                ...filterType,
-                                "OUT": filterType["OUT"] != null
-                                    ? !filterType["OUT"]!
-                                    : false,
-                              });
-                              _updateFutureTransactions();
-                            },
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: Sizes.sm,
-                          ),
-                          child: FilterChip(
-                            showCheckmark: false,
-                            label: Text(
-                              "Transfer",
-                              style: TextStyle(
-                                color: filterType["TR"]!
-                                    ? Colors.white
-                                    : Colors.blue.shade700,
-                              ),
-                            ),
-                            selected: filterType["TR"] ?? false,
-                            backgroundColor: Colors.white,
-                            selectedColor: Colors.blue.shade700,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                Sizes.borderRadius * 10,
-                              ),
-                              side: BorderSide(
-                                color: Colors.blue.shade700,
-                                width: 2.0,
-                              ),
-                            ),
-                            onSelected: (_) {
-                              ref.read(typeFilterProvider.notifier).setFilter({
-                                ...filterType,
-                                "TR": filterType["TR"] != null
-                                    ? !filterType["TR"]!
-                                    : false,
-                              });
-                              _updateFutureTransactions();
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+              child: InputDecorator(
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.search),
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.symmetric(horizontal: Sizes.sm),
+                  hintText: "Search",
                 ),
-              ],
+                child: Autocomplete(
+                  optionsBuilder: (TextEditingValue textEditingValue) {
+                    if (textEditingValue.text == '') {
+                      return const Iterable<String>.empty();
+                    }
+                    return suggetions.where((String option) {
+                      return option.contains(
+                        textEditingValue.text.toLowerCase(),
+                      );
+                    });
+                  },
+                  onSelected: (option) {
+                    setState(() => labelFilter = option);
+                    ref.read(filterLabelProvider.notifier).setLabel(option);
+                  },
+                ),
+              ),
             ),
-            Container(
-              alignment: Alignment.centerLeft,
-              child: const Text("SEARCH IN:"),
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: accountList.when(
-                      data: (accounts) {
-                        return Row(
-                          children: accounts.map((account) {
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: Sizes.sm,
-                              ),
-                              child: FilterChip(
-                                label: Text(
-                                  account.name,
-                                  style: TextStyle(
-                                    color:
-                                        filterAccountList[account.id] != null &&
-                                            filterAccountList[account.id]!
-                                        ? Colors.white
-                                        : Colors.blue.shade700,
-                                  ),
-                                ),
-                                showCheckmark: false,
-                                selected:
-                                    filterAccountList[account.id] ?? false,
-                                backgroundColor: Colors.white,
-                                selectedColor: Colors.blue.shade700,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                    Sizes.borderRadius * 10,
-                                  ),
-                                  side: BorderSide(
-                                    color: Colors.blue.shade700,
-                                    width: 2.0,
-                                  ),
-                                ),
-                                onSelected: (_) {
-                                  ref
-                                      .read(filterAccountProvider.notifier)
-                                      .setAccounts({
-                                        ...ref.read(filterAccountProvider),
-                                        account.id!:
-                                            ref.read(
-                                                  filterAccountProvider,
-                                                )[account.id] !=
-                                                null
-                                            ? !ref.read(
-                                                filterAccountProvider,
-                                              )[account.id]!
-                                            : false,
-                                      });
-                                  _updateFutureTransactions();
-                                },
-                              ),
-                            );
-                          }).toList(),
-                        );
+            const SizedBox(height: Sizes.md),
+            Text("SEARCH FOR", style: Theme.of(context).textTheme.bodySmall),
+            SizedBox(
+              height: 60,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: TransactionType.values.map((type) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: Sizes.sm),
+                    child: FilterChip(
+                      showCheckmark: false,
+                      label: Text(
+                        type.name.capitalize(),
+                        style: TextStyle(
+                          color: filterType[type.code]!
+                              ? Colors.white
+                              : Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
+                      selected: filterType[type.code] ?? false,
+                      onSelected: (_) {
+                        ref.read(typeFilterProvider.notifier).setFilter({
+                          ...filterType,
+                          type.code: filterType[type.code] != null
+                              ? !filterType[type.code]!
+                              : false,
+                        });
                       },
-                      loading: () => const SizedBox(),
-                      error: (err, stack) => Text('Error: $err'),
                     ),
-                  ),
-                ),
-              ],
+                  );
+                }).toList(),
+              ),
+            ),
+            const SizedBox(height: Sizes.md),
+            Text("SEARCH IN", style: Theme.of(context).textTheme.bodySmall),
+            SizedBox(
+              height: 60,
+              child: accountList.when(
+                data: (accounts) {
+                  return ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: accounts.map((account) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: Sizes.sm,
+                        ),
+                        child: FilterChip(
+                          label: Text(
+                            account.name,
+                            style: TextStyle(
+                              color:
+                                  filterAccountList[account.id] != null &&
+                                      filterAccountList[account.id]!
+                                  ? Colors.white
+                                  : Theme.of(context).colorScheme.secondary,
+                            ),
+                          ),
+                          showCheckmark: false,
+                          selected: filterAccountList[account.id] ?? false,
+                          onSelected: (_) {
+                            ref
+                                .read(filterAccountProvider.notifier)
+                                .setAccounts({
+                                  ...ref.read(filterAccountProvider),
+                                  account.id!:
+                                      ref.read(
+                                            filterAccountProvider,
+                                          )[account.id] !=
+                                          null
+                                      ? !ref.read(
+                                          filterAccountProvider,
+                                        )[account.id]!
+                                      : false,
+                                });
+                          },
+                        ),
+                      );
+                    }).toList(),
+                  );
+                },
+                loading: () => const SizedBox(),
+                error: (err, stack) => Text('Error: $err'),
+              ),
             ),
             Expanded(
-              child: FutureBuilder(
-                future: futureTransactions,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData &&
-                      snapshot.data != null &&
-                      snapshot.connectionState == ConnectionState.done) {
+              child: searchTransactions.when(
+                data: (data) {
+                  if (data.isNotEmpty) {
                     return SingleChildScrollView(
-                      child: TransactionsList(transactions: snapshot.data!),
+                      child: TransactionsList(
+                        margin: EdgeInsets.zero,
+                        transactions: data,
+                      ),
                     );
-                  } else if (snapshot.hasError) {
-                    return Text('Something went wrong: ${snapshot.error}');
                   } else {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Transform.scale(
-                        scale: 0.5,
-                        child: const CircularProgressIndicator(),
-                      );
-                    } else {
-                      return const Text("Search for a transaction");
-                    }
+                    return const Center(
+                      child: Text("Search for a transaction"),
+                    );
                   }
                 },
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (err, stack) => Text('Error: $err'),
               ),
             ),
           ],
