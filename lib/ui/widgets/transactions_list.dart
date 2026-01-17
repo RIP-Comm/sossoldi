@@ -65,62 +65,71 @@ class _TransactionsListState extends State<TransactionsList> {
 
   @override
   Widget build(BuildContext context) {
-    return transactions.isNotEmpty
-        ? DefaultContainer(
-            margin: widget.margin,
-            child: ListView.separated(
-              physics: const NeverScrollableScrollPhysics(),
-              padding: widget.padding,
-              shrinkWrap: true,
-              itemCount: totals.keys.length,
-              separatorBuilder: (_, _) => const SizedBox(height: Sizes.lg),
-              itemBuilder: (context, monthIndex) {
-                // Group transactions by month
-                final dates = totals.keys.toList()
-                  ..sort((a, b) => b.compareTo(a));
-                final currentDate = dates[monthIndex];
-                final dateTransactions = transactions
-                    .where((t) => t.date.formatYMD() == currentDate)
-                    .toList();
+    if (transactions.isNotEmpty) {
+      return DefaultContainer(
+        margin: widget.margin,
+        child: ListView.separated(
+          physics: const NeverScrollableScrollPhysics(),
+          padding: widget.padding,
+          shrinkWrap: true,
+          itemCount: totals.keys.length,
+          separatorBuilder: (_, _) => const SizedBox(height: Sizes.lg),
+          itemBuilder: (context, monthIndex) {
+            // Group transactions by month
+            final dates = totals.keys.toList()..sort((a, b) => b.compareTo(a));
+            final currentDate = dates[monthIndex];
+            final dateTransactions = transactions
+                .where((t) => t.date.formatYMD() == currentDate)
+                .toList();
 
-                return Column(
-                  children: [
-                    TransactionTitle(
-                      ignoreBlur: widget.ignoreBlur,
-                      date: DateTime.parse(currentDate),
-                      total: totals[currentDate] ?? 0,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primaryContainer,
-                        borderRadius: BorderRadius.circular(Sizes.borderRadius),
+            return Column(
+              children: [
+                TransactionTitle(
+                  ignoreBlur: widget.ignoreBlur,
+                  date: DateTime.parse(currentDate),
+                  total: totals[currentDate] ?? 0,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primaryContainer,
+                    borderRadius: BorderRadius.circular(Sizes.borderRadius),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(Sizes.borderRadius),
+                    child: ListView.separated(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: dateTransactions.length,
+                      separatorBuilder: (_, _) => Divider(
+                        indent: 12,
+                        endIndent: 12,
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.primary.withValues(alpha: 0.4),
                       ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(Sizes.borderRadius),
-                        child: ListView.separated(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: dateTransactions.length,
-                          separatorBuilder: (_, _) => Divider(
-                            indent: 12,
-                            endIndent: 12,
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.primary.withValues(alpha: 0.4),
-                          ),
-                          itemBuilder: (context, index) => TransactionTile(
-                            ignoreBlur: widget.ignoreBlur,
-                            transaction: dateTransactions[index],
-                          ),
-                        ),
+                      itemBuilder: (context, index) => TransactionTile(
+                        ignoreBlur: widget.ignoreBlur,
+                        transaction: dateTransactions[index],
                       ),
                     ),
-                  ],
-                );
-              },
-            ),
-          )
-        : const Center(child: Text("No transactions available"));
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      );
+    }
+
+    return DefaultContainer(
+      margin: widget.margin,
+      child: Text(
+        "Add a transaction to make this section more appealing",
+        style: Theme.of(
+          context,
+        ).textTheme.bodySmall?.copyWith(fontStyle: FontStyle.italic),
+      ),
+    );
   }
 }
 
