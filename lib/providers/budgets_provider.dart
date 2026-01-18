@@ -49,7 +49,21 @@ class Budgets extends _$Budgets {
     });
   }
 
-  Future<void> refreshBudgets() async {
-    ref.invalidateSelf();
+  Future<void> saveBudget(
+    List<Budget> updatedBudgets,
+    List<Budget> deletedBudgets,
+  ) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      for (var item in deletedBudgets) {
+        await ref
+            .read(budgetRepositoryProvider)
+            .deleteByCategory(item.idCategory);
+      }
+      for (var item in updatedBudgets) {
+        await ref.read(budgetRepositoryProvider).insertOrUpdate(item);
+      }
+      return _getBudgets();
+    });
   }
 }
