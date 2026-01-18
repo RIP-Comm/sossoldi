@@ -19,12 +19,21 @@ class AccountRepository {
 
   final SossoldiDatabase _sossoldiDB;
 
+  final orderByASC = '"${BankAccountFields.order}" ASC';
+
   Future<BankAccount> insert(BankAccount item) async {
     final db = await _sossoldiDB.database;
 
     await changeMainAccount(db, item);
 
-    final id = await db.insert(bankAccountTable, item.toJson());
+    final result = await db.rawQuery(
+      'SELECT COUNT(*) AS count FROM $bankAccountTable',
+    );
+    final nextOrder = result.first['count'] as int;
+
+    final newItem = item.copy(order: nextOrder);
+
+    final id = await db.insert(bankAccountTable, newItem.toJson());
     return item.copy(id: id);
   }
 
@@ -65,7 +74,6 @@ class AccountRepository {
   Future<List<BankAccount>> selectAll() async {
     final db = await _sossoldiDB.database;
 
-    final orderByASC = '${BankAccountFields.createdAt} ASC';
     final where = '${BankAccountFields.active} = 1 ';
     final recurringFilter =
         '(t.${TransactionFields.recurring} = 0 OR t.${TransactionFields.recurring} IS NULL)';
@@ -123,11 +131,47 @@ class AccountRepository {
   Future<int> deleteById(int id) async {
     final db = await _sossoldiDB.database;
 
-    return await db.delete(
+    final rows = await db.delete(
       bankAccountTable,
       where: '${BankAccountFields.id} = ?',
       whereArgs: [id],
     );
+    await normalizeOrders();
+    return rows;
+  }
+
+  Future<void> updateOrders(List<BankAccount> items) async {
+    final db = await _sossoldiDB.database;
+
+    await db.transaction((txn) async {
+      for (int i = 0; i < items.length; i++) {
+        await txn.update(
+          bankAccountTable,
+          {BankAccountFields.order: i},
+          where: '${BankAccountFields.id} = ?',
+          whereArgs: [items[i].id],
+        );
+      }
+    });
+  }
+
+  Future<void> normalizeOrders() async {
+    final db = await _sossoldiDB.database;
+
+    final result = await db.query(
+      bankAccountTable,
+      columns: [BankAccountFields.id],
+      orderBy: orderByASC,
+    );
+
+    for (int i = 0; i < result.length; i++) {
+      await db.update(
+        bankAccountTable,
+        {BankAccountFields.order: i},
+        where: '${BankAccountFields.id} = ?',
+        whereArgs: [result[i][BankAccountFields.id]],
+      );
+    }
   }
 
   Future<int> deactivateById(int id) async {

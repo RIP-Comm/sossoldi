@@ -22,6 +22,7 @@ void main() {
       active: true,
       countNetWorth: true,
       mainAccount: true,
+      order: 2,
       createdAt: DateTime.utc(2022),
       updatedAt: DateTime.utc(2022),
     );
@@ -32,10 +33,11 @@ void main() {
     assert(bCopy.name == b.name);
     assert(bCopy.symbol == b.symbol);
     assert(bCopy.color == b.color);
-    assert(bCopy.startingValue == bCopy.startingValue);
-    assert(bCopy.active == bCopy.active);
-    assert(bCopy.countNetWorth == bCopy.countNetWorth);
-    assert(bCopy.mainAccount == bCopy.mainAccount);
+    assert(bCopy.startingValue == b.startingValue);
+    assert(bCopy.active == b.active);
+    assert(bCopy.countNetWorth == b.countNetWorth);
+    assert(bCopy.mainAccount == b.mainAccount);
+    assert(bCopy.order == b.order);
     assert(bCopy.createdAt == b.createdAt);
     assert(bCopy.updatedAt == b.updatedAt);
   });
@@ -47,6 +49,7 @@ void main() {
       BankAccountFields.symbol: "symbol",
       BankAccountFields.color: 0,
       BankAccountFields.startingValue: 100,
+      BankAccountFields.order: 0,
       BaseEntityFields.createdAt: DateTime.utc(2022).toIso8601String(),
       BaseEntityFields.updatedAt: DateTime.utc(2022).toIso8601String(),
     };
@@ -58,6 +61,7 @@ void main() {
     assert(b.symbol == json[BankAccountFields.symbol]);
     assert(b.color == json[BankAccountFields.color]);
     assert(b.startingValue == json[BankAccountFields.startingValue]);
+    assert(b.order == json[BankAccountFields.order]);
     assert(
       b.createdAt?.toUtc().toIso8601String() ==
           json[BaseEntityFields.createdAt],
@@ -78,6 +82,7 @@ void main() {
       active: true,
       countNetWorth: true,
       mainAccount: false,
+      order: 2,
     );
 
     Map<String, Object?> json = b.toJson();
@@ -90,6 +95,7 @@ void main() {
     assert((b.active ? 1 : 0) == json[BankAccountFields.active]);
     assert((b.countNetWorth ? 1 : 0) == json[BankAccountFields.countNetWorth]);
     assert((b.mainAccount ? 1 : 0) == json[BankAccountFields.mainAccount]);
+    assert(b.order == json[BankAccountFields.order]);
   });
 
   group("Bank Account Methods", () {
