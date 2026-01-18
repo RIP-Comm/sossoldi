@@ -111,8 +111,11 @@ class TransactionsRepository {
   Future<List<Transaction>> getRecurrenceTransactionsById({int? id}) async {
     final db = await _sossoldiDB.database;
 
-    final result = await db.rawQuery(
-      'SELECT * FROM "$transactionTable" as t WHERE t.${TransactionFields.idRecurringTransaction} = $id ORDER BY ${TransactionFields.date} DESC',
+    final result = await db.query(
+      transactionTable,
+      where: '${TransactionFields.idRecurringTransaction} = ?',
+      whereArgs: [id],
+      orderBy: '${TransactionFields.date} DESC',
     );
 
     return result.map((json) => Transaction.fromJson(json)).toList();
