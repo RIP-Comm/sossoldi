@@ -430,7 +430,7 @@ class AppTheme {
 ColorScheme customColorScheme = const ColorScheme(
   primary: blue1,
   primaryContainer: white,
-  onPrimaryContainer: blue2,
+  onPrimaryContainer: blue5,
   secondary: blue5,
   tertiary: blue7,
   surface: grey3,
