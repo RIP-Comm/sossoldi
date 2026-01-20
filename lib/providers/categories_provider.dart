@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../model/category_transaction.dart';
+import '../model/transaction.dart';
 import '../services/database/repositories/category_repository.dart';
 import '../services/database/repositories/transactions_repository.dart';
 import 'transactions_provider.dart';
@@ -295,4 +296,77 @@ Future<List<double>> monthlyTotals(Ref ref) async {
     monthlyTotals[month] += transaction.amount.abs();
   }
   return monthlyTotals;
+}
+
+class ParentCategoryWithSubcategoriesData {
+  final CategoryTransaction parentCategory;
+  final Map<CategoryTransaction, num> subcategories;
+  final List<Transaction> transactions;
+  final num total;
+
+  ParentCategoryWithSubcategoriesData({
+    required this.parentCategory,
+    required this.subcategories,
+    required this.transactions,
+    required this.total,
+  });
+}
+
+@Riverpod(keepAlive: true)
+Future<List<ParentCategoryWithSubcategoriesData>> categoryWithSubcategoriesData(
+  Ref ref,
+) async {
+  final trnscType = ref.watch(selectedTransactionTypeProvider);
+  final categories = ref.watch(categoriesProvider).value ?? [];
+  final parentCategories = ref.watch(allParentCategoriesProvider).value ?? [];
+  final transactions = ref.watch(transactionsProvider).value ?? [];
+  final parentCategoriesByType = parentCategories.where(
+    (cat) => cat.type.transactionType == trnscType,
+  );
+
+  List<ParentCategoryWithSubcategoriesData> result = [];
+  for (var parentCategory in parentCategoriesByType) {
+    Map<CategoryTransaction, num> subcategoryMap = {};
+    num total = 0;
+    List<Transaction> categoryTransactions = [];
+    final parentTransactions = transactions.where(
+      (trnsc) => trnsc.idCategory == parentCategory.id,
+    );
+    categoryTransactions.addAll(parentTransactions);
+    total += parentTransactions.fold(
+      0,
+      (previousValue, trnsc) => previousValue + trnsc.amount,
+    );
+    final subcategories = categories.where(
+      (cat) => cat.parent == parentCategory.id,
+    );
+    for (var subcategory in subcategories) {
+      final subcategoryTransactions = transactions.where(
+        (trnsc) => trnsc.idCategory == subcategory.id,
+      );
+      num subcategoryTotal = subcategoryTransactions.fold(
+        0,
+        (previousValue, trnsc) => previousValue + trnsc.amount,
+      );
+      if (subcategoryTotal != 0) {
+        subcategoryMap[subcategory] = trnscType == TransactionType.expense
+            ? -subcategoryTotal
+            : subcategoryTotal;
+        total += subcategoryTotal;
+        categoryTransactions.addAll(subcategoryTransactions);
+      }
+    }
+    if (total != 0) {
+      result.add(
+        ParentCategoryWithSubcategoriesData(
+          parentCategory: parentCategory,
+          subcategories: subcategoryMap,
+          transactions: categoryTransactions,
+          total: trnscType == TransactionType.expense ? -total : total,
+        ),
+      );
+    }
+  }
+
+  return result;
 }
