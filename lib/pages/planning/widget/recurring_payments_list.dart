@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/style.dart';
+import '../../../providers/recurring_transactions_provider.dart';
 import 'recurring_payment_card.dart';
 import '../../../model/recurring_transaction.dart';
 import '../../../providers/categories_provider.dart';
@@ -18,10 +19,10 @@ class RecurringPaymentSection extends ConsumerWidget {
 
     void addRecurringPayment() {
       ref.read(selectedRecurringPayProvider.notifier).setValue(true);
-      ref.read(selectedBankAccountProvider.notifier).setAccount(null);
-      ref.read(selectedCategoryProvider.notifier).setCategory(null);
       ref.read(intervalProvider.notifier).setValue(Recurrence.monthly);
-      ref.read(endDateProvider.notifier).setDate(null);
+      ref.invalidate(selectedBankAccountProvider);
+      ref.invalidate(selectedCategoryProvider);
+      ref.invalidate(endDateProvider);
       Navigator.of(context).pushNamed(
         "/add-page",
         arguments: {'recurrencyEditingPermitted': false},

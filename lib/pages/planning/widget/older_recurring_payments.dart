@@ -1,78 +1,35 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../constants/constants.dart';
 import '../../../constants/style.dart';
 import '../../../model/category_transaction.dart';
 import '../../../model/currency.dart';
-import '../../../model/transaction.dart';
-
 import '../../../model/recurring_transaction.dart';
 import '../../../providers/categories_provider.dart';
 import '../../../providers/currency_provider.dart';
-import '../../../services/database/repositories/transactions_repository.dart';
-import '../../../services/transactions/recurring_transaction_calculator.dart';
+import '../../../providers/recurring_transactions_provider.dart';
 import '../../../ui/device.dart';
 import '../../../ui/extensions.dart';
 import '../../../ui/widgets/default_container.dart';
 import '../../../ui/widgets/rounded_icon.dart';
 
-class OlderRecurringPayments extends ConsumerStatefulWidget {
-  final RecurringTransaction transaction;
+class OlderRecurringPayments extends ConsumerWidget {
   const OlderRecurringPayments({super.key, required this.transaction});
 
-  @override
-  ConsumerState<OlderRecurringPayments> createState() =>
-      _OlderRecurringPaymentsState();
-}
-
-class _OlderRecurringPaymentsState
-    extends ConsumerState<OlderRecurringPayments> {
-  List<Transaction>? transactions;
-  num sum = 0.0;
-  Map<DateTime, num> groupedMonthlyTransaction = {};
-  Map<int, num> yearlyTotal = {};
+  final RecurringTransaction transaction;
 
   @override
-  void initState() {
-    super.initState();
-    ref
-        .read(transactionsRepositoryProvider)
-        .getRecurrenceTransactionsById(id: widget.transaction.id)
-        .then((value) {
-          setState(() {
-            transactions = value;
-            sum = value.fold(
-              0.0,
-              (previousValue, element) => previousValue + element.amount,
-            );
-          });
-        });
-
-    _generateDataBasedOnRecurrentType();
-  }
-
-  var months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final String nextDueDay = getNextDueDay();
     final currencyState = ref.watch(currencyStateProvider);
     final categories = ref.watch(categoriesProvider).value;
     final category = categories?.firstWhereOrNull(
-      (element) => element.id == widget.transaction.idCategory,
+      (element) => element.id == transaction.idCategory,
+    );
+    final recurringPayments = ref.watch(
+      recurringPaymentsProvider(transaction.id!),
     );
 
     // Handle null category case
@@ -114,149 +71,148 @@ class _OlderRecurringPaymentsState
             const SizedBox(height: Sizes.lg),
             _CategoryHeader(
               category: category,
-              transaction: widget.transaction,
+              transaction: transaction,
               currency: currencyState,
             ),
             const SizedBox(height: Sizes.sm),
-            Builder(
-              builder: (ctx) {
-                return Text(
-                  "${widget.transaction.recurrency.label}"
-                  " on the ${ordinal(int.parse(getNextDueDay()))} day",
-                  style: Theme.of(context).textTheme.bodyLarge,
-                );
-              },
+            Text(
+              "${transaction.recurrency.label}"
+              " - On the $nextDueDay day",
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
             const SizedBox(height: Sizes.xl),
             Expanded(
-              child: yearlyTotal.isNotEmpty
-                  ? ListView.separated(
-                      itemCount: yearlyTotal.length,
-                      itemBuilder: (ctx, index) {
-                        var years = yearlyTotal.keys.toList();
-                        var year = years[index];
-                        var totalyearlyAmt = yearlyTotal[year];
-                        var monthlyEntries = groupedMonthlyTransaction.entries
-                            .where((m) {
-                              return m.key.year == year;
-                            })
-                            .toList();
+              child: recurringPayments.when(
+                data: (transactions) {
+                  return transactions.isNotEmpty
+                      ? ListView.separated(
+                          itemCount: transactions.length,
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(height: Sizes.lg),
+                          itemBuilder: (ctx, index) {
+                            var yearTransactions = transactions[index];
+                            var year = yearTransactions.year;
+                            var monthlyEntries =
+                                yearTransactions.transactionsByMonth;
+                            var totalyearlyAmt = monthlyEntries.values.sum;
 
-                        return DefaultContainer(
-                          margin: EdgeInsets.zero,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            spacing: Sizes.sm,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(right: Sizes.lg),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      '$year',
-                                      style: Theme.of(
-                                        context,
-                                      ).textTheme.bodyLarge,
+                            return DefaultContainer(
+                              margin: EdgeInsets.zero,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                spacing: Sizes.sm,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      right: Sizes.lg,
                                     ),
-                                    const Spacer(),
-                                    _buildAmountText(
-                                      context,
-                                      totalyearlyAmt,
-                                      currencyState.symbol,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              monthlyEntries.isNotEmpty
-                                  ? Container(
-                                      padding: const EdgeInsets.all(Sizes.md),
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(
-                                          context,
-                                        ).colorScheme.primaryContainer,
-                                        borderRadius: BorderRadius.circular(
-                                          Sizes.borderRadius,
-                                        ),
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(
-                                          Sizes.borderRadius,
-                                        ),
-                                        child: ListView.separated(
-                                          shrinkWrap: true,
-                                          itemCount: monthlyEntries.length,
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          itemBuilder: (ctx, index) {
-                                            var date =
-                                                monthlyEntries[index].key;
-
-                                            var month = months[date.month - 1];
-                                            var day = date.day;
-                                            var montlyAmt =
-                                                groupedMonthlyTransaction[date];
-
-                                            return Container(
-                                              padding: const EdgeInsets.all(
-                                                Sizes.md,
-                                              ),
-                                              child: Row(
-                                                children: [
-                                                  Text('$day'),
-                                                  const SizedBox(
-                                                    width: Sizes.xs,
-                                                  ),
-                                                  Text(month),
-                                                  const Spacer(),
-                                                  _buildAmountText(
-                                                    context,
-                                                    montlyAmt,
-                                                    currencyState.symbol,
-                                                  ),
-                                                ],
-                                              ),
-                                            );
-                                          },
-                                          separatorBuilder: (ctx, index) {
-                                            return const SizedBox(
-                                              height: Sizes.xxs,
-                                              child: Divider(thickness: 0.3),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    )
-                                  : Container(
-                                      width: double.infinity,
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.surface,
-                                      child: Center(
-                                        child: Text(
-                                          "No Montly payment history",
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          '$year',
                                           style: Theme.of(
                                             context,
-                                          ).textTheme.bodySmall,
+                                          ).textTheme.bodyLarge,
                                         ),
-                                      ),
+                                        const Spacer(),
+                                        _buildAmountText(
+                                          context,
+                                          totalyearlyAmt,
+                                          currencyState.symbol,
+                                        ),
+                                      ],
                                     ),
-                            ],
+                                  ),
+                                  monthlyEntries.isNotEmpty
+                                      ? Container(
+                                          padding: const EdgeInsets.all(
+                                            Sizes.md,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.primaryContainer,
+                                            borderRadius: BorderRadius.circular(
+                                              Sizes.borderRadius,
+                                            ),
+                                          ),
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                              Sizes.borderRadius,
+                                            ),
+                                            child: ListView.separated(
+                                              shrinkWrap: true,
+                                              itemCount: monthlyEntries.length,
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              itemBuilder: (ctx, index) {
+                                                var month = monthlyEntries.keys
+                                                    .toList()[index];
+                                                var montlyAmt =
+                                                    monthlyEntries[month];
+
+                                                return Container(
+                                                  padding: const EdgeInsets.all(
+                                                    Sizes.md,
+                                                  ),
+                                                  child: Row(
+                                                    children: [
+                                                      Text(month),
+                                                      const Spacer(),
+                                                      _buildAmountText(
+                                                        context,
+                                                        montlyAmt,
+                                                        currencyState.symbol,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                              separatorBuilder: (ctx, index) {
+                                                return const SizedBox(
+                                                  height: Sizes.xxs,
+                                                  child: Divider(
+                                                    thickness: 0.3,
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        )
+                                      : Container(
+                                          width: double.infinity,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.surface,
+                                          child: Center(
+                                            child: Text(
+                                              "No Montly payment history",
+                                              style: Theme.of(
+                                                context,
+                                              ).textTheme.bodySmall,
+                                            ),
+                                          ),
+                                        ),
+                                ],
+                              ),
+                            );
+                          },
+                        )
+                      : Center(
+                          child: Text(
+                            "No recurrent payment history",
+                            style: Theme.of(context).textTheme.titleMedium,
                           ),
                         );
-                      },
-                      separatorBuilder: (context, index) =>
-                          const SizedBox(height: Sizes.lg),
-                    )
-                  : Container(
-                      width: double.infinity,
-                      color: Theme.of(context).colorScheme.surface,
-                      child: Center(
-                        child: Text(
-                          "No recurrent payment history",
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                      ),
-                    ),
+                },
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (error, stackTrace) => Center(
+                  child: Text(
+                    "Error loading payments: $error",
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
+              ),
             ),
           ],
         ),
@@ -264,87 +220,14 @@ class _OlderRecurringPaymentsState
     );
   }
 
-  void _generateDataBasedOnRecurrentType() {
-    var startDate = widget.transaction.fromDate;
-    var endDate = widget.transaction.toDate ?? DateTime.now();
-    switch (widget.transaction.recurrency) {
-      case Recurrence.monthly:
-        RecurringTransactionCalculator.generateRecurringTransactionMonthly(
-          startDate: startDate,
-          endDate: endDate,
-          amount: widget.transaction.amount,
-          groupedMonthlyTransaction: groupedMonthlyTransaction,
-          yearlyTotal: yearlyTotal,
-        );
-        break;
-      case Recurrence.bimonthly:
-        RecurringTransactionCalculator.generateRecurringTransactionBiMonthly(
-          startDate: startDate,
-          endDate: endDate,
-          amount: widget.transaction.amount,
-          groupedMonthlyTransaction: groupedMonthlyTransaction,
-          yearlyTotal: yearlyTotal,
-        );
-        break;
-      case Recurrence.quarterly:
-        RecurringTransactionCalculator.generateRecurringTransactionQuarterly(
-          startDate: startDate,
-          endDate: endDate,
-          amount: widget.transaction.amount,
-          groupedMonthlyTransaction: groupedMonthlyTransaction,
-          yearlyTotal: yearlyTotal,
-        );
-        break;
-      case Recurrence.semester:
-        RecurringTransactionCalculator.generateRecurringTransactionSemester(
-          startDate: startDate,
-          endDate: endDate,
-          amount: widget.transaction.amount,
-          groupedMonthlyTransaction: groupedMonthlyTransaction,
-          yearlyTotal: yearlyTotal,
-        );
-        break;
-
-      case Recurrence.annual:
-        RecurringTransactionCalculator.generateRecurringTransactionAnnually(
-          startDate: startDate,
-          endDate: endDate,
-          amount: widget.transaction.amount,
-          groupedMonthlyTransaction: groupedMonthlyTransaction,
-          yearlyTotal: yearlyTotal,
-        );
-        break;
-      case Recurrence.daily:
-        RecurringTransactionCalculator.generateRecurringTransactionDaily(
-          startDate: startDate,
-          endDate: endDate,
-          amount: widget.transaction.amount,
-          groupedMonthlyTransaction: groupedMonthlyTransaction,
-          yearlyTotal: yearlyTotal,
-        );
-        break;
-      case Recurrence.weekly:
-        RecurringTransactionCalculator.generateRecurringTransactionWeekly(
-          startDate: startDate,
-          endDate: endDate,
-          amount: widget.transaction.amount,
-          groupedMonthlyTransaction: groupedMonthlyTransaction,
-          yearlyTotal: yearlyTotal,
-        );
-        break;
-    }
-  }
-
   String getNextDueDay() {
     final now = DateTime.now();
     final daysPassed = now
-        .difference(
-          widget.transaction.lastInsertion ?? widget.transaction.fromDate,
-        )
+        .difference(transaction.lastInsertion ?? transaction.fromDate)
         .inDays;
-    final daysInterval = widget.transaction.recurrency.days;
+    final daysInterval = transaction.recurrency.days;
     final daysUntilNextTransaction = daysInterval - (daysPassed % daysInterval);
-    return daysUntilNextTransaction.toString();
+    return ordinal(daysUntilNextTransaction);
   }
 
   String ordinal(int number) {
@@ -372,9 +255,9 @@ class _OlderRecurringPaymentsState
     return Row(
       children: [
         Text(
-          '${widget.transaction.type.prefix}${(amount ?? 0).toCurrency()}',
+          '${transaction.type.prefix}${(amount ?? 0).toCurrency()}',
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            color: widget.transaction.type.toColor(
+            color: transaction.type.toColor(
               brightness: Theme.of(context).brightness,
             ),
           ),
@@ -382,7 +265,7 @@ class _OlderRecurringPaymentsState
         Text(
           currencySymbol,
           style: Theme.of(context).textTheme.labelSmall?.copyWith(
-            color: widget.transaction.type.toColor(
+            color: transaction.type.toColor(
               brightness: Theme.of(context).brightness,
             ),
           ),

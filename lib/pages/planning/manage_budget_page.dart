@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../model/budget.dart';
 import '../../model/category_transaction.dart';
 import '../../providers/currency_provider.dart';
-import '../../services/database/repositories/budget_repository.dart';
 import '../../ui/device.dart';
 import '../../ui/extensions.dart';
 import '../../ui/snack_bars/snack_bar.dart';
@@ -57,22 +56,6 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
       usedCategoryIds.remove(budgets[index].idCategory);
       budgets.removeAt(index);
     });
-  }
-
-  Future<void> updateBudget(Budget updatedBudget, int index) async {
-    setState(() {
-      deletedBudgets.add(budgets[index]);
-      budgets[index] = updatedBudget;
-    });
-    await ref.read(budgetsProvider.notifier).refreshBudgets();
-  }
-
-  Future<void> deleteBudget(Budget removedBudget, int index) async {
-    setState(() {
-      budgets.removeAt(index);
-      deletedBudgets.add(removedBudget);
-    });
-    await ref.read(budgetsProvider.notifier).refreshBudgets();
   }
 
   void handleEmptyCategories() {
@@ -156,18 +139,9 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () async {
-                  for (var item in deletedBudgets) {
-                    await ref
-                        .read(budgetRepositoryProvider)
-                        .deleteByCategory(item.idCategory);
-                  }
-                  for (var item in budgets) {
-                    await ref
-                        .read(budgetRepositoryProvider)
-                        .insertOrUpdate(item);
-                  }
-
-                  await ref.read(budgetsProvider.notifier).refreshBudgets();
+                  await ref
+                      .read(budgetsProvider.notifier)
+                      .saveBudget(budgets, deletedBudgets);
 
                   if (context.mounted) {
                     Navigator.of(context).pop();
