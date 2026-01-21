@@ -5,6 +5,7 @@ import '../model/bank_account.dart';
 import '../model/transaction.dart';
 import '../services/database/repositories/account_repository.dart';
 import 'dashboard_provider.dart';
+import 'recurring_transactions_provider.dart';
 import 'transactions_provider.dart';
 
 part 'accounts_provider.g.dart';
