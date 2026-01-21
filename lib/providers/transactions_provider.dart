@@ -148,6 +148,7 @@ class TransactionsNotifier extends _$TransactionsNotifier {
   }
 
   Future<List<Transaction>> _getTransactions({int? limit}) async {
+    ref.invalidate(transactionsExistsProvider);
     ref.invalidate(lastTransactionsProvider);
     ref.invalidate(accountsProvider);
     ref.invalidate(monthlyBudgetsStatsProvider);
@@ -321,6 +322,12 @@ class TransactionsNotifier extends _$TransactionsNotifier {
     ref.invalidate(intervalProvider);
     ref.invalidate(selectedTransactionTypeProvider);
   }
+}
+
+@Riverpod(keepAlive: true)
+Future<bool> transactionsExists(Ref ref) async {
+  final count = await ref.read(transactionsRepositoryProvider).countAll();
+  return count > 0;
 }
 
 @Riverpod(keepAlive: true)

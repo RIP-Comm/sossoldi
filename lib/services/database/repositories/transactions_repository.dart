@@ -121,6 +121,18 @@ class TransactionsRepository {
     return result.map((json) => Transaction.fromJson(json)).toList();
   }
 
+  Future<int> countAll() async {
+    final db = await _sossoldiDB.database;
+
+    final result = await db.rawQuery(
+      'SELECT COUNT(*) as count FROM "$transactionTable"',
+    );
+
+    return result.first['count'] != null
+        ? int.parse(result.first['count'].toString())
+        : 0;
+  }
+
   Future<List<String>> getAllLabels({String? label}) async {
     final db = await _sossoldiDB.database;
 

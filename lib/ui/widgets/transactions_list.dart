@@ -121,13 +121,16 @@ class _TransactionsListState extends State<TransactionsList> {
       );
     }
 
-    return DefaultContainer(
-      margin: widget.margin,
-      child: Text(
-        "Add a transaction to make this section more appealing",
-        style: Theme.of(
-          context,
-        ).textTheme.bodySmall?.copyWith(fontStyle: FontStyle.italic),
+    return Align(
+      alignment: Alignment.topCenter,
+      child: DefaultContainer(
+        margin: widget.margin,
+        child: Text(
+          "Add a transaction to make this section more appealing",
+          style: Theme.of(
+            context,
+          ).textTheme.bodySmall?.copyWith(fontStyle: FontStyle.italic),
+        ),
       ),
     );
   }
