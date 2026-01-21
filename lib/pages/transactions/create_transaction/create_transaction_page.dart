@@ -114,10 +114,7 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
     });
   }
 
-  // TODO: This should be inside addTransaction
   void _refreshAccountAndNavigateBack() async {
-    ref.invalidate(transactionsProvider);
-    ref.invalidate(recurringTransactionsProvider);
     ref
         .read(accountsProvider.notifier)
         .refreshAccount(ref.read(selectedBankAccountProvider)!)

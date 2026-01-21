@@ -5,23 +5,21 @@ import '../../../constants/constants.dart';
 import '../../../constants/style.dart';
 import '../../../model/category_transaction.dart';
 import '../../../providers/categories_provider.dart';
-import '../../../providers/transactions_provider.dart';
 import '../../../ui/device.dart';
-import '../../../ui/extensions.dart';
 import 'widgets/category_icon_color_selector.dart';
-import 'widgets/subcategories_list.dart';
 
-class CreateEditCategoryPage extends ConsumerStatefulWidget {
-  final bool hideIncome;
+class CreateEditSubcategoryPage extends ConsumerStatefulWidget {
+  final CategoryTransaction category;
 
-  const CreateEditCategoryPage({super.key, this.hideIncome = false});
+  const CreateEditSubcategoryPage({super.key, required this.category});
 
   @override
-  ConsumerState<CreateEditCategoryPage> createState() =>
-      _CreateEditCategoryPage();
+  ConsumerState<CreateEditSubcategoryPage> createState() =>
+      _CreateEditSubcategoryPage();
 }
 
-class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {
+class _CreateEditSubcategoryPage
+    extends ConsumerState<CreateEditSubcategoryPage> {
   final TextEditingController nameController = TextEditingController();
   late CategoryTransactionType categoryType;
   String categoryIcon = iconList.keys.first;
@@ -31,16 +29,14 @@ class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {
   void initState() {
     super.initState();
 
-    final transactionType = ref.read(selectedTransactionTypeProvider);
-    categoryType =
-        transactionType.categoryType ?? CategoryTransactionType.expense;
+    categoryType = widget.category.type;
+    categoryColor = widget.category.color;
 
-    final selectedCategory = ref.read(selectedCategoryProvider);
-    if (selectedCategory != null) {
-      nameController.text = selectedCategory.name;
-      categoryType = selectedCategory.type;
-      categoryIcon = selectedCategory.symbol;
-      categoryColor = selectedCategory.color;
+    final selectedSubcategory = ref.read(selectedSubcategoryProvider);
+    if (selectedSubcategory != null) {
+      nameController.text = selectedSubcategory.name;
+      categoryType = selectedSubcategory.type;
+      categoryIcon = selectedSubcategory.symbol;
     }
   }
 
@@ -52,15 +48,14 @@ class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    final selectedCategory = ref.watch(selectedCategoryProvider);
+    final selectedSubcategory = ref.watch(selectedSubcategoryProvider);
     return Scaffold(
       appBar: AppBar(
-        title: Text("${selectedCategory == null ? "New" : "Edit"} Category"),
+        title: Text(
+          "${selectedSubcategory == null ? "New" : "Edit"} Subcategory",
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          // Result from the .pop is used in lib\pages\planning_page\manage_budget_page.dart.
-          //
-          // If back button is pressed, no category has been added.
           onPressed: () => Navigator.pop(context, false),
         ),
       ),
@@ -93,23 +88,19 @@ class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {
             child: ElevatedButton(
               onPressed: () async {
                 if (nameController.text.isNotEmpty) {
-                  if (selectedCategory != null) {
+                  if (selectedSubcategory != null) {
                     await ref
                         .read(categoriesProvider.notifier)
-                        .updateCategory(
+                        .updateSubcategory(
                           name: nameController.text,
-                          type: categoryType,
                           icon: categoryIcon,
-                          color: categoryColor,
                         );
                   } else {
                     await ref
                         .read(categoriesProvider.notifier)
-                        .addCategory(
+                        .addSubcategory(
                           name: nameController.text,
-                          type: categoryType,
                           icon: categoryIcon,
-                          color: categoryColor,
                         );
                   }
                   // Result from the .pop is used in lib\pages\planning_page\manage_budget_page.dart.
@@ -119,7 +110,7 @@ class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {
                 }
               },
               child: Text(
-                "${selectedCategory == null ? "CREATE" : "UPDATE"} CATEGORY",
+                "${selectedSubcategory == null ? "CREATE" : "UPDATE"} SUBCATEGORY",
               ),
             ),
           ),
@@ -163,88 +154,19 @@ class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {
                 ],
               ),
             ),
-            Container(
-              width: double.infinity,
-              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              padding: const EdgeInsets.fromLTRB(
-                Sizes.lg,
-                Sizes.md,
-                Sizes.lg,
-                0,
-              ),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-                borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "TYPE",
-                    style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                  DropdownButton<CategoryTransactionType>(
-                    value: categoryType,
-                    underline: const SizedBox(),
-                    isExpanded: true,
-                    items: CategoryTransactionType.values
-                        .where(
-                          (category) =>
-                              !widget.hideIncome ||
-                              category == CategoryTransactionType.expense,
-                        )
-                        .map((CategoryTransactionType type) {
-                          return DropdownMenuItem<CategoryTransactionType>(
-                            value: type,
-                            child: Text(
-                              type.name.capitalize(),
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                          );
-                        })
-                        .toList(),
-                    onChanged: (CategoryTransactionType? newType) {
-                      if (newType != categoryType) {
-                        setState(() => categoryType = newType!);
-                      }
-                    },
-                  ),
-                ],
-              ),
-            ),
             CategoryIconColorSelector(
               selectedIcon: categoryIcon,
               selectedColor: categoryColor,
               onIconChanged: (icon) => setState(() => categoryIcon = icon),
-              onColorChanged: (color) => setState(() => categoryColor = color),
             ),
-            if (selectedCategory != null)
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.only(
-                  left: Sizes.lg,
-                  top: Sizes.lg,
-                  bottom: Sizes.sm,
-                ),
-                child: Text(
-                  "SUBCATEGORY",
-                  style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-              ),
-            if (selectedCategory != null)
-              SubcategoriesList(category: selectedCategory),
-            if (selectedCategory != null)
+            if (selectedSubcategory != null)
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(Sizes.lg),
                 child: TextButton.icon(
                   onPressed: () => ref
                       .read(categoriesProvider.notifier)
-                      .removeCategory(selectedCategory.id!)
+                      .removeCategory(selectedSubcategory.id!)
                       .whenComplete(() {
                         if (context.mounted) {
                           Navigator.of(context).pop();
@@ -255,7 +177,7 @@ class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {
                   ),
                   icon: const Icon(Icons.delete_outlined, color: red),
                   label: Text(
-                    "Delete category",
+                    "Delete subcategory",
                     style: Theme.of(
                       context,
                     ).textTheme.bodyLarge!.copyWith(color: red),

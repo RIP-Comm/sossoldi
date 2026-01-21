@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../model/category_transaction.dart';
+import '../model/transaction.dart';
 import '../services/database/repositories/category_repository.dart';
 import '../services/database/repositories/transactions_repository.dart';
 import 'transactions_provider.dart';
@@ -9,6 +10,14 @@ part 'categories_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 class SelectedCategory extends _$SelectedCategory {
+  @override
+  CategoryTransaction? build() => null;
+
+  void setCategory(CategoryTransaction? category) => state = category;
+}
+
+@Riverpod(keepAlive: true)
+class SelectedSubcategory extends _$SelectedSubcategory {
   @override
   CategoryTransaction? build() => null;
 
@@ -52,7 +61,34 @@ class Categories extends _$Categories {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       await ref.read(categoryRepositoryProvider).insert(category);
+      ref.invalidate(selectedCategoryProvider);
+      ref.invalidate(categoryMapProvider);
       ref.invalidate(categoriesByTypeProvider(category.type));
+      return _getCategories();
+    });
+  }
+
+  Future<void> addSubcategory({
+    required String name,
+    required String icon,
+  }) async {
+    final parentCategory = ref.read(selectedCategoryProvider)!;
+    CategoryTransaction category = CategoryTransaction(
+      name: name,
+      symbol: icon,
+      type: parentCategory.type,
+      color: parentCategory.color,
+      order: 0,
+      parent: parentCategory.id,
+    );
+
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      await ref.read(categoryRepositoryProvider).insert(category);
+      ref.invalidate(selectedSubcategoryProvider);
+      ref.invalidate(categoryMapProvider);
+      ref.invalidate(categoriesByTypeProvider(category.type));
+      ref.invalidate(subcategoriesProvider(parentCategory.id!));
       return _getCategories();
     });
   }
@@ -70,6 +106,28 @@ class Categories extends _$Categories {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       await ref.read(categoryRepositoryProvider).updateItem(category);
+      ref.invalidate(selectedCategoryProvider);
+      ref.invalidate(categoryMapProvider);
+      return _getCategories();
+    });
+  }
+
+  Future<void> updateSubcategory({
+    required String name,
+    required String icon,
+  }) async {
+    CategoryTransaction category = ref
+        .read(selectedSubcategoryProvider)!
+        .copy(name: name, symbol: icon);
+
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      await ref.read(categoryRepositoryProvider).updateItem(category);
+      ref.invalidate(selectedSubcategoryProvider);
+      ref.invalidate(categoryMapProvider);
+      ref.invalidate(
+        subcategoriesProvider(ref.read(selectedCategoryProvider)!.id!),
+      );
       return _getCategories();
     });
   }
@@ -78,6 +136,11 @@ class Categories extends _$Categories {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       await ref.read(categoryRepositoryProvider).deleteById(categoryId);
+      ref.invalidate(selectedSubcategoryProvider);
+      ref.invalidate(categoryMapProvider);
+      ref.invalidate(
+        subcategoriesProvider(ref.read(selectedCategoryProvider)!.id!),
+      );
       return _getCategories();
     });
   }
@@ -107,16 +170,41 @@ class Categories extends _$Categories {
 }
 
 @Riverpod(keepAlive: true)
+Future<List<CategoryTransaction>> allParentCategories(Ref ref) async {
+  final categories =
+      ref
+          .watch(categoriesProvider)
+          .value
+          ?.where((category) => category.parent == null)
+          .toList() ??
+      [];
+  return categories;
+}
+
+@Riverpod(keepAlive: true)
 Future<List<CategoryTransaction>> categoriesByType(
   Ref ref,
-  CategoryTransactionType? type,
-) async {
+  CategoryTransactionType? type, {
+  bool includeSubcategories = false,
+}) async {
   List<CategoryTransaction> categories = [];
   if (type != null) {
     categories = await ref
         .read(categoryRepositoryProvider)
-        .selectCategoriesByType(type);
+        .selectCategoriesByType(
+          type,
+          includeSubcategories: includeSubcategories,
+        );
   }
+  return categories;
+}
+
+@riverpod
+Future<List<CategoryTransaction>> subcategories(Ref ref, int categoryId) async {
+  List<CategoryTransaction> categories = [];
+  categories = await ref
+      .read(categoryRepositoryProvider)
+      .selectSubCategory(categoryId);
   return categories;
 }
 
@@ -208,4 +296,77 @@ Future<List<double>> monthlyTotals(Ref ref) async {
     monthlyTotals[month] += transaction.amount.abs();
   }
   return monthlyTotals;
+}
+
+class ParentCategoryWithSubcategoriesData {
+  final CategoryTransaction parentCategory;
+  final Map<CategoryTransaction, num> subcategories;
+  final List<Transaction> transactions;
+  final num total;
+
+  ParentCategoryWithSubcategoriesData({
+    required this.parentCategory,
+    required this.subcategories,
+    required this.transactions,
+    required this.total,
+  });
+}
+
+@Riverpod(keepAlive: true)
+Future<List<ParentCategoryWithSubcategoriesData>> categoryWithSubcategoriesData(
+  Ref ref,
+) async {
+  final trnscType = ref.watch(selectedTransactionTypeProvider);
+  final categories = ref.watch(categoriesProvider).value ?? [];
+  final parentCategories = ref.watch(allParentCategoriesProvider).value ?? [];
+  final transactions = ref.watch(transactionsProvider).value ?? [];
+  final parentCategoriesByType = parentCategories.where(
+    (cat) => cat.type.transactionType == trnscType,
+  );
+
+  List<ParentCategoryWithSubcategoriesData> result = [];
+  for (var parentCategory in parentCategoriesByType) {
+    Map<CategoryTransaction, num> subcategoryMap = {};
+    num total = 0;
+    List<Transaction> categoryTransactions = [];
+    final parentTransactions = transactions.where(
+      (trnsc) => trnsc.idCategory == parentCategory.id,
+    );
+    categoryTransactions.addAll(parentTransactions);
+    total += parentTransactions.fold(
+      0,
+      (previousValue, trnsc) => previousValue + trnsc.amount,
+    );
+    final subcategories = categories.where(
+      (cat) => cat.parent == parentCategory.id,
+    );
+    for (var subcategory in subcategories) {
+      final subcategoryTransactions = transactions.where(
+        (trnsc) => trnsc.idCategory == subcategory.id,
+      );
+      num subcategoryTotal = subcategoryTransactions.fold(
+        0,
+        (previousValue, trnsc) => previousValue + trnsc.amount,
+      );
+      if (subcategoryTotal != 0) {
+        subcategoryMap[subcategory] = trnscType == TransactionType.expense
+            ? -subcategoryTotal
+            : subcategoryTotal;
+        total += subcategoryTotal;
+        categoryTransactions.addAll(subcategoryTransactions);
+      }
+    }
+    if (total != 0) {
+      result.add(
+        ParentCategoryWithSubcategoriesData(
+          parentCategory: parentCategory,
+          subcategories: subcategoryMap,
+          transactions: categoryTransactions,
+          total: trnscType == TransactionType.expense ? -total : total,
+        ),
+      );
+    }
+  }
+
+  return result;
 }

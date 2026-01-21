@@ -23,7 +23,7 @@ class BudgetCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final budgetsAsync = ref.watch(budgetsProvider);
     final transactionsAsync = ref.watch(monthlyTransactionsProvider);
-    final categories = ref.watch(categoriesProvider).value ?? [];
+    final categories = ref.watch(allParentCategoriesProvider).value ?? [];
     final currencyState = ref.watch(currencyStateProvider);
 
     return DefaultContainer(

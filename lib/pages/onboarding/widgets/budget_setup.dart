@@ -36,7 +36,7 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
           (total, budget) => total + budget.amountLimit,
         ) ??
         0;
-    final categoriesGrid = ref.watch(categoriesProvider);
+    final categoriesGrid = ref.watch(allParentCategoriesProvider);
     return Scaffold(
       backgroundColor: blue7,
       body: SafeArea(

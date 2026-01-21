@@ -169,6 +169,8 @@ class Accounts extends _$Accounts {
   }
 
   Future<void> refreshAccount(BankAccount account) async {
+    ref.invalidate(transactionsProvider);
+    ref.invalidate(recurringTransactionsProvider);
     ref.read(selectedAccountProvider.notifier).state = account;
 
     final currentMonthDailyBalance = await ref

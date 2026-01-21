@@ -40,7 +40,16 @@ class CategoriesPieChart extends ConsumerWidget {
               centerSpaceRadius: 70,
               sectionsSpace: 0,
               borderData: FlBorderData(show: false),
-              sections: showingSections(selectedIndex),
+              sections: List.generate(amounts.values.length, (i) {
+                final isTouched = (i == selectedIndex);
+                final radius = isTouched ? 30.0 : 25.0;
+                return PieChartSectionData(
+                  color: categoryColorList[categories[i].color],
+                  value: 360 * amounts[categories[i].id]!,
+                  radius: radius,
+                  showTitle: false,
+                );
+              }),
               pieTouchData: PieTouchData(
                 touchCallback: (FlTouchEvent event, pieTouchResponse) {
                   // expand category when tapped
@@ -90,19 +99,5 @@ class CategoriesPieChart extends ConsumerWidget {
         ],
       ),
     );
-  }
-
-  List<PieChartSectionData>? showingSections(int index) {
-    return List.generate(amounts.values.length, (i) {
-      final isTouched = (i == index);
-
-      final radius = isTouched ? 30.0 : 25.0;
-      return PieChartSectionData(
-        color: categoryColorList[categories[i].color],
-        value: 360 * amounts[categories[i].id]!,
-        radius: radius,
-        showTitle: false,
-      );
-    });
   }
 }

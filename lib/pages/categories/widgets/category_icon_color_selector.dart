@@ -8,14 +8,14 @@ class CategoryIconColorSelector extends StatefulWidget {
   final String selectedIcon;
   final int selectedColor;
   final Function(String) onIconChanged;
-  final Function(int) onColorChanged;
+  final Function(int)? onColorChanged;
 
   const CategoryIconColorSelector({
     super.key,
     required this.selectedIcon,
     required this.selectedColor,
     required this.onIconChanged,
-    required this.onColorChanged,
+    this.onColorChanged,
   });
 
   @override
@@ -165,19 +165,20 @@ class _CategoryIconColorSelectorState extends State<CategoryIconColorSelector> {
                 ],
               ),
             ),
-          const Divider(height: 1, color: grey1),
-          const SizedBox(height: Sizes.md),
-          ColorGrid(
-            selectedColor: widget.selectedColor,
-            onColorChanged: widget.onColorChanged,
-          ),
-          const SizedBox(height: Sizes.xs),
-          Text(
-            "CHOOSE COLOR",
-            style: Theme.of(context).textTheme.labelMedium?.copyWith(
-              color: Theme.of(context).colorScheme.primary,
+          if (widget.onColorChanged != null)
+            const Divider(height: 1, color: grey1),
+          if (widget.onColorChanged != null)
+            ColorGrid(
+              selectedColor: widget.selectedColor,
+              onColorChanged: widget.onColorChanged!,
             ),
-          ),
+          if (widget.onColorChanged != null)
+            Text(
+              "CHOOSE COLOR",
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
         ],
       ),
     );
@@ -297,42 +298,43 @@ class _ColorGridState extends State<ColorGrid> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          padding: const EdgeInsets.symmetric(horizontal: Sizes.lg),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 8,
-            mainAxisSpacing: Sizes.lg,
-            crossAxisSpacing: Sizes.lg,
-          ),
-          itemCount: showAllColors ? categoryColorListTheme.length : 16,
-          itemBuilder: (context, index) {
-            final isSelected = widget.selectedColor == index;
-            return Center(
-              child: GestureDetector(
-                onTap: () => widget.onColorChanged(index),
-                child: Container(
-                  height: isSelected ? 38 : 32,
-                  width: isSelected ? 38 : 32,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: categoryColorListTheme[index],
-                    border: isSelected
-                        ? Border.all(
-                            color: Theme.of(context).colorScheme.primary,
-                            width: 3,
-                          )
-                        : null,
+    return Padding(
+      padding: const EdgeInsets.only(top: Sizes.md, bottom: Sizes.xs),
+      child: Column(
+        children: [
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.symmetric(horizontal: Sizes.lg),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 8,
+              mainAxisSpacing: Sizes.lg,
+              crossAxisSpacing: Sizes.lg,
+            ),
+            itemCount: showAllColors ? categoryColorListTheme.length : 16,
+            itemBuilder: (context, index) {
+              final isSelected = widget.selectedColor == index;
+              return Center(
+                child: GestureDetector(
+                  onTap: () => widget.onColorChanged(index),
+                  child: Container(
+                    height: isSelected ? 38 : 32,
+                    width: isSelected ? 38 : 32,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: categoryColorListTheme[index],
+                      border: isSelected
+                          ? Border.all(
+                              color: Theme.of(context).colorScheme.primary,
+                              width: 3,
+                            )
+                          : null,
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
-        ),
-        if (categoryColorListTheme.length > 16)
+              );
+            },
+          ),
           Padding(
             padding: const EdgeInsets.only(top: Sizes.sm),
             child: TextButton.icon(
@@ -342,7 +344,7 @@ class _ColorGridState extends State<ColorGrid> {
                 size: 20,
               ),
               label: Text(
-                showAllColors ? 'Show less' : 'Show more colors',
+                showAllColors ? 'Show less' : 'Show more',
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               style: TextButton.styleFrom(
@@ -354,7 +356,8 @@ class _ColorGridState extends State<ColorGrid> {
               ),
             ),
           ),
-      ],
+        ],
+      ),
     );
   }
 }
