@@ -136,10 +136,10 @@ class Categories extends _$Categories {
     });
   }
 
-  Future<void> removeCategory(int categoryId) async {
+  Future<void> removeCategory(CategoryTransaction category) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      await ref.read(categoryRepositoryProvider).deleteById(categoryId);
+      await ref.read(categoryRepositoryProvider).deleteById(category);
       ref.invalidate(selectedSubcategoryProvider);
       ref.invalidate(categoryMapProvider);
       ref.invalidate(
@@ -176,14 +176,18 @@ class Categories extends _$Categories {
 
 @Riverpod(keepAlive: true)
 Future<List<CategoryTransaction>> allParentCategories(Ref ref) async {
-  final categories =
-      ref
-          .watch(categoriesProvider)
-          .value
-          ?.where((category) => category.parent == null)
-          .toList() ??
-      [];
-  return categories;
+  final categories = ref.watch(categoriesProvider).value ?? [];
+  return categories
+      .where(
+        (category) => category.parent == null && category.deletedAt == null,
+      )
+      .toList();
+}
+
+@Riverpod(keepAlive: true)
+Future<List<CategoryTransaction>> activeCategories(Ref ref) async {
+  final categories = ref.watch(categoriesProvider).value ?? [];
+  return categories.where((category) => category.deletedAt == null).toList();
 }
 
 @Riverpod(keepAlive: true)
@@ -235,9 +239,9 @@ Future<Map<CategoryTransaction, double>> categoryMap(Ref ref) async {
 
   Map<CategoryTransaction, double> categoriesMap = {};
 
-  final categories = await ref
-      .read(categoryRepositoryProvider)
-      .selectCategoriesByType(categoryType);
+  final categories = await ref.watch(
+    categoriesByTypeProvider(categoryType).future,
+  );
 
   final transactions = await ref
       .read(transactionsRepositoryProvider)
