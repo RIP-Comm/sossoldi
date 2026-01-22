@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../constants/style.dart';
 import '../../providers/transactions_provider.dart';
-import '../../ui/assets.dart';
-import '../../ui/device.dart';
 import '../../ui/snack_bars/transactions_snack_bars.dart';
-import '../../ui/widgets/default_container.dart';
 import 'widgets/accounts_tab.dart';
+import 'widgets/add_transaction_card.dart';
 import 'widgets/categories_tab.dart';
 import 'widgets/custom_sliver_delegate.dart';
 import 'widgets/list_tab.dart';
@@ -59,73 +56,11 @@ class _TransactionsPageState extends ConsumerState<TransactionsPage>
         ref: ref,
       ),
     );
-    final transactionsAsync = ref.watch(transactionsProvider);
+    final transactionsExistsAsync = ref.watch(transactionsExistsProvider);
 
-    return transactionsAsync.when(
-      data: (data) {
-        if (data.isEmpty) {
-          return Align(
-            alignment: Alignment.topCenter,
-            child: DefaultContainer(
-              margin: const EdgeInsets.symmetric(
-                horizontal: Sizes.lg,
-                vertical: Sizes.xl,
-              ),
-              child: Column(
-                spacing: 16,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "There are no transactions added yet",
-                    style: Theme.of(context).textTheme.bodySmall,
-                    textAlign: TextAlign.center,
-                  ),
-                  Image.asset(
-                    SossoldiAssets.calculator,
-                    width: 240,
-                    height: 240,
-                  ),
-                  Text(
-                    "Add a transaction to make this section more appealing",
-                    style: Theme.of(context).textTheme.bodySmall,
-                    textAlign: TextAlign.center,
-                  ),
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(Sizes.borderRadius),
-                      boxShadow: [defaultShadow],
-                    ),
-                    child: ElevatedButton.icon(
-                      icon: Icon(
-                        Icons.add_circle,
-                        color: Theme.of(context).colorScheme.onPrimaryContainer,
-                        size: Sizes.xl,
-                      ),
-                      label: Text(
-                        "Add transaction",
-                        style: Theme.of(context).textTheme.titleLarge!.apply(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.onPrimaryContainer,
-                        ),
-                      ),
-                      style: TextButton.styleFrom(
-                        backgroundColor: Theme.of(
-                          context,
-                        ).colorScheme.primaryContainer,
-                        padding: const EdgeInsets.symmetric(vertical: Sizes.md),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pushNamed("/add-page");
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        } else {
+    return transactionsExistsAsync.when(
+      data: (transactionsExists) {
+        if (transactionsExists) {
           return NotificationListener<ScrollEndNotification>(
             onNotification: (notification) {
               // snap the header open/close when it's in between the two states
@@ -171,6 +106,8 @@ class _TransactionsPageState extends ConsumerState<TransactionsPage>
             ),
           );
         }
+
+        return const AddTransactionCard();
       },
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, stack) => Center(
