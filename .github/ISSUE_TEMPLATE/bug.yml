@@ -32,14 +32,14 @@ body:
   - type: input
     id: os-version
     attributes:
-      label: 🔄 **What version?**
-      description: e.g. Android 14 or iOS 18.3.2
+      label: 🔄 **What OS version?**
+      description: e.g. Android 14 or iOS 18.3.2, Irrelevant
     validations:
       required: true  
   - type: input
     id: version
     attributes:
-      label: 🔢 **Version**
+      label: 🔢 **What Sossoldi version?**
       description: What version of Sossoldi are you running? (Find out in Settings -> More info -> Version) 
       placeholder: e.g. v0.1.0
     validations:
