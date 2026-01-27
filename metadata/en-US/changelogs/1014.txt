@@ -1,0 +1,16 @@
+* NEW Feature: Subcategory feature
+  - Users can now create and manage subcategories within main categories.
+* NEW Feature: Drag & drop sorting for categories and accounts
+  - Users can easily reorder categories and accounts using drag & drop
+* Fixed: Persist last used value for balance blurring
+  - The application now remembers the user’s balance blurring preference instead of always blurring by default
+* Fixed: Dark theme startup flicker
+* Refactor: Improved budgets and recurring transactions
+    - Budgets and recurring transactions modules have been refactored for better performance and maintainability.
+    - Recurring transactions now show real historical data instead of precalculated values
+* Refactor: A lot of new icons and colors has been added for categories and subcategories
+
+...along with many other small improvements and bug fixes!
+
+IMPORTANT NOTE: This is still a beta release and includes significant internal changes.
+Before updating, please make a backup of your database to avoid any potential data loss.
