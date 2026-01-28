@@ -34,8 +34,13 @@ jobs:
           flutter-version: ${{ steps.fvm-config-action.outputs.FLUTTER_VERSION }}
           channel: stable
           cache: true
-          cache-key: flutter
+          cache-key: flutter-${{ steps.fvm-config-action.outputs.FLUTTER_VERSION }}
           cache-path: ${{ runner.tool_cache }}/flutter
+
+      - name: Check versions
+        run: |
+          flutter --version
+          dart --version
 
       - name: Get dependencies
         run: flutter pub get
