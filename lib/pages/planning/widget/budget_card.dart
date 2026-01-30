@@ -6,7 +6,6 @@ import '../../../model/category_transaction.dart';
 import '../../../providers/categories_provider.dart';
 import '../../../ui/extensions.dart';
 import '../../../ui/widgets/default_container.dart';
-import '../../../model/budget.dart';
 import '../../../providers/budgets_provider.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../providers/transactions_provider.dart';
@@ -54,17 +53,17 @@ class BudgetCard extends ConsumerWidget {
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: budgets.length,
                           itemBuilder: (BuildContext context, int index) {
+                            final budget = budgets[index];
                             num spent = num.parse(
                               transactions
                                   .where(
                                     (t) =>
-                                        t.idCategory ==
-                                        budgets[index].idCategory,
+                                        t.idCategory == budget.idCategory ||
+                                        t.categoryParent == budget.idCategory,
                                   )
                                   .fold(0.0, (sum, t) => sum + t.amount)
                                   .toCurrency(),
                             );
-                            Budget budget = budgets.elementAt(index);
                             CategoryTransaction category = categories
                                 .firstWhere(
                                   (cat) => cat.id == budget.idCategory,

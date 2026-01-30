@@ -16,6 +16,7 @@ class TransactionFields extends BaseEntityFields {
   static String categoryName = 'categoryName';
   static String categoryColor = 'categoryColor';
   static String categorySymbol = 'categorySymbol';
+  static String categoryParent = 'categoryParent';
   static String idBankAccount = 'idBankAccount'; // FK
   static String bankAccountName = 'bankAccountName';
   static String idBankAccountTransfer = 'idBankAccountTransfer';
@@ -95,6 +96,7 @@ class Transaction extends BaseEntity {
   final String? categoryName;
   final int? categoryColor;
   final String? categorySymbol;
+  final int? categoryParent;
   final int idBankAccount;
   final String? bankAccountName;
   final int? idBankAccountTransfer;
@@ -112,6 +114,7 @@ class Transaction extends BaseEntity {
     this.categoryName,
     this.categoryColor,
     this.categorySymbol,
+    this.categoryParent,
     required this.idBankAccount,
     this.bankAccountName,
     this.idBankAccountTransfer,
@@ -162,6 +165,7 @@ class Transaction extends BaseEntity {
       categoryName: json[TransactionFields.categoryName] as String?,
       categoryColor: json[TransactionFields.categoryColor] as int?,
       categorySymbol: json[TransactionFields.categorySymbol] as String?,
+      categoryParent: json[TransactionFields.categoryParent] as int?,
       idBankAccount: json[TransactionFields.idBankAccount] as int,
       bankAccountName: json[TransactionFields.bankAccountName] as String?,
       idBankAccountTransfer:
