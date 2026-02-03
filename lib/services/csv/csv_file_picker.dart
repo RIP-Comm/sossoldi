@@ -53,9 +53,10 @@ class CSVFilePicker {
 
   // Share exported CSV file
   static Future<void> saveCSVFile(String csv, BuildContext context) async {
+    String? selectedDirectory;
     try {
       // Prompt the user to select a directory
-      String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+      selectedDirectory = await FilePicker.platform.getDirectoryPath();
       if (selectedDirectory == null) {
         // User canceled the picker
         return;
@@ -76,7 +77,17 @@ class CSVFilePicker {
       }
     } catch (e) {
       if (context.mounted) {
-        showSnackBar(context, message: 'Error saving file: ${e.toString()}');
+        String errorMessage = 'Error saving file: ${e.toString()}';
+        
+        // Check if error is due to saving in root directory on Android
+        if (Platform.isAndroid && 
+            selectedDirectory != null &&
+            (selectedDirectory == '/storage/emulated/0' || 
+            selectedDirectory == '/storage/emulated/0/')) {
+          errorMessage = 'Cannot save to device root. Please create or select a folder in Downloads or Documents.';
+        }
+        
+        showSnackBar(context, message: errorMessage);
       }
     }
   }
