@@ -77,15 +77,8 @@ class CSVFilePicker {
       }
     } catch (e) {
       if (context.mounted) {
-        String errorMessage = 'Error saving file: ${e.toString()}';
+        String errorMessage = 'Cannot save the file here, please create or select a folder in Downloads or Documents. Error: ${e.toString()}';
         
-        // Check if error is due to saving in root directory on Android
-        if (Platform.isAndroid && 
-            selectedDirectory != null &&
-            (selectedDirectory == '/storage/emulated/0' || 
-            selectedDirectory == '/storage/emulated/0/')) {
-          errorMessage = 'Cannot save to device root. Please create or select a folder in Downloads or Documents.';
-        }
         
         showSnackBar(context, message: errorMessage);
       }
