@@ -77,9 +77,9 @@ class CSVFilePicker {
       }
     } catch (e) {
       if (context.mounted) {
-        String errorMessage = 'Cannot save the file here, please create or select a folder in Downloads or Documents. Error: ${e.toString()}';
-        
-        
+        String errorMessage =
+            'Cannot save the file here, please create or select a folder in Downloads or Documents. Error: ${e.toString()}';
+
         showSnackBar(context, message: errorMessage);
       }
     }
