@@ -53,9 +53,10 @@ class CSVFilePicker {
 
   // Share exported CSV file
   static Future<void> saveCSVFile(String csv, BuildContext context) async {
+    String? selectedDirectory;
     try {
       // Prompt the user to select a directory
-      String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+      selectedDirectory = await FilePicker.platform.getDirectoryPath();
       if (selectedDirectory == null) {
         // User canceled the picker
         return;
@@ -76,7 +77,10 @@ class CSVFilePicker {
       }
     } catch (e) {
       if (context.mounted) {
-        showSnackBar(context, message: 'Error saving file: ${e.toString()}');
+        String errorMessage =
+            'Cannot save the file here, please create or select a folder in Downloads or Documents. Error: ${e.toString()}';
+
+        showSnackBar(context, message: errorMessage);
       }
     }
   }
