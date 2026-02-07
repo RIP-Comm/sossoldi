@@ -234,7 +234,11 @@ Future<Map<CategoryTransaction, double>> categoryMap(Ref ref) async {
 
   for (var category in categories) {
     final sum = transactions
-        .where((transaction) => transaction.idCategory == category.id)
+        .where(
+          (transaction) =>
+              transaction.idCategory == category.id ||
+              transaction.categoryParent == category.id,
+        )
         .fold(
           0.0,
           (previousValue, transaction) => previousValue + transaction.amount,
