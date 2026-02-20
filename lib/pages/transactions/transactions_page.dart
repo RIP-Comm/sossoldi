@@ -58,62 +58,67 @@ class _TransactionsPageState extends ConsumerState<TransactionsPage>
     );
     final transactionsExistsAsync = ref.watch(transactionsExistsProvider);
 
-    return transactionsExistsAsync.when(
-      data: (transactionsExists) {
-        if (transactionsExists) {
-          return NotificationListener<ScrollEndNotification>(
-            onNotification: (notification) {
-              // snap the header open/close when it's in between the two states
-              final double scrollDistance = headerMaxHeight - headerMinHeight;
+    return NotificationListener<ScrollEndNotification>(
+      onNotification: (notification) {
+        // snap the header open/close when it's in between the two states
+        final double scrollDistance = headerMaxHeight - headerMinHeight;
 
-              if (_scrollController.offset > 0 &&
-                  _scrollController.offset < scrollDistance) {
-                final double snapOffset =
-                    (_scrollController.offset / scrollDistance > 0.5)
-                    ? scrollDistance + 10
-                    : 0;
+        if (_scrollController.offset > 0 &&
+            _scrollController.offset < scrollDistance) {
+          final double snapOffset =
+              (_scrollController.offset / scrollDistance > 0.5)
+              ? scrollDistance + 10
+              : 0;
 
-                //! the app freezes on animateTo
-                // // Future.microtask(() => _scrollController.animateTo(snapOffset,
-                // //     duration: Duration(milliseconds: 200), curve: Curves.easeIn));
+          //! the app freezes on animateTo
+          // // Future.microtask(() => _scrollController.animateTo(snapOffset,
+          // //     duration: Duration(milliseconds: 200), curve: Curves.easeIn));
 
-                // microtask() runs the callback after the build ends
-                Future.microtask(() => _scrollController.jumpTo(snapOffset));
-              }
-              return false;
-            },
-            child: NestedScrollView(
-              controller: _scrollController,
-              headerSliverBuilder: (context, innerBoxIsScrolled) {
-                return [
-                  SliverPersistentHeader(
-                    delegate: CustomSliverDelegate(
-                      ticker: this,
-                      myTabs: myTabs,
-                      tabController: _tabController,
-                      expandedHeight: headerMaxHeight,
-                      minHeight: headerMinHeight,
-                    ),
-                    pinned: true,
-                    floating: true,
-                  ),
-                ];
-              },
-              body: TabBarView(
-                controller: _tabController,
-                children: const [ListTab(), CategoriesTab(), AccountsTab()],
-              ),
-            ),
-          );
+          // microtask() runs the callback after the build ends
+          Future.microtask(() => _scrollController.jumpTo(snapOffset));
         }
-
-        return const AddTransactionCard();
+        return false;
       },
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, stack) => Center(
-        child: Text(
-          "An error occurred: $error",
-          style: Theme.of(context).textTheme.bodySmall,
+      child: transactionsExistsAsync.when(
+        data: (transactionsExists) {
+          if (transactionsExists) {
+            return LayoutBuilder(
+              key: ValueKey(transactionsExists),
+              builder: (context, constraints) {
+                return NestedScrollView(
+                  controller: _scrollController,
+                  headerSliverBuilder: (context, innerBoxIsScrolled) {
+                    return [
+                      SliverPersistentHeader(
+                        delegate: CustomSliverDelegate(
+                          ticker: this,
+                          myTabs: myTabs,
+                          tabController: _tabController,
+                          expandedHeight: headerMaxHeight,
+                          minHeight: headerMinHeight,
+                        ),
+                        pinned: true,
+                        floating: true,
+                      ),
+                    ];
+                  },
+                  body: TabBarView(
+                    controller: _tabController,
+                    children: const [ListTab(), CategoriesTab(), AccountsTab()],
+                  ),
+                );
+              },
+            );
+          }
+
+          return const AddTransactionCard();
+        },
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stack) => Center(
+          child: Text(
+            "An error occurred: $error",
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
         ),
       ),
     );

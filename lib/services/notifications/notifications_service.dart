@@ -28,7 +28,7 @@ class NotificationService {
       android: initializeSettingsAndroid,
       iOS: initializeSettingsIOS,
     );
-    await notificationsPlugin.initialize(initializationSettings);
+    await notificationsPlugin.initialize(settings: initializationSettings);
     await notificationsPlugin
         .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin
@@ -141,17 +141,17 @@ class NotificationService {
     // scheduledDate = now.add(const Duration(seconds: 10));
 
     await notificationsPlugin.zonedSchedule(
-      id,
-      title,
-      body,
-      tz.TZDateTime.from(scheduledDate, tz.local),
-      notificationDetails,
+      id: id,
+      title: title,
+      body: body,
+      scheduledDate: tz.TZDateTime.from(scheduledDate, tz.local),
+      notificationDetails: notificationDetails,
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       matchDateTimeComponents: matchDateTimeComponents,
     );
   }
 
   static Future<void> cancelNotification({int id = 0}) async {
-    await notificationsPlugin.cancel(id);
+    await notificationsPlugin.cancel(id: id);
   }
 }
