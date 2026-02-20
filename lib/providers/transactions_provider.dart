@@ -155,6 +155,7 @@ class TransactionsNotifier extends _$TransactionsNotifier {
     ref.invalidate(monthlyTransactionsProvider);
     ref.invalidate(dashboardProvider);
     ref.invalidate(statisticsProvider);
+    ref.invalidate(categoryMapProvider);
     final dateStart = ref.watch(filterDateStartProvider);
     final dateEnd = ref.watch(filterDateEndProvider);
     final transactions = await ref
