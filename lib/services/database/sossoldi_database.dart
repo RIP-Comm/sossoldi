@@ -208,24 +208,24 @@ class SossoldiDatabase {
   }
 
   Future fillDemoData({int countOfGeneratedTransaction = 10000}) async {
-    // Add some fake accounts
+    // Add fake accounts
     await _database?.execute('''
-      INSERT INTO bankAccount(id, name, symbol, color, startingValue, active, mainAccount, createdAt, updatedAt) VALUES
-        (70, 'Revolut', 'payments', 1, 1235.10, 1, 1, '${DateTime.now()}', '${DateTime.now()}'),
-        (71, 'N26', 'credit_card', 2, 3823.56, 1, 0, '${DateTime.now()}', '${DateTime.now()}'),
-        (72, 'Fineco', 'account_balance', 3, 0.00, 1, 0, '${DateTime.now()}', '${DateTime.now()}');
+      INSERT INTO bankAccount(id, name, symbol, color, startingValue, active, countNetWorth, mainAccount, position, createdAt, updatedAt) VALUES
+        (70, 'Revolut', 'payments', 1, 1235.10, 1, 1, 1, 0, '${DateTime.now()}', '${DateTime.now()}'),
+        (71, 'N26', 'credit_card', 2, 3823.56, 1, 1, 0, 1, '${DateTime.now()}', '${DateTime.now()}'),
+        (72, 'Fineco', 'account_balance', 3, 0.00, 1, 1, 0, 2, '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
-    // Add fake categories
+    // Add fake categories and subcategories
     await _database?.execute('''
-      INSERT INTO categoryTransaction(id, name, type, symbol, color, note, parent, createdAt, updatedAt) VALUES
-        (10, 'Out', 'OUT', 'restaurant', 0, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (11, 'Home', 'OUT', 'home', 1, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (12, 'Furniture','OUT', 'home', 2, '', 11, '${DateTime.now()}', '${DateTime.now()}'),
-        (13, 'Shopping', 'OUT', 'shopping_cart', 3, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (14, 'Leisure', 'OUT', 'subscriptions', 4, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (15, 'Transports', 'OUT', 'directions_car', 6, '', null, '${DateTime.now()}', '${DateTime.now()}'),
-        (16, 'Salary', 'IN', 'work', 5, '', null, '${DateTime.now()}', '${DateTime.now()}');
+      INSERT INTO categoryTransaction(id, name, type, symbol, color, note, parent, position, createdAt, updatedAt) VALUES
+        (10, 'Out', 'OUT', 'restaurant', 0, '', null, 0, '${DateTime.now()}', '${DateTime.now()}'),
+        (11, 'Home', 'OUT', 'home', 1, '', null, 1, '${DateTime.now()}', '${DateTime.now()}'),
+        (12, 'Furniture','OUT', 'home', 1, '', 11, 2, '${DateTime.now()}', '${DateTime.now()}'),
+        (13, 'Shopping', 'OUT', 'shopping_cart', 3, '', null, 3, '${DateTime.now()}', '${DateTime.now()}'),
+        (14, 'Leisure', 'OUT', 'subscriptions', 4, '', null, 4, '${DateTime.now()}', '${DateTime.now()}'),
+        (15, 'Transports', 'OUT', 'directions_car', 6, '', null, 5, '${DateTime.now()}', '${DateTime.now()}'),
+        (16, 'Salary', 'IN', 'work', 5, '', null, 6, '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
     // Add currencies
@@ -246,7 +246,7 @@ class SossoldiDatabase {
 
     // Add fake recurring transactions
     await _database?.execute('''
-      INSERT INTO recurringTransaction(fromDate, toDate, amount,type, note, recurrency, idCategory, idBankAccount, createdAt, updatedAt) VALUES
+      INSERT INTO recurringTransaction(fromDate, toDate, amount, type, note, recurrency, idCategory, idBankAccount, createdAt, updatedAt) VALUES
         ('2024-02-23', null, 10.99, 'OUT', '404 Books', 'MONTHLY', 14, 70, '${DateTime.now()}', '${DateTime.now()}'),
         ('2023-12-13', null, 4.97, 'OUT', 'ETF Consultant Parcel', 'DAILY', 14, 70, '${DateTime.now()}', '${DateTime.now()}'),
         ('2023-02-11', '2028-02-11', 1193.40, 'OUT', 'Car Loan', 'QUARTERLY', 15, 72, '${DateTime.now()}', '${DateTime.now()}');
@@ -308,7 +308,7 @@ class SossoldiDatabase {
       var randomType = 'OUT';
       var randomAccount = accounts[rnd.nextInt(accounts.length)];
       var randomNote = outNotes[rnd.nextInt(outNotes.length)];
-      var randomCategory = categories[rnd.nextInt(categories.length)];
+      int? randomCategory = categories[rnd.nextInt(categories.length)];
       int? idBankAccountTransfer;
       DateTime randomDate = now.subtract(
         Duration(
@@ -324,7 +324,7 @@ class SossoldiDatabase {
         randomNote = 'Transfer';
         randomAccount =
             70; // sender account is hardcoded with the one that receives our fake salary
-        randomCategory = 0; // no category for transfers
+        randomCategory = null; // transfers have no category
         idBankAccountTransfer = accounts[rnd.nextInt(accounts.length)];
         randomAmount = (fakeSalary / 100) * 70;
 
@@ -361,7 +361,7 @@ class SossoldiDatabase {
 
     // finalize query and write!
     await _database?.execute(
-      "$insertDemoTransactionsQuery ${demoTransactions.join(",")};",
+      "$insertDemoTransactionsQuery ${demoTransactions.join(",")};"  ,
     );
   }
 
