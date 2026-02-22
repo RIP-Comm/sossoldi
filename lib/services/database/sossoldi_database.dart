@@ -361,7 +361,7 @@ class SossoldiDatabase {
 
     // finalize query and write!
     await _database?.execute(
-      "$insertDemoTransactionsQuery ${demoTransactions.join(",")};"  ,
+      "$insertDemoTransactionsQuery ${demoTransactions.join(",")};",
     );
   }
 
