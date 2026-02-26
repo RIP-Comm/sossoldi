@@ -75,8 +75,6 @@ class AccountRepository {
     final db = await _sossoldiDB.database;
 
     final where = '${BankAccountFields.active} = 1 ';
-    final recurringFilter =
-        '(t.${TransactionFields.recurring} = 0 OR t.${TransactionFields.recurring} IS NULL)';
 
     final result = await db.rawQuery('''
       SELECT b.*, (b.${BankAccountFields.startingValue} +
@@ -89,7 +87,6 @@ class AccountRepository {
       LEFT JOIN "$transactionTable" as t
              ON (t.${TransactionFields.idBankAccount} = b.${BankAccountFields.id} OR
                  t.${TransactionFields.idBankAccountTransfer} = b.${BankAccountFields.id})
-             AND $recurringFilter
       WHERE $where
       GROUP BY b.${BankAccountFields.id}
       ORDER BY $orderByASC
@@ -266,11 +263,10 @@ class AccountRepository {
 
     final accountFilter =
         "(${TransactionFields.idBankAccount} = $accountId OR ${TransactionFields.idBankAccountTransfer} = $accountId)";
-    final recurrentFilter = "(${TransactionFields.recurring} = 0)";
     final periodFilterEnd = dateRangeEnd != null
         ? "strftime('%Y-%m-%d', ${TransactionFields.date}) < '${dateRangeEnd.toString().substring(0, 10)}'"
         : "";
-    final filters = [periodFilterEnd, accountFilter, recurrentFilter];
+    final filters = [periodFilterEnd, accountFilter];
     final sqlFilters = filters.where((filter) => filter != "").join(" AND ");
 
     final resultQuery = await db.rawQuery('''
@@ -322,11 +318,10 @@ class AccountRepository {
 
     final accountFilter =
         "(${TransactionFields.idBankAccount} = $accountId OR ${TransactionFields.idBankAccountTransfer} = $accountId)";
-    final recurrentFilter = "(${TransactionFields.recurring} = 0)";
     final periodFilterEnd = dateRangeEnd != null
         ? "strftime('%Y-%m-%d', ${TransactionFields.date}) < '${dateRangeEnd.toString().substring(0, 10)}'"
         : "";
-    final filters = [periodFilterEnd, accountFilter, recurrentFilter];
+    final filters = [periodFilterEnd, accountFilter];
     final sqlFilters = filters.where((filter) => filter != "").join(" AND ");
 
     final resultQuery = await db.rawQuery('''
