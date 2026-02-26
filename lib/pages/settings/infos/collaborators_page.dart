@@ -56,10 +56,7 @@ class CollaboratorsPage extends ConsumerWidget {
         title: const Text('Collaborators'),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.only(
-          top: Sizes.xl,
-          bottom: Sizes.xxl,
-        ),
+        padding: const EdgeInsets.only(top: Sizes.xl, bottom: Sizes.xxl),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -92,11 +89,7 @@ class CollaboratorsPage extends ConsumerWidget {
               spacing: Sizes.sm,
               children: List.generate(collaborators.length, (i) {
                 final c = collaborators[i];
-                return _ContributorCard(
-                  name: c[0],
-                  role: c[1],
-                  url: c[2],
-                );
+                return _ContributorCard(name: c[0], role: c[1], url: c[2]);
               }),
             ),
 
@@ -104,9 +97,8 @@ class CollaboratorsPage extends ConsumerWidget {
 
             // ── CTA ────────────────────────────────────────────────
             DefaultCard(
-              onTap: () => launchUrl(
-                Uri.parse('https://github.com/RIP-Comm/sossoldi'),
-              ),
+              onTap: () =>
+                  launchUrl(Uri.parse('https://github.com/RIP-Comm/sossoldi')),
               child: Row(
                 spacing: Sizes.md,
                 children: [
@@ -128,19 +120,17 @@ class CollaboratorsPage extends ConsumerWidget {
                       children: [
                         Text(
                           'Want to contribute?',
-                          style: Theme.of(
-                            context,
-                          ).textTheme.titleLarge!.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
+                          style: Theme.of(context).textTheme.titleLarge!
+                              .copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                         ),
                         Text(
                           'Open an issue, submit a PR or just say hi on GitHub',
-                          style: Theme.of(
-                            context,
-                          ).textTheme.bodySmall!.copyWith(
-                            color: Theme.of(context).colorScheme.outline,
-                          ),
+                          style: Theme.of(context).textTheme.bodySmall!
+                              .copyWith(
+                                color: Theme.of(context).colorScheme.outline,
+                              ),
                         ),
                       ],
                     ),
