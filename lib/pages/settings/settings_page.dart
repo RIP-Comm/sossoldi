@@ -129,69 +129,65 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         physics: const BouncingScrollPhysics(),
         itemCount: settingsOptions.length,
         itemBuilder: (context, i) {
-                List setting = settingsOptions[i];
-                if (setting[3] == null) return Container();
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: Sizes.lg),
-                  child: DefaultCard(
-                    onTap: () {
-                      if (setting[3] != null) {
-                        final link = setting[3] as String;
-                        if (link.startsWith("http")) {
-                          Uri url = Uri.parse(link);
-                          launchUrl(url);
-                        } else {
-                          Navigator.of(context).pushNamed(link);
-                        }
-                      }
-                    },
-                    child: Row(
+          List setting = settingsOptions[i];
+          if (setting[3] == null) return Container();
+          return Padding(
+            padding: const EdgeInsets.only(bottom: Sizes.lg),
+            child: DefaultCard(
+              onTap: () {
+                if (setting[3] != null) {
+                  final link = setting[3] as String;
+                  if (link.startsWith("http")) {
+                    Uri url = Uri.parse(link);
+                    launchUrl(url);
+                  } else {
+                    Navigator.of(context).pushNamed(link);
+                  }
+                }
+              },
+              child: Row(
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                      color: blue5,
+                      shape: BoxShape.circle,
+                    ),
+                    padding: const EdgeInsets.all(Sizes.sm),
+                    child: Icon(
+                      setting[0] as IconData,
+                      size: 30.0,
+                      color: white,
+                    ),
+                  ),
+                  const SizedBox(width: Sizes.md),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          decoration: const BoxDecoration(
-                            color: blue5,
-                            shape: BoxShape.circle,
-                          ),
-                          padding: const EdgeInsets.all(Sizes.sm),
-                          child: Icon(
-                            setting[0] as IconData,
-                            size: 30.0,
-                            color: white,
-                          ),
+                        Text(
+                          setting[1].toString(),
+                          style: Theme.of(context).textTheme.titleLarge!
+                              .copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                         ),
-                        const SizedBox(width: Sizes.md),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                setting[1].toString(),
-                                style: Theme.of(context).textTheme.titleLarge!
-                                    .copyWith(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.primary,
-                                    ),
+                        Text(
+                          setting[2].toString(),
+                          style: Theme.of(context).textTheme.bodySmall!
+                              .copyWith(
+                                color: Theme.of(context).colorScheme.primary,
                               ),
-                              Text(
-                                setting[2].toString(),
-                                style: Theme.of(context).textTheme.bodySmall!
-                                    .copyWith(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.primary,
-                                    ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 2,
-                              ),
-                            ],
-                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
                         ),
                       ],
                     ),
                   ),
-                );
+                ],
+              ),
+            ),
+          );
         },
       ),
       bottomNavigationBar: SafeArea(
@@ -232,9 +228,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   ),
                   IconButton(
                     icon: const FaIcon(FontAwesomeIcons.discord),
-                    onPressed: () => launchUrl(
-                      Uri.parse('https://discord.sossoldi.com'),
-                    ),
+                    onPressed: () =>
+                        launchUrl(Uri.parse('https://discord.sossoldi.com')),
                     color: Theme.of(context).colorScheme.primary,
                   ),
                 ],
