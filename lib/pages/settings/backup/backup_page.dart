@@ -122,22 +122,15 @@ class _BackupPageState extends ConsumerState<BackupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.onPrimary,
-        elevation: 0,
-        centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text(
-          'Manage your data',
-          style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-            color: Theme.of(context).colorScheme.primary,
-          ),
-        ),
+        title: const Text('Import/Export'),
       ),
       body: ListView.separated(
-        padding: const EdgeInsets.symmetric(vertical: Sizes.lg),
+        padding: const EdgeInsets.only(top: Sizes.xl),
+        physics: const BouncingScrollPhysics(),
         itemCount: options.length,
         separatorBuilder: (context, index) => const SizedBox(height: Sizes.lg),
         itemBuilder: (context, index) {
