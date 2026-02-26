@@ -27,7 +27,8 @@ class MoreInfoPage extends ConsumerWidget {
         title: const Text('App Info'),
       ),
       body: ListView.separated(
-        padding: const EdgeInsets.symmetric(vertical: Sizes.lg),
+        padding: const EdgeInsets.only(top: Sizes.xl),
+        physics: const BouncingScrollPhysics(),
         itemCount: moreInfoOptions.length,
         separatorBuilder: (context, index) => const SizedBox(height: Sizes.lg),
         itemBuilder: (context, index) {

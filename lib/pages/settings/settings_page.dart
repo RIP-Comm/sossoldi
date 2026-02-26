@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import '../../constants/style.dart';
 import '../../ui/widgets/alert_dialog.dart';
 import '../../ui/widgets/default_card.dart';
@@ -117,49 +119,16 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () => Navigator.pop(context),
         ),
+        title: GestureDetector(
+          onTap: _onSettingsTap,
+          child: const Text('Settings'),
+        ),
       ),
-      body: SingleChildScrollView(
+      body: ListView.builder(
+        padding: const EdgeInsets.only(top: Sizes.xl),
         physics: const BouncingScrollPhysics(),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Sizes.xl,
-                horizontal: Sizes.lg,
-              ),
-              child: GestureDetector(
-                onTap: _onSettingsTap,
-                child: Row(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      padding: const EdgeInsets.all(Sizes.xs),
-                      child: Icon(
-                        Icons.settings,
-                        size: 28.0,
-                        color: Theme.of(context).colorScheme.surface,
-                      ),
-                    ),
-                    const SizedBox(width: Sizes.md),
-                    Text(
-                      "Settings",
-                      style: Theme.of(context).textTheme.headlineLarge!
-                          .copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            ListView.builder(
-              itemCount: settingsOptions.length,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, i) {
+        itemCount: settingsOptions.length,
+        itemBuilder: (context, i) {
                 List setting = settingsOptions[i];
                 if (setting[3] == null) return Container();
                 return Padding(
@@ -223,9 +192,55 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                     ),
                   ),
                 );
-              },
-            ),
-          ],
+        },
+      ),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: Sizes.sm),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Open source, built by the community',
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  color: Theme.of(context).colorScheme.outline,
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: const FaIcon(FontAwesomeIcons.github),
+                    onPressed: () => launchUrl(
+                      Uri.parse('https://github.com/RIP-Comm/sossoldi'),
+                    ),
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  IconButton(
+                    icon: const FaIcon(FontAwesomeIcons.linkedin),
+                    onPressed: () => launchUrl(
+                      Uri.parse('https://www.linkedin.com/company/sossoldi'),
+                    ),
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  IconButton(
+                    icon: const FaIcon(FontAwesomeIcons.youtube),
+                    onPressed: () => launchUrl(
+                      Uri.parse('https://www.youtube.com/@Sossoldi-app'),
+                    ),
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  IconButton(
+                    icon: const FaIcon(FontAwesomeIcons.discord),
+                    onPressed: () => launchUrl(
+                      Uri.parse('https://discord.sossoldi.com'),
+                    ),
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
       bottomSheet: _isDeveloperOptionsActive
