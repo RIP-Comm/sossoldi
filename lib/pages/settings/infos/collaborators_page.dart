@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../constants/constants.dart';
 import '../../../constants/style.dart';
 import '../../../ui/device.dart';
 import '../../../ui/widgets/default_card.dart';
@@ -97,8 +98,7 @@ class CollaboratorsPage extends ConsumerWidget {
 
             // ── CTA ────────────────────────────────────────────────
             DefaultCard(
-              onTap: () =>
-                  launchUrl(Uri.parse('https://github.com/RIP-Comm/sossoldi')),
+              onTap: () => launchUrl(Uri.parse(githubUrl)),
               child: Row(
                 spacing: Sizes.md,
                 children: [
