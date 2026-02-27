@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -47,7 +48,13 @@ class SelectedAccountLastTransactions
 @Riverpod(keepAlive: true)
 class FilterAccount extends _$FilterAccount {
   @override
-  Map<int, bool> build() => {};
+  Map<int, bool> build() {
+    final accounts = ref.watch(accountsProvider).value;
+    if (accounts != null) {
+      return {for (var account in accounts) account.id!: false};
+    }
+    return {};
+  }
 
   void setAccounts(Map<int, bool> accountsFilter) => state = accountsFilter;
 }
@@ -56,24 +63,16 @@ class FilterAccount extends _$FilterAccount {
 class Accounts extends _$Accounts {
   @override
   Future<List<BankAccount>> build() async {
-    ref.watch(mainAccountProvider.notifier).state = await _getMainAccount();
-    List<BankAccount> accounts = await _getAccounts();
-
-    for (BankAccount account in accounts) {
-      ref.watch(filterAccountProvider.notifier).state[account.id!] = false;
-    }
-
+    final accounts = await _getAccounts();
+    ref.read(mainAccountProvider.notifier).state = accounts.firstWhereOrNull(
+      (account) => account.mainAccount,
+    );
     return accounts;
   }
 
   Future<List<BankAccount>> _getAccounts() async {
     final accounts = await ref.read(accountRepositoryProvider).selectAll();
     return accounts;
-  }
-
-  Future<BankAccount?> _getMainAccount() async {
-    final account = await ref.read(accountRepositoryProvider).selectMain();
-    return account;
   }
 
   Future<void> addAccount({
@@ -124,7 +123,7 @@ class Accounts extends _$Accounts {
         );
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      if (balance != null && balance != account.total) {
+      if (balance != null) {
         await _reconcileAccount(account: account, newBalance: balance);
       }
       await ref.read(accountRepositoryProvider).updateItem(account);
@@ -209,10 +208,19 @@ class Accounts extends _$Accounts {
         );
   }
 
-  Future<void> removeAccount(BankAccount account) async {
+  Future<void> deactivateAccount(BankAccount account) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       await ref.read(accountRepositoryProvider).deactivateById(account.id!);
+      if (account.mainAccount) ref.invalidate(mainAccountProvider);
+      return _getAccounts();
+    });
+  }
+
+  Future<void> removeAccount(BankAccount account) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      await ref.read(accountRepositoryProvider).deleteById(account);
       if (account.mainAccount) ref.invalidate(mainAccountProvider);
       return _getAccounts();
     });
@@ -241,4 +249,10 @@ class Accounts extends _$Accounts {
     ref.invalidate(selectedAccountProvider);
     ref.invalidate(selectedAccountCurrentYearMonthlyBalanceProvider);
   }
+}
+
+@Riverpod(keepAlive: true)
+Future<List<BankAccount>> activeAccounts(Ref ref) async {
+  final accounts = ref.watch(accountsProvider).value ?? [];
+  return accounts.where((account) => account.deletedAt == null).toList();
 }

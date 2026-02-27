@@ -3,6 +3,7 @@ import 'package:sqflite/sqflite.dart';
 
 import '../../../model/bank_account.dart';
 import '../../../model/category_transaction.dart';
+import '../../../model/recurring_transaction.dart';
 import '../../../model/transaction.dart';
 import '../sossoldi_database.dart';
 
@@ -71,10 +72,17 @@ class AccountRepository {
     }
   }
 
-  Future<List<BankAccount>> selectAll() async {
+  Future<List<BankAccount>> selectAll({bool? active, bool? deleted}) async {
     final db = await _sossoldiDB.database;
 
-    final where = '${BankAccountFields.active} = 1 ';
+    String where = "";
+    if (active != null) {
+      where += ' AND ${BankAccountFields.active} = ${active ? 1 : 0}';
+    }
+    if (deleted != null) {
+      where +=
+          ' AND ${BankAccountFields.deletedAt} IS ${deleted ? 'NOT ' : ''}NULL';
+    }
 
     final result = await db.rawQuery('''
       SELECT b.*, (b.${BankAccountFields.startingValue} +
@@ -125,16 +133,23 @@ class AccountRepository {
     }
   }
 
-  Future<int> deleteById(int id) async {
+  Future<void> deleteById(BankAccount item) async {
     final db = await _sossoldiDB.database;
 
-    final rows = await db.delete(
+    await db.update(
       bankAccountTable,
+      item.toJson(delete: true),
       where: '${BankAccountFields.id} = ?',
-      whereArgs: [id],
+      whereArgs: [item.id],
     );
+
+    await db.delete(
+      recurringTransactionTable,
+      where: '${RecurringTransactionFields.idBankAccount} = ?',
+      whereArgs: [item.id],
+    );
+
     await normalizeOrders();
-    return rows;
   }
 
   Future<void> updateOrders(List<BankAccount> items) async {

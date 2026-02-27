@@ -18,7 +18,7 @@ class AccountListPage extends ConsumerStatefulWidget {
 class _AccountListPage extends ConsumerState<AccountListPage> {
   @override
   Widget build(BuildContext context) {
-    final accountsList = ref.watch(accountsProvider);
+    final accountsList = ref.watch(activeAccountsProvider);
     ref.listen(selectedAccountProvider, (_, _) {});
     return Scaffold(
       appBar: AppBar(
