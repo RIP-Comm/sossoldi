@@ -157,14 +157,15 @@ class Categories extends _$Categories {
       newIndex -= 1;
     }
 
-    final newList = List<CategoryTransaction>.from(currentList);
-    final item = newList.removeAt(oldIndex);
-    newList.insert(newIndex, item);
+    final parents = currentList.where((c) => c.parent == null).toList();
+    final item = parents.removeAt(oldIndex);
+    parents.insert(newIndex, item);
 
-    state = AsyncData(newList);
+    final subcategories = currentList.where((c) => c.parent != null).toList();
+    state = AsyncData([...parents, ...subcategories]);
 
     await AsyncValue.guard(() async {
-      await ref.read(categoryRepositoryProvider).updateOrders(newList);
+      await ref.read(categoryRepositoryProvider).updateOrders(parents);
     });
   }
 }
