@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../model/category_transaction.dart';
+import '../../../model/transaction.dart';
 import '../sossoldi_database.dart';
 
 part 'category_repository.g.dart';
@@ -110,6 +111,33 @@ class CategoryRepository {
     } else {
       return [];
     }
+  }
+
+  Future<List<CategoryTransaction>> selectFrequentCategories(
+    CategoryTransactionType type,
+  ) async {
+    final db = await _sossoldiDB.database;
+    // Select the last 100 transactions, group by category and return the
+    // top 5 most used categories ordered by usage count desc.
+    final result = await db.rawQuery(
+      '''
+        SELECT c.*
+        FROM "$categoryTransactionTable" c
+        JOIN (
+          SELECT * FROM "$transactionTable"
+          WHERE "${TransactionFields.type}" = ?
+          ORDER BY "${TransactionFields.date}" DESC
+          LIMIT 100
+        ) t ON t."${TransactionFields.idCategory}" = c."${CategoryTransactionFields.id}"
+        WHERE c."${CategoryTransactionFields.type}" = ?
+        GROUP BY c."${CategoryTransactionFields.id}"
+        ORDER BY COUNT(t."${TransactionFields.id}") DESC
+        LIMIT 5
+      ''',
+      [type.transactionType.code, type.code],
+    );
+
+    return result.map((json) => CategoryTransaction.fromJson(json)).toList();
   }
 
   Future<int> updateItem(CategoryTransaction item) async {
