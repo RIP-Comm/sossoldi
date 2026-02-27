@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../constants/constants.dart';
 import '../../constants/style.dart';
 import '../../ui/widgets/alert_dialog.dart';
 import '../../ui/widgets/default_card.dart';
@@ -207,29 +208,22 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 children: [
                   IconButton(
                     icon: const FaIcon(FontAwesomeIcons.github),
-                    onPressed: () => launchUrl(
-                      Uri.parse('https://github.com/RIP-Comm/sossoldi'),
-                    ),
+                    onPressed: () => launchUrl(Uri.parse(githubUrl)),
                     color: Theme.of(context).colorScheme.primary,
                   ),
                   IconButton(
                     icon: const FaIcon(FontAwesomeIcons.linkedin),
-                    onPressed: () => launchUrl(
-                      Uri.parse('https://www.linkedin.com/company/sossoldi'),
-                    ),
+                    onPressed: () => launchUrl(Uri.parse(linkedinUrl)),
                     color: Theme.of(context).colorScheme.primary,
                   ),
                   IconButton(
                     icon: const FaIcon(FontAwesomeIcons.youtube),
-                    onPressed: () => launchUrl(
-                      Uri.parse('https://www.youtube.com/@Sossoldi-app'),
-                    ),
+                    onPressed: () => launchUrl(Uri.parse(youtubeUrl)),
                     color: Theme.of(context).colorScheme.primary,
                   ),
                   IconButton(
                     icon: const FaIcon(FontAwesomeIcons.discord),
-                    onPressed: () =>
-                        launchUrl(Uri.parse('https://discord.sossoldi.com')),
+                    onPressed: () => launchUrl(Uri.parse(discordUrl)),
                     color: Theme.of(context).colorScheme.primary,
                   ),
                 ],
