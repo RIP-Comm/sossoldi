@@ -26,6 +26,7 @@ class _AccountListPage extends ConsumerState<AccountListPage> {
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () => Navigator.pop(context),
         ),
+        title: const Text('Accounts'),
         actions: [
           IconButton(
             onPressed: () {
@@ -38,38 +39,10 @@ class _AccountListPage extends ConsumerState<AccountListPage> {
         ],
       ),
       body: SingleChildScrollView(
+        padding: const EdgeInsets.only(top: Sizes.xl),
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Sizes.xl,
-                horizontal: Sizes.lg,
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    padding: const EdgeInsets.all(Sizes.sm),
-                    child: Icon(
-                      Icons.account_balance_wallet,
-                      size: 24.0,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                  ),
-                  const SizedBox(width: Sizes.md),
-                  Text(
-                    "Your accounts",
-                    style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                ],
-              ),
-            ),
             accountsList.when(
               data: (accounts) => ReorderableListView.builder(
                 shrinkWrap: true,

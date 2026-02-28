@@ -297,6 +297,12 @@ const darkAccountColorList = [
 List<Color> categoryColorListTheme = categoryColorList;
 List<Color> accountColorListTheme = accountColorList;
 
+// external URLs
+const String githubUrl = 'https://github.com/RIP-Comm/sossoldi';
+const String linkedinUrl = 'https://www.linkedin.com/company/sossoldi';
+const String youtubeUrl = 'https://www.youtube.com/@Sossoldi-app';
+const String discordUrl = 'https://discord.sossoldi.com';
+
 void updateColorsBasedOnTheme(bool isDarkModeEnabled) {
   if (isDarkModeEnabled) {
     categoryColorListTheme = darkCategoryColorList;
