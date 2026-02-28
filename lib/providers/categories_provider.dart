@@ -106,8 +106,12 @@ class Categories extends _$Categories {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       await ref.read(categoryRepositoryProvider).updateItem(category);
+      await ref
+          .read(categoryRepositoryProvider)
+          .updateSubcategoriesColor(category.id!, color);
       ref.invalidate(selectedCategoryProvider);
       ref.invalidate(categoryMapProvider);
+      ref.invalidate(subcategoriesProvider(category.id!));
       return _getCategories();
     });
   }

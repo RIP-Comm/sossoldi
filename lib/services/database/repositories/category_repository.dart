@@ -124,6 +124,17 @@ class CategoryRepository {
     );
   }
 
+  Future<void> updateSubcategoriesColor(int parentId, int color) async {
+    final db = await _sossoldiDB.database;
+
+    await db.update(
+      categoryTransactionTable,
+      {CategoryTransactionFields.color: color},
+      where: '${CategoryTransactionFields.parent} = ?',
+      whereArgs: [parentId],
+    );
+  }
+
   Future<int> deleteById(int id) async {
     final db = await _sossoldiDB.database;
 
