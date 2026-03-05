@@ -39,6 +39,7 @@ var collaborators = const [
   ],
   ["Alessia Schina", "UX/UI Designer", "linkedin.com/in/alessiaschina"],
   ["Federico Bruzzone", "Former Maintainer", "github.com/FedericoBruzzone"],
+  ["Mattia Sacchi", "Software Developer", "github.com/Mattia-Sacchi"],
 ];
 
 class _CollaboratorsPageState extends ConsumerState<CollaboratorsPage> {
