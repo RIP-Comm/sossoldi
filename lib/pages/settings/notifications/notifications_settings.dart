@@ -25,38 +25,11 @@ class NotificationsSettings extends ConsumerWidget {
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () => Navigator.pop(context),
         ),
+        title: const Text('Notifications'),
       ),
       body: ListView(
+        padding: const EdgeInsets.only(top: Sizes.xl),
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: Sizes.xl,
-              horizontal: Sizes.lg,
-            ),
-            child: Row(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  padding: const EdgeInsets.all(Sizes.sm),
-                  child: Icon(
-                    Icons.notifications_active,
-                    size: 24.0,
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
-                ),
-                const SizedBox(width: 12.0),
-                Text(
-                  "Notifications",
-                  style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-              ],
-            ),
-          ),
           Container(
             width: double.infinity,
             margin: const EdgeInsets.symmetric(horizontal: Sizes.lg),
