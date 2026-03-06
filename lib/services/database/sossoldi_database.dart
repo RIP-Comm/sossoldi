@@ -10,6 +10,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
 
 // Models
+import '../../constants/constants.dart';
 import '../../model/bank_account.dart';
 import '../../model/budget.dart';
 import '../../model/category_transaction.dart';
@@ -359,7 +360,6 @@ class SossoldiDatabase {
     }
     txn.insert('transaction', row);
   }
-
   Future insertCategoriesFromMoneyManager({required txn, required Map<String,List<String>> categoryMap, required String code, required DateTime oldestDate}) async
   {
     List<Map<String, dynamic>> maps  = await txn.query(
@@ -369,17 +369,18 @@ class SossoldiDatabase {
       whereArgs: [code],
     );
 
-    List<String> currentCategories = maps.map((row) => row[CategoryTransactionFields.name] as String).toList();
 
+    List<String> currentCategories = maps.map((row) => row[CategoryTransactionFields.name] as String).toList();
     for(var c in categoryMap.keys)
     {
+      int randomColor = Random().nextInt(categoryColorList.length);
       if(!currentCategories.contains(c))
       {
         Map<String, dynamic> row = {
           CategoryTransactionFields.name: c,
           CategoryTransactionFields.type: code,
-          CategoryTransactionFields.symbol: 1,
-          CategoryTransactionFields.color:  0,
+          CategoryTransactionFields.symbol: householdIconList.keys.elementAt(Random().nextInt(householdIconList.length)),
+          CategoryTransactionFields.color:  randomColor,
           CategoryTransactionFields.createdAt: oldestDate.toIso8601String(),
           CategoryTransactionFields.updatedAt: oldestDate.toIso8601String(),
         };
@@ -404,8 +405,8 @@ class SossoldiDatabase {
         Map<String, dynamic> row = {
           CategoryTransactionFields.name: subCategory,
           CategoryTransactionFields.type: code,
-          CategoryTransactionFields.symbol: 1,
-          CategoryTransactionFields.color:  0,
+          CategoryTransactionFields.symbol: activitiesIconList.keys.elementAt(Random().nextInt(activitiesIconList.length)),
+          CategoryTransactionFields.color:  randomColor,
           CategoryTransactionFields.parent : categoryId,
           CategoryTransactionFields.createdAt: oldestDate.toIso8601String(),
           CategoryTransactionFields.updatedAt: oldestDate.toIso8601String(),
@@ -419,7 +420,7 @@ class SossoldiDatabase {
   // I consider being called in a try catch
   Future<bool> importFromCsvFromMoneyManager(String csvFilePath) async {
 
-    await clearDatabase();
+    await resetDatabase();
 
     final db = await database;
 
@@ -551,8 +552,8 @@ class SossoldiDatabase {
           {
             Map<String, dynamic> row = {
               BankAccountFields.name : a,
-              BankAccountFields.symbol : '1',
-              BankAccountFields.color : 0,
+              BankAccountFields.symbol : accountIconList.keys.elementAt(Random().nextInt(accountIconList.length)),
+              BankAccountFields.color : Random().nextInt(accountColorList.length),
               BankAccountFields.startingValue : 0.0,
               BankAccountFields.active : 1,
               BankAccountFields.countNetWorth : 1,
