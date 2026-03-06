@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import '../../constants/constants.dart';
 import '../../constants/style.dart';
 import '../../ui/widgets/alert_dialog.dart';
 import '../../ui/widgets/default_card.dart';
@@ -117,115 +120,116 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () => Navigator.pop(context),
         ),
+        title: GestureDetector(
+          onTap: _onSettingsTap,
+          child: const Text('Settings'),
+        ),
       ),
-      body: SingleChildScrollView(
+      body: ListView.builder(
+        padding: const EdgeInsets.only(top: Sizes.xl),
         physics: const BouncingScrollPhysics(),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Sizes.xl,
-                horizontal: Sizes.lg,
-              ),
-              child: GestureDetector(
-                onTap: _onSettingsTap,
-                child: Row(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      padding: const EdgeInsets.all(Sizes.xs),
-                      child: Icon(
-                        Icons.settings,
-                        size: 28.0,
-                        color: Theme.of(context).colorScheme.surface,
-                      ),
+        itemCount: settingsOptions.length,
+        itemBuilder: (context, i) {
+          List setting = settingsOptions[i];
+          if (setting[3] == null) return Container();
+          return Padding(
+            padding: const EdgeInsets.only(bottom: Sizes.lg),
+            child: DefaultCard(
+              onTap: () {
+                if (setting[3] != null) {
+                  final link = setting[3] as String;
+                  if (link.startsWith("http")) {
+                    Uri url = Uri.parse(link);
+                    launchUrl(url);
+                  } else {
+                    Navigator.of(context).pushNamed(link);
+                  }
+                }
+              },
+              child: Row(
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                      color: blue5,
+                      shape: BoxShape.circle,
                     ),
-                    const SizedBox(width: Sizes.md),
-                    Text(
-                      "Settings",
-                      style: Theme.of(context).textTheme.headlineLarge!
-                          .copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
+                    padding: const EdgeInsets.all(Sizes.sm),
+                    child: Icon(
+                      setting[0] as IconData,
+                      size: 30.0,
+                      color: white,
                     ),
-                  ],
-                ),
-              ),
-            ),
-            ListView.builder(
-              itemCount: settingsOptions.length,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, i) {
-                List setting = settingsOptions[i];
-                if (setting[3] == null) return Container();
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: Sizes.lg),
-                  child: DefaultCard(
-                    onTap: () {
-                      if (setting[3] != null) {
-                        final link = setting[3] as String;
-                        if (link.startsWith("http")) {
-                          Uri url = Uri.parse(link);
-                          launchUrl(url);
-                        } else {
-                          Navigator.of(context).pushNamed(link);
-                        }
-                      }
-                    },
-                    child: Row(
+                  ),
+                  const SizedBox(width: Sizes.md),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          decoration: const BoxDecoration(
-                            color: blue5,
-                            shape: BoxShape.circle,
-                          ),
-                          padding: const EdgeInsets.all(Sizes.sm),
-                          child: Icon(
-                            setting[0] as IconData,
-                            size: 30.0,
-                            color: white,
-                          ),
+                        Text(
+                          setting[1].toString(),
+                          style: Theme.of(context).textTheme.titleLarge!
+                              .copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                         ),
-                        const SizedBox(width: Sizes.md),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                setting[1].toString(),
-                                style: Theme.of(context).textTheme.titleLarge!
-                                    .copyWith(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.primary,
-                                    ),
+                        Text(
+                          setting[2].toString(),
+                          style: Theme.of(context).textTheme.bodySmall!
+                              .copyWith(
+                                color: Theme.of(context).colorScheme.primary,
                               ),
-                              Text(
-                                setting[2].toString(),
-                                style: Theme.of(context).textTheme.bodySmall!
-                                    .copyWith(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.primary,
-                                    ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 2,
-                              ),
-                            ],
-                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
                         ),
                       ],
                     ),
                   ),
-                );
-              },
+                ],
+              ),
             ),
-          ],
+          );
+        },
+      ),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: Sizes.sm),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Open source, built by the community',
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  color: Theme.of(context).colorScheme.outline,
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: const FaIcon(FontAwesomeIcons.github),
+                    onPressed: () => launchUrl(Uri.parse(githubUrl)),
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  IconButton(
+                    icon: const FaIcon(FontAwesomeIcons.linkedin),
+                    onPressed: () => launchUrl(Uri.parse(linkedinUrl)),
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  IconButton(
+                    icon: const FaIcon(FontAwesomeIcons.youtube),
+                    onPressed: () => launchUrl(Uri.parse(youtubeUrl)),
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  IconButton(
+                    icon: const FaIcon(FontAwesomeIcons.discord),
+                    onPressed: () => launchUrl(Uri.parse(discordUrl)),
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
       bottomSheet: _isDeveloperOptionsActive
