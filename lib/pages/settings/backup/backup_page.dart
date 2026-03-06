@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,6 +8,7 @@ import '../../../ui/device.dart';
 import '../../../services/csv/csv_file_picker.dart';
 import '../../../ui/snack_bars/snack_bar.dart';
 import '../../../ui/widgets/default_card.dart';
+
 
 class BackupPage extends ConsumerStatefulWidget {
   const BackupPage({super.key});
@@ -42,39 +45,69 @@ class BackupOption {
   }
 }
 
+enum CsvSource{
+  sossoldi,
+  moneyManager
+}
+
 class _BackupPageState extends ConsumerState<BackupPage> {
-  Future<void> _handleImport() async {
+
+  Future<void> _handleImport({required CsvSource source}) async {
     try {
       final file = await CSVFilePicker.pickCSVFile(context);
-      if (file != null) {
-        if (!mounted) return;
-        CSVFilePicker.showLoading(context, 'Importing data...');
-        final results = await SossoldiDatabase.instance.importFromCSV(
-          file.path,
-        );
-        if (!mounted) return;
-        CSVFilePicker.hideLoading(context);
+      if (file == null) {
+        return;
+      }
 
-        if (results.values.every((success) => success)) {
+      if (!mounted) return;
+
+      CSVFilePicker.showLoading(context, 'Importing data...');
+
+      switch(source)
+      {
+        case CsvSource.sossoldi:
+          final results = await SossoldiDatabase.instance.importFromCSV(
+            file.path,
+          );
+
+          if (!mounted) return;
+          CSVFilePicker.hideLoading(context);
+
+          if (results.values.every((success) => success)) {
+            await CSVFilePicker.showSuccess(
+              context,
+              'Data imported successfully',
+            );
+            if (mounted) Phoenix.rebirth(context);
+          } else {
+            final failedTables = results.entries
+                .where((e) => !e.value)
+                .map((e) => e.key)
+                .join(', ');
+
+            throw Exception('Failed to import some tables: $failedTables');
+          }
+          break;
+
+        case CsvSource.moneyManager:
+          final result = await SossoldiDatabase.instance.importFromCsvFromMoneyManager(
+            file.path,
+          );
+
+          if(!result) {
+            throw Exception('Failed to import data from CSV');
+          }
+
           await CSVFilePicker.showSuccess(
             context,
             'Data imported successfully',
           );
           if (mounted) Phoenix.rebirth(context);
-        } else {
-          final failedTables = results.entries
-              .where((e) => !e.value)
-              .map((e) => e.key)
-              .join(', ');
 
-          if (!mounted) return;
-
-          showSnackBar(
-            context,
-            message: 'Failed to import some tables: $failedTables',
-          );
-        }
+          break;
       }
+
+
     } catch (e) {
       if (!mounted) return;
       CSVFilePicker.hideLoading(context);
@@ -107,6 +140,11 @@ class _BackupPageState extends ConsumerState<BackupPage> {
       icon: Icons.upload_file,
     ),
     BackupOption(
+      title: 'Import data',
+      description: 'Import from CSV from  Money Manager\n to update your database\nThe file must be resaved in csv from xls',
+      icon: Icons.upload_file,
+    ),
+    BackupOption(
       title: 'Export data',
       description: 'Save your data as a CSV file',
       icon: Icons.download,
@@ -116,6 +154,34 @@ class _BackupPageState extends ConsumerState<BackupPage> {
   @override
   void initState() {
     super.initState();
+  }
+
+  void showImportAlert(context, function)
+  {
+     showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('Warning: Data Overwrite'),
+                    content: const Text(
+                      'Importing this file will permanently replace your existing data. This action cannot be undone. Ensure you have a backup before proceeding.',
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          function();
+                        },
+                        child: const Text('Proceed with Import'),
+                      ),
+                    ],
+                  ),
+                );
   }
 
   @override
@@ -137,34 +203,19 @@ class _BackupPageState extends ConsumerState<BackupPage> {
           final option = options[index];
           return DefaultCard(
             onTap: () {
-              if (index == 0) {
-                // Show confirmation dialog for the first option
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text('Warning: Data Overwrite'),
-                    content: const Text(
-                      'Importing this file will permanently replace your existing data. This action cannot be undone. Ensure you have a backup before proceeding.',
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('Cancel'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          _handleImport();
-                        },
-                        child: const Text('Proceed with Import'),
-                      ),
-                    ],
-                  ),
-                );
-              } else {
-                _handleExport();
+              switch(index)
+              {
+                case 0:
+                  showImportAlert(context, () => _handleImport(source:  CsvSource.sossoldi));
+                  break;
+                case 1:
+                  showImportAlert(context, () => _handleImport(source: CsvSource.moneyManager));
+                  break;
+                case 2:
+                  _handleExport();
+                  break;
+                default:
+                  throw UnimplementedError();
               }
             },
             child: Row(
