@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../constants/style.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../model/currency.dart';
 import '../../../../providers/currency_provider.dart';
 
@@ -11,11 +12,12 @@ class CurrencySelectorDialog {
     Currency currency,
     Future<List<Currency>> currencies,
   ) {
+    var l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(
-          'Select a currency',
+          l10n.selectACurrency,
           style: Theme.of(context).textTheme.titleLarge!.copyWith(
             color: Theme.of(context).colorScheme.primary,
           ),
@@ -71,7 +73,7 @@ class CurrencySelectorDialog {
                         },
                       );
                     } else if (snapshot.hasError) {
-                      return Text('Something went wrong: ${snapshot.error}');
+                      return Text(l10n.errorOccurred(snapshot.error.toString()));
                     } else {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Transform.scale(
@@ -79,7 +81,7 @@ class CurrencySelectorDialog {
                           child: const CircularProgressIndicator(),
                         );
                       } else {
-                        return const Text("Search for a transaction");
+                        return Text(l10n.searchForATransaction);
                       }
                     }
                   },

@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../ui/extensions.dart';
 import '../../../ui/widgets/rounded_icon.dart';
 import '../../../model/recurring_transaction.dart';
@@ -32,6 +33,7 @@ class RecurringPaymentCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    var l10n = AppLocalizations.of(context)!;
     final categories = ref.watch(categoriesProvider).value;
     final accounts = ref.watch(accountsProvider).value;
     final isDarkMode = ref.watch(appThemeStateProvider).isDarkModeEnabled;
@@ -100,7 +102,7 @@ class RecurringPaymentCard extends ConsumerWidget {
                           spacing: Sizes.sm,
                           children: [
                             Text(
-                              "IN ${getNextText()} DAYS".toUpperCase(),
+                              l10n.inTheNextDays(getNextText()).toUpperCase(),
                               style: Theme.of(context).textTheme.labelLarge,
                             ),
                             Builder(
@@ -183,8 +185,8 @@ class RecurringPaymentCard extends ConsumerWidget {
                               ),
                             ),
                             icon: const Icon(Icons.checklist_rtl_outlined),
-                            label: const Text(
-                              "See older payments",
+                            label: Text(
+                              l10n.seeOlderPayments,
                               style: TextStyle(fontSize: 14),
                             ),
                           ),

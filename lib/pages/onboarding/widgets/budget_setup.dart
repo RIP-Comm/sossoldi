@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
 import '../../../constants/style.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../model/budget.dart';
 import '../../../providers/budgets_provider.dart';
 import '../../../providers/categories_provider.dart';
@@ -29,6 +30,7 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = AppLocalizations.of(context)!;
     budgetsList = ref.watch(budgetsProvider).value;
     totalBudget =
         budgetsList?.fold<num>(
@@ -45,12 +47,12 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
           child: Column(
             children: [
               Text(
-                "STEP 1 OF 2",
+                l10n.step1Of2,
                 style: Theme.of(context).textTheme.labelSmall,
               ),
               const SizedBox(height: Sizes.xl),
               Text(
-                "Set up your monthly\nbudgets",
+                l10n.setupMonthlyBudgets,
                 textAlign: TextAlign.center,
                 style: Theme.of(
                   context,
@@ -58,7 +60,7 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
               ),
               const SizedBox(height: Sizes.xxl),
               Text(
-                "Choose which categories you want to set a budget for",
+                l10n.chooseCategoriesForBudget,
                 textAlign: TextAlign.center,
                 style: Theme.of(
                   context,
@@ -123,7 +125,7 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                         }
                       },
                     ),
-                    error: (err, stack) => Text('Error: $err'),
+                    error: (err, stack) => Text(l10n.errorOccurred(err)),
                     loading: () =>
                         const Center(child: CircularProgressIndicator()),
                   ),
@@ -137,7 +139,7 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                         children: [
                           const SizedBox(height: Sizes.sm),
                           Text(
-                            "Monthly budget total:",
+                              l10n.monthlyBudgetTotal,
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                           const SizedBox(height: Sizes.sm),
@@ -184,7 +186,7 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                                 ),
                               ),
                               child: Text(
-                                'NEXT STEP',
+                                l10n.nextStep,
                                 style: Theme.of(context).textTheme.bodyMedium
                                     ?.copyWith(color: Colors.white),
                               ),
@@ -213,7 +215,7 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                'CONTINUE WITHOUT BUDGET  ',
+                                l10n.continueWithoutBudget.toUpperCase(),
                                 style: Theme.of(
                                   context,
                                 ).textTheme.bodyMedium?.copyWith(color: blue1),

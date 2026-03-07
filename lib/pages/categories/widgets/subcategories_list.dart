@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
 import '../../../constants/style.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../model/category_transaction.dart';
 import '../../../providers/categories_provider.dart';
 import '../../../ui/device.dart';
@@ -48,7 +49,7 @@ class SubcategoriesList extends ConsumerWidget {
                           color: grey1,
                         ),
                         Text(
-                          "Add subcategory",
+                          AppLocalizations.of(context)!.addSubcategory,
                           style: Theme.of(
                             context,
                           ).textTheme.titleSmall!.copyWith(color: grey1),
@@ -99,7 +100,7 @@ class SubcategoriesList extends ConsumerWidget {
         );
       },
       loading: () => const SizedBox.shrink(),
-      error: (err, stack) => Text('Error: $err'),
+      error: (err, stack) => Text(AppLocalizations.of(context)!.errorOccurred(err)),
     );
   }
 }

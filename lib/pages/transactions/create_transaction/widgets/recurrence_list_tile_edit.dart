@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
 import "../../../../constants/style.dart";
+import '../../../../l10n/app_localizations.dart';
 import '../../../../providers/theme_provider.dart';
 import '../../../../providers/transactions_provider.dart';
 import '../../../../ui/device.dart';
@@ -36,7 +37,7 @@ class RecurrenceListTileEdit extends ConsumerWidget {
             ),
           ),
           title: Text(
-            "Recurring payment",
+            AppLocalizations.of(context)!.recurringPayments,
             style: Theme.of(context).textTheme.titleLarge!.copyWith(
               color: Theme.of(context).colorScheme.primary,
             ),
@@ -61,7 +62,7 @@ class RecurrenceListTileEdit extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Interval",
+                    AppLocalizations.of(context)!.interval,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                     ),
@@ -104,14 +105,14 @@ class RecurrenceListTileEdit extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "End repetition",
+                    AppLocalizations.of(context)!.endRepetition,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                   const Spacer(),
                   Text(
-                    endDate != null ? endDate.formatEDMY() : "Never",
+                    endDate != null ? endDate.formatEDMY() : AppLocalizations.of(context)!.never,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       color: isDarkMode
                           ? grey3
@@ -151,7 +152,7 @@ class EndDateSelector extends ConsumerWidget {
             trailing: ref.watch(endDateProvider) != null
                 ? null
                 : const Icon(Icons.check),
-            title: const Text("Never"),
+            title: Text(AppLocalizations.of(context)!.never),
             onTap: () {
               ref.read(endDateProvider.notifier).setDate(null);
               Navigator.pop(context);
@@ -159,7 +160,7 @@ class EndDateSelector extends ConsumerWidget {
           ),
           ListTile(
             visualDensity: const VisualDensity(vertical: -3),
-            title: const Text("On a date"),
+            title: Text(AppLocalizations.of(context)!.onADate),
             trailing: ref.watch(endDateProvider) != null
                 ? const Icon(Icons.check)
                 : null,

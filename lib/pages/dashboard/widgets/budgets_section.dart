@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../../ui/widgets/budget_circular_indicator.dart';
 import '../../../providers/budgets_provider.dart';
 import '../../../ui/device.dart';
@@ -12,6 +13,7 @@ class BudgetsSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final budgetsAsync = ref.watch(monthlyBudgetsStatsProvider);
+    var l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: Sizes.lg,
@@ -21,7 +23,7 @@ class BudgetsSection extends ConsumerWidget {
           child: Padding(
             padding: const EdgeInsets.only(left: Sizes.lg),
             child: Text(
-              "Your budgets",
+              l10n.yourBudgets,
               style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
@@ -37,14 +39,14 @@ class BudgetsSection extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "No budget set",
+                      l10n.noBudgetSet,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         color: Colors.grey[600],
                       ),
                     ),
                     const SizedBox(height: Sizes.sm),
                     Text(
-                      "Create a budget to track your spending",
+                      l10n.createBudgetToTrack,
                       style: Theme.of(
                         context,
                       ).textTheme.bodySmall?.copyWith(color: Colors.grey[500]),
@@ -79,7 +81,7 @@ class BudgetsSection extends ConsumerWidget {
               );
             }
           },
-          error: (err, stack) => Text('Error: $err'),
+          error: (err, stack) => Text(l10n.errorOccurred(err)),
           loading: () => const Center(child: CircularProgressIndicator()),
         ),
       ],

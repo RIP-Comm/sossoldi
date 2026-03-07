@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/style.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../model/budget.dart';
 import '../../../model/category_transaction.dart';
 import '../../../providers/budgets_provider.dart';
@@ -52,9 +53,10 @@ class _AddBudgetState extends ConsumerState<AddBudget> {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = AppLocalizations.of(context)!;
     return AlertDialog(
       title: Text(
-        'Add budget for ${widget.category.name}',
+        l10n.addBudgetForCategory(widget.category.name),
         style: Theme.of(context).textTheme.bodyMedium,
         textAlign: TextAlign.center,
       ),
@@ -65,7 +67,7 @@ class _AddBudgetState extends ConsumerState<AddBudget> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text('CANCEL', style: Theme.of(context).textTheme.bodyMedium),
+          child: Text(l10n.cancel, style: Theme.of(context).textTheme.bodyMedium),
         ),
         ElevatedButton(
           onPressed: () async {
@@ -93,7 +95,7 @@ class _AddBudgetState extends ConsumerState<AddBudget> {
             ),
           ),
           child: Text(
-            'CONFIRM',
+            l10n.confirm,
             style: Theme.of(context).textTheme.bodyMedium?.apply(color: white),
           ),
         ),

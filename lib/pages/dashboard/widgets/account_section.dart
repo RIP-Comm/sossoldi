@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../l10n/app_localizations.dart';
 import 'accounts_sum.dart';
 import '../../../constants/style.dart';
 import '../../../model/bank_account.dart';
@@ -14,6 +15,7 @@ class AccountSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    var l10n = AppLocalizations.of(context)!;
     final accountList = ref.watch(accountsProvider);
     final isDarkMode = ref.watch(appThemeStateProvider).isDarkModeEnabled;
     return SizedBox(
@@ -51,7 +53,7 @@ class AccountSection extends ConsumerWidget {
                     padding: const EdgeInsets.all(Sizes.xs),
                   ),
                   label: Text(
-                    "New Account",
+                    l10n.newAccount,
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                       color: isDarkMode
                           ? grey3
@@ -71,7 +73,7 @@ class AccountSection extends ConsumerWidget {
           },
         ),
         loading: () => const SizedBox(),
-        error: (err, stack) => Text('Error: $err'),
+        error: (err, stack) => Text(l10n.errorOccurred(err)),
       ),
     );
   }

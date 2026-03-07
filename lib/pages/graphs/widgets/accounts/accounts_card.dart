@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../ui/device.dart';
 import '../../../../ui/extensions.dart';
 import '../linear_progress_bar.dart';
@@ -17,10 +18,10 @@ class AccountsCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final accountList = ref.watch(accountsProvider);
     final currencyState = ref.watch(currencyStateProvider);
-
+    var l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
-        const CardLabel(label: "Accounts"),
+        CardLabel(label: l10n.accounts),
         const SizedBox(height: Sizes.sm),
         DefaultContainer(
           child: accountList.when(
@@ -76,7 +77,7 @@ class AccountsCard extends ConsumerWidget {
               },
             ),
             loading: () => const SizedBox.shrink(),
-            error: (e, s) => Text('Error: $e'),
+            error: (e, s) => Text(l10n.errorOccurred(e)),
           ),
         ),
       ],

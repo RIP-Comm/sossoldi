@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../l10n/app_localizations.dart';
 import '../../ui/assets.dart';
 import '../../ui/device.dart';
 import 'widgets/budget_setup.dart';
@@ -14,6 +15,7 @@ class Onboarding extends StatefulWidget {
 class _OnboardingState extends State<Onboarding> {
   @override
   Widget build(BuildContext context) {
+    var l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: blue7,
       body: SafeArea(
@@ -26,7 +28,7 @@ class _OnboardingState extends State<Onboarding> {
               children: [
                 SizedBox(height: MediaQuery.sizeOf(context).height / 9),
                 Text(
-                  'Set up the app',
+                  l10n.setUpTheApp,
                   style: Theme.of(
                     context,
                   ).textTheme.headlineLarge?.copyWith(color: blue1),
@@ -38,7 +40,7 @@ class _OnboardingState extends State<Onboarding> {
                 ),
                 const SizedBox(height: 74),
                 Text(
-                  'In a few steps you\'ll be ready to start keeping\ntrack of your personal finances (almost) like\nMr. Rip',
+                  l10n.setupDescription,
                   textAlign: TextAlign.center,
                   style: Theme.of(
                     context,
@@ -60,7 +62,7 @@ class _OnboardingState extends State<Onboarding> {
                     ),
                   );
                 },
-                child: const Center(child: Text('START THE SET UP')),
+                child: Center(child: Text(l10n.startTheSetup)),
               ),
             ),
           ],

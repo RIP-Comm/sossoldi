@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../providers/transactions_provider.dart';
 import '../../ui/snack_bars/transactions_snack_bars.dart';
 import 'widgets/accounts_tab.dart';
@@ -18,12 +19,7 @@ class TransactionsPage extends ConsumerStatefulWidget {
 
 class _TransactionsPageState extends ConsumerState<TransactionsPage>
     with TickerProviderStateMixin {
-  static const List<Tab> myTabs = <Tab>[
-    Tab(text: "List", height: 35),
-    Tab(text: "Categories", height: 35),
-    Tab(text: "Accounts", height: 35),
-  ];
-
+  late List<Tab> myTabs = [];
   late TabController _tabController;
   late ScrollController _scrollController;
 
@@ -33,9 +29,7 @@ class _TransactionsPageState extends ConsumerState<TransactionsPage>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, length: myTabs.length);
-    // Reset the selected index when switch tab
-    _tabController.addListener(() => ref.invalidate(selectedListIndexProvider));
+
     _scrollController = ScrollController();
   }
 
@@ -48,6 +42,23 @@ class _TransactionsPageState extends ConsumerState<TransactionsPage>
 
   @override
   Widget build(BuildContext context) {
+
+    final l10n = AppLocalizations.of(context)!;
+    if(myTabs.isEmpty)
+    {
+      myTabs = [
+        Tab(text: l10n.list, height: 35),
+        Tab(text: l10n.categories, height: 35),
+        Tab(text: l10n.accounts, height: 35),
+      ];
+      _tabController = TabController(vsync: this, length: myTabs.length);
+      // Reset the selected index when switch tab
+      _tabController.addListener(() => ref.invalidate(selectedListIndexProvider));
+    }
+
+
+    _tabController = TabController(vsync: this, length: myTabs.length);
+
     ref.listen(
       duplicatedTransactionProvider,
       (prev, curr) => showDuplicatedTransactionSnackBar(

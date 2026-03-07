@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../l10n/app_localizations.dart';
 import '../../providers/accounts_provider.dart';
 import '../../constants/constants.dart';
 import '../../constants/style.dart';
@@ -52,10 +53,11 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
   Widget build(BuildContext context) {
     final selectedAccount = ref.watch(selectedAccountProvider);
     final currencyState = ref.watch(currencyStateProvider);
+    var l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("${selectedAccount == null ? "New" : "Edit"} account"),
+        title: Text(selectedAccount == null ? l10n.newAccount : l10n.editAccount),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () => Navigator.pop(context),
@@ -115,7 +117,7 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                 if (context.mounted) Navigator.of(context).pop();
               },
               child: Text(
-                "${selectedAccount == null ? "CREATE" : "UPDATE"} ACCOUNT",
+                selectedAccount == null ? l10n.createAccount.toUpperCase() : l10n.editAccount.toUpperCase()
               ),
             ),
           ),
@@ -143,10 +145,10 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("NAME", style: Theme.of(context).textTheme.labelLarge),
+                  Text(l10n.name.toUpperCase(), style: Theme.of(context).textTheme.labelLarge),
                   TextField(
                     controller: nameController,
-                    decoration: const InputDecoration(hintText: "Account name"),
+                    decoration: InputDecoration(hintText: l10n.accountName),
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ],
@@ -165,7 +167,7 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "ICON AND COLOR",
+                      l10n.iconAndColor,
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                   ),
@@ -193,7 +195,7 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                   ),
                   const SizedBox(height: Sizes.sm),
                   Text(
-                    "CHOOSE ICON",
+                    l10n.chooseColor,
                     style: Theme.of(context).textTheme.labelMedium,
                   ),
                   const SizedBox(height: Sizes.md),
@@ -213,7 +215,7 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                               onPressed: () =>
                                   setState(() => showAccountIcons = false),
                               child: Text(
-                                "Done",
+                                l10n.done,
                                 style: Theme.of(context).textTheme.bodyLarge!
                                     .copyWith(
                                       color: Theme.of(
@@ -310,7 +312,7 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                   ),
                   const SizedBox(height: Sizes.sm),
                   Text(
-                    "CHOOSE COLOR",
+                    l10n.chooseColor.toUpperCase(),
                     style: Theme.of(context).textTheme.labelMedium!.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                     ),
@@ -340,14 +342,14 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "${selectedAccount == null ? "INITIAL" : "CURRENT"} BALANCE",
+                    selectedAccount == null ? l10n.initialBalance.toUpperCase(): l10n.currentBalance.toUpperCase(),
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                   TextField(
                     controller: balanceController,
                     decoration: InputDecoration(
                       hintText:
-                          "${selectedAccount == null ? "Initial" : "Current"} Balance",
+                      selectedAccount == null ? l10n.initialBalance: l10n.currentBalance,
                       suffixText: currencyState.symbol,
                     ),
                     keyboardType: const TextInputType.numberWithOptions(
@@ -380,7 +382,7 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Set as main account",
+                          l10n.setAsMainAccount,
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                         Switch.adaptive(
@@ -398,7 +400,7 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Counts for the net worth",
+                          l10n.countsForNetWorth,
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                         Switch.adaptive(
@@ -444,7 +446,7 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                   ),
                   icon: const Icon(Icons.delete_outlined, color: red),
                   label: Text(
-                    "Delete account",
+                    l10n.deleteAccount,
                     style: Theme.of(
                       context,
                     ).textTheme.bodyLarge!.copyWith(color: red),

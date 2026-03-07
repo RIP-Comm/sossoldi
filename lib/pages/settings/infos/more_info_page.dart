@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../../providers/settings_provider.dart';
 import '../../../ui/widgets/default_card.dart';
 import '../../../ui/device.dart';
@@ -12,10 +13,11 @@ class MoreInfoPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    var l10n = AppLocalizations.of(context)!;
     final moreInfoOptions = [
-      ["App Version:", ref.watch(versionProvider), null],
-      ["Collaborators", "See the team behind this app", "/collaborators"],
-      ["Privacy Policy", "Read more", "/privacy-policy"],
+      [l10n.appVersion, ref.watch(versionProvider), null],
+      [l10n.collaborators, l10n.collaboratorsDescription, "/collaborators"],
+      [l10n.privacyPolicy, l10n.privacyPolicyDescription, "/privacy-policy"],
     ];
 
     return Scaffold(
@@ -24,7 +26,7 @@ class MoreInfoPage extends ConsumerWidget {
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text('App Info'),
+        title: Text(l10n.appInfo),
       ),
       body: ListView.separated(
         padding: const EdgeInsets.only(top: Sizes.xl),

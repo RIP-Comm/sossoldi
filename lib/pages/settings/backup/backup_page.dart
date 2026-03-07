@@ -3,11 +3,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import '../../../constants/exceptions.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../services/database/sossoldi_database.dart';
 import '../../../ui/device.dart';
 import '../../../services/csv/csv_file_picker.dart';
 import '../../../ui/snack_bars/snack_bar.dart';
 import '../../../ui/widgets/default_card.dart';
+
 
 
 class BackupPage extends ConsumerStatefulWidget {
@@ -49,6 +53,32 @@ enum CsvSource{
   sossoldi,
   moneyManager
 }
+void _showLocalizedError(BuildContext context, Object error) {
+  final l10n = AppLocalizations.of(context)!;
+  String message = '';
+
+  if (error is CsvExportingErrorException) {
+    message = l10n.errorExporting(error.tableName);
+  } else if (error is CsvImportGeneralErrorException) {
+    message = l10n.errorCsvImportGeneral(error.text);
+  } else if (error is CsvNotFoundException) {
+    message = l10n.errorCsvNotFound;
+  } else if (error is CsvEmptyException) {
+    message = l10n.errorCsvEmpty;
+  } else if (error is CsvExpectedColumnException) {
+    message = l10n.errorCsvExpectedColumn(error.column);
+  } else if (error is CsvUnexpectedValueException) {
+    message = l10n.errorCsvUnexpectedValue(error.value);
+  } else if (error is CsvTransactionImportErrorException) {
+    message = l10n.errorCsvTransactionImport(error.date);
+  } else if (error is CleanDatabaseException) {
+    message = l10n.errorCleanDatabase(error.text);
+  } else if (error is ResetDatabaseException) {
+    message = l10n.errorCleanDatabase(error.text);
+  }
+
+  showSnackBar(context, message: message);
+}
 
 class _BackupPageState extends ConsumerState<BackupPage> {
 
@@ -61,7 +91,7 @@ class _BackupPageState extends ConsumerState<BackupPage> {
 
       if (!mounted) return;
 
-      CSVFilePicker.showLoading(context, 'Importing data...');
+      CSVFilePicker.showLoading(context, AppLocalizations.of(context)!.importData);
 
       switch(source)
       {
@@ -76,7 +106,7 @@ class _BackupPageState extends ConsumerState<BackupPage> {
           if (results.values.every((success) => success)) {
             await CSVFilePicker.showSuccess(
               context,
-              'Data imported successfully',
+              AppLocalizations.of(context)!.dataImportedSuccessfully,
             );
             if (mounted) Phoenix.rebirth(context);
           } else {
@@ -85,7 +115,7 @@ class _BackupPageState extends ConsumerState<BackupPage> {
                 .map((e) => e.key)
                 .join(', ');
 
-            throw Exception('Failed to import some tables: $failedTables');
+            throw CsvImportGeneralErrorException(text: 'Failed to import some tables: $failedTables');
           }
           break;
 
@@ -95,13 +125,12 @@ class _BackupPageState extends ConsumerState<BackupPage> {
           );
 
           if(!result) {
-            throw Exception('Failed to import data from CSV');
+            throw CsvImportGeneralErrorException(text: '');
           }
 
           await CSVFilePicker.showSuccess(
             context,
-            'Data imported successfully',
-          );
+              AppLocalizations.of(context)!.dataImportedSuccessfully);
           if (mounted) Phoenix.rebirth(context);
 
           break;
@@ -111,14 +140,13 @@ class _BackupPageState extends ConsumerState<BackupPage> {
     } catch (e) {
       if (!mounted) return;
       CSVFilePicker.hideLoading(context);
-
-      showSnackBar(context, message: 'Import failed: ${e.toString()}');
+      _showLocalizedError(context, e);
     }
   }
 
   Future<void> _handleExport() async {
     try {
-      CSVFilePicker.showLoading(context, 'Exporting data...');
+      CSVFilePicker.showLoading(context,  AppLocalizations.of(context)!.exportData);
 
       final csv = await SossoldiDatabase.instance.exportToCSV();
 
@@ -129,27 +157,9 @@ class _BackupPageState extends ConsumerState<BackupPage> {
     } catch (e) {
       if (!mounted) return;
       CSVFilePicker.hideLoading(context);
-      showSnackBar(context, message: 'Export failed: ${e.toString()}');
+      showSnackBar(context, message:  AppLocalizations.of(context)!.exportFailed(e.toString()));
     }
   }
-
-  late final List<BackupOption> options = [
-    BackupOption(
-      title: 'Import data',
-      description: 'Import a CSV file to update your database',
-      icon: Icons.upload_file,
-    ),
-    BackupOption(
-      title: 'Import data',
-      description: 'Import from CSV from  Money Manager\n to update your database\nThe file must be resaved in csv from xls',
-      icon: Icons.upload_file,
-    ),
-    BackupOption(
-      title: 'Export data',
-      description: 'Save your data as a CSV file',
-      icon: Icons.download,
-    ),
-  ];
 
   @override
   void initState() {
@@ -186,13 +196,32 @@ class _BackupPageState extends ConsumerState<BackupPage> {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = AppLocalizations.of(context)!;
+
+    final List<BackupOption> options = [
+      BackupOption(
+        title: l10n.importData,
+        description: l10n.importDataDescription,
+        icon: Icons.upload_file,
+      ),
+      BackupOption(
+        title: l10n.importData,
+        description: l10n.importMoneyManager,
+        icon: Icons.upload_file,
+      ),
+      BackupOption(
+        title: l10n.exportData,
+        description: l10n.exportDataDescription,
+        icon: Icons.download,
+      ),
+    ];
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text('Import/Export'),
+        title: Text(l10n.importExport),
       ),
       body: ListView.separated(
         padding: const EdgeInsets.only(top: Sizes.xl),

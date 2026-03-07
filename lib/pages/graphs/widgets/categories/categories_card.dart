@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../ui/widgets/category_type_button.dart';
 import '../../../../ui/widgets/default_container.dart';
 import '../../../../model/category_transaction.dart';
@@ -27,11 +28,11 @@ class CategoriesCardState extends ConsumerState<CategoriesCard> {
     final categoryMap = ref.watch(categoryMapProvider);
     final categoryTotalAmount =
         ref.watch(categoryTotalAmountProvider).value ?? 0;
-
+    var l10n = AppLocalizations.of(context)!;
     return Column(
       spacing: Sizes.sm,
       children: [
-        const CardLabel(label: "Categories"),
+        CardLabel(label: l10n.categories),
         DefaultContainer(
           child: Column(
             spacing: Sizes.xl,
@@ -52,7 +53,7 @@ class CategoriesCardState extends ConsumerState<CategoriesCard> {
                 loading: () => LoadingContentWidget(
                   previousCategoriesCount: _categoriesCount,
                 ),
-                error: (e, s) => Text("Error: $e"),
+                error: (e, s) => Text(l10n.errorOccurred(e)),
               ),
             ],
           ),
@@ -175,11 +176,12 @@ class NoTransactionsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = AppLocalizations.of(context)!;
     return SizedBox(
       height: 200,
       child: Center(
         child: Text(
-          "After you add some transactions, some outstanding graphs will appear here... almost by magic!",
+          l10n.graphsEmptyState,
           style: Theme.of(context).textTheme.bodySmall,
           textAlign: TextAlign.center,
         ),

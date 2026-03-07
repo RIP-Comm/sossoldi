@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants/constants.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../../l10n/app_localizations_en.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../ui/formatters/decimal_text_input_formatter.dart';
 import '../../../ui/device.dart';
@@ -47,6 +49,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: blue7,
       resizeToAvoidBottomInset: false,
@@ -56,12 +59,12 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
           child: Column(
             children: [
               Text(
-                "STEP 2 OF 2",
+                l10n.setupMonthlyBudgets,
                 style: Theme.of(context).textTheme.labelSmall,
               ),
               const SizedBox(height: Sizes.xl),
               Text(
-                "Set the liquidity in your main account",
+                l10n.setLiquidityInMainAccount,
                 textAlign: TextAlign.center,
                 style: Theme.of(
                   context,
@@ -69,7 +72,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
               ),
               const SizedBox(height: Sizes.xl),
               Text(
-                "It will be used as a baseline to which you can add income, expenses and calculate your wealth.",
+               l10n.liquidityDescription,
                 textAlign: TextAlign.center,
                 maxLines: 3,
                 style: Theme.of(
@@ -78,7 +81,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
               ),
               const SizedBox(height: Sizes.sm),
               Text(
-                "You'll be able to add more accounts within the app.",
+                l10n.addMoreAccounts,
                 textAlign: TextAlign.center,
                 maxLines: 3,
                 style: Theme.of(
@@ -120,7 +123,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "ACCOUNT NAME ",
+                              l10n.accountName.toUpperCase(),
                               style: Theme.of(
                                 context,
                               ).textTheme.labelSmall?.copyWith(color: grey1),
@@ -133,7 +136,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                           controller: accountNameController,
                           autofocus: true,
                           decoration: InputDecoration(
-                            hintText: "Main Account",
+                            hintText: l10n.mainAccount,
                             errorStyle: Theme.of(context).textTheme.bodyLarge
                                 ?.copyWith(fontSize: 10, color: red),
                             hintStyle: Theme.of(context).textTheme.bodySmall,
@@ -155,7 +158,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "SET AMOUNT ",
+                              l10n.setAmount.toUpperCase(),
                               style: Theme.of(
                                 context,
                               ).textTheme.labelSmall?.copyWith(color: grey1),
@@ -198,7 +201,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "EDIT ICON AND COLOR ",
+                              l10n.editIconAndColor.toUpperCase(),
                               style: Theme.of(
                                 context,
                               ).textTheme.labelSmall?.copyWith(color: grey1),
@@ -323,7 +326,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                 children: [
                   const SizedBox(height: Sizes.lg),
                   Text(
-                    'Or you can skip this step and start from 0',
+                    l10n.skipStepOrStartFromZero,
                     style: Theme.of(
                       context,
                     ).textTheme.bodySmall?.copyWith(color: blue1),
@@ -349,7 +352,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'START FROM 0  ',
+                              l10n.startFromZero.toUpperCase(),
                               style: Theme.of(
                                 context,
                               ).textTheme.bodyMedium?.copyWith(color: blue1),
@@ -397,8 +400,8 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: _validAmount ? blue5 : grey2,
                       ),
-                      child: const Center(
-                        child: Text('START TRACKING YOUR EXPENSES'),
+                      child: Center(
+                        child: Text(l10n.startTrackingExpenses),
                       ),
                     ),
                   ),

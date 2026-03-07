@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants/style.dart';
+import '../../l10n/app_localizations.dart';
 import '../../ui/extensions.dart';
 import '../../ui/widgets/line_chart.dart';
 import '../../ui/widgets/transactions_list.dart';
@@ -50,6 +51,7 @@ class _AccountPage extends ConsumerState<AccountPage> {
         ref: ref,
       ),
     );
+    var l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
@@ -109,16 +111,16 @@ class _AccountPage extends ConsumerState<AccountPage> {
                 padding: const EdgeInsets.all(Sizes.lg),
                 child: Column(
                   children: [
-                    const Row(
+                     Row(
                       spacing: 8,
                       children: [
-                        Icon(Icons.info_outline),
-                        Text("Balance Discrepancy?"),
+                        const Icon(Icons.info_outline),
+                        Text(l10n.balanceDiscrepancy),
                       ],
                     ),
                     const SizedBox(height: Sizes.sm),
-                    const Text(
-                      "Your recorder balance might differ from your bank's statement. Tap below to manually adjust your balance and keep your records accurate.",
+                    Text(
+                      l10n.balanceAdjustmentHint
                     ),
                     const SizedBox(height: Sizes.lg),
                     if (isRecoinciling)
@@ -128,7 +130,7 @@ class _AccountPage extends ConsumerState<AccountPage> {
                             focusNode: _focusNode,
                             controller: _newBalanceController,
                             decoration: InputDecoration(
-                              hintText: "New Balance",
+                              hintText: l10n.newBalance,
                               border: const OutlineInputBorder(),
                               prefixIcon: SizedBox(
                                 width: 40,
@@ -180,7 +182,7 @@ class _AccountPage extends ConsumerState<AccountPage> {
                                       }
                                     }
                                   },
-                                  label: const Text("Save"),
+                                  label: Text(l10n.save),
                                   icon: const Icon(Icons.check),
                                 ),
                               ),
@@ -199,8 +201,8 @@ class _AccountPage extends ConsumerState<AccountPage> {
                                   ),
                                   onPressed: () =>
                                       setState(() => isRecoinciling = false),
-                                  label: const Text(
-                                    "Cancel",
+                                  label: Text(
+                                    l10n.cancel,
                                     style: TextStyle(fontSize: 14),
                                   ),
                                   icon: const Icon(Icons.cancel_outlined),
@@ -218,7 +220,7 @@ class _AccountPage extends ConsumerState<AccountPage> {
                         },
                         icon: const Icon(Icons.sync),
                         label: Text(
-                          "Start Reconciliation",
+                          l10n.startReconciliation,
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ),
@@ -233,7 +235,7 @@ class _AccountPage extends ConsumerState<AccountPage> {
                 top: Sizes.sm,
               ),
               child: Text(
-                "Your last transactions",
+                l10n.lastTransactions,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ),

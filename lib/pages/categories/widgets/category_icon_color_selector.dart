@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../constants/constants.dart';
 import '../../../constants/style.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../ui/device.dart';
 
 class CategoryIconColorSelector extends StatefulWidget {
@@ -28,6 +29,7 @@ class _CategoryIconColorSelectorState extends State<CategoryIconColorSelector> {
   bool showCategoryIcons = false;
   String selectedIconCategory = mapIconsList.keys.first;
 
+
   @override
   void dispose() {
     _pageController.dispose();
@@ -36,6 +38,7 @@ class _CategoryIconColorSelectorState extends State<CategoryIconColorSelector> {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = AppLocalizations.of(context)!;
     return Container(
       margin: const EdgeInsets.symmetric(
         horizontal: Sizes.lg,
@@ -54,7 +57,7 @@ class _CategoryIconColorSelectorState extends State<CategoryIconColorSelector> {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              "ICON AND COLOR",
+              l10n.iconAndColor.toUpperCase(),
               style: Theme.of(context).textTheme.labelLarge?.copyWith(
                 color: Theme.of(context).colorScheme.primary,
               ),
@@ -82,7 +85,7 @@ class _CategoryIconColorSelectorState extends State<CategoryIconColorSelector> {
           ),
           const SizedBox(height: Sizes.sm),
           Text(
-            "CHOOSE ICON",
+            l10n.chooseIcon.toUpperCase(),
             style: Theme.of(context).textTheme.labelMedium?.copyWith(
               color: Theme.of(context).colorScheme.primary,
             ),
@@ -174,7 +177,7 @@ class _CategoryIconColorSelectorState extends State<CategoryIconColorSelector> {
             ),
           if (widget.onColorChanged != null)
             Text(
-              "CHOOSE COLOR",
+              l10n.chooseColor.toUpperCase(),
               style: Theme.of(context).textTheme.labelMedium?.copyWith(
                 color: Theme.of(context).colorScheme.primary,
               ),
@@ -344,7 +347,7 @@ class _ColorGridState extends State<ColorGrid> {
                 size: 20,
               ),
               label: Text(
-                showAllColors ? 'Show less' : 'Show more',
+                showAllColors ? AppLocalizations.of(context)!.showLess : AppLocalizations.of(context)!.showMore,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               style: TextButton.styleFrom(

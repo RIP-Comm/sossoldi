@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../../constants/constants.dart';
 import '../../constants/style.dart';
+import '../../l10n/app_localizations.dart';
 import '../../model/transaction.dart';
 import '../../providers/currency_provider.dart';
 import '../../providers/transactions_provider.dart';
@@ -126,7 +127,7 @@ class _TransactionsListState extends State<TransactionsList> {
       child: DefaultContainer(
         margin: widget.margin,
         child: Text(
-          "Add a transaction to make this section more appealing",
+          AppLocalizations.of(context)!.addTransactionCallToAction,
           style: Theme.of(
             context,
           ).textTheme.bodySmall?.copyWith(fontStyle: FontStyle.italic),
@@ -148,6 +149,7 @@ class TransactionTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    var l10n = AppLocalizations.of(context)!;
     final currencyState = ref.watch(currencyStateProvider);
     return Material(
       child: ListTile(
@@ -192,7 +194,7 @@ class TransactionTile extends ConsumerWidget {
         subtitle: Text(
           transaction.type == TransactionType.transfer
               ? ""
-              : transaction.categoryName ?? "Uncategorized",
+              : transaction.categoryName ?? l10n.uncategorized,
           overflow: TextOverflow.ellipsis,
           style: Theme.of(context).textTheme.labelMedium!.copyWith(
             color: Theme.of(context).colorScheme.primary,

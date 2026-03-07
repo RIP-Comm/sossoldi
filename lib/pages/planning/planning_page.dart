@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../l10n/app_localizations.dart';
 import '../../ui/device.dart';
 import 'manage_budget_page.dart';
 import 'widget/budget_card.dart';
@@ -9,6 +10,7 @@ class PlanningPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = AppLocalizations.of(context)!;
     return ListView(
       padding: const EdgeInsetsDirectional.all(Sizes.md),
       children: [
@@ -16,7 +18,7 @@ class PlanningPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "Monthly budget",
+              l10n.monthlyBudget,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             GestureDetector(
@@ -43,7 +45,7 @@ class PlanningPage extends StatelessWidget {
               child: Row(
                 spacing: Sizes.xs,
                 children: [
-                  Text("MANAGE", style: Theme.of(context).textTheme.labelLarge),
+                  Text(l10n.manage.toUpperCase(), style: Theme.of(context).textTheme.labelLarge),
                   const Icon(Icons.edit, size: 13),
                 ],
               ),
@@ -54,7 +56,7 @@ class PlanningPage extends StatelessWidget {
         const BudgetCard(),
         const SizedBox(height: Sizes.xl),
         Text(
-          "Recurring payments",
+          l10n.recurringPayments,
           style: Theme.of(context).textTheme.titleLarge,
         ),
         const SizedBox(height: Sizes.sm),

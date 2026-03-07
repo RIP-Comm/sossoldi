@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../constants/style.dart';
+import '../../l10n/app_localizations.dart';
+import '../../l10n/app_localizations_en.dart';
 import '../../model/category_transaction.dart';
 import '../../providers/categories_provider.dart';
 import '../../providers/transactions_provider.dart';
@@ -26,7 +28,7 @@ class CategoryTypeButton extends ConsumerWidget {
       ref.read(categoryTypeProvider.notifier).setType(type);
       ref.read(selectedCategoryProvider.notifier).setCategory(null);
     }
-
+    var l10n = AppLocalizations.of(context)!;
     return Container(
       height: 28,
       decoration: BoxDecoration(
@@ -60,7 +62,7 @@ class CategoryTypeButton extends ConsumerWidget {
                 color: Colors.transparent,
                 alignment: Alignment.center,
                 child: Text(
-                  "Income",
+                  l10n.income,
                   style: textStyleFromType(CategoryTransactionType.income),
                 ),
               ),
@@ -75,7 +77,7 @@ class CategoryTypeButton extends ConsumerWidget {
                 color: Colors.transparent,
                 alignment: Alignment.center,
                 child: Text(
-                  'Expenses',
+                  l10n.expense,
                   style: textStyleFromType(CategoryTransactionType.expense),
                 ),
               ),

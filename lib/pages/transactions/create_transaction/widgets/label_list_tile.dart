@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../ui/widgets/rounded_icon.dart';
 import '../../../../constants/style.dart';
 import '../../../../providers/theme_provider.dart';
@@ -30,7 +31,7 @@ class LabelListTile extends ConsumerWidget {
           ),
           const SizedBox(width: Sizes.lg),
           Text(
-            "Description",
+            AppLocalizations.of(context)!.description,
             style: Theme.of(context).textTheme.titleLarge!.copyWith(
               color: Theme.of(context).colorScheme.primary,
             ),
@@ -40,9 +41,9 @@ class LabelListTile extends ConsumerWidget {
             child: TextField(
               controller: labelController,
               textCapitalization: TextCapitalization.sentences,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: "Add a description",
+                hintText: AppLocalizations.of(context)!.addDescription,
               ),
               textAlign: TextAlign.end,
               style: Theme.of(context).textTheme.bodySmall!.copyWith(

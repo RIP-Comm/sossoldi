@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../ui/widgets/default_container.dart';
 import '../../../ui/widgets/transaction_type_button.dart';
 import '../../../model/category_transaction.dart';
@@ -19,6 +20,7 @@ class CategoriesTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final categoriesData = ref.watch(categoryWithSubcategoriesDataProvider);
     final transactionType = ref.watch(selectedTransactionTypeProvider);
+    var l10n = AppLocalizations.of(context)!;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(vertical: Sizes.xl),
@@ -34,7 +36,7 @@ class CategoriesTab extends ConsumerWidget {
                     height: 400,
                     child: Center(
                       child: Text(
-                        "No ${transactionType == TransactionType.income ? 'incomes' : 'expenses'} for selected month",
+                        transactionType == TransactionType.income ? l10n.noIncomesForSelectedMonth : l10n.noExpensesForSelectedMonth,
                       ),
                     ),
                   );

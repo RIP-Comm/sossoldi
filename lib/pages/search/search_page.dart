@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/transactions_provider.dart';
+import '../../l10n/app_localizations.dart';
 import '../../services/database/repositories/transactions_repository.dart';
 import '../../ui/extensions.dart';
 import '../../ui/widgets/transactions_list.dart';
@@ -34,10 +35,10 @@ class _SearchPage extends ConsumerState<SearchPage> {
     final accountList = ref.watch(accountsProvider);
     final filterAccountList = ref.watch(filterAccountProvider);
     final searchTransactions = ref.watch(searchTransactionsProvider);
-
+    var l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Search"),
+        title: Text(l10n.search),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () => Navigator.pop(context),
@@ -54,11 +55,11 @@ class _SearchPage extends ConsumerState<SearchPage> {
                 borderRadius: BorderRadius.circular(Sizes.borderRadius),
               ),
               child: InputDecorator(
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.search),
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Icons.search),
                   border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(horizontal: Sizes.sm),
-                  hintText: "Search",
+                  contentPadding: const EdgeInsets.symmetric(horizontal: Sizes.sm),
+                  hintText: l10n.search,
                 ),
                 child: Autocomplete(
                   optionsBuilder: (TextEditingValue textEditingValue) {
@@ -79,18 +80,31 @@ class _SearchPage extends ConsumerState<SearchPage> {
               ),
             ),
             const SizedBox(height: Sizes.md),
-            Text("SEARCH FOR", style: Theme.of(context).textTheme.bodySmall),
+            Text(l10n.searchForATransaction, style: Theme.of(context).textTheme.bodySmall),
             SizedBox(
               height: 60,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: TransactionType.values.map((type) {
+                  String message = '';
+                  switch(type)
+                  {
+                    case TransactionType.expense:
+                      message = l10n.expense;
+                      break;
+                    case TransactionType.income:
+                      message = l10n.income;
+                      break;
+                    case TransactionType.transfer:
+                      message = l10n.transfer;
+                      break;
+                  }
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: Sizes.sm),
                     child: FilterChip(
                       showCheckmark: false,
                       label: Text(
-                        type.name.capitalize(),
+                        message,
                         style: TextStyle(
                           color: filterType[type.code]!
                               ? Colors.white
@@ -112,7 +126,7 @@ class _SearchPage extends ConsumerState<SearchPage> {
               ),
             ),
             const SizedBox(height: Sizes.md),
-            Text("SEARCH IN", style: Theme.of(context).textTheme.bodySmall),
+            Text(l10n.searchIn, style: Theme.of(context).textTheme.bodySmall),
             SizedBox(
               height: 60,
               child: accountList.when(
@@ -159,7 +173,7 @@ class _SearchPage extends ConsumerState<SearchPage> {
                   );
                 },
                 loading: () => const SizedBox(),
-                error: (err, stack) => Text('Error: $err'),
+                error: (err, stack) => Text(l10n.errorOccurred(err)),
               ),
             ),
             Expanded(
@@ -173,13 +187,13 @@ class _SearchPage extends ConsumerState<SearchPage> {
                       ),
                     );
                   } else {
-                    return const Center(
-                      child: Text("Search for a transaction"),
+                    return Center(
+                      child: Text(l10n.searchForATransaction),
                     );
                   }
                 },
                 loading: () => const Center(child: CircularProgressIndicator()),
-                error: (err, stack) => Text('Error: $err'),
+                error: (err, stack) => Text(l10n.errorOccurred(err)),
               ),
             ),
           ],

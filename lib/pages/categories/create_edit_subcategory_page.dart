@@ -6,6 +6,7 @@ import '../../../constants/style.dart';
 import '../../../model/category_transaction.dart';
 import '../../../providers/categories_provider.dart';
 import '../../../ui/device.dart';
+import '../../l10n/app_localizations.dart';
 import 'widgets/category_icon_color_selector.dart';
 
 class CreateEditSubcategoryPage extends ConsumerStatefulWidget {
@@ -48,11 +49,12 @@ class _CreateEditSubcategoryPage
 
   @override
   Widget build(BuildContext context) {
+    var l10n = AppLocalizations.of(context)!;
     final selectedSubcategory = ref.watch(selectedSubcategoryProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "${selectedSubcategory == null ? "New" : "Edit"} Subcategory",
+          selectedSubcategory == null ? l10n.newSubcategory : l10n.editSubcategory,
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
@@ -110,7 +112,7 @@ class _CreateEditSubcategoryPage
                 }
               },
               child: Text(
-                "${selectedSubcategory == null ? "CREATE" : "UPDATE"} SUBCATEGORY",
+                selectedSubcategory == null ? l10n.createSubcategory.toUpperCase() : l10n.updateSubcategory.toUpperCase(),
               ),
             ),
           ),
@@ -139,15 +141,15 @@ class _CreateEditSubcategoryPage
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "NAME",
+                    l10n.name.toUpperCase(),
                     style: Theme.of(context).textTheme.labelLarge!.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                   TextField(
                     controller: nameController,
-                    decoration: const InputDecoration(
-                      hintText: "Category name",
+                    decoration: InputDecoration(
+                      hintText: l10n.subcategoryName,
                     ),
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
@@ -177,7 +179,7 @@ class _CreateEditSubcategoryPage
                   ),
                   icon: const Icon(Icons.delete_outlined, color: red),
                   label: Text(
-                    "Delete subcategory",
+                    l10n.deleteSubcategory,
                     style: Theme.of(
                       context,
                     ).textTheme.bodyLarge!.copyWith(color: red),

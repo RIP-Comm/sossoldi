@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../ui/widgets/default_container.dart';
 import '../../../ui/widgets/transaction_type_button.dart';
 import '../../../model/bank_account.dart';
@@ -20,6 +21,7 @@ class AccountsTab extends ConsumerWidget {
     final accounts = ref.watch(accountsProvider);
     final transactions = ref.watch(transactionsProvider);
     final transactionType = ref.watch(selectedTransactionTypeProvider);
+    var l10n = AppLocalizations.of(context)!;
 
     // create a map to link each accounts with a list of its transactions
     // stored as Map<String, dynamic> to be passed to AccountListTile
@@ -99,10 +101,10 @@ class AccountsTab extends ConsumerWidget {
                     .toList();
                 return transactionType == TransactionType.income
                     ? accountIncomeList.isEmpty
-                          ? const SizedBox(
+                          ?  SizedBox(
                               height: 400,
                               child: Center(
-                                child: Text("No incomes for selected month"),
+                                child: Text(l10n.noIncomesForSelectedMonth),
                               ),
                             )
                           : AccountSection(
@@ -112,10 +114,10 @@ class AccountsTab extends ConsumerWidget {
                               transactions: accountToTransactionsIncome,
                             )
                     : accountExpenseList.isEmpty
-                    ? const SizedBox(
+                    ? SizedBox(
                         height: 400,
                         child: Center(
-                          child: Text("No expenses for selected month"),
+                          child: Text(l10n.noExpensesForSelectedMonth),
                         ),
                       )
                     : AccountSection(

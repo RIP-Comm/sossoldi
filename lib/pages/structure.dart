@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../l10n/app_localizations.dart';
 import '../providers/settings_provider.dart';
 import '../providers/transactions_provider.dart';
 import '../ui/device.dart';
@@ -19,14 +20,7 @@ class Structure extends ConsumerStatefulWidget {
 }
 
 class _StructureState extends ConsumerState<Structure> {
-  // We could add this List in the app's state, so it isn't intialized every time.
-  final List<String> _pagesTitle = [
-    "Dashboard",
-    "Transactions",
-    "",
-    "Planning",
-    "Graphs",
-  ];
+
   final List<Widget?> _pages = [
     const DashboardPage(),
     const TransactionsPage(),
@@ -40,6 +34,16 @@ class _StructureState extends ConsumerState<Structure> {
   @override
   Widget build(BuildContext context) {
     final isVisible = ref.watch(visibilityAmountProvider);
+    var l10n = AppLocalizations.of(context)!;
+
+
+    List<String> pagesTitle = [
+      l10n.dashboard,
+      l10n.transactions,
+      "",
+      l10n.planning,
+      l10n.graphs,
+    ];
 
     return Scaffold(
       // Prevent the fab moving up when the keyboard is opened
@@ -50,7 +54,7 @@ class _StructureState extends ConsumerState<Structure> {
             : null,
         title: switch (selectedIndex) {
           0 => null,
-          _ => Text(_pagesTitle.elementAt(selectedIndex)),
+          _ => Text(pagesTitle.elementAt(selectedIndex)),
         },
         leading: Padding(
           padding: const EdgeInsets.only(left: Sizes.lg),
@@ -92,7 +96,7 @@ class _StructureState extends ConsumerState<Structure> {
         items: [
           BottomNavigationBarItem(
             icon: Icon(selectedIndex == 0 ? Icons.home : Icons.home_outlined),
-            label: "DASHBOARD",
+            label: AppLocalizations.of(context)!.dashboard.toUpperCase(),
           ),
           BottomNavigationBarItem(
             icon: Icon(
@@ -100,7 +104,7 @@ class _StructureState extends ConsumerState<Structure> {
                   ? Icons.swap_horizontal_circle
                   : Icons.swap_horizontal_circle_outlined,
             ),
-            label: "TRANSACTIONS",
+            label: AppLocalizations.of(context)!.transactions.toUpperCase(),
           ),
           const BottomNavigationBarItem(icon: Text(""), label: ""),
           BottomNavigationBarItem(
@@ -109,7 +113,7 @@ class _StructureState extends ConsumerState<Structure> {
                   ? Icons.calendar_today
                   : Icons.calendar_today_outlined,
             ),
-            label: "PLANNING",
+            label: AppLocalizations.of(context)!.planning.toUpperCase(),
           ),
           BottomNavigationBarItem(
             icon: Icon(
@@ -117,7 +121,7 @@ class _StructureState extends ConsumerState<Structure> {
                   ? Icons.data_exploration
                   : Icons.data_exploration_outlined,
             ),
-            label: "GRAPHS",
+            label: AppLocalizations.of(context)!.graphs.toUpperCase(),
           ),
         ],
       ),

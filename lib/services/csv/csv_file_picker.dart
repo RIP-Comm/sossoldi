@@ -5,6 +5,7 @@ import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../ui/snack_bars/snack_bar.dart';
 import '../../ui/device.dart';
 
@@ -28,7 +29,7 @@ class CSVFilePicker {
     bool permissionGranted = await _requestStoragePermission();
     if (!permissionGranted) {
       if (context.mounted) {
-        showSnackBar(context, message: 'Storage permission is required');
+        showSnackBar(context, message: AppLocalizations.of(context)!.storagePermissionRequired);
       }
       return null;
     }
@@ -45,7 +46,7 @@ class CSVFilePicker {
       }
     } catch (e) {
       if (context.mounted) {
-        showSnackBar(context, message: 'Error picking file: ${e.toString()}');
+        showSnackBar(context, message: AppLocalizations.of(context)!.errorPickingFile(e.toString()));
       }
     }
     return null;
@@ -73,14 +74,12 @@ class CSVFilePicker {
 
       // Show success message
       if (context.mounted) {
-        showSnackBar(context, message: 'File saved to: ${file.path}');
+        showSnackBar(context, message: AppLocalizations.of(context)!.fileSavedTo((file.path)));
       }
     } catch (e) {
       if (context.mounted) {
-        String errorMessage =
-            'Cannot save the file here, please create or select a folder in Downloads or Documents. Error: ${e.toString()}';
 
-        showSnackBar(context, message: errorMessage);
+        showSnackBar(context, message: AppLocalizations.of(context)!.saveCsvFileFailed(e.toString()));
       }
     }
   }
@@ -135,7 +134,7 @@ class CSVFilePicker {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Success'),
+          title: Text(AppLocalizations.of(context)!.success),
           content: Text(message),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(Sizes.borderRadius),
@@ -143,7 +142,7 @@ class CSVFilePicker {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('OK'),
+              child: Text(AppLocalizations.of(context)!.ok),
             ),
           ],
         );

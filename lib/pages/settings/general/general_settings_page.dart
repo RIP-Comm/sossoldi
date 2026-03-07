@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/style.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../model/currency.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../providers/authentication_provider.dart';
@@ -24,6 +25,7 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
   String selectedCurrency = "EUR";
   dynamic selectedLanguage = "🇬🇧";
 
+  // Vorrei non fare commenti riguardo questa lista di liste, ma questo è un commento
   List<List<dynamic>> languages = [
     ["🇬🇧", "English"],
     ["🇮🇹", "Italiano"],
@@ -33,6 +35,9 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    var l10n = AppLocalizations.of(context)!;
+
     final appThemeState = ref.watch(appThemeStateProvider);
     final currencyState = ref.watch(currencyStateProvider);
     Future<List<Currency>> currencyList = ref
@@ -46,7 +51,7 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text('General Settings'),
+        title: Text(l10n.generalSettings),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(
@@ -61,7 +66,7 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
             Row(
               children: [
                 Text(
-                  "Appearance",
+                  l10n.appearance,
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
                     color: Theme.of(context).colorScheme.primary,
                   ),
@@ -89,7 +94,7 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
             Row(
               children: [
                 Text(
-                  "Currency",
+                  l10n.currency,
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
                     color: Theme.of(context).colorScheme.primary,
                   ),
@@ -124,7 +129,7 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
             Row(
               children: [
                 Text(
-                  "Require authentication",
+                  l10n.requireAuthentication,
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
                     color: Theme.of(context).colorScheme.primary,
                   ),

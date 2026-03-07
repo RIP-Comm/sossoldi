@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import '../../l10n/app_localizations.dart';
 import '../../providers/currency_provider.dart';
 import '../device.dart';
 import '../extensions.dart';
@@ -59,7 +60,7 @@ class BudgetCircularIndicator extends ConsumerWidget {
               ),
               const SizedBox(height: Sizes.sm),
               Text(
-                "LEFT",
+                AppLocalizations.of(context)!.left.toUpperCase(),
                 style: theme.textTheme.labelLarge!.copyWith(
                   color: theme.colorScheme.primary,
                 ),

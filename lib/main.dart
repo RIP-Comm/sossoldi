@@ -8,6 +8,7 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 
+import 'l10n/app_localizations.dart';
 import 'providers/settings_provider.dart';
 import 'providers/theme_provider.dart';
 import 'routes/routes.dart';
@@ -15,6 +16,8 @@ import 'services/database/repositories/recurring_transactions_repository.dart';
 import 'services/database/sossoldi_database.dart';
 import 'services/notifications/notifications_service.dart';
 import 'ui/theme/app_theme.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -104,7 +107,25 @@ class Launcher extends ConsumerWidget {
     final appThemeState = ref.watch(appThemeStateProvider);
     final bool isOnboardingCompleted = ref.watch(onBoardingCompletedProvider);
     return MaterialApp(
+      supportedLocales: [
+        const Locale('en'), // English
+        const Locale('pt'), // Portuguese
+        // const Locale('es'), // Spanish
+        const Locale('it'), // Italian
+        // Locale('zh'), // Chinese
+        // Locale('hi'), // Hindi
+
+      ],
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        AppLocalizations.delegate
+      ],
+      locale: const Locale('pt', 'PT'),
       title: 'Sossoldi',
+
+
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: appThemeState.isDarkModeEnabled

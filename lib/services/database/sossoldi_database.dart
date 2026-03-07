@@ -11,6 +11,7 @@ import 'package:sqflite/sqflite.dart';
 
 // Models
 import '../../constants/constants.dart';
+import '../../constants/exceptions.dart';
 import '../../model/bank_account.dart';
 import '../../model/budget.dart';
 import '../../model/category_transaction.dart';
@@ -179,7 +180,7 @@ class SossoldiDatabase {
           allData.add(csvRow);
         }
       } catch (e) {
-        dev.log('Error exporting table $tableName: $e');
+        throw CsvExportingErrorException(tableName: '$tableName with error: $e');
       }
     }
 
@@ -196,7 +197,7 @@ class SossoldiDatabase {
     try {
       final file = File(csvFilePath);
       if (!await file.exists()) {
-        throw Exception('CSV file not found');
+        throw CsvNotFoundException();
       }
 
       final String csvData = await file.readAsString();
@@ -205,7 +206,7 @@ class SossoldiDatabase {
       );
 
       if (rows.isEmpty) {
-        throw Exception('CSV file is empty');
+        throw CsvEmptyException();
       }
 
       // First row contains headers
@@ -213,7 +214,7 @@ class SossoldiDatabase {
       final int tableNameIndex = headers.indexOf('table_name');
 
       if (tableNameIndex == -1) {
-        throw Exception('CSV file missing table_name column');
+        throw CsvExpectedColumnException(column: 'table_column');
       }
 
       // Group rows by table
@@ -253,14 +254,12 @@ class SossoldiDatabase {
             }
             results[tableName] = true;
           } catch (e) {
-            dev.log('Error importing table $tableName: $e');
-            results[tableName] = false;
+            throw CsvImportGeneralErrorException(text : e.toString());
           }
         }
       });
     } catch (e) {
-      dev.log('Error during import: $e');
-      rethrow;
+      throw CsvImportGeneralErrorException(text : e.toString());
     }
 
     return results;
@@ -313,7 +312,7 @@ class SossoldiDatabase {
 
     if(backAccountId == null)
     {
-      throw Exception('Error during inserting ${transaction.date} transaction');
+      throw CsvTransactionImportErrorException(date: currentDate);
     }
 
     switch(transaction.type)
@@ -323,7 +322,7 @@ class SossoldiDatabase {
         var categoryId =  await getCategoryId(txn: txn, type: code, name: transaction.category);
         if(categoryId == null)
         {
-          throw Exception('Error during inserting ${transaction.date} transaction');
+          throw CsvTransactionImportErrorException(date: currentDate);
         }
         row = {
           TransactionFields.date: currentDate,
@@ -342,7 +341,7 @@ class SossoldiDatabase {
         var backAccountReceiverId = await getBankAccountId(txn: txn, name: transaction.destinationAccount!);
         if(backAccountReceiverId == null)
         {
-          throw Exception('Error during inserting ${transaction.date} transaction');
+          throw CsvTransactionImportErrorException(date: currentDate);
         }
         row = {
           TransactionFields.date : currentDate,
@@ -360,6 +359,8 @@ class SossoldiDatabase {
     }
     txn.insert('transaction', row);
   }
+
+
   Future insertCategoriesFromMoneyManager({required txn, required Map<String,List<String>> categoryMap, required String code, required DateTime oldestDate}) async
   {
     List<Map<String, dynamic>> maps  = await txn.query(
@@ -428,7 +429,7 @@ class SossoldiDatabase {
       final file = File(csvFilePath);
 
       if (!await file.exists()) {
-        throw Exception('CSV file not found');
+        throw CsvNotFoundException();
       }
 
       final String csvData = await file.readAsString();
@@ -437,7 +438,7 @@ class SossoldiDatabase {
       );
 
       if (rows.isEmpty) {
-        throw Exception('CSV file is empty');
+        throw CsvEmptyException();
       }
 
       // First row contains headers
@@ -461,7 +462,7 @@ class SossoldiDatabase {
 
       for (var str in expectedHeaders) {
         if(!headers.contains(str)) {
-          throw Exception('Column $str not found in CSV file');
+          throw CsvExpectedColumnException(column: str);
         }
       }
 
@@ -522,7 +523,7 @@ class SossoldiDatabase {
             accounts.add(cat);
             break;
           default:
-            throw Exception('Income/Expenses column found ${row[6]}, undefined behaviour', );
+            throw CsvUnexpectedValueException(value: row[6]);
 
         }
         currencies.add(row[9]);
@@ -597,8 +598,7 @@ class SossoldiDatabase {
       return true;
 
     } catch (e) {
-      dev.log('Error during import: $e');
-      rethrow;
+      throw CsvImportGeneralErrorException(text: e.toString());
     }
   }
 
@@ -775,7 +775,7 @@ class SossoldiDatabase {
         await batch.commit();
       });
     } catch (error) {
-      throw Exception('DbBase.resetDatabase: $error');
+      throw ResetDatabaseException(text: error.toString());
     }
     await _createDB(_database!, _migrationManager.latestVersion);
   }
@@ -793,7 +793,7 @@ class SossoldiDatabase {
         await batch.commit();
       });
     } catch (error) {
-      throw Exception('DbBase.cleanDatabase: $error');
+      throw CleanDatabaseException(text : error.toString());
     }
   }
 

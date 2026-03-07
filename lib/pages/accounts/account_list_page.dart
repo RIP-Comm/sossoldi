@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants/constants.dart';
+import '../../l10n/app_localizations.dart';
 import '../../ui/widgets/default_card.dart';
 import '../../ui/widgets/rounded_icon.dart';
 import '../../model/bank_account.dart';
@@ -16,8 +17,12 @@ class AccountListPage extends ConsumerStatefulWidget {
 }
 
 class _AccountListPage extends ConsumerState<AccountListPage> {
+
+
+
   @override
   Widget build(BuildContext context) {
+    var l10n = AppLocalizations.of(context)!;
     final accountsList = ref.watch(accountsProvider);
     ref.listen(selectedAccountProvider, (_, _) {});
     return Scaffold(
@@ -26,7 +31,7 @@ class _AccountListPage extends ConsumerState<AccountListPage> {
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text('Accounts'),
+        title: Text(l10n.accounts),
         actions: [
           IconButton(
             onPressed: () {
@@ -103,7 +108,7 @@ class _AccountListPage extends ConsumerState<AccountListPage> {
                 },
               ),
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (err, stack) => Text('Error: $err'),
+              error: (err, stack) => Text(l10n.errorOccurred(err)),
             ),
           ],
         ),

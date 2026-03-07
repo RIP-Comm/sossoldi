@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../constants/style.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../ui/device.dart';
 
 class AddCategoryButton extends StatelessWidget {
@@ -28,7 +29,7 @@ class AddCategoryButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
-                "Add category",
+                AppLocalizations.of(context)!.addCategory,
                 style: Theme.of(
                   context,
                 ).textTheme.bodyMedium?.copyWith(color: grey1),

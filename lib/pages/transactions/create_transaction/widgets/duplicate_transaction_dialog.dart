@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../model/transaction.dart';
 import '../../../../providers/transactions_provider.dart';
 import '../../../../ui/device.dart';
@@ -13,16 +14,16 @@ class DuplicateTransactionDialog extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AlertDialog(
-      title: const Text("Duplicate transaction"),
-      content: const Text(
-        "This transaction is already in the list. Do you want to duplicate it? You can then edit the new transaction.",
+      title: Text(AppLocalizations.of(context)!.duplicateTransactionTitle),
+      content: Text(
+        AppLocalizations.of(context)!.duplicateTransactionContent,
       ),
       actions: [
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text("Cancel", style: TextStyle(fontSize: 14)),
+          child: Text(AppLocalizations.of(context)!.cancel, style: const TextStyle(fontSize: 14)),
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
@@ -38,7 +39,7 @@ class DuplicateTransactionDialog extends ConsumerWidget {
                     ..pop();
                 }
               }),
-          child: const Text("Duplicate"),
+          child: Text(AppLocalizations.of(context)!.duplicate),
         ),
       ],
     );

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/style.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/categories_provider.dart';
@@ -211,8 +212,8 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
       appBar: AppBar(
         title: Text(
           (widget.transaction != null)
-              ? "Editing transaction"
-              : "New transaction",
+              ? AppLocalizations.of(context)!.editingTransaction
+              : AppLocalizations.of(context)!.newTransaction,
         ),
         actions: [
           if (widget.transaction != null) ...[
@@ -269,8 +270,8 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
               onPressed: _isSaveEnabled ? _createOrUpdateTransaction : null,
               child: Text(
                 widget.transaction != null
-                    ? "UPDATE TRANSACTION"
-                    : "ADD TRANSACTION",
+                    ? AppLocalizations.of(context)!.updateTransaction.toUpperCase()
+                    : AppLocalizations.of(context)!.addTransaction.toUpperCase(),
               ),
             ),
           ),
@@ -289,7 +290,7 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
                 bottom: Sizes.sm,
               ),
               child: Text(
-                "DETAILS",
+                AppLocalizations.of(context)!.details.toUpperCase(),
                 style: Theme.of(context).textTheme.labelLarge!.copyWith(
                   color: Theme.of(context).colorScheme.primary,
                 ),
@@ -303,7 +304,7 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
                   const Divider(),
                   if (selectedType != TransactionType.transfer) ...[
                     DetailsListTile(
-                      title: "Account",
+                      title: AppLocalizations.of(context)!.account,
                       icon: Icons.account_balance_wallet,
                       value: ref.watch(selectedBankAccountProvider)?.name,
                       callback: () {
@@ -332,7 +333,7 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
                     ),
                     const Divider(),
                     DetailsListTile(
-                      title: "Category",
+                      title: AppLocalizations.of(context)!.category,
                       icon: Icons.list_alt,
                       value: ref.watch(selectedCategoryProvider)?.name,
                       callback: () {
@@ -362,7 +363,7 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
                     const Divider(),
                   ],
                   DetailsListTile(
-                    title: "Date",
+                    title: AppLocalizations.of(context)!.date,
                     icon: Icons.calendar_month,
                     value: ref.watch(selectedDateProvider).formatEDMY(),
                     callback: () async {

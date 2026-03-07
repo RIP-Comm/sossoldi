@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../model/transaction.dart';
 import '../../providers/transactions_provider.dart';
 import 'snack_bar.dart';
@@ -9,9 +10,11 @@ void showDuplicatedTransactionSnackBar(
   BuildContext context, {
   required Transaction? transaction,
   required WidgetRef ref,
-}) => showSnackBar(
+}) {
+  var l10n = AppLocalizations.of(context)!;
+  return  showSnackBar(
   context,
-  actionLabel: "Edit",
+  actionLabel: l10n.edit,
   onAction: transaction != null
       ? () async {
           await ref
@@ -23,6 +26,6 @@ void showDuplicatedTransactionSnackBar(
         }
       : null,
   message: transaction != null
-      ? "${transaction.note} has been created"
-      : "Error duplicating transaction",
-);
+      ? l10n.transactionCreated(transaction.note.toString())
+      : l10n.errorDuplicatingTransaction,
+);}

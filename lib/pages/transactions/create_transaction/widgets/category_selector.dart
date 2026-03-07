@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../constants/constants.dart';
 import '../../../../constants/style.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../ui/widgets/rounded_icon.dart';
 import '../../../../model/category_transaction.dart';
 import '../../../../providers/categories_provider.dart';
@@ -41,7 +42,7 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
         mainAxisSize: MainAxisSize.min,
         children: [
           AppBar(
-            title: const Text("Category"),
+            title: Text(AppLocalizations.of(context)!.category),
             actions: [
               IconButton(
                 onPressed: () =>
@@ -64,7 +65,7 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
                       bottom: Sizes.md,
                     ),
                     child: Text(
-                      "MORE FREQUENT",
+                      AppLocalizations.of(context)!.moreFrequent.toUpperCase(),
                       style: Theme.of(context).textTheme.labelLarge!.copyWith(
                         color: Theme.of(context).colorScheme.primary,
                       ),
@@ -114,7 +115,7 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
                       ),
                       loading: () =>
                           const Center(child: CircularProgressIndicator()),
-                      error: (err, stack) => Text('Error: $err'),
+                      error: (err, stack) => Text(AppLocalizations.of(context)!.errorOccurred(err)),
                     ),
                   ),
                   Container(
@@ -125,7 +126,7 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
                       bottom: Sizes.sm,
                     ),
                     child: Text(
-                      "ALL CATEGORIES",
+                      AppLocalizations.of(context)!.allCategories.toUpperCase(),
                       style: Theme.of(context).textTheme.labelLarge!.copyWith(
                         color: Theme.of(context).colorScheme.primary,
                       ),
@@ -207,7 +208,7 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
                                   loading: () => const Center(
                                     child: CircularProgressIndicator(),
                                   ),
-                                  error: (err, stack) => Text('Error: $err'),
+                                  error: (err, stack) => Text(AppLocalizations.of(context)!.errorOccurred(err)),
                                 ),
                               ),
                             ],
@@ -217,7 +218,7 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
                     ),
                     loading: () =>
                         const Center(child: CircularProgressIndicator()),
-                    error: (err, stack) => Text('Error: $err'),
+                    error: (err, stack) => Text(AppLocalizations.of(context)!.errorOccurred(err)),
                   ),
                 ],
               ),

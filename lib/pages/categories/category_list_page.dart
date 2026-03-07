@@ -7,12 +7,15 @@ import '../../../../providers/categories_provider.dart';
 import '../../../ui/device.dart';
 import '../../../ui/widgets/default_card.dart';
 import '../../../ui/widgets/rounded_icon.dart';
+import '../../l10n/app_localizations.dart';
 
 class CategoryList extends ConsumerWidget {
   const CategoryList({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
+    var l10n = AppLocalizations.of(context)!;
     final categorysList = ref.watch(allParentCategoriesProvider);
     ref.listen(selectedCategoryProvider, (_, _) {});
     return Scaffold(
@@ -21,7 +24,7 @@ class CategoryList extends ConsumerWidget {
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text('Categories'),
+        title: Text(l10n.categories),
         actions: [
           IconButton(
             onPressed: () {
@@ -98,7 +101,7 @@ class CategoryList extends ConsumerWidget {
                 },
               ),
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (err, stack) => Text('Error: $err'),
+              error: (err, stack) => Text(l10n.errorOccurred(err)),
             ),
           ],
         ),

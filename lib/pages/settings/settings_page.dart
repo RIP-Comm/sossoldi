@@ -10,6 +10,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../constants/constants.dart';
 import '../../constants/style.dart';
+import '../../l10n/app_localizations.dart';
 import '../../ui/widgets/alert_dialog.dart';
 import '../../ui/widgets/default_card.dart';
 import '../../services/database/sossoldi_database.dart';
@@ -21,46 +22,6 @@ import '../../providers/statistics_provider.dart';
 import '../../providers/transactions_provider.dart';
 import '../../ui/device.dart';
 
-var settingsOptions = [
-  [
-    Icons.settings,
-    "General Settings",
-    "Edit general settings",
-    "/general-settings",
-  ],
-  [
-    Icons.account_balance_wallet,
-    "Accounts",
-    "Add or edit your accounts",
-    "/account-list",
-  ],
-  [
-    Icons.list_alt,
-    "Categories",
-    "Add/edit categories and subcategories",
-    "/category-list",
-  ],
-  [Icons.attach_money, "Budget", "Add or edit your budgets", null],
-  [
-    Icons.download_for_offline,
-    "Import/Export",
-    "Import or export data from a CSV file",
-    "/backup-page",
-  ],
-  [
-    Icons.notifications_active,
-    "Notifications",
-    "Manage your notifications settings",
-    "/notifications-settings",
-  ],
-  [
-    Icons.feedback,
-    "Leave a feedback",
-    "Complete a small form to report a bug or leave a feedback",
-    "https://feedback.sossoldi.com",
-  ],
-  [Icons.info, "App Info", "Learn more about us and the app", "/more-info"],
-];
 
 class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
@@ -114,6 +75,50 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = AppLocalizations.of(context)!;
+
+
+    var settingsOptions = [
+      [
+        Icons.settings,
+        l10n.generalSettings,
+        l10n.generalSettingsDesc,
+        "/general-settings",
+      ],
+      [
+        Icons.account_balance_wallet,
+        l10n.accounts,
+        l10n.accountsDesc,
+        "/account-list",
+      ],
+      [
+        Icons.list_alt,
+        l10n.categories,
+        l10n.categoriesDesc,
+        "/category-list",
+      ],
+      [Icons.attach_money, l10n.budget, l10n.budgetDesc, null],
+      [
+        Icons.download_for_offline,
+        l10n.importExport,
+        l10n.importExportDesc,
+        "/backup-page",
+      ],
+      [
+        Icons.notifications_active,
+        l10n.notifications,
+        l10n.notificationsDesc,
+        "/notifications-settings",
+      ],
+      [
+        Icons.feedback,
+        l10n.leaveFeedback,l10n.leaveFeedbackDesc,
+        "https://feedback.sossoldi.com",
+      ],
+      [Icons.info, l10n.appInfo, l10n.appInfoDesc, "/more-info"],
+    ];
+
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -122,7 +127,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         ),
         title: GestureDetector(
           onTap: _onSettingsTap,
-          child: const Text('Settings'),
+          child: Text(l10n.settings),
         ),
       ),
       body: ListView.builder(
@@ -198,7 +203,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Open source, built by the community',
+                l10n.settingsDisclaimer,
                 style: Theme.of(context).textTheme.bodySmall!.copyWith(
                   color: Theme.of(context).colorScheme.outline,
                 ),

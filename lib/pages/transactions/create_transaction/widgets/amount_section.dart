@@ -3,6 +3,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 
 import '../../../../constants/constants.dart';
 import "../../../../constants/style.dart";
+import '../../../../l10n/app_localizations.dart';
 import '../../../../ui/widgets/rounded_icon.dart';
 import '../../../../model/transaction.dart';
 import '../../../../providers/transactions_provider.dart';
@@ -21,7 +22,6 @@ class AmountSection extends ConsumerStatefulWidget {
 }
 
 class _AmountSectionState extends ConsumerState<AmountSection> {
-  static const List<String> _titleList = ['Income', 'Expense', 'Transfer'];
 
   List<bool> _typeToggleState = [false, true, false];
 
@@ -42,7 +42,8 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
   Widget build(BuildContext context) {
     final trsncTypeList = TransactionType.values;
     final selectedType = ref.watch(selectedTransactionTypeProvider);
-
+    var l10n = AppLocalizations.of(context)!;
+    List<String> _titleList = [l10n.income, l10n.expense, l10n.transfer];
     return Container(
       color: Theme.of(context).colorScheme.surface,
       child: Column(
@@ -113,7 +114,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
                         children: [
                           const SizedBox(height: Sizes.sm),
                           Text(
-                            "FROM:",
+                            l10n.from.toUpperCase(),
                             style: Theme.of(context).textTheme.labelMedium!
                                 .copyWith(
                                   color:
@@ -206,7 +207,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
                                                 selectedBankAccountProvider,
                                               )
                                               ?.name ??
-                                          "Select Account",
+                                          l10n.selectAccount,
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodySmall!
@@ -260,7 +261,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
                         children: [
                           const SizedBox(height: Sizes.sm),
                           Text(
-                            "TO:",
+                            l10n.to.toUpperCase(),
                             style: Theme.of(context).textTheme.labelMedium!
                                 .copyWith(
                                   color:
@@ -345,7 +346,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
                                                 bankAccountTransferProvider,
                                               )
                                               ?.name ??
-                                          "Select account",
+                                          l10n.selectAccount,
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodySmall!

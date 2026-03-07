@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../constants/constants.dart';
 import '../../../../constants/style.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../ui/widgets/rounded_icon.dart';
 import '../../../../model/category_transaction.dart';
 import '../../../../providers/categories_provider.dart';
@@ -123,7 +124,7 @@ class PieChartCategoryInfo extends ConsumerWidget {
         if (selectedCategory != null)
           Text(selectedCategory.name)
         else
-          const Text("Total"),
+          Text(AppLocalizations.of(context)!.total),
       ],
     );
   }

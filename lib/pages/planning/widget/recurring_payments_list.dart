@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/style.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../providers/recurring_transactions_provider.dart';
 import 'recurring_payment_card.dart';
 import '../../../model/recurring_transaction.dart';
@@ -15,6 +16,7 @@ class RecurringPaymentSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    var l10n = AppLocalizations.of(context)!;
     var recurringTransactionsAsync = ref.watch(recurringTransactionsProvider);
 
     void addRecurringPayment() {
@@ -43,7 +45,7 @@ class RecurringPaymentSection extends ConsumerWidget {
                   spacing: Sizes.lg,
                   children: [
                     Text(
-                      "All recurring payments will be displayed here",
+                      l10n.allRecurringPaymentsHere,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     Container(
@@ -61,7 +63,7 @@ class RecurringPaymentSection extends ConsumerWidget {
                           size: Sizes.xl,
                         ),
                         label: Text(
-                          "Add recurring payment",
+                          l10n.addRecurringPayment,
                           style: Theme.of(context).textTheme.titleLarge!.apply(
                             color: Theme.of(
                               context,
@@ -112,7 +114,7 @@ class RecurringPaymentSection extends ConsumerWidget {
               TextButton.icon(
                 icon: const Icon(Icons.add_circle, size: 32),
                 onPressed: addRecurringPayment,
-                label: const Text("Add recurring payment"),
+                label: Text(l10n.addRecurringPayment),
               ),
             ],
           );
@@ -121,7 +123,7 @@ class RecurringPaymentSection extends ConsumerWidget {
           return const CircularProgressIndicator();
         },
         error: (error, _) {
-          return Text('Error: $error');
+          return Text(l10n.errorOccurred(error));
         },
       ),
     );

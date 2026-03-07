@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
 import '../../../constants/style.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../model/category_transaction.dart';
 import '../../../model/currency.dart';
 import '../../../model/recurring_transaction.dart';
@@ -22,6 +23,7 @@ class OlderRecurringPayments extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    var l10n = AppLocalizations.of(context)!;
     final String nextDueDay = getNextDueDay();
     final currencyState = ref.watch(currencyStateProvider);
     final categories = ref.watch(categoriesProvider).value;
@@ -35,14 +37,14 @@ class OlderRecurringPayments extends ConsumerWidget {
     // Handle null category case
     if (category == null) {
       return Scaffold(
-        appBar: AppBar(title: const Text("Older payments"), centerTitle: true),
-        body: const Center(child: Text("Category not found")),
+        appBar: AppBar(title: Text(l10n.olderPayments), centerTitle: true),
+        body: Center(child: Text(l10n.categoryNotFound)),
       );
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Older payments"),
+        title: Text(l10n.olderPayments),
         centerTitle: true,
         leadingWidth: 80.0,
         leading: InkWell(
@@ -54,7 +56,7 @@ class OlderRecurringPayments extends ConsumerWidget {
               const SizedBox(width: Sizes.sm),
               const Icon(Icons.arrow_back_ios),
               Text(
-                "Back",
+                l10n.back,
                 style: Theme.of(
                   context,
                 ).textTheme.titleMedium!.copyWith(color: darkBlue5),
@@ -76,8 +78,8 @@ class OlderRecurringPayments extends ConsumerWidget {
             ),
             const SizedBox(height: Sizes.sm),
             Text(
-              "${transaction.recurrency.label}"
-              " - On the $nextDueDay day",
+              transaction.recurrency.label +
+              l10n.onTheDay(nextDueDay),
               style: Theme.of(context).textTheme.bodyLarge,
             ),
             const SizedBox(height: Sizes.xl),
@@ -186,7 +188,7 @@ class OlderRecurringPayments extends ConsumerWidget {
                                           ).colorScheme.surface,
                                           child: Center(
                                             child: Text(
-                                              "No Montly payment history",
+                                              l10n.noMonthlyPaymentHistory,
                                               style: Theme.of(
                                                 context,
                                               ).textTheme.bodySmall,
@@ -200,7 +202,7 @@ class OlderRecurringPayments extends ConsumerWidget {
                         )
                       : Center(
                           child: Text(
-                            "No recurrent payment history",
+                            l10n.noRecurrentPaymentHistory,
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                         );
@@ -208,7 +210,7 @@ class OlderRecurringPayments extends ConsumerWidget {
                 loading: () => const Center(child: CircularProgressIndicator()),
                 error: (error, stackTrace) => Center(
                   child: Text(
-                    "Error loading payments: $error",
+                    l10n.errorLoadingPayments(error),
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),

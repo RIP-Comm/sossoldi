@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../model/budget.dart';
 import '../../../model/category_transaction.dart';
 import '../../../providers/currency_provider.dart';
@@ -59,6 +60,7 @@ class _BudgetCategorySelector extends ConsumerState<BudgetCategorySelector> {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = AppLocalizations.of(context)!;
     final currencyState = ref.watch(currencyStateProvider);
     return Container(
       padding: const EdgeInsets.all(Sizes.lg),

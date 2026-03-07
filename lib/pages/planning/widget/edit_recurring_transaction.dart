@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/style.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../providers/categories_provider.dart';
 import '../../../providers/recurring_transactions_provider.dart';
 import '../../../providers/transactions_provider.dart';
@@ -50,6 +51,7 @@ class _EditRecurringTransactionState
 
   @override
   Widget build(BuildContext context) {
+    var l10n = AppLocalizations.of(context)!;
     final selectedRecurringTransaction = ref.watch(
       selectedRecurringTransactionUpdateProvider,
     );
