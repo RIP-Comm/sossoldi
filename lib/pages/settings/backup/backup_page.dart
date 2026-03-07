@@ -141,13 +141,23 @@ class _BackupPageState extends ConsumerState<BackupPage> {
     ),
     BackupOption(
       title: 'Import data',
-      description: 'Import from CSV from  Money Manager\n to update your database\nThe file must be resaved in csv from xls',
+      description: 'Import from Money Manager CSV\n to update your database\nThe file must be resaved in csv from xls',
+      icon: Icons.upload_file,
+    ),
+    BackupOption(
+      title: 'Import database',
+      description: 'Import from DB\n',
       icon: Icons.upload_file,
     ),
     BackupOption(
       title: 'Export data',
       description: 'Save your data as a CSV file',
       icon: Icons.download,
+    ),
+    BackupOption(
+      title: 'Export database',
+      description: 'Export your DB\n',
+      icon: Icons.upload_file,
     ),
   ];
 
@@ -212,8 +222,13 @@ class _BackupPageState extends ConsumerState<BackupPage> {
                   showImportAlert(context, () => _handleImport(source: CsvSource.moneyManager));
                   break;
                 case 2:
+                  showImportAlert(context, () => SossoldiDatabase.instance.importDatabase());
+                  break;
+                case 3:
                   _handleExport();
                   break;
+                case 4:
+                  SossoldiDatabase.instance.exportDatabase();
                 default:
                   throw UnimplementedError();
               }

@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'dart:math'; // used for random number generation in demo data
 import 'dart:developer' as dev;
+import 'dart:typed_data';
 
 import 'package:csv/csv.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
@@ -600,6 +602,41 @@ class SossoldiDatabase {
       dev.log('Error during import: $e');
       rethrow;
     }
+  }
+
+  Future<void> exportDatabase() async {
+
+    String dbPath = await getDatabasesPath();
+    String path = join(dbPath, dbName);
+
+    Uint8List bytes = await File(path).readAsBytes();
+    await FilePicker.platform.saveFile(
+      dialogTitle: 'Salva backup database',
+      fileName: 'backup.db',
+      bytes: bytes
+    );
+
+  }
+
+  Future<void> importDatabase() async {
+    final db = await database;
+
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    db.close();
+
+    if (result != null) {
+      File sourceFile = File(result.files.single.path!);
+
+      String dbPath = await getDatabasesPath();
+      String destPath = join(dbPath, dbName);
+
+
+      await sourceFile.copy(destPath);
+
+      _database = await openDatabase(destPath);
+
+    }
+
   }
 
   Future fillDemoData({int countOfGeneratedTransaction = 10000}) async {
