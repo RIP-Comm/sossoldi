@@ -115,7 +115,7 @@ class _BackupPageState extends ConsumerState<BackupPage> {
                 .map((e) => e.key)
                 .join(', ');
 
-            throw CsvImportGeneralErrorException(text: 'Failed to import some tables: $failedTables');
+            throw CsvImportGeneralErrorException(text: '$failedTables');
           }
           break;
 
@@ -168,26 +168,27 @@ class _BackupPageState extends ConsumerState<BackupPage> {
 
   void showImportAlert(context, function)
   {
+    var l10n = AppLocalizations.of(context)!;
      showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
-                    title: const Text('Warning: Data Overwrite'),
-                    content: const Text(
-                      'Importing this file will permanently replace your existing data. This action cannot be undone. Ensure you have a backup before proceeding.',
+                    title: Text(l10n.warningOverwrite),
+                    content: Text(
+                    l10n.warningOverwriteContent,
                     ),
                     actions: [
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child: const Text('Cancel'),
+                        child: Text(l10n.cancel),
                       ),
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).pop();
                           function();
                         },
-                        child: const Text('Proceed with Import'),
+                        child: Text(l10n.proceedImport),
                       ),
                     ],
                   ),

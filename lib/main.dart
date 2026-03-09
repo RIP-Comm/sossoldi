@@ -122,7 +122,6 @@ class Launcher extends ConsumerWidget {
         GlobalCupertinoLocalizations.delegate,
         AppLocalizations.delegate
       ],
-      locale: const Locale('pt', 'PT'),
       title: 'Sossoldi',
 
 
