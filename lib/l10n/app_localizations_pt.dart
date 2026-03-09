@@ -12,7 +12,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get appName => 'Sossoldi';
 
   @override
-  String get dashboard => 'Dashboard';
+  String get dashboard => 'Painel';
 
   @override
   String get transactions => 'Transações';
@@ -120,6 +120,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get switchDisabled => 'Gesto desativado';
 
   @override
+  String get recurringTransactionWarning =>
+      'Esta é uma transação gerada por uma recorrente: qualquer alteração afetará apenas esta transação.\nPara alterar todas as transações futuras ou opções de recorrência, TOQUE AQUI.';
+
+  @override
   String saveCsvFileFailed(Object e) {
     return 'Não é possível salvar arquivos aqui, crie ou selecione uma pasta em Downloads ou Documentos. Erro: \$$e';
   }
@@ -152,10 +156,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get addDescription => 'Adicionar descrição';
-
-  @override
-  String get recurringTransactionWarning =>
-      'Esta é uma transação gerada por uma recorrente: qualquer alteração afetará apenas esta transação.\nPara alterar todas as transações futuras ou opções de recorrência, TOQUE AQUI.';
 
   @override
   String get duplicateTransactionTitle => 'Duplicar transação';

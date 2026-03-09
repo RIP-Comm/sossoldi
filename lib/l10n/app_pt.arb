@@ -2,9 +2,9 @@
   "@@locale": "pt",
   "appName": "Sossoldi",
   "@appName": {
-    "description": "O nome da aplicação"
+    "description": "The name of the application"
   },
-  "dashboard": "Dashboard",
+  "dashboard": "Painel",
   "transactions": "Transações",
   "planning": "Planejamento",
   "graphs": "Gráficos",
@@ -40,6 +40,7 @@
   "never": "Nunca",
   "onADate": "Em uma data",
   "switchDisabled": "Gesto desativado",
+  "recurringTransactionWarning": "Esta é uma transação gerada por uma recorrente: qualquer alteração afetará apenas esta transação.\nPara alterar todas as transações futuras ou opções de recorrência, TOQUE AQUI.",
   "saveCsvFileFailed": "Não é possível salvar arquivos aqui, crie ou selecione uma pasta em Downloads ou Documentos. Erro: ${e}",
   "errorPickingFile": "Erro ao selecionar o arquivo. Certifique-se de ter as permissões necessárias. Erro: {error}",
   "storagePermissionRequired": "É necessária permissão de armazenamento para acessar os arquivos.",
@@ -49,7 +50,6 @@
   "dataImportedSuccessfully": "Dados importados com sucesso",
   "description": "Descrição",
   "addDescription": "Adicionar descrição",
-  "recurringTransactionWarning": "Esta é uma transação gerada por uma recorrente: qualquer alteração afetará apenas esta transação.\nPara alterar todas as transações futuras ou opções de recorrência, TOQUE AQUI.",
   "duplicateTransactionTitle": "Duplicar transação",
   "duplicateTransactionContent": "Esta transação já está na lista. Deseja duplicá-la? Você poderá editar a nova entrada posteriormente.",
   "duplicate": "Duplicar",
@@ -226,7 +226,6 @@
   "transactionCreated": "\"{transaction}\" foi criada",
   "left": "Restante",
   "notEnoughDataForGraph": "Lamentamos, mas não há\n-dados suficientes para criar o gráfico...",
-
   "generalSettingsDesc": "Editar configurações gerais",
   "accountsDesc": "Adicionar ou editar suas contas",
   "categoriesDesc": "Adicionar/editar categorias e subcategorias",

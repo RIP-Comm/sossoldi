@@ -110,7 +110,9 @@ class Launcher extends ConsumerWidget {
       supportedLocales: [
         const Locale('en'), // English
         const Locale('pt'), // Portuguese
-        // const Locale('es'), // Spanish
+        const Locale('es'), // Spanish
+        const Locale('de'), // German
+        const Locale('nl'), // Dutch
         const Locale('it'), // Italian
         // Locale('zh'), // Chinese
         // Locale('hi'), // Hindi
