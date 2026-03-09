@@ -120,8 +120,20 @@ class Launcher extends ConsumerWidget {
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
-        AppLocalizations.delegate
+        AppLocalizations.delegate,
       ],
+      localeListResolutionCallback: (locales, supportedLocales)
+      {
+        for (var locale in locales ?? []) {
+          for (var supported in supportedLocales) {
+            if (supported.languageCode == locale.languageCode) {
+              return supported;
+            }
+          }
+        }
+        return const Locale('en');
+      },
+
       title: 'Sossoldi',
 
 
