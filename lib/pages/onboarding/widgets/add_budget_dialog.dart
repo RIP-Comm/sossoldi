@@ -53,14 +53,31 @@ class _AddBudgetState extends ConsumerState<AddBudget> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(Sizes.borderRadius),
+      ),
       title: Text(
         'Add budget for ${widget.category.name}',
         style: Theme.of(context).textTheme.bodyMedium,
         textAlign: TextAlign.center,
       ),
-      content: TextField(
-        controller: amountController,
-        keyboardType: TextInputType.number,
+      insetPadding: const EdgeInsets.all(Sizes.edgeInsetsTablet),
+      content: SizedBox(
+        width: double.maxFinite,
+        child: TextField(
+          controller: amountController,
+          autofocus: true,
+          textAlign: TextAlign.center,
+          decoration: const InputDecoration(
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: grey2, width: 1),
+            ),
+            border: UnderlineInputBorder(
+              borderSide: BorderSide(color: grey2, width: 1),
+            ),
+          ),
+          keyboardType: TextInputType.number,
+        ),
       ),
       actions: [
         TextButton(
