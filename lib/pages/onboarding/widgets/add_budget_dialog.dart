@@ -4,7 +4,6 @@ import '../../../constants/style.dart';
 import '../../../model/budget.dart';
 import '../../../model/category_transaction.dart';
 import '../../../providers/budgets_provider.dart';
-import '../../../ui/device.dart';
 
 class AddBudget extends ConsumerStatefulWidget {
   final CategoryTransaction category;
@@ -53,14 +52,29 @@ class _AddBudgetState extends ConsumerState<AddBudget> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       title: Text(
         'Add budget for ${widget.category.name}',
         style: Theme.of(context).textTheme.bodyMedium,
         textAlign: TextAlign.center,
       ),
-      content: TextField(
-        controller: amountController,
-        keyboardType: TextInputType.number,
+      insetPadding: const EdgeInsets.all(16),
+      content: SizedBox(
+        width: double.maxFinite,
+        child: TextField(
+          controller: amountController,
+          autofocus: true,
+          textAlign: TextAlign.center,
+          decoration: const InputDecoration(
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: grey2, width: 1),
+            ),
+            border: UnderlineInputBorder(
+              borderSide: BorderSide(color: grey2, width: 1),
+            ),
+          ),
+          keyboardType: TextInputType.number,
+        ),
       ),
       actions: [
         TextButton(
@@ -89,7 +103,7 @@ class _AddBudgetState extends ConsumerState<AddBudget> {
           style: ElevatedButton.styleFrom(
             backgroundColor: blue5,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(Sizes.borderRadius),
+              borderRadius: BorderRadius.circular(8),
             ),
           ),
           child: Text(
