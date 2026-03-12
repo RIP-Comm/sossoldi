@@ -61,7 +61,7 @@ class _AddBudgetState extends ConsumerState<AddBudget> {
         style: Theme.of(context).textTheme.bodyMedium,
         textAlign: TextAlign.center,
       ),
-      insetPadding: const EdgeInsets.all(16),
+      insetPadding: const EdgeInsets.all(Sizes.edgeInsetsTablet),
       content: SizedBox(
         width: double.maxFinite,
         child: TextField(
