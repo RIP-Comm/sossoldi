@@ -5,7 +5,6 @@ import 'dart:typed_data';
 
 import 'package:csv/csv.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -23,59 +22,189 @@ import 'migration_manager.dart';
 
 part 'sossoldi_database.g.dart';
 
+class MMAccount {
+  final String uuid;
+  final DateTime useTime;
+  final String accountGroupName;
+  final bool countInNet;
+
+  MMAccount({
+    required this.uuid,
+    required this.useTime,
+    required this.accountGroupName,
+    required this.countInNet,
+  });
 
 
-TransactionType? translateTransactionType(String tt)
-{
-  switch(tt)
-      {
-    case 'Income':
-          return TransactionType.income;
-    case 'Expense':
-          return TransactionType.expense;
-    case 'Transfer-Out':
-          return TransactionType.transfer;
-    default:
-      return null;
+  
+  factory MMAccount.fromMap(Map<String, dynamic> map) {
+    int timestamp = (map['A_UTIME'] as num?)?.toInt() ?? 0;
+    bool countIn = false;
+    if(map['ZDATA2'] != null)
+    {
+      countIn = map['ZDATA2'] == '0';
+    }
+    return MMAccount(
+      uuid: map['uid'],
+      useTime: DateTime.fromMillisecondsSinceEpoch(timestamp),
+      accountGroupName: map['NIC_NAME'] ?? '',
+      countInNet: countIn,
+    );
   }
 }
 
-class MoneyManagerTransaction {
+
+class MMCurrency {
+  final String name;
+  final String iso;
+  final String symbol;
+  final bool mainCurrency;
+
+  MMCurrency({
+    required this.name,
+    required this.iso,
+    required this.symbol,
+    required this.mainCurrency,
+  });
+
+  factory MMCurrency.fromMap(Map<String, dynamic> map) {
+    String mainIso = map['MAIN_ISO'] ?? '';
+    String iso = map['ISO'] ?? '';
+
+    return MMCurrency(
+      name: map['NAME'] ?? '',
+      iso: iso,
+      symbol: map['SYMBOL'] ?? '',
+      mainCurrency: mainIso == iso && iso.isNotEmpty,
+    );
+  }
+}
+
+class MMCategory {
+  final int id;
+  final DateTime cUTime;
+  final String textUid;
+  final String name;
+  final String? parent;
+
+  MMCategory({
+    required this.id,
+    required this.cUTime,
+    required this.textUid,
+    required this.name,
+    required this.parent,
+  });
+
+  factory MMCategory.fromMap(Map<String, dynamic> map) {
+    return MMCategory(
+      id: map['ID'] ?? 0,
+      cUTime: DateTime.fromMillisecondsSinceEpoch((map['C_UTIME'] as num).toInt()),
+      textUid: map['uid'] ?? '', // Ensure this matches your column name
+      name: map['NAME'] ?? 'Unnamed',
+      parent: map['pUid'],
+    );
+  }
+}
+
+class MMTransaction {
   final DateTime date;
-  final String account;
+  final int account;
   // In case of transfer
-  final String? destinationAccount;
+  final int? destinationAccount;
   // Could be also an account fi the type is transaction
-  final String category;
-  final String? subCategory;
+  final int category;
   String? description;
   // Still Don't know the difference between description and note
-  String? note;
   String currency;
   final double amount;
 
   final TransactionType type; // Income o Expense or transaction
 
-  MoneyManagerTransaction({required this.date, required this.account, required this.category, required this.amount, required this.type,required this.currency, this.destinationAccount, this.subCategory, this.description, this.note});
-  factory MoneyManagerTransaction.transfer({required DateTime date, required String account, required String dAccount, required amount,required currency, description,note})
+  MMTransaction({required this.date, required this.account, required this.category, required this.amount, required this.type,required this.currency, this.destinationAccount, this.description });
+  factory MMTransaction.transfer({required DateTime date, required int account, required int dAccount, required amount,required currency, description,note})
   {
-    return MoneyManagerTransaction(date: date, account: account,  category: '', amount: amount, type: TransactionType.transfer,currency: currency, destinationAccount : dAccount, description: description, note: note );
+    return MMTransaction(date: date, account: account,  category: -1, amount: amount, type: TransactionType.transfer,currency: currency, destinationAccount : dAccount, description: description );
   }
 
-  factory MoneyManagerTransaction.income({required DateTime date, required String account, required category, required amount,required currency,sub,description,note})
+  factory MMTransaction.income({required DateTime date, required int account, required category, required amount,required currency,sub,description,note})
   {
-    return MoneyManagerTransaction(date: date, account: account,  category: category, amount: amount, type: TransactionType.income,currency: currency ,subCategory: sub, description: description, note: note );
+    return MMTransaction(date: date, account: account,  category: category, amount: amount, type: TransactionType.income,currency: currency , description: description);
   }
 
-  factory MoneyManagerTransaction.expense({required DateTime date, required String account, required category, required amount,required currency,sub,description,note})
+  factory MMTransaction.expense({required DateTime date, required int account, required category, required amount,required currency,sub,description,note})
   {
-    return MoneyManagerTransaction(date: date, account: account,  category: category, amount: amount, type: TransactionType.expense,currency: currency, subCategory: sub , description: description, note: note );
+    return MMTransaction(date: date, account: account,  category: category, amount: amount, type: TransactionType.expense,currency: currency , description: description);
   }
 
-  factory MoneyManagerTransaction.invalid()
+  factory MMTransaction.invalid()
   {
-    return MoneyManagerTransaction(date: DateTime.now(), account: 'Invalid',  category: 'Invalid', amount: 0.0, type: TransactionType.expense,currency: 'ZWD');
+    return MMTransaction(date: DateTime.now(),
+        account: -1,
+        category: -1,
+        amount: 0.0,
+        type: TransactionType.expense,
+        currency: 'ZWD');
   }
+
+  factory MMTransaction.fromMap(Map<String, dynamic> map,Map<String,int> accountHelperMap,Map<String,int> incomeCategoryHelperMap,Map<String,int>expensesCategoryHelperMap, Map<String,String> currencyHelper, int inMod, int outMod) {
+    String uTime = map['ZDATE'];
+    DateTime date = DateTime.fromMillisecondsSinceEpoch(int.parse(uTime));
+    String asset = map['assetUid'];
+    if(!accountHelperMap.containsKey(asset))
+    {
+      return MMTransaction.invalid();
+    }
+    int accountId = accountHelperMap[asset]!;
+    double amount = map['AMOUNT_ACCOUNT'] ;
+    String desc = map['ZCONTENT'];
+
+    // I know that it isn't use by us
+    String curr = map['currencyUid'];
+    if(currencyHelper.containsKey(curr)) {
+      curr = currencyHelper[curr]!;
+    }
+
+    String cat = map['ctgUid'];
+    int categoryId = -1;
+    if(expensesCategoryHelperMap.containsKey(cat))
+    {
+      categoryId = expensesCategoryHelperMap[cat]!;
+    }
+    if(incomeCategoryHelperMap.containsKey(cat))
+    {
+      categoryId = incomeCategoryHelperMap[cat]!;
+    }
+
+    int doType = int.parse(map['DO_TYPE']);
+
+    if (doType == 0 || doType == 7) {
+      if(categoryId == -1)
+      {
+        categoryId =inMod;
+      }
+
+      return MMTransaction.income(date: date, account: accountId, category: categoryId, amount: amount, currency: curr, description: desc);
+    } else if (doType == 1) {
+      if(categoryId == -1)
+      {
+        categoryId =outMod;
+      }
+
+      return MMTransaction.expense(date: date, account: accountId, category: categoryId, amount: amount, currency: curr,description: desc);
+    } else if (doType == 3) {
+      String destAsset = map['toAssetUid'];
+      if(!accountHelperMap.containsKey(destAsset))
+      {
+        return MMTransaction.invalid();
+      }
+      int destAccountId = accountHelperMap[destAsset]!;
+      return MMTransaction.transfer(date: date, account: accountId, dAccount: destAccountId, amount: amount, currency:curr, description: desc);
+
+    } else {
+        return MMTransaction.invalid();
+    }
+  }
+
 
 
 }
@@ -268,72 +397,31 @@ class SossoldiDatabase {
     return results;
   }
 
-  String sanitizeAlphaNumeric(String text) {
-    return text
-        .replaceAll(RegExp(r'[^\p{L}\p{N}\s]+', unicode: true), '')
-        .replaceAll(RegExp(r'\s+'), ' ')
-        .trim();
-  }
-
-  Future<int?> getBankAccountId({required txn, required String name}) async {
-    final List<Map<String, dynamic>> maps = await txn.rawQuery(
-      'SELECT id FROM bankAccount WHERE name = ? LIMIT 1',
-      [name],
-    );
-
-    if (maps.isEmpty) {
-      return null;
-    }
-
-    return maps.first['id'] as int;
-  }
-
-  Future<int?> getCategoryId( {required txn,required String name,required String type}) async {
-    String query = 'SELECT id FROM categoryTransaction WHERE name = ?';
-    List<dynamic> args = [name];
-
-    query += ' AND type = ?';
-    args.add(type);
-
-
-    query += ' LIMIT 1';
-
-    final List<Map<String, dynamic>> maps = await txn.rawQuery(query, args);
-
-    if (maps.isEmpty) {
-      return null;
-    }
-
-    return maps.first['id'] as int;
-  }
-
-  Future insertTransactionFromMoneyManager( {required txn,required MoneyManagerTransaction transaction}) async {
-    var backAccountId = await  getBankAccountId(txn: txn, name: transaction.account);
+  Future insertTransactionFromMoneyManager( {required txn,required MMTransaction transaction}) async {
     Map<String, dynamic> row = {};
     String currentDate = transaction.date.toIso8601String();
     String code = transaction.type.code;
-
-    if(backAccountId == null)
+    if(transaction.account == -1)
     {
-      throw Exception('Error during inserting ${transaction.date} transaction');
+      return;
     }
 
     switch(transaction.type)
     {
       case TransactionType.income:
       case TransactionType.expense:
-        var categoryId =  await getCategoryId(txn: txn, type: code, name: transaction.category);
-        if(categoryId == null)
+        if(transaction.category == -1)
         {
-          throw Exception('Error during inserting ${transaction.date} transaction');
+          return;
         }
+
         row = {
           TransactionFields.date: currentDate,
           TransactionFields.amount: transaction.amount,
           TransactionFields.type: code,
           TransactionFields.note: transaction.description,
-          TransactionFields.idCategory: categoryId,
-          TransactionFields.idBankAccount: backAccountId,
+          TransactionFields.idCategory: transaction.category,
+          TransactionFields.idBankAccount: transaction.account,
           TransactionFields.recurring: 0,
           TransactionFields.idRecurringTransaction: null,
           TransactionFields.createdAt: currentDate,
@@ -341,18 +429,17 @@ class SossoldiDatabase {
         };
         break;
       case TransactionType.transfer:
-        var backAccountReceiverId = await getBankAccountId(txn: txn, name: transaction.destinationAccount!);
-        if(backAccountReceiverId == null)
+        if(transaction.destinationAccount == null)
         {
-          throw Exception('Error during inserting ${transaction.date} transaction');
+          return;
         }
         row = {
           TransactionFields.date : currentDate,
           TransactionFields.amount : transaction.amount,
           TransactionFields.type: code,
           TransactionFields.note: transaction.description,
-          TransactionFields.idBankAccount: backAccountId,
-          TransactionFields.idBankAccountTransfer : backAccountReceiverId,
+          TransactionFields.idBankAccount: transaction.account,
+          TransactionFields.idBankAccountTransfer : transaction.destinationAccount,
           TransactionFields.recurring: 0,
           TransactionFields.idRecurringTransaction: null,
           TransactionFields.createdAt: currentDate,
@@ -361,9 +448,12 @@ class SossoldiDatabase {
         break;
     }
     txn.insert('transaction', row);
+
   }
-  Future insertCategoriesFromMoneyManager({required txn, required Map<String,List<String>> categoryMap, required String code, required DateTime oldestDate}) async
+
+  Future<Map<String, int>> insertCategoriesFromMoneyManager({required txn, required Map<MMCategory,List<MMCategory>> categoryMap, required String code}) async
   {
+    Map<String, int> ret = {};
     List<Map<String, dynamic>> maps  = await txn.query(
       categoryTransactionTable,
       columns: [CategoryTransactionFields.name],
@@ -371,113 +461,241 @@ class SossoldiDatabase {
       whereArgs: [code],
     );
 
-
     List<String> currentCategories = maps.map((row) => row[CategoryTransactionFields.name] as String).toList();
-    for(var c in categoryMap.keys)
-    {
+    for (var entry in categoryMap.entries) {
+      var c = entry.key;
+      List<MMCategory> list = entry.value;
+
+
       int randomColor = Random().nextInt(categoryColorList.length);
-      if(!currentCategories.contains(c))
-      {
-        Map<String, dynamic> row = {
-          CategoryTransactionFields.name: c,
-          CategoryTransactionFields.type: code,
-          CategoryTransactionFields.symbol: householdIconList.keys.elementAt(Random().nextInt(householdIconList.length)),
-          CategoryTransactionFields.color:  randomColor,
-          CategoryTransactionFields.createdAt: oldestDate.toIso8601String(),
-          CategoryTransactionFields.updatedAt: oldestDate.toIso8601String(),
-        };
-        txn.insert(categoryTransactionTable, row);
-      }
-
-      List<String> subs = categoryMap[c]!;
-
-      if(subs.isEmpty) {
-        continue;
-      }
-
-      var categoryId = await getCategoryId(txn: txn, name: c, type: code);
-
-      if(categoryId == null)
+      String randomIcon = householdIconList.keys.elementAt(Random().nextInt(householdIconList.length));
+      if(currentCategories.contains(c.name))
       {
         continue;
       }
 
-      for(var subCategory in subs)
+      Map<String, dynamic> row = {
+        CategoryTransactionFields.name: c.name,
+        CategoryTransactionFields.type: code,
+        CategoryTransactionFields.symbol:randomIcon ,
+        CategoryTransactionFields.color:  randomColor,
+        CategoryTransactionFields.createdAt: c.cUTime.toIso8601String(),
+        CategoryTransactionFields.updatedAt: c.cUTime.toIso8601String(),
+      };
+      int newId = await txn.insert(categoryTransactionTable, row);
+      ret[c.textUid] = newId;
+      if(list.isEmpty) {
+        continue;
+      }
+
+      for(var subCategory in list)
       {
         Map<String, dynamic> row = {
-          CategoryTransactionFields.name: subCategory,
+          CategoryTransactionFields.name: subCategory.name,
           CategoryTransactionFields.type: code,
-          CategoryTransactionFields.symbol: activitiesIconList.keys.elementAt(Random().nextInt(activitiesIconList.length)),
+          CategoryTransactionFields.symbol: randomIcon,
           CategoryTransactionFields.color:  randomColor,
-          CategoryTransactionFields.parent : categoryId,
-          CategoryTransactionFields.createdAt: oldestDate.toIso8601String(),
-          CategoryTransactionFields.updatedAt: oldestDate.toIso8601String(),
+          CategoryTransactionFields.parent : newId,
+          CategoryTransactionFields.createdAt: subCategory.cUTime.toIso8601String(),
+          CategoryTransactionFields.updatedAt: subCategory.cUTime.toIso8601String(),
         };
-
-        txn.insert(categoryTransactionTable, row);
+        int subUid =
+        await txn.insert(categoryTransactionTable, row);
+        ret[subCategory.textUid] =subUid;
       }
     }
+    return ret;
   }
 
-  // I consider being called in a try catch
-  Future<bool> importFromCsvFromMoneyManager(String csvFilePath) async {
 
+  // I consider being called in a try catch
+  Future<bool> importDBFromMoneyManager(String filePath) async {
     await resetDatabase();
 
-    final db = await database;
+    final myDb = await database;
+
+
+    final file = File(filePath);
 
     try {
-      final file = File(csvFilePath);
-
       if (!await file.exists()) {
-        throw Exception('CSV file not found');
+        throw Exception('File not found');
       }
 
-      final String csvData = await file.readAsString();
-      final List<List<dynamic>> rows = const CsvToListConverter(eol: '\n', shouldParseNumbers: false).convert(
-        csvData,
+      Database mmDb = await openDatabase(
+        filePath,
+        readOnly: false,
+        singleInstance: true,
       );
 
-      if (rows.isEmpty) {
-        throw Exception('CSV file is empty');
+      List<Map<String,dynamic>> list = await mmDb.rawQuery('SELECT uid,A_UTIME,NIC_NAME, ZDATA2  FROM ASSETS');
+      List<MMAccount> accountsList = list.map((map) => MMAccount.fromMap(map)).toList();
+      // Fetching the categories
+      List<Map<String, dynamic>> rawOutCategories = await mmDb.rawQuery(
+          'SELECT ID, C_UTIME, uid,pUid, NAME FROM ZCATEGORY WHERE TYPE = 1'
+      );
+
+      List<Map<String, dynamic>> rawInCategories = await mmDb.rawQuery(
+          'SELECT ID, C_UTIME, uid,pUid, NAME FROM ZCATEGORY WHERE TYPE = 0'
+      );
+
+      List<MMCategory> categoryInList = rawInCategories
+          .map((map) => MMCategory.fromMap(map))
+          .toList();
+
+      List<MMCategory> categoryOutList = rawOutCategories
+          .map((map) => MMCategory.fromMap(map))
+          .toList();
+
+      List<Map<String, dynamic>> rawCurrencies = await mmDb.rawQuery(
+          'SELECT uid, NAME, ISO, SYMBOL, MAIN_ISO FROM CURRENCY'
+      );
+
+      List<MMCurrency> currencyList = rawCurrencies
+          .map((map) => MMCurrency.fromMap(map))
+          .toList();
+
+      Map<String, String> currencyUidToIso = {};
+
+      for (var entry in rawCurrencies) {
+        currencyUidToIso[entry['uid']!] = entry['ISO']!;
       }
 
-      // First row contains headers
-      final List<String> headers = rows.first.map((e) => e.toString()).toList();
+      Map<MMCategory, List<MMCategory>> expenseCategories = {};
+      Map<MMCategory, List<MMCategory>> incomeCategories = {};
 
-      const List<String> expectedHeaders = [
-        'Date',
-        'Account',
-        'Category',
-        'Subcategory',
-        'Note',
-        // Still need to check how this column works
-        // I think it is the default chosen currency in money manager
-        // 'EUR',
-        'Income/Expense',
-        'Description',
-        'Amount',
-        'Currency',
-        'Account'
-      ];
-
-      for (var str in expectedHeaders) {
-        if(!headers.contains(str)) {
-          throw Exception('Column $str not found in CSV file');
+      void populateCategories(Map<MMCategory, List<MMCategory>>  map,List<MMCategory> list) {
+        List<MMCategory> subs = [];
+        for (var cat in list) {
+          if(cat.parent == null || (cat.parent != null && cat.parent  == '0'))
+          {
+            map[cat] = [];
+          }
+          else {
+            subs.add(cat);
+          }
         }
+
+        map.forEach((MMCategory cat, List<MMCategory> list)
+        {
+          for (var subCat in subs) {
+            if(subCat.parent == cat.textUid)
+            {
+              list.add(subCat);
+            }
+          }
+        });
       }
+      populateCategories(expenseCategories, categoryOutList);
+      populateCategories(incomeCategories, categoryInList);
 
-      // We can discard the headers
-      rows.removeAt(0);
+      List<Map<String, dynamic>> maps = await myDb.query(
+        bankAccountTable,
+        columns: [BankAccountFields.name],
+      );
 
-      List<MoneyManagerTransaction> transactions = [];
-      Set<String> accounts = {};
-      Map<String, List<String>> expenseCategories = {};
-      Map<String, List<String>> incomeCategories = {};
-      Set<String> currencies = {};
-      DateFormat format = DateFormat("MM/dd/yyyy HH:mm:ss");
-      DateTime oldest = DateTime.now();
+      List<String> currentAccounts = List.generate(maps.length, (i) {
+        return maps[i][BankAccountFields.name] as String;
+      });
 
+      Map<String, int> mmUidToAccountID = {};
+
+      List<Map<String, dynamic>> rawTxns = await mmDb.query(
+          'INOUTCOME',
+          columns: ['assetUid', 'toAssetUid', 'ctgUid', 'ZCONTENT', 'ZDATE', 'AMOUNT_ACCOUNT', 'DO_TYPE', 'currencyUid' ]);
+
+      await myDb.transaction((txn) async {
+
+
+        for (var a in accountsList) {
+          if (!currentAccounts.contains(a.accountGroupName)) {
+            Map<String, dynamic> row = {
+              BankAccountFields.name: a.accountGroupName,
+              BankAccountFields.symbol: accountIconList.keys.elementAt(
+                  Random().nextInt(accountIconList.length)),
+              BankAccountFields.color: Random().nextInt(
+                  accountColorList.length),
+              BankAccountFields.startingValue: 0.0,
+              BankAccountFields.active: 1,
+              BankAccountFields.countNetWorth: a.countInNet,
+              BankAccountFields.mainAccount: 0,
+              BankAccountFields.createdAt: a.useTime.toIso8601String(),
+              BankAccountFields.updatedAt: a.useTime.toIso8601String(),
+            };
+            int newId = await txn.insert(bankAccountTable, row);
+            mmUidToAccountID[a.uuid] = newId;
+          }
+        }
+
+        Map<String, int> mmUidToIdIncomes = await insertCategoriesFromMoneyManager(txn: txn, categoryMap: incomeCategories, code: 'IN');
+        Map<String, int> mmUidToIdExpense = await insertCategoriesFromMoneyManager(txn: txn, categoryMap: expenseCategories, code: 'OUT');
+
+        List<Map<String, dynamic>> maps = await txn.query(
+          currencyTable,
+          columns: [CurrencyFields.code],
+        );
+
+        List<String> currentCurrencies = maps.map((row) => row[CurrencyFields.code] as String).toList();
+
+        for(var c in currencyList) {
+          if (currentCurrencies.contains(c.iso)) {
+            continue;
+          }
+          Map<String, dynamic> row = {
+
+            CurrencyFields.symbol: c.symbol,
+            CurrencyFields.code: c.iso,
+            CurrencyFields.name: c.name,
+            CurrencyFields.mainCurrency: (c.mainCurrency ? 1: 0),
+          };
+
+          txn.insert(
+            currencyTable,
+            row,
+            conflictAlgorithm: ConflictAlgorithm.ignore,
+          );
+
+        }
+
+        Map<String, dynamic> row = {
+          CategoryTransactionFields.name: 'Modified balance',
+          CategoryTransactionFields.type: 'IN',
+          CategoryTransactionFields.symbol: 'balance',
+          CategoryTransactionFields.color:  0,
+          CategoryTransactionFields.updatedAt: DateTime.fromMicrosecondsSinceEpoch(0).toIso8601String(),
+          CategoryTransactionFields.createdAt: DateTime.fromMicrosecondsSinceEpoch(0).toIso8601String(),
+        };
+
+        int inMod = await txn.insert(categoryTransactionTable, row);
+        row[CategoryTransactionFields.type] = 'OUT';
+        int outMod = await txn.insert(categoryTransactionTable, row);
+
+        List<MMTransaction> transactions = rawTxns.map((m) => MMTransaction.fromMap(m,mmUidToAccountID,mmUidToIdIncomes,mmUidToIdExpense,currencyUidToIso, inMod,outMod)).toList();
+
+        for(var tr in transactions)
+        {
+          await insertTransactionFromMoneyManager(txn: txn, transaction: tr);
+        }
+      });
+
+
+
+      return true;
+
+
+    } catch (e) {
+      throw Exception('Failed to load database');
+    }
+    //try {
+
+
+
+
+
+
+
+
+/*
       // First elaboration
       for (var row in rows) {
         DateTime dateTime = format.parse(row[0]);
@@ -530,66 +748,6 @@ class SossoldiDatabase {
         currencies.add(row[9]);
         accounts.add(account);
       }
-
-      List<Map<String, dynamic>> maps = await db.query(
-        bankAccountTable,
-        columns: [BankAccountFields.name],
-      );
-
-      List<String> currentAccounts = List.generate(maps.length, (i) {
-        return maps[i][BankAccountFields.name] as String;
-      });
-
-      maps = await db.query(
-        currencyTable,
-        columns: [CurrencyFields.code],
-      );
-
-      List<String> currentCurrencies = maps.map((row) => row[CurrencyFields.code] as String).toList();
-
-      await db.transaction((txn) async {
-        for(var a in accounts)
-        {
-          if(!currentAccounts.contains(a))
-          {
-            Map<String, dynamic> row = {
-              BankAccountFields.name : a,
-              BankAccountFields.symbol : accountIconList.keys.elementAt(Random().nextInt(accountIconList.length)),
-              BankAccountFields.color : Random().nextInt(accountColorList.length),
-              BankAccountFields.startingValue : 0.0,
-              BankAccountFields.active : 1,
-              BankAccountFields.countNetWorth : 1,
-              BankAccountFields.mainAccount : 0,
-              BankAccountFields.createdAt : oldest.toIso8601String(),
-              BankAccountFields.updatedAt : oldest.toIso8601String(),
-            };
-            txn.insert(bankAccountTable, row);
-          }
-        }
-
-        insertCategoriesFromMoneyManager(txn: txn, categoryMap: incomeCategories, code: 'IN', oldestDate: oldest);
-        insertCategoriesFromMoneyManager(txn: txn, categoryMap: expenseCategories, code: 'OUT', oldestDate: oldest);
-
-
-        for(var c in currencies) {
-          if (!currentCurrencies.contains(c)) {
-            Map<String, dynamic> row = {
-
-              CurrencyFields.symbol: c,
-              CurrencyFields.code: c,
-              CurrencyFields.name: c,
-              CurrencyFields.mainCurrency: 0,
-            };
-
-            txn.insert(
-              currencyTable,
-              row,
-              conflictAlgorithm: ConflictAlgorithm.ignore,
-            );
-          }
-        }
-
-
         for(var transaction in transactions)
         {
           await insertTransactionFromMoneyManager(txn: txn, transaction: transaction);
@@ -602,6 +760,7 @@ class SossoldiDatabase {
       dev.log('Error during import: $e');
       rethrow;
     }
+    */
   }
 
   Future<void> exportDatabase() async {
