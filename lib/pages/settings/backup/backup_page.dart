@@ -1,5 +1,3 @@
-
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -46,14 +44,83 @@ class BackupOption {
   }
 }
 
+enum CsvSource{
+  sossoldi,
+  moneyManager
+}
+
 class _BackupPageState extends ConsumerState<BackupPage> {
 
-  Future<void> _handleImportDB() async{
+  Future<void> _handleImport({required CsvSource source}) async {
+    try {
+      final file = await CSVFilePicker.pickCSVFile(context);
+      if (file == null) {
+        return;
+      }
+
+      if (!mounted) return;
+
+      CSVFilePicker.showLoading(context, 'Importing data...');
+
+      switch(source)
+      {
+        case CsvSource.sossoldi:
+          final results = await SossoldiDatabase.instance.importFromCSV(
+            file.path,
+          );
+
+          if (!mounted) return;
+          CSVFilePicker.hideLoading(context);
+
+          if (results.values.every((success) => success)) {
+            await CSVFilePicker.showSuccess(
+              context,
+              'Data imported successfully',
+            );
+            if (mounted) Phoenix.rebirth(context);
+          } else {
+            final failedTables = results.entries
+                .where((e) => !e.value)
+                .map((e) => e.key)
+                .join(', ');
+
+            throw Exception('Failed to import some tables: $failedTables');
+          }
+          break;
+
+        case CsvSource.moneyManager:
+          final result = await SossoldiDatabase.instance.importFromCsvFromMoneyManager(
+            file.path,
+          );
+
+          if(!result) {
+            throw Exception('Failed to import data from CSV');
+          }
+
+          await CSVFilePicker.showSuccess(
+            context,
+            'Data imported successfully',
+          );
+          if (mounted) Phoenix.rebirth(context);
+
+          break;
+      }
+
+
+    } catch (e) {
+      if (!mounted) return;
+      CSVFilePicker.hideLoading(context);
+
+      showSnackBar(context, message: 'Import failed: ${e.toString()}');
+    }
+  }
+
+  Future<void> _handleImportDBFromMM() async{
     FilePickerResult? result= await FilePicker.platform.pickFiles(type: FileType.custom, dialogTitle: 'Pick Database',allowMultiple: false, allowedExtensions: ['sqlite','db']);
     if(result == null)
     {
-        // User declined
-        return;
+      // User declined
+      return;
     }
     String? filePath = result.files.single.path;
 
@@ -84,46 +151,6 @@ class _BackupPageState extends ConsumerState<BackupPage> {
 
   }
 
-  Future<void> _handleImportCsv() async {
-    try {
-      final file = await CSVFilePicker.pickCSVFile(context);
-      if (file == null) {
-        return;
-      }
-
-      if (!mounted) return;
-
-      CSVFilePicker.showLoading(context, 'Importing data...');
-
-      final results = await SossoldiDatabase.instance.importFromCSV(
-        file.path,
-      );
-
-      if (!mounted) return;
-      CSVFilePicker.hideLoading(context);
-
-      if (results.values.every((success) => success)) {
-        await CSVFilePicker.showSuccess(
-          context,
-          'Data imported successfully',
-        );
-        if (mounted) Phoenix.rebirth(context);
-      } else {
-        final failedTables = results.entries
-            .where((e) => !e.value)
-            .map((e) => e.key)
-            .join(', ');
-
-        throw Exception('Failed to import some tables: $failedTables');
-      }
-
-    } catch (e) {
-      if (!mounted) return;
-      CSVFilePicker.hideLoading(context);
-
-      showSnackBar(context, message: 'Import failed: ${e.toString()}');
-    }
-  }
 
   Future<void> _handleExport() async {
     try {
@@ -159,6 +186,11 @@ class _BackupPageState extends ConsumerState<BackupPage> {
       icon: Icons.storage,
     ),
     BackupOption(
+      title: 'Import Money Manager CSV',
+      description: 'Make sure the CSV is in english language\n',
+      icon: Icons.upload_file,
+    ),
+    BackupOption(
       title: 'Export data',
       description: 'Save your data as a CSV file',
       icon: Icons.download,
@@ -175,7 +207,7 @@ class _BackupPageState extends ConsumerState<BackupPage> {
     super.initState();
   }
 
-  void showImportAlert(context, function)
+  void showImportAlert(BuildContext context, Function() function)
   {
      showDialog(
                   context: context,
@@ -225,19 +257,23 @@ class _BackupPageState extends ConsumerState<BackupPage> {
               switch(index)
               {
                 case 0:
-                  showImportAlert(context, () => _handleImportCsv());
+                  showImportAlert(context, () => _handleImport(source: CsvSource.sossoldi));
                   break;
                 case 1:
-                  showImportAlert(context, () => _handleImportDB());
+                  showImportAlert(context, () => _handleImportDBFromMM());
                   break;
                 case 2:
                   showImportAlert(context, () => SossoldiDatabase.instance.importDatabase());
                   break;
                 case 3:
-                  _handleExport();
+                  showImportAlert(context, () => _handleImport(source: CsvSource.moneyManager));
                   break;
                 case 4:
+                  _handleExport();
+                  break;
+                case 5:
                   SossoldiDatabase.instance.exportDatabase();
+                  break;
                 default:
                   throw UnimplementedError();
               }
