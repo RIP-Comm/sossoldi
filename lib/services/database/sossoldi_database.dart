@@ -4,7 +4,6 @@ import 'dart:developer' as dev;
 import 'dart:typed_data';
 
 import 'package:csv/csv.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
@@ -721,7 +720,7 @@ class SossoldiDatabase {
                   accountColorList.length),
               BankAccountFields.startingValue: 0.0,
               BankAccountFields.active: 1,
-              BankAccountFields.countNetWorth: true,
+              BankAccountFields.countNetWorth: 1,
               BankAccountFields.mainAccount: 0,
               BankAccountFields.createdAt: dateTime.toIso8601String(),
               BankAccountFields.updatedAt: DateTime.now().toIso8601String(),
@@ -787,7 +786,7 @@ class SossoldiDatabase {
                       accountColorList.length),
                   BankAccountFields.startingValue: 0.0,
                   BankAccountFields.active: 1,
-                  BankAccountFields.countNetWorth: true,
+                  BankAccountFields.countNetWorth: 1,
                   BankAccountFields.mainAccount: 0,
                   BankAccountFields.createdAt: dateTime.toIso8601String(),
                   BankAccountFields.updatedAt: DateTime.now().toIso8601String(),
@@ -869,38 +868,28 @@ class SossoldiDatabase {
     }
   }
 
-  Future<void> exportDatabase() async {
+  Future<Uint8List> exportDatabase() async {
 
     String dbPath = await getDatabasesPath();
     String path = join(dbPath, dbName);
 
-    Uint8List bytes = await File(path).readAsBytes();
-    await FilePicker.platform.saveFile(
-      dialogTitle: 'Salva backup database',
-      fileName: 'backup.db',
-      bytes: bytes
-    );
+    return  await File(path).readAsBytes();
+
 
   }
 
-  Future<void> importDatabase() async {
+  Future<void> importDatabase(File sourceFile) async {
     final db = await database;
-
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
     db.close();
 
-    if (result != null) {
-      File sourceFile = File(result.files.single.path!);
 
-      String dbPath = await getDatabasesPath();
-      String destPath = join(dbPath, dbName);
+    String dbPath = await getDatabasesPath();
+    String destPath = join(dbPath, dbName);
 
 
-      await sourceFile.copy(destPath);
+    await sourceFile.copy(destPath);
 
-      _database = await openDatabase(destPath);
-
-    }
+    _database = await openDatabase(destPath);
 
   }
 

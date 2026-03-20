@@ -287,7 +287,7 @@ class MMTransaction {
     } else if (doType == 1) {
       if(categoryId == -1)
       {
-        categoryId =outMod;
+        categoryId = outMod;
       }
 
       return MMTransaction.expense(date: date, account: accountId, category: categoryId, amount: amount, currency: curr,description: desc);
