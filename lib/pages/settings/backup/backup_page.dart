@@ -97,7 +97,7 @@ class _BackupPageState extends ConsumerState<BackupPage> {
           if (file == null) {
             return;
           }
-          final result = await SossoldiDatabase.instance.importFromCsvFromMoneyManager(
+          final result = await SossoldiDatabase.instance.importCsvFromMoneyManager(
             file.path,
           );
 

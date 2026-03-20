@@ -634,7 +634,7 @@ class SossoldiDatabase {
   }
 
   // I consider being called in a try catch
-  Future<bool> importFromCsvFromMoneyManager(String csvFilePath) async {
+  Future<bool> importCsvFromMoneyManager(String csvFilePath) async {
 
     await resetDatabase();
 
