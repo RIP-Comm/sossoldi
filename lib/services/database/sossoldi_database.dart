@@ -1,12 +1,8 @@
-import 'dart:io';
 import 'dart:math'; // used for random number generation in demo data
-import 'dart:developer' as dev;
-
-import 'package:csv/csv.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite/sqflite.dart' as sql;
 
 // Models
 import '../../model/bank_account.dart';
@@ -15,9 +11,18 @@ import '../../model/category_transaction.dart';
 import '../../model/currency.dart';
 import '../../model/recurring_transaction.dart';
 import '../../model/transaction.dart';
-import 'migration_manager.dart';
 
+import 'migration_manager.dart';
+import 'dart:io';
+import 'package:csv/csv.dart';
+import 'package:intl/intl.dart';
+import 'dart:developer' as dev;
+import 'dart:typed_data';
+import 'package:path_provider/path_provider.dart';
+import '../../constants/constants.dart';
+import 'money_manager_objects.dart';
 part 'sossoldi_database.g.dart';
+part 'database_backup_controller.dart';
 
 @Riverpod(keepAlive: true)
 SossoldiDatabase database(Ref ref) => SossoldiDatabase.instance;
@@ -65,146 +70,6 @@ class SossoldiDatabase {
     int newVersion,
   ) async {
     await instance._migrationManager.migrate(database, oldVersion, newVersion);
-  }
-
-  Future<String> exportToCSV() async {
-    final db = await database;
-    final Directory documentsDir = await getApplicationDocumentsDirectory();
-    final String csvDir = join(documentsDir.path, 'sossoldi_exports');
-
-    // Create exports directory if it doesn't exist
-    await Directory(csvDir).create(recursive: true);
-
-    // Get all table names
-    final List<Map<String, dynamic>> tables = await db.rawQuery(
-      "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' AND name NOT LIKE 'android_%'",
-    );
-
-    List<List<dynamic>> allData = [];
-    Set<String> allColumns = {'table_name'}; // Start with table_name column
-
-    // First pass: collect all unique columns
-    for (var table in tables) {
-      final String tableName = table['name'] as String;
-      final List<Map<String, dynamic>> rows = await db.query(tableName);
-      if (rows.isNotEmpty) {
-        allColumns.addAll(rows.first.keys);
-      }
-    }
-
-    // Create header row
-    List<String> headers = allColumns.toList();
-    allData.add(headers);
-
-    // Second pass: add data from all tables
-    for (var table in tables) {
-      final String tableName = table['name'] as String;
-      try {
-        final List<Map<String, dynamic>> rows = await db.query(tableName);
-
-        for (var row in rows) {
-          List<dynamic> csvRow = List.filled(
-            headers.length,
-            '',
-          ); // Initialize with empty strings
-          csvRow[0] = tableName; // Set table name
-
-          // Fill in values for existing columns
-          row.forEach((col, value) {
-            final int index = headers.indexOf(col);
-            if (index != -1) {
-              csvRow[index] = value?.toString() ?? '';
-            }
-          });
-
-          allData.add(csvRow);
-        }
-      } catch (e) {
-        dev.log('Error exporting table $tableName: $e');
-      }
-    }
-
-    // Convert to CSV string
-    String csv = const ListToCsvConverter().convert(allData);
-
-    return csv;
-  }
-
-  Future<Map<String, bool>> importFromCSV(String csvFilePath) async {
-    final db = await database;
-    Map<String, bool> results = {};
-
-    try {
-      final file = File(csvFilePath);
-      if (!await file.exists()) {
-        throw Exception('CSV file not found');
-      }
-
-      final String csvData = await file.readAsString();
-      final List<List<dynamic>> rows = const CsvToListConverter().convert(
-        csvData,
-      );
-
-      if (rows.isEmpty) {
-        throw Exception('CSV file is empty');
-      }
-
-      // First row contains headers
-      final List<String> headers = rows.first.map((e) => e.toString()).toList();
-      final int tableNameIndex = headers.indexOf('table_name');
-
-      if (tableNameIndex == -1) {
-        throw Exception('CSV file missing table_name column');
-      }
-
-      // Group rows by table
-      Map<String, List<List<dynamic>>> tableData = {};
-      for (int i = 1; i < rows.length; i++) {
-        final String tableName = rows[i][tableNameIndex].toString();
-        tableData.putIfAbsent(tableName, () => [headers]);
-        tableData[tableName]!.add(rows[i]);
-      }
-
-      // Import each table's data
-      await db.transaction((txn) async {
-        for (var entry in tableData.entries) {
-          final String tableName = entry.key;
-          final List<List<dynamic>> tableRows = entry.value;
-
-          try {
-            // Clear existing data
-            await txn.delete(tableName);
-
-            // Insert new data
-            for (int i = 1; i < tableRows.length; i++) {
-              final Map<String, dynamic> row = {};
-              for (int j = 0; j < headers.length; j++) {
-                if (j != tableNameIndex) {
-                  // Skip the table_name column
-                  final String header = headers[j];
-                  final dynamic value = tableRows[i][j];
-
-                  // Convert empty strings to null
-                  if (value != '') {
-                    row[header] = value;
-                  }
-                }
-              }
-              await txn.insert(tableName, row);
-            }
-            results[tableName] = true;
-          } catch (e) {
-            dev.log('Error importing table $tableName: $e');
-            results[tableName] = false;
-          }
-        }
-      });
-    } catch (e) {
-      dev.log('Error during import: $e');
-      rethrow;
-    }
-
-    return results;
   }
 
   Future fillDemoData({int countOfGeneratedTransaction = 10000}) async {

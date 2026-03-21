@@ -34,6 +34,7 @@ var collaborators = const [
   ],
   ["Alessia Schina", "UX/UI Designer", "linkedin.com/in/alessiaschina"],
   ["Federico Bruzzone", "Former Maintainer", "github.com/FedericoBruzzone"],
+  ["Mattia Sacchi", "Software Developer", "github.com/Mattia-Sacchi"],
 ];
 
 // Cycles through the category colour palette for visual variety.

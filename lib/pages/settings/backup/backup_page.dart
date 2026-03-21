@@ -1,3 +1,7 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,6 +10,7 @@ import '../../../ui/device.dart';
 import '../../../services/csv/csv_file_picker.dart';
 import '../../../ui/snack_bars/snack_bar.dart';
 import '../../../ui/widgets/default_card.dart';
+
 
 class BackupPage extends ConsumerStatefulWidget {
   const BackupPage({super.key});
@@ -42,39 +47,129 @@ class BackupOption {
   }
 }
 
-class _BackupPageState extends ConsumerState<BackupPage> {
-  Future<void> _handleImport() async {
-    try {
-      final file = await CSVFilePicker.pickCSVFile(context);
-      if (file != null) {
-        if (!mounted) return;
-        CSVFilePicker.showLoading(context, 'Importing data...');
-        final results = await SossoldiDatabase.instance.importFromCSV(
-          file.path,
-        );
-        if (!mounted) return;
-        CSVFilePicker.hideLoading(context);
+enum Source{
+  sossoldiCsv,
+  moneyManagerCsv,
+  sossoldiDb,
+  moneyManagerDb,
+}
 
-        if (results.values.every((success) => success)) {
+class _BackupPageState extends ConsumerState<BackupPage> {
+
+  Future<void> _handleImport({required Source source}) async {
+    try {
+      if (!mounted) return;
+
+      CSVFilePicker.showLoading(context, 'Importing data...');
+
+      switch(source)
+      {
+        case Source.sossoldiCsv:
+          final file = await CSVFilePicker.pickCSVFile(context);
+          if (file == null) {
+            return;
+          }
+          final results = await SossoldiDatabase.instance.importFromCSV(
+            file.path,
+          );
+
+          if (!mounted) return;
+          CSVFilePicker.hideLoading(context);
+
+          if (results.values.every((success) => success)) {
+            await CSVFilePicker.showSuccess(
+              context,
+              'Data imported successfully',
+            );
+            if (mounted) Phoenix.rebirth(context);
+          } else {
+            final failedTables = results.entries
+                .where((e) => !e.value)
+                .map((e) => e.key)
+                .join(', ');
+
+            throw Exception('Failed to import some tables: $failedTables');
+          }
+          break;
+
+        case Source.moneyManagerCsv:
+          final file = await CSVFilePicker.pickCSVFile(context);
+          if (file == null) {
+            return;
+          }
+          final result = await SossoldiDatabase.instance.importCsvFromMoneyManager(
+            file.path,
+          );
+
+          if(!result) {
+            throw Exception('Failed to import data from CSV');
+          }
+          CSVFilePicker.hideLoading(context);
           await CSVFilePicker.showSuccess(
             context,
             'Data imported successfully',
           );
           if (mounted) Phoenix.rebirth(context);
-        } else {
-          final failedTables = results.entries
-              .where((e) => !e.value)
-              .map((e) => e.key)
-              .join(', ');
 
-          if (!mounted) return;
+          break;
+        case Source.moneyManagerDb:
+          FilePickerResult? result= await FilePicker.platform.pickFiles(type: FileType.custom, dialogTitle: 'Pick Database',allowMultiple: false, allowedExtensions: ['sqlite','db']);
+          if(result == null)
+          {
+            // User declined
+            return;
+          }
+          String? filePath = result.files.single.path;
 
-          showSnackBar(
+          if(filePath == null){
+            return;
+          }
+
+          final res = await SossoldiDatabase.instance.importDBFromMoneyManager(filePath);
+
+
+          if(!res) {
+            throw Exception('Failed to import data from DB');
+          }
+          if (mounted) Phoenix.rebirth(context);
+          CSVFilePicker.hideLoading(context);
+
+          await CSVFilePicker.showSuccess(
             context,
-            message: 'Failed to import some tables: $failedTables',
+            'Data imported successfully',
           );
-        }
+
+          break;
+        case Source.sossoldiDb:
+          FilePickerResult? result= await FilePicker.platform.pickFiles(type: FileType.custom, dialogTitle: 'Pick Database',allowMultiple: false, allowedExtensions: ['sqlite','db']);
+          if(result == null)
+          {
+            // User declined
+            return;
+          }
+          String? filePath = result.files.single.path;
+
+          if(filePath == null){
+            return;
+          }
+
+          if(!await SossoldiDatabase.instance.importDatabase(File(filePath)))
+          {
+            throw Exception('Failed to import database, table not found');
+          }
+          CSVFilePicker.hideLoading(context);
+
+          await CSVFilePicker.showSuccess(
+            context,
+            'Data imported successfully',
+          );
+
+          if (mounted) Phoenix.rebirth(context);
+
+          break;
       }
+
+
     } catch (e) {
       if (!mounted) return;
       CSVFilePicker.hideLoading(context);
@@ -83,16 +178,35 @@ class _BackupPageState extends ConsumerState<BackupPage> {
     }
   }
 
-  Future<void> _handleExport() async {
+
+  Future<void> _handleExport({required Source source}) async {
     try {
-      CSVFilePicker.showLoading(context, 'Exporting data...');
+      switch(source)
+      {
+        case Source.sossoldiDb:
+          CSVFilePicker.showLoading(context, 'Exporting data...');
+          Uint8List bytes =  await SossoldiDatabase.instance.exportDatabase();
+          await FilePicker.platform.saveFile(
+              dialogTitle: 'Salva backup database',
+              fileName: 'backup.db',
+              bytes: bytes
+          );
+          CSVFilePicker.hideLoading(context);
+          break;
+        case Source.sossoldiCsv:
+          CSVFilePicker.showLoading(context, 'Exporting data...');
 
-      final csv = await SossoldiDatabase.instance.exportToCSV();
+          final csv = await SossoldiDatabase.instance.exportToCSV();
 
-      if (!mounted) return;
-      CSVFilePicker.hideLoading(context);
+          if (!mounted) return;
 
-      await CSVFilePicker.saveCSVFile(csv, context);
+          await CSVFilePicker.saveCSVFile(csv, context);
+          CSVFilePicker.hideLoading(context);
+          break;
+        default:
+          return;
+      }
+
     } catch (e) {
       if (!mounted) return;
       CSVFilePicker.hideLoading(context);
@@ -100,27 +214,86 @@ class _BackupPageState extends ConsumerState<BackupPage> {
     }
   }
 
-  late final List<BackupOption> options = [
-    BackupOption(
-      title: 'Import data',
-      description: 'Import a CSV file to update your database',
-      icon: Icons.upload_file,
-    ),
-    BackupOption(
-      title: 'Export data',
-      description: 'Save your data as a CSV file',
-      icon: Icons.download,
-    ),
-  ];
+
 
   @override
   void initState() {
     super.initState();
   }
 
+  void showImportAlert(BuildContext context, Source source)
+  {
+     showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Warning: Data Overwrite'),
+          content: const Text(
+            'Importing this file will permanently replace your existing data. This action cannot be undone. Ensure you have a backup before proceeding.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _handleImport(source: source);
+              },
+              child: const Text('Proceed with Import'),
+            ),
+          ],
+        ),
+      );
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+
+  // It updates with the right context
+  List<BackupOption> options = [
+    BackupOption(
+      title: 'Import data',
+      description: 'Import a CSV file to update your database',
+      icon: Icons.upload_file,
+      action: () async => showImportAlert(context, Source.sossoldiCsv),
+    ),
+    BackupOption(
+      title: 'Import data',
+      description: 'Import from Money Manager DB\n to update your database',
+      icon: Icons.savings,
+      action: () async => showImportAlert(context, Source.moneyManagerDb),
+    ),
+    BackupOption(
+      title: 'Import database',
+      description: 'Import from DB\n',
+      icon: Icons.storage,
+      action: () async => showImportAlert(context, Source.sossoldiDb),
+    ),
+    BackupOption(
+      title: 'Import Money Manager CSV',
+      description: 'Make sure the CSV is in english language\n',
+      icon: Icons.upload_file,
+      action: () async => showImportAlert(context, Source.moneyManagerCsv),
+    ),
+    BackupOption(
+      title: 'Export data',
+      description: 'Save your data as a CSV file',
+      icon: Icons.download,
+      action: () => _handleExport(source: Source.sossoldiCsv),
+    ),
+    BackupOption(
+      title: 'Export database',
+      description: 'Export your DB\n',
+      icon: Icons.storage,
+      action: () => _handleExport(source: Source.sossoldiDb),
+    ),
+  ];
+
+  return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
@@ -137,34 +310,9 @@ class _BackupPageState extends ConsumerState<BackupPage> {
           final option = options[index];
           return DefaultCard(
             onTap: () {
-              if (index == 0) {
-                // Show confirmation dialog for the first option
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text('Warning: Data Overwrite'),
-                    content: const Text(
-                      'Importing this file will permanently replace your existing data. This action cannot be undone. Ensure you have a backup before proceeding.',
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('Cancel'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          _handleImport();
-                        },
-                        child: const Text('Proceed with Import'),
-                      ),
-                    ],
-                  ),
-                );
-              } else {
-                _handleExport();
+              if(option.action !=  null)
+              {
+                option.action?.call();
               }
             },
             child: Row(
