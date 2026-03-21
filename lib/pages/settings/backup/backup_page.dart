@@ -153,13 +153,18 @@ class _BackupPageState extends ConsumerState<BackupPage> {
             return;
           }
 
-          await SossoldiDatabase.instance.importDatabase(File(filePath));
+          if(!await SossoldiDatabase.instance.importDatabase(File(filePath)))
+          {
+            throw Exception('Failed to import database, table not found');
+          }
           CSVFilePicker.hideLoading(context);
 
           await CSVFilePicker.showSuccess(
             context,
             'Data imported successfully',
           );
+
+          if (mounted) Phoenix.rebirth(context);
 
           break;
       }
