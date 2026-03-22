@@ -480,31 +480,46 @@ extension DatabaseBackupController on SossoldiDatabase
   }
 
   Future<bool> importDatabase(File sourceFile) async {
-    // TODO: copy in temporary the current db
-    /*
-    final db = SossoldiDatabase._database;
+    final dbPath = await getDatabasesPath();
+    final destPath = join(dbPath, SossoldiDatabase.dbName);
+    final backupPath = join(dbPath, "${SossoldiDatabase.dbName}.bak");
 
-    if(db == null)
-    {
+    if (SossoldiDatabase._database != null) {
+      await SossoldiDatabase._database!.close();
+      SossoldiDatabase._database = null;
+    }
+
+    try {
+
+      final currentDbFile = File(destPath);
+      if (await currentDbFile.exists()) {
+        await currentDbFile.copy(backupPath);
+      }
+
+      await sourceFile.copy(destPath);
+
+      final newDb = await openDatabase(destPath);
+      bool isValid = await checkTableExists(newDb, bankAccountTable);
+
+      if (isValid) {
+        SossoldiDatabase._database = newDb;
+        final bakFile = File(backupPath);
+        if (await bakFile.exists()) await bakFile.delete();
+        return true;
+      } else {
+        await newDb.close();
+        throw Exception("Validation failed: Table missing");
+      }
+    } catch (e) {
+      final bakFile = File(backupPath);
+      if (await bakFile.exists()) {
+        await bakFile.copy(destPath);
+        await bakFile.delete();
+      }
+
+      SossoldiDatabase._database = await openDatabase(destPath);
       return false;
     }
-
-    String dbPath = await sql.getDatabasesPath();
-    String destPath = join(dbPath, SossoldiDatabase.dbName);
-
-    await sourceFile.copy(destPath);
-    final newDb = await openDatabase(destPath);
-
-    if(!await checkTableExists(newDb, bankAccountTable))
-    {
-        return false;
-    }
-
-    db.close();
-
-    SossoldiDatabase._database = newDb;
-    */
-    return true;
   }
 
 
