@@ -1,3 +1,4 @@
+import '../ui/extensions.dart';
 import 'base_entity.dart';
 
 const String bankAccountTable = 'bankAccount';
@@ -15,6 +16,7 @@ class BankAccountFields extends BaseEntityFields {
   static String order = 'position';
   static String createdAt = BaseEntityFields.getCreatedAt;
   static String updatedAt = BaseEntityFields.getUpdatedAt;
+  static String deletedAt = BaseEntityFields.getDeletedAt;
 
   static final List<String> allFields = [
     BaseEntityFields.id,
@@ -28,6 +30,7 @@ class BankAccountFields extends BaseEntityFields {
     order,
     BaseEntityFields.createdAt,
     BaseEntityFields.updatedAt,
+    BaseEntityFields.deletedAt,
   ];
 }
 
@@ -55,6 +58,7 @@ class BankAccount extends BaseEntity {
     this.total,
     super.createdAt,
     super.updatedAt,
+    super.deletedAt,
   });
 
   BankAccount copy({
@@ -69,6 +73,7 @@ class BankAccount extends BaseEntity {
     int? order,
     DateTime? createdAt,
     DateTime? updatedAt,
+    DateTime? deletedAt,
   }) => BankAccount(
     id: id ?? this.id,
     name: name ?? this.name,
@@ -81,6 +86,7 @@ class BankAccount extends BaseEntity {
     order: order ?? this.order,
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
+    deletedAt: deletedAt ?? this.deletedAt,
     total: total,
   );
 
@@ -97,21 +103,25 @@ class BankAccount extends BaseEntity {
     total: json[BankAccountFields.total] as num?,
     createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
     updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String),
+    deletedAt: json[BaseEntityFields.deletedAt] != null
+        ? DateTime.parse(json[BaseEntityFields.deletedAt] as String)
+        : null,
   );
 
-  Map<String, Object?> toJson({bool update = false}) => {
+  Map<String, Object?> toJson({bool update = false, bool delete = false}) => {
     BaseEntityFields.id: id,
     BankAccountFields.name: name,
     BankAccountFields.symbol: symbol,
     BankAccountFields.color: color,
-    BankAccountFields.startingValue: startingValue,
+    BankAccountFields.startingValue: startingValue.toCurrency().toNum(),
     BankAccountFields.active: active ? 1 : 0,
     BankAccountFields.countNetWorth: countNetWorth ? 1 : 0,
     BankAccountFields.mainAccount: mainAccount ? 1 : 0,
-    BankAccountFields.order: order,
-    BaseEntityFields.createdAt: update
+    BankAccountFields.order: delete ? 0 : order,
+    BaseEntityFields.createdAt: update || delete
         ? createdAt?.toIso8601String()
         : DateTime.now().toIso8601String(),
     BaseEntityFields.updatedAt: DateTime.now().toIso8601String(),
+    if (delete) BaseEntityFields.deletedAt: DateTime.now().toIso8601String(),
   };
 }

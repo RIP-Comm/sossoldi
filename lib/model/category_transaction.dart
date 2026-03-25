@@ -14,6 +14,7 @@ class CategoryTransactionFields extends BaseEntityFields {
   static String order = 'position';
   static String createdAt = BaseEntityFields.getCreatedAt;
   static String updatedAt = BaseEntityFields.getUpdatedAt;
+  static String deletedAt = BaseEntityFields.getDeletedAt;
 
   static final List<String> allFields = [
     BaseEntityFields.id,
@@ -26,6 +27,7 @@ class CategoryTransactionFields extends BaseEntityFields {
     order,
     BaseEntityFields.createdAt,
     BaseEntityFields.updatedAt,
+    BaseEntityFields.deletedAt,
   ];
 }
 
@@ -75,6 +77,7 @@ class CategoryTransaction extends BaseEntity {
     required this.order,
     super.createdAt,
     super.updatedAt,
+    super.deletedAt,
   });
 
   CategoryTransaction copy({
@@ -88,6 +91,7 @@ class CategoryTransaction extends BaseEntity {
     int? order,
     DateTime? createdAt,
     DateTime? updatedAt,
+    DateTime? deletedAt,
   }) => CategoryTransaction(
     id: id ?? this.id,
     name: name ?? this.name,
@@ -99,6 +103,7 @@ class CategoryTransaction extends BaseEntity {
     order: order ?? this.order,
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
+    deletedAt: deletedAt ?? this.deletedAt,
   );
 
   static CategoryTransaction fromJson(Map<String, Object?> json) =>
@@ -115,9 +120,12 @@ class CategoryTransaction extends BaseEntity {
         order: json[CategoryTransactionFields.order] as int,
         createdAt: DateTime.parse(json[BaseEntityFields.createdAt] as String),
         updatedAt: DateTime.parse(json[BaseEntityFields.updatedAt] as String),
+        deletedAt: json[BaseEntityFields.deletedAt] != null
+            ? DateTime.parse(json[BaseEntityFields.deletedAt] as String)
+            : null,
       );
 
-  Map<String, Object?> toJson({bool update = false}) => {
+  Map<String, Object?> toJson({bool update = false, bool delete = false}) => {
     BaseEntityFields.id: id,
     CategoryTransactionFields.name: name,
     CategoryTransactionFields.type: type.code,
@@ -125,10 +133,11 @@ class CategoryTransaction extends BaseEntity {
     CategoryTransactionFields.color: color,
     CategoryTransactionFields.note: note,
     CategoryTransactionFields.parent: parent,
-    CategoryTransactionFields.order: order,
-    BaseEntityFields.createdAt: update
+    CategoryTransactionFields.order: delete ? 0 : order,
+    BaseEntityFields.createdAt: update || delete
         ? createdAt?.toIso8601String()
         : DateTime.now().toIso8601String(),
     BaseEntityFields.updatedAt: DateTime.now().toIso8601String(),
+    if (delete) BaseEntityFields.deletedAt: DateTime.now().toIso8601String(),
   };
 }

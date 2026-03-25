@@ -244,7 +244,7 @@ class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {
                 child: TextButton.icon(
                   onPressed: () => ref
                       .read(categoriesProvider.notifier)
-                      .removeCategory(selectedCategory.id!)
+                      .removeCategory(selectedCategory)
                       .whenComplete(() {
                         if (context.mounted) {
                           Navigator.of(context).pop();

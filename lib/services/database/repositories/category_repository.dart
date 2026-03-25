@@ -92,7 +92,8 @@ class CategoryRepository {
   }) async {
     final db = await _sossoldiDB.database;
 
-    String where = '${CategoryTransactionFields.type} = ?';
+    String where =
+        '${CategoryTransactionFields.type} = ? AND ${CategoryTransactionFields.deletedAt} IS NULL';
     List<dynamic> args = [type.code];
     if (!includeSubcategories) {
       where += ' AND ${CategoryTransactionFields.parent} IS NULL';
@@ -129,7 +130,7 @@ class CategoryRepository {
           ORDER BY "${TransactionFields.date}" DESC
           LIMIT 100
         ) t ON t."${TransactionFields.idCategory}" = c."${CategoryTransactionFields.id}"
-        WHERE c."${CategoryTransactionFields.type}" = ?
+        WHERE c."${CategoryTransactionFields.type}" = ? AND c.${CategoryTransactionFields.deletedAt} IS NULL
         GROUP BY c."${CategoryTransactionFields.id}"
         ORDER BY COUNT(t."${TransactionFields.id}") DESC
         LIMIT 5
@@ -163,16 +164,38 @@ class CategoryRepository {
     );
   }
 
-  Future<int> deleteById(int id) async {
+  Future<void> deleteById(
+    CategoryTransaction item, {
+    bool isSub = false,
+  }) async {
     final db = await _sossoldiDB.database;
 
-    final rows = await db.delete(
+    await db.update(
       categoryTransactionTable,
+      item.toJson(delete: true),
       where: '${CategoryTransactionFields.id} = ?',
-      whereArgs: [id],
+      whereArgs: [item.id],
     );
-    await normalizeOrders();
-    return rows;
+
+    await db
+        .query(
+          categoryTransactionTable,
+          where:
+              '${CategoryTransactionFields.parent} = ? AND ${CategoryTransactionFields.deletedAt} IS NULL',
+          whereArgs: [item.id],
+        )
+        .then((subcategories) async {
+          for (final subcategory in subcategories) {
+            await deleteById(
+              CategoryTransaction.fromJson(subcategory),
+              isSub: true,
+            );
+          }
+        });
+
+    if (!isSub) {
+      await normalizeOrders();
+    }
   }
 
   Future<void> updateOrders(List<CategoryTransaction> items) async {
@@ -196,6 +219,7 @@ class CategoryRepository {
     final result = await db.query(
       categoryTransactionTable,
       columns: [CategoryTransactionFields.id],
+      where: '${CategoryTransactionFields.deletedAt} IS NULL',
       orderBy: orderByASC,
     );
 

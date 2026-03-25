@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../ui/device.dart';
 import '../../../ui/widgets/native_alert_dialog.dart';
 import '../../../model/bank_account.dart';
 
@@ -17,8 +18,20 @@ class ConfirmAccountDeletionDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AdaptiveDialog(
       title: const Text('Delete account'),
-      content: Text(
-        'Are you sure you want to delete the account named "${account.name}"?\n\nThis action cannot be undone.',
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: Sizes.md,
+        children: [
+          Text(
+            'Are you sure you want to delete the account named "${account.name}"?',
+          ),
+          const Text(
+            'All recurring transactions linked to this account will be stopped.',
+          ),
+          const SizedBox(height: Sizes.md),
+          const Text('This action cannot be undone.'),
+        ],
       ),
       actions: [
         AdaptiveDialogAction(
