@@ -92,12 +92,12 @@ class CategoryRepository {
   }) async {
     final db = await _sossoldiDB.database;
 
-    String where = '${CategoryTransactionFields.type} = ?';
+    String where =
+        '${CategoryTransactionFields.type} = ? AND ${CategoryTransactionFields.deletedAt} IS NULL';
     List<dynamic> args = [type.code];
     if (!includeSubcategories) {
       where += ' AND ${CategoryTransactionFields.parent} IS NULL';
     }
-    where += ' AND ${CategoryTransactionFields.deletedAt} IS NULL';
 
     final result = await db.query(
       categoryTransactionTable,
@@ -130,7 +130,7 @@ class CategoryRepository {
           ORDER BY "${TransactionFields.date}" DESC
           LIMIT 100
         ) t ON t."${TransactionFields.idCategory}" = c."${CategoryTransactionFields.id}"
-        WHERE c."${CategoryTransactionFields.type}" = ?
+        WHERE c."${CategoryTransactionFields.type}" = ? AND c.${CategoryTransactionFields.deletedAt} IS NULL
         GROUP BY c."${CategoryTransactionFields.id}"
         ORDER BY COUNT(t."${TransactionFields.id}") DESC
         LIMIT 5

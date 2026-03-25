@@ -185,12 +185,6 @@ Future<List<CategoryTransaction>> allParentCategories(Ref ref) async {
 }
 
 @Riverpod(keepAlive: true)
-Future<List<CategoryTransaction>> activeCategories(Ref ref) async {
-  final categories = ref.watch(categoriesProvider).value ?? [];
-  return categories.where((category) => category.deletedAt == null).toList();
-}
-
-@Riverpod(keepAlive: true)
 Future<List<CategoryTransaction>> categoriesByType(
   Ref ref,
   CategoryTransactionType? type, {

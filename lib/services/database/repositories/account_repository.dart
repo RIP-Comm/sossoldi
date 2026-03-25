@@ -75,7 +75,7 @@ class AccountRepository {
   Future<List<BankAccount>> selectAll({bool? active, bool? deleted}) async {
     final db = await _sossoldiDB.database;
 
-    String where = "";
+    String where = "1 = 1";
     if (active != null) {
       where += ' AND ${BankAccountFields.active} = ${active ? 1 : 0}';
     }

@@ -26,7 +26,7 @@ class AccountSelector extends ConsumerStatefulWidget {
 class _AccountSelectorState extends ConsumerState<AccountSelector> {
   @override
   Widget build(BuildContext context) {
-    final accountsList = ref.watch(accountsProvider);
+    final accountsList = ref.watch(activeAccountsProvider);
     final fromAccount = ref.watch(selectedBankAccountProvider);
     final toAccount = ref.watch(bankAccountTransferProvider);
 
