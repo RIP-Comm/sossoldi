@@ -231,7 +231,7 @@ extension DatabaseBackupController on SossoldiDatabase
   }
 
   // I consider being called in a try catch
-  Future<bool> importCsvFromMoneyManager(String csvFilePath) async {
+  Future<bool> importCsvFromMoneyManager(String csvFilePath, DateTime from, DateTime to, bool reset) async {
     try {
       final file = File(csvFilePath);
 
@@ -279,7 +279,12 @@ extension DatabaseBackupController on SossoldiDatabase
       {
         return false;
       }
-      await resetDatabase();
+
+      if(reset)
+      {
+        await resetDatabase();
+      }
+
 
 
       // We can discard the headers
@@ -416,6 +421,11 @@ extension DatabaseBackupController on SossoldiDatabase
           {
             continue;
           }
+
+          if(dateTime.isBefore(from)  ||  dateTime.isAfter(to))
+          {
+            continue;
+          }
           int? accountUid = uidToAccountID[sanitizeAlphaNumeric(row[1])];
           String cat = sanitizeAlphaNumeric(row[2]);
           String sub = sanitizeAlphaNumeric(row[3]);
@@ -475,8 +485,6 @@ extension DatabaseBackupController on SossoldiDatabase
     String path = join(dbPath, SossoldiDatabase.dbName);
 
     return  await File(path).readAsBytes();
-
-
   }
 
   Future<bool> importDatabase(File sourceFile) async {
@@ -522,8 +530,8 @@ extension DatabaseBackupController on SossoldiDatabase
     }
   }
 
-
-  Future<String> exportToCSV() async {
+  // Ignore datetime start and to
+  Future<String> exportToCSV(DateTime from, DateTime to) async {
     final Directory documentsDir = await getApplicationDocumentsDirectory();
     final String csvDir = join(documentsDir.path, 'sossoldi_exports');
 
@@ -571,6 +579,12 @@ extension DatabaseBackupController on SossoldiDatabase
           ); // Initialize with empty strings
           csvRow[0] = tableName; // Set table name
 
+          if(tableName == transactionTable)
+          {
+            DateTime trDate = DateTime(row[TransactionFields.date]);
+            if(trDate.isBefore(from) || trDate.isAfter(to)) continue;
+          }
+
           // Fill in values for existing columns
           row.forEach((col, value) {
             final int index = headers.indexOf(col);
@@ -592,7 +606,7 @@ extension DatabaseBackupController on SossoldiDatabase
     return csv;
   }
 
-  Future<Map<String, bool>> importFromCSV(String csvFilePath) async {
+  Future<Map<String, bool>> importFromCSV(String csvFilePath, DateTime from, DateTime to, bool reset) async {
     final db = SossoldiDatabase._database;
 
     if(db == null)
@@ -638,10 +652,13 @@ extension DatabaseBackupController on SossoldiDatabase
         for (var entry in tableData.entries) {
           final String tableName = entry.key;
           final List<List<dynamic>> tableRows = entry.value;
-
+          int indexOfDate = headers.indexOf(TransactionFields.date);
           try {
             // Clear existing data
-            await txn.delete(tableName);
+            if(reset){
+              await txn.delete(tableName);
+            }
+
 
             // Insert new data
             for (int i = 1; i < tableRows.length; i++) {
@@ -652,6 +669,17 @@ extension DatabaseBackupController on SossoldiDatabase
                   final String header = headers[j];
                   final dynamic value = tableRows[i][j];
 
+                  if(tableName == transactionTable)
+                  {
+                    String dateString = tableRows[i][indexOfDate];
+                    DateTime? dt = parseFlexibleDate(dateString);
+                    DateTime currentDate = dt ?? DateTime.parse(dateString);
+                    if(currentDate.isBefore(from)  ||  currentDate.isAfter(to))
+                    {
+                      continue;
+                    }
+
+                  }
                   // Convert empty strings to null
                   if (value != '') {
                     row[header] = value;
@@ -676,7 +704,7 @@ extension DatabaseBackupController on SossoldiDatabase
   }
 
   // I consider being called in a try catch
-  Future<bool> importDBFromMoneyManager(String filePath) async {
+  Future<bool> importDBFromMoneyManager(String filePath, DateTime from, DateTime to, bool reset) async {
     final file = File(filePath);
 
     try {
@@ -701,7 +729,10 @@ extension DatabaseBackupController on SossoldiDatabase
         return false;
       }
 
-      await resetDatabase();
+      if(reset)
+      {
+        await resetDatabase();
+      }
 
       List<Map<String,dynamic>> list = await mmDb.query(
           columns: [MMAccount.uidColumn, MMAccount.timeColumn, MMAccount.groupNameColumn, MMAccount.countNethWorthColumn],
@@ -876,6 +907,10 @@ extension DatabaseBackupController on SossoldiDatabase
 
         for(var tr in transactions)
         {
+          if(tr.date.isBefore(from)  ||  tr.date.isAfter(to))
+          {
+            continue;
+          }
           await insertTransactionFromMoneyManager(txn: txn, transaction: tr);
         }
       });

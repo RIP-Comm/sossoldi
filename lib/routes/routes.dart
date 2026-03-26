@@ -16,6 +16,8 @@ import '../pages/planning/planning_page.dart';
 import '../pages/planning/widget/edit_recurring_transaction.dart';
 import '../pages/search/search_page.dart';
 import '../pages/settings/backup/backup_page.dart';
+import '../pages/settings/backup/export_screen.dart';
+import '../pages/settings/backup/import_screen.dart';
 import '../pages/settings/general/general_settings_page.dart';
 import '../pages/settings/infos/collaborators_page.dart';
 import '../pages/settings/infos/more_info_page.dart';
@@ -90,6 +92,10 @@ Route<dynamic> makeRoute(RouteSettings settings) {
       return buildAdaptiveRoute(settings.name, const SearchPage());
     case '/backup-page':
       return buildAdaptiveRoute(settings.name, const BackupPage());
+    case '/import-page':
+      return buildAdaptiveRoute(settings.name, const ImportScreen());
+    case '/export-page':
+      return buildAdaptiveRoute(settings.name, const ExportScreen());
     default:
       throw 'Route is not defined';
   }
