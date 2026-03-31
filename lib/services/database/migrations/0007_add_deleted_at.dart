@@ -10,7 +10,7 @@ import '/model/category_transaction.dart';
 class AddDeletedAt extends Migration {
   AddDeletedAt()
     : super(
-        version: 6,
+        version: 7,
         description: 'Add deletedAt column to account and category tables',
       );
 

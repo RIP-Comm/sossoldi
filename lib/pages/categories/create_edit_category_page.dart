@@ -9,6 +9,7 @@ import '../../../providers/transactions_provider.dart';
 import '../../../ui/device.dart';
 import '../../../ui/extensions.dart';
 import 'widgets/category_icon_color_selector.dart';
+import 'widgets/confirm_category_deletion_dialog.dart';
 import 'widgets/subcategories_list.dart';
 
 class CreateEditCategoryPage extends ConsumerStatefulWidget {
@@ -242,14 +243,27 @@ class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {
                 width: double.infinity,
                 padding: const EdgeInsets.all(Sizes.lg),
                 child: TextButton.icon(
-                  onPressed: () => ref
-                      .read(categoriesProvider.notifier)
-                      .removeCategory(selectedCategory)
-                      .whenComplete(() {
-                        if (context.mounted) {
-                          Navigator.of(context).pop();
-                        }
-                      }),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return ConfirmCategoryDeletionDialog(
+                          category: selectedCategory,
+                          onPressed: () => ref
+                              .read(categoriesProvider.notifier)
+                              .removeCategory(selectedCategory)
+                              .whenComplete(() {
+                                if (context.mounted) {
+                                  Navigator.popUntil(
+                                    context,
+                                    ModalRoute.withName('/category-list'),
+                                  );
+                                }
+                              }),
+                        );
+                      },
+                    );
+                  },
                   style: TextButton.styleFrom(
                     side: const BorderSide(color: red, width: 1),
                   ),
