@@ -15,7 +15,7 @@ class AccountsCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final accountList = ref.watch(accountsProvider);
+    final accountList = ref.watch(activeAccountsProvider);
     final currencyState = ref.watch(currencyStateProvider);
 
     return Column(

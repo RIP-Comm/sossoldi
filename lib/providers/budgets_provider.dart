@@ -20,6 +20,7 @@ class Budgets extends _$Budgets {
 
   Future<List<Budget>> _getBudgets() async {
     final budgets = await ref.read(budgetRepositoryProvider).selectAllActive();
+    ref.invalidate(monthlyBudgetsStatsProvider);
     return budgets;
   }
 

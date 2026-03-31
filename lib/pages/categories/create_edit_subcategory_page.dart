@@ -166,7 +166,7 @@ class _CreateEditSubcategoryPage
                 child: TextButton.icon(
                   onPressed: () => ref
                       .read(categoriesProvider.notifier)
-                      .removeCategory(selectedSubcategory.id!)
+                      .removeCategory(selectedSubcategory)
                       .whenComplete(() {
                         if (context.mounted) {
                           Navigator.of(context).pop();

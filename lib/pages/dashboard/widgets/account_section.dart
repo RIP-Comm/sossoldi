@@ -14,7 +14,7 @@ class AccountSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final accountList = ref.watch(accountsProvider);
+    final accountList = ref.watch(activeAccountsProvider);
     final isDarkMode = ref.watch(appThemeStateProvider).isDarkModeEnabled;
     return SizedBox(
       height: 80.0,

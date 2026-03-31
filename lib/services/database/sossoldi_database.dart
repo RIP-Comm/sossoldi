@@ -240,7 +240,7 @@ class SossoldiDatabase {
     // Add fake budgets
     await _database?.execute('''
       INSERT INTO budget(idCategory, name, amountLimit, active, createdAt, updatedAt) VALUES
-        (13, 'Grocery', 900.00, 1, '${DateTime.now()}', '${DateTime.now()}'),
+        (13, 'Shopping', 900.00, 1, '${DateTime.now()}', '${DateTime.now()}'),
         (11, 'Home', 123.45, 0, '${DateTime.now()}', '${DateTime.now()}');
     ''');
 
