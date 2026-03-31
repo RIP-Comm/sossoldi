@@ -1,11 +1,10 @@
 import 'dart:io';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:intl/intl.dart';
 import '../../../constants/style.dart';
-import '../../../services/csv/csv_file_picker.dart';
+import '../../../services/csv/general_file_picker.dart';
 import '../../../services/database/sossoldi_database.dart';
 import '../../../ui/device.dart';
 import '../../../ui/widgets/rounded_icon.dart';
@@ -132,12 +131,12 @@ class _ImportScreenState extends State<ImportScreen> {
 
   Future<bool> importSossoldiCsv() async
   {
-    final file = await CSVFilePicker.pickCSVFile(context);
+    final file = await GeneralFilePicker.pickFile(context, ['csv']);
     if (file == null) {
       return false;
     }
     final results = await SossoldiDatabase.instance.importFromCSV(
-      file.path,selectedFromDate, selectedToDate, resetDatabase
+      file,selectedFromDate, selectedToDate, resetDatabase
     );
 
     if (!mounted) return false;
@@ -156,19 +155,11 @@ class _ImportScreenState extends State<ImportScreen> {
 
   Future<bool> importMoneyManagerDatabase() async
   {
-    FilePickerResult? result= await FilePicker.platform.pickFiles(type: FileType.custom, dialogTitle: 'Pick Database',allowMultiple: false, allowedExtensions: ['sqlite','db']);
-
-    if(result == null)
-    {
+    final file = await GeneralFilePicker.pickFile(context, ['mmbak']);
+    if (file == null) {
       return false;
     }
-    String? filePath = result.files.single.path;
-
-    if(filePath == null){
-      return false;
-    }
-
-    final res = await SossoldiDatabase.instance.importDBFromMoneyManager(filePath, selectedFromDate, selectedToDate, resetDatabase);
+    final res = await SossoldiDatabase.instance.importDBFromMoneyManager(file, selectedFromDate, selectedToDate, resetDatabase);
 
     if(!res) {
       throw Exception('Failed to import data from DB');
@@ -178,7 +169,7 @@ class _ImportScreenState extends State<ImportScreen> {
   }
 
   Future<bool> importMoneyManagerCsv() async{
-    final file = await CSVFilePicker.pickCSVFile(context);
+    final file = await GeneralFilePicker.pickFile(context, ['csv']);
     if (file == null) {
       return false;
     }
@@ -202,7 +193,7 @@ class _ImportScreenState extends State<ImportScreen> {
   {
     bool result = false;
 
-    CSVFilePicker.showLoading(context, 'Importing data');
+    GeneralFilePicker.showLoading(context, 'Importing data');
 
     switch(selectedFormatIndex)
     {
@@ -222,11 +213,11 @@ class _ImportScreenState extends State<ImportScreen> {
         return;
     }
 
-    CSVFilePicker.hideLoading(context);
+    GeneralFilePicker.hideLoading(context);
 
     if(result)
     {
-      await CSVFilePicker.showSuccess(
+      await GeneralFilePicker.showSuccess(
         context,
         'Data imported successfully',
       );
@@ -245,55 +236,57 @@ class _ImportScreenState extends State<ImportScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            ...importFormats.asMap().entries.map((entry) {
-              int index = entry.key;
-              ImportOption option = entry.value;
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ...importFormats.asMap().entries.map((entry) {
+                int index = entry.key;
+                ImportOption option = entry.value;
 
-              return RadioListTile<int>(
-                value: index,
-                groupValue: selectedFormatIndex,
-                title: Text(option.label, style: const TextStyle(fontWeight: FontWeight.bold)),
-                secondary:  RoundedIcon(
-                  icon: option.icon,
-                  backgroundColor: option.color,
-                ),
-                activeColor: Theme.of(context).primaryColor,
-                onChanged: (int? value) {
-                  setState(() {
-                    selectedFormatIndex = value!;
-                  });
-                },
-                controlAffinity: ListTileControlAffinity.trailing, // Put radio on the right
-              );
-            }),
-            const Divider(),
-            DetailsListTile(
-                title: "From",
-                icon: Icons.calendar_month,
-                value: DateFormat('yyyy/MM/dd').format(selectedFromDate),
-                callback: () => showContextDatePicker(selectedFromDate, true)
-            ),
-            DetailsListTile(
-                title: "To",
-                icon: Icons.calendar_month,
-                value: DateFormat('yyyy/MM/dd').format(selectedToDate),
-                callback: () => showContextDatePicker(selectedToDate, false)
-            ),
-            const Divider(),
-            Row(mainAxisAlignment: MainAxisAlignment.start,children: [
-              Checkbox(value: resetDatabase, onChanged: (status)
-              {
-                setState(() {
-                  resetDatabase = status!;
-                });
+                return RadioListTile<int>(
+                  value: index,
+                  groupValue: selectedFormatIndex,
+                  title: Text(option.label, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  secondary:  RoundedIcon(
+                    icon: option.icon,
+                    backgroundColor: option.color,
+                  ),
+                  activeColor: Theme.of(context).primaryColor,
+                  onChanged: (int? value) {
+                    setState(() {
+                      selectedFormatIndex = value!;
+                    });
+                  },
+                  controlAffinity: ListTileControlAffinity.trailing, // Put radio on the right
+                );
               }),
-              const Text('Reset Database'),
-            ],)
-          ],
-        ),
+              const Divider(),
+              DetailsListTile(
+                  title: "From",
+                  icon: Icons.calendar_month,
+                  value: DateFormat('yyyy/MM/dd').format(selectedFromDate),
+                  callback: () => showContextDatePicker(selectedFromDate, true)
+              ),
+              DetailsListTile(
+                  title: "To",
+                  icon: Icons.calendar_month,
+                  value: DateFormat('yyyy/MM/dd').format(selectedToDate),
+                  callback: () => showContextDatePicker(selectedToDate, false)
+              ),
+              const Divider(),
+              Row(mainAxisAlignment: MainAxisAlignment.start,children: [
+                Checkbox(value: resetDatabase, onChanged: (status)
+                {
+                  setState(() {
+                    resetDatabase = status!;
+                  });
+                }),
+                const Text('Reset Database'),
+              ],)
+            ],
+          ),
+        )
       ),
       persistentFooterButtons: [
         Padding(

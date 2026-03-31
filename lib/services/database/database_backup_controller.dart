@@ -606,7 +606,7 @@ extension DatabaseBackupController on SossoldiDatabase
     return csv;
   }
 
-  Future<Map<String, bool>> importFromCSV(String csvFilePath, DateTime from, DateTime to, bool reset) async {
+  Future<Map<String, bool>> importFromCSV(File file, DateTime from, DateTime to, bool reset) async {
     final db = SossoldiDatabase._database;
 
     if(db == null)
@@ -617,7 +617,6 @@ extension DatabaseBackupController on SossoldiDatabase
     Map<String, bool> results = {};
 
     try {
-      final file = File(csvFilePath);
       if (!await file.exists()) {
         throw Exception('CSV file not found');
       }
@@ -704,8 +703,7 @@ extension DatabaseBackupController on SossoldiDatabase
   }
 
   // I consider being called in a try catch
-  Future<bool> importDBFromMoneyManager(String filePath, DateTime from, DateTime to, bool reset) async {
-    final file = File(filePath);
+  Future<bool> importDBFromMoneyManager(File file, DateTime from, DateTime to, bool reset) async {
 
     try {
       if (!await file.exists()) {
@@ -713,7 +711,7 @@ extension DatabaseBackupController on SossoldiDatabase
       }
 
       Database mmDb = await openDatabase(
-        filePath,
+        file.path,
         readOnly: false,
         singleInstance: true,
       );

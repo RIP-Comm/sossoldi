@@ -1,14 +1,14 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:path/path.dart';
+import 'package:path/path.dart' as p;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
 import '../../ui/snack_bars/snack_bar.dart';
 import '../../ui/device.dart';
 
-class CSVFilePicker {
+class GeneralFilePicker {
   // Request storage permission based on Android version
   static Future<bool> _requestStoragePermission() async {
     if (Platform.isAndroid) {
@@ -24,7 +24,7 @@ class CSVFilePicker {
   }
 
   // Pick CSV file for import
-  static Future<File?> pickCSVFile(BuildContext context) async {
+  static Future<File?> pickFile(BuildContext context, List<String> extensions) async {
     bool permissionGranted = await _requestStoragePermission();
     if (!permissionGranted) {
       if (context.mounted) {
@@ -36,12 +36,25 @@ class CSVFilePicker {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: ['csv'],
+        allowedExtensions: extensions,
         allowMultiple: false,
       );
 
       if (result != null && result.files.isNotEmpty) {
-        return File(result.files.first.path!);
+        PlatformFile pickedFile = result.files.first;
+        // 1. Check via the FilePicker property (cleanest)
+        // 2. Fallback: Check the actual file path using the 'path' package
+        String? extension = pickedFile.extension ?? p.extension(pickedFile.path!).replaceFirst('.', '');
+
+        if (extensions.contains(extension.toLowerCase())) {
+          return File(pickedFile.path!);
+        } else {
+          if (context.mounted) {
+            showSnackBar(context, message: 'Invalid file type. Expected: ${extensions.join(", ")}');
+          }
+          return null;
+        }
+
       }
     } catch (e) {
       if (context.mounted) {
@@ -52,24 +65,24 @@ class CSVFilePicker {
   }
 
   // Share exported CSV file
-  static Future<void> saveCSVFile(String csv, BuildContext context) async {
-    String? selectedDirectory;
+  static Future<void> saveFile(List<int> data, BuildContext context) async {
+
     try {
+
+      final String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+      final String proposedName  = 'sossoldi_export_$timestamp.csv';
       // Prompt the user to select a directory
-      selectedDirectory = await FilePicker.platform.getDirectoryPath();
-      if (selectedDirectory == null) {
+      String? filePath = await FilePicker.platform.saveFile(
+          dialogTitle: 'Please select where to save your file:',
+          fileName: proposedName
+      );
+      if (filePath == null) {
         // User canceled the picker
         return;
       }
 
-      final String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
-      final String filePath = join(
-        selectedDirectory,
-        'sossoldi_export_$timestamp.csv',
-      );
-
       // Write the CSV content directly to the file
-      final file = await File(filePath).writeAsString(csv);
+      final file = await File(filePath).writeAsBytes(data);
 
       // Show success message
       if (context.mounted) {

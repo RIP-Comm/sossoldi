@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../constants/style.dart';
-import '../../../services/csv/csv_file_picker.dart';
+import '../../../services/csv/general_file_picker.dart';
 import '../../../services/database/sossoldi_database.dart';
 import '../../../ui/device.dart';
 import '../../../ui/widgets/rounded_icon.dart';
@@ -108,12 +108,12 @@ class _ExportScreenState extends State<ExportScreen> {
     switch(selectedFormatIndex)
     {
       case 0:
-        CSVFilePicker.showLoading(context, 'Exporting data...');
+        GeneralFilePicker.showLoading(context, 'Exporting data...');
 
         final csv = await SossoldiDatabase.instance.exportToCSV(selectedFromDate, selectedToDate);
 
-        await CSVFilePicker.saveCSVFile(csv, context);
-        CSVFilePicker.hideLoading(context);
+        await GeneralFilePicker.saveFile(csv.codeUnits, context);
+        GeneralFilePicker.hideLoading(context);
         break;
       default:
         return;
@@ -130,43 +130,45 @@ class _ExportScreenState extends State<ExportScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            ...exportFormats.asMap().entries.map((entry) {
-              int index = entry.key;
-              ExportOption option = entry.value;
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ...exportFormats.asMap().entries.map((entry) {
+                int index = entry.key;
+                ExportOption option = entry.value;
 
-              return RadioListTile<int>(
-                value: index,
-                groupValue: selectedFormatIndex,
-                title: Text(option.label, style: const TextStyle(fontWeight: FontWeight.bold)),
-                secondary: RoundedIcon(
-                  icon: option.icon,
-                  backgroundColor: option.color,
-                ),
-                activeColor: Theme.of(context).primaryColor,
-                onChanged: (int? value) {
-                  setState(() => selectedFormatIndex = value!);
-                },
-                controlAffinity: ListTileControlAffinity.trailing,
-              );
-            }),
-            const Divider(),
-            DetailsListTile(
-                title: "From",
-                icon: Icons.calendar_month,
-                value: DateFormat('yyyy/MM/dd').format(selectedFromDate),
-                callback: () => showContextDatePicker(selectedFromDate, true)
-            ),
-            DetailsListTile(
-                title: "To",
-                icon: Icons.calendar_month,
-                value: DateFormat('yyyy/MM/dd').format(selectedToDate),
-                callback: () => showContextDatePicker(selectedToDate, false)
-            ),
-            const Divider(),
-          ],
+                return RadioListTile<int>(
+                  value: index,
+                  groupValue: selectedFormatIndex,
+                  title: Text(option.label, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  secondary: RoundedIcon(
+                    icon: option.icon,
+                    backgroundColor: option.color,
+                  ),
+                  activeColor: Theme.of(context).primaryColor,
+                  onChanged: (int? value) {
+                    setState(() => selectedFormatIndex = value!);
+                  },
+                  controlAffinity: ListTileControlAffinity.trailing,
+                );
+              }),
+              const Divider(),
+              DetailsListTile(
+                  title: "From",
+                  icon: Icons.calendar_month,
+                  value: DateFormat('yyyy/MM/dd').format(selectedFromDate),
+                  callback: () => showContextDatePicker(selectedFromDate, true)
+              ),
+              DetailsListTile(
+                  title: "To",
+                  icon: Icons.calendar_month,
+                  value: DateFormat('yyyy/MM/dd').format(selectedToDate),
+                  callback: () => showContextDatePicker(selectedToDate, false)
+              ),
+              const Divider(),
+            ],
+          ),
         ),
       ),
       persistentFooterButtons: [

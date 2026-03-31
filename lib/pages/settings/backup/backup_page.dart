@@ -5,9 +5,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../services/csv/general_file_picker.dart';
 import '../../../services/database/sossoldi_database.dart';
 import '../../../ui/device.dart';
-import '../../../services/csv/csv_file_picker.dart';
 import '../../../ui/snack_bars/snack_bar.dart';
 import '../../../ui/widgets/default_card.dart';
 
@@ -68,9 +68,9 @@ class _BackupPageState extends ConsumerState<BackupPage> {
       {
         throw Exception('Failed to import database, table not found');
       }
-      CSVFilePicker.hideLoading(context);
+      GeneralFilePicker.hideLoading(context);
 
-      await CSVFilePicker.showSuccess(
+      await GeneralFilePicker.showSuccess(
         context,
         'Data imported successfully',
       );
@@ -80,7 +80,7 @@ class _BackupPageState extends ConsumerState<BackupPage> {
     catch(e)
     {
       if (!mounted) return;
-      CSVFilePicker.hideLoading(context);
+      GeneralFilePicker.hideLoading(context);
 
       showSnackBar(context, message: 'Import failed: ${e.toString()}');
     }
@@ -89,18 +89,18 @@ class _BackupPageState extends ConsumerState<BackupPage> {
 
   Future<void> _handleBackup() async {
     try {
-      CSVFilePicker.showLoading(context, 'Exporting data...');
+      GeneralFilePicker.showLoading(context, 'Exporting data...');
       Uint8List bytes =  await SossoldiDatabase.instance.exportDatabase();
       await FilePicker.platform.saveFile(
           dialogTitle: 'Salva backup database',
           fileName: 'backup.db',
           bytes: bytes
       );
-      CSVFilePicker.hideLoading(context);
+      GeneralFilePicker.hideLoading(context);
 
     } catch (e) {
       if (!mounted) return;
-      CSVFilePicker.hideLoading(context);
+      GeneralFilePicker.hideLoading(context);
       showSnackBar(context, message: 'Export failed: ${e.toString()}');
     }
   }
