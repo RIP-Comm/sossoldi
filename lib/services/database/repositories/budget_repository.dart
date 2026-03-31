@@ -29,7 +29,7 @@ class BudgetRepository {
     final exists = await checkIfExists(item);
     if (exists) {
       await db.rawQuery(
-        "UPDATE $budgetTable SET amountLimit = ${item.amountLimit} WHERE idCategory = ${item.idCategory}",
+        "UPDATE $budgetTable SET ${BudgetFields.amountLimit} = ${item.amountLimit} AND ${BudgetFields.active} = 1 WHERE idCategory = ${item.idCategory}",
       );
     } else {
       await db.insert(budgetTable, item.toJson());
@@ -84,7 +84,7 @@ class BudgetRepository {
     final db = await _sossoldiDB.database;
     final orderByASC = '${BudgetFields.createdAt} ASC';
     final result = await db.rawQuery(
-      'SELECT bt.*, ct.name FROM $budgetTable as bt LEFT JOIN $categoryTransactionTable as ct ON bt.${BudgetFields.idCategory} = ct.${CategoryTransactionFields.id} WHERE bt.active = 1 ORDER BY $orderByASC',
+      'SELECT bt.*, ct.name FROM $budgetTable as bt LEFT JOIN $categoryTransactionTable as ct ON bt.${BudgetFields.idCategory} = ct.${CategoryTransactionFields.id} WHERE bt.${BudgetFields.active} = 1 ORDER BY $orderByASC',
     );
     return result.map((json) => Budget.fromJson(json)).toList();
   }
@@ -92,7 +92,7 @@ class BudgetRepository {
   Future<List<BudgetStats>> selectMonthlyBudgetsStats() async {
     final db = await _sossoldiDB.database;
     var query =
-        "SELECT bt.*, SUM(t.amount) as spent FROM $budgetTable as bt  LEFT JOIN $categoryTransactionTable as ct ON bt.${BudgetFields.idCategory} = ct.${CategoryTransactionFields.id}  LEFT JOIN '$transactionTable' as t ON t.${TransactionFields.idCategory} = ct.${CategoryTransactionFields.id}  WHERE bt.active = 1 AND strftime('%m', t.date) = strftime('%m', 'now') AND strftime('%Y', t.date) = strftime('%Y', 'now')  GROUP BY bt.${BudgetFields.idCategory};";
+        "SELECT bt.*, SUM(t.${TransactionFields.amount}) as spent FROM $budgetTable as bt LEFT JOIN $categoryTransactionTable as ct ON bt.${BudgetFields.idCategory} = ct.${CategoryTransactionFields.id} LEFT JOIN '$transactionTable' as t ON t.${TransactionFields.idCategory} = ct.${CategoryTransactionFields.id} WHERE bt.${BudgetFields.active} = 1 AND strftime('%m', t.date) = strftime('%m', 'now') AND strftime('%Y', t.date) = strftime('%Y', 'now') GROUP BY bt.${BudgetFields.idCategory};";
     final result = await db.rawQuery(query);
 
     List<Budget> allBudgets = await selectAllActive();
