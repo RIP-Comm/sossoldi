@@ -5,6 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../model/bank_account.dart';
 import '../model/transaction.dart';
 import '../services/database/repositories/account_repository.dart';
+import '../services/database/repositories/recurring_transactions_repository.dart';
 import 'dashboard_provider.dart';
 import 'recurring_transactions_provider.dart';
 import 'transactions_provider.dart';
@@ -220,8 +221,16 @@ class Accounts extends _$Accounts {
   Future<void> removeAccount(BankAccount account) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
+      // delete recurring transactions tied to this account
+      if (account.id != null) {
+        await ref
+            .read(recurringTransactionRepositoryProvider)
+            .deleteByAccount(account.id!);
+      }
+
       await ref.read(accountRepositoryProvider).deleteById(account);
       if (account.mainAccount) ref.invalidate(mainAccountProvider);
+      ref.invalidate(recurringTransactionsProvider);
       return _getAccounts();
     });
   }

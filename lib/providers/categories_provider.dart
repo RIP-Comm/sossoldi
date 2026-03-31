@@ -4,6 +4,10 @@ import '../model/category_transaction.dart';
 import '../model/transaction.dart';
 import '../services/database/repositories/category_repository.dart';
 import '../services/database/repositories/transactions_repository.dart';
+import '../services/database/repositories/budget_repository.dart';
+import '../services/database/repositories/recurring_transactions_repository.dart';
+import 'budgets_provider.dart';
+import 'recurring_transactions_provider.dart';
 import 'transactions_provider.dart';
 
 part 'categories_provider.g.dart';
@@ -139,12 +143,37 @@ class Categories extends _$Categories {
   Future<void> removeCategory(CategoryTransaction category) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
+      // delete budgets and recurring transactions tied to this category and its subcategories
+      final cid = category.id;
+      if (cid != null) {
+        await ref.read(budgetRepositoryProvider).deleteByCategory(cid);
+        await ref
+            .read(recurringTransactionRepositoryProvider)
+            .deleteByCategory(cid);
+
+        // delete for direct subcategories as well
+        final subs = await ref
+            .read(categoryRepositoryProvider)
+            .selectSubCategory(cid);
+        for (var sub in subs) {
+          if (sub.id != null) {
+            await ref.read(budgetRepositoryProvider).deleteByCategory(sub.id!);
+            await ref
+                .read(recurringTransactionRepositoryProvider)
+                .deleteByCategory(sub.id!);
+          }
+        }
+      }
+
       await ref.read(categoryRepositoryProvider).deleteById(category);
       ref.invalidate(selectedSubcategoryProvider);
       ref.invalidate(categoryMapProvider);
       ref.invalidate(
         subcategoriesProvider(ref.read(selectedCategoryProvider)!.id!),
       );
+      ref.invalidate(recurringTransactionsProvider);
+      ref.invalidate(budgetsProvider);
+      ref.invalidate(monthlyBudgetsStatsProvider);
       return _getCategories();
     });
   }

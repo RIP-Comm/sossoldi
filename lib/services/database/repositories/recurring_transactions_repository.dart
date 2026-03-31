@@ -96,6 +96,26 @@ class RecurringTransactionRepository {
     );
   }
 
+  Future<int> deleteByCategory(int id) async {
+    final db = await _sossoldiDB.database;
+
+    return await db.delete(
+      recurringTransactionTable,
+      where: '${RecurringTransactionFields.idCategory} = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<int> deleteByAccount(int id) async {
+    final db = await _sossoldiDB.database;
+
+    return await db.delete(
+      recurringTransactionTable,
+      where: '${RecurringTransactionFields.idBankAccount} = ?',
+      whereArgs: [id],
+    );
+  }
+
   Future<void> checkRecurringTransactions() async {
     // get all recurring transactions active
     final transactions = await selectAllActive();
