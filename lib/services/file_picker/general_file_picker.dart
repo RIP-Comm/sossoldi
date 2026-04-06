@@ -70,7 +70,7 @@ class GeneralFilePicker {
     try {
 
       final String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
-      final String proposedName  = 'sossoldi_export_$timestamp.csv';
+      final String proposedName  = 'sossoldi_export_$timestamp.file_picker';
       // Prompt the user to select a directory
       String? filePath = await FilePicker.platform.saveFile(
           dialogTitle: 'Please select where to save your file:',

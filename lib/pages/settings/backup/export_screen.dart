@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../constants/style.dart';
-import '../../../services/csv/general_file_picker.dart';
+import '../../../services/file_picker/general_file_picker.dart';
 import '../../../services/database/sossoldi_database.dart';
 import '../../../ui/device.dart';
 import '../../../ui/widgets/rounded_icon.dart';
