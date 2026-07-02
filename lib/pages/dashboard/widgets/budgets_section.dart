@@ -1,9 +1,14 @@
+import 'dart:math';
+
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
 
 import '../../../ui/widgets/budget_circular_indicator.dart';
 import '../../../providers/budgets_provider.dart';
+import '../../../providers/categories_provider.dart';
+import '../../../providers/transactions_provider.dart';
 import '../../../ui/device.dart';
 
 class BudgetsSection extends ConsumerWidget {
@@ -11,7 +16,10 @@ class BudgetsSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final budgetsAsync = ref.watch(monthlyBudgetsStatsProvider);
+    final budgetsAsync = ref.watch(budgetsProvider);
+    final transactionsAsync = ref.watch(monthlyTransactionsProvider);
+    final categoriesAsync = ref.watch(allParentCategoriesProvider);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: Sizes.lg,
@@ -52,32 +60,52 @@ class BudgetsSection extends ConsumerWidget {
                   ],
                 ),
               );
-            } else {
-              return SizedBox(
-                height: 150,
-                width: MediaQuery.of(context).size.width,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: budgets.length,
-                  itemBuilder: (context, index) => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: Sizes.md),
-                    child: BudgetCircularIndicator(
-                      title: budgets[index].name!,
-                      amount:
-                          budgets[index].amountLimit - budgets[index].spent > 0
-                          ? budgets[index].amountLimit - budgets[index].spent
-                          : 0,
-                      perc:
-                          budgets[index].spent / budgets[index].amountLimit > 1
-                          ? 1
-                          : budgets[index].spent / budgets[index].amountLimit,
-                      color:
-                          categoryColorList[index % categoryColorList.length],
-                    ),
-                  ),
-                ),
-              );
             }
+            return transactionsAsync.when(
+              data: (transactions) => categoriesAsync.when(
+                data: (categories) {
+                  return SizedBox(
+                    height: 150,
+                    width: MediaQuery.of(context).size.width,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: budgets.length,
+                      itemBuilder: (context, index) {
+                        final budget = budgets[index];
+                        final category = categories.firstWhereOrNull(
+                          (cat) => cat.id == budget.idCategory,
+                        );
+                        if (category == null) return const SizedBox();
+                        final double spent = transactions
+                            .where(
+                              (t) =>
+                                  t.idCategory == budget.idCategory ||
+                                  t.categoryParent == budget.idCategory,
+                            )
+                            .fold(0.0, (sum, t) => sum + t.amount);
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: Sizes.md,
+                          ),
+                          child: BudgetCircularIndicator(
+                            title: budget.name!,
+                            amount: max(0, budget.amountLimit - spent),
+                            perc: budget.amountLimit > 0
+                                ? min(1, spent / budget.amountLimit)
+                                : 0,
+                            color: categoryColorList[category.color],
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+                error: (err, stack) => Text('Error: $err'),
+                loading: () => const Center(child: CircularProgressIndicator()),
+              ),
+              error: (err, stack) => Text('Error: $err'),
+              loading: () => const Center(child: CircularProgressIndicator()),
+            );
           },
           error: (err, stack) => Text('Error: $err'),
           loading: () => const Center(child: CircularProgressIndicator()),
