@@ -276,15 +276,14 @@ class TransactionsNotifier extends _$TransactionsNotifier {
     final hasCategory =
         transaction.type != TransactionType.transfer &&
         transaction.idCategory != null;
-    final category =
-        hasCategory
-            ? ref
-                .read(categoriesProvider)
-                .value!
-                .firstWhereOrNull(
-                  (element) => element.id == transaction.idCategory!,
-                )
-            : null;
+    final category = hasCategory
+        ? ref
+              .read(categoriesProvider)
+              .value!
+              .firstWhereOrNull(
+                (element) => element.id == transaction.idCategory!,
+              )
+        : null;
     ref.read(selectedCategoryProvider.notifier).state = category;
     ref.read(selectedBankAccountProvider.notifier).state = ref
         .read(accountsProvider)

@@ -63,8 +63,9 @@ class _StructureState extends ConsumerState<Structure> {
       // Prevent the fab moving up when the keyboard is opened
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor:
-            selectedIndex == 0 ? Theme.of(context).colorScheme.tertiary : null,
+        backgroundColor: selectedIndex == 0
+            ? Theme.of(context).colorScheme.tertiary
+            : null,
         title: switch (selectedIndex) {
           0 => null,
           _ => Text(_pagesTitle.elementAt(selectedIndex)),
@@ -104,9 +105,8 @@ class _StructureState extends ConsumerState<Structure> {
         selectedFontSize: 8,
         unselectedFontSize: 8,
         currentIndex: selectedIndex,
-        onTap:
-            (index) =>
-                index != 2 ? setState(() => selectedIndex = index) : null,
+        onTap: (index) =>
+            index != 2 ? setState(() => selectedIndex = index) : null,
         items: [
           BottomNavigationBarItem(
             icon: Icon(selectedIndex == 0 ? Icons.home : Icons.home_outlined),
