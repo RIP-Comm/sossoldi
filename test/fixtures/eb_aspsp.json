@@ -1,0 +1,14 @@
+{
+  "name": "Mock ASPSP",
+  "country": "IT",
+  "logo": "https://example.com/logo.png",
+  "psu_types": ["personal", "business"],
+  "auth_methods": [],
+  "maximum_consent_validity": 7776000,
+  "beta": false,
+  "sandbox": {
+    "users": [
+      { "username": "sandbox-user-1" }
+    ]
+  }
+}

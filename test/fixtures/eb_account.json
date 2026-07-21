@@ -1,0 +1,12 @@
+{
+  "uid": "acc-uid-123",
+  "account_id": { "iban": "IT60X0542811101000000123456" },
+  "all_account_ids": [{ "iban": "IT60X0542811101000000123456" }],
+  "name": "Main Account",
+  "details": "Checking",
+  "currency": "EUR",
+  "product": "Current Account",
+  "cash_account_type": "CACC",
+  "usage": "PRIV",
+  "identification_hash": "idhash-abc"
+}
