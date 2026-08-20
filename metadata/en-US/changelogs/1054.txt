@@ -1,0 +1,9 @@
+From open-source experiment to mature tool: Sossoldi officially reaches Version 1.0!
+
+What v1.0 brings:
+- Security & Architecture: Safe editing of categories/accounts without losing past budget history.
+- Speed: Faster daily tracking with quick shortcuts and updated settings.
+- A LOT of bug fixed
+- iOS Return: Catching up with subcategories, drag-and-drop, and Face ID fixes.
+
+A huge thank you to all the community who contributed code, reports and ideas to make this achievement possible!
