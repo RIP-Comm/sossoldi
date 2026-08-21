@@ -219,20 +219,21 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
               : "New transaction",
         ),
         actions: [
-          if (widget.transaction != null && !_isReconciliationTransaction) ...[
-            IconButton(
-              icon: Icon(
-                Icons.copy,
-                size: 20,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              onPressed: () => showDialog(
-                context: context,
-                builder: (_) => DuplicateTransactionDialog(
-                  transaction: widget.transaction!,
+          if (widget.transaction != null) ...[
+            if (!_isReconciliationTransaction)
+              IconButton(
+                icon: Icon(
+                  Icons.copy,
+                  size: 20,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                onPressed: () => showDialog(
+                  context: context,
+                  builder: (_) => DuplicateTransactionDialog(
+                    transaction: widget.transaction!,
+                  ),
                 ),
               ),
-            ),
             IconButton(
               icon: Icon(
                 Icons.delete_outline,
@@ -313,15 +314,14 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
                     LabelListTile(noteController),
                   const Divider(),
                   if (selectedType != TransactionType.transfer) ...[
-                    (_isReconciliationTransaction
-                        ? NonEditableDetailsListTile(
-                            title: "Account",
-                            icon: Icons.account_balance_wallet,
-                            value: ref
-                                .watch(selectedBankAccountProvider)
-                                ?.name,
-                          )
-                        : DetailsListTile(
+                    if (_isReconciliationTransaction)
+                      NonEditableDetailsListTile(
+                        title: "Account",
+                        icon: Icons.account_balance_wallet,
+                        value: ref.watch(selectedBankAccountProvider)?.name,
+                      )
+                    else
+                      DetailsListTile(
                       title: "Account",
                       icon: Icons.account_balance_wallet,
                       value: ref.watch(selectedBankAccountProvider)?.name,
@@ -348,15 +348,16 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
                           ),
                         );
                       },
-                    )),
+                      ),
                     const Divider(),
-                    (_isReconciliationTransaction
-                        ? NonEditableDetailsListTile(
-                            title: "Category",
-                            icon: Icons.list_alt,
-                            value: ref.watch(selectedCategoryProvider)?.name,
-                          )
-                        : DetailsListTile(
+                    if (_isReconciliationTransaction)
+                      NonEditableDetailsListTile(
+                        title: "Category",
+                        icon: Icons.list_alt,
+                        value: ref.watch(selectedCategoryProvider)?.name,
+                      )
+                    else
+                      DetailsListTile(
                       title: "Category",
                       icon: Icons.list_alt,
                       value: ref.watch(selectedCategoryProvider)?.name,
@@ -383,18 +384,17 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
                           ),
                         );
                       },
-                    )),
+                      ),
                     const Divider(),
                   ],
-                  (_isReconciliationTransaction
-                      ? NonEditableDetailsListTile(
-                          title: "Date",
-                          icon: Icons.calendar_month,
-                          value: ref
-                              .watch(selectedDateProvider)
-                              .formatEDMY(),
-                        )
-                      : DetailsListTile(
+                  if (_isReconciliationTransaction)
+                    NonEditableDetailsListTile(
+                      title: "Date",
+                      icon: Icons.calendar_month,
+                      value: ref.watch(selectedDateProvider).formatEDMY(),
+                    )
+                  else
+                    DetailsListTile(
                     title: "Date",
                     icon: Icons.calendar_month,
                     value: ref.watch(selectedDateProvider).formatEDMY(),
@@ -434,7 +434,7 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
                         }
                       }
                     },
-                  )),
+                    ),
                   if (!_isReconciliationTransaction)
                     RecurrenceListTile(
                       recurrencyEditingPermitted: recurrencyEditingPermitted,
