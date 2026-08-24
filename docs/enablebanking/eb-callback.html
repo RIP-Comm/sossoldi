@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Returning to Sossoldi…</title>
+<meta name="robots" content="noindex">
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    text-align: center;
+    padding: 0 24px;
+    color: #222;
+  }
+  a { color: #2f6fed; }
+</style>
+</head>
+<body>
+  <p id="message">Returning to Sossoldi&hellip;<br>
+    If nothing happens, <a id="fallback" href="#">tap here</a>.</p>
+
+  <script>
+    // Enable Banking redirects here with ?code=...&state=... (or
+    // ?error=...&error_description=...) after the user approves/denies
+    // consent at their bank. This page only exists because Enable Banking
+    // requires an HTTPS redirect URL in production and won't accept the
+    // app's own "sossoldi://" custom scheme directly — so we bounce.
+    var target = 'sossoldi://eb-callback' + window.location.search;
+    document.getElementById('fallback').href = target;
+    window.location.replace(target);
+  </script>
+</body>
+</html>
