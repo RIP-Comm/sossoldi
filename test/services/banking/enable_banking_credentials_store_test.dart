@@ -42,8 +42,46 @@ void main() {
       expect(readConfig!.appId, 'app-123');
       expect(readConfig.environment, EnableBankingEnvironment.sandbox);
       expect(readConfig.defaultCountry, 'IT');
+      expect(readConfig.supportedCountries, isEmpty);
       expect(readConfig.redirectUri, kEbRedirectUri);
       expect(readConfig.baseUrl, 'https://api.enablebanking.com');
+    });
+
+    test('rejects mismatched app IDs before changing storage', () async {
+      final store = const EnableBankingCredentialsStore();
+
+      await expectLater(
+        () => store.saveCredentials(
+          appId: 'app-123',
+          privateKeyPem: 'pem',
+          config: const EnableBankingConfig(appId: 'different-app'),
+        ),
+        throwsA(isA<Exception>()),
+      );
+
+      expect(await store.hasCredentials(), isFalse);
+    });
+
+    test('treats a partial legacy credential pair as invalid', () async {
+      FlutterSecureStorage.setMockInitialValues({'eb_app_id': 'app-123'});
+      final store = const EnableBankingCredentialsStore();
+
+      expect(await store.hasCredentials(), isFalse);
+      await expectLater(store.readCredentials, throwsA(isA<Exception>()));
+    });
+
+    test('reads a complete legacy pair without mixing app IDs', () async {
+      FlutterSecureStorage.setMockInitialValues({
+        'eb_app_id': 'legacy-app',
+        'eb_private_key_pem': 'legacy-key',
+        'eb_config_json': '{"app_id":"legacy-app"}',
+      });
+      final store = const EnableBankingCredentialsStore();
+
+      final credentials = await store.readCredentials();
+
+      expect(credentials?.config.appId, 'legacy-app');
+      expect(credentials?.privateKeyPem, 'legacy-key');
     });
 
     test('clear removes appId, private key and config', () async {

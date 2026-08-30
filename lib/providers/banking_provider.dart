@@ -1,6 +1,9 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../services/banking/enable_banking_api.dart';
+import '../services/banking/enable_banking_auth.dart';
 import '../services/banking/enable_banking_config.dart';
+import '../services/banking/enable_banking_credentials_service.dart';
 import '../services/banking/enable_banking_credentials_store.dart';
 
 part 'banking_provider.g.dart';
@@ -8,6 +11,22 @@ part 'banking_provider.g.dart';
 @Riverpod(keepAlive: true)
 EnableBankingCredentialsStore enableBankingCredentialsStore(Ref ref) =>
     const EnableBankingCredentialsStore();
+
+@Riverpod(keepAlive: true)
+EnableBankingAuth enableBankingAuth(Ref ref) => EnableBankingAuth();
+
+@Riverpod(keepAlive: true)
+EnableBankingApi enableBankingApi(Ref ref) => EnableBankingApi(
+  auth: ref.watch(enableBankingAuthProvider),
+  store: ref.watch(enableBankingCredentialsStoreProvider),
+);
+
+@Riverpod(keepAlive: true)
+EnableBankingCredentialsService enableBankingCredentialsService(Ref ref) =>
+    EnableBankingCredentialsService(
+      api: ref.watch(enableBankingApiProvider),
+      store: ref.watch(enableBankingCredentialsStoreProvider),
+    );
 
 @Riverpod(keepAlive: true)
 class EnableBankingSettings extends _$EnableBankingSettings {
@@ -29,13 +48,15 @@ class EnableBankingSettings extends _$EnableBankingSettings {
   }) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      final store = ref.read(enableBankingCredentialsStoreProvider);
-      await store.saveCredentials(
-        appId: appId,
-        privateKeyPem: privateKeyPem,
-        config: config,
-      );
-      return store.readConfig();
+      final saved = await ref
+          .read(enableBankingCredentialsServiceProvider)
+          .saveVerifiedCredentials(
+            appId: appId,
+            privateKeyPem: privateKeyPem,
+            redirectUri: config.redirectUri,
+            defaultCountry: config.defaultCountry,
+          );
+      return saved;
     });
   }
 

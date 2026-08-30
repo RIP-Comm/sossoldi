@@ -3,14 +3,27 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'enable_banking_config.dart';
+import 'enable_banking_exception.dart';
 
-const _kAppIdKey = 'eb_app_id';
-const _kPrivateKeyPemKey = 'eb_private_key_pem';
-const _kConfigJsonKey = 'eb_config_json';
+const _kCredentialSetKey = 'eb_credentials_v1';
+const _kLegacyAppIdKey = 'eb_app_id';
+const _kLegacyPrivateKeyPemKey = 'eb_private_key_pem';
+const _kLegacyConfigJsonKey = 'eb_config_json';
 
-/// Encrypted persistence for the user's BYOC Enable Banking credentials
-/// (Keychain on iOS/macOS, Keystore-backed EncryptedSharedPreferences on
-/// Android). The private key is never logged nor exposed beyond this store.
+class EnableBankingCredentials {
+  final EnableBankingConfig config;
+  final String privateKeyPem;
+
+  const EnableBankingCredentials({
+    required this.config,
+    required this.privateKeyPem,
+  });
+}
+
+/// Encrypted persistence for a verified BYOC credential set.
+///
+/// Configuration and private key are stored in one versioned value so readers
+/// cannot observe a torn app-id/key pair after an interrupted write.
 class EnableBankingCredentialsStore {
   final FlutterSecureStorage _storage;
 
@@ -29,37 +42,96 @@ class EnableBankingCredentialsStore {
     required String privateKeyPem,
     required EnableBankingConfig config,
   }) async {
-    await _storage.write(key: _kAppIdKey, value: appId);
-    await _storage.write(key: _kPrivateKeyPemKey, value: privateKeyPem);
-    await _storage.write(
-      key: _kConfigJsonKey,
-      value: jsonEncode(config.toJson()),
-    );
+    if (config.appId != appId) {
+      throw const EnableBankingException(
+        message: 'Credential app ID does not match its configuration',
+      );
+    }
+    final encoded = jsonEncode({
+      'version': 1,
+      'config': config.toJson(),
+      'private_key_pem': privateKeyPem,
+    });
+    await _storage.write(key: _kCredentialSetKey, value: encoded);
+    await _clearLegacyKeys();
   }
 
-  Future<EnableBankingConfig?> readConfig() async {
-    final appId = await _storage.read(key: _kAppIdKey);
-    if (appId == null) {
-      return null;
+  Future<EnableBankingCredentials?> readCredentials() async {
+    final encoded = await _storage.read(key: _kCredentialSetKey);
+    if (encoded == null) return _readLegacyCredentials();
+
+    try {
+      final json = jsonDecode(encoded) as Map<String, dynamic>;
+      if (json['version'] != 1) {
+        throw const FormatException('unsupported credential version');
+      }
+      final config = EnableBankingConfig.fromJson(
+        json['config'] as Map<String, dynamic>,
+      );
+      final privateKeyPem = json['private_key_pem'] as String;
+      if (privateKeyPem.trim().isEmpty) {
+        throw const FormatException('empty private key');
+      }
+      return EnableBankingCredentials(
+        config: config,
+        privateKeyPem: privateKeyPem,
+      );
+    } catch (error) {
+      throw EnableBankingException(
+        message: 'Malformed Enable Banking credential set: $error',
+      );
     }
-    final configJson = await _storage.read(key: _kConfigJsonKey);
-    if (configJson == null) {
-      return EnableBankingConfig(appId: appId);
-    }
-    return EnableBankingConfig.fromJson(
-      jsonDecode(configJson) as Map<String, dynamic>,
-    );
   }
 
-  Future<String?> readPrivateKey() => _storage.read(key: _kPrivateKeyPemKey);
+  Future<EnableBankingConfig?> readConfig() async =>
+      (await readCredentials())?.config;
 
-  Future<bool> hasCredentials() async =>
-      await _storage.containsKey(key: _kAppIdKey) &&
-      await _storage.containsKey(key: _kPrivateKeyPemKey);
+  Future<String?> readPrivateKey() async =>
+      (await readCredentials())?.privateKeyPem;
+
+  Future<bool> hasCredentials() async {
+    try {
+      return await readCredentials() != null;
+    } on EnableBankingException {
+      return false;
+    }
+  }
 
   Future<void> clear() async {
-    await _storage.delete(key: _kAppIdKey);
-    await _storage.delete(key: _kPrivateKeyPemKey);
-    await _storage.delete(key: _kConfigJsonKey);
+    await _storage.delete(key: _kCredentialSetKey);
+    await _clearLegacyKeys();
+  }
+
+  Future<EnableBankingCredentials?> _readLegacyCredentials() async {
+    final appId = await _storage.read(key: _kLegacyAppIdKey);
+    final privateKeyPem = await _storage.read(key: _kLegacyPrivateKeyPemKey);
+    if (appId == null && privateKeyPem == null) return null;
+    if (appId == null || privateKeyPem == null) {
+      throw const EnableBankingException(
+        message: 'Incomplete legacy Enable Banking credentials',
+      );
+    }
+
+    final configJson = await _storage.read(key: _kLegacyConfigJsonKey);
+    final config = configJson == null
+        ? EnableBankingConfig(appId: appId)
+        : EnableBankingConfig.fromJson(
+            jsonDecode(configJson) as Map<String, dynamic>,
+          );
+    if (config.appId != appId) {
+      throw const EnableBankingException(
+        message: 'Legacy credential app IDs do not match',
+      );
+    }
+    return EnableBankingCredentials(
+      config: config,
+      privateKeyPem: privateKeyPem,
+    );
+  }
+
+  Future<void> _clearLegacyKeys() async {
+    await _storage.delete(key: _kLegacyAppIdKey);
+    await _storage.delete(key: _kLegacyPrivateKeyPemKey);
+    await _storage.delete(key: _kLegacyConfigJsonKey);
   }
 }
