@@ -1,7 +1,6 @@
 import 'eb_account.dart';
 
-/// An authorized session as returned by `POST /sessions` and
-/// `GET /sessions/{id}`.
+/// An authorized session as returned by `POST /sessions`.
 ///
 /// [aspspName]/[aspspCountry] come from the nested `aspsp` object and
 /// [validUntil] from `access.valid_until`.

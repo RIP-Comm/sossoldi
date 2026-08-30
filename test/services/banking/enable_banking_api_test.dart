@@ -13,6 +13,13 @@ import 'package:sossoldi/services/banking/enable_banking_exception.dart';
 /// valid bearer token string, not a real signature.
 class _FakeAuth extends EnableBankingAuth {
   @override
+  String buildJwt({
+    required String appId,
+    required String privateKeyPem,
+    Duration ttl = const Duration(hours: 1),
+  }) => 'candidate-token';
+
+  @override
   Future<String> getValidToken(EnableBankingCredentialsStore store) async =>
       'test-token';
 }
@@ -53,6 +60,94 @@ void main() {
       expect(captured.headers['Accept'], 'application/json');
       expect(aspsps, hasLength(1));
       expect(aspsps.single.name, 'Test Bank');
+    });
+
+    test(
+      'getAspsps can fetch all countries without a country filter',
+      () async {
+        late http.Request captured;
+        final api = _apiWith((request) async {
+          captured = request;
+          return _json({'aspsps': []});
+        });
+
+        await api.getAspsps();
+
+        expect(captured.url.queryParameters.containsKey('country'), isFalse);
+        expect(captured.url.queryParameters['psu_type'], 'personal');
+      },
+    );
+
+    test(
+      'getApplication parses environment, redirects and countries',
+      () async {
+        final api = _apiWith(
+          (request) async => _json({
+            'name': 'Sossoldi',
+            'kid': 'app-123',
+            'environment': 'PRODUCTION',
+            'redirect_urls': [kEbRedirectUri],
+            'active': true,
+            'countries': ['IT', 'GB'],
+            'services': ['AIS'],
+          }),
+        );
+
+        final application = await api.getApplication();
+
+        expect(application.kid, 'app-123');
+        expect(application.environment, EnableBankingEnvironment.production);
+        expect(application.countries, ['GB', 'IT']);
+      },
+    );
+
+    test(
+      'verifyApplicationCredentials uses the candidate JWT before save',
+      () async {
+        late http.Request captured;
+        final api = _apiWith((request) async {
+          captured = request;
+          return _json({
+            'name': 'Sossoldi',
+            'kid': 'app-123',
+            'environment': 'PRODUCTION',
+            'redirect_urls': [kEbRedirectUri],
+            'active': true,
+            'countries': ['IT'],
+            'services': ['AIS'],
+          });
+        });
+
+        await api.verifyApplicationCredentials(
+          appId: 'app-123',
+          privateKeyPem: 'candidate-private-key',
+        );
+
+        expect(captured.url.path, '/application');
+        expect(captured.headers['Authorization'], 'Bearer candidate-token');
+      },
+    );
+
+    test('verifyApplicationCredentials rejects a different returned kid', () {
+      final api = _apiWith(
+        (request) async => _json({
+          'name': 'Other',
+          'kid': 'other-app',
+          'environment': 'PRODUCTION',
+          'redirect_urls': [kEbRedirectUri],
+          'active': true,
+          'countries': ['IT'],
+          'services': ['AIS'],
+        }),
+      );
+
+      expect(
+        () => api.verifyApplicationCredentials(
+          appId: 'app-123',
+          privateKeyPem: 'candidate-private-key',
+        ),
+        throwsA(isA<EnableBankingException>()),
+      );
     });
 
     test(
@@ -121,10 +216,19 @@ void main() {
       final api = _apiWith((request) async {
         captured = request;
         return _json({
-          'session_id': 'sess-1',
-          'accounts': [],
+          'status': 'AUTHORIZED',
+          'accounts': ['account-uid'],
+          'accounts_data': [
+            {
+              'uid': 'account-uid',
+              'identification_hash': 'account-hash',
+              'identification_hashes': ['account-hash'],
+            },
+          ],
           'aspsp': {'name': 'Test Bank', 'country': 'IT'},
           'access': {'valid_until': '2026-12-31T00:00:00.000Z'},
+          'created': '2026-08-01T00:00:00.000Z',
+          'psu_type': 'personal',
         });
       });
 
@@ -132,7 +236,8 @@ void main() {
 
       expect(captured.method, 'GET');
       expect(captured.url.path, '/sessions/sess-1');
-      expect(session.sessionId, 'sess-1');
+      expect(session.accountUids, ['account-uid']);
+      expect(session.accountsData.single.identificationHash, 'account-hash');
     });
 
     test('deleteSession issues a DELETE to /sessions/{id}', () async {

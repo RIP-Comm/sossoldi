@@ -55,9 +55,9 @@ class _CountingCredentialsStore extends EnableBankingCredentialsStore {
   int readConfigCalls = 0;
 
   @override
-  Future<EnableBankingConfig?> readConfig() async {
+  Future<EnableBankingCredentials?> readCredentials() async {
     readConfigCalls++;
-    return super.readConfig();
+    return super.readCredentials();
   }
 }
 
@@ -159,5 +159,19 @@ void main() {
 
       expect(store.readConfigCalls, 2);
     });
+
+    test(
+      'clearCache forces credentials to be read again after rotation',
+      () async {
+        final store = await storeWithCredentials();
+        final auth = EnableBankingAuth();
+
+        await auth.getValidToken(store);
+        auth.clearCache();
+        await auth.getValidToken(store);
+
+        expect(store.readConfigCalls, 2);
+      },
+    );
   });
 }

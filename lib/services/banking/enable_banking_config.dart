@@ -7,11 +7,23 @@ enum EnableBankingEnvironment {
   production,
   sandbox;
 
+  static EnableBankingEnvironment fromApi(String value) =>
+      switch (value.toUpperCase()) {
+        'PRODUCTION' => EnableBankingEnvironment.production,
+        'SANDBOX' => EnableBankingEnvironment.sandbox,
+        _ => throw EnableBankingException(
+          message: 'Unknown Enable Banking environment: $value',
+        ),
+      };
+
   static EnableBankingEnvironment fromJson(String value) =>
-      EnableBankingEnvironment.values.firstWhere(
-        (e) => e.name == value,
-        orElse: () => EnableBankingEnvironment.production,
-      );
+      switch (value.toLowerCase()) {
+        'production' => EnableBankingEnvironment.production,
+        'sandbox' => EnableBankingEnvironment.sandbox,
+        _ => throw EnableBankingException(
+          message: 'Unknown stored Enable Banking environment: $value',
+        ),
+      };
 
   String toJson() => name;
 }
@@ -25,12 +37,16 @@ class EnableBankingConfig {
   final EnableBankingEnvironment environment;
   final String redirectUri;
   final String? defaultCountry;
+  final List<String> supportedCountries;
+  final List<String> redirectUrls;
 
   const EnableBankingConfig({
     required this.appId,
     this.environment = EnableBankingEnvironment.production,
     this.redirectUri = kEbRedirectUri,
     this.defaultCountry,
+    this.supportedCountries = const [],
+    this.redirectUrls = const [],
   });
 
   /// Enable Banking serves the same host for both production and sandbox;
@@ -50,6 +66,12 @@ class EnableBankingConfig {
         ),
         redirectUri: json['redirect_uri'] as String? ?? kEbRedirectUri,
         defaultCountry: json['default_country'] as String?,
+        supportedCountries: ((json['supported_countries'] as List?) ?? const [])
+            .map((value) => value as String)
+            .toList(growable: false),
+        redirectUrls: ((json['redirect_urls'] as List?) ?? const [])
+            .map((value) => value as String)
+            .toList(growable: false),
       );
     } catch (e) {
       throw EnableBankingException(
@@ -63,5 +85,7 @@ class EnableBankingConfig {
     'environment': environment.toJson(),
     'redirect_uri': redirectUri,
     'default_country': defaultCountry,
+    'supported_countries': supportedCountries,
+    'redirect_urls': redirectUrls,
   };
 }

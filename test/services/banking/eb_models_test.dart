@@ -4,9 +4,11 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:sossoldi/services/banking/models/aspsp.dart';
+import 'package:sossoldi/services/banking/models/eb_application.dart';
 import 'package:sossoldi/services/banking/models/eb_account.dart';
 import 'package:sossoldi/services/banking/models/eb_balance.dart';
 import 'package:sossoldi/services/banking/models/eb_session.dart';
+import 'package:sossoldi/services/banking/models/eb_session_details.dart';
 import 'package:sossoldi/services/banking/models/eb_transactions_page.dart';
 
 Map<String, dynamic> _loadJson(String name) =>
@@ -14,6 +16,33 @@ Map<String, dynamic> _loadJson(String name) =>
         as Map<String, dynamic>;
 
 void main() {
+  group('EbApplication.fromJson', () {
+    test('parses server-derived environment and available countries', () {
+      final application = EbApplication.fromJson(
+        _loadJson('eb_application.json'),
+      );
+
+      expect(application.kid, 'app-123');
+      expect(application.environment.name, 'production');
+      expect(application.active, isTrue);
+      expect(application.countries, ['GB', 'IT']);
+      expect(application.redirectUrls, ['sossoldi://eb-callback']);
+      expect(application.services, ['AIS']);
+    });
+
+    test('rejects an unknown server environment', () {
+      expect(
+        () => EbApplication.fromJson({
+          'name': 'Broken',
+          'kid': 'app-1',
+          'environment': 'STAGING',
+          'active': true,
+        }),
+        throwsFormatException,
+      );
+    });
+  });
+
   group('Aspsp.fromJson', () {
     test('parses fields including psu_types and nested sandbox', () {
       final aspsp = Aspsp.fromJson(_loadJson('eb_aspsp.json'));
@@ -120,6 +149,35 @@ void main() {
       expect(session.validUntil, DateTime.parse('2025-04-15T10:00:00.000Z'));
       expect(session.accounts.length, 1);
       expect(session.accounts.first.iban, 'IT60X0542811101000000123456');
+    });
+  });
+
+  group('EbSessionDetails.fromJson', () {
+    test('parses the GET session response without a session_id', () {
+      final session = EbSessionDetails.fromJson(
+        _loadJson('eb_get_session.json'),
+      );
+
+      expect(session.status, EbSessionStatus.authorized);
+      expect(session.accountUids, ['497f6eca-6276-4993-bfeb-53cbbbba6f08']);
+      expect(session.accountsData.single.identificationHash, 'primary-hash');
+      expect(session.accountsData.single.identificationHashes, [
+        'primary-hash',
+        'alternate-hash',
+      ]);
+      expect(session.aspspName, 'Nordea');
+      expect(session.aspspCountry, 'FI');
+      expect(session.psuType, 'business');
+      expect(session.psuIdHash, 'psu-hash');
+      expect(session.created, DateTime.parse('2026-08-01T11:55:00.000Z'));
+      expect(session.closed, isNull);
+    });
+
+    test('rejects an unknown session status', () {
+      final json = _loadJson('eb_get_session.json');
+      json['status'] = 'UNKNOWN';
+
+      expect(() => EbSessionDetails.fromJson(json), throwsFormatException);
     });
   });
 }

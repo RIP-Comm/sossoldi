@@ -34,6 +34,19 @@ void main() {
       );
     });
 
+    test(
+      'rejects an unknown stored environment instead of assuming production',
+      () {
+        expect(
+          () => EnableBankingConfig.fromJson({
+            'app_id': 'app-1',
+            'environment': 'staging',
+          }),
+          throwsA(isA<EnableBankingException>()),
+        );
+      },
+    );
+
     test('throws EnableBankingException instead of a raw TypeError when '
         'app_id is the wrong type (corrupted/incompatible stored blob)', () {
       expect(

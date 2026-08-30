@@ -7,9 +7,11 @@ import 'enable_banking_config.dart';
 import 'enable_banking_credentials_store.dart';
 import 'enable_banking_exception.dart';
 import 'models/aspsp.dart';
+import 'models/eb_application.dart';
 import 'models/eb_auth.dart';
 import 'models/eb_balance.dart';
 import 'models/eb_session.dart';
+import 'models/eb_session_details.dart';
 import 'models/eb_transactions_page.dart';
 
 const _kBaseUrl = 'https://api.enablebanking.com';
@@ -40,11 +42,14 @@ class EnableBankingApi {
        _store = store,
        _client = client ?? http.Client();
 
-  Future<Map<String, String>> _headers() async => {
-    'Authorization': 'Bearer ${await _auth.getValidToken(_store)}',
+  Map<String, String> _headersForToken(String token) => {
+    'Authorization': 'Bearer $token',
     'Content-Type': 'application/json',
     'Accept': 'application/json',
   };
+
+  Future<Map<String, String>> _headers() async =>
+      _headersForToken(await _auth.getValidToken(_store));
 
   void _check(http.Response response) {
     if (response.statusCode < 400) return;
@@ -74,6 +79,13 @@ class EnableBankingApi {
     return jsonDecode(response.body) as Map<String, dynamic>;
   }
 
+  Future<Map<String, dynamic>> _getWithToken(String path, String token) async {
+    final uri = Uri.parse('$_kBaseUrl$path');
+    final response = await _client.get(uri, headers: _headersForToken(token));
+    _check(response);
+    return jsonDecode(response.body) as Map<String, dynamic>;
+  }
+
   Future<Map<String, dynamic>> _post(
     String path,
     Map<String, dynamic> body,
@@ -95,16 +107,38 @@ class EnableBankingApi {
   }
 
   Future<List<Aspsp>> getAspsps({
-    required String country,
+    String? country,
     String psuType = 'personal',
   }) async {
     final json = await _get('/aspsps', {
-      'country': country,
+      'country': ?country,
       'psu_type': psuType,
     });
     return ((json['aspsps'] as List?) ?? const [])
         .map((e) => Aspsp.fromJson(e as Map<String, dynamic>))
         .toList();
+  }
+
+  Future<EbApplication> getApplication() async {
+    final json = await _get('/application');
+    return EbApplication.fromJson(json);
+  }
+
+  /// Verifies a candidate app-id/key pair before it is persisted.
+  Future<EbApplication> verifyApplicationCredentials({
+    required String appId,
+    required String privateKeyPem,
+  }) async {
+    final token = _auth.buildJwt(appId: appId, privateKeyPem: privateKeyPem);
+    final json = await _getWithToken('/application', token);
+    final application = EbApplication.fromJson(json);
+    if (application.kid != appId) {
+      throw const EnableBankingException(
+        message: 'The application returned a different key ID',
+      );
+    }
+    _auth.clearCache();
+    return application;
   }
 
   Future<EbAuthorization> startAuthorization({
@@ -135,9 +169,9 @@ class EnableBankingApi {
     return EbSession.fromJson(json);
   }
 
-  Future<EbSession> getSession(String sessionId) async {
+  Future<EbSessionDetails> getSession(String sessionId) async {
     final json = await _get('/sessions/$sessionId');
-    return EbSession.fromJson(json);
+    return EbSessionDetails.fromJson(json);
   }
 
   Future<void> deleteSession(String sessionId) async {

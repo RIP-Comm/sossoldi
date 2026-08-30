@@ -29,6 +29,11 @@ class EnableBankingAuth {
   String? _cachedToken;
   DateTime? _cachedExpiry;
 
+  void clearCache() {
+    _cachedToken = null;
+    _cachedExpiry = null;
+  }
+
   /// [tokenTtl] and [refreshMargin] default to the production values; they
   /// (and [now]) are only overridden in tests to make cache expiry
   /// deterministic without real waiting.
@@ -78,17 +83,16 @@ class EnableBankingAuth {
       return _cachedToken!;
     }
 
-    final config = await store.readConfig();
-    final privateKeyPem = await store.readPrivateKey();
-    if (config == null || privateKeyPem == null) {
+    final credentials = await store.readCredentials();
+    if (credentials == null) {
       throw const EnableBankingAuthException(
         'Enable Banking credentials are not configured',
       );
     }
 
     final token = buildJwt(
-      appId: config.appId,
-      privateKeyPem: privateKeyPem,
+      appId: credentials.config.appId,
+      privateKeyPem: credentials.privateKeyPem,
       ttl: _tokenTtl,
     );
 
