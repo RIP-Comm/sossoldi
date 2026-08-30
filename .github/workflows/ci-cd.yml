@@ -84,3 +84,10 @@ jobs:
         if: github.event_name == 'push'
         run: |
           flutter build appbundle --flavor default
+
+      - name: Verify release Internet permission
+        if: github.event_name == 'push'
+        run: |
+          manifest="$(find build/app/intermediates/merged_manifests -name AndroidManifest.xml -print -quit)"
+          test -n "$manifest"
+          grep -q 'android.permission.INTERNET' "$manifest"
