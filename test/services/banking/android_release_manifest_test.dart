@@ -16,4 +16,13 @@ void main() {
       ),
     );
   });
+
+  test('app_links is the only Android deep-link handler', () {
+    final manifest = File(
+      'android/app/src/main/AndroidManifest.xml',
+    ).readAsStringSync();
+
+    expect(manifest, contains('android:name="flutter_deeplinking_enabled"'));
+    expect(manifest, contains('android:value="false"'));
+  });
 }
