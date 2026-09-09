@@ -29,8 +29,10 @@ struct AddWalletTransactionIntent: AppIntent {
 
   func perform() async throws -> some IntentResult {
     _ = card
+    let parsedAmount = try WalletTransactionAmountParser.parse(amount)
     try WalletTransactionStore.insert(
-      amount: try WalletTransactionAmountParser.parse(amount),
+      amount: abs(parsedAmount),
+      type: parsedAmount < 0 ? "IN" : "OUT",
       merchant: merchant.trimmingCharacters(in: .whitespacesAndNewlines)
     )
     return .result()
@@ -39,39 +41,50 @@ struct AddWalletTransactionIntent: AppIntent {
 
 private enum WalletTransactionAmountParser {
   static func parse(_ value: String) throws -> Double {
-    let allowedCharacters = CharacterSet(charactersIn: "0123456789,.-")
-    let filtered = value.unicodeScalars
-      .filter { allowedCharacters.contains($0) }
-      .map(String.init)
-      .joined()
-      .replacingOccurrences(of: ",", with: ".")
-
-    let decimalSeparatorCount = filtered.filter { $0 == "." }.count
-    let normalized = decimalSeparatorCount > 1
-      ? removeThousandsSeparators(from: filtered)
-      : filtered
-
-    guard let amount = Double(normalized), amount.isFinite else {
-      throw WalletTransactionStoreError.invalidAmount(value)
+    let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
+    for style in [NumberFormatter.Style.currency, .decimal] {
+      let formatter = NumberFormatter()
+      formatter.locale = .autoupdatingCurrent
+      formatter.numberStyle = style
+      formatter.isLenient = true
+      if let amount = formatter.number(from: trimmed)?.doubleValue, amount.isFinite {
+        return amount
+      }
     }
 
-    return abs(amount)
+    if let amount = Double(normalizedDecimalString(from: trimmed)), amount.isFinite {
+      return amount
+    }
+
+    throw WalletTransactionStoreError.invalidAmount(value)
   }
 
-  private static func removeThousandsSeparators(from value: String) -> String {
-    guard let lastSeparator = value.lastIndex(of: ".") else {
-      return value
+  private static func normalizedDecimalString(from value: String) -> String {
+    let filtered = value
+      .unicodeScalars
+      .filter { CharacterSet(charactersIn: "0123456789,.-").contains($0) }
+      .map(String.init)
+      .joined()
+
+    guard let lastDot = filtered.lastIndex(of: ".") else {
+      return filtered.replacingOccurrences(of: ",", with: ".")
     }
 
-    return value.enumerated().compactMap { offset, character in
-      let index = value.index(value.startIndex, offsetBy: offset)
-      return character == "." && index != lastSeparator ? nil : character
-    }.map(String.init).joined()
+    guard let lastComma = filtered.lastIndex(of: ",") else {
+      return filtered
+    }
+
+    let decimalSeparator = lastDot > lastComma ? "." : ","
+    let groupingSeparator = decimalSeparator == "." ? "," : "."
+
+    return filtered
+      .replacingOccurrences(of: groupingSeparator, with: "")
+      .replacingOccurrences(of: decimalSeparator, with: ".")
   }
 }
 
 private enum WalletTransactionStore {
-  static func insert(amount: Double, merchant: String) throws {
+  static func insert(amount: Double, type: String, merchant: String) throws {
     let databaseURL = try sossoldiDatabaseURL()
     guard FileManager.default.fileExists(atPath: databaseURL.path) else {
       throw WalletTransactionStoreError.databaseNotFound
@@ -91,7 +104,7 @@ private enum WalletTransactionStore {
       INSERT INTO "transaction"
         (date, amount, type, note, idCategory, idBankAccount, idBankAccountTransfer, recurring, idRecurringTransaction, createdAt, updatedAt)
       VALUES
-        (?, ?, 'OUT', ?, NULL, 0, NULL, 0, NULL, ?, ?)
+        (?, ?, ?, ?, NULL, 0, NULL, 0, NULL, ?, ?)
       """
 
     var statement: OpaquePointer?
@@ -103,9 +116,10 @@ private enum WalletTransactionStore {
 
     bindText(now, to: statement, at: 1)
     sqlite3_bind_double(statement, 2, amount)
-    bindText(note, to: statement, at: 3)
-    bindText(now, to: statement, at: 4)
+    bindText(type, to: statement, at: 3)
+    bindText(note, to: statement, at: 4)
     bindText(now, to: statement, at: 5)
+    bindText(now, to: statement, at: 6)
 
     guard sqlite3_step(statement) == SQLITE_DONE else {
       let message = String(cString: sqlite3_errmsg(database))
