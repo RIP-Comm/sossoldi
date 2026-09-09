@@ -62,30 +62,17 @@ jobs:
       - name: Run tests
         run: flutter test --concurrency=1
 
-      - name: Prepare Android signing
+      - name: Dump keystore
+        if: github.event_name == 'push'
+        uses: timheuer/base64-to-file@v1.2.4
+        with:
+          fileName: keystore.jks
+          fileDir: android/app
+          encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+
+      - name: Create key.properties
         if: github.event_name == 'push'
         run: |
-          if [ -n "$ANDROID_KEYSTORE_BASE64$ANDROID_KEYSTORE_PASSWORD$ANDROID_KEY_ALIAS$ANDROID_KEY_PASSWORD" ]; then
-            : "${ANDROID_KEYSTORE_BASE64:?Incomplete Android signing configuration}"
-            : "${ANDROID_KEYSTORE_PASSWORD:?Incomplete Android signing configuration}"
-            : "${ANDROID_KEY_ALIAS:?Incomplete Android signing configuration}"
-            : "${ANDROID_KEY_PASSWORD:?Incomplete Android signing configuration}"
-            printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/keystore.jks
-          else
-            keytool -genkeypair \
-              -keystore android/app/keystore.jks \
-              -storetype JKS \
-              -storepass ci-password \
-              -alias ci \
-              -keypass ci-password \
-              -keyalg RSA \
-              -dname "CN=Sossoldi CI" \
-              -validity 1
-            ANDROID_KEYSTORE_PASSWORD=ci-password
-            ANDROID_KEY_ALIAS=ci
-            ANDROID_KEY_PASSWORD=ci-password
-          fi
-
           cat > android/key.properties <<EOF
           storeFile=keystore.jks
           storePassword=${ANDROID_KEYSTORE_PASSWORD}

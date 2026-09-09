@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:timezone/data/latest.dart' as tzdata;
+import 'package:timezone/timezone.dart' as tz;
 import 'package:sossoldi/services/banking/enable_banking_api.dart';
 import 'package:sossoldi/services/banking/enable_banking_auth.dart';
 import 'package:sossoldi/services/banking/enable_banking_config.dart';
@@ -306,6 +308,33 @@ void main() {
       expect(page.continuationKey, 'next-page');
       expect(page.transactions, hasLength(1));
       expect(page.transactions.single.signedAmount, 12.5);
+    });
+
+    test('getTransactions preserves calendar dates across timezones', () async {
+      tzdata.initializeTimeZones();
+      late http.Request captured;
+      final api = _apiWith((request) async {
+        captured = request;
+        return _json({'transactions': []});
+      });
+
+      final cases = [
+        (2026, 1, 1, '2026-01-01'),
+        (2026, 9, 1, '2026-09-01'),
+        (2028, 2, 29, '2028-02-29'),
+      ];
+      for (final zone in ['Europe/Rome', 'America/Los_Angeles', 'UTC']) {
+        final location = tz.getLocation(zone);
+        for (final (year, month, day, expected) in cases) {
+          final from = tz.TZDateTime(location, year, month, day);
+          final to = tz.TZDateTime(location, year, month, day, 23, 30);
+          await api.getTransactions('acc-uid', dateFrom: from, dateTo: to);
+
+          final query = captured.url.queryParameters;
+          expect(query['date_from'], expected, reason: zone);
+          expect(query['date_to'], expected, reason: zone);
+        }
+      }
     });
 
     test(

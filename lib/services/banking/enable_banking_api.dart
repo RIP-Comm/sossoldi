@@ -17,10 +17,9 @@ import 'models/eb_transactions_page.dart';
 const _kBaseUrl = 'https://api.enablebanking.com';
 
 String _formatDate(DateTime date) {
-  final utc = date.toUtc();
-  final year = utc.year.toString().padLeft(4, '0');
-  final month = utc.month.toString().padLeft(2, '0');
-  final day = utc.day.toString().padLeft(2, '0');
+  final year = date.year.toString().padLeft(4, '0');
+  final month = date.month.toString().padLeft(2, '0');
+  final day = date.day.toString().padLeft(2, '0');
   return '$year-$month-$day';
 }
 
@@ -185,6 +184,7 @@ class EnableBankingApi {
         .toList();
   }
 
+  /// Treats [dateFrom] and [dateTo] as calendar dates, preserving their year, month and day without timezone conversion.
   Future<EbTransactionsPage> getTransactions(
     String accountUid, {
     DateTime? dateFrom,
