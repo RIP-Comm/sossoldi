@@ -1,9 +1,9 @@
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sossoldi/services/banking/enable_banking_auth.dart';
-import 'package:sossoldi/services/banking/enable_banking_config.dart';
-import 'package:sossoldi/services/banking/enable_banking_credentials_store.dart';
+import 'package:sossoldi/services/banking/enable_banking/enable_banking_auth.dart';
+import 'package:sossoldi/services/banking/enable_banking/enable_banking_config.dart';
+import 'package:sossoldi/services/banking/enable_banking/enable_banking_credentials_store.dart';
 
 const _testAppId = 'test-app-id';
 

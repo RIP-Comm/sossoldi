@@ -7,6 +7,7 @@ import 'enable_banking_config.dart';
 import 'enable_banking_credentials_store.dart';
 import 'enable_banking_exception.dart';
 import 'models/aspsp.dart';
+import 'models/eb_account.dart';
 import 'models/eb_application.dart';
 import 'models/eb_auth.dart';
 import 'models/eb_balance.dart';
@@ -113,7 +114,7 @@ class EnableBankingApi {
       'country': ?country,
       'psu_type': psuType,
     });
-    return ((json['aspsps'] as List?) ?? const [])
+    return (json['aspsps'] as List)
         .map((e) => Aspsp.fromJson(e as Map<String, dynamic>))
         .toList();
   }
@@ -169,17 +170,26 @@ class EnableBankingApi {
   }
 
   Future<EbSessionDetails> getSession(String sessionId) async {
-    final json = await _get('/sessions/$sessionId');
+    final json = await _get('/sessions/${Uri.encodeComponent(sessionId)}');
     return EbSessionDetails.fromJson(json);
   }
 
   Future<void> deleteSession(String sessionId) async {
-    await _delete('/sessions/$sessionId');
+    await _delete('/sessions/${Uri.encodeComponent(sessionId)}');
+  }
+
+  Future<EbAccount> getAccount(String accountUid) async {
+    final json = await _get(
+      '/accounts/${Uri.encodeComponent(accountUid)}/details',
+    );
+    return EbAccount.fromJson(json);
   }
 
   Future<List<EbBalance>> getBalances(String accountUid) async {
-    final json = await _get('/accounts/$accountUid/balances');
-    return ((json['balances'] as List?) ?? const [])
+    final json = await _get(
+      '/accounts/${Uri.encodeComponent(accountUid)}/balances',
+    );
+    return (json['balances'] as List)
         .map((e) => EbBalance.fromJson(e as Map<String, dynamic>))
         .toList();
   }
@@ -192,12 +202,15 @@ class EnableBankingApi {
     String? continuationKey,
     String? transactionStatus,
   }) async {
-    final json = await _get('/accounts/$accountUid/transactions', {
-      if (dateFrom != null) 'date_from': _formatDate(dateFrom),
-      if (dateTo != null) 'date_to': _formatDate(dateTo),
-      'continuation_key': ?continuationKey,
-      'transaction_status': ?transactionStatus,
-    });
+    final json = await _get(
+      '/accounts/${Uri.encodeComponent(accountUid)}/transactions',
+      {
+        if (dateFrom != null) 'date_from': _formatDate(dateFrom),
+        if (dateTo != null) 'date_to': _formatDate(dateTo),
+        'continuation_key': ?continuationKey,
+        'transaction_status': ?transactionStatus,
+      },
+    );
     return EbTransactionsPage.fromJson(json);
   }
 }

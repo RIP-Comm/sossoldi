@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sossoldi/services/banking/enable_banking_config.dart';
-import 'package:sossoldi/services/banking/enable_banking_exception.dart';
+import 'package:sossoldi/services/banking/enable_banking/enable_banking_config.dart';
+import 'package:sossoldi/services/banking/enable_banking/enable_banking_exception.dart';
 
 void main() {
   group('EnableBankingConfig.fromJson', () {

@@ -1,71 +1,24 @@
+// dart format width=400
+
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../services/banking/enable_banking_api.dart';
-import '../services/banking/enable_banking_auth.dart';
-import '../services/banking/enable_banking_config.dart';
-import '../services/banking/enable_banking_credentials_service.dart';
-import '../services/banking/enable_banking_credentials_store.dart';
+import '../services/banking/banking_provider.dart';
+import '../services/banking/bank_institution_directory.dart' as domain;
+import '../services/banking/bank_consent_service.dart' as domain;
+import '../services/banking/bank_account_data_source.dart' as domain;
+import '../services/banking/enable_banking/enable_banking_dependencies.dart';
+import '../services/banking/enable_banking/enable_banking_provider.dart';
 
 part 'banking_provider.g.dart';
 
 @Riverpod(keepAlive: true)
-EnableBankingCredentialsStore enableBankingCredentialsStore(Ref ref) =>
-    const EnableBankingCredentialsStore();
+BankingProvider bankingService(Ref ref) => EnableBankingProvider(ref.watch(enableBankingApiProvider));
 
 @Riverpod(keepAlive: true)
-EnableBankingAuth enableBankingAuth(Ref ref) => EnableBankingAuth();
+domain.BankInstitutionDirectory bankInstitutionDirectory(Ref ref) => ref.watch(bankingServiceProvider).institutions;
 
 @Riverpod(keepAlive: true)
-EnableBankingApi enableBankingApi(Ref ref) => EnableBankingApi(
-  auth: ref.watch(enableBankingAuthProvider),
-  store: ref.watch(enableBankingCredentialsStoreProvider),
-);
+domain.BankConsentService bankConsentService(Ref ref) => ref.watch(bankingServiceProvider).consent;
 
 @Riverpod(keepAlive: true)
-EnableBankingCredentialsService enableBankingCredentialsService(Ref ref) =>
-    EnableBankingCredentialsService(
-      api: ref.watch(enableBankingApiProvider),
-      store: ref.watch(enableBankingCredentialsStoreProvider),
-    );
-
-@Riverpod(keepAlive: true)
-class EnableBankingSettings extends _$EnableBankingSettings {
-  @override
-  Future<EnableBankingConfig?> build() async {
-    final store = ref.watch(enableBankingCredentialsStoreProvider);
-    return store.readConfig();
-  }
-
-  Future<bool> hasCredentials() async {
-    final store = ref.watch(enableBankingCredentialsStoreProvider);
-    return store.hasCredentials();
-  }
-
-  Future<void> save({
-    required String appId,
-    required String privateKeyPem,
-    required EnableBankingConfig config,
-  }) async {
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
-      final saved = await ref
-          .read(enableBankingCredentialsServiceProvider)
-          .saveVerifiedCredentials(
-            appId: appId,
-            privateKeyPem: privateKeyPem,
-            redirectUri: config.redirectUri,
-            defaultCountry: config.defaultCountry,
-          );
-      return saved;
-    });
-  }
-
-  Future<void> clear() async {
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
-      final store = ref.read(enableBankingCredentialsStoreProvider);
-      await store.clear();
-      return null;
-    });
-  }
-}
+domain.BankAccountDataSource bankAccountDataSource(Ref ref) => ref.watch(bankingServiceProvider).accountData;

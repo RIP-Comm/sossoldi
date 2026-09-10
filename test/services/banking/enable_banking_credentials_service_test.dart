@@ -1,12 +1,12 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sossoldi/services/banking/enable_banking_api.dart';
-import 'package:sossoldi/services/banking/enable_banking_auth.dart';
-import 'package:sossoldi/services/banking/enable_banking_config.dart';
-import 'package:sossoldi/services/banking/enable_banking_credentials_service.dart';
-import 'package:sossoldi/services/banking/enable_banking_credentials_store.dart';
-import 'package:sossoldi/services/banking/enable_banking_exception.dart';
-import 'package:sossoldi/services/banking/models/eb_application.dart';
+import 'package:sossoldi/services/banking/enable_banking/enable_banking_api.dart';
+import 'package:sossoldi/services/banking/enable_banking/enable_banking_auth.dart';
+import 'package:sossoldi/services/banking/enable_banking/enable_banking_config.dart';
+import 'package:sossoldi/services/banking/enable_banking/enable_banking_credentials_service.dart';
+import 'package:sossoldi/services/banking/enable_banking/enable_banking_credentials_store.dart';
+import 'package:sossoldi/services/banking/enable_banking/enable_banking_exception.dart';
+import 'package:sossoldi/services/banking/enable_banking/models/eb_application.dart';
 
 class _FakeApplicationApi extends EnableBankingApi {
   _FakeApplicationApi(this.application, {this.failure})

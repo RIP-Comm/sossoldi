@@ -14,7 +14,7 @@ class EbTransactionsPage {
 
   static EbTransactionsPage fromJson(Map<String, dynamic> json) =>
       EbTransactionsPage(
-        transactions: ((json['transactions'] as List?) ?? const [])
+        transactions: (json['transactions'] as List)
             .map((e) => EbTransaction.fromJson(e as Map<String, dynamic>))
             .toList(),
         continuationKey: json['continuation_key'] as String?,

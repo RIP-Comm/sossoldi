@@ -2,7 +2,14 @@ import 'eb_amount.dart';
 
 DateTime? _parseDate(Object? value) {
   if (value == null) return null;
-  return DateTime.tryParse(value as String);
+  if (value is! String || !RegExp(r'^\d{4}-\d{2}-\d{2}$').hasMatch(value)) {
+    throw const FormatException('Invalid bank transaction date');
+  }
+  final date = DateTime.tryParse(value);
+  if (date == null || date.toIso8601String().substring(0, 10) != value) {
+    throw const FormatException('Invalid bank transaction date');
+  }
+  return date;
 }
 
 /// A single transaction as returned by `GET /accounts/{uid}/transactions`.

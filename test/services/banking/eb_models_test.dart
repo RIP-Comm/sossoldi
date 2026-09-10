@@ -3,13 +3,13 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:sossoldi/services/banking/models/aspsp.dart';
-import 'package:sossoldi/services/banking/models/eb_application.dart';
-import 'package:sossoldi/services/banking/models/eb_account.dart';
-import 'package:sossoldi/services/banking/models/eb_balance.dart';
-import 'package:sossoldi/services/banking/models/eb_session.dart';
-import 'package:sossoldi/services/banking/models/eb_session_details.dart';
-import 'package:sossoldi/services/banking/models/eb_transactions_page.dart';
+import 'package:sossoldi/services/banking/enable_banking/models/aspsp.dart';
+import 'package:sossoldi/services/banking/enable_banking/models/eb_application.dart';
+import 'package:sossoldi/services/banking/enable_banking/models/eb_account.dart';
+import 'package:sossoldi/services/banking/enable_banking/models/eb_balance.dart';
+import 'package:sossoldi/services/banking/enable_banking/models/eb_session.dart';
+import 'package:sossoldi/services/banking/enable_banking/models/eb_session_details.dart';
+import 'package:sossoldi/services/banking/enable_banking/models/eb_transactions_page.dart';
 
 Map<String, dynamic> _loadJson(String name) =>
     jsonDecode(File('test/fixtures/$name').readAsStringSync())

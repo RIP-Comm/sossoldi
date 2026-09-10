@@ -5,11 +5,11 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
-import 'package:sossoldi/services/banking/enable_banking_api.dart';
-import 'package:sossoldi/services/banking/enable_banking_auth.dart';
-import 'package:sossoldi/services/banking/enable_banking_config.dart';
-import 'package:sossoldi/services/banking/enable_banking_credentials_store.dart';
-import 'package:sossoldi/services/banking/enable_banking_exception.dart';
+import 'package:sossoldi/services/banking/enable_banking/enable_banking_api.dart';
+import 'package:sossoldi/services/banking/enable_banking/enable_banking_auth.dart';
+import 'package:sossoldi/services/banking/enable_banking/enable_banking_config.dart';
+import 'package:sossoldi/services/banking/enable_banking/enable_banking_credentials_store.dart';
+import 'package:sossoldi/services/banking/enable_banking/enable_banking_exception.dart';
 
 /// Bypasses credential/JWT signing entirely: the API client only needs a
 /// valid bearer token string, not a real signature.

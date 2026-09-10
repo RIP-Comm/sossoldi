@@ -12,6 +12,7 @@ class EbAccount {
   final String? cashAccountType;
   final String? usage;
   final String? identificationHash;
+  final List<String> identificationHashes;
 
   const EbAccount({
     required this.uid,
@@ -23,6 +24,7 @@ class EbAccount {
     this.cashAccountType,
     this.usage,
     this.identificationHash,
+    this.identificationHashes = const [],
   });
 
   static EbAccount fromJson(Map<String, dynamic> json) => EbAccount(
@@ -35,5 +37,7 @@ class EbAccount {
     cashAccountType: json['cash_account_type'] as String?,
     usage: json['usage'] as String?,
     identificationHash: json['identification_hash'] as String?,
+    identificationHashes: ((json['identification_hashes'] as List?) ?? const [])
+        .cast<String>(),
   );
 }
