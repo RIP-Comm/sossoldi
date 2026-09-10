@@ -1,0 +1,33 @@
+{
+  "transactions": [
+    {
+      "entry_reference": "ref-001",
+      "transaction_id": "tx-001",
+      "status": "BOOK",
+      "booking_date": "2025-01-15",
+      "value_date": "2025-01-15",
+      "transaction_date": "2025-01-14",
+      "transaction_amount": { "amount": "10.33", "currency": "EUR" },
+      "credit_debit_indicator": "CRDT",
+      "creditor": { "name": "Alice" },
+      "debtor": { "name": "Bob" },
+      "remittance_information": ["Salary", "January"],
+      "note": null
+    },
+    {
+      "entry_reference": null,
+      "transaction_id": "tx-002",
+      "status": "PDNG",
+      "booking_date": null,
+      "value_date": "2025-01-16",
+      "transaction_date": "2025-01-16",
+      "transaction_amount": { "amount": "25.00", "currency": "EUR" },
+      "credit_debit_indicator": "DBIT",
+      "creditor": { "name": "Grocery Store" },
+      "debtor": { "name": "Me" },
+      "remittance_information": ["Groceries"],
+      "note": "supermarket"
+    }
+  ],
+  "continuation_key": "next-page-123"
+}

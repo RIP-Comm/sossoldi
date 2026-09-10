@@ -1,0 +1,19 @@
+{
+  "session_id": "sess-789",
+  "status": "AUTHORIZED",
+  "accounts": [
+    {
+      "uid": "acc-uid-123",
+      "account_id": { "iban": "IT60X0542811101000000123456" },
+      "name": "Main Account",
+      "currency": "EUR",
+      "product": "Current Account",
+      "cash_account_type": "CACC",
+      "usage": "PRIV",
+      "identification_hash": "idhash-abc"
+    }
+  ],
+  "aspsp": { "name": "Mock ASPSP", "country": "IT" },
+  "psu_type": "personal",
+  "access": { "valid_until": "2025-04-15T10:00:00.000Z" }
+}

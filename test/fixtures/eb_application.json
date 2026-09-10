@@ -1,0 +1,10 @@
+{
+  "name": "Sossoldi test",
+  "description": "Test application",
+  "kid": "app-123",
+  "environment": "PRODUCTION",
+  "redirect_urls": ["sossoldi://eb-callback"],
+  "active": true,
+  "countries": ["IT", "GB", "it"],
+  "services": ["AIS"]
+}

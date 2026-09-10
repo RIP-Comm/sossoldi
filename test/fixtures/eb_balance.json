@@ -1,0 +1,5 @@
+{
+  "name": "Closing booked",
+  "balance_amount": { "amount": "1234.56", "currency": "EUR" },
+  "balance_type": "CLBD"
+}

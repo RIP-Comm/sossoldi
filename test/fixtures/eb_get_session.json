@@ -1,0 +1,22 @@
+{
+  "access": {
+    "valid_until": "2026-12-01T12:00:00.000Z"
+  },
+  "accounts": ["497f6eca-6276-4993-bfeb-53cbbbba6f08"],
+  "accounts_data": [
+    {
+      "uid": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+      "identification_hash": "primary-hash",
+      "identification_hashes": ["primary-hash", "alternate-hash"]
+    }
+  ],
+  "aspsp": {
+    "country": "FI",
+    "name": "Nordea"
+  },
+  "authorized": "2026-08-01T12:00:00.000Z",
+  "created": "2026-08-01T11:55:00.000Z",
+  "psu_id_hash": "psu-hash",
+  "psu_type": "business",
+  "status": "AUTHORIZED"
+}

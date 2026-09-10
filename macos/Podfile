@@ -1,4 +1,11 @@
-platform :osx, '10.14'
+# Not driven by any single plugin: flutter_secure_storage_macos, app_links
+# and the other desktop plugins added for Enable Banking all declare 10.14
+# as their own minimum. 10.15 is this Flutter SDK's own current macOS
+# Podfile template floor (see templates/cocoapods/Podfile-macos), which a
+# `flutter pub get`/`pod install` regenerates independently of app code —
+# dropping Mojave (10.14) support is a side effect of the SDK, not a
+# deliberate product decision.
+platform :osx, '10.15'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
