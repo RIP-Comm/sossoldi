@@ -116,12 +116,11 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
   }
 
   void _refreshAccountAndNavigateBack() async {
-    ref
-        .read(accountsProvider.notifier)
-        .refreshAccount(ref.read(selectedBankAccountProvider)!)
-        .whenComplete(() {
-          if (mounted) Navigator.of(context).pop();
-        });
+    final selectedAccount = ref.read(selectedBankAccountProvider);
+    if (selectedAccount != null) {
+      await ref.read(accountsProvider.notifier).refreshAccount(selectedAccount);
+    }
+    if (mounted) Navigator.of(context).pop();
   }
 
   void _createOrUpdateTransaction() async {

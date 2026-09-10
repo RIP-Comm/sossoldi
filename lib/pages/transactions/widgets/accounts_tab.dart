@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
+import '../../../constants/style.dart';
 import '../../../ui/widgets/default_container.dart';
 import '../../../ui/widgets/transaction_type_button.dart';
 import '../../../model/bank_account.dart';
@@ -14,6 +15,8 @@ import 'panel_list_tile.dart';
 
 class AccountsTab extends ConsumerWidget {
   const AccountsTab({super.key});
+
+  static const int _unassignedAccountId = 0;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -85,18 +88,14 @@ class AccountsTab extends ConsumerWidget {
             const TransactionTypeButton(),
             accounts.when(
               data: (data) {
-                List<BankAccount> accountIncomeList = data
-                    .where(
-                      (account) =>
-                          accountToAmountIncome.containsKey(account.id),
-                    )
-                    .toList();
-                List<BankAccount> accountExpenseList = data
-                    .where(
-                      (account) =>
-                          accountToAmountExpense.containsKey(account.id),
-                    )
-                    .toList();
+                final accountIncomeList = _buildAccountEntries(
+                  accounts: data,
+                  amounts: accountToAmountIncome,
+                );
+                final accountExpenseList = _buildAccountEntries(
+                  accounts: data,
+                  amounts: accountToAmountExpense,
+                );
                 return transactionType == TransactionType.income
                     ? accountIncomeList.isEmpty
                           ? const SizedBox(
@@ -134,6 +133,50 @@ class AccountsTab extends ConsumerWidget {
       ),
     );
   }
+
+  List<AccountEntry> _buildAccountEntries({
+    required List<BankAccount> accounts,
+    required Map<int, double> amounts,
+  }) {
+    final entries = accounts
+        .where((account) => amounts.containsKey(account.id))
+        .map(
+          (account) => AccountEntry(
+            id: account.id!,
+            name: account.name,
+            icon: accountIconList[account.symbol],
+            color: accountColorList[account.color],
+          ),
+        )
+        .toList();
+
+    if (amounts.containsKey(_unassignedAccountId)) {
+      entries.add(
+        const AccountEntry(
+          id: _unassignedAccountId,
+          name: 'Unassigned',
+          icon: Icons.account_balance_wallet_outlined,
+          color: grey2,
+        ),
+      );
+    }
+
+    return entries;
+  }
+}
+
+class AccountEntry {
+  const AccountEntry({
+    required this.id,
+    required this.name,
+    required this.icon,
+    required this.color,
+  });
+
+  final int id;
+  final String name;
+  final IconData? icon;
+  final Color color;
 }
 
 class AccountSection extends StatelessWidget {
@@ -145,7 +188,7 @@ class AccountSection extends StatelessWidget {
     super.key,
   });
 
-  final List<BankAccount> accountList;
+  final List<AccountEntry> accountList;
   final Map<int, double> amounts;
   final double total;
   final Map<int, List<Transaction>> transactions;
@@ -163,11 +206,11 @@ class AccountSection extends StatelessWidget {
           separatorBuilder: (context, index) =>
               const SizedBox(height: Sizes.sm),
           itemBuilder: (context, index) {
-            BankAccount account = accountList[index];
+            final account = accountList[index];
             return PanelListTile(
               name: account.name,
-              color: accountColorList[account.color],
-              icon: accountIconList[account.symbol],
+              color: account.color,
+              icon: account.icon,
               transactions: transactions[account.id] ?? [],
               amount: amounts[account.id] ?? 0,
               percent: (amounts[account.id] ?? 0) / total * 100,
