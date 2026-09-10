@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/settings_provider.dart';
 import '../providers/transactions_provider.dart';
+import '../services/wallet/pending_wallet_transaction_importer.dart';
 import '../ui/device.dart';
 import 'graphs/graphs_page.dart';
 import 'dashboard/dashboard_page.dart';
@@ -43,6 +44,7 @@ class _StructureState extends ConsumerState<Structure> {
     super.initState();
     _resumeObserver = _AppResumeObserver(_refreshTransactions);
     WidgetsBinding.instance.addObserver(_resumeObserver);
+    _refreshTransactions();
   }
 
   @override
@@ -51,7 +53,8 @@ class _StructureState extends ConsumerState<Structure> {
     super.dispose();
   }
 
-  void _refreshTransactions() {
+  void _refreshTransactions() async {
+    await PendingWalletTransactionImporter.importPending(ref);
     ref.read(transactionsProvider.notifier).filterTransactions();
   }
 
