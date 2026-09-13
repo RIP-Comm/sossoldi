@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/settings_provider.dart';
 import '../providers/transactions_provider.dart';
+import '../services/wallet/pending_wallet_transaction_importer.dart';
 import '../ui/device.dart';
 import 'graphs/graphs_page.dart';
 import 'dashboard/dashboard_page.dart';
@@ -36,6 +37,26 @@ class _StructureState extends ConsumerState<Structure> {
   ];
 
   int selectedIndex = 0;
+  late final _AppResumeObserver _resumeObserver;
+
+  @override
+  void initState() {
+    super.initState();
+    _resumeObserver = _AppResumeObserver(_refreshTransactions);
+    WidgetsBinding.instance.addObserver(_resumeObserver);
+    _refreshTransactions();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(_resumeObserver);
+    super.dispose();
+  }
+
+  void _refreshTransactions() async {
+    await PendingWalletTransactionImporter.importPending(ref);
+    ref.read(transactionsProvider.notifier).filterTransactions();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -137,5 +158,18 @@ class _StructureState extends ConsumerState<Structure> {
       floatingActionButtonLocation:
           FloatingActionButtonLocation.miniCenterDocked,
     );
+  }
+}
+
+class _AppResumeObserver extends WidgetsBindingObserver {
+  _AppResumeObserver(this.onResumed);
+
+  final VoidCallback onResumed;
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      onResumed();
+    }
   }
 }
