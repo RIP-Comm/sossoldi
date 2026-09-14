@@ -10,11 +10,13 @@ import 'package:sqflite/sqflite.dart';
 
 // Models
 import '../../model/bank_account.dart';
+import '../../model/bank_connection.dart';
 import '../../model/budget.dart';
 import '../../model/category_transaction.dart';
 import '../../model/currency.dart';
 import '../../model/recurring_transaction.dart';
 import '../../model/transaction.dart';
+import '../banking/lifecycle/banking_backup_policy.dart';
 import 'migration_manager.dart';
 
 part 'sossoldi_database.g.dart';
@@ -30,7 +32,7 @@ class SossoldiDatabase {
 
   // Zero args constructor needed to extend this class
   SossoldiDatabase({String? dbName}) {
-    dbName = dbName ?? 'sossoldi.db';
+    if (dbName != null) SossoldiDatabase.dbName = dbName;
   }
 
   SossoldiDatabase._init();
@@ -110,7 +112,8 @@ class SossoldiDatabase {
           csvRow[0] = tableName; // Set table name
 
           // Fill in values for existing columns
-          row.forEach((col, value) {
+          final safeRow = BankingBackupPolicy.sanitizeForExport(tableName, row);
+          safeRow.forEach((col, value) {
             final int index = headers.indexOf(col);
             if (index != -1) {
               csvRow[index] = value?.toString() ?? '';
@@ -190,7 +193,10 @@ class SossoldiDatabase {
                   }
                 }
               }
-              await txn.insert(tableName, row);
+              await txn.insert(
+                tableName,
+                BankingBackupPolicy.sanitizeForRestore(tableName, row),
+              );
             }
             results[tableName] = true;
           } catch (e) {
@@ -377,6 +383,8 @@ class SossoldiDatabase {
         batch.execute('DROP TABLE IF EXISTS $categoryTransactionTable');
         batch.execute('DROP TABLE IF EXISTS $budgetTable');
         batch.execute('DROP TABLE IF EXISTS $currencyTable');
+        batch.execute('DROP TABLE IF EXISTS $bankAccountIdentityTable');
+        batch.execute('DROP TABLE IF EXISTS $bankConnectionTable');
         await batch.commit();
       });
     } catch (error) {
@@ -395,6 +403,8 @@ class SossoldiDatabase {
         batch.delete(categoryTransactionTable);
         batch.delete(budgetTable);
         batch.delete(currencyTable);
+        batch.delete(bankAccountIdentityTable);
+        batch.delete(bankConnectionTable);
         await batch.commit();
       });
     } catch (error) {

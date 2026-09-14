@@ -1,7 +1,40 @@
 import 'enable_banking_exception.dart';
 
 /// Default OAuth callback URI registered with Enable Banking.
+///
+/// The custom scheme can be claimed by another local app and the HTTPS relay
+/// is an external availability dependency. OAuth state validation is therefore
+/// mandatory; relay or browser failures must remain observable and retryable.
 const String kEbRedirectUri = 'sossoldi://eb-callback';
+const String kEbRelayRedirectUri =
+    'https://rip-comm.github.io/sossoldi/enablebanking/eb-callback.html';
+
+Uri validateEnableBankingRedirect(
+  String value, {
+  Iterable<String>? registeredRedirects,
+}) {
+  final uri = Uri.tryParse(value);
+  final isAppCallback = value == kEbRedirectUri;
+  final isRelayCallback = value == kEbRelayRedirectUri;
+  if (uri == null ||
+      !uri.hasScheme ||
+      (!isAppCallback && !isRelayCallback) ||
+      uri.hasQuery ||
+      uri.hasFragment ||
+      uri.userInfo.isNotEmpty) {
+    throw const EnableBankingException(
+      message: 'Unsupported Enable Banking redirect URI',
+      kind: EnableBankingFailureKind.invalidRequest,
+    );
+  }
+  if (registeredRedirects != null && !registeredRedirects.contains(value)) {
+    throw const EnableBankingException(
+      message: 'Redirect URI is not registered for this application',
+      kind: EnableBankingFailureKind.invalidRequest,
+    );
+  }
+  return uri;
+}
 
 enum EnableBankingEnvironment {
   production,

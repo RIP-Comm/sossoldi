@@ -6,6 +6,7 @@ import '../banking_connection.dart';
 import '../banking_exception.dart';
 import '../banking_reference.dart';
 import 'enable_banking_api.dart';
+import 'enable_banking_config.dart';
 import 'enable_banking_consent_mapper.dart';
 import 'enable_banking_errors.dart';
 import 'enable_banking_reference.dart';
@@ -20,7 +21,7 @@ class EnableBankingConsentService implements BankConsentService {
   Future<BankingAuthorization> startAuthorization(BankingAuthorizationRequest request) => withEnableBankingErrors(() async {
     checkEnableBankingReference(request.institution.providerId, request.institution.id);
     if (request.state.trim().isEmpty) throw const BankingException(providerId: enableBankingId, failure: BankingFailure.rejected);
-    return _mapper.authorization(await _api.startAuthorization(aspspName: request.institution.name, aspspCountry: request.institution.country, state: request.state, validUntil: request.validUntil, psuType: request.customerType.name, language: request.language));
+    return _mapper.authorization(await _api.startAuthorization(aspspName: request.institution.name, aspspCountry: request.institution.country, state: request.state, validUntil: request.validUntil, psuType: request.customerType.name, language: request.language, redirectUri: request.redirectUri?.toString() ?? kEbRedirectUri));
   });
 
   @override

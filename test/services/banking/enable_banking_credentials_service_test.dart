@@ -199,4 +199,57 @@ void main() {
       );
     },
   );
+
+  test('rejects malformed or lookalike custom callbacks', () async {
+    final service = EnableBankingCredentialsService(
+      api: _FakeApplicationApi(
+        const EbApplication(
+          name: 'Sossoldi',
+          kid: 'app-123',
+          environment: EnableBankingEnvironment.production,
+          redirectUrls: ['sossoldi://eb-callback/other'],
+          active: true,
+          countries: ['IT'],
+          services: ['AIS'],
+        ),
+      ),
+      store: const EnableBankingCredentialsStore(),
+    );
+
+    await expectLater(
+      () => service.saveVerifiedCredentials(
+        appId: 'app-123',
+        privateKeyPem: 'private-key',
+        redirectUri: 'sossoldi://eb-callback/other',
+      ),
+      throwsA(isA<EnableBankingException>()),
+    );
+  });
+
+  test(
+    'accepts only the versioned HTTPS relay when server-registered',
+    () async {
+      const relayApplication = EbApplication(
+        name: 'Sossoldi',
+        kid: 'app-123',
+        environment: EnableBankingEnvironment.production,
+        redirectUrls: [kEbRelayRedirectUri],
+        active: true,
+        countries: ['IT'],
+        services: ['AIS'],
+      );
+      final service = EnableBankingCredentialsService(
+        api: _FakeApplicationApi(relayApplication),
+        store: const EnableBankingCredentialsStore(),
+      );
+
+      final config = await service.saveVerifiedCredentials(
+        appId: 'app-123',
+        privateKeyPem: 'private-key',
+        redirectUri: kEbRelayRedirectUri,
+      );
+
+      expect(config.redirectUri, kEbRelayRedirectUri);
+    },
+  );
 }

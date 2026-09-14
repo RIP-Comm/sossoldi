@@ -106,7 +106,7 @@ void main() {
       sqflite_ffi.sqfliteFfiInit();
       sqflite_ffi.databaseFactory = sqflite_ffi.databaseFactoryFfi;
 
-      sossoldiDatabase = SossoldiDatabase(dbName: 'test.db');
+      sossoldiDatabase = SossoldiDatabase(dbName: 'bank_account_test.db');
       db = await sossoldiDatabase.database;
       await sossoldiDatabase.resetDatabase();
     });

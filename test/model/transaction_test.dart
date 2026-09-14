@@ -166,7 +166,7 @@ void main() {
     setUpAll(() async {
       sqflite_ffi.sqfliteFfiInit();
       sqflite_ffi.databaseFactory = sqflite_ffi.databaseFactoryFfi;
-      sossoldiDatabase = SossoldiDatabase(dbName: 'test.db');
+      sossoldiDatabase = SossoldiDatabase(dbName: 'transaction_test.db');
       db = await sossoldiDatabase.database;
       await sossoldiDatabase.clearDatabase();
     });

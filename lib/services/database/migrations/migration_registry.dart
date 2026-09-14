@@ -18,6 +18,8 @@ import '0004_add_category_order.dart';
 import '0005_add_account_order.dart';
 import '0006_migrate_icons_name.dart';
 import '0007_add_deleted_at.dart';
+import '0008_add_bank_consent_lifecycle.dart';
+import '0009_add_bank_provider_identity.dart';
 
 import '../migration_base.dart';
 
@@ -36,6 +38,8 @@ List<Migration> getMigrations() {
     AddAccountOrder(),
     MigrateIconsName(),
     AddDeletedAt(),
+    AddBankConsentLifecycle(),
+    AddBankProviderIdentity(),
   ];
 }
 

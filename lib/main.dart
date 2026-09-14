@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 
+import 'providers/banking_provider.dart';
 import 'providers/settings_provider.dart';
 import 'providers/theme_provider.dart';
 import 'routes/routes.dart';
@@ -101,6 +102,7 @@ class Launcher extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(bankingCallbackBootstrapProvider);
     final appThemeState = ref.watch(appThemeStateProvider);
     final bool isOnboardingCompleted = ref.watch(onBoardingCompletedProvider);
     return MaterialApp(
