@@ -6,6 +6,10 @@ has_children: true
 ---
 # Setup Guide
 
+For a ready-to-use Docker environment with Flutter, Android and Linux build
+tools, see the [Dev Container Setup](devcontainer.html). It includes automatic
+dependency installation and code generation, plus CLI build/test instructions.
+
 ## Step 1: Install Git
 
 Download and install Git from [https://git-scm.com/](https://git-scm.com/).
