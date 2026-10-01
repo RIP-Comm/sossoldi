@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
+import '../../../model/transaction.dart';
 
 import '../../../ui/widgets/budget_circular_indicator.dart';
 import '../../../providers/budgets_provider.dart';
@@ -79,8 +80,9 @@ class BudgetsSection extends ConsumerWidget {
                         final double spent = transactions
                             .where(
                               (t) =>
-                                  t.idCategory == budget.idCategory ||
-                                  t.categoryParent == budget.idCategory,
+                                  t.type == TransactionType.expense &&
+                                  (t.idCategory == budget.idCategory ||
+                                      t.categoryParent == budget.idCategory),
                             )
                             .fold(0.0, (sum, t) => sum + t.amount);
                         return Padding(

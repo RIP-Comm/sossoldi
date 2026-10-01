@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart';
 import 'package:sossoldi/model/bank_account.dart';
+import 'package:sossoldi/model/budget.dart';
 import 'package:sossoldi/model/category_transaction.dart';
 import 'package:sossoldi/model/transaction.dart';
 import 'package:sossoldi/services/database/migration_manager.dart';
+import 'package:sossoldi/services/database/repositories/budget_repository.dart';
 import 'package:sossoldi/services/database/repositories/category_repository.dart';
 import 'package:sossoldi/services/database/sossoldi_database.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart' hide Transaction;
@@ -115,7 +117,9 @@ void main() {
         version: migrationManager.latestVersion,
         onUpgrade: migrationManager.migrate,
       );
-      final repository = CategoryRepository(database: _TestDatabase(database));
+      final testDatabase = _TestDatabase(database);
+      final repository = CategoryRepository(database: testDatabase);
+      final budgetRepository = BudgetRepository(database: testDatabase);
       final dualCategory = await repository.insert(
         const CategoryTransaction(
           name: 'Birthday Gift',
@@ -128,7 +132,7 @@ void main() {
       await database.insert(
         transactionTable,
         Transaction(
-          date: DateTime.utc(2026, 10, 1),
+          date: DateTime.now(),
           amount: 100,
           type: TransactionType.income,
           idCategory: dualCategory.id,
@@ -139,13 +143,21 @@ void main() {
       await database.insert(
         transactionTable,
         Transaction(
-          date: DateTime.utc(2026, 10, 1),
+          date: DateTime.now(),
           amount: 25,
           type: TransactionType.expense,
           idCategory: dualCategory.id,
           idBankAccount: accountId,
           recurring: false,
         ).toJson(),
+      );
+      await budgetRepository.insert(
+        Budget(
+          idCategory: dualCategory.id!,
+          name: dualCategory.name,
+          amountLimit: 200,
+          active: true,
+        ),
       );
 
       final incomeCategories = await repository.selectCategoriesByType(
@@ -160,6 +172,7 @@ void main() {
       final expenseFrequent = await repository.selectFrequentCategories(
         CategoryTransactionType.expense,
       );
+      final budgetStats = await budgetRepository.selectMonthlyBudgetsStats();
       final existingTransaction = await database.query(
         transactionTable,
         where: '${TransactionFields.id} = ?',
@@ -191,6 +204,7 @@ void main() {
         expenseFrequent.map((category) => category.id),
         contains(dualCategory.id),
       );
+      expect(budgetStats.single.spent, 25);
       expect(
         existingTransaction.single[TransactionFields.idCategory],
         legacyExpenseId,
