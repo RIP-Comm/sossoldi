@@ -94,9 +94,13 @@ class CategoryRepository {
   }) async {
     final db = await _sossoldiDB.database;
 
+    final typePlaceholders = List.filled(
+      type.selectableCodes.length,
+      '?',
+    ).join(', ');
     String where =
-        '${CategoryTransactionFields.type} = ? AND ${CategoryTransactionFields.deletedAt} IS NULL';
-    List<dynamic> args = [type.code];
+        '${CategoryTransactionFields.type} IN ($typePlaceholders) AND ${CategoryTransactionFields.deletedAt} IS NULL';
+    List<dynamic> args = type.selectableCodes;
     if (!includeSubcategories) {
       where += ' AND ${CategoryTransactionFields.parent} IS NULL';
     }
@@ -120,6 +124,17 @@ class CategoryRepository {
     CategoryTransactionType type,
   ) async {
     final db = await _sossoldiDB.database;
+    final transactionTypeCodes = type.transactionTypes
+        .map((transactionType) => transactionType.code)
+        .toList();
+    final transactionTypePlaceholders = List.filled(
+      transactionTypeCodes.length,
+      '?',
+    ).join(', ');
+    final categoryTypePlaceholders = List.filled(
+      type.selectableCodes.length,
+      '?',
+    ).join(', ');
     // Select the last 100 transactions, group by category and return the
     // top 5 most used categories ordered by usage count desc.
     final result = await db.rawQuery(
@@ -128,16 +143,16 @@ class CategoryRepository {
         FROM "$categoryTransactionTable" c
         JOIN (
           SELECT * FROM "$transactionTable"
-          WHERE "${TransactionFields.type}" = ?
+          WHERE "${TransactionFields.type}" IN ($transactionTypePlaceholders)
           ORDER BY "${TransactionFields.date}" DESC
           LIMIT 100
         ) t ON t."${TransactionFields.idCategory}" = c."${CategoryTransactionFields.id}"
-        WHERE c."${CategoryTransactionFields.type}" = ? AND c.${CategoryTransactionFields.deletedAt} IS NULL
+        WHERE c."${CategoryTransactionFields.type}" IN ($categoryTypePlaceholders) AND c.${CategoryTransactionFields.deletedAt} IS NULL
         GROUP BY c."${CategoryTransactionFields.id}"
         ORDER BY COUNT(t."${TransactionFields.id}") DESC
         LIMIT 5
       ''',
-      [type.transactionType.code, type.code],
+      [...transactionTypeCodes, ...type.selectableCodes],
     );
 
     return result.map((json) => CategoryTransaction.fromJson(json)).toList();
@@ -155,12 +170,19 @@ class CategoryRepository {
     );
   }
 
-  Future<void> updateSubcategoriesColor(int parentId, int color) async {
+  Future<void> updateSubcategories(
+    int parentId,
+    int color,
+    CategoryTransactionType type,
+  ) async {
     final db = await _sossoldiDB.database;
 
     await db.update(
       categoryTransactionTable,
-      {CategoryTransactionFields.color: color},
+      {
+        CategoryTransactionFields.color: color,
+        CategoryTransactionFields.type: type.code,
+      },
       where: '${CategoryTransactionFields.parent} = ?',
       whereArgs: [parentId],
     );
