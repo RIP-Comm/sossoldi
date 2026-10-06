@@ -347,7 +347,8 @@ Future<List<Transaction>> searchTransactions(Ref ref) async {
   List<String> transactionType = ref
       .watch(typeFilterProvider)
       .entries
-      .map((f) => f.value == true ? f.key : "")
+      .where((f) => f.value)
+      .map((f) => f.key)
       .toList();
   Map<int, bool> filteredAccounts = ref.watch(filterAccountProvider);
   Map<int, bool> filterAccountList = {
