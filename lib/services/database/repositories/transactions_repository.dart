@@ -80,11 +80,14 @@ class TransactionsRepository {
           "${where != null ? '$where and ' : ''}strftime('%Y-%m-%d', ${TransactionFields.date}) BETWEEN '${dateRangeStart.toString().substring(0, 10)}' and '${dateRangeEnd.toIso8601String().substring(0, 10)}'";
     }
 
+    final List<Object?> whereArgs = [];
+
     if (label != null && label.isNotEmpty) {
-      where = "${where != null ? '$where and ' : ''}t.note LIKE '%$label%' ";
+      where = "${where != null ? '$where and ' : ''}t.note LIKE ? ";
+      whereArgs.add('%$label%');
     }
 
-    if (transactionType != null) {
+    if (transactionType != null && transactionType.isNotEmpty) {
       final transactionTypeList = transactionType.map((e) => "'$e'").toList();
       where =
           "${where != null ? '$where and ' : ''}t.type IN (${transactionTypeList.join(',')}) ";
@@ -103,6 +106,7 @@ class TransactionsRepository {
 
     final result = await db.rawQuery(
       'SELECT t.*, c.${CategoryTransactionFields.name} as ${TransactionFields.categoryName}, c.${CategoryTransactionFields.color} as ${TransactionFields.categoryColor}, c.${CategoryTransactionFields.symbol} as ${TransactionFields.categorySymbol}, c.${CategoryTransactionFields.parent} as ${TransactionFields.categoryParent}, b1.${BankAccountFields.name} as ${TransactionFields.bankAccountName}, b2.${BankAccountFields.name} as ${TransactionFields.bankAccountTransferName} FROM "$transactionTable" as t LEFT JOIN $categoryTransactionTable as c ON t.${TransactionFields.idCategory} = c.${CategoryTransactionFields.id} LEFT JOIN $bankAccountTable as b1 ON t.${TransactionFields.idBankAccount} = b1.${BankAccountFields.id} LEFT JOIN $bankAccountTable as b2 ON t.${TransactionFields.idBankAccountTransfer} = b2.${BankAccountFields.id} ${where != null ? "WHERE $where" : ""} ORDER BY $orderByDESC ${limit != null ? "LIMIT $limit" : ""}',
+      whereArgs,
     );
 
     return result.map((json) => Transaction.fromJson(json)).toList();
@@ -136,15 +140,18 @@ class TransactionsRepository {
   Future<List<String>> getAllLabels({String? label}) async {
     final db = await _sossoldiDB.database;
 
-    String where = "";
+    String where = "t.note IS NOT NULL ";
+    final List<Object?> whereArgs = [];
     final orderByDESC = '${TransactionFields.date} DESC';
 
     if (label != null) {
-      where = "t.note LIKE '%$label%' ";
+      where = "$where and t.note LIKE ? ";
+      whereArgs.add('%$label%');
     }
 
     final result = await db.rawQuery(
-      'SELECT DISTINCT LOWER(t.note) as note FROM "$transactionTable" as t LEFT JOIN $bankAccountTable as b1 ON t.${TransactionFields.idBankAccount} = b1.${BankAccountFields.id} LEFT JOIN $bankAccountTable as b2 ON t.${TransactionFields.idBankAccountTransfer} = b2.${BankAccountFields.id} ${where.isNotEmpty ? "WHERE $where" : ""} ORDER BY $orderByDESC',
+      'SELECT DISTINCT LOWER(t.note) as note FROM "$transactionTable" as t LEFT JOIN $bankAccountTable as b1 ON t.${TransactionFields.idBankAccount} = b1.${BankAccountFields.id} LEFT JOIN $bankAccountTable as b2 ON t.${TransactionFields.idBankAccountTransfer} = b2.${BankAccountFields.id} WHERE $where ORDER BY $orderByDESC',
+      whereArgs,
     );
 
     return (result).map((x) => x["note"] as String).toList();
