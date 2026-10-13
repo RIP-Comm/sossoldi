@@ -38,6 +38,15 @@ class EbAccount {
     usage: json['usage'] as String?,
     identificationHash: json['identification_hash'] as String?,
     identificationHashes: ((json['identification_hashes'] as List?) ?? const [])
-        .cast<String>(),
+        .map((value) => value as String)
+        .toList(growable: false),
   );
+
+  Set<String> get stableHashes => {
+    if (identificationHash case final String value when value.trim().isNotEmpty)
+      value.trim(),
+    ...identificationHashes
+        .map((value) => value.trim())
+        .where((value) => value.isNotEmpty),
+  };
 }

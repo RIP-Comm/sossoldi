@@ -4,14 +4,14 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:sossoldi/providers/banking_provider.dart';
 import 'package:sossoldi/services/banking/bank_institution.dart';
-import 'package:sossoldi/services/banking/banking_exception.dart';
 import 'package:sossoldi/services/banking/bank_institution_directory.dart' as domain;
+import 'package:sossoldi/services/banking/banking_exception.dart';
 import 'package:sossoldi/services/banking/banking_provider.dart';
 import 'package:sossoldi/services/banking/enable_banking/enable_banking_api.dart';
 import 'package:sossoldi/services/banking/enable_banking/enable_banking_auth.dart';
@@ -109,6 +109,27 @@ void main() {
     for (final entity in Directory('lib').listSync(recursive: true).whereType<File>()) {
       if (!entity.path.endsWith('.dart') || entity.path.endsWith('.g.dart') || entity.path.contains('/banking/enable_banking/') || entity.path == 'lib/providers/banking_provider.dart') continue;
       expect(RegExp(r'''(?:import|export)\s+['"][^'"]*enable_banking/''').hasMatch(entity.readAsStringSync()), isFalse, reason: entity.path);
+    }
+  });
+  test('the Enable Banking module never imports application lifecycle or persistence', () {
+    for (final file in Directory('lib/services/banking/enable_banking').listSync(recursive: true).whereType<File>()) {
+      if (!file.path.endsWith('.dart') || file.path.endsWith('.g.dart')) continue;
+      final imports = RegExp(r'''(?:import|export)\s+['"]([^'"]+)['"]''').allMatches(file.readAsStringSync()).map((match) => match.group(1)!);
+      for (final path in imports) {
+        final resolved = path.startsWith('package:sossoldi/') ? Uri.file('lib/${path.substring('package:sossoldi/'.length)}') : Uri.file(file.path).resolve(path);
+        expect(resolved.path.contains('/database/') || resolved.path.contains('/providers/') || resolved.path.contains('/lifecycle/'), isFalse, reason: '${file.path} -> $path');
+      }
+    }
+  });
+
+  test('application callbacks are independent of provider DTOs and deep-link transport', () {
+    final callback = File('lib/services/banking/lifecycle/bank_authorization_callback.dart').readAsStringSync();
+    expect(RegExp(r"(?:import|export)\s").hasMatch(callback), isFalse);
+    final lifecycle = File('lib/services/banking/lifecycle/bank_consent_lifecycle_service.dart').readAsStringSync();
+    expect(lifecycle.contains('bank_deeplink_service.dart'), isFalse);
+    for (final file in Directory('lib/services/banking/lifecycle').listSync().whereType<File>()) {
+      if (!file.path.endsWith('.dart')) continue;
+      expect(RegExp(r'EnableBanking|enableBanking').hasMatch(file.readAsStringSync()), isFalse, reason: file.path);
     }
   });
 }

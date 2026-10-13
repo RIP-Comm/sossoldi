@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:async';
 
 import 'package:http/http.dart' as http;
 
@@ -33,14 +34,17 @@ class EnableBankingApi {
   final EnableBankingAuth _auth;
   final EnableBankingCredentialsStore _store;
   final http.Client _client;
+  final Duration _timeout;
 
   EnableBankingApi({
     required EnableBankingAuth auth,
     required EnableBankingCredentialsStore store,
     http.Client? client,
+    Duration timeout = const Duration(seconds: 30),
   }) : _auth = auth,
        _store = store,
-       _client = client ?? http.Client();
+       _client = client ?? http.Client(),
+       _timeout = timeout;
 
   Map<String, String> _headersForToken(String token) => {
     'Authorization': 'Bearer $token',
@@ -60,11 +64,72 @@ class EnableBankingApi {
     } catch (_) {
       body = null;
     }
+    final rawError = body?['error'];
+    final code = switch (rawError) {
+      String value => value,
+      Map<String, dynamic> value =>
+        _string(value['code']) ?? _string(value['error']),
+      _ => _string(body?['code']) ?? _string(body?['error_code']),
+    };
+    final rawMessage =
+        body?['message'] ??
+        (rawError is Map<String, dynamic> ? rawError['message'] : null) ??
+        body?['error_description'];
     throw EnableBankingException(
       statusCode: response.statusCode,
-      error: body?['error'] as String?,
-      message: body?['message'] as String?,
+      error: code,
+      message: rawMessage is String ? rawMessage : null,
+      kind: _failureKind(response.statusCode, code),
     );
+  }
+
+  String? _string(Object? value) => value is String ? value : null;
+
+  EnableBankingFailureKind _failureKind(int statusCode, String? code) {
+    switch (code?.toUpperCase()) {
+      case 'EXPIRED_SESSION':
+        return EnableBankingFailureKind.sessionExpired;
+      case 'REVOKED_SESSION':
+        return EnableBankingFailureKind.sessionRevoked;
+      case 'CLOSED_SESSION':
+        return EnableBankingFailureKind.sessionClosed;
+    }
+    return switch (statusCode) {
+      400 => EnableBankingFailureKind.invalidRequest,
+      401 || 403 => EnableBankingFailureKind.applicationAuthentication,
+      404 => EnableBankingFailureKind.notFound,
+      429 => EnableBankingFailureKind.rateLimited,
+      >= 500 => EnableBankingFailureKind.server,
+      _ => EnableBankingFailureKind.unknown,
+    };
+  }
+
+  Future<http.Response> _request(Future<http.Response> request) async {
+    try {
+      return await request.timeout(_timeout);
+    } on TimeoutException {
+      throw const EnableBankingException(
+        message: 'Enable Banking request timed out',
+        kind: EnableBankingFailureKind.timeout,
+      );
+    } on http.ClientException catch (error) {
+      throw EnableBankingException(
+        message: error.message,
+        kind: EnableBankingFailureKind.network,
+      );
+    }
+  }
+
+  Map<String, dynamic> _decodeObject(http.Response response) {
+    try {
+      return jsonDecode(response.body) as Map<String, dynamic>;
+    } catch (error) {
+      throw EnableBankingException(
+        statusCode: response.statusCode,
+        message: 'Malformed Enable Banking response: $error',
+        kind: EnableBankingFailureKind.invalidResponse,
+      );
+    }
   }
 
   Future<Map<String, dynamic>> _get(
@@ -74,16 +139,20 @@ class EnableBankingApi {
     final uri = Uri.parse('$_kBaseUrl$path').replace(
       queryParameters: query != null && query.isNotEmpty ? query : null,
     );
-    final response = await _client.get(uri, headers: await _headers());
+    final response = await _request(
+      _client.get(uri, headers: await _headers()),
+    );
     _check(response);
-    return jsonDecode(response.body) as Map<String, dynamic>;
+    return _decodeObject(response);
   }
 
   Future<Map<String, dynamic>> _getWithToken(String path, String token) async {
     final uri = Uri.parse('$_kBaseUrl$path');
-    final response = await _client.get(uri, headers: _headersForToken(token));
+    final response = await _request(
+      _client.get(uri, headers: _headersForToken(token)),
+    );
     _check(response);
-    return jsonDecode(response.body) as Map<String, dynamic>;
+    return _decodeObject(response);
   }
 
   Future<Map<String, dynamic>> _post(
@@ -91,18 +160,18 @@ class EnableBankingApi {
     Map<String, dynamic> body,
   ) async {
     final uri = Uri.parse('$_kBaseUrl$path');
-    final response = await _client.post(
-      uri,
-      headers: await _headers(),
-      body: jsonEncode(body),
+    final response = await _request(
+      _client.post(uri, headers: await _headers(), body: jsonEncode(body)),
     );
     _check(response);
-    return jsonDecode(response.body) as Map<String, dynamic>;
+    return _decodeObject(response);
   }
 
   Future<void> _delete(String path) async {
     final uri = Uri.parse('$_kBaseUrl$path');
-    final response = await _client.delete(uri, headers: await _headers());
+    final response = await _request(
+      _client.delete(uri, headers: await _headers()),
+    );
     _check(response);
   }
 
@@ -148,7 +217,9 @@ class EnableBankingApi {
     required DateTime validUntil,
     String psuType = 'personal',
     String? language,
+    String redirectUri = kEbRedirectUri,
   }) async {
+    validateEnableBankingRedirect(redirectUri);
     final json = await _post('/auth', {
       'access': {
         'valid_until': validUntil.toUtc().toIso8601String(),
@@ -157,7 +228,7 @@ class EnableBankingApi {
       },
       'aspsp': {'name': aspspName, 'country': aspspCountry},
       'state': state,
-      'redirect_url': kEbRedirectUri,
+      'redirect_url': redirectUri,
       'psu_type': psuType,
       'language': ?language,
     });

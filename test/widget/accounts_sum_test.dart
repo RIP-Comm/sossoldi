@@ -19,7 +19,7 @@ void main() {
   late SharedPreferences sharedPreferences;
 
   setUpAll(() async {
-    sossoldiDatabase = SossoldiDatabase(dbName: 'test.db');
+    sossoldiDatabase = SossoldiDatabase(dbName: 'accounts_sum_test.db');
     await sossoldiDatabase.clearDatabase();
     SharedPreferences.setMockInitialValues({'visibility_amount': false});
     sharedPreferences = await SharedPreferences.getInstance();

@@ -8,8 +8,9 @@ class BankingAuthorizationRequest {
   final DateTime validUntil;
   final String state;
   final String? language;
+  final Uri? redirectUri;
 
-  const BankingAuthorizationRequest({required this.institution, required this.validUntil, required this.state, this.customerType = BankingCustomerType.personal, this.language});
+  const BankingAuthorizationRequest({required this.institution, required this.validUntil, required this.state, this.customerType = BankingCustomerType.personal, this.language, this.redirectUri});
 }
 
 class BankingAuthorization {

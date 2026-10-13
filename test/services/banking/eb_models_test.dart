@@ -179,5 +179,13 @@ void main() {
 
       expect(() => EbSessionDetails.fromJson(json), throwsFormatException);
     });
+
+    test('account data tolerates a missing stable hash', () {
+      final account = EbSessionAccount.fromJson({'uid': 'session-only-uid'});
+
+      expect(account.uid, 'session-only-uid');
+      expect(account.identificationHash, isNull);
+      expect(account.identificationHashes, isEmpty);
+    });
   });
 }

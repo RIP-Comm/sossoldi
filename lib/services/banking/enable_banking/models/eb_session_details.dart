@@ -1,3 +1,5 @@
+import '../enable_banking_exception.dart';
+
 enum EbSessionStatus {
   authorized,
   cancelled,
@@ -17,25 +19,28 @@ enum EbSessionStatus {
     'PENDING_AUTHORIZATION' => EbSessionStatus.pendingAuthorization,
     'RETURNED_FROM_BANK' => EbSessionStatus.returnedFromBank,
     'REVOKED' => EbSessionStatus.revoked,
-    _ => throw FormatException('Unknown session status: $value'),
+    _ => throw EnableBankingException(
+      message: 'Unknown session status: $value',
+      kind: EnableBankingFailureKind.invalidResponse,
+    ),
   };
 }
 
 class EbSessionAccount {
   final String uid;
-  final String identificationHash;
+  final String? identificationHash;
   final List<String> identificationHashes;
 
   const EbSessionAccount({
     required this.uid,
-    required this.identificationHash,
+    this.identificationHash,
     this.identificationHashes = const [],
   });
 
   static EbSessionAccount fromJson(Map<String, dynamic> json) =>
       EbSessionAccount(
         uid: json['uid'] as String,
-        identificationHash: json['identification_hash'] as String,
+        identificationHash: json['identification_hash'] as String?,
         identificationHashes:
             ((json['identification_hashes'] as List?) ?? const [])
                 .map((value) => value as String)

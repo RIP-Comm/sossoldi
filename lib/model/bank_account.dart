@@ -17,6 +17,12 @@ class BankAccountFields extends BaseEntityFields {
   static String createdAt = BaseEntityFields.getCreatedAt;
   static String updatedAt = BaseEntityFields.getUpdatedAt;
   static String deletedAt = BaseEntityFields.getDeletedAt;
+  static String ebAccountUid = 'ebAccountUid';
+  static String ebConnectionId = 'ebConnectionId';
+  static String identificationHash = 'identificationHash';
+  static String identificationHashes = 'identificationHashes';
+  static String iban = 'iban';
+  static String lastSyncAt = 'lastSyncAt';
 
   static final List<String> allFields = [
     BaseEntityFields.id,
@@ -31,10 +37,18 @@ class BankAccountFields extends BaseEntityFields {
     BaseEntityFields.createdAt,
     BaseEntityFields.updatedAt,
     BaseEntityFields.deletedAt,
+    ebAccountUid,
+    ebConnectionId,
+    identificationHash,
+    identificationHashes,
+    iban,
+    lastSyncAt,
   ];
 }
 
 class BankAccount extends BaseEntity {
+  static const _unset = Object();
+
   final String name;
   final String symbol;
   final int color;
@@ -44,6 +58,12 @@ class BankAccount extends BaseEntity {
   final bool mainAccount;
   final int order;
   final num? total;
+  final String? ebAccountUid;
+  final int? ebConnectionId;
+  final String? identificationHash;
+  final String? identificationHashes;
+  final String? iban;
+  final DateTime? lastSyncAt;
 
   const BankAccount({
     super.id,
@@ -56,6 +76,12 @@ class BankAccount extends BaseEntity {
     required this.mainAccount,
     required this.order,
     this.total,
+    this.ebAccountUid,
+    this.ebConnectionId,
+    this.identificationHash,
+    this.identificationHashes,
+    this.iban,
+    this.lastSyncAt,
     super.createdAt,
     super.updatedAt,
     super.deletedAt,
@@ -74,6 +100,12 @@ class BankAccount extends BaseEntity {
     DateTime? createdAt,
     DateTime? updatedAt,
     DateTime? deletedAt,
+    Object? ebAccountUid = _unset,
+    Object? ebConnectionId = _unset,
+    Object? identificationHash = _unset,
+    Object? identificationHashes = _unset,
+    Object? iban = _unset,
+    Object? lastSyncAt = _unset,
   }) => BankAccount(
     id: id ?? this.id,
     name: name ?? this.name,
@@ -88,6 +120,22 @@ class BankAccount extends BaseEntity {
     updatedAt: updatedAt ?? this.updatedAt,
     deletedAt: deletedAt ?? this.deletedAt,
     total: total,
+    ebAccountUid: ebAccountUid == _unset
+        ? this.ebAccountUid
+        : ebAccountUid as String?,
+    ebConnectionId: ebConnectionId == _unset
+        ? this.ebConnectionId
+        : ebConnectionId as int?,
+    identificationHash: identificationHash == _unset
+        ? this.identificationHash
+        : identificationHash as String?,
+    identificationHashes: identificationHashes == _unset
+        ? this.identificationHashes
+        : identificationHashes as String?,
+    iban: iban == _unset ? this.iban : iban as String?,
+    lastSyncAt: lastSyncAt == _unset
+        ? this.lastSyncAt
+        : lastSyncAt as DateTime?,
   );
 
   static BankAccount fromJson(Map<String, Object?> json) => BankAccount(
@@ -106,6 +154,15 @@ class BankAccount extends BaseEntity {
     deletedAt: json[BaseEntityFields.deletedAt] != null
         ? DateTime.parse(json[BaseEntityFields.deletedAt] as String)
         : null,
+    ebAccountUid: json[BankAccountFields.ebAccountUid] as String?,
+    ebConnectionId: json[BankAccountFields.ebConnectionId] as int?,
+    identificationHash: json[BankAccountFields.identificationHash] as String?,
+    identificationHashes:
+        json[BankAccountFields.identificationHashes] as String?,
+    iban: json[BankAccountFields.iban] as String?,
+    lastSyncAt: json[BankAccountFields.lastSyncAt] == null
+        ? null
+        : DateTime.parse(json[BankAccountFields.lastSyncAt] as String).toUtc(),
   );
 
   Map<String, Object?> toJson({bool update = false, bool delete = false}) => {
@@ -123,5 +180,11 @@ class BankAccount extends BaseEntity {
         : DateTime.now().toIso8601String(),
     BaseEntityFields.updatedAt: DateTime.now().toIso8601String(),
     if (delete) BaseEntityFields.deletedAt: DateTime.now().toIso8601String(),
+    BankAccountFields.ebAccountUid: ebAccountUid,
+    BankAccountFields.ebConnectionId: ebConnectionId,
+    BankAccountFields.identificationHash: identificationHash,
+    BankAccountFields.identificationHashes: identificationHashes,
+    BankAccountFields.iban: iban,
+    BankAccountFields.lastSyncAt: lastSyncAt?.toUtc().toIso8601String(),
   };
 }

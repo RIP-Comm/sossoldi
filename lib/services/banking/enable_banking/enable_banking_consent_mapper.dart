@@ -37,7 +37,7 @@ class EnableBankingConsentMapper {
 
   BankingConnection connection(EbSessionDetails value, BankingConnectionReference reference) {
     final identities = {
-      for (final account in value.accountsData) account.uid: {account.identificationHash, ...account.identificationHashes},
+      for (final account in value.accountsData) account.uid: {if (account.identificationHash != null) account.identificationHash!, ...account.identificationHashes},
     };
     return BankingConnection(
       reference: reference,

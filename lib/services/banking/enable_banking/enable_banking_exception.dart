@@ -1,20 +1,50 @@
-/// Error surfaced by the Enable Banking REST API (HTTP status >= 400).
-///
-/// [statusCode] lets callers detect an expired/revoked consent (401) to
-/// mark the connection as `EXPIRED` (see Step 14 of the implementation
-/// plan) instead of failing the whole sync.
+enum EnableBankingFailureKind {
+  applicationAuthentication,
+  sessionExpired,
+  sessionRevoked,
+  sessionClosed,
+  notFound,
+  rateLimited,
+  timeout,
+  server,
+  invalidRequest,
+  invalidResponse,
+  network,
+  unknown,
+}
+
 class EnableBankingException implements Exception {
   final int? statusCode;
   final String? error;
   final String? message;
+  final EnableBankingFailureKind kind;
 
-  const EnableBankingException({this.statusCode, this.error, this.message});
+  const EnableBankingException({
+    this.statusCode,
+    this.error,
+    this.message,
+    this.kind = EnableBankingFailureKind.unknown,
+  });
 
-  /// True when the consent/session is no longer valid.
+  bool get isRetryable => switch (kind) {
+    EnableBankingFailureKind.rateLimited ||
+    EnableBankingFailureKind.timeout ||
+    EnableBankingFailureKind.server ||
+    EnableBankingFailureKind.network => true,
+    _ => false,
+  };
+
   bool get isUnauthorized => statusCode == 401;
+
+  bool get confirmsMissingSession => switch (kind) {
+    EnableBankingFailureKind.sessionRevoked ||
+    EnableBankingFailureKind.sessionClosed ||
+    EnableBankingFailureKind.notFound => true,
+    _ => false,
+  };
 
   @override
   String toString() =>
       'EnableBankingException(statusCode: $statusCode, error: $error, '
-      'message: $message)';
+      'kind: $kind, message: $message)';
 }

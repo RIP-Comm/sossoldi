@@ -26,6 +26,7 @@ class EnableBankingCredentialsService {
     String redirectUri = kEbRedirectUri,
     String? defaultCountry,
   }) async {
+    validateEnableBankingRedirect(redirectUri);
     final application = await _api.verifyApplicationCredentials(
       appId: appId,
       privateKeyPem: privateKeyPem,
@@ -47,11 +48,10 @@ class EnableBankingCredentialsService {
         message: 'Sandbox credentials are not allowed in release builds',
       );
     }
-    if (!application.redirectUrls.contains(redirectUri)) {
-      throw const EnableBankingException(
-        message: 'Redirect URI is not registered for this application',
-      );
-    }
+    validateEnableBankingRedirect(
+      redirectUri,
+      registeredRedirects: application.redirectUrls,
+    );
 
     final normalizedDefaultCountry = defaultCountry?.toUpperCase();
     if (normalizedDefaultCountry != null &&

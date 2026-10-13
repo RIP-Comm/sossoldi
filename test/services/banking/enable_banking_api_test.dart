@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -26,10 +27,14 @@ class _FakeAuth extends EnableBankingAuth {
       'test-token';
 }
 
-EnableBankingApi _apiWith(MockClientHandler handler) => EnableBankingApi(
+EnableBankingApi _apiWith(
+  MockClientHandler handler, {
+  Duration timeout = const Duration(seconds: 30),
+}) => EnableBankingApi(
   auth: _FakeAuth(),
   store: const EnableBankingCredentialsStore(),
   client: MockClient(handler),
+  timeout: timeout,
 );
 
 http.Response _json(Object body, {int statusCode = 200}) => http.Response(
@@ -370,6 +375,120 @@ void main() {
             'isUnauthorized',
             isTrue,
           ),
+        ),
+      );
+    });
+
+    test('classifies session codes before generic HTTP status', () async {
+      final cases = {
+        'EXPIRED_SESSION': EnableBankingFailureKind.sessionExpired,
+        'REVOKED_SESSION': EnableBankingFailureKind.sessionRevoked,
+        'CLOSED_SESSION': EnableBankingFailureKind.sessionClosed,
+      };
+      for (final entry in cases.entries) {
+        final api = _apiWith(
+          (request) async => _json({
+            'error': {'code': entry.key, 'message': 'session failure'},
+          }, statusCode: 401),
+        );
+        await expectLater(
+          () => api.getBalances('account'),
+          throwsA(
+            isA<EnableBankingException>().having(
+              (error) => error.kind,
+              'kind',
+              entry.value,
+            ),
+          ),
+        );
+      }
+    });
+
+    test(
+      'distinguishes auth, rate limit, server and malformed response',
+      () async {
+        for (final entry in {
+          401: EnableBankingFailureKind.applicationAuthentication,
+          429: EnableBankingFailureKind.rateLimited,
+          503: EnableBankingFailureKind.server,
+        }.entries) {
+          final api = _apiWith(
+            (request) async => _json({}, statusCode: entry.key),
+          );
+          await expectLater(
+            () => api.getBalances('account'),
+            throwsA(
+              isA<EnableBankingException>().having(
+                (error) => error.kind,
+                'kind',
+                entry.value,
+              ),
+            ),
+          );
+        }
+        final malformed = _apiWith(
+          (request) async => http.Response('not-json', 200),
+        );
+        await expectLater(
+          () => malformed.getBalances('account'),
+          throwsA(
+            isA<EnableBankingException>().having(
+              (error) => error.kind,
+              'kind',
+              EnableBankingFailureKind.invalidResponse,
+            ),
+          ),
+        );
+      },
+    );
+
+    test(
+      'ignores non-string error codes without leaking a TypeError',
+      () async {
+        final api = _apiWith(
+          (request) async => _json({'error': 42}, statusCode: 503),
+        );
+
+        await expectLater(
+          () => api.getBalances('account'),
+          throwsA(
+            isA<EnableBankingException>().having(
+              (error) => error.kind,
+              'kind',
+              EnableBankingFailureKind.server,
+            ),
+          ),
+        );
+      },
+    );
+
+    test('forwards business discovery supported by the foundation', () async {
+      var calls = 0;
+      final api = _apiWith((request) async {
+        calls++;
+        return _json({'aspsps': []});
+      });
+
+      expect(await api.getAspsps(psuType: 'business'), isEmpty);
+      expect(calls, 1);
+    });
+
+    test('maps request timeout to a retryable typed failure', () async {
+      final api = _apiWith(
+        (request) => Completer<http.Response>().future,
+        timeout: const Duration(milliseconds: 1),
+      );
+
+      await expectLater(
+        () => api.getBalances('account'),
+        throwsA(
+          isA<EnableBankingException>()
+              .having(
+                (error) => error.kind,
+                'kind',
+                EnableBankingFailureKind.timeout,
+              )
+              .having((error) => error.isRetryable, 'isRetryable', isTrue),
         ),
       );
     });
