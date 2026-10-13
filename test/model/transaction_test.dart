@@ -596,5 +596,62 @@ void main() {
       expect(result[1]['income'], 700);
       expect(result[1]['expense'], 300);
     });
+
+    group("search", () {
+      late TransactionsRepository repository;
+
+      setUp(() async {
+        repository = TransactionsRepository(database: sossoldiDatabase);
+        await sossoldiDatabase.fillDemoData(countOfGeneratedTransaction: 100);
+        await db.delete(transactionTable);
+
+        for (final (note, type) in [
+          ("McDonald's", TransactionType.expense),
+          ("Salary", TransactionType.income),
+          (null, TransactionType.expense),
+        ]) {
+          await repository.insert(
+            Transaction(
+              date: DateTime.now(),
+              amount: 10,
+              type: type,
+              note: note,
+              idCategory: 10,
+              idBankAccount: 70,
+              recurring: false,
+            ),
+          );
+        }
+      });
+
+      test("selectAll with a label containing an apostrophe", () async {
+        final result = await repository.selectAll(label: "mcdonald's");
+
+        expect(result.length, 1);
+        expect(result.first.note, "McDonald's");
+      });
+
+      test("selectAll with no transaction type selected", () async {
+        final result = await repository.selectAll(
+          label: "salary",
+          transactionType: [],
+        );
+
+        expect(result.length, 1);
+        expect(result.first.note, "Salary");
+      });
+
+      test("getAllLabels skips transactions without a note", () async {
+        final result = await repository.getAllLabels();
+
+        expect(result, unorderedEquals(["mcdonald's", "salary"]));
+      });
+
+      test("getAllLabels with a label containing an apostrophe", () async {
+        final result = await repository.getAllLabels(label: "mcdonald's");
+
+        expect(result, ["mcdonald's"]);
+      });
+    });
   });
 }
