@@ -17,7 +17,7 @@ String createInsertSqlTransaction({
   DateTime? createdAt,
   DateTime? updatedAt,
 }) {
-  date = date ?? DateTime.now();
+  date = date ?? DateTime.utc(2024, 2, 29);
   createdAt = date;
   updatedAt = date;
   int recurringInt = recurring ? 1 : 0;

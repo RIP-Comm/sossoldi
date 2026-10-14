@@ -10,6 +10,7 @@ import 'package:sossoldi/services/database/repositories/bank_reconciliation_exce
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() {
+  final now = DateTime.utc(2026, 9, 15);
   late Database db;
   late BankConnectionRepository repository;
 
@@ -60,7 +61,7 @@ void main() {
     expect(beforeCommit.remoteConnectionId, 'session-old');
     expect(beforeCommit.pendingRemoteConnectionId, 'session-new');
     expect(beforeCommit.status, BankConnectionStatus.active);
-    expect((await repository.selectActive(applicationId: 'app-id')).single.id, first.id);
+    expect((await repository.selectActive(applicationId: 'app-id', clock: now)).single.id, first.id);
 
     final reconnected = await repository.activateStagedConnection(first.id!, [
       const BankAccountLink(uid: 'uid-new', identificationHashes: {'hash-alias', 'hash-new'}, iban: 'IT00UPDATED'),
@@ -122,17 +123,22 @@ void main() {
     final expired = await repository.insert(_activeConnection('expired', boundary));
     final future = await repository.insert(_activeConnection('future', boundary.add(const Duration(seconds: 1))));
 
+    final before = await repository.selectActive(applicationId: 'app-id', clock: boundary.subtract(const Duration(microseconds: 1)));
+    expect(before.map((item) => item.id), [expired.id, future.id]);
+
     final active = await repository.selectActive(applicationId: 'app-id', clock: boundary);
 
     expect(active.map((item) => item.id), [future.id]);
     expect((await repository.selectById(expired.id!)).status, BankConnectionStatus.expired);
+    expect(await repository.selectActive(applicationId: 'app-id', clock: boundary.add(const Duration(seconds: 1))), isEmpty);
+    expect((await repository.selectById(future.id!)).status, BankConnectionStatus.expired);
   });
 
   test('active selection and credential rotation are application-scoped', () async {
     final current = await repository.insert(_activeConnection('current', DateTime.utc(2027)));
     final old = await repository.insert(BankConnection(providerId: 'enable_banking', institutionName: 'Old Bank', institutionCountry: 'IT', applicationId: 'old-app', remoteConnectionId: 'old', validUntil: DateTime.utc(2027), status: BankConnectionStatus.active));
 
-    final selected = await repository.selectActive(applicationId: 'app-id');
+    final selected = await repository.selectActive(applicationId: 'app-id', clock: now);
     expect(selected.map((item) => item.id), [current.id]);
 
     await repository.markOtherApplicationsReauthRequired('app-id', providerId: 'enable_banking');
