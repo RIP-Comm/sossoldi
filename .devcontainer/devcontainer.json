@@ -5,10 +5,11 @@
     "ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
       "packages": "clang,llvm,lld,cmake,ninja-build,pkg-config,libgtk-3-dev,liblzma-dev,libstdc++-14-dev,libsecret-1-dev,libjsoncpp-dev,libnotify-dev,libsqlite3-dev,libgl1-mesa-dri,mesa-utils,jq,xz-utils"
     },
-    "ghcr.io/devcontainers-extra/features/asdf-package:1": {
-      "plugin": "flutter",
-      "pluginRepo": "https://github.com/asdf-community/asdf-flutter.git",
-      "version": "3.38.8-stable"
+    "ghcr.io/devcontainers-extra/features/gh-release:1": {
+      "repo": "btwld/fvm",
+      "binaryNames": "fvm",
+      "version": "4.3.1",
+      "assetRegex": "linux-x64\\.tar\\.gz$"
     },
     "ghcr.io/devcontainers/features/java:1": {
       "version": "17",
@@ -24,14 +25,13 @@
     },
     "ghcr.io/devcontainers/features/desktop-lite:1": {}
   },
-  "overrideFeatureInstallOrder": [
-    "ghcr.io/rocker-org/devcontainer-features/apt-packages",
-    "ghcr.io/devcontainers-extra/features/asdf-package"
+  "mounts": [
+    "source=${localWorkspaceFolderBasename}-fvm,target=/home/vscode/fvm,type=volume"
   ],
   "remoteUser": "vscode",
   "runArgs": ["--publish", "127.0.0.1:6080:6080"],
   "remoteEnv": {
-    "PATH": "/home/vscode/.asdf/shims:/home/vscode/.asdf/bin:${containerEnv:PATH}",
+    "FVM_CACHE_PATH": "/home/vscode/fvm",
     "ANDROID_HOME": "/usr/local/android"
   },
   "postCreateCommand": "bash .devcontainer/setup.sh",
@@ -47,7 +47,7 @@
     "vscode": {
       "extensions": ["Dart-Code.dart-code", "Dart-Code.flutter"],
       "settings": {
-        "dart.flutterSdkPath": "/home/vscode/.asdf/installs/flutter/3.38.8-stable"
+        "dart.flutterSdkPath": ".fvm/flutter_sdk"
       }
     }
   }
