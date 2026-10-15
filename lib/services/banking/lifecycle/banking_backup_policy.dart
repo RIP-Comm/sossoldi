@@ -1,12 +1,13 @@
-// dart format width=400
-
 import '../../../model/bank_account.dart';
 import '../../../model/bank_connection.dart';
 
 class BankingBackupPolicy {
   const BankingBackupPolicy._();
 
-  static Map<String, Object?> sanitizeForExport(String table, Map<String, Object?> row) {
+  static Map<String, Object?> sanitizeForExport(
+    String table,
+    Map<String, Object?> row,
+  ) {
     final sanitized = Map<String, Object?>.from(row);
     if (table == bankConnectionTable) {
       sanitized[BankConnectionFields.remoteConnectionId] = null;
@@ -14,8 +15,10 @@ class BankingBackupPolicy {
       sanitized[BankConnectionFields.pendingAuthorizationId] = null;
       sanitized[BankConnectionFields.pendingValidUntil] = null;
       final status = sanitized[BankConnectionFields.status];
-      if (status != BankConnectionStatus.revoked.code && status != BankConnectionStatus.disconnected.code) {
-        sanitized[BankConnectionFields.status] = BankConnectionStatus.reauthRequired.code;
+      if (status != BankConnectionStatus.revoked.code &&
+          status != BankConnectionStatus.disconnected.code) {
+        sanitized[BankConnectionFields.status] =
+            BankConnectionStatus.reauthRequired.code;
       }
     } else if (table == bankAccountTable) {
       sanitized[BankAccountFields.ebAccountUid] = null;
@@ -24,5 +27,8 @@ class BankingBackupPolicy {
     return sanitized;
   }
 
-  static Map<String, Object?> sanitizeForRestore(String table, Map<String, Object?> row) => sanitizeForExport(table, row);
+  static Map<String, Object?> sanitizeForRestore(
+    String table,
+    Map<String, Object?> row,
+  ) => sanitizeForExport(table, row);
 }

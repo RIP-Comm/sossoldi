@@ -1,5 +1,3 @@
-// dart format width=400
-
 import 'banking_money.dart';
 
 enum BankingTransactionStatus { booked, pending, unknown }
@@ -20,7 +18,20 @@ class BankingTransaction {
   final String? note;
   final List<String> remittanceInformation;
 
-  BankingTransaction({this.entryId, this.transactionId, required this.status, required this.direction, required this.amount, this.bookingDate, this.valueDate, this.transactionDate, this.creditorName, this.debtorName, this.note, List<String> remittanceInformation = const []}) : remittanceInformation = List.unmodifiable(remittanceInformation);
+  BankingTransaction({
+    this.entryId,
+    this.transactionId,
+    required this.status,
+    required this.direction,
+    required this.amount,
+    this.bookingDate,
+    this.valueDate,
+    this.transactionDate,
+    this.creditorName,
+    this.debtorName,
+    this.note,
+    List<String> remittanceInformation = const [],
+  }) : remittanceInformation = List.unmodifiable(remittanceInformation);
 }
 
 class BankingTransactionQuery {
@@ -29,12 +40,20 @@ class BankingTransactionQuery {
   final BankingTransactionStatus? status;
   final String? cursor;
 
-  const BankingTransactionQuery({this.dateFrom, this.dateTo, this.status, this.cursor});
+  const BankingTransactionQuery({
+    this.dateFrom,
+    this.dateTo,
+    this.status,
+    this.cursor,
+  });
 }
 
 class BankingTransactionsPage {
   final List<BankingTransaction> transactions;
   final String? nextCursor;
 
-  BankingTransactionsPage({required List<BankingTransaction> transactions, this.nextCursor}) : transactions = List.unmodifiable(transactions);
+  BankingTransactionsPage({
+    required List<BankingTransaction> transactions,
+    this.nextCursor,
+  }) : transactions = List.unmodifiable(transactions);
 }

@@ -1,5 +1,3 @@
-// dart format width=400
-
 import 'dart:async';
 import 'dart:io';
 
@@ -17,14 +15,22 @@ Future<T> withEnableBankingErrors<T>(Future<T> Function() operation) async {
     return await operation();
   } on EnableBankingException catch (error) {
     final failure = switch (error.kind) {
-      EnableBankingFailureKind.sessionExpired => BankingFailure.connectionExpired,
-      EnableBankingFailureKind.sessionRevoked => BankingFailure.connectionRevoked,
+      EnableBankingFailureKind.sessionExpired =>
+        BankingFailure.connectionExpired,
+      EnableBankingFailureKind.sessionRevoked =>
+        BankingFailure.connectionRevoked,
       EnableBankingFailureKind.sessionClosed => BankingFailure.connectionClosed,
       EnableBankingFailureKind.notFound => BankingFailure.notFound,
-      EnableBankingFailureKind.applicationAuthentication => error.statusCode == 403 ? BankingFailure.forbidden : BankingFailure.authentication,
+      EnableBankingFailureKind.applicationAuthentication =>
+        error.statusCode == 403
+            ? BankingFailure.forbidden
+            : BankingFailure.authentication,
       EnableBankingFailureKind.rateLimited => BankingFailure.rateLimited,
-      EnableBankingFailureKind.timeout || EnableBankingFailureKind.server || EnableBankingFailureKind.network => BankingFailure.unavailable,
-      EnableBankingFailureKind.invalidResponse => BankingFailure.invalidResponse,
+      EnableBankingFailureKind.timeout ||
+      EnableBankingFailureKind.server ||
+      EnableBankingFailureKind.network => BankingFailure.unavailable,
+      EnableBankingFailureKind.invalidResponse =>
+        BankingFailure.invalidResponse,
       _ => switch (error.statusCode) {
         401 => BankingFailure.authentication,
         403 => BankingFailure.forbidden,
@@ -35,16 +41,34 @@ Future<T> withEnableBankingErrors<T>(Future<T> Function() operation) async {
     };
     throw BankingException(providerId: id, failure: failure);
   } on EnableBankingAuthException {
-    throw const BankingException(providerId: id, failure: BankingFailure.authentication);
+    throw const BankingException(
+      providerId: id,
+      failure: BankingFailure.authentication,
+    );
   } on TimeoutException {
-    throw const BankingException(providerId: id, failure: BankingFailure.unavailable);
+    throw const BankingException(
+      providerId: id,
+      failure: BankingFailure.unavailable,
+    );
   } on http.ClientException {
-    throw const BankingException(providerId: id, failure: BankingFailure.unavailable);
+    throw const BankingException(
+      providerId: id,
+      failure: BankingFailure.unavailable,
+    );
   } on SocketException {
-    throw const BankingException(providerId: id, failure: BankingFailure.unavailable);
+    throw const BankingException(
+      providerId: id,
+      failure: BankingFailure.unavailable,
+    );
   } on FormatException {
-    throw const BankingException(providerId: id, failure: BankingFailure.invalidResponse);
+    throw const BankingException(
+      providerId: id,
+      failure: BankingFailure.invalidResponse,
+    );
   } on TypeError {
-    throw const BankingException(providerId: id, failure: BankingFailure.invalidResponse);
+    throw const BankingException(
+      providerId: id,
+      failure: BankingFailure.invalidResponse,
+    );
   }
 }

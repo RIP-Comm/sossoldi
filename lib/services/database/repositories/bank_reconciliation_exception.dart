@@ -1,6 +1,9 @@
-// dart format width=400
-
-enum BankReconciliationFailure { missingStableIdentity, identityCollision, missingLocalAccount, invalidConnectionState }
+enum BankReconciliationFailure {
+  missingStableIdentity,
+  identityCollision,
+  missingLocalAccount,
+  invalidConnectionState,
+}
 
 class BankReconciliationException implements Exception {
   final BankReconciliationFailure failure;

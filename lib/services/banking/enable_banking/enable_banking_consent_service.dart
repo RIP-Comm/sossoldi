@@ -1,5 +1,3 @@
-// dart format width=400
-
 import '../bank_consent_service.dart';
 import '../banking_authorization.dart';
 import '../banking_connection.dart';
@@ -18,27 +16,59 @@ class EnableBankingConsentService implements BankConsentService {
   EnableBankingConsentService(this._api);
 
   @override
-  Future<BankingAuthorization> startAuthorization(BankingAuthorizationRequest request) => withEnableBankingErrors(() async {
-    checkEnableBankingReference(request.institution.providerId, request.institution.id);
-    if (request.state.trim().isEmpty) throw const BankingException(providerId: enableBankingId, failure: BankingFailure.rejected);
-    return _mapper.authorization(await _api.startAuthorization(aspspName: request.institution.name, aspspCountry: request.institution.country, state: request.state, validUntil: request.validUntil, psuType: request.customerType.name, language: request.language, redirectUri: request.redirectUri?.toString() ?? kEbRedirectUri));
+  Future<BankingAuthorization> startAuthorization(
+    BankingAuthorizationRequest request,
+  ) => withEnableBankingErrors(() async {
+    checkEnableBankingReference(
+      request.institution.providerId,
+      request.institution.id,
+    );
+    if (request.state.trim().isEmpty) {
+      throw const BankingException(
+        providerId: enableBankingId,
+        failure: BankingFailure.rejected,
+      );
+    }
+    return _mapper.authorization(
+      await _api.startAuthorization(
+        aspspName: request.institution.name,
+        aspspCountry: request.institution.country,
+        state: request.state,
+        validUntil: request.validUntil,
+        psuType: request.customerType.name,
+        language: request.language,
+        redirectUri: request.redirectUri?.toString() ?? kEbRedirectUri,
+      ),
+    );
   });
 
   @override
-  Future<BankingConnectionResult> createConnection(String authorizationCode) => withEnableBankingErrors(() async {
-    if (authorizationCode.trim().isEmpty) throw const BankingException(providerId: enableBankingId, failure: BankingFailure.rejected);
-    return _mapper.created(await _api.createSession(authorizationCode));
-  });
+  Future<BankingConnectionResult> createConnection(String authorizationCode) =>
+      withEnableBankingErrors(() async {
+        if (authorizationCode.trim().isEmpty) {
+          throw const BankingException(
+            providerId: enableBankingId,
+            failure: BankingFailure.rejected,
+          );
+        }
+        return _mapper.created(await _api.createSession(authorizationCode));
+      });
 
   @override
-  Future<BankingConnection> getConnection(BankingConnectionReference reference) => withEnableBankingErrors(() async {
+  Future<BankingConnection> getConnection(
+    BankingConnectionReference reference,
+  ) => withEnableBankingErrors(() async {
     checkEnableBankingReference(reference.providerId, reference.remoteId);
-    return _mapper.connection(await _api.getSession(reference.remoteId), reference);
+    return _mapper.connection(
+      await _api.getSession(reference.remoteId),
+      reference,
+    );
   });
 
   @override
-  Future<void> revokeConnection(BankingConnectionReference reference) => withEnableBankingErrors(() async {
-    checkEnableBankingReference(reference.providerId, reference.remoteId);
-    await _api.deleteSession(reference.remoteId);
-  });
+  Future<void> revokeConnection(BankingConnectionReference reference) =>
+      withEnableBankingErrors(() async {
+        checkEnableBankingReference(reference.providerId, reference.remoteId);
+        await _api.deleteSession(reference.remoteId);
+      });
 }

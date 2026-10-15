@@ -1,5 +1,3 @@
-// dart format width=400
-
 import 'base_entity.dart';
 
 const String bankConnectionTable = 'bankConnection';
@@ -21,7 +19,22 @@ class BankConnectionFields extends BaseEntityFields {
   static String createdAt = BaseEntityFields.getCreatedAt;
   static String updatedAt = BaseEntityFields.getUpdatedAt;
 
-  static final List<String> allFields = [id, providerId, institutionName, institutionCountry, applicationId, remoteConnectionId, pendingRemoteConnectionId, pendingAuthorizationId, validUntil, pendingValidUntil, status, psuType, createdAt, updatedAt];
+  static final List<String> allFields = [
+    id,
+    providerId,
+    institutionName,
+    institutionCountry,
+    applicationId,
+    remoteConnectionId,
+    pendingRemoteConnectionId,
+    pendingAuthorizationId,
+    validUntil,
+    pendingValidUntil,
+    status,
+    psuType,
+    createdAt,
+    updatedAt,
+  ];
 }
 
 class BankAccountIdentityFields {
@@ -51,7 +64,12 @@ enum BankConnectionStatus {
     BankConnectionStatus.disconnected => 'DISCONNECTED',
   };
 
-  static BankConnectionStatus fromJson(String code) => BankConnectionStatus.values.firstWhere((status) => status.code == code, orElse: () => throw FormatException('Unknown bank connection status: $code'));
+  static BankConnectionStatus fromJson(String code) =>
+      BankConnectionStatus.values.firstWhere(
+        (status) => status.code == code,
+        orElse: () =>
+            throw FormatException('Unknown bank connection status: $code'),
+      );
 }
 
 class BankConnection extends BaseEntity {
@@ -69,7 +87,22 @@ class BankConnection extends BaseEntity {
   final BankConnectionStatus status;
   final String psuType;
 
-  const BankConnection({super.id, required this.providerId, required this.institutionName, required this.institutionCountry, required this.applicationId, this.remoteConnectionId, this.pendingRemoteConnectionId, this.pendingAuthorizationId, this.validUntil, this.pendingValidUntil, required this.status, this.psuType = 'personal', super.createdAt, super.updatedAt});
+  const BankConnection({
+    super.id,
+    required this.providerId,
+    required this.institutionName,
+    required this.institutionCountry,
+    required this.applicationId,
+    this.remoteConnectionId,
+    this.pendingRemoteConnectionId,
+    this.pendingAuthorizationId,
+    this.validUntil,
+    this.pendingValidUntil,
+    required this.status,
+    this.psuType = 'personal',
+    super.createdAt,
+    super.updatedAt,
+  });
 
   BankConnection copy({
     int? id,
@@ -92,11 +125,21 @@ class BankConnection extends BaseEntity {
     institutionName: institutionName ?? this.institutionName,
     institutionCountry: institutionCountry ?? this.institutionCountry,
     applicationId: applicationId ?? this.applicationId,
-    remoteConnectionId: remoteConnectionId == _unset ? this.remoteConnectionId : remoteConnectionId as String?,
-    pendingRemoteConnectionId: pendingRemoteConnectionId == _unset ? this.pendingRemoteConnectionId : pendingRemoteConnectionId as String?,
-    pendingAuthorizationId: pendingAuthorizationId == _unset ? this.pendingAuthorizationId : pendingAuthorizationId as String?,
-    validUntil: validUntil == _unset ? this.validUntil : validUntil as DateTime?,
-    pendingValidUntil: pendingValidUntil == _unset ? this.pendingValidUntil : pendingValidUntil as DateTime?,
+    remoteConnectionId: remoteConnectionId == _unset
+        ? this.remoteConnectionId
+        : remoteConnectionId as String?,
+    pendingRemoteConnectionId: pendingRemoteConnectionId == _unset
+        ? this.pendingRemoteConnectionId
+        : pendingRemoteConnectionId as String?,
+    pendingAuthorizationId: pendingAuthorizationId == _unset
+        ? this.pendingAuthorizationId
+        : pendingAuthorizationId as String?,
+    validUntil: validUntil == _unset
+        ? this.validUntil
+        : validUntil as DateTime?,
+    pendingValidUntil: pendingValidUntil == _unset
+        ? this.pendingValidUntil
+        : pendingValidUntil as DateTime?,
     status: status ?? this.status,
     psuType: psuType ?? this.psuType,
     createdAt: createdAt ?? this.createdAt,
@@ -105,16 +148,22 @@ class BankConnection extends BaseEntity {
 
   static BankConnection fromJson(Map<String, Object?> json) => BankConnection(
     id: json[BankConnectionFields.id] as int?,
-    providerId: json[BankConnectionFields.providerId] as String? ?? 'enable_banking',
+    providerId:
+        json[BankConnectionFields.providerId] as String? ?? 'enable_banking',
     institutionName: json[BankConnectionFields.institutionName] as String,
     institutionCountry: json[BankConnectionFields.institutionCountry] as String,
     applicationId: json[BankConnectionFields.applicationId] as String,
-    remoteConnectionId: json[BankConnectionFields.remoteConnectionId] as String?,
-    pendingRemoteConnectionId: json[BankConnectionFields.pendingRemoteConnectionId] as String?,
-    pendingAuthorizationId: json[BankConnectionFields.pendingAuthorizationId] as String?,
+    remoteConnectionId:
+        json[BankConnectionFields.remoteConnectionId] as String?,
+    pendingRemoteConnectionId:
+        json[BankConnectionFields.pendingRemoteConnectionId] as String?,
+    pendingAuthorizationId:
+        json[BankConnectionFields.pendingAuthorizationId] as String?,
     validUntil: _date(json[BankConnectionFields.validUntil]),
     pendingValidUntil: _date(json[BankConnectionFields.pendingValidUntil]),
-    status: BankConnectionStatus.fromJson(json[BankConnectionFields.status] as String),
+    status: BankConnectionStatus.fromJson(
+      json[BankConnectionFields.status] as String,
+    ),
     psuType: json[BankConnectionFields.psuType] as String? ?? 'personal',
     createdAt: _date(json[BankConnectionFields.createdAt]),
     updatedAt: _date(json[BankConnectionFields.updatedAt]),
@@ -132,13 +181,18 @@ class BankConnection extends BaseEntity {
       BankConnectionFields.pendingRemoteConnectionId: pendingRemoteConnectionId,
       BankConnectionFields.pendingAuthorizationId: pendingAuthorizationId,
       BankConnectionFields.validUntil: validUntil?.toUtc().toIso8601String(),
-      BankConnectionFields.pendingValidUntil: pendingValidUntil?.toUtc().toIso8601String(),
+      BankConnectionFields.pendingValidUntil: pendingValidUntil
+          ?.toUtc()
+          .toIso8601String(),
       BankConnectionFields.status: status.code,
       BankConnectionFields.psuType: psuType,
-      BankConnectionFields.createdAt: update ? createdAt?.toUtc().toIso8601String() : now,
+      BankConnectionFields.createdAt: update
+          ? createdAt?.toUtc().toIso8601String()
+          : now,
       BankConnectionFields.updatedAt: now,
     };
   }
 
-  static DateTime? _date(Object? value) => value == null ? null : DateTime.parse(value as String).toUtc();
+  static DateTime? _date(Object? value) =>
+      value == null ? null : DateTime.parse(value as String).toUtc();
 }

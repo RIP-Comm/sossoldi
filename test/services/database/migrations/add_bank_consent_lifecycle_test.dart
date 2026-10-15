@@ -1,5 +1,3 @@
-// dart format width=400
-
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -20,7 +18,10 @@ void main() {
   });
 
   setUp(() {
-    dbPath = path.join(Directory.systemTemp.path, 'sossoldi_bank_consent_migration_test.db');
+    dbPath = path.join(
+      Directory.systemTemp.path,
+      'sossoldi_bank_consent_migration_test.db',
+    );
   });
 
   tearDown(() async {
@@ -31,7 +32,10 @@ void main() {
     expect(manager.latestVersion, 8);
     final database = await databaseFactory.openDatabase(
       dbPath,
-      options: OpenDatabaseOptions(version: manager.latestVersion, onCreate: (db, version) => manager.migrate(db, 0, version)),
+      options: OpenDatabaseOptions(
+        version: manager.latestVersion,
+        onCreate: (db, version) => manager.migrate(db, 0, version),
+      ),
     );
     final row = {
       BankConnectionFields.providerId: 'enable_banking',
@@ -45,43 +49,86 @@ void main() {
     };
     try {
       await database.insert(bankConnectionTable, row);
-      await database.insert(bankConnectionTable, {...row, BankConnectionFields.providerId: 'alternative'});
-      await expectLater(database.insert(bankConnectionTable, row), throwsA(isA<DatabaseException>()));
+      await database.insert(bankConnectionTable, {
+        ...row,
+        BankConnectionFields.providerId: 'alternative',
+      });
+      await expectLater(
+        database.insert(bankConnectionTable, row),
+        throwsA(isA<DatabaseException>()),
+      );
       expect(await database.query(bankConnectionTable), hasLength(2));
     } finally {
       await database.close();
     }
   });
 
-  test('v7 upgrade preserves manual accounts and adds lifecycle schema', () async {
-    final v7 = await databaseFactory.openDatabase(dbPath, options: OpenDatabaseOptions(version: 7, onCreate: (db, version) => manager.migrate(db, 0, version)));
-    await v7.insert(bankAccountTable, {
-      BankAccountFields.name: 'Cash',
-      BankAccountFields.symbol: 'wallet',
-      BankAccountFields.color: 1,
-      BankAccountFields.startingValue: 25,
-      BankAccountFields.active: 1,
-      BankAccountFields.countNetWorth: 1,
-      BankAccountFields.mainAccount: 0,
-      BankAccountFields.order: 0,
-      BaseEntityFields.createdAt: '2026-01-01T00:00:00.000Z',
-      BaseEntityFields.updatedAt: '2026-01-01T00:00:00.000Z',
-    });
-    await v7.close();
+  test(
+    'v7 upgrade preserves manual accounts and adds lifecycle schema',
+    () async {
+      final v7 = await databaseFactory.openDatabase(
+        dbPath,
+        options: OpenDatabaseOptions(
+          version: 7,
+          onCreate: (db, version) => manager.migrate(db, 0, version),
+        ),
+      );
+      await v7.insert(bankAccountTable, {
+        BankAccountFields.name: 'Cash',
+        BankAccountFields.symbol: 'wallet',
+        BankAccountFields.color: 1,
+        BankAccountFields.startingValue: 25,
+        BankAccountFields.active: 1,
+        BankAccountFields.countNetWorth: 1,
+        BankAccountFields.mainAccount: 0,
+        BankAccountFields.order: 0,
+        BaseEntityFields.createdAt: '2026-01-01T00:00:00.000Z',
+        BaseEntityFields.updatedAt: '2026-01-01T00:00:00.000Z',
+      });
+      await v7.close();
 
-    final v8 = await databaseFactory.openDatabase(dbPath, options: OpenDatabaseOptions(version: 8, onUpgrade: manager.migrate));
-    final accountColumns = (await v8.rawQuery('PRAGMA table_info(`$bankAccountTable`)')).map((row) => row['name']);
-    expect(accountColumns, containsAll([BankAccountFields.ebAccountUid, BankAccountFields.ebConnectionId, BankAccountFields.identificationHash, BankAccountFields.identificationHashes, BankAccountFields.iban, BankAccountFields.lastSyncAt]));
-    expect(await v8.query(bankAccountTable), hasLength(1));
-    expect((await v8.query(bankAccountTable)).single[BankAccountFields.ebAccountUid], isNull);
-    expect((await v8.rawQuery("SELECT name FROM sqlite_master WHERE type = 'table'")).map((row) => row['name']), containsAll([bankConnectionTable, bankAccountIdentityTable]));
-    await v8.close();
-  });
+      final v8 = await databaseFactory.openDatabase(
+        dbPath,
+        options: OpenDatabaseOptions(version: 8, onUpgrade: manager.migrate),
+      );
+      final accountColumns = (await v8.rawQuery(
+        'PRAGMA table_info(`$bankAccountTable`)',
+      )).map((row) => row['name']);
+      expect(
+        accountColumns,
+        containsAll([
+          BankAccountFields.ebAccountUid,
+          BankAccountFields.ebConnectionId,
+          BankAccountFields.identificationHash,
+          BankAccountFields.identificationHashes,
+          BankAccountFields.iban,
+          BankAccountFields.lastSyncAt,
+        ]),
+      );
+      expect(await v8.query(bankAccountTable), hasLength(1));
+      expect(
+        (await v8.query(
+          bankAccountTable,
+        )).single[BankAccountFields.ebAccountUid],
+        isNull,
+      );
+      expect(
+        (await v8.rawQuery(
+          "SELECT name FROM sqlite_master WHERE type = 'table'",
+        )).map((row) => row['name']),
+        containsAll([bankConnectionTable, bankAccountIdentityTable]),
+      );
+      await v8.close();
+    },
+  );
 
   test('fresh schema enforces stable hash uniqueness per connection', () async {
     final db = await databaseFactory.openDatabase(
       inMemoryDatabasePath,
-      options: OpenDatabaseOptions(version: manager.latestVersion, onCreate: (database, version) => manager.migrate(database, 0, version)),
+      options: OpenDatabaseOptions(
+        version: manager.latestVersion,
+        onCreate: (database, version) => manager.migrate(database, 0, version),
+      ),
     );
     final now = '2026-01-01T00:00:00.000Z';
     final connectionId = await db.insert(bankConnectionTable, {
@@ -96,24 +143,62 @@ void main() {
     });
     final first = await db.insert(bankAccountTable, _accountRow('First'));
     final second = await db.insert(bankAccountTable, _accountRow('Second'));
-    await db.insert(bankAccountIdentityTable, {BankAccountIdentityFields.connectionId: connectionId, BankAccountIdentityFields.bankAccountId: first, BankAccountIdentityFields.identificationHash: 'stable-hash'});
+    await db.insert(bankAccountIdentityTable, {
+      BankAccountIdentityFields.connectionId: connectionId,
+      BankAccountIdentityFields.bankAccountId: first,
+      BankAccountIdentityFields.identificationHash: 'stable-hash',
+    });
 
-    await expectLater(() => db.insert(bankAccountIdentityTable, {BankAccountIdentityFields.connectionId: connectionId, BankAccountIdentityFields.bankAccountId: second, BankAccountIdentityFields.identificationHash: 'stable-hash'}), throwsA(isA<DatabaseException>()));
+    await expectLater(
+      () => db.insert(bankAccountIdentityTable, {
+        BankAccountIdentityFields.connectionId: connectionId,
+        BankAccountIdentityFields.bankAccountId: second,
+        BankAccountIdentityFields.identificationHash: 'stable-hash',
+      }),
+      throwsA(isA<DatabaseException>()),
+    );
     await db.close();
   });
 
   test('failed v8 upgrade rolls back every partial schema change', () async {
-    final v7 = await databaseFactory.openDatabase(dbPath, options: OpenDatabaseOptions(version: 7, onCreate: (db, version) => manager.migrate(db, 0, version)));
+    final v7 = await databaseFactory.openDatabase(
+      dbPath,
+      options: OpenDatabaseOptions(
+        version: 7,
+        onCreate: (db, version) => manager.migrate(db, 0, version),
+      ),
+    );
     await v7.execute('CREATE TABLE sabotage (sessionId TEXT)');
-    await v7.execute('CREATE INDEX idx_bank_connection_session ON sabotage (sessionId)');
+    await v7.execute(
+      'CREATE INDEX idx_bank_connection_session ON sabotage (sessionId)',
+    );
     await v7.close();
 
-    await expectLater(() => databaseFactory.openDatabase(dbPath, options: OpenDatabaseOptions(version: 8, onUpgrade: manager.migrate)), throwsA(isA<DatabaseException>()));
-    final unchanged = await databaseFactory.openDatabase(dbPath, options: OpenDatabaseOptions(version: 7));
-    final tables = await unchanged.rawQuery("SELECT name FROM sqlite_master WHERE type = 'table'");
-    expect(tables.map((row) => row['name']), isNot(contains(bankConnectionTable)));
-    final columns = await unchanged.rawQuery('PRAGMA table_info(`$bankAccountTable`)');
-    expect(columns.map((row) => row['name']), isNot(contains(BankAccountFields.ebAccountUid)));
+    await expectLater(
+      () => databaseFactory.openDatabase(
+        dbPath,
+        options: OpenDatabaseOptions(version: 8, onUpgrade: manager.migrate),
+      ),
+      throwsA(isA<DatabaseException>()),
+    );
+    final unchanged = await databaseFactory.openDatabase(
+      dbPath,
+      options: OpenDatabaseOptions(version: 7),
+    );
+    final tables = await unchanged.rawQuery(
+      "SELECT name FROM sqlite_master WHERE type = 'table'",
+    );
+    expect(
+      tables.map((row) => row['name']),
+      isNot(contains(bankConnectionTable)),
+    );
+    final columns = await unchanged.rawQuery(
+      'PRAGMA table_info(`$bankAccountTable`)',
+    );
+    expect(
+      columns.map((row) => row['name']),
+      isNot(contains(BankAccountFields.ebAccountUid)),
+    );
     await unchanged.close();
   });
 }

@@ -1,5 +1,3 @@
-// dart format width=400
-
 import 'dart:convert';
 
 import '../bank_institution.dart';
@@ -17,8 +15,13 @@ class EnableBankingInstitutionMapper {
     name: value.name,
     country: value.country,
     logoUri: value.logo == null ? null : Uri.tryParse(value.logo!),
-    customerTypes: {if (value.psuTypes.contains('personal')) BankingCustomerType.personal, if (value.psuTypes.contains('business')) BankingCustomerType.business},
-    maximumConsentDuration: value.maximumConsentValidity == null ? null : Duration(seconds: value.maximumConsentValidity!),
+    customerTypes: {
+      if (value.psuTypes.contains('personal')) BankingCustomerType.personal,
+      if (value.psuTypes.contains('business')) BankingCustomerType.business,
+    },
+    maximumConsentDuration: value.maximumConsentValidity == null
+        ? null
+        : Duration(seconds: value.maximumConsentValidity!),
     isSandbox: value.sandbox != null,
     isBeta: value.beta,
   );

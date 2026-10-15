@@ -1,5 +1,3 @@
-// dart format width=400
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sossoldi/model/bank_connection.dart';
 import 'package:sossoldi/services/banking/bank_authorization_context.dart';
@@ -44,17 +42,29 @@ class _FakeApi implements BankConsentService, BankInstitutionDirectory {
   DateTime? requestedValidUntil;
 
   @override
-  Future<List<BankInstitution>> getInstitutions({String? country, BankingCustomerType customerType = BankingCustomerType.personal}) async => aspsps;
+  Future<List<BankInstitution>> getInstitutions({
+    String? country,
+    BankingCustomerType customerType = BankingCustomerType.personal,
+  }) async => aspsps;
 
   @override
-  Future<BankingAuthorization> startAuthorization(BankingAuthorizationRequest request) async {
+  Future<BankingAuthorization> startAuthorization(
+    BankingAuthorizationRequest request,
+  ) async {
     startCalls++;
     requestedValidUntil = request.validUntil;
-    return BankingAuthorization(providerId: 'alternative', uri: Uri.parse('https://bank.example/authorize'), authorizationId: 'authorization-id');
+    return BankingAuthorization(
+      providerId: 'alternative',
+      uri: Uri.parse('https://bank.example/authorize'),
+      authorizationId: 'authorization-id',
+    );
   }
 
   BankingConnection connection(String id) => BankingConnection(
-    reference: BankingConnectionReference(providerId: 'alternative', remoteId: id),
+    reference: BankingConnectionReference(
+      providerId: 'alternative',
+      remoteId: id,
+    ),
     institution: bank(),
     validUntil: validUntil,
     status: sessionStatus,
@@ -65,11 +75,16 @@ class _FakeApi implements BankConsentService, BankInstitutionDirectory {
   Future<BankingConnectionResult> createConnection(String code) async {
     createCalls++;
     if (createFailure case final failure?) throw failure;
-    return BankingConnectionResult(connection: connection('session-new'), accounts: []);
+    return BankingConnectionResult(
+      connection: connection('session-new'),
+      accounts: [],
+    );
   }
 
   @override
-  Future<BankingConnection> getConnection(BankingConnectionReference reference) async {
+  Future<BankingConnection> getConnection(
+    BankingConnectionReference reference,
+  ) async {
     expect(reference.providerId, 'alternative');
     if (getSessionFailure case final failure?) throw failure;
     return connection(reference.remoteId);
@@ -83,12 +98,28 @@ class _FakeApi implements BankConsentService, BankInstitutionDirectory {
   }
 }
 
-BankInstitution bank({String name = 'Test Bank', String country = 'IT', Set<BankingCustomerType> customerTypes = const {BankingCustomerType.personal}, Duration? maximumConsentDuration}) => BankInstitution(providerId: 'alternative', id: '$country:$name', name: name, country: country, customerTypes: customerTypes, maximumConsentDuration: maximumConsentDuration);
+BankInstitution bank({
+  String name = 'Test Bank',
+  String country = 'IT',
+  Set<BankingCustomerType> customerTypes = const {BankingCustomerType.personal},
+  Duration? maximumConsentDuration,
+}) => BankInstitution(
+  providerId: 'alternative',
+  id: '$country:$name',
+  name: name,
+  country: country,
+  customerTypes: customerTypes,
+  maximumConsentDuration: maximumConsentDuration,
+);
 
 void main() {
   late Database db;
   late BankConnectionRepository repository;
-  BankAuthorizationContext context = const BankAuthorizationContext(providerId: 'alternative', applicationId: 'app-id', redirectUri: 'sossoldi://eb-callback');
+  BankAuthorizationContext context = const BankAuthorizationContext(
+    providerId: 'alternative',
+    applicationId: 'app-id',
+    redirectUri: 'sossoldi://eb-callback',
+  );
   late _MemoryPendingStore pending;
   late _FakeApi api;
   final now = DateTime.utc(2026, 9, 1, 12);
@@ -99,29 +130,64 @@ void main() {
   });
 
   setUp(() async {
-    context = const BankAuthorizationContext(providerId: 'alternative', applicationId: 'app-id', redirectUri: 'sossoldi://eb-callback');
+    context = const BankAuthorizationContext(
+      providerId: 'alternative',
+      applicationId: 'app-id',
+      redirectUri: 'sossoldi://eb-callback',
+    );
     final manager = MigrationManager();
     db = await databaseFactory.openDatabase(
       inMemoryDatabasePath,
-      options: OpenDatabaseOptions(version: manager.latestVersion, onCreate: (database, version) => manager.migrate(database, 0, version)),
+      options: OpenDatabaseOptions(
+        version: manager.latestVersion,
+        onCreate: (database, version) => manager.migrate(database, 0, version),
+      ),
     );
     repository = BankConnectionRepository.withDatabase(db);
     pending = _MemoryPendingStore();
     api = _FakeApi();
     api.aspsps = [
-      bank(name: 'Test Bank', country: 'IT', customerTypes: {BankingCustomerType.personal}, maximumConsentDuration: const Duration(seconds: 86400)),
+      bank(
+        name: 'Test Bank',
+        country: 'IT',
+        customerTypes: {BankingCustomerType.personal},
+        maximumConsentDuration: const Duration(seconds: 86400),
+      ),
     ];
   });
 
   tearDown(() => db.close());
 
-  BankConsentLifecycleService service() => BankConsentLifecycleService(consent: api, institutions: api, readContext: () async => context, pendingStore: pending, connections: repository, clock: () => now, callbackSupported: () => true);
+  BankConsentLifecycleService service() => BankConsentLifecycleService(
+    consent: api,
+    institutions: api,
+    readContext: () async => context,
+    pendingStore: pending,
+    connections: repository,
+    clock: () => now,
+    callbackSupported: () => true,
+  );
 
   test('reconnect reloads metadata and clamps requested validity', () async {
-    final connection = await repository.insert(BankConnection(providerId: 'alternative', institutionName: 'Test Bank', institutionCountry: 'IT', applicationId: 'app-id', remoteConnectionId: 'old-session', validUntil: now.add(const Duration(days: 1)), status: BankConnectionStatus.active));
+    final connection = await repository.insert(
+      BankConnection(
+        providerId: 'alternative',
+        institutionName: 'Test Bank',
+        institutionCountry: 'IT',
+        applicationId: 'app-id',
+        remoteConnectionId: 'old-session',
+        validUntil: now.add(const Duration(days: 1)),
+        status: BankConnectionStatus.active,
+      ),
+    );
 
     final attempt = await service().startAuthorization(
-      bank(name: 'Test Bank', country: 'IT', customerTypes: {BankingCustomerType.personal}, maximumConsentDuration: const Duration(seconds: 7776000)),
+      bank(
+        name: 'Test Bank',
+        country: 'IT',
+        customerTypes: {BankingCustomerType.personal},
+        maximumConsentDuration: const Duration(seconds: 7776000),
+      ),
       reconnectConnectionId: connection.id,
     );
 
@@ -131,27 +197,52 @@ void main() {
     expect(pending.value?.reconnectConnectionId, connection.id);
   });
 
-  test('cold-start callback stages session and duplicate is idempotent', () async {
-    await service().startAuthorization(api.aspsps.single);
-    final state = pending.value!.state;
+  test(
+    'cold-start callback stages session and duplicate is idempotent',
+    () async {
+      await service().startAuthorization(api.aspsps.single);
+      final state = pending.value!.state;
 
-    final restarted = service();
-    final first = await restarted.completeCallback(BankAuthorizationCallback(code: 'code', state: state));
-    final duplicate = await restarted.completeCallback(BankAuthorizationCallback(code: 'code', state: state));
+      final restarted = service();
+      final first = await restarted.completeCallback(
+        BankAuthorizationCallback(code: 'code', state: state),
+      );
+      final duplicate = await restarted.completeCallback(
+        BankAuthorizationCallback(code: 'code', state: state),
+      );
 
-    expect(first.connection.status, BankConnectionStatus.awaitingImport);
-    expect(first.connection.remoteConnectionId, isNull);
-    expect(first.connection.pendingRemoteConnectionId, 'session-new');
-    expect(duplicate.connection.id, first.connection.id);
-    expect(api.createCalls, 1);
-    expect(pending.value?.phase, PendingAuthorizationPhase.connectionStaged);
-    expect((await restarted.resumeAwaitingImports()).single.connection.id, first.connection.id);
-  });
+      expect(first.connection.status, BankConnectionStatus.awaitingImport);
+      expect(first.connection.remoteConnectionId, isNull);
+      expect(first.connection.pendingRemoteConnectionId, 'session-new');
+      expect(duplicate.connection.id, first.connection.id);
+      expect(api.createCalls, 1);
+      expect(pending.value?.phase, PendingAuthorizationPhase.connectionStaged);
+      expect(
+        (await restarted.resumeAwaitingImports()).single.connection.id,
+        first.connection.id,
+      );
+    },
+  );
 
   test('failed staged reconnect keeps the previous session active', () async {
-    final connection = await repository.insert(BankConnection(providerId: 'alternative', institutionName: 'Test Bank', institutionCountry: 'IT', applicationId: 'app-id', remoteConnectionId: 'session-old', validUntil: now.add(const Duration(days: 1)), status: BankConnectionStatus.active));
-    await service().startAuthorization(api.aspsps.single, reconnectConnectionId: connection.id);
-    await service().completeCallback(BankAuthorizationCallback(code: 'code', state: pending.value!.state));
+    final connection = await repository.insert(
+      BankConnection(
+        providerId: 'alternative',
+        institutionName: 'Test Bank',
+        institutionCountry: 'IT',
+        applicationId: 'app-id',
+        remoteConnectionId: 'session-old',
+        validUntil: now.add(const Duration(days: 1)),
+        status: BankConnectionStatus.active,
+      ),
+    );
+    await service().startAuthorization(
+      api.aspsps.single,
+      reconnectConnectionId: connection.id,
+    );
+    await service().completeCallback(
+      BankAuthorizationCallback(code: 'code', state: pending.value!.state),
+    );
     api.sessionStatus = BankingConnectionStatus.expired;
 
     expect(await service().resumeAwaitingImports(), isEmpty);
@@ -163,51 +254,95 @@ void main() {
     expect(pending.value, isNull);
   });
 
-  test('reauth-required staged import clears pending state and is not resumed again', () async {
-    await service().startAuthorization(api.aspsps.single);
-    final staged = await service().completeCallback(BankAuthorizationCallback(code: 'code', state: pending.value!.state));
-    api.getSessionFailure = const BankingException(providerId: 'alternative', failure: BankingFailure.authentication);
+  test(
+    'reauth-required staged import clears pending state and is not resumed again',
+    () async {
+      await service().startAuthorization(api.aspsps.single);
+      final staged = await service().completeCallback(
+        BankAuthorizationCallback(code: 'code', state: pending.value!.state),
+      );
+      api.getSessionFailure = const BankingException(
+        providerId: 'alternative',
+        failure: BankingFailure.authentication,
+      );
 
-    expect(await service().resumeAwaitingImports(), isEmpty);
+      expect(await service().resumeAwaitingImports(), isEmpty);
 
-    final rejected = await repository.selectById(staged.connection.id!);
-    expect(rejected.status, BankConnectionStatus.reauthRequired);
-    expect(rejected.pendingRemoteConnectionId, isNull);
-    expect(rejected.pendingAuthorizationId, isNull);
-    expect(rejected.pendingValidUntil, isNull);
-    expect(await repository.selectAwaitingImport(), isEmpty);
-    expect(pending.value, isNull);
-  });
+      final rejected = await repository.selectById(staged.connection.id!);
+      expect(rejected.status, BankConnectionStatus.reauthRequired);
+      expect(rejected.pendingRemoteConnectionId, isNull);
+      expect(rejected.pendingAuthorizationId, isNull);
+      expect(rejected.pendingValidUntil, isNull);
+      expect(await repository.selectAwaitingImport(), isEmpty);
+      expect(pending.value, isNull);
+    },
+  );
 
-  test('reauth-required staged reconnect keeps the previous session and clears pending state', () async {
-    final connection = await repository.insert(BankConnection(providerId: 'alternative', institutionName: 'Test Bank', institutionCountry: 'IT', applicationId: 'app-id', remoteConnectionId: 'session-old', validUntil: now.add(const Duration(days: 1)), status: BankConnectionStatus.active));
-    await service().startAuthorization(api.aspsps.single, reconnectConnectionId: connection.id);
-    await service().completeCallback(BankAuthorizationCallback(code: 'code', state: pending.value!.state));
-    api.getSessionFailure = const BankingException(providerId: 'alternative', failure: BankingFailure.forbidden);
+  test(
+    'reauth-required staged reconnect keeps the previous session and clears pending state',
+    () async {
+      final connection = await repository.insert(
+        BankConnection(
+          providerId: 'alternative',
+          institutionName: 'Test Bank',
+          institutionCountry: 'IT',
+          applicationId: 'app-id',
+          remoteConnectionId: 'session-old',
+          validUntil: now.add(const Duration(days: 1)),
+          status: BankConnectionStatus.active,
+        ),
+      );
+      await service().startAuthorization(
+        api.aspsps.single,
+        reconnectConnectionId: connection.id,
+      );
+      await service().completeCallback(
+        BankAuthorizationCallback(code: 'code', state: pending.value!.state),
+      );
+      api.getSessionFailure = const BankingException(
+        providerId: 'alternative',
+        failure: BankingFailure.forbidden,
+      );
 
-    expect(await service().resumeAwaitingImports(), isEmpty);
+      expect(await service().resumeAwaitingImports(), isEmpty);
 
-    final rejected = await repository.selectById(connection.id!);
-    expect(rejected.status, BankConnectionStatus.reauthRequired);
-    expect(rejected.remoteConnectionId, 'session-old');
-    expect(rejected.pendingRemoteConnectionId, isNull);
-    expect(rejected.pendingAuthorizationId, isNull);
-    expect(rejected.pendingValidUntil, isNull);
-    expect(await repository.selectAwaitingImport(), isEmpty);
-    expect(pending.value, isNull);
-  });
+      final rejected = await repository.selectById(connection.id!);
+      expect(rejected.status, BankConnectionStatus.reauthRequired);
+      expect(rejected.remoteConnectionId, 'session-old');
+      expect(rejected.pendingRemoteConnectionId, isNull);
+      expect(rejected.pendingAuthorizationId, isNull);
+      expect(rejected.pendingValidUntil, isNull);
+      expect(await repository.selectAwaitingImport(), isEmpty);
+      expect(pending.value, isNull);
+    },
+  );
 
-  test('retryable callback failure remains pending and can be retried', () async {
-    await service().startAuthorization(api.aspsps.single);
-    final callback = BankAuthorizationCallback(code: 'code', state: pending.value!.state);
-    api.createFailure = const BankingException(providerId: 'alternative', failure: BankingFailure.unavailable);
+  test(
+    'retryable callback failure remains pending and can be retried',
+    () async {
+      await service().startAuthorization(api.aspsps.single);
+      final callback = BankAuthorizationCallback(
+        code: 'code',
+        state: pending.value!.state,
+      );
+      api.createFailure = const BankingException(
+        providerId: 'alternative',
+        failure: BankingFailure.unavailable,
+      );
 
-    expect(await service().handleCallback(callback), BankCallbackDisposition.retryable);
-    expect(pending.value, isNotNull);
-    api.createFailure = null;
-    expect(await service().handleCallback(callback), BankCallbackDisposition.terminal);
-    expect(api.createCalls, 2);
-  });
+      expect(
+        await service().handleCallback(callback),
+        BankCallbackDisposition.retryable,
+      );
+      expect(pending.value, isNotNull);
+      api.createFailure = null;
+      expect(
+        await service().handleCallback(callback),
+        BankCallbackDisposition.terminal,
+      );
+      expect(api.createCalls, 2);
+    },
+  );
 
   test('duplicate authorization start reuses one pending attempt', () async {
     final first = await service().startAuthorization(api.aspsps.single);
@@ -218,14 +353,38 @@ void main() {
     expect(api.startCalls, 1);
   });
 
-  test('authorization uses the default validity when no limit exists', () async {
-    await service().startAuthorization(bank(name: 'Test Bank', country: 'IT', customerTypes: {BankingCustomerType.personal}));
+  test(
+    'authorization uses the default validity when no limit exists',
+    () async {
+      await service().startAuthorization(
+        bank(
+          name: 'Test Bank',
+          country: 'IT',
+          customerTypes: {BankingCustomerType.personal},
+        ),
+      );
 
-    expect(api.requestedValidUntil, now.add(const Duration(days: 90)));
-  });
+      expect(api.requestedValidUntil, now.add(const Duration(days: 90)));
+    },
+  );
 
   test('business-only banks are rejected before authorization', () async {
-    await expectLater(() => service().startAuthorization(bank(name: 'Corporate Bank', country: 'IT', customerTypes: {BankingCustomerType.business})), throwsA(isA<BankingException>().having((error) => error.failure, 'kind', BankingFailure.rejected)));
+    await expectLater(
+      () => service().startAuthorization(
+        bank(
+          name: 'Corporate Bank',
+          country: 'IT',
+          customerTypes: {BankingCustomerType.business},
+        ),
+      ),
+      throwsA(
+        isA<BankingException>().having(
+          (error) => error.failure,
+          'kind',
+          BankingFailure.rejected,
+        ),
+      ),
+    );
     expect(api.startCalls, 0);
   });
 
@@ -233,93 +392,270 @@ void main() {
     await service().startAuthorization(api.aspsps.single);
     final state = pending.value!.state;
 
-    await expectLater(() => service().completeCallback(const BankAuthorizationCallback(code: 'code', state: 'wrong')), throwsA(isA<BankingException>()));
+    await expectLater(
+      () => service().completeCallback(
+        const BankAuthorizationCallback(code: 'code', state: 'wrong'),
+      ),
+      throwsA(isA<BankingException>()),
+    );
     expect(api.createCalls, 0);
-    pending.value = PendingBankAuthorization(providerId: 'alternative', state: state, authorizationId: 'authorization-id', authorizationUrl: 'https://bank.example/authorize', applicationId: 'app-id', institutionName: 'Test Bank', institutionCountry: 'IT', redirectUri: 'sossoldi://eb-callback', expiresAt: now, consentValidUntil: now.add(const Duration(days: 1)));
-    await expectLater(() => service().completeCallback(BankAuthorizationCallback(code: 'code', state: state)), throwsA(isA<BankingException>().having((error) => error.failure, 'kind', BankingFailure.connectionExpired)));
+    pending.value = PendingBankAuthorization(
+      providerId: 'alternative',
+      state: state,
+      authorizationId: 'authorization-id',
+      authorizationUrl: 'https://bank.example/authorize',
+      applicationId: 'app-id',
+      institutionName: 'Test Bank',
+      institutionCountry: 'IT',
+      redirectUri: 'sossoldi://eb-callback',
+      expiresAt: now,
+      consentValidUntil: now.add(const Duration(days: 1)),
+    );
+    await expectLater(
+      () => service().completeCallback(
+        BankAuthorizationCallback(code: 'code', state: state),
+      ),
+      throwsA(
+        isA<BankingException>().having(
+          (error) => error.failure,
+          'kind',
+          BankingFailure.connectionExpired,
+        ),
+      ),
+    );
     expect(pending.value, isNull);
   });
 
-  test('failed browser launch preserves retry URL until explicit cancel', () async {
-    await service().startAuthorization(api.aspsps.single);
-    final url = Uri.parse(pending.value!.authorizationUrl);
+  test(
+    'failed browser launch preserves retry URL until explicit cancel',
+    () async {
+      await service().startAuthorization(api.aspsps.single);
+      final url = Uri.parse(pending.value!.authorizationUrl);
 
-    final result = await service().launchAuthorization(url, launcher: (_) async => false);
+      final result = await service().launchAuthorization(
+        url,
+        launcher: (_) async => false,
+      );
 
-    expect(result.opened, isFalse);
-    expect(result.url, url);
-    expect(pending.value, isNotNull);
-    await service().cancelAuthorization();
-    expect(pending.value, isNull);
-  });
+      expect(result.opened, isFalse);
+      expect(result.url, url);
+      expect(pending.value, isNotNull);
+      await service().cancelAuthorization();
+      expect(pending.value, isNull);
+    },
+  );
 
-  test('retryable revocation stays pending while not-found finalizes', () async {
-    final connection = await repository.insert(BankConnection(providerId: 'alternative', institutionName: 'Test Bank', institutionCountry: 'IT', applicationId: 'app-id', remoteConnectionId: 'session', validUntil: now.add(const Duration(days: 1)), status: BankConnectionStatus.active));
-    for (final kind in const [BankingFailure.unavailable, BankingFailure.rateLimited, BankingFailure.authentication, BankingFailure.forbidden]) {
-      api.deleteFailure = BankingException(providerId: 'alternative', failure: kind);
-      await expectLater(() => service().revoke(connection), throwsA(anything));
-      expect((await repository.selectById(connection.id!)).status, BankConnectionStatus.revocationPending);
-    }
+  test(
+    'retryable revocation stays pending while not-found finalizes',
+    () async {
+      final connection = await repository.insert(
+        BankConnection(
+          providerId: 'alternative',
+          institutionName: 'Test Bank',
+          institutionCountry: 'IT',
+          applicationId: 'app-id',
+          remoteConnectionId: 'session',
+          validUntil: now.add(const Duration(days: 1)),
+          status: BankConnectionStatus.active,
+        ),
+      );
+      for (final kind in const [
+        BankingFailure.unavailable,
+        BankingFailure.rateLimited,
+        BankingFailure.authentication,
+        BankingFailure.forbidden,
+      ]) {
+        api.deleteFailure = BankingException(
+          providerId: 'alternative',
+          failure: kind,
+        );
+        await expectLater(
+          () => service().revoke(connection),
+          throwsA(anything),
+        );
+        expect(
+          (await repository.selectById(connection.id!)).status,
+          BankConnectionStatus.revocationPending,
+        );
+      }
 
-    api.deleteFailure = const BankingException(providerId: 'alternative', failure: BankingFailure.notFound);
-    await service().revoke(await repository.selectById(connection.id!));
-    expect((await repository.selectById(connection.id!)).status, BankConnectionStatus.revoked);
-  });
+      api.deleteFailure = const BankingException(
+        providerId: 'alternative',
+        failure: BankingFailure.notFound,
+      );
+      await service().revoke(await repository.selectById(connection.id!));
+      expect(
+        (await repository.selectById(connection.id!)).status,
+        BankConnectionStatus.revoked,
+      );
+    },
+  );
 
   test('confirmed remote revocation finalizes the connection', () async {
-    final connection = await repository.insert(BankConnection(providerId: 'alternative', institutionName: 'Test Bank', institutionCountry: 'IT', applicationId: 'app-id', remoteConnectionId: 'session', validUntil: now.add(const Duration(days: 1)), status: BankConnectionStatus.active));
+    final connection = await repository.insert(
+      BankConnection(
+        providerId: 'alternative',
+        institutionName: 'Test Bank',
+        institutionCountry: 'IT',
+        applicationId: 'app-id',
+        remoteConnectionId: 'session',
+        validUntil: now.add(const Duration(days: 1)),
+        status: BankConnectionStatus.active,
+      ),
+    );
 
     await service().revoke(connection);
 
     expect(api.deleteCalls, 1);
-    expect((await repository.selectById(connection.id!)).status, BankConnectionStatus.revoked);
+    expect(
+      (await repository.selectById(connection.id!)).status,
+      BankConnectionStatus.revoked,
+    );
   });
 
-  test('application auth error does not masquerade as expired session', () async {
-    final connection = await repository.insert(BankConnection(providerId: 'alternative', institutionName: 'Test Bank', institutionCountry: 'IT', applicationId: 'app-id', remoteConnectionId: 'session', validUntil: now.add(const Duration(days: 1)), status: BankConnectionStatus.active));
-    api.getSessionFailure = const BankingException(providerId: 'alternative', failure: BankingFailure.authentication);
+  test(
+    'application auth error does not masquerade as expired session',
+    () async {
+      final connection = await repository.insert(
+        BankConnection(
+          providerId: 'alternative',
+          institutionName: 'Test Bank',
+          institutionCountry: 'IT',
+          applicationId: 'app-id',
+          remoteConnectionId: 'session',
+          validUntil: now.add(const Duration(days: 1)),
+          status: BankConnectionStatus.active,
+        ),
+      );
+      api.getSessionFailure = const BankingException(
+        providerId: 'alternative',
+        failure: BankingFailure.authentication,
+      );
 
-    final status = await service().refreshConnectionState(connection);
+      final status = await service().refreshConnectionState(connection);
 
-    expect(status, BankConnectionStatus.reauthRequired);
-  });
+      expect(status, BankConnectionStatus.reauthRequired);
+    },
+  );
 
-  test('unsupported platform is rejected before network or pending state', () async {
-    final unsupported = BankConsentLifecycleService(consent: api, institutions: api, readContext: () async => context, pendingStore: pending, connections: repository, callbackSupported: () => false);
+  test(
+    'unsupported platform is rejected before network or pending state',
+    () async {
+      final unsupported = BankConsentLifecycleService(
+        consent: api,
+        institutions: api,
+        readContext: () async => context,
+        pendingStore: pending,
+        connections: repository,
+        callbackSupported: () => false,
+      );
 
-    await expectLater(() => unsupported.startAuthorization(api.aspsps.single), throwsA(isA<BankingException>()));
-    expect(pending.value, isNull);
-  });
-  for (final changed in [const BankAuthorizationContext(providerId: 'other', applicationId: 'app-id', redirectUri: 'sossoldi://eb-callback'), const BankAuthorizationContext(providerId: 'alternative', applicationId: 'rotated', redirectUri: 'sossoldi://eb-callback'), const BankAuthorizationContext(providerId: 'alternative', applicationId: 'app-id', redirectUri: 'https://example.com/callback')]) {
-    test('pending callback rejects changed context ${changed.providerId}/${changed.applicationId}/${changed.redirectUri}', () async {
-      await service().startAuthorization(api.aspsps.single);
-      final callback = BankAuthorizationCallback(code: 'code', state: pending.value!.state);
-      context = changed;
-      await expectLater(service().completeCallback(callback), throwsA(isA<BankingException>().having((error) => error.failure, 'failure', BankingFailure.authentication)));
-      expect(api.createCalls, 0);
-      expect(await repository.selectAll(), isEmpty);
-    });
+      await expectLater(
+        () => unsupported.startAuthorization(api.aspsps.single),
+        throwsA(isA<BankingException>()),
+      );
+      expect(pending.value, isNull);
+    },
+  );
+  for (final changed in [
+    const BankAuthorizationContext(
+      providerId: 'other',
+      applicationId: 'app-id',
+      redirectUri: 'sossoldi://eb-callback',
+    ),
+    const BankAuthorizationContext(
+      providerId: 'alternative',
+      applicationId: 'rotated',
+      redirectUri: 'sossoldi://eb-callback',
+    ),
+    const BankAuthorizationContext(
+      providerId: 'alternative',
+      applicationId: 'app-id',
+      redirectUri: 'https://example.com/callback',
+    ),
+  ]) {
+    test(
+      'pending callback rejects changed context ${changed.providerId}/${changed.applicationId}/${changed.redirectUri}',
+      () async {
+        await service().startAuthorization(api.aspsps.single);
+        final callback = BankAuthorizationCallback(
+          code: 'code',
+          state: pending.value!.state,
+        );
+        context = changed;
+        await expectLater(
+          service().completeCallback(callback),
+          throwsA(
+            isA<BankingException>().having(
+              (error) => error.failure,
+              'failure',
+              BankingFailure.authentication,
+            ),
+          ),
+        );
+        expect(api.createCalls, 0);
+        expect(await repository.selectAll(), isEmpty);
+      },
+    );
   }
 
-  test('foreign institution is rejected before starting authorization', () async {
-    final foreign = BankInstitution(providerId: 'other', id: 'bank', name: 'Test Bank', country: 'IT', customerTypes: {BankingCustomerType.personal});
-    await expectLater(service().startAuthorization(foreign), throwsA(isA<BankingException>()));
-    expect(api.startCalls, 0);
-    expect(pending.value, isNull);
-  });
+  test(
+    'foreign institution is rejected before starting authorization',
+    () async {
+      final foreign = BankInstitution(
+        providerId: 'other',
+        id: 'bank',
+        name: 'Test Bank',
+        country: 'IT',
+        customerTypes: {BankingCustomerType.personal},
+      );
+      await expectLater(
+        service().startAuthorization(foreign),
+        throwsA(isA<BankingException>()),
+      );
+      expect(api.startCalls, 0);
+      expect(pending.value, isNull);
+    },
+  );
 
-  test('active staged consent with elapsed validity is rejected on resume', () async {
-    await service().startAuthorization(api.aspsps.single);
-    final staged = await service().completeCallback(BankAuthorizationCallback(code: 'code', state: pending.value!.state));
-    api.validUntil = now;
-    expect(await service().resumeAwaitingImports(), isEmpty);
-    expect((await repository.selectById(staged.connection.id!)).status, BankConnectionStatus.expired);
-  });
+  test(
+    'active staged consent with elapsed validity is rejected on resume',
+    () async {
+      await service().startAuthorization(api.aspsps.single);
+      final staged = await service().completeCallback(
+        BankAuthorizationCallback(code: 'code', state: pending.value!.state),
+      );
+      api.validUntil = now;
+      expect(await service().resumeAwaitingImports(), isEmpty);
+      expect(
+        (await repository.selectById(staged.connection.id!)).status,
+        BankConnectionStatus.expired,
+      );
+    },
+  );
 
-  test('credential mismatch cannot revoke a connection through another application', () async {
-    final connection = await repository.insert(const BankConnection(providerId: 'alternative', institutionName: 'Test Bank', institutionCountry: 'IT', applicationId: 'old-app', remoteConnectionId: 'session', status: BankConnectionStatus.active));
-    await expectLater(service().revoke(connection), throwsA(isA<BankingException>()));
-    expect(api.deleteCalls, 0);
-    expect((await repository.selectById(connection.id!)).remoteConnectionId, 'session');
-  });
+  test(
+    'credential mismatch cannot revoke a connection through another application',
+    () async {
+      final connection = await repository.insert(
+        const BankConnection(
+          providerId: 'alternative',
+          institutionName: 'Test Bank',
+          institutionCountry: 'IT',
+          applicationId: 'old-app',
+          remoteConnectionId: 'session',
+          status: BankConnectionStatus.active,
+        ),
+      );
+      await expectLater(
+        service().revoke(connection),
+        throwsA(isA<BankingException>()),
+      );
+      expect(api.deleteCalls, 0);
+      expect(
+        (await repository.selectById(connection.id!)).remoteConnectionId,
+        'session',
+      );
+    },
+  );
 }
