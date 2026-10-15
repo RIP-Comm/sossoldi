@@ -1,5 +1,3 @@
-// dart format width=400
-
 import 'dart:async';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -23,16 +21,20 @@ import '../services/database/repositories/bank_connection_repository.dart';
 part 'banking_provider.g.dart';
 
 @Riverpod(keepAlive: true)
-BankingProvider bankingService(Ref ref) => EnableBankingProvider(ref.watch(enableBankingApiProvider));
+BankingProvider bankingService(Ref ref) =>
+    EnableBankingProvider(ref.watch(enableBankingApiProvider));
 
 @Riverpod(keepAlive: true)
-domain.BankInstitutionDirectory bankInstitutionDirectory(Ref ref) => ref.watch(bankingServiceProvider).institutions;
+domain.BankInstitutionDirectory bankInstitutionDirectory(Ref ref) =>
+    ref.watch(bankingServiceProvider).institutions;
 
 @Riverpod(keepAlive: true)
-domain.BankConsentService bankConsentService(Ref ref) => ref.watch(bankingServiceProvider).consent;
+domain.BankConsentService bankConsentService(Ref ref) =>
+    ref.watch(bankingServiceProvider).consent;
 
 @Riverpod(keepAlive: true)
-domain.BankAccountDataSource bankAccountDataSource(Ref ref) => ref.watch(bankingServiceProvider).accountData;
+domain.BankAccountDataSource bankAccountDataSource(Ref ref) =>
+    ref.watch(bankingServiceProvider).accountData;
 
 @Riverpod(keepAlive: true)
 BankAuthorizationContextReader bankAuthorizationContextReader(Ref ref) {
@@ -41,10 +43,18 @@ BankAuthorizationContextReader bankAuthorizationContextReader(Ref ref) {
 }
 
 @Riverpod(keepAlive: true)
-PendingBankAuthorizationStore pendingBankAuthorizationStore(Ref ref) => const SecurePendingBankAuthorizationStore();
+PendingBankAuthorizationStore pendingBankAuthorizationStore(Ref ref) =>
+    const SecurePendingBankAuthorizationStore();
 
 @Riverpod(keepAlive: true)
-BankConsentLifecycleService bankConsentLifecycleService(Ref ref) => BankConsentLifecycleService(consent: ref.watch(bankConsentServiceProvider), institutions: ref.watch(bankInstitutionDirectoryProvider), readContext: ref.watch(bankAuthorizationContextReaderProvider), pendingStore: ref.watch(pendingBankAuthorizationStoreProvider), connections: ref.watch(bankConnectionRepositoryProvider));
+BankConsentLifecycleService bankConsentLifecycleService(Ref ref) =>
+    BankConsentLifecycleService(
+      consent: ref.watch(bankConsentServiceProvider),
+      institutions: ref.watch(bankInstitutionDirectoryProvider),
+      readContext: ref.watch(bankAuthorizationContextReaderProvider),
+      pendingStore: ref.watch(pendingBankAuthorizationStoreProvider),
+      connections: ref.watch(bankConnectionRepositoryProvider),
+    );
 
 @Riverpod(keepAlive: true)
 BankDeeplinkService bankDeeplinkService(Ref ref) {
@@ -58,7 +68,11 @@ class BankCallbackResultState {
   final int? connectionId;
   final Object? error;
 
-  const BankCallbackResultState({this.processing = false, this.connectionId, this.error});
+  const BankCallbackResultState({
+    this.processing = false,
+    this.connectionId,
+    this.error,
+  });
 }
 
 @Riverpod(keepAlive: true)
@@ -66,7 +80,9 @@ class BankCallbackResult extends _$BankCallbackResult {
   @override
   BankCallbackResultState build() => const BankCallbackResultState();
 
-  Future<BankCallbackDisposition> handle(BankAuthorizationCallback callback) async {
+  Future<BankCallbackDisposition> handle(
+    BankAuthorizationCallback callback,
+  ) async {
     state = const BankCallbackResultState(processing: true);
     return ref
         .read(bankConsentLifecycleServiceProvider)
@@ -87,8 +103,15 @@ class BankCallbackResult extends _$BankCallbackResult {
 @Riverpod(keepAlive: true)
 Future<void> bankingCallbackBootstrap(Ref ref) async {
   if (!BankingPlatformSupport.supportsCallback()) return;
-  await ref.read(bankConsentLifecycleServiceProvider).clearExpiredAuthorization();
-  await ref.watch(bankDeeplinkServiceProvider).start(ref.read(bankCallbackResultProvider.notifier).handle, onError: ref.read(bankCallbackResultProvider.notifier).reportError);
+  await ref
+      .read(bankConsentLifecycleServiceProvider)
+      .clearExpiredAuthorization();
+  await ref
+      .watch(bankDeeplinkServiceProvider)
+      .start(
+        ref.read(bankCallbackResultProvider.notifier).handle,
+        onError: ref.read(bankCallbackResultProvider.notifier).reportError,
+      );
 }
 
 @Riverpod(keepAlive: true)
@@ -104,19 +127,39 @@ class EnableBankingSettings extends _$EnableBankingSettings {
     return store.hasCredentials();
   }
 
-  Future<void> save({required String appId, required String privateKeyPem, required EnableBankingConfig config}) async {
+  Future<void> save({
+    required String appId,
+    required String privateKeyPem,
+    required EnableBankingConfig config,
+  }) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       final store = ref.read(enableBankingCredentialsStoreProvider);
       final previous = await store.readCredentials();
-      final saved = await ref.read(enableBankingCredentialsServiceProvider).saveVerifiedCredentials(appId: appId, privateKeyPem: privateKeyPem, redirectUri: config.redirectUri, defaultCountry: config.defaultCountry);
+      final saved = await ref
+          .read(enableBankingCredentialsServiceProvider)
+          .saveVerifiedCredentials(
+            appId: appId,
+            privateKeyPem: privateKeyPem,
+            redirectUri: config.redirectUri,
+            defaultCountry: config.defaultCountry,
+          );
       try {
-        await ref.read(bankConnectionRepositoryProvider).markOtherApplicationsReauthRequired(saved.appId, providerId: enableBankingId);
+        await ref
+            .read(bankConnectionRepositoryProvider)
+            .markOtherApplicationsReauthRequired(
+              saved.appId,
+              providerId: enableBankingId,
+            );
       } catch (_) {
         if (previous == null) {
           await store.clear();
         } else {
-          await store.saveCredentials(appId: previous.config.appId, privateKeyPem: previous.privateKeyPem, config: previous.config);
+          await store.saveCredentials(
+            appId: previous.config.appId,
+            privateKeyPem: previous.privateKeyPem,
+            config: previous.config,
+          );
         }
         rethrow;
       }
@@ -128,7 +171,9 @@ class EnableBankingSettings extends _$EnableBankingSettings {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       final store = ref.read(enableBankingCredentialsStoreProvider);
-      await ref.read(bankConnectionRepositoryProvider).markAllReauthRequired(providerId: enableBankingId);
+      await ref
+          .read(bankConnectionRepositoryProvider)
+          .markAllReauthRequired(providerId: enableBankingId);
       await store.clear();
       return null;
     });

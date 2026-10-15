@@ -1,5 +1,3 @@
-// dart format width=400
-
 import '../bank_institution.dart';
 import '../bank_institution_directory.dart';
 import 'enable_banking_api.dart';
@@ -13,8 +11,14 @@ class EnableBankingInstitutionDirectory implements BankInstitutionDirectory {
   EnableBankingInstitutionDirectory(this._api);
 
   @override
-  Future<List<BankInstitution>> getInstitutions({String? country, BankingCustomerType customerType = BankingCustomerType.personal}) => withEnableBankingErrors(() async {
-    final values = await _api.getAspsps(country: country, psuType: customerType.name);
+  Future<List<BankInstitution>> getInstitutions({
+    String? country,
+    BankingCustomerType customerType = BankingCustomerType.personal,
+  }) => withEnableBankingErrors(() async {
+    final values = await _api.getAspsps(
+      country: country,
+      psuType: customerType.name,
+    );
     return List.unmodifiable(values.map(_mapper.institution));
   });
 }

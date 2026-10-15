@@ -1,5 +1,3 @@
-// dart format width=400
-
 import '../bank_account_data_source.dart';
 import '../banking_account.dart';
 import '../banking_balance.dart';
@@ -20,31 +18,64 @@ class EnableBankingAccountDataSource implements BankAccountDataSource {
   EnableBankingAccountDataSource(this._api);
 
   @override
-  Future<BankingAccount> getAccount(BankingAccountReference reference) => withEnableBankingErrors(() async {
-    checkEnableBankingReference(reference.providerId, reference.remoteId);
-    final account = await _api.getAccount(reference.remoteId);
-    if (account.uid != reference.remoteId) throw const FormatException('Account identity mismatch');
-    return _accounts.account(account);
-  });
+  Future<BankingAccount> getAccount(BankingAccountReference reference) =>
+      withEnableBankingErrors(() async {
+        checkEnableBankingReference(reference.providerId, reference.remoteId);
+        final account = await _api.getAccount(reference.remoteId);
+        if (account.uid != reference.remoteId) {
+          throw const FormatException('Account identity mismatch');
+        }
+        return _accounts.account(account);
+      });
 
   @override
-  Future<List<BankingBalance>> getBalances(BankingAccountReference reference) => withEnableBankingErrors(() async {
-    checkEnableBankingReference(reference.providerId, reference.remoteId);
-    return List.unmodifiable((await _api.getBalances(reference.remoteId)).map(_data.balance));
-  });
+  Future<List<BankingBalance>> getBalances(BankingAccountReference reference) =>
+      withEnableBankingErrors(() async {
+        checkEnableBankingReference(reference.providerId, reference.remoteId);
+        return List.unmodifiable(
+          (await _api.getBalances(reference.remoteId)).map(_data.balance),
+        );
+      });
 
   @override
-  Future<BankingTransactionsPage> getTransactions(BankingAccountReference reference, {BankingTransactionQuery query = const BankingTransactionQuery()}) => withEnableBankingErrors(() async {
+  Future<BankingTransactionsPage> getTransactions(
+    BankingAccountReference reference, {
+    BankingTransactionQuery query = const BankingTransactionQuery(),
+  }) => withEnableBankingErrors(() async {
     checkEnableBankingReference(reference.providerId, reference.remoteId);
-    if (query.status == BankingTransactionStatus.unknown) throw const BankingException(providerId: enableBankingId, failure: BankingFailure.rejected);
+    if (query.status == BankingTransactionStatus.unknown) {
+      throw const BankingException(
+        providerId: enableBankingId,
+        failure: BankingFailure.rejected,
+      );
+    }
     final from = query.dateFrom;
     final to = query.dateTo;
-    if (from != null && to != null && DateTime.utc(from.year, from.month, from.day).isAfter(DateTime.utc(to.year, to.month, to.day))) throw const BankingException(providerId: enableBankingId, failure: BankingFailure.rejected);
+    if (from != null &&
+        to != null &&
+        DateTime.utc(
+          from.year,
+          from.month,
+          from.day,
+        ).isAfter(DateTime.utc(to.year, to.month, to.day))) {
+      throw const BankingException(
+        providerId: enableBankingId,
+        failure: BankingFailure.rejected,
+      );
+    }
     final status = switch (query.status) {
       BankingTransactionStatus.booked => 'BOOK',
       BankingTransactionStatus.pending => 'PDNG',
       _ => null,
     };
-    return _data.transactions(await _api.getTransactions(reference.remoteId, dateFrom: from, dateTo: to, continuationKey: query.cursor, transactionStatus: status));
+    return _data.transactions(
+      await _api.getTransactions(
+        reference.remoteId,
+        dateFrom: from,
+        dateTo: to,
+        continuationKey: query.cursor,
+        transactionStatus: status,
+      ),
+    );
   });
 }

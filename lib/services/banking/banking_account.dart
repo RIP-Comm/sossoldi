@@ -1,5 +1,3 @@
-// dart format width=400
-
 import 'banking_reference.dart';
 
 class BankingAccount {
@@ -12,5 +10,14 @@ class BankingAccount {
   final String? accountType;
   final String? usage;
 
-  const BankingAccount({required this.reference, this.iban, this.name, this.details, this.currency, this.product, this.accountType, this.usage});
+  const BankingAccount({
+    required this.reference,
+    this.iban,
+    this.name,
+    this.details,
+    this.currency,
+    this.product,
+    this.accountType,
+    this.usage,
+  });
 }

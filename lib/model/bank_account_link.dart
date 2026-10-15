@@ -1,5 +1,3 @@
-// dart format width=400
-
 import 'bank_account.dart';
 
 class BankAccountLink {
@@ -8,5 +6,10 @@ class BankAccountLink {
   final String? iban;
   final BankAccount? newAccount;
 
-  const BankAccountLink({required this.uid, required this.identificationHashes, this.iban, this.newAccount});
+  const BankAccountLink({
+    required this.uid,
+    required this.identificationHashes,
+    this.iban,
+    this.newAccount,
+  });
 }

@@ -1,5 +1,3 @@
-// dart format width=400
-
 import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -18,24 +16,34 @@ abstract class PendingBankAuthorizationStore {
   Future<void> clear();
 }
 
-class SecurePendingBankAuthorizationStore implements PendingBankAuthorizationStore {
+class SecurePendingBankAuthorizationStore
+    implements PendingBankAuthorizationStore {
   final FlutterSecureStorage _storage;
 
-  const SecurePendingBankAuthorizationStore({FlutterSecureStorage? storage}) : _storage = storage ?? const FlutterSecureStorage();
+  const SecurePendingBankAuthorizationStore({FlutterSecureStorage? storage})
+    : _storage = storage ?? const FlutterSecureStorage();
 
   @override
-  Future<void> save(PendingBankAuthorization pending) => _storage.write(key: _kPendingAuthorizationKey, value: jsonEncode(pending.toJson()));
+  Future<void> save(PendingBankAuthorization pending) => _storage.write(
+    key: _kPendingAuthorizationKey,
+    value: jsonEncode(pending.toJson()),
+  );
 
   @override
   Future<PendingBankAuthorization?> read() async {
     final value = await _storage.read(key: _kPendingAuthorizationKey);
     if (value == null) return null;
     try {
-      return PendingBankAuthorization.fromJson(jsonDecode(value) as Map<String, dynamic>);
+      return PendingBankAuthorization.fromJson(
+        jsonDecode(value) as Map<String, dynamic>,
+      );
     } on BankingException {
       rethrow;
     } catch (error) {
-      throw const BankingException(providerId: 'application', failure: BankingFailure.invalidResponse);
+      throw const BankingException(
+        providerId: 'application',
+        failure: BankingFailure.invalidResponse,
+      );
     }
   }
 

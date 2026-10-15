@@ -1,5 +1,3 @@
-// dart format width=400
-
 // ignore_for_file: file_names
 
 import 'package:sqflite/sqflite.dart';
@@ -9,7 +7,11 @@ import '../../../model/bank_connection.dart';
 import '../migration_base.dart';
 
 class AddBankConsentLifecycle extends Migration {
-  AddBankConsentLifecycle() : super(version: 8, description: 'Add bank consent lifecycle and stable account identity');
+  AddBankConsentLifecycle()
+    : super(
+        version: 8,
+        description: 'Add bank consent lifecycle and stable account identity',
+      );
 
   @override
   Future<void> up(Database db) async {

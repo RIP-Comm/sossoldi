@@ -1,5 +1,3 @@
-// dart format width=400
-
 import '../banking_exception.dart';
 
 enum PendingAuthorizationPhase {
@@ -12,7 +10,10 @@ enum PendingAuthorizationPhase {
     PendingAuthorizationPhase.connectionStaged => 'sessionStaged',
   };
 
-  static PendingAuthorizationPhase fromCode(String code) => PendingAuthorizationPhase.values.firstWhere((phase) => phase.code == code);
+  static PendingAuthorizationPhase fromCode(String code) =>
+      PendingAuthorizationPhase.values.firstWhere(
+        (phase) => phase.code == code,
+      );
 }
 
 class PendingBankAuthorization {
@@ -48,7 +49,10 @@ class PendingBankAuthorization {
     this.phase = PendingAuthorizationPhase.awaitingCallback,
   });
 
-  PendingBankAuthorization copy({Object? stagedConnectionId = _unset, PendingAuthorizationPhase? phase}) => PendingBankAuthorization(
+  PendingBankAuthorization copy({
+    Object? stagedConnectionId = _unset,
+    PendingAuthorizationPhase? phase,
+  }) => PendingBankAuthorization(
     providerId: providerId,
     state: state,
     authorizationId: authorizationId,
@@ -60,7 +64,9 @@ class PendingBankAuthorization {
     expiresAt: expiresAt,
     consentValidUntil: consentValidUntil,
     reconnectConnectionId: reconnectConnectionId,
-    stagedConnectionId: stagedConnectionId == _unset ? this.stagedConnectionId : stagedConnectionId as int?,
+    stagedConnectionId: stagedConnectionId == _unset
+        ? this.stagedConnectionId
+        : stagedConnectionId as int?,
     phase: phase ?? this.phase,
   );
 
@@ -96,13 +102,18 @@ class PendingBankAuthorization {
         institutionCountry: json['aspsp_country'] as String,
         redirectUri: json['redirect_uri'] as String,
         expiresAt: DateTime.parse(json['expires_at'] as String).toUtc(),
-        consentValidUntil: DateTime.parse(json['consent_valid_until'] as String).toUtc(),
+        consentValidUntil: DateTime.parse(
+          json['consent_valid_until'] as String,
+        ).toUtc(),
         reconnectConnectionId: json['reconnect_connection_id'] as int?,
         stagedConnectionId: json['staged_connection_id'] as int?,
         phase: PendingAuthorizationPhase.fromCode(json['phase'] as String),
       );
     } catch (error) {
-      throw const BankingException(providerId: 'application', failure: BankingFailure.invalidResponse);
+      throw const BankingException(
+        providerId: 'application',
+        failure: BankingFailure.invalidResponse,
+      );
     }
   }
 }

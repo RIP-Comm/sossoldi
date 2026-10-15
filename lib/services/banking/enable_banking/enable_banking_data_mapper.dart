@@ -1,5 +1,3 @@
-// dart format width=400
-
 import '../banking_balance.dart';
 import '../banking_money.dart';
 import '../banking_transaction.dart';
@@ -11,7 +9,8 @@ import 'models/eb_transactions_page.dart';
 class EnableBankingDataMapper {
   const EnableBankingDataMapper();
 
-  BankingMoney money(EbAmount value) => BankingMoney(decimalAmount: value.exactAmount, currency: value.currency);
+  BankingMoney money(EbAmount value) =>
+      BankingMoney(decimalAmount: value.exactAmount, currency: value.currency);
 
   BankingBalance balance(EbBalance value) => BankingBalance(
     name: value.name,
@@ -29,7 +28,9 @@ class EnableBankingDataMapper {
 
   BankingTransaction transaction(EbTransaction value) {
     final amount = money(value.transactionAmount);
-    if (amount.decimalAmount.startsWith('-')) throw const FormatException('Negative transaction magnitude');
+    if (amount.decimalAmount.startsWith('-')) {
+      throw const FormatException('Negative transaction magnitude');
+    }
     return BankingTransaction(
       entryId: value.entryReference,
       transactionId: value.transactionId,
@@ -54,5 +55,11 @@ class EnableBankingDataMapper {
     );
   }
 
-  BankingTransactionsPage transactions(EbTransactionsPage value) => BankingTransactionsPage(transactions: value.transactions.map(transaction).toList(), nextCursor: value.continuationKey?.trim().isEmpty == true ? null : value.continuationKey);
+  BankingTransactionsPage transactions(EbTransactionsPage value) =>
+      BankingTransactionsPage(
+        transactions: value.transactions.map(transaction).toList(),
+        nextCursor: value.continuationKey?.trim().isEmpty == true
+            ? null
+            : value.continuationKey,
+      );
 }

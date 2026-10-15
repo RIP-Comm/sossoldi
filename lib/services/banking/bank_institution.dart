@@ -1,5 +1,3 @@
-// dart format width=400
-
 enum BankingCustomerType { personal, business }
 
 class BankInstitution {
@@ -13,5 +11,15 @@ class BankInstitution {
   final bool isSandbox;
   final bool isBeta;
 
-  BankInstitution({required this.providerId, required this.id, required this.name, required this.country, this.logoUri, Set<BankingCustomerType> customerTypes = const {}, this.maximumConsentDuration, this.isSandbox = false, this.isBeta = false}) : customerTypes = Set.unmodifiable(customerTypes);
+  BankInstitution({
+    required this.providerId,
+    required this.id,
+    required this.name,
+    required this.country,
+    this.logoUri,
+    Set<BankingCustomerType> customerTypes = const {},
+    this.maximumConsentDuration,
+    this.isSandbox = false,
+    this.isBeta = false,
+  }) : customerTypes = Set.unmodifiable(customerTypes);
 }
