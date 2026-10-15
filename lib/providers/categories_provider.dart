@@ -395,7 +395,9 @@ Future<List<ParentCategoryWithSubcategoriesData>> categoryWithSubcategoriesData(
   final trnscType = ref.watch(selectedTransactionTypeProvider);
   final categories = ref.watch(categoriesProvider).value ?? [];
   final parentCategories = ref.watch(allParentCategoriesProvider).value ?? [];
-  final transactions = ref.watch(transactionsProvider).value ?? [];
+  final transactions = (ref.watch(transactionsProvider).value ?? [])
+      .where((transaction) => transaction.type == trnscType)
+      .toList();
   final parentCategoriesByType = parentCategories.where(
     (cat) => cat.type.supports(trnscType),
   );
