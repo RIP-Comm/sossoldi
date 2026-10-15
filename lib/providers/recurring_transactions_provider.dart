@@ -101,7 +101,6 @@ class RecurringTransactionsNotifier extends _$RecurringTransactionsNotifier {
     final RecurringTransaction transaction = ref
         .read(selectedRecurringTransactionUpdateProvider)!
         .copy(
-          fromDate: ref.read(selectedDateProvider),
           toDate: ref.read(endDateProvider),
           recurrency: recurrency,
           amount: amount,
