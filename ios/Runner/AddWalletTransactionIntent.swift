@@ -5,7 +5,7 @@ import Foundation
 struct AddWalletTransactionIntent: AppIntent {
   static var title: LocalizedStringResource = "Add Wallet Transaction"
   static var description = IntentDescription(
-    "Adds an uncategorized Apple Wallet transaction to Sossoldi."
+    "Adds an uncategorized transaction to Sossoldi."
   )
   static var openAppWhenRun = false
 
