@@ -1,0 +1,54 @@
+{
+  "name": "Sossoldi (Flutter + Android + Linux)",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
+  "features": {
+    "ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
+      "packages": "clang,llvm,lld,cmake,ninja-build,pkg-config,libgtk-3-dev,liblzma-dev,libstdc++-14-dev,libsecret-1-dev,libjsoncpp-dev,libnotify-dev,libsqlite3-dev,libgl1-mesa-dri,mesa-utils,jq,xz-utils"
+    },
+    "ghcr.io/devcontainers-extra/features/gh-release:1": {
+      "repo": "btwld/fvm",
+      "binaryNames": "fvm",
+      "version": "4.3.1",
+      "assetRegex": "linux-x64\\.tar\\.gz$"
+    },
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "17",
+      "jdkDistro": "tem"
+    },
+    "ghcr.io/casl0/devcontainer-features/android-sdk:1": {
+      "platformsVersion": "36",
+      "buildToolsVersion": "35.0.0",
+      "installNdk": true,
+      "ndkVersion": "28.2.13676358",
+      "installCmake": true,
+      "cmakeVersion": "3.22.1"
+    },
+    "ghcr.io/devcontainers/features/desktop-lite:1": {}
+  },
+  "mounts": [
+    "source=${localWorkspaceFolderBasename}-fvm,target=/home/vscode/fvm,type=volume"
+  ],
+  "remoteUser": "vscode",
+  "runArgs": ["--publish", "127.0.0.1:6080:6080"],
+  "remoteEnv": {
+    "FVM_CACHE_PATH": "/home/vscode/fvm",
+    "ANDROID_HOME": "/usr/local/android"
+  },
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+  "waitFor": "postCreateCommand",
+  "forwardPorts": [6080],
+  "portsAttributes": {
+    "6080": {
+      "label": "Sossoldi Linux desktop (noVNC)",
+      "onAutoForward": "notify"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": ["Dart-Code.dart-code", "Dart-Code.flutter"],
+      "settings": {
+        "dart.flutterSdkPath": ".fvm/flutter_sdk"
+      }
+    }
+  }
+}

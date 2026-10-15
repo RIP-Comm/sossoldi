@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,6 +7,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -19,6 +22,10 @@ import 'ui/theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  if (Platform.isLinux) {
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+  }
   NotificationService().requestNotificationPermissions();
   NotificationService().initializeNotifications();
   tz.initializeTimeZones();
@@ -66,7 +73,7 @@ void main() async {
   }
 
   final LocalAuthentication auth = LocalAuthentication();
-  if (await auth.isDeviceSupported()) {
+  if (!Platform.isLinux && await auth.isDeviceSupported()) {
     // check for authentication if requested by user
     bool? requiresAuthentication = sharedPreferences.getBool(
       "user_requires_authentication",

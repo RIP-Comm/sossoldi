@@ -84,6 +84,7 @@ If you want to help with this project you are more than welcome! Sossoldi is com
 Also, you can refer to internal docs:
 
 -   [Setup Guide](https://rip-comm.github.io/sossoldi/setup/setup.html)
+-   [Dev Container Setup](docs/setup/devcontainer.md)
 -   [PR Guide](https://rip-comm.github.io/sossoldi/contributing/PR-guide.html)
 
 ### Useful links to get started
