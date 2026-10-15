@@ -150,8 +150,11 @@ class TransactionsRepository {
     return (result).map((x) => x["note"] as String).toList();
   }
 
-  Future<List> currentMonthDailyTransactions({int? accountId}) async {
-    final today = DateTime.now();
+  Future<List> currentMonthDailyTransactions({
+    int? accountId,
+    DateTime? clock,
+  }) async {
+    final today = clock ?? DateTime.now();
     final currentMonth = today.month;
     final currentYear = today.year;
 
@@ -166,8 +169,8 @@ class TransactionsRepository {
     );
   }
 
-  Future<List> lastMonthDailyTransactions() async {
-    final today = DateTime.now();
+  Future<List> lastMonthDailyTransactions({DateTime? clock}) async {
+    final today = clock ?? DateTime.now();
     final currentMonth = today.month;
     final currentYear = today.year;
 
@@ -181,8 +184,8 @@ class TransactionsRepository {
     );
   }
 
-  Future<List> currentYearMontlyTransactions() async {
-    final today = DateTime.now();
+  Future<List> currentYearMontlyTransactions({DateTime? clock}) async {
+    final today = clock ?? DateTime.now();
     final currentYear = today.year;
 
     final beginningCurrentYear = DateTime(currentYear, 1, 1);

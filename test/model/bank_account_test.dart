@@ -137,7 +137,7 @@ void main() {
           '''INSERT INTO `transaction` (date, amount, type, note, idCategory, idBankAccount, idBankAccountTransfer, recurring, idRecurringTransaction, createdAt, updatedAt) VALUES ''';
       final List<String> demoTransactions = [];
 
-      final today = DateTime.now();
+      final today = DateTime(2024, 2, 29);
       final fistOfCurrentMonth = DateTime(today.year, today.month, 1);
 
       // Add a transaction of last month
@@ -267,7 +267,7 @@ void main() {
           '''INSERT INTO `transaction` (date, amount, type, note, idCategory, idBankAccount, idBankAccountTransfer, recurring, idRecurringTransaction, createdAt, updatedAt) VALUES ''';
       final List<String> demoTransactions = [];
 
-      final today = DateTime.now();
+      final today = DateTime(2024, 2, 29);
       final fistOfCurrentMonth = DateTime(today.year, today.month, 1);
 
       // Add a transaction of last month
@@ -370,16 +370,8 @@ void main() {
       var result = await AccountRepository(database: sossoldiDatabase)
           .accountDailyBalance(
             70,
-            dateRangeStart: DateTime(
-              DateTime.now().year,
-              DateTime.now().month,
-              1,
-            ), // beginnig of current month
-            dateRangeEnd: DateTime(
-              DateTime.now().year,
-              DateTime.now().month + 1,
-              1,
-            ),
+            dateRangeStart: fistOfCurrentMonth, // beginnig of current month
+            dateRangeEnd: DateTime(today.year, today.month + 1, 1),
           ); // beginnig of next month
       expect(result.length, 3);
 
@@ -402,16 +394,8 @@ void main() {
       result = await AccountRepository(database: sossoldiDatabase)
           .accountDailyBalance(
             71,
-            dateRangeStart: DateTime(
-              DateTime.now().year,
-              DateTime.now().month,
-              1,
-            ),
-            dateRangeEnd: DateTime(
-              DateTime.now().year,
-              DateTime.now().month + 1,
-              1,
-            ),
+            dateRangeStart: fistOfCurrentMonth,
+            dateRangeEnd: DateTime(today.year, today.month + 1, 1),
           ); // beginnig of next month;
       expect(result.length, 3);
 

@@ -177,424 +177,460 @@ void main() {
       sossoldiDatabase.close();
     });
 
-    test("lastMonthDailyTransactions", () async {
-      await sossoldiDatabase.fillDemoData(countOfGeneratedTransaction: 2000);
+    for (final today in [
+      DateTime(2024, 2, 29),
+      DateTime(2026, 1, 1),
+      DateTime(2026, 3, 29),
+      DateTime(2035, 12, 31),
+    ]) {
+      group("at $today", () {
+        test("lastMonthDailyTransactions", () async {
+          await sossoldiDatabase.fillDemoData(
+            countOfGeneratedTransaction: 2000,
+          );
 
-      try {
-        await db.transaction((txn) async {
-          var batch = txn.batch();
-          batch.delete(transactionTable);
-          await batch.commit();
+          try {
+            await db.transaction((txn) async {
+              var batch = txn.batch();
+              batch.delete(transactionTable);
+              await batch.commit();
+            });
+          } catch (error) {
+            throw Exception('DbBase.cleanDatabase: $error');
+          }
+
+          const insertDemoTransactionsQuery =
+              '''INSERT INTO `transaction` (date, amount, type, note, idCategory, idBankAccount, idBankAccountTransfer, recurring, idRecurringTransaction, createdAt, updatedAt) VALUES ''';
+          final List<String> demoTransactions = [];
+
+          final fistOfLastMonth = DateTime(today.year, today.month - 1, 1);
+
+          // Add a transaction of two month ago
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfLastMonth.subtract(const Duration(days: 10)),
+            ),
+          );
+
+          // Add transactions of last month
+          demoTransactions.add(
+            createInsertSqlTransaction(date: fistOfLastMonth),
+          );
+          demoTransactions.add(
+            createInsertSqlTransaction(date: fistOfLastMonth),
+          );
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfLastMonth.add(const Duration(days: 1)),
+            ),
+          );
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfLastMonth.add(const Duration(days: 1)),
+              amount: 200,
+              type: 'IN',
+            ),
+          );
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfLastMonth.add(const Duration(days: 2)),
+              type: 'IN',
+            ),
+          );
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfLastMonth.add(const Duration(days: 2)),
+              type: 'IN',
+            ),
+          );
+
+          // Add a transaction of current month
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfLastMonth.add(const Duration(days: 32)),
+            ),
+          );
+
+          await db.execute(
+            "$insertDemoTransactionsQuery ${demoTransactions.join(",")};",
+          );
+
+          var result = await TransactionsRepository(
+            database: sossoldiDatabase,
+          ).lastMonthDailyTransactions(clock: today);
+          expect(result.length, 3);
+
+          final DateFormat formatter = DateFormat('yyyy-MM-dd');
+
+          expect(result[0]['day'], formatter.format(fistOfLastMonth));
+          expect(result[0]['income'], 0);
+          expect(result[0]['expense'], 200);
+
+          expect(
+            result[1]['day'],
+            formatter.format(fistOfLastMonth.add(const Duration(days: 1))),
+          );
+          expect(result[1]['income'], 200);
+          expect(result[1]['expense'], 100);
+
+          expect(
+            result[2]['day'],
+            formatter.format(fistOfLastMonth.add(const Duration(days: 2))),
+          );
+          expect(result[2]['income'], 200);
+          expect(result[2]['expense'], 0);
         });
-      } catch (error) {
-        throw Exception('DbBase.cleanDatabase: $error');
-      }
 
-      const insertDemoTransactionsQuery =
-          '''INSERT INTO `transaction` (date, amount, type, note, idCategory, idBankAccount, idBankAccountTransfer, recurring, idRecurringTransaction, createdAt, updatedAt) VALUES ''';
-      final List<String> demoTransactions = [];
+        test("currentMonthDailyTransactions", () async {
+          await sossoldiDatabase.fillDemoData(
+            countOfGeneratedTransaction: 2000,
+          );
 
-      final today = DateTime.now();
-      final fistOfLastMonth = DateTime(today.year, today.month - 1, 1);
+          try {
+            await db.transaction((txn) async {
+              var batch = txn.batch();
+              batch.delete(transactionTable);
+              await batch.commit();
+            });
+          } catch (error) {
+            throw Exception('DbBase.cleanDatabase: $error');
+          }
 
-      // Add a transaction of two month ago
-      demoTransactions.add(
-        createInsertSqlTransaction(
-          date: fistOfLastMonth.subtract(const Duration(days: 10)),
-        ),
-      );
+          const insertDemoTransactionsQuery =
+              '''INSERT INTO `transaction` (date, amount, type, note, idCategory, idBankAccount, idBankAccountTransfer, recurring, idRecurringTransaction, createdAt, updatedAt) VALUES ''';
+          final List<String> demoTransactions = [];
 
-      // Add transactions of last month
-      demoTransactions.add(createInsertSqlTransaction(date: fistOfLastMonth));
-      demoTransactions.add(createInsertSqlTransaction(date: fistOfLastMonth));
-      demoTransactions.add(
-        createInsertSqlTransaction(
-          date: fistOfLastMonth.add(const Duration(days: 1)),
-        ),
-      );
-      demoTransactions.add(
-        createInsertSqlTransaction(
-          date: fistOfLastMonth.add(const Duration(days: 1)),
-          amount: 200,
-          type: 'IN',
-        ),
-      );
-      demoTransactions.add(
-        createInsertSqlTransaction(
-          date: fistOfLastMonth.add(const Duration(days: 2)),
-          type: 'IN',
-        ),
-      );
-      demoTransactions.add(
-        createInsertSqlTransaction(
-          date: fistOfLastMonth.add(const Duration(days: 2)),
-          type: 'IN',
-        ),
-      );
+          final fistOfCurrentMonth = DateTime(today.year, today.month, 1);
 
-      // Add a transaction of current month
-      demoTransactions.add(
-        createInsertSqlTransaction(
-          date: fistOfLastMonth.add(const Duration(days: 32)),
-        ),
-      );
+          // Add a transaction of last month
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfCurrentMonth.subtract(const Duration(days: 10)),
+            ),
+          );
 
-      await db.execute(
-        "$insertDemoTransactionsQuery ${demoTransactions.join(",")};",
-      );
+          // Add transactions of current month
+          demoTransactions.add(
+            createInsertSqlTransaction(date: fistOfCurrentMonth),
+          );
+          demoTransactions.add(
+            createInsertSqlTransaction(date: fistOfCurrentMonth),
+          );
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfCurrentMonth.add(const Duration(days: 1)),
+            ),
+          );
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfCurrentMonth.add(const Duration(days: 1)),
+              amount: 200,
+              type: 'IN',
+            ),
+          );
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfCurrentMonth.add(const Duration(days: 2)),
+              type: 'IN',
+            ),
+          );
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfCurrentMonth.add(const Duration(days: 2)),
+              type: 'IN',
+            ),
+          );
 
-      var result = await TransactionsRepository(
-        database: sossoldiDatabase,
-      ).lastMonthDailyTransactions();
-      expect(result.length, 3);
+          // Add a transaction of next month
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfCurrentMonth.add(const Duration(days: 32)),
+            ),
+          );
 
-      final DateFormat formatter = DateFormat('yyyy-MM-dd');
+          await db.execute(
+            "$insertDemoTransactionsQuery ${demoTransactions.join(",")};",
+          );
 
-      expect(result[0]['day'], formatter.format(fistOfLastMonth));
-      expect(result[0]['income'], 0);
-      expect(result[0]['expense'], 200);
+          var result = await TransactionsRepository(
+            database: sossoldiDatabase,
+          ).currentMonthDailyTransactions(clock: today);
+          expect(result.length, 3);
 
-      expect(
-        result[1]['day'],
-        formatter.format(fistOfLastMonth.add(const Duration(days: 1))),
-      );
-      expect(result[1]['income'], 200);
-      expect(result[1]['expense'], 100);
+          final DateFormat formatter = DateFormat('yyyy-MM-dd');
 
-      expect(
-        result[2]['day'],
-        formatter.format(fistOfLastMonth.add(const Duration(days: 2))),
-      );
-      expect(result[2]['income'], 200);
-      expect(result[2]['expense'], 0);
-    });
+          expect(result[0]['day'], formatter.format(fistOfCurrentMonth));
+          expect(result[0]['income'], 0);
+          expect(result[0]['expense'], 200);
 
-    test("currentMonthDailyTransactions", () async {
-      await sossoldiDatabase.fillDemoData(countOfGeneratedTransaction: 2000);
+          expect(
+            result[1]['day'],
+            formatter.format(fistOfCurrentMonth.add(const Duration(days: 1))),
+          );
+          expect(result[1]['income'], 200);
+          expect(result[1]['expense'], 100);
 
-      try {
-        await db.transaction((txn) async {
-          var batch = txn.batch();
-          batch.delete(transactionTable);
-          await batch.commit();
+          expect(
+            result[2]['day'],
+            formatter.format(fistOfCurrentMonth.add(const Duration(days: 2))),
+          );
+          expect(result[2]['income'], 200);
+          expect(result[2]['expense'], 0);
         });
-      } catch (error) {
-        throw Exception('DbBase.cleanDatabase: $error');
-      }
 
-      const insertDemoTransactionsQuery =
-          '''INSERT INTO `transaction` (date, amount, type, note, idCategory, idBankAccount, idBankAccountTransfer, recurring, idRecurringTransaction, createdAt, updatedAt) VALUES ''';
-      final List<String> demoTransactions = [];
+        test("currentMonthDailyTransactions single account", () async {
+          await sossoldiDatabase.fillDemoData(
+            countOfGeneratedTransaction: 2000,
+          );
 
-      final today = DateTime.now();
-      final fistOfCurrentMonth = DateTime(today.year, today.month, 1);
+          try {
+            await db.transaction((txn) async {
+              var batch = txn.batch();
+              batch.delete(transactionTable);
+              await batch.commit();
+            });
+          } catch (error) {
+            throw Exception('DbBase.cleanDatabase: $error');
+          }
 
-      // Add a transaction of last month
-      demoTransactions.add(
-        createInsertSqlTransaction(
-          date: fistOfCurrentMonth.subtract(const Duration(days: 10)),
-        ),
-      );
+          const insertDemoTransactionsQuery =
+              '''INSERT INTO `transaction` (date, amount, type, note, idCategory, idBankAccount, idBankAccountTransfer, recurring, idRecurringTransaction, createdAt, updatedAt) VALUES ''';
+          final List<String> demoTransactions = [];
 
-      // Add transactions of current month
-      demoTransactions.add(
-        createInsertSqlTransaction(date: fistOfCurrentMonth),
-      );
-      demoTransactions.add(
-        createInsertSqlTransaction(date: fistOfCurrentMonth),
-      );
-      demoTransactions.add(
-        createInsertSqlTransaction(
-          date: fistOfCurrentMonth.add(const Duration(days: 1)),
-        ),
-      );
-      demoTransactions.add(
-        createInsertSqlTransaction(
-          date: fistOfCurrentMonth.add(const Duration(days: 1)),
-          amount: 200,
-          type: 'IN',
-        ),
-      );
-      demoTransactions.add(
-        createInsertSqlTransaction(
-          date: fistOfCurrentMonth.add(const Duration(days: 2)),
-          type: 'IN',
-        ),
-      );
-      demoTransactions.add(
-        createInsertSqlTransaction(
-          date: fistOfCurrentMonth.add(const Duration(days: 2)),
-          type: 'IN',
-        ),
-      );
+          final fistOfCurrentMonth = DateTime(today.year, today.month, 1);
 
-      // Add a transaction of next month
-      demoTransactions.add(
-        createInsertSqlTransaction(
-          date: fistOfCurrentMonth.add(const Duration(days: 32)),
-        ),
-      );
+          // Add a transaction of last month
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfCurrentMonth.subtract(const Duration(days: 10)),
+            ),
+          );
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfCurrentMonth,
+              idBankAccount: 71,
+            ),
+          );
 
-      await db.execute(
-        "$insertDemoTransactionsQuery ${demoTransactions.join(",")};",
-      );
+          // Add transactions of current month
+          demoTransactions.add(
+            createInsertSqlTransaction(date: fistOfCurrentMonth),
+          );
+          demoTransactions.add(
+            createInsertSqlTransaction(date: fistOfCurrentMonth),
+          );
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfCurrentMonth,
+              idBankAccount: 71,
+            ),
+          );
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfCurrentMonth.add(const Duration(days: 1)),
+            ),
+          );
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfCurrentMonth.add(const Duration(days: 1)),
+              amount: 200,
+              type: 'IN',
+            ),
+          );
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfCurrentMonth,
+              idBankAccount: 71,
+            ),
+          );
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfCurrentMonth.add(const Duration(days: 2)),
+              type: 'IN',
+            ),
+          );
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfCurrentMonth.add(const Duration(days: 2)),
+              type: 'IN',
+            ),
+          );
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfCurrentMonth,
+              idBankAccount: 71,
+            ),
+          );
 
-      var result = await TransactionsRepository(
-        database: sossoldiDatabase,
-      ).currentMonthDailyTransactions();
-      expect(result.length, 3);
+          // Add a transaction of next month
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfCurrentMonth.add(const Duration(days: 32)),
+            ),
+          );
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfCurrentMonth,
+              idBankAccount: 71,
+            ),
+          );
 
-      final DateFormat formatter = DateFormat('yyyy-MM-dd');
+          await db.execute(
+            "$insertDemoTransactionsQuery ${demoTransactions.join(",")};",
+          );
 
-      expect(result[0]['day'], formatter.format(fistOfCurrentMonth));
-      expect(result[0]['income'], 0);
-      expect(result[0]['expense'], 200);
+          var result = await TransactionsRepository(
+            database: sossoldiDatabase,
+          ).currentMonthDailyTransactions(accountId: 70, clock: today);
+          expect(result.length, 3);
 
-      expect(
-        result[1]['day'],
-        formatter.format(fistOfCurrentMonth.add(const Duration(days: 1))),
-      );
-      expect(result[1]['income'], 200);
-      expect(result[1]['expense'], 100);
+          final DateFormat formatter = DateFormat('yyyy-MM-dd');
 
-      expect(
-        result[2]['day'],
-        formatter.format(fistOfCurrentMonth.add(const Duration(days: 2))),
-      );
-      expect(result[2]['income'], 200);
-      expect(result[2]['expense'], 0);
-    });
+          expect(result[0]['day'], formatter.format(fistOfCurrentMonth));
+          expect(result[0]['income'], 0);
+          expect(result[0]['expense'], 200);
 
-    test("currentMonthDailyTransactions single account", () async {
-      await sossoldiDatabase.fillDemoData(countOfGeneratedTransaction: 2000);
+          expect(
+            result[1]['day'],
+            formatter.format(fistOfCurrentMonth.add(const Duration(days: 1))),
+          );
+          expect(result[1]['income'], 200);
+          expect(result[1]['expense'], 100);
 
-      try {
-        await db.transaction((txn) async {
-          var batch = txn.batch();
-          batch.delete(transactionTable);
-          await batch.commit();
+          expect(
+            result[2]['day'],
+            formatter.format(fistOfCurrentMonth.add(const Duration(days: 2))),
+          );
+          expect(result[2]['income'], 200);
+          expect(result[2]['expense'], 0);
         });
-      } catch (error) {
-        throw Exception('DbBase.cleanDatabase: $error');
-      }
 
-      const insertDemoTransactionsQuery =
-          '''INSERT INTO `transaction` (date, amount, type, note, idCategory, idBankAccount, idBankAccountTransfer, recurring, idRecurringTransaction, createdAt, updatedAt) VALUES ''';
-      final List<String> demoTransactions = [];
+        test("currentYearMontlyTransactions", () async {
+          await sossoldiDatabase.fillDemoData(
+            countOfGeneratedTransaction: 2000,
+          );
 
-      final today = DateTime.now();
-      final fistOfCurrentMonth = DateTime(today.year, today.month, 1);
+          try {
+            await db.transaction((txn) async {
+              var batch = txn.batch();
+              batch.delete(transactionTable);
+              await batch.commit();
+            });
+          } catch (error) {
+            throw Exception('DbBase.cleanDatabase: $error');
+          }
 
-      // Add a transaction of last month
-      demoTransactions.add(
-        createInsertSqlTransaction(
-          date: fistOfCurrentMonth.subtract(const Duration(days: 10)),
-        ),
-      );
-      demoTransactions.add(
-        createInsertSqlTransaction(date: fistOfCurrentMonth, idBankAccount: 71),
-      );
+          const insertDemoTransactionsQuery =
+              '''INSERT INTO `transaction` (date, amount, type, note, idCategory, idBankAccount, idBankAccountTransfer, recurring, idRecurringTransaction, createdAt, updatedAt) VALUES ''';
+          final List<String> demoTransactions = [];
 
-      // Add transactions of current month
-      demoTransactions.add(
-        createInsertSqlTransaction(date: fistOfCurrentMonth),
-      );
-      demoTransactions.add(
-        createInsertSqlTransaction(date: fistOfCurrentMonth),
-      );
-      demoTransactions.add(
-        createInsertSqlTransaction(date: fistOfCurrentMonth, idBankAccount: 71),
-      );
-      demoTransactions.add(
-        createInsertSqlTransaction(
-          date: fistOfCurrentMonth.add(const Duration(days: 1)),
-        ),
-      );
-      demoTransactions.add(
-        createInsertSqlTransaction(
-          date: fistOfCurrentMonth.add(const Duration(days: 1)),
-          amount: 200,
-          type: 'IN',
-        ),
-      );
-      demoTransactions.add(
-        createInsertSqlTransaction(date: fistOfCurrentMonth, idBankAccount: 71),
-      );
-      demoTransactions.add(
-        createInsertSqlTransaction(
-          date: fistOfCurrentMonth.add(const Duration(days: 2)),
-          type: 'IN',
-        ),
-      );
-      demoTransactions.add(
-        createInsertSqlTransaction(
-          date: fistOfCurrentMonth.add(const Duration(days: 2)),
-          type: 'IN',
-        ),
-      );
-      demoTransactions.add(
-        createInsertSqlTransaction(date: fistOfCurrentMonth, idBankAccount: 71),
-      );
+          final fistOfCurrentYear = DateTime(today.year, 1, 1);
 
-      // Add a transaction of next month
-      demoTransactions.add(
-        createInsertSqlTransaction(
-          date: fistOfCurrentMonth.add(const Duration(days: 32)),
-        ),
-      );
-      demoTransactions.add(
-        createInsertSqlTransaction(date: fistOfCurrentMonth, idBankAccount: 71),
-      );
+          // Add a transaction of last year
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfCurrentYear.subtract(const Duration(days: 10)),
+            ),
+          );
 
-      await db.execute(
-        "$insertDemoTransactionsQuery ${demoTransactions.join(",")};",
-      );
+          // Add transactions of current year jan
+          demoTransactions.add(
+            createInsertSqlTransaction(date: fistOfCurrentYear),
+          );
+          demoTransactions.add(
+            createInsertSqlTransaction(date: fistOfCurrentYear),
+          );
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfCurrentYear.add(const Duration(days: 1)),
+            ),
+          );
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfCurrentYear.add(const Duration(days: 1)),
+              amount: 200,
+              type: 'IN',
+            ),
+          );
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfCurrentYear.add(const Duration(days: 2)),
+              type: 'IN',
+            ),
+          );
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfCurrentYear.add(const Duration(days: 2)),
+              type: 'IN',
+            ),
+          );
 
-      var result = await TransactionsRepository(
-        database: sossoldiDatabase,
-      ).currentMonthDailyTransactions(accountId: 70);
-      expect(result.length, 3);
+          // Add transactions of current year dec
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfCurrentYear.add(const Duration(days: 300)),
+            ),
+          );
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfCurrentYear.add(const Duration(days: 300)),
+            ),
+          );
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfCurrentYear.add(const Duration(days: 301)),
+            ),
+          );
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfCurrentYear.add(const Duration(days: 301)),
+              amount: 500,
+              type: 'IN',
+            ),
+          );
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfCurrentYear.add(const Duration(days: 302)),
+              type: 'IN',
+            ),
+          );
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfCurrentYear.add(const Duration(days: 302)),
+              type: 'IN',
+            ),
+          );
 
-      final DateFormat formatter = DateFormat('yyyy-MM-dd');
+          // Add a transaction of next year
+          demoTransactions.add(
+            createInsertSqlTransaction(
+              date: fistOfCurrentYear.add(const Duration(days: 400)),
+            ),
+          );
 
-      expect(result[0]['day'], formatter.format(fistOfCurrentMonth));
-      expect(result[0]['income'], 0);
-      expect(result[0]['expense'], 200);
+          await db.execute(
+            "$insertDemoTransactionsQuery ${demoTransactions.join(",")};",
+          );
 
-      expect(
-        result[1]['day'],
-        formatter.format(fistOfCurrentMonth.add(const Duration(days: 1))),
-      );
-      expect(result[1]['income'], 200);
-      expect(result[1]['expense'], 100);
+          var result = await TransactionsRepository(
+            database: sossoldiDatabase,
+          ).currentYearMontlyTransactions(clock: today);
+          expect(result.length, 2);
 
-      expect(
-        result[2]['day'],
-        formatter.format(fistOfCurrentMonth.add(const Duration(days: 2))),
-      );
-      expect(result[2]['income'], 200);
-      expect(result[2]['expense'], 0);
-    });
+          final DateFormat formatter = DateFormat('yyyy-MM');
 
-    test("currentYearMontlyTransactions", () async {
-      await sossoldiDatabase.fillDemoData(countOfGeneratedTransaction: 2000);
+          expect(result[0]['month'], formatter.format(fistOfCurrentYear));
+          expect(result[0]['income'], 400);
+          expect(result[0]['expense'], 300);
 
-      try {
-        await db.transaction((txn) async {
-          var batch = txn.batch();
-          batch.delete(transactionTable);
-          await batch.commit();
+          expect(
+            result[1]['month'],
+            formatter.format(fistOfCurrentYear.add(const Duration(days: 300))),
+          );
+          expect(result[1]['income'], 700);
+          expect(result[1]['expense'], 300);
         });
-      } catch (error) {
-        throw Exception('DbBase.cleanDatabase: $error');
-      }
-
-      const insertDemoTransactionsQuery =
-          '''INSERT INTO `transaction` (date, amount, type, note, idCategory, idBankAccount, idBankAccountTransfer, recurring, idRecurringTransaction, createdAt, updatedAt) VALUES ''';
-      final List<String> demoTransactions = [];
-
-      final today = DateTime.now();
-      final fistOfCurrentYear = DateTime(today.year, 1, 1);
-
-      // Add a transaction of last year
-      demoTransactions.add(
-        createInsertSqlTransaction(
-          date: fistOfCurrentYear.subtract(const Duration(days: 10)),
-        ),
-      );
-
-      // Add transactions of current year jan
-      demoTransactions.add(createInsertSqlTransaction(date: fistOfCurrentYear));
-      demoTransactions.add(createInsertSqlTransaction(date: fistOfCurrentYear));
-      demoTransactions.add(
-        createInsertSqlTransaction(
-          date: fistOfCurrentYear.add(const Duration(days: 1)),
-        ),
-      );
-      demoTransactions.add(
-        createInsertSqlTransaction(
-          date: fistOfCurrentYear.add(const Duration(days: 1)),
-          amount: 200,
-          type: 'IN',
-        ),
-      );
-      demoTransactions.add(
-        createInsertSqlTransaction(
-          date: fistOfCurrentYear.add(const Duration(days: 2)),
-          type: 'IN',
-        ),
-      );
-      demoTransactions.add(
-        createInsertSqlTransaction(
-          date: fistOfCurrentYear.add(const Duration(days: 2)),
-          type: 'IN',
-        ),
-      );
-
-      // Add transactions of current year dec
-      demoTransactions.add(
-        createInsertSqlTransaction(
-          date: fistOfCurrentYear.add(const Duration(days: 300)),
-        ),
-      );
-      demoTransactions.add(
-        createInsertSqlTransaction(
-          date: fistOfCurrentYear.add(const Duration(days: 300)),
-        ),
-      );
-      demoTransactions.add(
-        createInsertSqlTransaction(
-          date: fistOfCurrentYear.add(const Duration(days: 301)),
-        ),
-      );
-      demoTransactions.add(
-        createInsertSqlTransaction(
-          date: fistOfCurrentYear.add(const Duration(days: 301)),
-          amount: 500,
-          type: 'IN',
-        ),
-      );
-      demoTransactions.add(
-        createInsertSqlTransaction(
-          date: fistOfCurrentYear.add(const Duration(days: 302)),
-          type: 'IN',
-        ),
-      );
-      demoTransactions.add(
-        createInsertSqlTransaction(
-          date: fistOfCurrentYear.add(const Duration(days: 302)),
-          type: 'IN',
-        ),
-      );
-
-      // Add a transaction of next year
-      demoTransactions.add(
-        createInsertSqlTransaction(
-          date: fistOfCurrentYear.add(const Duration(days: 400)),
-        ),
-      );
-
-      await db.execute(
-        "$insertDemoTransactionsQuery ${demoTransactions.join(",")};",
-      );
-
-      var result = await TransactionsRepository(
-        database: sossoldiDatabase,
-      ).currentYearMontlyTransactions();
-      expect(result.length, 2);
-
-      final DateFormat formatter = DateFormat('yyyy-MM');
-
-      expect(result[0]['month'], formatter.format(fistOfCurrentYear));
-      expect(result[0]['income'], 400);
-      expect(result[0]['expense'], 300);
-
-      expect(
-        result[1]['month'],
-        formatter.format(fistOfCurrentYear.add(const Duration(days: 300))),
-      );
-      expect(result[1]['income'], 700);
-      expect(result[1]['expense'], 300);
-    });
+      });
+    }
   });
 }
