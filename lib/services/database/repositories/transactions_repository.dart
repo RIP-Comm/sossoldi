@@ -150,6 +150,31 @@ class TransactionsRepository {
     return (result).map((x) => x["note"] as String).toList();
   }
 
+  Future<CategoryTransaction?> getLastCategoryByLabel(
+    String label,
+    TransactionType type,
+  ) async {
+    final db = await _sossoldiDB.database;
+
+    final result = await db.rawQuery(
+      '''
+      SELECT c.*
+      FROM "$transactionTable" as t
+      INNER JOIN $categoryTransactionTable as c ON t.${TransactionFields.idCategory} = c.${CategoryTransactionFields.id}
+      WHERE LOWER(TRIM(t.${TransactionFields.note})) = LOWER(TRIM(?))
+        AND t.${TransactionFields.type} = ?
+        AND c.${CategoryTransactionFields.deletedAt} IS NULL
+      ORDER BY t.${TransactionFields.date} DESC, t.${TransactionFields.id} DESC
+      LIMIT 1
+    ''',
+      [label, type.code],
+    );
+
+    return result.isNotEmpty
+        ? CategoryTransaction.fromJson(result.first)
+        : null;
+  }
+
   Future<List> currentMonthDailyTransactions({
     int? accountId,
     DateTime? clock,
