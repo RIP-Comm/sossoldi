@@ -6,6 +6,7 @@ import '../../../ui/device.dart';
 import '../../../services/csv/csv_file_picker.dart';
 import '../../../ui/snack_bars/snack_bar.dart';
 import '../../../ui/widgets/default_card.dart';
+import 'widgets/csv_format_sheet.dart';
 
 class BackupPage extends ConsumerStatefulWidget {
   const BackupPage({super.key});
@@ -100,6 +101,29 @@ class _BackupPageState extends ConsumerState<BackupPage> {
     }
   }
 
+  void _showCsvFormat() {
+    showModalBottomSheet(
+      context: context,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      isScrollControlled: true,
+      useSafeArea: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(Sizes.borderRadius),
+          topRight: Radius.circular(Sizes.borderRadius),
+        ),
+      ),
+      builder: (_) => DraggableScrollableSheet(
+        expand: false,
+        minChildSize: 0.5,
+        initialChildSize: 0.8,
+        maxChildSize: 0.95,
+        builder: (_, controller) =>
+            CsvFormatSheet(scrollController: controller),
+      ),
+    );
+  }
+
   late final List<BackupOption> options = [
     BackupOption(
       title: 'Import data',
@@ -110,6 +134,11 @@ class _BackupPageState extends ConsumerState<BackupPage> {
       title: 'Export data',
       description: 'Save your data as a CSV file',
       icon: Icons.download,
+    ),
+    BackupOption(
+      title: 'CSV format',
+      description: 'See which columns the file needs and get a template',
+      icon: Icons.info_outline,
     ),
   ];
 
@@ -163,8 +192,10 @@ class _BackupPageState extends ConsumerState<BackupPage> {
                     ],
                   ),
                 );
-              } else {
+              } else if (index == 1) {
                 _handleExport();
+              } else {
+                _showCsvFormat();
               }
             },
             child: Row(
