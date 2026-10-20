@@ -1,7 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:sossoldi/model/category_transaction.dart';
 import 'package:sossoldi/model/base_entity.dart';
+import 'package:sossoldi/model/category_transaction.dart';
+import 'package:sossoldi/model/transaction.dart';
 
 void main() {
   test('Test Copy Category Transaction', () {
@@ -83,5 +84,18 @@ void main() {
     assert(c.color == json[CategoryTransactionFields.color]);
     assert(c.note == json[CategoryTransactionFields.note]);
     assert(c.order == json[CategoryTransactionFields.order]);
+  });
+
+  test("Test income and expense category type", () {
+    final type = CategoryTransactionType.fromJson("BOTH");
+
+    expect(type, CategoryTransactionType.incomeAndExpense);
+    expect(type.code, "BOTH");
+    expect(type.label, "Income & Expense");
+    expect(type.supports(TransactionType.income), isTrue);
+    expect(type.supports(TransactionType.expense), isTrue);
+    expect(type.supports(TransactionType.transfer), isFalse);
+    expect(CategoryTransactionType.income.selectableCodes, ["IN", "BOTH"]);
+    expect(CategoryTransactionType.expense.selectableCodes, ["OUT", "BOTH"]);
   });
 }
