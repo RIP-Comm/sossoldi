@@ -140,7 +140,11 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
         : await ref
               .read(transactionsRepositoryProvider)
               .getLastCategoryByLabel(label, selectedType);
-    if (!mounted || noteController.text.trim() != label) return;
+    if (!mounted ||
+        noteController.text.trim() != label ||
+        ref.read(selectedTransactionTypeProvider) != selectedType) {
+      return;
+    }
 
     _suggestedCategory = category;
     ref.read(selectedCategoryProvider.notifier).setCategory(category);
@@ -235,6 +239,18 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
   @override
   Widget build(BuildContext context) {
     final selectedType = ref.watch(selectedTransactionTypeProvider);
+    // A category belongs to a single transaction type, so drop it when the
+    // type changes and look for a suggestion matching the new type
+    ref.listen(selectedTransactionTypeProvider, (previous, next) {
+      final category = ref.read(selectedCategoryProvider);
+      if (category != null && category.type.transactionType != next) {
+        ref.read(selectedCategoryProvider.notifier).setCategory(null);
+      }
+      if (widget.transaction == null) {
+        _suggestedLabel = null;
+        _suggestCategory();
+      }
+    });
 
     _updateAmount();
 
