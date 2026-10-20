@@ -201,7 +201,8 @@ class SossoldiDatabase {
             results[tableName] = true;
           } catch (e) {
             dev.log('Error importing table $tableName: $e');
-            results[tableName] = false;
+            // Abort the whole transaction so no table is left emptied
+            throw Exception('Failed to import table $tableName: $e');
           }
         }
       });
