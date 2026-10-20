@@ -139,6 +139,17 @@ const Map<String, IconData> peopleIconList = {
   'face': Icons.face,
   'face_3': Icons.face_3,
 };
+const Map<String, IconData> medicalIconList = {
+  'local_hospital': Icons.local_hospital,
+  'medical_services': Icons.medical_services,
+  'local_pharmacy': Icons.local_pharmacy,
+  'dentistry': Icons.medical_information,
+  'healing': Icons.healing,
+  'health_and_safety': Icons.health_and_safety,
+  'monitor_heart': Icons.monitor_heart,
+  'bloodtype': Icons.bloodtype,
+  'coronavirus': Icons.coronavirus,
+};
 const Map<String, IconData> othersIconList = {
   'real_estate_agent': Icons.real_estate_agent,
   'auto_graph': Icons.auto_graph,
@@ -172,6 +183,7 @@ const Map<String, Map<String, IconData>> mapIconsList = {
   "Travel": travelIconList,
   "Tech": techIconList,
   "People": peopleIconList,
+  "Medical": medicalIconList,
   "Others": othersIconList,
 };
 const Map<String, IconData> iconList = {
@@ -180,6 +192,7 @@ const Map<String, IconData> iconList = {
   ...travelIconList,
   ...techIconList,
   ...peopleIconList,
+  ...medicalIconList,
   ...othersIconList,
 };
 const Map<String, IconData> accountIconList = {
