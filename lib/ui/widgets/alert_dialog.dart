@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
 
 ///
@@ -79,7 +80,7 @@ class AlertDialogBuilder {
 void showInfoDialog(BuildContext context, String text) => AlertDialogBuilder(
   text: text,
   dialogType: AlertDialogType.info,
-  primaryActionText: "OK",
+  primaryActionText: AppLocalizations.of(context)!.ok,
 ).show(context);
 
 ///
@@ -88,7 +89,7 @@ void showInfoDialog(BuildContext context, String text) => AlertDialogBuilder(
 void showSuccessDialog(BuildContext context, String text) => AlertDialogBuilder(
   text: text,
   dialogType: AlertDialogType.success,
-  primaryActionText: "OK",
+  primaryActionText: AppLocalizations.of(context)!.ok,
 ).show(context);
 
 ///
@@ -97,7 +98,7 @@ void showSuccessDialog(BuildContext context, String text) => AlertDialogBuilder(
 void showWarningDialog(BuildContext context, String text) => AlertDialogBuilder(
   text: text,
   dialogType: AlertDialogType.warning,
-  primaryActionText: "OK",
+  primaryActionText: AppLocalizations.of(context)!.ok,
 ).show(context);
 
 ///
@@ -106,7 +107,7 @@ void showWarningDialog(BuildContext context, String text) => AlertDialogBuilder(
 void showErrorDialog(BuildContext context, String text) => AlertDialogBuilder(
   text: text,
   dialogType: AlertDialogType.error,
-  primaryActionText: "OK",
+  primaryActionText: AppLocalizations.of(context)!.ok,
 ).show(context);
 
 enum AlertDialogType { info, success, warning, error }

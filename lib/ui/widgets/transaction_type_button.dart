@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants/style.dart';
+import '../../l10n/app_localizations.dart';
 import '../../model/transaction.dart';
 import '../../providers/transactions_provider.dart';
 import '../device.dart';
@@ -54,7 +55,7 @@ class TransactionTypeButton extends ConsumerWidget {
                 color: Colors.transparent,
                 alignment: Alignment.center,
                 child: Text(
-                  "Income",
+                  AppLocalizations.of(context)!.income,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: (transactionType == TransactionType.income)
                         ? white
@@ -77,7 +78,7 @@ class TransactionTypeButton extends ConsumerWidget {
                 color: Colors.transparent,
                 alignment: Alignment.center,
                 child: Text(
-                  'Expenses',
+                  AppLocalizations.of(context)!.expense,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: (transactionType == TransactionType.expense)
                         ? white

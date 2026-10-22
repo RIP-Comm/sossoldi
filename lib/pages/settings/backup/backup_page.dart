@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../constants/exceptions.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../services/database/sossoldi_database.dart';
 import '../../../ui/device.dart';
 import '../../../services/csv/csv_file_picker.dart';
@@ -43,12 +46,31 @@ class BackupOption {
 }
 
 class _BackupPageState extends ConsumerState<BackupPage> {
+  void _showImportError(Object error) {
+    final l10n = AppLocalizations.of(context)!;
+    final String message = switch (error) {
+      CsvNotFoundException() => l10n.errorCsvNotFound,
+      CsvEmptyException() => l10n.errorCsvEmpty,
+      CsvExpectedColumnException(:final column) => l10n.errorCsvExpectedColumn(
+        column,
+      ),
+      CsvImportTableException(:final tableName) => l10n.errorCsvImportTable(
+        tableName,
+      ),
+      _ => l10n.errorCsvImportGeneral(error.toString()),
+    };
+    showSnackBar(context, message: message);
+  }
+
   Future<void> _handleImport() async {
     try {
       final file = await CSVFilePicker.pickCSVFile(context);
       if (file != null) {
         if (!mounted) return;
-        CSVFilePicker.showLoading(context, 'Importing data...');
+        CSVFilePicker.showLoading(
+          context,
+          AppLocalizations.of(context)!.importingData,
+        );
         final results = await SossoldiDatabase.instance.importFromCSV(
           file.path,
         );
@@ -58,7 +80,7 @@ class _BackupPageState extends ConsumerState<BackupPage> {
         if (results.values.every((success) => success)) {
           await CSVFilePicker.showSuccess(
             context,
-            'Data imported successfully',
+            AppLocalizations.of(context)!.dataImportedSuccessfully,
           );
           if (mounted) Phoenix.rebirth(context);
         } else {
@@ -71,21 +93,25 @@ class _BackupPageState extends ConsumerState<BackupPage> {
 
           showSnackBar(
             context,
-            message: 'Failed to import some tables: $failedTables',
+            message: AppLocalizations.of(
+              context,
+            )!.importFailedTables(failedTables),
           );
         }
       }
     } catch (e) {
       if (!mounted) return;
       CSVFilePicker.hideLoading(context);
-
-      showSnackBar(context, message: 'Import failed: ${e.toString()}');
+      _showImportError(e);
     }
   }
 
   Future<void> _handleExport() async {
     try {
-      CSVFilePicker.showLoading(context, 'Exporting data...');
+      CSVFilePicker.showLoading(
+        context,
+        AppLocalizations.of(context)!.exportingData,
+      );
 
       final csv = await SossoldiDatabase.instance.exportToCSV();
 
@@ -96,22 +122,12 @@ class _BackupPageState extends ConsumerState<BackupPage> {
     } catch (e) {
       if (!mounted) return;
       CSVFilePicker.hideLoading(context);
-      showSnackBar(context, message: 'Export failed: ${e.toString()}');
+      showSnackBar(
+        context,
+        message: AppLocalizations.of(context)!.exportFailed(e.toString()),
+      );
     }
   }
-
-  late final List<BackupOption> options = [
-    BackupOption(
-      title: 'Import data',
-      description: 'Import a CSV file to update your database',
-      icon: Icons.upload_file,
-    ),
-    BackupOption(
-      title: 'Export data',
-      description: 'Save your data as a CSV file',
-      icon: Icons.download,
-    ),
-  ];
 
   @override
   void initState() {
@@ -120,13 +136,27 @@ class _BackupPageState extends ConsumerState<BackupPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final List<BackupOption> options = [
+      BackupOption(
+        title: l10n.importData,
+        description: l10n.importDataDescription,
+        icon: Icons.upload_file,
+      ),
+      BackupOption(
+        title: l10n.exportData,
+        description: l10n.exportDataDescription,
+        icon: Icons.download,
+      ),
+    ];
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text('Import/Export'),
+        title: Text(l10n.importExport),
       ),
       body: ListView.separated(
         padding: const EdgeInsets.only(top: Sizes.xl),
@@ -142,23 +172,21 @@ class _BackupPageState extends ConsumerState<BackupPage> {
                 showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
-                    title: const Text('Warning: Data Overwrite'),
-                    content: const Text(
-                      'Importing this file will permanently replace your existing data. This action cannot be undone. Ensure you have a backup before proceeding.',
-                    ),
+                    title: Text(l10n.warningOverwrite),
+                    content: Text(l10n.warningOverwriteContent),
                     actions: [
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child: const Text('Cancel'),
+                        child: Text(l10n.cancel),
                       ),
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).pop();
                           _handleImport();
                         },
-                        child: const Text('Proceed with Import'),
+                        child: Text(l10n.proceedImport),
                       ),
                     ],
                   ),

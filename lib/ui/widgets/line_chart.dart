@@ -128,41 +128,13 @@ class _LineChartSample2State extends State<LineChartWidget> {
     Widget text;
     switch (widget.period) {
       case Period.year:
-        switch (value.toInt()) {
-          case 1:
-            text = Text('Feb', style: style);
-            break;
-          case 2:
-            text = Text('Mar', style: style);
-            break;
-          case 3:
-            text = Text('Apr', style: style);
-            break;
-          case 4:
-            text = Text('May', style: style);
-            break;
-          case 5:
-            text = Text('Jun', style: style);
-            break;
-          case 6:
-            text = Text('Jul', style: style);
-            break;
-          case 7:
-            text = Text('Aug', style: style);
-            break;
-          case 8:
-            text = Text('Sep', style: style);
-            break;
-          case 9:
-            text = Text('Oct', style: style);
-            break;
-          case 10:
-            text = Text('Nov', style: style);
-            break;
-          default:
-            text = Text('', style: style);
-            break;
-        }
+        final int month = value.toInt();
+        text = Text(
+          month >= 1 && month <= 10
+              ? DateFormat.MMM().format(DateTime(0, month + 1))
+              : '',
+          style: style,
+        );
         break;
       case Period.month:
         int step = (widget.currentMonthDays / widget.nXLabel).round();

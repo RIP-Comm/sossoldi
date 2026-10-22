@@ -42,6 +42,8 @@ dependencies:
   timezone: ^0.10.1
   url_launcher: ^6.3.2
   font_awesome_flutter: ^10.12.0
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
@@ -58,6 +60,7 @@ dev_dependencies:
   test: ^1.26.3
 
 flutter:
+  generate: true
   uses-material-design: true
   assets:
     - assets/

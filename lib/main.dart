@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
+import 'l10n/app_localizations.dart';
 import 'providers/banking_provider.dart';
 import 'providers/settings_provider.dart';
 import 'providers/theme_provider.dart';
@@ -107,6 +109,15 @@ class Launcher extends ConsumerWidget {
     final bool isOnboardingCompleted = ref.watch(onBoardingCompletedProvider);
     return MaterialApp(
       title: 'Sossoldi',
+      // English comes first so it is the fallback for unsupported languages
+      supportedLocales: const [Locale('en'), Locale('it'), Locale('pt')],
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      localeListResolutionCallback: (locales, supportedLocales) {
+        final locale = basicLocaleListResolution(locales, supportedLocales);
+        // DateFormat uses Intl.defaultLocale for month and weekday names
+        Intl.defaultLocale = locale.languageCode;
+        return locale;
+      },
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: appThemeState.isDarkModeEnabled
