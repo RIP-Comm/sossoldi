@@ -246,5 +246,7 @@
   "recurrenceAnnual": "Jährlich",
   "language": "Sprache",
   "selectALanguage": "Sprache auswählen",
-  "systemLanguage": "Systemsprache"
+  "systemLanguage": "Systemsprache",
+  "reminderNotificationTitle": "Denk daran, neue Ausgaben einzutragen!",
+  "reminderNotificationBody": "Sossoldi wartet auf deine neuesten Transaktionen. Behalte deine Finanzen im Blick und trage deine letzten Ausgaben ein."
 }

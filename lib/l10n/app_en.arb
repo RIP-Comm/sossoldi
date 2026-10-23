@@ -246,5 +246,7 @@
   "recurrenceAnnual": "Annual",
   "language": "Language",
   "selectALanguage": "Select a language",
-  "systemLanguage": "System language"
+  "systemLanguage": "System language",
+  "reminderNotificationTitle": "Remember to log new expenses!",
+  "reminderNotificationBody": "Sossoldi is waiting for your latest transactions. Don't lose sight of your financial movements, and input your most recent expenses."
 }

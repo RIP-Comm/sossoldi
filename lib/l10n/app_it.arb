@@ -246,5 +246,7 @@
   "recurrenceAnnual": "Annuale",
   "language": "Lingua",
   "selectALanguage": "Seleziona una lingua",
-  "systemLanguage": "Lingua del sistema"
+  "systemLanguage": "Lingua del sistema",
+  "reminderNotificationTitle": "Ricordati di registrare le nuove spese!",
+  "reminderNotificationBody": "Sossoldi aspetta le tue ultime transazioni. Non perdere di vista i tuoi movimenti e inserisci le spese più recenti."
 }

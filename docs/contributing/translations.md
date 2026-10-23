@@ -40,6 +40,8 @@ A language should be enabled only once its translation has been reviewed by a na
    ```
 
 `test/l10n/arb_consistency_test.dart` fails if a translation file is missing a key or uses different placeholders.
+`test/l10n/hardcoded_strings_test.dart` fails if a user facing text is written directly in the code instead of coming from `AppLocalizations`.
+Only the developer menu strings are allowed there.
 
 ## Crowdin
 

@@ -246,5 +246,7 @@
   "recurrenceAnnual": "Jaarlijks",
   "language": "Taal",
   "selectALanguage": "Kies een taal",
-  "systemLanguage": "Systeemtaal"
+  "systemLanguage": "Systeemtaal",
+  "reminderNotificationTitle": "Vergeet je nieuwe uitgaven niet te registreren!",
+  "reminderNotificationBody": "Sossoldi wacht op je laatste transacties. Houd je financiën in de gaten en voer je recente uitgaven in."
 }
