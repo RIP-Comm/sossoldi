@@ -4,6 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../device.dart';
 import 'blur_widget.dart';
 
@@ -101,7 +102,7 @@ class _LineChartSample2State extends State<LineChartWidget> {
                         widget.line2Data.length < 2) {
                       return Center(
                         child: Text(
-                          "We are sorry but there is not\nenough data to make the graph...",
+                          AppLocalizations.of(context)!.notEnoughDataForGraph,
                           style: TextStyle(color: Theme.of(context).hintColor),
                         ),
                       );

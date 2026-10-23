@@ -10,6 +10,7 @@ import '../../../../providers/theme_provider.dart';
 import '../../../../providers/transactions_provider.dart';
 import '../../../../ui/device.dart';
 import '../../../../ui/extensions.dart';
+import '../../../../ui/localized_labels.dart';
 import 'recurrence_selector.dart';
 
 class RecurrenceListTileEdit extends ConsumerWidget {
@@ -69,7 +70,9 @@ class RecurrenceListTileEdit extends ConsumerWidget {
                   ),
                   const Spacer(),
                   Text(
-                    ref.watch(intervalProvider).label,
+                    ref
+                        .watch(intervalProvider)
+                        .localizedLabel(AppLocalizations.of(context)!),
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       color: isDarkMode
                           ? grey3

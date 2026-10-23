@@ -236,5 +236,12 @@
   "deleteCategoryConfirm": "Weet je zeker dat je de categorie \"{name}\" wilt verwijderen?",
   "deleteCategoryLinkedWarning": "Alle terugkerende transacties en budgetten van deze categorie worden verwijderd.",
   "actionCannotBeUndone": "Deze actie kan niet ongedaan worden gemaakt.",
-  "amountExampleHint": "bijv. 1300 €"
+  "amountExampleHint": "bijv. 1300 €",
+  "recurrenceDaily": "Dagelijks",
+  "recurrenceWeekly": "Wekelijks",
+  "recurrenceMonthly": "Maandelijks",
+  "recurrenceBimonthly": "Tweemaandelijks",
+  "recurrenceQuarterly": "Per kwartaal",
+  "recurrenceSemester": "Halfjaarlijks",
+  "recurrenceAnnual": "Jaarlijks"
 }

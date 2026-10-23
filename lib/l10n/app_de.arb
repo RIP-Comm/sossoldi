@@ -236,5 +236,12 @@
   "deleteCategoryConfirm": "Möchtest du die Kategorie „{name}“ wirklich löschen?",
   "deleteCategoryLinkedWarning": "Alle wiederkehrenden Transaktionen und Budgets dieser Kategorie werden gelöscht.",
   "actionCannotBeUndone": "Diese Aktion kann nicht rückgängig gemacht werden.",
-  "amountExampleHint": "z. B. 1300 €"
+  "amountExampleHint": "z. B. 1300 €",
+  "recurrenceDaily": "Täglich",
+  "recurrenceWeekly": "Wöchentlich",
+  "recurrenceMonthly": "Monatlich",
+  "recurrenceBimonthly": "Zweimonatlich",
+  "recurrenceQuarterly": "Vierteljährlich",
+  "recurrenceSemester": "Halbjährlich",
+  "recurrenceAnnual": "Jährlich"
 }

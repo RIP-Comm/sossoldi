@@ -7,6 +7,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "../../../../constants/style.dart";
 import '../../../../l10n/app_localizations.dart';
 import '../../../../ui/extensions.dart';
+import '../../../../ui/localized_labels.dart';
 import '../../../../ui/widgets/rounded_icon.dart';
 import '../../../../providers/theme_provider.dart';
 import '../../../../providers/transactions_provider.dart';
@@ -115,7 +116,9 @@ class RecurrenceListTile extends ConsumerWidget {
                     ),
                     const Spacer(),
                     Text(
-                      ref.watch(intervalProvider).label,
+                      ref
+                          .watch(intervalProvider)
+                          .localizedLabel(AppLocalizations.of(context)!),
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: isDarkMode
                             ? grey3

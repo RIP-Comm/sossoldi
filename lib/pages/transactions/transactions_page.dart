@@ -126,7 +126,7 @@ class _TransactionsPageState extends ConsumerState<TransactionsPage>
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => Center(
           child: Text(
-            "An error occurred: $error",
+            AppLocalizations.of(context)!.errorOccurred(error),
             style: Theme.of(context).textTheme.bodySmall,
           ),
         ),

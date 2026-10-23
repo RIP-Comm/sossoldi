@@ -106,7 +106,7 @@ class _EditRecurringTransactionState
                     bottom: Sizes.sm,
                   ),
                   child: Text(
-                    "DETAILS (any change will affect only future transactions)",
+                    l10n.detailsExplanation.toUpperCase(),
                     style: Theme.of(context).textTheme.labelLarge!.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                     ),
@@ -213,7 +213,7 @@ class _EditRecurringTransactionState
                     ),
                   ),
                   child: Text(
-                    "UPDATE TRANSACTION",
+                    l10n.updateTransaction.toUpperCase(),
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                       color: Theme.of(context).colorScheme.onPrimary,
                     ),

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../ui/extensions.dart';
+import '../../../ui/localized_labels.dart';
 import '../../../ui/widgets/rounded_icon.dart';
 import '../../../model/recurring_transaction.dart';
 import '../../../providers/theme_provider.dart';
@@ -80,7 +81,9 @@ class RecurringPaymentCard extends ConsumerWidget {
                           spacing: Sizes.sm,
                           children: [
                             Text(
-                              transaction.recurrency.label.toUpperCase(),
+                              transaction.recurrency
+                                  .localizedLabel(l10n)
+                                  .toUpperCase(),
                               style: Theme.of(context).textTheme.labelLarge,
                             ),
                             Text(
@@ -198,7 +201,9 @@ class RecurringPaymentCard extends ConsumerWidget {
                           child: Container(
                             alignment: Alignment.centerRight,
                             child: Text(
-                              "Until ${transaction.toDate?.formatEDMY()}",
+                              l10n.untilDate(
+                                transaction.toDate?.formatEDMY() ?? '',
+                              ),
                               style: const TextStyle(fontSize: 8),
                             ),
                           ),

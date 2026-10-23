@@ -236,5 +236,12 @@
   "deleteCategoryConfirm": "Are you sure you want to delete the category named \"{name}\"?",
   "deleteCategoryLinkedWarning": "All recurring transactions and budgets linked to this category will be deleted.",
   "actionCannotBeUndone": "This action cannot be undone.",
-  "amountExampleHint": "e.g. 1300 €"
+  "amountExampleHint": "e.g. 1300 €",
+  "recurrenceDaily": "Daily",
+  "recurrenceWeekly": "Weekly",
+  "recurrenceMonthly": "Monthly",
+  "recurrenceBimonthly": "Bimonthly",
+  "recurrenceQuarterly": "Quarterly",
+  "recurrenceSemester": "Semester",
+  "recurrenceAnnual": "Annual"
 }

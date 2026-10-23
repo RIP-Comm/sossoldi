@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../providers/settings_provider.dart';
 import '../../../../ui/device.dart';
+import '../../../../ui/localized_labels.dart';
 
 class NotificationTypeTile extends StatelessWidget {
   final NotificationReminderType type;
@@ -37,7 +39,7 @@ class NotificationTypeTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "${type.name[0].toUpperCase()}${type.name.substring(1)}",
+                type.localizedLabel(AppLocalizations.of(context)!),
                 style: TextStyle(
                   color: selected
                       ? Theme.of(context).colorScheme.secondary

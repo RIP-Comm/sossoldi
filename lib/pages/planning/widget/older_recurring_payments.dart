@@ -13,6 +13,7 @@ import '../../../providers/currency_provider.dart';
 import '../../../providers/recurring_transactions_provider.dart';
 import '../../../ui/device.dart';
 import '../../../ui/extensions.dart';
+import '../../../ui/localized_labels.dart';
 import '../../../ui/widgets/default_container.dart';
 import '../../../ui/widgets/rounded_icon.dart';
 
@@ -78,7 +79,8 @@ class OlderRecurringPayments extends ConsumerWidget {
             ),
             const SizedBox(height: Sizes.sm),
             Text(
-              transaction.recurrency.label + l10n.onTheDay(nextDueDay),
+              transaction.recurrency.localizedLabel(l10n) +
+                  l10n.onTheDay(nextDueDay),
               style: Theme.of(context).textTheme.bodyLarge,
             ),
             const SizedBox(height: Sizes.xl),

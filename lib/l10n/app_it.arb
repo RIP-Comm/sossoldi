@@ -236,5 +236,12 @@
   "deleteCategoryConfirm": "Vuoi davvero eliminare la categoria \"{name}\"?",
   "deleteCategoryLinkedWarning": "Tutte le transazioni ricorrenti e i budget collegati a questa categoria verranno eliminati.",
   "actionCannotBeUndone": "Questa azione non può essere annullata.",
-  "amountExampleHint": "es. 1300 €"
+  "amountExampleHint": "es. 1300 €",
+  "recurrenceDaily": "Giornaliera",
+  "recurrenceWeekly": "Settimanale",
+  "recurrenceMonthly": "Mensile",
+  "recurrenceBimonthly": "Bimestrale",
+  "recurrenceQuarterly": "Trimestrale",
+  "recurrenceSemester": "Semestrale",
+  "recurrenceAnnual": "Annuale"
 }
