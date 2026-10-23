@@ -8,6 +8,7 @@ import '../../../../model/bank_account.dart';
 import '../../../../providers/accounts_provider.dart';
 import '../../../../providers/transactions_provider.dart';
 import '../../../../ui/device.dart';
+import 'frequent_item.dart';
 
 class AccountSelector extends ConsumerStatefulWidget {
   const AccountSelector({
@@ -24,6 +25,8 @@ class AccountSelector extends ConsumerStatefulWidget {
 }
 
 class _AccountSelectorState extends ConsumerState<AccountSelector> {
+  bool _closing = false;
+
   @override
   Widget build(BuildContext context) {
     final accountsList = ref.watch(activeAccountsProvider);
@@ -84,55 +87,44 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> {
                               (widget.transfer &&
                                   account.id != fromAccount?.id) ||
                               (!widget.transfer && account.id != toAccount?.id);
-                          return GestureDetector(
-                            onTap: enabled
-                                ? () {
-                                    if (widget.transfer) {
-                                      ref
-                                          .read(
-                                            bankAccountTransferProvider
-                                                .notifier,
-                                          )
-                                          .setAccount(account);
-                                    } else {
-                                      ref
-                                          .read(
-                                            selectedBankAccountProvider
-                                                .notifier,
-                                          )
-                                          .setAccount(account);
+                          return Opacity(
+                            opacity: enabled ? 1.0 : 0.5,
+                            child: FrequentItem(
+                              label: account.name,
+                              icon: accountIconList[account.symbol],
+                              color: accountColorListTheme[account.color],
+                              selected: widget.transfer
+                                  ? toAccount?.id == account.id
+                                  : fromAccount?.id == account.id,
+                              onTap: enabled
+                                  ? () async {
+                                      if (_closing) return;
+                                      _closing = true;
+                                      if (widget.transfer) {
+                                        ref
+                                            .read(
+                                              bankAccountTransferProvider
+                                                  .notifier,
+                                            )
+                                            .setAccount(account);
+                                      } else {
+                                        ref
+                                            .read(
+                                              selectedBankAccountProvider
+                                                  .notifier,
+                                            )
+                                            .setAccount(account);
+                                      }
+                                      // Let the selection animation play
+                                      // before closing the sheet
+                                      await Future.delayed(
+                                        FrequentItem.animationDuration,
+                                      );
+                                      if (context.mounted) {
+                                        Navigator.pop(context);
+                                      }
                                     }
-                                    Navigator.pop(context);
-                                  }
-                                : null,
-                            child: Opacity(
-                              opacity: enabled ? 1.0 : 0.5,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: Sizes.lg,
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    RoundedIcon(
-                                      icon: accountIconList[account.symbol],
-                                      backgroundColor:
-                                          accountColorListTheme[account.color],
-                                    ),
-                                    Text(
-                                      account.name,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelLarge!
-                                          .copyWith(
-                                            color: Theme.of(
-                                              context,
-                                            ).colorScheme.primary,
-                                          ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                                  : null,
                             ),
                           );
                         },
