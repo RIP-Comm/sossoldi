@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'settings_provider.dart';
@@ -12,6 +13,13 @@ final Map<Locale, String> supportedAppLocales = {
   const Locale('it'): 'Italiano',
   const Locale('pt'): 'Português',
 };
+
+/// [MaterialApp.builder] that keeps [Intl.defaultLocale], used by DateFormat
+/// for month and weekday names, in sync with the language shown by the app.
+Widget syncIntlLocale(BuildContext context, Widget? child) {
+  Intl.defaultLocale = Localizations.localeOf(context).languageCode;
+  return child!;
+}
 
 /// The language chosen in the settings, or null to follow the device.
 @Riverpod(keepAlive: true)

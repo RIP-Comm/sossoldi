@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -113,12 +112,7 @@ class Launcher extends ConsumerWidget {
       locale: ref.watch(appLocaleProvider),
       supportedLocales: supportedAppLocales.keys,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
-      localeListResolutionCallback: (locales, supportedLocales) {
-        final locale = basicLocaleListResolution(locales, supportedLocales);
-        // DateFormat uses Intl.defaultLocale for month and weekday names
-        Intl.defaultLocale = locale.languageCode;
-        return locale;
-      },
+      builder: syncIntlLocale,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: appThemeState.isDarkModeEnabled
