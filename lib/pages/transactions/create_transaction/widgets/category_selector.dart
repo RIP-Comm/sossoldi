@@ -8,6 +8,7 @@ import '../../../../model/category_transaction.dart';
 import '../../../../providers/categories_provider.dart';
 import '../../../../providers/transactions_provider.dart';
 import '../../../../ui/device.dart';
+import 'frequent_item.dart';
 
 class CategorySelector extends ConsumerStatefulWidget {
   const CategorySelector({required this.scrollController, super.key});
@@ -81,34 +82,12 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
                         shrinkWrap: true,
                         itemBuilder: (context, i) {
                           CategoryTransaction category = categories[i];
-                          return GestureDetector(
+                          return FrequentItem(
+                            label: category.name,
+                            icon: iconList[category.symbol],
+                            color: categoryColorListTheme[category.color],
+                            selected: selectedCategory?.id == category.id,
                             onTap: () => _selectCategory(context, category),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: Sizes.lg,
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  RoundedIcon(
-                                    icon: iconList[category.symbol],
-                                    backgroundColor:
-                                        categoryColorListTheme[category.color],
-                                  ),
-                                  Text(
-                                    category.name,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelLarge!
-                                        .copyWith(
-                                          color: Theme.of(
-                                            context,
-                                          ).colorScheme.primary,
-                                        ),
-                                  ),
-                                ],
-                              ),
-                            ),
                           );
                         },
                       ),
