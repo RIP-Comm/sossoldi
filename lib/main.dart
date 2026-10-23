@@ -11,6 +11,7 @@ import 'package:timezone/timezone.dart' as tz;
 
 import 'l10n/app_localizations.dart';
 import 'providers/banking_provider.dart';
+import 'providers/locale_provider.dart';
 import 'providers/settings_provider.dart';
 import 'providers/theme_provider.dart';
 import 'routes/routes.dart';
@@ -109,8 +110,8 @@ class Launcher extends ConsumerWidget {
     final bool isOnboardingCompleted = ref.watch(onBoardingCompletedProvider);
     return MaterialApp(
       title: 'Sossoldi',
-      // English comes first so it is the fallback for unsupported languages
-      supportedLocales: const [Locale('en'), Locale('it'), Locale('pt')],
+      locale: ref.watch(appLocaleProvider),
+      supportedLocales: supportedAppLocales.keys,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       localeListResolutionCallback: (locales, supportedLocales) {
         final locale = basicLocaleListResolution(locales, supportedLocales);

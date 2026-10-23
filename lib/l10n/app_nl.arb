@@ -243,5 +243,8 @@
   "recurrenceBimonthly": "Tweemaandelijks",
   "recurrenceQuarterly": "Per kwartaal",
   "recurrenceSemester": "Halfjaarlijks",
-  "recurrenceAnnual": "Jaarlijks"
+  "recurrenceAnnual": "Jaarlijks",
+  "language": "Taal",
+  "selectALanguage": "Kies een taal",
+  "systemLanguage": "Systeemtaal"
 }

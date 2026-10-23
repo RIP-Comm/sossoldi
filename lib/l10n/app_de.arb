@@ -243,5 +243,8 @@
   "recurrenceBimonthly": "Zweimonatlich",
   "recurrenceQuarterly": "Vierteljährlich",
   "recurrenceSemester": "Halbjährlich",
-  "recurrenceAnnual": "Jährlich"
+  "recurrenceAnnual": "Jährlich",
+  "language": "Sprache",
+  "selectALanguage": "Sprache auswählen",
+  "systemLanguage": "Systemsprache"
 }

@@ -6,10 +6,12 @@ import '../../../l10n/app_localizations.dart';
 import '../../../model/currency.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../providers/authentication_provider.dart';
+import '../../../providers/locale_provider.dart';
 import '../../../providers/theme_provider.dart';
 import '../../../services/database/repositories/currency_repository.dart';
 import '../../../ui/device.dart';
 import 'widgets/currency_selector_dialog.dart';
+import 'widgets/language_selector_dialog.dart';
 
 class GeneralSettingsPage extends ConsumerStatefulWidget {
   const GeneralSettingsPage({super.key});
@@ -23,15 +25,6 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
   //default values
   bool darkMode = false;
   String selectedCurrency = "EUR";
-  dynamic selectedLanguage = "🇬🇧";
-
-  // Vorrei non fare commenti riguardo questa lista di liste, ma questo è un commento
-  List<List<dynamic>> languages = [
-    ["🇬🇧", "English"],
-    ["🇮🇹", "Italiano"],
-    ["🇫🇷", "Français"],
-    ["🇩🇪", "Deutsch"],
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +36,7 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
         .read(currencyRepositoryProvider)
         .selectAll();
     final requiresAuthenticationState = ref.watch(authenticationStateProvider);
+    final selectedLocale = ref.watch(appLocaleProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -155,70 +149,41 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                 ),
               ],
             ),
-            /*
             Row(
               children: [
-                Text("Language",
-                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        color: Theme.of(context).colorScheme.primary)),
+                Text(
+                  l10n.language,
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
                 const Spacer(),
                 GestureDetector(
-                    onTap: () {
-                      selectLanguage();
-                    },
-                    child: CircleAvatar(
-                      radius: 30.0,
-                      backgroundColor: blue5,
-                      child: Center(child: Text(selectedLanguage, style: const TextStyle(fontSize: 30))),
-                    )),
+                  onTap: () =>
+                      LanguageSelectorDialog.selectLanguageDialog(context),
+                  child: CircleAvatar(
+                    radius: 30.0,
+                    backgroundColor: blue5,
+                    child: selectedLocale == null
+                        ? Icon(
+                            Icons.language,
+                            size: 25.0,
+                            color: Theme.of(context).colorScheme.onPrimary,
+                          )
+                        : Text(
+                            selectedLocale.languageCode.toUpperCase(),
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontSize: 20,
+                            ),
+                          ),
+                  ),
+                ),
               ],
-            ),*/
+            ),
           ],
         ),
       ),
     );
   }
-
-  // selectLanguage() {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) => AlertDialog(
-  //       title: Text(
-  //         'Select a language',
-  //         style: Theme.of(context).textTheme.titleLarge!.copyWith(
-  //           color: Theme.of(context).colorScheme.primary,
-  //         ),
-  //       ),
-  //       content: SizedBox(
-  //         height: 220,
-  //         width: 220,
-  //         child: ListView.builder(
-  //           itemCount: languages.length,
-  //           physics: const NeverScrollableScrollPhysics(),
-  //           shrinkWrap: true,
-  //           itemBuilder: (BuildContext context, int index) {
-  //             return GestureDetector(
-  //               onTap: () {
-  //                 setState(() {
-  //                   selectedLanguage = languages.elementAt(index)[0];
-  //                 });
-  //                 Navigator.pop(context);
-  //               },
-  //               child: ListTile(
-  //                 leading: Text(
-  //                   languages.elementAt(index)[0],
-  //                   style: const TextStyle(fontSize: 30),
-  //                 ),
-  //                 title: Text(
-  //                   languages.elementAt(index)[1],
-  //                   textAlign: TextAlign.center,
-  //                 ),
-  //               ),
-  //             );
-  //           },
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 }

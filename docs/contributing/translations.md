@@ -8,7 +8,7 @@ parent: How to contribute to the project
 # Translations
 
 Sossoldi uses the standard Flutter localization tooling (`flutter_localizations` + `gen-l10n`).
-The app follows the device language and falls back to English when the language is not supported.
+The app falls back to English when the language is not supported.
 
 ## Where the strings live
 
@@ -16,8 +16,11 @@ The app follows the device language and falls back to English when the language 
 - `lib/l10n/app_<language>.arb` contains the translation for each language (e.g. `app_it.arb`).
 - `lib/l10n/app_localizations*.dart` are generated and not committed: `flutter pub get` (or `flutter gen-l10n`) creates them.
 
-The languages offered to users are listed in `supportedLocales` in `lib/main.dart`.
-A language should be enabled there only once its translation has been reviewed by a native speaker.
+The app follows the device language unless the user picks one in *Settings → General → Language*.
+
+The languages offered to users are listed in `supportedAppLocales` in `lib/providers/locale_provider.dart`,
+and must also be listed under `CFBundleLocalizations` in `ios/Runner/Info.plist`.
+A language should be enabled only once its translation has been reviewed by a native speaker.
 
 ## Adding or changing a string
 
