@@ -107,17 +107,24 @@ class PieChartCategoryInfo extends ConsumerWidget {
             backgroundColor: categoryColorList[selectedCategory.color],
             padding: const EdgeInsets.all(Sizes.sm),
           ),
-        Text(
-          categoryValue != null
-              ? "${categoryValue.toStringAsFixed(2)} ${currencyState.symbol}"
-              : "${total.toStringAsFixed(2)} ${currencyState.symbol}",
-          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-            color:
-                (categoryValue != null && categoryValue >= 0) ||
-                    (selectedCategory == null && total >= 0)
-                ? green
-                : red,
-            fontSize: 18,
+        SizedBox(
+          // Fits the hole of the donut, long amounts shrink instead of overlapping
+          width: 2 * 60,
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              categoryValue != null
+                  ? "${categoryValue.toStringAsFixed(2)} ${currencyState.symbol}"
+                  : "${total.toStringAsFixed(2)} ${currencyState.symbol}",
+              style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                color:
+                    (categoryValue != null && categoryValue >= 0) ||
+                        (selectedCategory == null && total >= 0)
+                    ? green
+                    : red,
+                fontSize: 18,
+              ),
+            ),
           ),
         ),
         if (selectedCategory != null)
