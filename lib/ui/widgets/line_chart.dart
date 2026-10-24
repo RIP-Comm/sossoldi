@@ -2,15 +2,18 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../providers/currency_provider.dart';
 import '../device.dart';
+import '../extensions.dart';
 import 'blur_widget.dart';
 
 enum Period { month, year }
 
 //This class can be used when we need to draw a line chart with one or two lines
-class LineChartWidget extends StatefulWidget {
+class LineChartWidget extends ConsumerStatefulWidget {
   final List<FlSpot> lineData; // this should be a list of Flspot(x,y)
   final Color? lineColor;
 
@@ -25,7 +28,6 @@ class LineChartWidget extends StatefulWidget {
     DateTime.now().year,
     DateTime.now().month,
   );
-  final int nXLabel = 10;
   final double minY;
 
   final Color? colorBackground;
@@ -41,7 +43,6 @@ class LineChartWidget extends StatefulWidget {
     this.enableGapFilling = true,
     this.ignoreBlur = true,
     this.period = Period.month,
-    int nXLabel = 10,
     double? minY,
   }) : lineData = enableGapFilling ? fillGaps(lineData) : lineData,
        line2Data = enableGapFilling ? fillGaps(line2Data) : line2Data,
@@ -74,10 +75,10 @@ class LineChartWidget extends StatefulWidget {
   }
 
   @override
-  State<LineChartWidget> createState() => _LineChartSample2State();
+  ConsumerState<LineChartWidget> createState() => _LineChartSample2State();
 }
 
-class _LineChartSample2State extends State<LineChartWidget> {
+class _LineChartSample2State extends ConsumerState<LineChartWidget> {
   _LineChartSample2State();
 
   @override
@@ -125,56 +126,23 @@ class _LineChartSample2State extends State<LineChartWidget> {
       fontWeight: FontWeight.normal,
       fontSize: 8,
     );
-    Widget text;
+    final int index = value.toInt();
+    String label = '';
     switch (widget.period) {
       case Period.year:
-        switch (value.toInt()) {
-          case 1:
-            text = Text('Feb', style: style);
-            break;
-          case 2:
-            text = Text('Mar', style: style);
-            break;
-          case 3:
-            text = Text('Apr', style: style);
-            break;
-          case 4:
-            text = Text('May', style: style);
-            break;
-          case 5:
-            text = Text('Jun', style: style);
-            break;
-          case 6:
-            text = Text('Jul', style: style);
-            break;
-          case 7:
-            text = Text('Aug', style: style);
-            break;
-          case 8:
-            text = Text('Sep', style: style);
-            break;
-          case 9:
-            text = Text('Oct', style: style);
-            break;
-          case 10:
-            text = Text('Nov', style: style);
-            break;
-          default:
-            text = Text('', style: style);
-            break;
-        }
+        label = DateFormat.MMM().format(DateTime(2000, index + 1));
         break;
       case Period.month:
-        int step = (widget.currentMonthDays / widget.nXLabel).round();
-        if (value.toInt() % step == 1 &&
-            value.toInt() != widget.currentMonthDays) {
-          text = Text((value + 1).toStringAsFixed(0), style: style);
-        } else {
-          text = Text('', style: style);
-        }
+        // Days 1, 5, 10, 15, ... like a calendar
+        final int day = index + 1;
+        if (day == 1 || day % 5 == 0) label = '$day';
     }
 
-    return SideTitleWidget(meta: meta, child: text);
+    return SideTitleWidget(
+      meta: meta,
+      fitInside: SideTitleFitInsideData.fromTitleMeta(meta),
+      child: Text(label, style: style),
+    );
   }
 
   LineChartData mainData() {
@@ -252,42 +220,29 @@ class _LineChartSample2State extends State<LineChartWidget> {
                 ? DateFormat(DateFormat.ABBR_MONTH_DAY).format(date)
                 : DateFormat(DateFormat.ABBR_MONTH).format(date);
 
-            LineTooltipItem first = LineTooltipItem(
-              '$dateFormat \n\n',
-              TextStyle(
-                color: Theme.of(context).colorScheme.onSurface,
-                fontWeight: FontWeight.bold,
-              ),
-              children: [
-                TextSpan(
-                  text: touchedBarSpots[0].y.toString(),
-                  style: TextStyle(
-                    color: line2Color,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-              ],
-            );
+            final currencySymbol = ref.read(currencyStateProvider).symbol;
 
-            var others = touchedBarSpots.sublist(1).map((barSpot) {
-              final flSpot = barSpot;
-
+            // fl_chart sorts the spots by distance from the finger, so the
+            // colour comes from each spot's own line.
+            return touchedBarSpots.asMap().entries.map((entry) {
+              final barSpot = entry.value;
               return LineTooltipItem(
-                '',
-                const TextStyle(fontWeight: FontWeight.bold),
+                entry.key == 0 ? '$dateFormat \n\n' : '',
+                TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
+                  fontWeight: FontWeight.bold,
+                ),
                 children: [
                   TextSpan(
-                    text: flSpot.y.toString(),
+                    text: '${barSpot.y.toCurrency()}$currencySymbol',
                     style: TextStyle(
-                      color: lineColor,
+                      color: barSpot.bar.color,
                       fontWeight: FontWeight.w900,
                     ),
                   ),
                 ],
               );
             }).toList();
-
-            return [first, ...others];
           },
         ),
       ),
