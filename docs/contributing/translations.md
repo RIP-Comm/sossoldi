@@ -45,7 +45,18 @@ Only the developer menu strings are allowed there.
 
 ## Crowdin
 
-Translations can be managed by the community on Crowdin (configuration in `crowdin.yml`), using the [Crowdin CLI](https://crowdin.github.io/crowdin-cli/):
+Translations are managed by the community on Crowdin (configuration in `crowdin.yml`).
+Translators only need a Crowdin account and work on the website, no code involved.
+
+Maintainers sync the files with the [Crowdin CLI](https://crowdin.github.io/crowdin-cli/).
+It needs a personal access token (Crowdin → Account Settings → API) of a user with at least Manager permissions on the project,
+set in the shell and never committed:
+
+```bash
+export CROWDIN_PERSONAL_TOKEN=<your token>
+```
+
+Then:
 
 ```bash
 # Upload new or changed English strings
@@ -55,5 +66,7 @@ crowdin upload sources
 crowdin download
 flutter gen-l10n
 ```
+
+When the Crowdin project is first set up, also run `crowdin upload translations` once, so the existing translations are imported instead of starting from zero.
 
 Download the latest translations before editing `.arb` files by hand, so that changes made on Crowdin are not overwritten.
