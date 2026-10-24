@@ -76,17 +76,24 @@ class AccountsPieChart extends ConsumerWidget {
                       accountColorList[accounts[selectedIndex].color],
                   padding: const EdgeInsets.all(Sizes.sm),
                 ),
-              Text(
-                (selectedIndex != -1)
-                    ? "${amounts[accounts[selectedIndex].id]!.toStringAsFixed(2)} ${currencyState.symbol}"
-                    : "${total.toStringAsFixed(2)} ${currencyState.symbol}",
-                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                  color:
-                      ((selectedIndex != -1 &&
-                              amounts[accounts[selectedIndex].id]! > 0) ||
-                          (selectedIndex == -1 && total > 0))
-                      ? green
-                      : red,
+              SizedBox(
+                // Fits the hole of the donut, long amounts shrink instead of overlapping
+                width: 2 * 60,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    (selectedIndex != -1)
+                        ? "${amounts[accounts[selectedIndex].id]!.toStringAsFixed(2)} ${currencyState.symbol}"
+                        : "${total.toStringAsFixed(2)} ${currencyState.symbol}",
+                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                      color:
+                          ((selectedIndex != -1 &&
+                                  amounts[accounts[selectedIndex].id]! > 0) ||
+                              (selectedIndex == -1 && total > 0))
+                          ? green
+                          : red,
+                    ),
+                  ),
                 ),
               ),
               (selectedIndex != -1)
