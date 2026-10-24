@@ -1,6 +1,7 @@
 import 'dart:developer' as dev;
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../model/recurring_transaction.dart';
 import '../../../model/transaction.dart';
@@ -116,6 +117,19 @@ class RecurringTransactionRepository {
     );
   }
 
+  static const _lastCheckKey = 'last_recurring_transactions_check';
+
+  /// Runs [checkRecurringTransactions] at most once a day.
+  Future<void> dailyCheck(SharedPreferences prefs) async {
+    final lastCheck = prefs.getString(_lastCheckKey);
+    if (lastCheck != null &&
+        DateTime.now().difference(DateTime.parse(lastCheck)).inDays < 1) {
+      return;
+    }
+    await checkRecurringTransactions();
+    await prefs.setString(_lastCheckKey, DateTime.now().toIso8601String());
+  }
+
   Future<void> checkRecurringTransactions() async {
     // get all recurring transactions active
     final transactions = await selectAllActive();
@@ -143,7 +157,7 @@ class RecurringTransactionRepository {
           throw Exception('No amount provided for entity "$entity"');
         }
 
-        populateRecurringTransaction(
+        await populateRecurringTransaction(
           entity,
           lastTransactionDate,
           transaction,
@@ -177,12 +191,12 @@ class RecurringTransactionRepository {
     return Transaction.fromJson(result.first).date;
   }
 
-  void populateRecurringTransaction(
+  Future<void> populateRecurringTransaction(
     String scope,
     DateTime lastTransactionDate,
     RecurringTransaction transaction,
     int amount,
-  ) {
+  ) async {
     if (amount == 0) {
       throw Exception('No amount provided for entity "$scope"');
     }
@@ -267,10 +281,10 @@ class RecurringTransactionRepository {
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       );
-      TransactionsRepository(database: _sossoldiDB).insert(addTr);
+      await TransactionsRepository(database: _sossoldiDB).insert(addTr);
     }
 
     // update the last insertion date
-    updateItem(transaction.copy(lastInsertion: now));
+    await updateItem(transaction.copy(lastInsertion: now));
   }
 }
