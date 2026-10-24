@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
 import '../../../constants/style.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../ui/widgets/rounded_icon.dart';
 import '../../../model/category_transaction.dart';
@@ -24,6 +25,7 @@ class CategoriesPieChart extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    var l10n = AppLocalizations.of(context)!;
     final selectedIndex = ref.watch(selectedListIndexProvider);
     final selectedCategory = (selectedIndex >= 0)
         ? categories[selectedIndex]
@@ -93,7 +95,7 @@ class CategoriesPieChart extends ConsumerWidget {
               ),
               (selectedCategory != null)
                   ? Text(selectedCategory.name)
-                  : const Text("Total"),
+                  : Text(l10n.total),
             ],
           ),
         ],

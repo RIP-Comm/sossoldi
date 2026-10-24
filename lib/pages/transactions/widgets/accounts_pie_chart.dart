@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
 import '../../../constants/style.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../ui/widgets/rounded_icon.dart';
 import '../../../model/bank_account.dart';
@@ -91,7 +92,7 @@ class AccountsPieChart extends ConsumerWidget {
               ),
               (selectedIndex != -1)
                   ? Text(accounts[selectedIndex].name)
-                  : const Text("Total"),
+                  : Text(AppLocalizations.of(context)!.total),
             ],
           ),
         ],

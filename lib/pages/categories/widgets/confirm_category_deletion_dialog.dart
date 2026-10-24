@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../model/category_transaction.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../ui/device.dart';
 import '../../../ui/widgets/native_alert_dialog.dart';
 
@@ -16,32 +17,29 @@ class ConfirmCategoryDeletionDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return AdaptiveDialog(
-      title: const Text('Delete category'),
+      title: Text(l10n.deleteCategory),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: Sizes.md,
         children: [
-          Text(
-            'Are you sure you want to delete the category named "${category.name}"?',
-          ),
-          const Text(
-            'All recurring transactions and budgets linked to this category will be deleted.',
-          ),
+          Text(l10n.deleteCategoryConfirm(category.name)),
+          Text(l10n.deleteCategoryLinkedWarning),
           const SizedBox(height: Sizes.md),
-          const Text('This action cannot be undone.'),
+          Text(l10n.actionCannotBeUndone),
         ],
       ),
       actions: [
         AdaptiveDialogAction(
-          child: const Text('Cancel'),
+          child: Text(l10n.cancel),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         AdaptiveDialogAction(
-          child: const Text('Delete'),
+          child: Text(l10n.delete),
           isDestructiveAction: true,
           onPressed: onPressed,
         ),

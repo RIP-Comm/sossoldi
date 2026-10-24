@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../ui/extensions.dart';
 import '../../ui/widgets/line_chart.dart';
 import '../../model/transaction.dart';
@@ -25,7 +26,7 @@ class _GraphsPageState extends ConsumerState<GraphsPage> {
       currentYearMontlyTransactionsProvider,
     );
     final currencyState = ref.watch(currencyStateProvider);
-
+    var l10n = AppLocalizations.of(context)!;
     return ListView(
       children: [
         const SizedBox(height: Sizes.lg),
@@ -59,7 +60,7 @@ class _GraphsPageState extends ConsumerState<GraphsPage> {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Text(
-                                "Available liquidity",
+                                l10n.availableLiquidity,
                                 style: Theme.of(context).textTheme.titleLarge
                                     ?.copyWith(
                                       color: Theme.of(
@@ -131,7 +132,7 @@ class _GraphsPageState extends ConsumerState<GraphsPage> {
                                 ),
                               ),
                               Text(
-                                " VS last month",
+                                l10n.vsLastMonth,
                                 style: Theme.of(context).textTheme.labelLarge
                                     ?.copyWith(fontWeight: FontWeight.w300),
                               ),
@@ -149,7 +150,7 @@ class _GraphsPageState extends ConsumerState<GraphsPage> {
                 );
               },
               loading: () => const SizedBox(),
-              error: (error, stack) => Text('Error: $error'),
+              error: (error, stack) => Text(l10n.errorOccurred(error)),
             ),
         const SizedBox(height: Sizes.xl),
         const AccountsCard(),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/style.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../providers/categories_provider.dart';
 import '../../../providers/recurring_transactions_provider.dart';
 import '../../../providers/transactions_provider.dart';
@@ -54,17 +55,18 @@ class _EditRecurringTransactionState
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final selectedRecurringTransaction = ref.watch(
       selectedRecurringTransactionUpdateProvider,
     );
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Edit recurring transaction"),
+        title: Text(l10n.editRecurringTransaction),
         leadingWidth: 100,
         leading: TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
+          child: Text(l10n.cancel),
         ),
         actions: [
           if (selectedRecurringTransaction != null)
@@ -104,7 +106,7 @@ class _EditRecurringTransactionState
                     bottom: Sizes.sm,
                   ),
                   child: Text(
-                    "DETAILS (any change will affect only future transactions)",
+                    l10n.detailsExplanation.toUpperCase(),
                     style: Theme.of(context).textTheme.labelLarge!.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                     ),
@@ -117,7 +119,7 @@ class _EditRecurringTransactionState
                       LabelListTile(noteController),
                       const Divider(height: 1, color: grey1),
                       DetailsListTile(
-                        title: "Account",
+                        title: l10n.account,
                         icon: Icons.account_balance_wallet,
                         value: ref.watch(selectedBankAccountProvider)?.name,
                         callback: () {
@@ -146,13 +148,13 @@ class _EditRecurringTransactionState
                       ),
                       const Divider(height: 1, color: grey1),
                       NonEditableDetailsListTile(
-                        title: "Category",
+                        title: l10n.category,
                         icon: Icons.list_alt,
                         value: ref.watch(selectedCategoryProvider)?.name,
                       ),
                       const Divider(height: 1, color: grey1),
                       NonEditableDetailsListTile(
-                        title: "Date Start",
+                        title: l10n.dateStart,
                         icon: Icons.calendar_month,
                         value: startDate.formatEDMY(),
                       ),
@@ -211,7 +213,7 @@ class _EditRecurringTransactionState
                     ),
                   ),
                   child: Text(
-                    "UPDATE TRANSACTION",
+                    l10n.updateTransaction.toUpperCase(),
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                       color: Theme.of(context).colorScheme.onPrimary,
                     ),

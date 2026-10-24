@@ -8,6 +8,7 @@ import 'package:path/path.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../../constants/exceptions.dart';
 // Models
 import '../../model/bank_account.dart';
 import '../../model/bank_connection.dart';
@@ -140,7 +141,7 @@ class SossoldiDatabase {
     try {
       final file = File(csvFilePath);
       if (!await file.exists()) {
-        throw Exception('CSV file not found');
+        throw CsvNotFoundException();
       }
 
       final String csvData = await file.readAsString();
@@ -149,7 +150,7 @@ class SossoldiDatabase {
       );
 
       if (rows.isEmpty) {
-        throw Exception('CSV file is empty');
+        throw CsvEmptyException();
       }
 
       // First row contains headers
@@ -157,7 +158,7 @@ class SossoldiDatabase {
       final int tableNameIndex = headers.indexOf('table_name');
 
       if (tableNameIndex == -1) {
-        throw Exception('CSV file missing table_name column');
+        throw CsvExpectedColumnException(column: 'table_name');
       }
 
       // Group rows by table
@@ -202,7 +203,7 @@ class SossoldiDatabase {
           } catch (e) {
             dev.log('Error importing table $tableName: $e');
             // Abort the whole transaction so no table is left emptied
-            throw Exception('Failed to import table $tableName: $e');
+            throw CsvImportTableException(tableName: tableName, error: e);
           }
         }
       });

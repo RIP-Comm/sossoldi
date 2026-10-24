@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../device.dart';
 
 void showSnackBar(
@@ -27,7 +28,7 @@ void showSnackBar(
               onAction.call();
               closeSnackBar(context);
             },
-            child: Text(actionLabel ?? 'Close'),
+            child: Text(actionLabel ?? AppLocalizations.of(context)!.close),
           ),
       ],
     ),

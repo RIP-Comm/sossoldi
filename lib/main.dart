@@ -8,7 +8,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
+import 'l10n/app_localizations.dart';
 import 'providers/banking_provider.dart';
+import 'providers/locale_provider.dart';
 import 'providers/settings_provider.dart';
 import 'providers/theme_provider.dart';
 import 'routes/routes.dart';
@@ -107,6 +109,10 @@ class Launcher extends ConsumerWidget {
     final bool isOnboardingCompleted = ref.watch(onBoardingCompletedProvider);
     return MaterialApp(
       title: 'Sossoldi',
+      locale: ref.watch(appLocaleProvider),
+      supportedLocales: supportedAppLocales.keys,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      builder: syncIntlLocale,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: appThemeState.isDarkModeEnabled
