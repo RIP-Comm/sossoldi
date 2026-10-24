@@ -1,4 +1,5 @@
 // Satistics page.
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -10,6 +11,16 @@ import '../../providers/statistics_provider.dart';
 import '../../ui/device.dart';
 import 'widgets/categories/categories_card.dart';
 import 'widgets/accounts/accounts_card.dart';
+
+/// Change of the balance between the last two points, in percent of the
+/// previous balance (in absolute value, so a negative balance that improves is
+/// a gain). Null when there aren't two points or the previous balance is 0.
+double? monthOverMonthChange(List<FlSpot> balances) {
+  if (balances.length < 2) return null;
+  final previous = balances[balances.length - 2].y;
+  if (previous == 0) return null;
+  return (balances.last.y - previous) / previous.abs() * 100;
+}
 
 class GraphsPage extends ConsumerStatefulWidget {
   const GraphsPage({super.key});
@@ -33,20 +44,9 @@ class _GraphsPageState extends ConsumerState<GraphsPage> {
             .watch(statisticsProvider)
             .when(
               data: (value) {
-                double percentGainLoss = 0;
-                if (currentYearMonthlyTransactions.length > 1) {
-                  percentGainLoss =
-                      ((currentYearMonthlyTransactions.last.y -
-                              currentYearMonthlyTransactions[currentYearMonthlyTransactions
-                                          .length -
-                                      2]
-                                  .y) /
-                          currentYearMonthlyTransactions[currentYearMonthlyTransactions
-                                      .length -
-                                  2]
-                              .y) *
-                      100;
-                }
+                final percentGainLoss = monthOverMonthChange(
+                  currentYearMonthlyTransactions,
+                );
                 return Column(
                   children: [
                     Container(
@@ -110,33 +110,38 @@ class _GraphsPageState extends ConsumerState<GraphsPage> {
                               ),
                             ],
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.surface,
-                                  borderRadius: BorderRadius.circular(
-                                    Sizes.borderRadiusSmall,
+                          if (percentGainLoss != null)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.surface,
+                                    borderRadius: BorderRadius.circular(
+                                      Sizes.borderRadiusSmall,
+                                    ),
+                                  ),
+                                  padding: const EdgeInsets.all(Sizes.xxs),
+                                  child: Text(
+                                    "${percentGainLoss.toCurrency()}%",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          color: percentGainLoss.toColor(),
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                   ),
                                 ),
-                                padding: const EdgeInsets.all(Sizes.xxs),
-                                child: Text(
-                                  "${percentGainLoss.toCurrency()}%",
-                                  style: Theme.of(context).textTheme.bodyMedium
-                                      ?.copyWith(
-                                        color: percentGainLoss.toColor(),
-                                        fontWeight: FontWeight.w600,
-                                      ),
+                                Text(
+                                  " VS last month",
+                                  style: Theme.of(context).textTheme.labelLarge
+                                      ?.copyWith(fontWeight: FontWeight.w300),
                                 ),
-                              ),
-                              Text(
-                                " VS last month",
-                                style: Theme.of(context).textTheme.labelLarge
-                                    ?.copyWith(fontWeight: FontWeight.w300),
-                              ),
-                            ],
-                          ),
+                              ],
+                            ),
                         ],
                       ),
                     ),
