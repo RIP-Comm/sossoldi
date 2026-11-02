@@ -1,6 +1,6 @@
-import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -74,11 +74,20 @@ class _Picker extends FilePicker {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   late EnableBankingKeyMaterial material;
+  String? copiedText;
   setUpAll(() {
     material = generateEnableBankingKeyMaterial(1024);
   });
   setUp(() {
     FlutterSecureStorage.setMockInitialValues({});
+    copiedText = null;
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(SystemChannels.platform, (call) async {
+          if (call.method == 'Clipboard.setData') {
+            copiedText = (call.arguments as Map)['text'] as String;
+          }
+          return null;
+        });
     FilePicker.platform = _Picker();
   });
   const store = EnableBankingCredentialsStore();
@@ -127,7 +136,26 @@ void main() {
       final first = await store.readSetupDraft();
       expect(first!.privateKeyPem, material.privateKeyPem);
       expect(first.certificatePem, material.certificatePem);
+      expect(find.text('Copy public certificate'), findsNothing);
+      expect(find.text('Export public certificate'), findsNothing);
+      expect(find.text('Previous step'), findsNothing);
       await tap(tester, 'Continue to registration');
+      expect(find.text('Copy public certificate'), findsOneWidget);
+      expect(find.text('Export public certificate'), findsOneWidget);
+      expect(
+        tester.getTopLeft(find.text('Open Enable Banking')).dy,
+        lessThan(tester.getTopLeft(find.text('Copy public certificate')).dy),
+      );
+      expect(
+        tester.getTopLeft(find.text('Copy public certificate')).dy,
+        lessThan(tester.getTopLeft(find.text('Copy return address')).dy),
+      );
+      await tap(tester, 'Copy return address');
+      expect(copiedText, first.redirectUri);
+      await tap(tester, 'Copy public certificate');
+      final copied = copiedText!;
+      expect(copied, material.certificatePem);
+      expect(copied, isNot(contains('PRIVATE KEY')));
       final picker = _Picker();
       final previous = FilePicker.platform;
       FilePicker.platform = picker;
@@ -147,6 +175,9 @@ void main() {
         first.privateKeyPem,
       );
       await tap(tester, 'I have my Application ID');
+      expect(find.text('Advanced options'), findsNothing);
+      expect(find.byType(DropdownButtonFormField<String>), findsNothing);
+      expect(find.text('Previous step'), findsNothing);
       await tester.enterText(find.byType(TextField), 'saved-progress');
       await tester.pumpAndSettle();
       await pump(tester, generator, _Settings(), id: 'reopened-again');
@@ -190,6 +221,23 @@ void main() {
       expect(find.text('Choose your bank'), findsOneWidget);
       expect(await store.readSetupDraft(), isNull);
       expect((await store.readCredentials())!.config.appId, 'synthetic-app');
+    },
+  );
+
+  testWidgets(
+    'configured application ID can be copied without changing credentials',
+    (tester) async {
+      const config = EnableBankingConfig(appId: 'configured-app');
+      await store.saveCredentials(
+        appId: config.appId,
+        privateKeyPem: material.privateKeyPem,
+        config: config,
+      );
+      await pump(tester, _Generator(material), _Settings(config));
+      await tap(tester, 'Copy Application ID');
+      expect(copiedText, config.appId);
+      expect((await store.readCredentials())!.config.appId, config.appId);
+      expect(find.text('Application ID copied'), findsOneWidget);
     },
   );
 
@@ -246,12 +294,14 @@ void main() {
       await pump(tester, generator, _Settings());
       await tap(tester, 'First-time setup');
       await tap(tester, 'Generate key & certificate');
-      await tap(tester, 'Previous step');
+      await tester.tap(find.byTooltip('Back'));
+      await tester.pumpAndSettle();
       await tap(tester, 'I already have credentials');
       await tester.enterText(find.byType(TextField).last, 'replacement-key');
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
-      await tap(tester, 'Previous step');
+      await tester.tap(find.byTooltip('Back'));
+      await tester.pumpAndSettle();
       await tap(tester, 'First-time setup');
       expect((await store.readSetupDraft())!.certificatePem, isNull);
       expect(find.text('Export public certificate'), findsNothing);

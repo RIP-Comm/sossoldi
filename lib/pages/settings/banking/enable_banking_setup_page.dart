@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../providers/banking_ui_provider.dart';
+import '../../../ui/device.dart';
 import '../../../ui/snack_bars/snack_bar.dart';
 import 'helpers/enable_banking_certificate_file_picker.dart';
 import 'helpers/pem_file_picker.dart';
@@ -244,6 +245,11 @@ class _EnableBankingSetupPageState
         error = null;
       }
     });
+  }
+
+  Future<void> _copy(String value, String message) async {
+    await Clipboard.setData(ClipboardData(text: value));
+    if (mounted) showSnackBar(context, message: message);
   }
 
   Future<void> _import() async {
@@ -529,14 +535,9 @@ class _EnableBankingSetupPageState
     final child = Text(label, textAlign: TextAlign.center);
     final style = ButtonStyle(
       minimumSize: const WidgetStatePropertyAll(Size(48, 48)),
-      foregroundColor: WidgetStatePropertyAll(
-        primary
-            ? Theme.of(context).colorScheme.onPrimary
-            : Theme.of(context).colorScheme.onSurface,
-      ),
-      backgroundColor: primary
-          ? WidgetStatePropertyAll(Theme.of(context).colorScheme.primary)
-          : null,
+      foregroundColor: primary
+          ? null
+          : WidgetStatePropertyAll(Theme.of(context).colorScheme.onSurface),
     );
     return SizedBox(
       width: double.infinity,
@@ -571,27 +572,51 @@ class _EnableBankingSetupPageState
     String label, {
     String? issue,
     bool secret = false,
-  }) => TextField(
-    key: controller == appId ? appField : keyField,
-    focusNode: controller == appId ? appFocus : keyFocus,
-    controller: controller,
-    enabled: !busy,
-    obscureText: secret && !pemVisible,
-    maxLines: secret && pemVisible ? 6 : 1,
-    autocorrect: false,
-    enableSuggestions: false,
-    onChanged: secret ? _privateKeyChanged : _changed,
-    decoration: InputDecoration(
-      labelText: label,
-      errorText: issue,
-      errorMaxLines: 5,
-      suffixIcon: secret
-          ? IconButton(
-              tooltip: pemVisible ? 'Hide private key' : 'Show private key',
-              onPressed: () => setState(() => pemVisible = !pemVisible),
-              icon: Icon(pemVisible ? Icons.visibility_off : Icons.visibility),
-            )
-          : null,
+  }) => Container(
+    padding: const EdgeInsets.symmetric(
+      horizontal: Sizes.lg,
+      vertical: Sizes.md,
+    ),
+    decoration: BoxDecoration(
+      color: Theme.of(context).colorScheme.surface,
+      borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label.toUpperCase(),
+          style: Theme.of(context).textTheme.labelLarge,
+        ),
+        TextField(
+          key: controller == appId ? appField : keyField,
+          focusNode: controller == appId ? appFocus : keyFocus,
+          controller: controller,
+          enabled: !busy,
+          obscureText: secret && !pemVisible,
+          maxLines: secret && pemVisible ? 6 : 1,
+          autocorrect: false,
+          enableSuggestions: false,
+          style: Theme.of(context).textTheme.titleLarge,
+          onChanged: secret ? _privateKeyChanged : _changed,
+          decoration: InputDecoration(
+            hintText: label,
+            errorText: issue,
+            errorMaxLines: 5,
+            suffixIcon: secret
+                ? IconButton(
+                    tooltip: pemVisible
+                        ? 'Hide private key'
+                        : 'Show private key',
+                    onPressed: () => setState(() => pemVisible = !pemVisible),
+                    icon: Icon(
+                      pemVisible ? Icons.visibility_off : Icons.visibility,
+                    ),
+                  )
+                : null,
+          ),
+        ),
+      ],
     ),
   );
 
@@ -605,6 +630,10 @@ class _EnableBankingSetupPageState
       'Your credentials are stored securely on this device. Manage your bank connections below.',
     ),
     Text('Application ID: ${config.appId}'),
+    _button(
+      'Copy Application ID',
+      () => unawaited(_copy(config.appId, 'Application ID copied')),
+    ),
     Text(
       config.environment == EnableBankingEnvironment.sandbox
           ? 'Sandbox · verified'
@@ -622,16 +651,31 @@ class _EnableBankingSetupPageState
     _button('Clear credentials', _confirmClear),
   ];
 
+  Widget _heading(String text) =>
+      Text(text, style: Theme.of(context).textTheme.headlineMedium);
+
+  Widget _description(String text) =>
+      Text(text, style: Theme.of(context).textTheme.bodySmall);
+
+  Widget _section(String title, List<Widget> children) => Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      Text(title, style: Theme.of(context).textTheme.titleLarge),
+      for (final child in children)
+        Padding(
+          padding: const EdgeInsets.only(top: Sizes.md),
+          child: child,
+        ),
+    ],
+  );
+
   List<Widget> _stepContents() => switch (step) {
     0 => [
-      const Text(
-        'Connect your bank with Enable Banking',
-        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-      ),
-      const Text(
+      _heading('Connect your bank with Enable Banking'),
+      _description(
         'You will need an Enable Banking application and a browser to register it. Sossoldi guides you through the setup, then lets you choose your bank.',
       ),
-      const Text(
+      _description(
         'Your private key stays in secure storage on this device. Only the public certificate is exported. You can leave and resume this setup.',
       ),
       _button('First-time setup', () {
@@ -644,23 +688,21 @@ class _EnableBankingSetupPageState
       }),
     ],
     1 => [
-      const Text(
-        'Prepare your key',
-        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-      ),
-      const Text(
-        'Generate a private key and its public certificate. Sossoldi keeps them together so you can resume setup without generating another key.',
-      ),
-      if (certificate != null) _notice('Your key is ready and saved securely.'),
-      _button(
-        certificate == null
-            ? 'Generate key & certificate'
-            : 'Generate a replacement key',
-        () => unawaited(_generate()),
-        primary: certificate == null,
-      ),
-      if (certificate != null)
-        _button('Export public certificate', () => unawaited(_export())),
+      _heading('Prepare your key'),
+      _section('Private key & public certificate', [
+        _description(
+          'Generate a private key and its public certificate. Sossoldi keeps them together so you can resume setup without generating another key.',
+        ),
+        if (certificate != null)
+          _notice('Your key is ready and saved securely.'),
+        _button(
+          certificate == null
+              ? 'Generate key & certificate'
+              : 'Generate a replacement key',
+          () => unawaited(_generate()),
+          primary: certificate == null,
+        ),
+      ]),
       if (certificate != null)
         _button(
           'Continue to registration',
@@ -669,34 +711,42 @@ class _EnableBankingSetupPageState
         ),
     ],
     2 => [
-      const Text(
-        'Register your application',
-        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-      ),
-      const Text(
-        '1. Export the public certificate below.\n2. Open Enable Banking and create your application.\n3. Upload the certificate and register this return address.\n4. Copy the Application ID and return to Sossoldi.',
-      ),
-      if (certificate != null)
-        _button('Export public certificate', () => unawaited(_export())),
-      const Text(
-        'Return address',
-        style: TextStyle(fontWeight: FontWeight.bold),
-      ),
-      SelectableText(redirect.text),
-      _button(
-        'Copy return address',
-        () => unawaited(
-          Clipboard.setData(ClipboardData(text: redirect.text)).then((_) {
-            if (mounted) {
-              showSnackBar(context, message: 'Return address copied');
-            }
-          }),
+      _heading('Register your application'),
+      _section('1. Open Enable Banking', [
+        _description('Open Enable Banking and create your application.'),
+        _description(
+          'Your progress is saved before opening the browser. Return here when registration is complete.',
         ),
-      ),
-      _button('Open Enable Banking', () => unawaited(_portal())),
-      const Text(
-        'Your progress is saved before opening the browser. Return here when registration is complete.',
-      ),
+        _button('Open Enable Banking', () => unawaited(_portal())),
+      ]),
+      _section('2. Public certificate', [
+        _description(
+          'Copy the public certificate into Enable Banking, or export it as a file to upload.',
+        ),
+        if (certificate != null)
+          _button(
+            'Copy public certificate',
+            () => unawaited(_copy(certificate!, 'Public certificate copied')),
+          ),
+        if (certificate != null)
+          _button('Export public certificate', () => unawaited(_export())),
+      ]),
+      _section('3. Return address', [
+        _description('Register this return address in Enable Banking.'),
+        SelectableText(
+          redirect.text,
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+        _button(
+          'Copy return address',
+          () => unawaited(_copy(redirect.text, 'Return address copied')),
+        ),
+      ]),
+      _section('4. Application ID', [
+        _description(
+          'Copy the Application ID from Enable Banking and return to Sossoldi.',
+        ),
+      ]),
       _button(
         'I have my Application ID',
         () => unawaited(_go(3)),
@@ -704,11 +754,8 @@ class _EnableBankingSetupPageState
       ),
     ],
     _ => [
-      const Text(
-        'Verify your credentials',
-        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-      ),
-      Text(
+      _heading('Verify your credentials'),
+      _description(
         existing
             ? 'Enter the Application ID and matching private key from your existing application.'
             : 'Enter the Application ID from Enable Banking. Your generated key is already saved.',
@@ -723,52 +770,44 @@ class _EnableBankingSetupPageState
         _button('Import private key from file', () => unawaited(_import())),
       ] else if (keyError != null)
         _notice(keyError!, key: keyField),
-      ExpansionTile(
-        key: ValueKey(redirectError != null),
-        initiallyExpanded: redirectError != null,
-        title: const Text('Advanced options'),
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: DropdownButtonFormField<String>(
-              key: redirectField,
-              initialValue:
-                  {kEbRedirectUri, kEbRelayRedirectUri}.contains(redirect.text)
-                  ? redirect.text
-                  : kEbRelayRedirectUri,
-              isExpanded: true,
-              decoration: InputDecoration(
-                labelText: 'Registered return address',
-                errorText: redirectError,
-                errorMaxLines: 5,
+      if (existing)
+        _section('Registered return address', [
+          _description(
+            'Choose the exact address registered in Enable Banking. The environment is detected when your credentials are verified.',
+          ),
+          DropdownButtonFormField<String>(
+            key: redirectField,
+            initialValue:
+                {kEbRedirectUri, kEbRelayRedirectUri}.contains(redirect.text)
+                ? redirect.text
+                : kEbRelayRedirectUri,
+            isExpanded: true,
+            decoration: InputDecoration(
+              labelText: 'Registered return address',
+              errorText: redirectError,
+              errorMaxLines: 5,
+            ),
+            items: const [
+              DropdownMenuItem(
+                value: kEbRelayRedirectUri,
+                child: Text('HTTPS return page'),
               ),
-              items: const [
-                DropdownMenuItem(
-                  value: kEbRelayRedirectUri,
-                  child: Text('HTTPS return page'),
-                ),
-                DropdownMenuItem(
-                  value: kEbRedirectUri,
-                  child: Text('Direct app link'),
-                ),
-              ],
-              onChanged: busy
-                  ? null
-                  : (value) {
-                      redirect.text = value!;
-                      _changed(value);
-                    },
-            ),
+              DropdownMenuItem(
+                value: kEbRedirectUri,
+                child: Text('Direct app link'),
+              ),
+            ],
+            onChanged: busy
+                ? null
+                : (value) {
+                    redirect.text = value!;
+                    _changed(value);
+                  },
           ),
-          const Padding(
-            padding: EdgeInsets.all(12),
-            child: Text(
-              'Choose the exact address registered in Enable Banking. The environment is detected when your credentials are verified.',
-            ),
-          ),
-        ],
-      ),
-      const Text(
+        ]),
+      if (!existing && redirectError != null)
+        _notice(redirectError!, key: redirectField),
+      _description(
         'Verification needs an internet connection. If it fails, your progress and any previously verified credentials are kept.',
       ),
       _button('Verify and continue', () => unawaited(_verify()), primary: true),
@@ -801,7 +840,7 @@ class _EnableBankingSetupPageState
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
               controller: scroll,
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(Sizes.lg),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -851,12 +890,6 @@ class _EnableBankingSetupPageState
                     Padding(
                       padding: const EdgeInsets.only(bottom: 20),
                       child: child,
-                    ),
-                  if (!summary && step > 0)
-                    _button(
-                      'Previous step',
-                      () =>
-                          unawaited(_go(step == 3 && existing ? 0 : step - 1)),
                     ),
                   if (editing)
                     _button(
