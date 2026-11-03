@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/style.dart';
+import '../../../model/category_transaction.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/categories_provider.dart';
 import '../../../providers/recurring_transactions_provider.dart';
 import '../../../providers/transactions_provider.dart';
+import '../../../services/database/repositories/transactions_repository.dart';
 import '../../../ui/device.dart';
 import '../../../ui/extensions.dart';
 import "widgets/account_selector.dart";
@@ -35,6 +37,8 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
   final TextEditingController noteController = TextEditingController();
   bool recurrencyEditingPermitted = true;
   bool _isSaveEnabled = false;
+  CategoryTransaction? _suggestedCategory;
+  String? _suggestedLabel;
 
   @override
   void initState() {
@@ -45,6 +49,9 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
       noteController.text = widget.transaction?.note ?? '';
     }
     amountController.addListener(_updateAmount);
+    if (widget.transaction == null) {
+      noteController.addListener(_suggestCategory);
+    }
 
     super.initState();
   }
@@ -113,6 +120,34 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
           break;
       }
     });
+  }
+
+  // Pre-select the category last used for a transaction with the same label,
+  // unless the user has already picked one manually
+  void _suggestCategory() async {
+    final label = noteController.text.trim();
+    final selectedType = ref.read(selectedTransactionTypeProvider);
+    final selectedCategory = ref.read(selectedCategoryProvider);
+    if (label == _suggestedLabel ||
+        selectedType == TransactionType.transfer ||
+        (selectedCategory != null && selectedCategory != _suggestedCategory)) {
+      return;
+    }
+    _suggestedLabel = label;
+
+    final category = label.isEmpty
+        ? null
+        : await ref
+              .read(transactionsRepositoryProvider)
+              .getLastCategoryByLabel(label, selectedType);
+    if (!mounted ||
+        noteController.text.trim() != label ||
+        ref.read(selectedTransactionTypeProvider) != selectedType) {
+      return;
+    }
+
+    _suggestedCategory = category;
+    ref.read(selectedCategoryProvider.notifier).setCategory(category);
   }
 
   void _refreshAccountAndNavigateBack() async {
@@ -204,6 +239,18 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
   @override
   Widget build(BuildContext context) {
     final selectedType = ref.watch(selectedTransactionTypeProvider);
+    // A category belongs to a single transaction type, so drop it when the
+    // type changes and look for a suggestion matching the new type
+    ref.listen(selectedTransactionTypeProvider, (previous, next) {
+      final category = ref.read(selectedCategoryProvider);
+      if (category != null && category.type.transactionType != next) {
+        ref.read(selectedCategoryProvider.notifier).setCategory(null);
+      }
+      if (widget.transaction == null) {
+        _suggestedLabel = null;
+        _suggestCategory();
+      }
+    });
 
     _updateAmount();
 
