@@ -290,6 +290,7 @@ Future<Map<CategoryTransaction, double>> categoryMap(Ref ref) async {
           0.0,
           (previousValue, transaction) => previousValue + transaction.amount,
         );
+    if (sum == 0) continue;
 
     categoriesMap[category] = categoryType == CategoryTransactionType.income
         ? double.parse(sum.toStringAsFixed(2))
@@ -418,6 +419,13 @@ Future<List<ParentCategoryWithSubcategoriesData>> categoryWithSubcategoriesData(
       );
     }
   }
+
+  // Biggest first, like the categories card in the graphs page
+  result.sort((a, b) {
+    final byTotal = b.total.abs().compareTo(a.total.abs());
+    if (byTotal != 0) return byTotal;
+    return a.parentCategory.name.compareTo(b.parentCategory.name);
+  });
 
   return result;
 }
