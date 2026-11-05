@@ -2,13 +2,12 @@ import 'package:fl_chart/fl_chart.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../constants/constants.dart';
 import '../../../constants/style.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../ui/widgets/rounded_icon.dart';
-import '../../../model/bank_account.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../ui/device.dart';
+import 'accounts_tab.dart';
 
 class AccountsPieChart extends ConsumerWidget {
   const AccountsPieChart({
@@ -18,7 +17,7 @@ class AccountsPieChart extends ConsumerWidget {
     super.key,
   });
 
-  final List<BankAccount> accounts;
+  final List<AccountEntry> accounts;
   final Map<int, double> amounts;
   final double total;
 
@@ -37,11 +36,11 @@ class AccountsPieChart extends ConsumerWidget {
               centerSpaceRadius: 70,
               sectionsSpace: 0,
               borderData: FlBorderData(show: false),
-              sections: List.generate(amounts.values.length, (i) {
+              sections: List.generate(accounts.length, (i) {
                 final isTouched = (i == selectedIndex);
                 final radius = isTouched ? 30.0 : 25.0;
                 return PieChartSectionData(
-                  color: accountColorList[accounts[i].color],
+                  color: accounts[i].color,
                   value: 360 * amounts[accounts[i].id]!,
                   radius: radius,
                   showTitle: false,
@@ -69,11 +68,8 @@ class AccountsPieChart extends ConsumerWidget {
             children: [
               if (selectedIndex != -1)
                 RoundedIcon(
-                  icon:
-                      accountIconList[accounts[selectedIndex].symbol] ??
-                      Icons.swap_horiz_rounded,
-                  backgroundColor:
-                      accountColorList[accounts[selectedIndex].color],
+                  icon: accounts[selectedIndex].icon,
+                  backgroundColor: accounts[selectedIndex].color,
                   padding: const EdgeInsets.all(Sizes.sm),
                 ),
               Text(

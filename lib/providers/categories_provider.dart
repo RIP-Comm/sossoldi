@@ -367,6 +367,7 @@ class ParentCategoryWithSubcategoriesData {
 Future<List<ParentCategoryWithSubcategoriesData>> categoryWithSubcategoriesData(
   Ref ref,
 ) async {
+  const uncategorizedCategoryId = 0;
   final trnscType = ref.watch(selectedTransactionTypeProvider);
   final categories = ref.watch(categoriesProvider).value ?? [];
   final parentCategories = ref.watch(allParentCategoriesProvider).value ?? [];
@@ -417,6 +418,34 @@ Future<List<ParentCategoryWithSubcategoriesData>> categoryWithSubcategoriesData(
         ),
       );
     }
+  }
+
+  final uncategorizedTransactions = transactions
+      .where((trnsc) => trnsc.type == trnscType && trnsc.idCategory == null)
+      .toList();
+  final uncategorizedTotal = uncategorizedTransactions.fold<num>(
+    0,
+    (previousValue, trnsc) => previousValue + trnsc.amount,
+  );
+
+  if (uncategorizedTotal != 0) {
+    result.add(
+      ParentCategoryWithSubcategoriesData(
+        parentCategory: CategoryTransaction(
+          id: uncategorizedCategoryId,
+          name: 'Uncategorized',
+          type: trnscType.categoryType!,
+          symbol: 'question_mark',
+          color: 0,
+          order: result.length,
+        ),
+        subcategories: const {},
+        transactions: uncategorizedTransactions,
+        total: trnscType == TransactionType.expense
+            ? -uncategorizedTotal
+            : uncategorizedTotal,
+      ),
+    );
   }
 
   return result;
