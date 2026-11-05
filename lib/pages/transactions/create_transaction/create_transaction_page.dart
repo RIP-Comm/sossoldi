@@ -243,7 +243,7 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
     // type changes and look for a suggestion matching the new type
     ref.listen(selectedTransactionTypeProvider, (previous, next) {
       final category = ref.read(selectedCategoryProvider);
-      if (category != null && category.type.transactionType != next) {
+      if (category != null && !category.type.supports(next)) {
         ref.read(selectedCategoryProvider.notifier).setCategory(null);
       }
       if (widget.transaction == null) {
