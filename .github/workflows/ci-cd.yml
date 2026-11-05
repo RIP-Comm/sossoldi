@@ -24,6 +24,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
       - name: Setup FVM
         uses: kuhnroyal/flutter-fvm-config-action/config@v3
         id: fvm-config-action
