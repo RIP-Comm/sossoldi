@@ -45,25 +45,9 @@ void main() async {
   }
 
   // perform recurring transactions checks
-  DateTime? lastCheckGetPref =
-      sharedPreferences.getString('last_recurring_transactions_check') != null
-      ? DateTime.parse(
-          sharedPreferences.getString('last_recurring_transactions_check')!,
-        )
-      : null;
-  DateTime? lastRecurringTransactionsCheck = lastCheckGetPref;
-
-  if (lastRecurringTransactionsCheck == null ||
-      DateTime.now().difference(lastRecurringTransactionsCheck).inDays >= 1) {
-    RecurringTransactionRepository(
-      database: SossoldiDatabase.instance,
-    ).checkRecurringTransactions();
-    // update last recurring transactions runtime
-    await sharedPreferences.setString(
-      'last_recurring_transactions_check',
-      DateTime.now().toIso8601String(),
-    );
-  }
+  await RecurringTransactionRepository(
+    database: SossoldiDatabase.instance,
+  ).dailyCheck(sharedPreferences);
 
   final LocalAuthentication auth = LocalAuthentication();
   if (await auth.isDeviceSupported()) {
