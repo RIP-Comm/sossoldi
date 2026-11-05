@@ -33,17 +33,45 @@ class CategoryTransactionFields extends BaseEntityFields {
 
 enum CategoryTransactionType {
   income,
-  expense;
+  expense,
+  incomeAndExpense;
 
   String get code => switch (this) {
     CategoryTransactionType.income => "IN",
     CategoryTransactionType.expense => "OUT",
+    CategoryTransactionType.incomeAndExpense => "BOTH",
   };
 
-  TransactionType get transactionType => switch (this) {
-    CategoryTransactionType.income => TransactionType.income,
-    CategoryTransactionType.expense => TransactionType.expense,
+  String get label => switch (this) {
+    CategoryTransactionType.income => "Income",
+    CategoryTransactionType.expense => "Expense",
+    CategoryTransactionType.incomeAndExpense => "Income & Expense",
   };
+
+  List<TransactionType> get transactionTypes => switch (this) {
+    CategoryTransactionType.income => [TransactionType.income],
+    CategoryTransactionType.expense => [TransactionType.expense],
+    CategoryTransactionType.incomeAndExpense => [
+      TransactionType.income,
+      TransactionType.expense,
+    ],
+  };
+
+  List<String> get selectableCodes => switch (this) {
+    CategoryTransactionType.income => [
+      CategoryTransactionType.income.code,
+      CategoryTransactionType.incomeAndExpense.code,
+    ],
+    CategoryTransactionType.expense => [
+      CategoryTransactionType.expense.code,
+      CategoryTransactionType.incomeAndExpense.code,
+    ],
+    CategoryTransactionType.incomeAndExpense => [
+      CategoryTransactionType.incomeAndExpense.code,
+    ],
+  };
+
+  bool supports(TransactionType type) => transactionTypes.contains(type);
 
   static CategoryTransactionType fromJson(String value) {
     switch (value) {
@@ -51,6 +79,8 @@ enum CategoryTransactionType {
         return CategoryTransactionType.income;
       case "OUT":
         return CategoryTransactionType.expense;
+      case "BOTH":
+        return CategoryTransactionType.incomeAndExpense;
       default:
         throw ArgumentError('Invalid : $value');
     }

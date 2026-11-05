@@ -97,8 +97,8 @@ class BudgetRepository {
   Future<List<BudgetStats>> selectMonthlyBudgetsStats() async {
     final db = await _sossoldiDB.database;
     var query =
-        "SELECT bt.*, SUM(t.${TransactionFields.amount}) as spent FROM $budgetTable as bt LEFT JOIN $categoryTransactionTable as ct ON bt.${BudgetFields.idCategory} = ct.${CategoryTransactionFields.id} LEFT JOIN '$transactionTable' as t ON t.${TransactionFields.idCategory} = ct.${CategoryTransactionFields.id} WHERE bt.${BudgetFields.active} = 1 AND strftime('%m', t.date) = strftime('%m', 'now') AND strftime('%Y', t.date) = strftime('%Y', 'now') GROUP BY bt.${BudgetFields.idCategory};";
-    final result = await db.rawQuery(query);
+        "SELECT bt.*, SUM(t.${TransactionFields.amount}) as spent FROM $budgetTable as bt LEFT JOIN $categoryTransactionTable as ct ON bt.${BudgetFields.idCategory} = ct.${CategoryTransactionFields.id} LEFT JOIN '$transactionTable' as t ON t.${TransactionFields.idCategory} = ct.${CategoryTransactionFields.id} WHERE bt.${BudgetFields.active} = 1 AND t.${TransactionFields.type} = ? AND strftime('%m', t.date) = strftime('%m', 'now') AND strftime('%Y', t.date) = strftime('%Y', 'now') GROUP BY bt.${BudgetFields.idCategory};";
+    final result = await db.rawQuery(query, [TransactionType.expense.code]);
 
     List<Budget> allBudgets = await selectAllActive();
 
