@@ -41,4 +41,41 @@ void main() {
       expect((await repository.selectAll()).single.amount, transaction.amount);
     },
   );
+
+  test(
+    'search with apostrophes and an empty type filter preserves bank ownership',
+    () async {
+      final harness = BankSyncHarness(databaseFactoryFfi);
+      await harness.open();
+      addTearDown(harness.close);
+      harness.pages = [
+        [bankRecord(note: "McDonald's synthetic purchase")],
+      ];
+      expect((await harness.service.syncAccount(1)).completed, isTrue);
+      final repository = TransactionsRepository(
+        database: NativeContractDatabase(harness.db),
+      );
+
+      final imported = await repository.selectAll(
+        label: "mcdonald's",
+        transactionType: [],
+      );
+      expect(imported, hasLength(1));
+      expect(imported.single.note, "McDonald's synthetic purchase");
+      expect(imported.single.isBankImported, isTrue);
+      expect(await repository.getAllLabels(label: "mcdonald's"), [
+        "mcdonald's synthetic purchase",
+      ]);
+
+      await BankConnectionRepository.withDatabase(
+        harness.db,
+      ).disconnectLocally(1);
+      final manual = await repository.selectAll(
+        label: "mcdonald's",
+        transactionType: [],
+      );
+      expect(manual.single.id, imported.single.id);
+      expect(manual.single.isBankImported, isFalse);
+    },
+  );
 }

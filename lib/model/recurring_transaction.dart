@@ -104,6 +104,9 @@ enum Recurrence {
 }
 
 class RecurringTransaction extends BaseEntity {
+  // This is to allow to manually set a null value to toDate field.
+  static const _unset = Object();
+
   final DateTime fromDate;
   final DateTime? toDate;
   final num amount;
@@ -132,7 +135,7 @@ class RecurringTransaction extends BaseEntity {
   RecurringTransaction copy({
     int? id,
     DateTime? fromDate,
-    DateTime? toDate,
+    Object? toDate = _unset,
     num? amount,
     String? note,
     Recurrence? recurrency,
@@ -145,7 +148,7 @@ class RecurringTransaction extends BaseEntity {
   }) => RecurringTransaction(
     id: id ?? this.id,
     fromDate: fromDate ?? this.fromDate,
-    toDate: toDate ?? this.toDate,
+    toDate: toDate == _unset ? this.toDate : (toDate as DateTime?),
     amount: amount ?? this.amount,
     note: note ?? this.note,
     recurrency: recurrency ?? this.recurrency,

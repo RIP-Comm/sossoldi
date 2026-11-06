@@ -9,6 +9,20 @@ import '../../../../providers/statistics_provider.dart';
 import '../../../../providers/transactions_provider.dart';
 import '../../../../ui/device.dart';
 
+/// Average of the months of [year] that are over (before [now]) and have
+/// transactions; the current month is still in progress and would lower it.
+/// Returns null when there is no such month.
+double? completedMonthsAverage(List<double> totals, int year, DateTime now) {
+  final completedMonths = year < now.year
+      ? totals.length
+      : year == now.year
+      ? now.month - 1
+      : 0;
+  final values = totals.take(completedMonths).where((total) => total > 0);
+  if (values.isEmpty) return null;
+  return values.reduce((a, b) => a + b) / values.length;
+}
+
 class CategoriesBarChart extends ConsumerWidget {
   const CategoriesBarChart({super.key});
 
@@ -25,10 +39,11 @@ class CategoriesBarChart extends ConsumerWidget {
         Text('$currentYear', style: Theme.of(context).textTheme.bodySmall),
         monthlyTotals.when(
           data: (totals) {
-            final average = totals.isNotEmpty
-                ? totals.reduce((a, b) => a + b) /
-                      totals.where((total) => total > 0).length
-                : 0.0;
+            final average = completedMonthsAverage(
+              totals,
+              currentYear,
+              DateTime.now(),
+            );
 
             return SizedBox(
               height: 200,
@@ -44,18 +59,19 @@ class CategoriesBarChart extends ConsumerWidget {
                   borderData: FlBorderData(show: false),
                   extraLinesData: ExtraLinesData(
                     horizontalLines: [
-                      HorizontalLine(
-                        y: average,
-                        color: Theme.of(context).colorScheme.secondary,
-                        strokeWidth: 2,
-                        dashArray: [5, 5],
-                        label: HorizontalLineLabel(
-                          show: true,
-                          labelResolver: (line) => "avg",
-                          alignment: Alignment.topRight,
-                          style: Theme.of(context).textTheme.bodySmall,
+                      if (average != null)
+                        HorizontalLine(
+                          y: average,
+                          color: Theme.of(context).colorScheme.secondary,
+                          strokeWidth: 2,
+                          dashArray: [5, 5],
+                          label: HorizontalLineLabel(
+                            show: true,
+                            labelResolver: (line) => "avg",
+                            alignment: Alignment.topRight,
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 ),

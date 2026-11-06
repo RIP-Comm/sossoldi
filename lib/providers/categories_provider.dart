@@ -48,6 +48,19 @@ class Categories extends _$Categories {
     return categories;
   }
 
+  void _invalidateTypeProviders(CategoryTransactionType type) {
+    final types = {
+      type,
+      ...type.transactionTypes.map(
+        (transactionType) => transactionType.categoryType!,
+      ),
+    };
+    for (final categoryType in types) {
+      ref.invalidate(categoriesByTypeProvider(categoryType));
+      ref.invalidate(frequentCategoriesProvider(categoryType));
+    }
+  }
+
   Future<void> addCategory({
     required String name,
     required CategoryTransactionType type,
@@ -67,7 +80,7 @@ class Categories extends _$Categories {
       await ref.read(categoryRepositoryProvider).insert(category);
       ref.invalidate(selectedCategoryProvider);
       ref.invalidate(categoryMapProvider);
-      ref.invalidate(categoriesByTypeProvider(category.type));
+      _invalidateTypeProviders(category.type);
       return _getCategories();
     });
   }
@@ -103,19 +116,25 @@ class Categories extends _$Categories {
     required String icon,
     required int color,
   }) async {
-    CategoryTransaction category = ref
-        .read(selectedCategoryProvider)!
-        .copy(name: name, type: type, symbol: icon, color: color);
+    final selectedCategory = ref.read(selectedCategoryProvider)!;
+    CategoryTransaction category = selectedCategory.copy(
+      name: name,
+      type: type,
+      symbol: icon,
+      color: color,
+    );
 
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       await ref.read(categoryRepositoryProvider).updateItem(category);
       await ref
           .read(categoryRepositoryProvider)
-          .updateSubcategoriesColor(category.id!, color);
+          .updateSubcategories(category.id!, color, type);
       ref.invalidate(selectedCategoryProvider);
       ref.invalidate(categoryMapProvider);
       ref.invalidate(subcategoriesProvider(category.id!));
+      _invalidateTypeProviders(selectedCategory.type);
+      _invalidateTypeProviders(category.type);
       return _getCategories();
     });
   }
@@ -171,7 +190,7 @@ class Categories extends _$Categories {
       ref.invalidate(monthlyBudgetsStatsProvider);
       ref.invalidate(selectedSubcategoryProvider);
       ref.invalidate(categoryMapProvider);
-      ref.invalidate(categoriesByTypeProvider(category.type));
+      _invalidateTypeProviders(category.type);
       ref.invalidate(
         subcategoriesProvider(ref.read(selectedCategoryProvider)!.id!),
       );
@@ -270,7 +289,9 @@ Future<Map<CategoryTransaction, double>> categoryMap(Ref ref) async {
   final transactions = await ref
       .read(transactionsRepositoryProvider)
       .selectAll(
-        transactionType: [categoryType.transactionType.code],
+        transactionType: categoryType.transactionTypes
+            .map((type) => type.code)
+            .toList(),
         dateRangeStart: dateStart,
         dateRangeEnd: dateEnd,
       );
@@ -290,6 +311,7 @@ Future<Map<CategoryTransaction, double>> categoryMap(Ref ref) async {
           0.0,
           (previousValue, transaction) => previousValue + transaction.amount,
         );
+    if (sum == 0) continue;
 
     categoriesMap[category] = categoryType == CategoryTransactionType.income
         ? double.parse(sum.toStringAsFixed(2))
@@ -308,7 +330,9 @@ Future<double> categoryTotalAmount(Ref ref) async {
   final transactions = await ref
       .read(transactionsRepositoryProvider)
       .selectAll(
-        transactionType: [categoryType.transactionType.code],
+        transactionType: categoryType.transactionTypes
+            .map((type) => type.code)
+            .toList(),
         dateRangeStart: dateStart,
         dateRangeEnd: dateEnd,
       );
@@ -337,7 +361,9 @@ Future<List<double>> monthlyTotals(Ref ref) async {
   final transactions = await ref
       .read(transactionsRepositoryProvider)
       .selectAll(
-        transactionType: [categoryType.transactionType.code],
+        transactionType: categoryType.transactionTypes
+            .map((type) => type.code)
+            .toList(),
         dateRangeStart: startOfYear,
         dateRangeEnd: endOfYear,
       );
@@ -370,9 +396,11 @@ Future<List<ParentCategoryWithSubcategoriesData>> categoryWithSubcategoriesData(
   final trnscType = ref.watch(selectedTransactionTypeProvider);
   final categories = ref.watch(categoriesProvider).value ?? [];
   final parentCategories = ref.watch(allParentCategoriesProvider).value ?? [];
-  final transactions = ref.watch(transactionsProvider).value ?? [];
+  final transactions = (ref.watch(transactionsProvider).value ?? [])
+      .where((transaction) => transaction.type == trnscType)
+      .toList();
   final parentCategoriesByType = parentCategories.where(
-    (cat) => cat.type.transactionType == trnscType,
+    (cat) => cat.type.supports(trnscType),
   );
 
   List<ParentCategoryWithSubcategoriesData> result = [];
@@ -418,6 +446,13 @@ Future<List<ParentCategoryWithSubcategoriesData>> categoryWithSubcategoriesData(
       );
     }
   }
+
+  // Biggest first, like the categories card in the graphs page
+  result.sort((a, b) {
+    final byTotal = b.total.abs().compareTo(a.total.abs());
+    if (byTotal != 0) return byTotal;
+    return a.parentCategory.name.compareTo(b.parentCategory.name);
+  });
 
   return result;
 }
