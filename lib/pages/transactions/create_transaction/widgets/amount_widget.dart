@@ -10,9 +10,10 @@ import '../../../../ui/formatters/decimal_text_input_formatter.dart';
 import '../../../../ui/device.dart';
 
 class AmountWidget extends ConsumerStatefulWidget {
-  const AmountWidget(this.amountController, {super.key});
+  const AmountWidget(this.amountController, {this.readOnly = false, super.key});
 
   final TextEditingController amountController;
+  final bool readOnly;
 
   @override
   ConsumerState<AmountWidget> createState() => _AmountWidgetState();
@@ -31,6 +32,7 @@ class _AmountWidgetState extends ConsumerState<AmountWidget> {
       ),
       child: TextField(
         controller: widget.amountController,
+        readOnly: widget.readOnly,
         decoration: InputDecoration(
           hintText: "0",
           border: InputBorder.none,

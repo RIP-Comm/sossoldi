@@ -1,13 +1,11 @@
+import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sossoldi/model/bank_connection.dart';
 import 'package:sossoldi/providers/banking_provider.dart';
 import 'package:sossoldi/services/banking/enable_banking/enable_banking_api.dart';
-import 'package:sossoldi/services/banking/enable_banking/enable_banking_auth.dart';
-import 'package:sossoldi/services/banking/enable_banking/enable_banking_config.dart';
 import 'package:sossoldi/services/banking/enable_banking/enable_banking_credentials_store.dart';
-import 'package:sossoldi/services/banking/enable_banking/enable_banking_dependencies.dart';
 import 'package:sossoldi/services/banking/enable_banking/models/eb_application.dart';
 import 'package:sossoldi/services/database/migration_manager.dart';
 import 'package:sossoldi/services/database/repositories/bank_connection_repository.dart';
@@ -22,6 +20,8 @@ class _ApplicationApi extends EnableBankingApi {
 
   Object? failure;
   int calls = 0;
+  Completer<void>? gate;
+  Completer<void>? started;
 
   @override
   Future<EbApplication> verifyApplicationCredentials({
@@ -29,6 +29,8 @@ class _ApplicationApi extends EnableBankingApi {
     required String privateKeyPem,
   }) async {
     calls++;
+    started?.complete();
+    await gate?.future;
     if (failure case final error?) throw error;
     return EbApplication(
       name: 'Synthetic application',
@@ -133,6 +135,82 @@ void main() {
           defaultCountry: 'it',
         ),
       );
+
+  test(
+    'late verification cannot overwrite a completed clear or its UI state',
+    () async {
+      api.gate = Completer<void>();
+      api.started = Completer<void>();
+      final verification = save();
+      await api.started!.future;
+      await container.read(enableBankingSettingsProvider.notifier).clear();
+      api.gate!.complete();
+      await verification;
+      expect(await store.readCredentials(), isNull);
+      expect(container.read(enableBankingSettingsProvider).hasError, isFalse);
+      expect(container.read(enableBankingSettingsProvider).value, isNull);
+    },
+  );
+
+  test(
+    'successful settings verification clears only the matching completed draft',
+    () async {
+      await store.saveSetupDraft(
+        const EnableBankingSetupDraft(
+          step: 3,
+          existingCredentials: true,
+          appId: 'new-app',
+          redirectUri: kEbRedirectUri,
+          privateKeyPem: 'new-synthetic-key',
+        ),
+      );
+      await save();
+      expect(container.read(enableBankingSettingsProvider).hasError, isFalse);
+      expect(await store.readSetupDraft(), isNull);
+    },
+  );
+
+  test(
+    'database failure preserves the unfinished draft while rolling back new credentials',
+    () async {
+      await store.saveSetupDraft(
+        const EnableBankingSetupDraft(
+          step: 3,
+          existingCredentials: true,
+          appId: 'new-app',
+          privateKeyPem: 'new-synthetic-key',
+        ),
+      );
+      connections.failWrites = true;
+      await save();
+      expect(container.read(enableBankingSettingsProvider).hasError, isTrue);
+      expect(await store.readCredentials(), isNull);
+      expect((await store.readSetupDraft())?.appId, 'new-app');
+    },
+  );
+
+  test(
+    'late failure from an older verification cannot replace newer successful settings',
+    () async {
+      final gate = Completer<void>();
+      api.gate = gate;
+      api.started = Completer<void>();
+      final first = save();
+      await api.started!.future;
+      api.gate = null;
+      api.started = null;
+      await save();
+      expect(container.read(enableBankingSettingsProvider).hasError, isFalse);
+      api.failure = StateError('Synthetic old request failure');
+      gate.complete();
+      await first;
+      expect(container.read(enableBankingSettingsProvider).hasError, isFalse);
+      expect(
+        container.read(enableBankingSettingsProvider).value?.appId,
+        'new-app',
+      );
+    },
+  );
 
   test('settings read the provider credential store', () async {
     expect(

@@ -48,6 +48,12 @@ var settingsOptions = [
     "/backup-page",
   ],
   [
+    Icons.account_balance,
+    "Bank sync",
+    "Connect your bank and import transactions",
+    "/enable-banking-setup",
+  ],
+  [
     Icons.notifications_active,
     "Notifications",
     "Manage your notifications settings",

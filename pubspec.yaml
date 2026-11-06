@@ -14,6 +14,7 @@ dependencies:
 
   analyzer_plugin: ^0.13.1
   app_links: ^6.3.0
+  basic_utils: ^5.7.0
   collection: ^1.19.1
   csv: ^6.0.0
   cupertino_icons: ^1.0.8
@@ -44,6 +45,9 @@ dependencies:
   font_awesome_flutter: ^10.12.0
 
 dev_dependencies:
+  integration_test:
+    sdk: flutter
+
   flutter_test:
     sdk: flutter
 

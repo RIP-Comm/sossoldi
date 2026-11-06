@@ -8,7 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
-import 'providers/banking_provider.dart';
+import 'pages/banking/banking_navigation.dart';
+import 'ui/snack_bars/snack_bar.dart';
 import 'providers/settings_provider.dart';
 import 'providers/theme_provider.dart';
 import 'routes/routes.dart';
@@ -29,9 +30,7 @@ void main() async {
   final SharedPreferences sharedPreferences =
       await SharedPreferences.getInstance();
 
-  // KV migration from the 'is_first_login' key to 'onboarding_completed'
-  // to correctly handle the completion of the onboarding process
-  // (To consider to remove in later future)
+  // KV migration from the 'is_first_login' key to 'onboarding_completed' to correctly handle the completion of the onboarding process (To consider to remove in later future)
   final bool? isFirstLoginCachedValue = sharedPreferences.getBool(
     'is_first_login',
   );
@@ -86,18 +85,22 @@ class Launcher extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(bankingCallbackBootstrapProvider);
     final appThemeState = ref.watch(appThemeStateProvider);
     final bool isOnboardingCompleted = ref.watch(onBoardingCompletedProvider);
-    return MaterialApp(
-      title: 'Sossoldi',
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: appThemeState.isDarkModeEnabled
-          ? ThemeMode.dark
-          : ThemeMode.light,
-      onGenerateRoute: makeRoute,
-      initialRoute: !isOnboardingCompleted ? '/onboarding' : '/',
+    return BankingNavigation(
+      child: MaterialApp(
+        navigatorKey: bankingNavigatorKey,
+        navigatorObservers: [bankingNavigationObserver],
+        scaffoldMessengerKey: rootScaffoldMessengerKey,
+        title: 'Sossoldi',
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        themeMode: appThemeState.isDarkModeEnabled
+            ? ThemeMode.dark
+            : ThemeMode.light,
+        onGenerateRoute: makeRoute,
+        initialRoute: !isOnboardingCompleted ? '/onboarding' : '/',
+      ),
     );
   }
 }

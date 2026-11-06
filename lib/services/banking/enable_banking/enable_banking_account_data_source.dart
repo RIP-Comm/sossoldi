@@ -1,5 +1,6 @@
 import '../bank_account_data_source.dart';
 import '../banking_account.dart';
+import '../banking_request_context.dart';
 import '../banking_balance.dart';
 import '../banking_exception.dart';
 import '../banking_reference.dart';
@@ -18,24 +19,34 @@ class EnableBankingAccountDataSource implements BankAccountDataSource {
   EnableBankingAccountDataSource(this._api);
 
   @override
-  Future<BankingAccount> getAccount(BankingAccountReference reference) =>
-      withEnableBankingErrors(() async {
-        checkEnableBankingReference(reference.providerId, reference.remoteId);
-        final account = await _api.getAccount(reference.remoteId);
-        if (account.uid != reference.remoteId) {
-          throw const FormatException('Account identity mismatch');
-        }
-        return _accounts.account(account);
-      });
+  Future<BankingAccount> getAccount(
+    BankingAccountReference reference, {
+    BankingRequestContext context = const BankingRequestContext(),
+  }) => withEnableBankingErrors(() async {
+    checkEnableBankingReference(reference.providerId, reference.remoteId);
+    final account = await _api.getAccount(
+      reference.remoteId,
+      psuHeaders: context.psuHeaders,
+    );
+    if (account.uid != reference.remoteId) {
+      throw const FormatException('Account identity mismatch');
+    }
+    return _accounts.account(account);
+  });
 
   @override
-  Future<List<BankingBalance>> getBalances(BankingAccountReference reference) =>
-      withEnableBankingErrors(() async {
-        checkEnableBankingReference(reference.providerId, reference.remoteId);
-        return List.unmodifiable(
-          (await _api.getBalances(reference.remoteId)).map(_data.balance),
-        );
-      });
+  Future<List<BankingBalance>> getBalances(
+    BankingAccountReference reference, {
+    BankingRequestContext context = const BankingRequestContext(),
+  }) => withEnableBankingErrors(() async {
+    checkEnableBankingReference(reference.providerId, reference.remoteId);
+    return List.unmodifiable(
+      (await _api.getBalances(
+        reference.remoteId,
+        psuHeaders: context.psuHeaders,
+      )).map(_data.balance),
+    );
+  });
 
   @override
   Future<BankingTransactionsPage> getTransactions(
@@ -66,6 +77,10 @@ class EnableBankingAccountDataSource implements BankAccountDataSource {
     final status = switch (query.status) {
       BankingTransactionStatus.booked => 'BOOK',
       BankingTransactionStatus.pending => 'PDNG',
+      BankingTransactionStatus.cancelled => 'CNCL',
+      BankingTransactionStatus.rejected => 'RJCT',
+      BankingTransactionStatus.held => 'HOLD',
+      BankingTransactionStatus.scheduled => 'SCHD',
       _ => null,
     };
     return _data.transactions(
@@ -75,7 +90,13 @@ class EnableBankingAccountDataSource implements BankAccountDataSource {
         dateTo: to,
         continuationKey: query.cursor,
         transactionStatus: status,
+        strategy: query.strategy == BankingHistoryStrategy.longest
+            ? 'longest'
+            : null,
+        psuHeaders: query.context.psuHeaders,
+        collectRejectedRecords: query.collectRejectedRecords,
       ),
+      collectRejectedRecords: query.collectRejectedRecords,
     );
   });
 }

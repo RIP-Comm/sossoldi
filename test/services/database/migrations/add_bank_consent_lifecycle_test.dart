@@ -29,11 +29,11 @@ void main() {
   });
 
   test('v8 schema namespaces sessions by provider', () async {
-    expect(manager.latestVersion, 8);
+    expect(manager.latestVersion, greaterThanOrEqualTo(8));
     final database = await databaseFactory.openDatabase(
       dbPath,
       options: OpenDatabaseOptions(
-        version: manager.latestVersion,
+        version: 8,
         onCreate: (db, version) => manager.migrate(db, 0, version),
       ),
     );

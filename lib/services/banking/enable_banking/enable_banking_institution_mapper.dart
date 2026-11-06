@@ -24,5 +24,6 @@ class EnableBankingInstitutionMapper {
         : Duration(seconds: value.maximumConsentValidity!),
     isSandbox: value.sandbox != null,
     isBeta: value.beta,
+    requiredPsuHeaders: value.requiredPsuHeaders,
   );
 }

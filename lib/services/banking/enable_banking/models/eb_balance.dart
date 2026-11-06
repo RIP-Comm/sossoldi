@@ -23,6 +23,13 @@ DateTime? _balanceDate(Object? raw, {bool timestamp = false}) {
           int.parse(raw.substring(17, 19)) > 59)) {
     throw const FormatException('Invalid balance time');
   }
+  if (timestamp && !raw.endsWith('Z')) {
+    final offset = raw.substring(raw.length - 6);
+    if (int.parse(offset.substring(1, 3)) > 23 ||
+        int.parse(offset.substring(4, 6)) > 59) {
+      throw const FormatException('Invalid balance timezone offset');
+    }
+  }
   final date = DateTime.tryParse(raw);
   if (date == null ||
       (!timestamp && date.toIso8601String().substring(0, 10) != raw)) {

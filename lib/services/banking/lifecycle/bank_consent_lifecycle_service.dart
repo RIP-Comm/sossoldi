@@ -17,6 +17,7 @@ import '../banking_authorization.dart';
 import '../banking_connection.dart';
 import '../banking_exception.dart';
 import '../banking_reference.dart';
+import '../sync/bank_money.dart';
 import 'bank_authorization_callback.dart';
 import 'bank_authorization_result.dart';
 import 'banking_platform_support.dart';
@@ -342,6 +343,14 @@ class BankConsentLifecycleService {
         failure: BankingFailure.rejected,
       );
     }
+    for (final selection in selections) {
+      final scale = BankMoney.scales[selection.remote.currency];
+      if (scale == null || scale > 2) {
+        throw const FormatException(
+          'Remote account currency is not supported by the current display',
+        );
+      }
+    }
     final links = selections
         .map(
           (selection) => BankAccountLink(
@@ -351,7 +360,10 @@ class BankConsentLifecycleService {
                 .where((value) => value.isNotEmpty)
                 .toSet(),
             iban: selection.remote.iban,
-            newAccount: selection.newAccount,
+            newAccount: selection.newAccount?.id == null
+                ? selection.newAccount?.copy(startingValue: 0)
+                : selection.newAccount,
+            currency: selection.remote.currency,
           ),
         )
         .toList(growable: false);
@@ -449,24 +461,38 @@ class BankConsentLifecycleService {
   }
 
   Future<void> revoke(BankConnection connection) async {
-    if (connection.id == null || connection.remoteConnectionId == null) {
+    if (connection.id == null) {
+      throw const BankingException(
+        providerId: 'application',
+        failure: BankingFailure.rejected,
+      );
+    }
+    final current = await _connections.selectById(connection.id!);
+    final remoteIds = {
+      if (current.pendingRemoteConnectionId != null)
+        current.pendingRemoteConnectionId!,
+      if (current.remoteConnectionId != null) current.remoteConnectionId!,
+    };
+    if (remoteIds.isEmpty) {
       throw const BankingException(
         providerId: 'application',
         failure: BankingFailure.rejected,
       );
     }
     await _connections.markStatus(
-      connection.id!,
+      current.id!,
       BankConnectionStatus.revocationPending,
     );
-    try {
-      await _consent.revokeConnection(
-        await _reference(connection, connection.remoteConnectionId!),
-      );
-    } on BankingException catch (error) {
-      if (!error.confirmsMissingConnection) rethrow;
+    for (final remoteId in remoteIds) {
+      try {
+        await _consent.revokeConnection(await _reference(current, remoteId));
+      } on BankingException catch (error) {
+        if (!error.confirmsMissingConnection) rethrow;
+      }
     }
-    await _connections.finalizeRemoteRevocation(connection.id!);
+    await _connections.finalizeRemoteRevocation(current.id!);
+    final pending = await _pendingStore.read();
+    if (pending?.stagedConnectionId == current.id) await _pendingStore.clear();
   }
 
   Future<void> disconnectLocally(BankConnection connection) async {

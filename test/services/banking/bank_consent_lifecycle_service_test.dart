@@ -513,6 +513,46 @@ void main() {
     );
   });
 
+  for (final reconnect in [false, true]) {
+    test(
+      'revocation closes staged consent and clears pending import, reconnect=$reconnect',
+      () async {
+        final connection = await repository.insert(
+          BankConnection(
+            providerId: 'alternative',
+            institutionName: 'Test Bank',
+            institutionCountry: 'IT',
+            applicationId: 'app-id',
+            remoteConnectionId: reconnect ? 'previous-session' : null,
+            pendingRemoteConnectionId: 'staged-session',
+            pendingAuthorizationId: 'auth-id',
+            pendingValidUntil: now.add(const Duration(days: 1)),
+            status: BankConnectionStatus.awaitingImport,
+          ),
+        );
+        pending.value = PendingBankAuthorization(
+          providerId: 'alternative',
+          state: 'state',
+          authorizationId: 'auth-id',
+          authorizationUrl: 'https://bank.example/authorize',
+          applicationId: 'app-id',
+          institutionName: 'Test Bank',
+          institutionCountry: 'IT',
+          redirectUri: context.redirectUri,
+          expiresAt: now.add(const Duration(minutes: 10)),
+          consentValidUntil: now.add(const Duration(days: 1)),
+          stagedConnectionId: connection.id,
+        );
+        await service().revoke(connection);
+        expect(api.deleteCalls, reconnect ? 2 : 1);
+        final saved = await repository.selectById(connection.id!);
+        expect(saved.status, BankConnectionStatus.revoked);
+        expect(saved.pendingRemoteConnectionId, isNull);
+        expect(pending.value, isNull);
+      },
+    );
+  }
+
   test(
     'application auth error does not masquerade as expired session',
     () async {

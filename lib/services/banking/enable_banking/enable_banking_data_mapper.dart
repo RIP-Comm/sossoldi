@@ -37,6 +37,10 @@ class EnableBankingDataMapper {
       status: switch (value.status) {
         'BOOK' => BankingTransactionStatus.booked,
         'PDNG' => BankingTransactionStatus.pending,
+        'CNCL' => BankingTransactionStatus.cancelled,
+        'RJCT' => BankingTransactionStatus.rejected,
+        'HOLD' => BankingTransactionStatus.held,
+        'SCHD' => BankingTransactionStatus.scheduled,
         _ => BankingTransactionStatus.unknown,
       },
       direction: switch (value.creditDebitIndicator) {
@@ -55,11 +59,27 @@ class EnableBankingDataMapper {
     );
   }
 
-  BankingTransactionsPage transactions(EbTransactionsPage value) =>
-      BankingTransactionsPage(
-        transactions: value.transactions.map(transaction).toList(),
-        nextCursor: value.continuationKey?.trim().isEmpty == true
-            ? null
-            : value.continuationKey,
-      );
+  BankingTransactionsPage transactions(
+    EbTransactionsPage value, {
+    bool collectRejectedRecords = false,
+  }) {
+    final items = <BankingTransaction>[];
+    var rejected = value.rejectedRecords;
+    for (final item in value.transactions) {
+      try {
+        items.add(transaction(item));
+      } on FormatException {
+        if (!collectRejectedRecords) rethrow;
+        rejected++;
+      }
+    }
+    return BankingTransactionsPage(
+      transactions: items,
+      nextCursor: value.continuationKey?.trim().isEmpty == true
+          ? null
+          : value.continuationKey,
+      serverTime: value.serverTime,
+      rejectedRecords: rejected,
+    );
+  }
 }

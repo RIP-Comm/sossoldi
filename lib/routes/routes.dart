@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../pages/banking/connect_bank_page.dart';
+import '../pages/banking/import_accounts_page.dart';
+import '../pages/settings/banking/enable_banking_setup_page.dart';
 import '../pages/accounts/account_page.dart';
 import '../pages/accounts/create_edit_account_page.dart';
 import '../pages/accounts/account_list_page.dart';
@@ -80,6 +83,12 @@ Route<dynamic> makeRoute(RouteSettings settings) {
       return buildAdaptiveRoute(settings.name, const PlanningPage());
     case '/graphs':
       return buildAdaptiveRoute(settings.name, const GraphsPage());
+    case '/enable-banking-setup':
+      return buildAdaptiveRoute(settings.name, const EnableBankingSetupPage());
+    case '/connect-bank':
+      return buildAdaptiveRoute(settings.name, const ConnectBankPage());
+    case '/import-accounts':
+      return buildAdaptiveRoute(settings.name, const ImportAccountsPage());
     case '/settings':
       return buildAdaptiveRoute(settings.name, const SettingsPage());
     case '/general-settings':

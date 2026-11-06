@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../banking_exception.dart';
+import '../storage/banking_secure_storage.dart';
 import 'pending_bank_authorization.dart';
 
 // Preserve the storage key used by existing pending authorizations.
@@ -19,9 +20,11 @@ abstract class PendingBankAuthorizationStore {
 class SecurePendingBankAuthorizationStore
     implements PendingBankAuthorizationStore {
   final FlutterSecureStorage _storage;
+  final FlutterSecureStorage _legacyStorage;
 
   const SecurePendingBankAuthorizationStore({FlutterSecureStorage? storage})
-    : _storage = storage ?? const FlutterSecureStorage();
+    : _storage = storage ?? bankingSecureStorage,
+      _legacyStorage = storage ?? const FlutterSecureStorage();
 
   @override
   Future<void> save(PendingBankAuthorization pending) => _storage.write(
@@ -48,5 +51,9 @@ class SecurePendingBankAuthorizationStore
   }
 
   @override
-  Future<void> clear() => _storage.delete(key: _kPendingAuthorizationKey);
+  Future<void> clear() async {
+    await _storage.delete(key: _kPendingAuthorizationKey);
+    // Older iOS entries retain their original accessibility class, so delete through both configurations.
+    await _legacyStorage.delete(key: _kPendingAuthorizationKey);
+  }
 }

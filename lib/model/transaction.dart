@@ -88,6 +88,11 @@ class Transaction extends BaseEntity {
   // This is to allow to manually set a null value to id field.
   static const _unset = Object();
 
+  static const String reconciliationNote = 'Reconciliation';
+
+  final bool isBankImported;
+  bool get isReconciliation => note == reconciliationNote;
+
   final DateTime date;
   final num amount;
   final TransactionType type;
@@ -106,6 +111,7 @@ class Transaction extends BaseEntity {
 
   const Transaction({
     super.id,
+    this.isBankImported = false,
     required this.date,
     required this.amount,
     required this.type,
@@ -140,6 +146,7 @@ class Transaction extends BaseEntity {
     DateTime? updatedAt,
   }) => Transaction(
     id: id == _unset ? this.id : (id as int?),
+    isBankImported: isBankImported,
     date: date ?? this.date,
     amount: amount ?? this.amount,
     type: type ?? this.type,
@@ -157,6 +164,7 @@ class Transaction extends BaseEntity {
   static Transaction fromJson(Map<String, Object?> json) {
     return Transaction(
       id: json[BaseEntityFields.id] as int?,
+      isBankImported: json['bankImported'] == 1,
       date: DateTime.parse(json[TransactionFields.date] as String),
       amount: json[TransactionFields.amount] as num,
       type: TransactionType.fromJson(json[TransactionFields.type] as String),

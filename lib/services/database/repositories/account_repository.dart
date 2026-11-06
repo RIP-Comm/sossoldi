@@ -105,8 +105,7 @@ class AccountRepository {
 
   Future<List<BankAccount>> selectFrequentAccounts() async {
     final db = await _sossoldiDB.database;
-    // Select the last 100 transactions, group by account and return the
-    // top 5 most used accounts ordered by usage count desc.
+    // Select the last 100 transactions, group by account and return the top 5 most used accounts ordered by usage count desc.
     final result = await db.rawQuery('''
         SELECT b.*
         FROM "$bankAccountTable" b
@@ -221,7 +220,7 @@ class AccountRepository {
   Future<num?> getAccountSum(int? id) async {
     final db = await _sossoldiDB.database;
 
-    //get account infos first
+    // get account infos first
     final result = await db.query(
       bankAccountTable,
       where: '${BankAccountFields.id}  = $id',
@@ -271,7 +270,7 @@ class AccountRepository {
     final accountFilter = "${TransactionFields.idBankAccount} = $accountId";
 
     final resultQuery = await db.rawQuery('''
-      SELECT t.*,
+      SELECT t.*, EXISTS(SELECT 1 FROM bankRemoteTransaction br WHERE br.localTransactionId = t.id) AS bankImported,
         c.${CategoryTransactionFields.name} as ${TransactionFields.categoryName},
         c.${CategoryTransactionFields.color} as ${TransactionFields.categoryColor},
         c.${CategoryTransactionFields.symbol} as ${TransactionFields.categorySymbol}

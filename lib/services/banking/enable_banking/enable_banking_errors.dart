@@ -14,32 +14,43 @@ Future<T> withEnableBankingErrors<T>(Future<T> Function() operation) async {
   try {
     return await operation();
   } on EnableBankingException catch (error) {
-    final failure = switch (error.kind) {
-      EnableBankingFailureKind.sessionExpired =>
-        BankingFailure.connectionExpired,
-      EnableBankingFailureKind.sessionRevoked =>
-        BankingFailure.connectionRevoked,
-      EnableBankingFailureKind.sessionClosed => BankingFailure.connectionClosed,
-      EnableBankingFailureKind.notFound => BankingFailure.notFound,
-      EnableBankingFailureKind.applicationAuthentication =>
-        error.statusCode == 403
-            ? BankingFailure.forbidden
-            : BankingFailure.authentication,
-      EnableBankingFailureKind.rateLimited => BankingFailure.rateLimited,
-      EnableBankingFailureKind.timeout ||
-      EnableBankingFailureKind.server ||
-      EnableBankingFailureKind.network => BankingFailure.unavailable,
-      EnableBankingFailureKind.invalidResponse =>
-        BankingFailure.invalidResponse,
-      _ => switch (error.statusCode) {
-        401 => BankingFailure.authentication,
-        403 => BankingFailure.forbidden,
-        429 => BankingFailure.rateLimited,
-        int code when code >= 500 => BankingFailure.unavailable,
-        _ => BankingFailure.rejected,
-      },
-    };
-    throw BankingException(providerId: id, failure: failure);
+    final failure =
+        const {
+          'WRONG_TRANSACTIONS_PERIOD',
+          'DATE_FROM_IN_FUTURE',
+        }.contains(error.error?.toUpperCase())
+        ? BankingFailure.unsupportedHistoryPeriod
+        : switch (error.kind) {
+            EnableBankingFailureKind.sessionExpired =>
+              BankingFailure.connectionExpired,
+            EnableBankingFailureKind.sessionRevoked =>
+              BankingFailure.connectionRevoked,
+            EnableBankingFailureKind.sessionClosed =>
+              BankingFailure.connectionClosed,
+            EnableBankingFailureKind.notFound => BankingFailure.notFound,
+            EnableBankingFailureKind.applicationAuthentication =>
+              error.statusCode == 403
+                  ? BankingFailure.forbidden
+                  : BankingFailure.authentication,
+            EnableBankingFailureKind.rateLimited => BankingFailure.rateLimited,
+            EnableBankingFailureKind.timeout ||
+            EnableBankingFailureKind.server ||
+            EnableBankingFailureKind.network => BankingFailure.unavailable,
+            EnableBankingFailureKind.invalidResponse =>
+              BankingFailure.invalidResponse,
+            _ => switch (error.statusCode) {
+              401 => BankingFailure.authentication,
+              403 => BankingFailure.forbidden,
+              429 => BankingFailure.rateLimited,
+              int code when code >= 500 => BankingFailure.unavailable,
+              _ => BankingFailure.rejected,
+            },
+          };
+    throw BankingException(
+      providerId: id,
+      failure: failure,
+      retryAfter: error.retryAfter,
+    );
   } on EnableBankingAuthException {
     throw const BankingException(
       providerId: id,
