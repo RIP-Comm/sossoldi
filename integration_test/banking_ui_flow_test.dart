@@ -279,6 +279,7 @@ void main() {
       Future<void> tap(Finder target) async {
         await until(target);
         await tester.ensureVisible(target.first);
+        await until(target.first.hitTestable());
         await tester.tap(target.first);
         await tester.pumpAndSettle();
       }
