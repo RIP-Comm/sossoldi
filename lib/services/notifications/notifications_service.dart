@@ -27,6 +27,7 @@ class NotificationService {
     var initializationSettings = InitializationSettings(
       android: initializeSettingsAndroid,
       iOS: initializeSettingsIOS,
+      linux: const LinuxInitializationSettings(defaultActionName: 'Open'),
     );
     await notificationsPlugin.initialize(settings: initializationSettings);
     await notificationsPlugin
