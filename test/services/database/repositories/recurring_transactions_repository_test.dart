@@ -78,4 +78,74 @@ void main() {
 
     expect(await countGenerated(recurring), 0);
   });
+
+  test(
+    'dailyCheck preserves lastInsertion when no transaction is due',
+    () async {
+      final now = DateTime.now();
+      final tenDaysAgo = DateTime(
+        now.year,
+        now.month,
+        now.day,
+      ).subtract(const Duration(days: 10));
+
+      final recurring = (await repository.insert(
+        RecurringTransaction(
+          fromDate: tenDaysAgo,
+          toDate: now.add(const Duration(days: 60)),
+          lastInsertion: tenDaysAgo,
+          amount: 50,
+          note: 'Subscription',
+          recurrency: Recurrence.monthly,
+          idCategory: 1,
+          type: TransactionType.expense,
+          idBankAccount: 1,
+          createdAt: tenDaysAgo,
+          updatedAt: tenDaysAgo,
+        ),
+      ))!;
+
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+
+      await repository.dailyCheck(prefs);
+
+      expect(await countGenerated(recurring), 0);
+      expect(
+        (await repository.selectById(recurring.id!)).lastInsertion,
+        tenDaysAgo,
+      );
+
+      // Simulate a subsequent day check when still no occurrence is due
+      await prefs.setString(
+        'last_recurring_transactions_check',
+        now.subtract(const Duration(days: 2)).toIso8601String(),
+      );
+      await repository.dailyCheck(prefs);
+
+      expect(await countGenerated(recurring), 0);
+      expect(
+        (await repository.selectById(recurring.id!)).lastInsertion,
+        tenDaysAgo,
+      );
+    },
+  );
+
+  test(
+    'dailyCheck sets lastInsertion to the last generated transaction date',
+    () async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      final now = DateTime.now();
+      final recurring = await insertRent();
+
+      await repository.dailyCheck(prefs);
+
+      expect(await countGenerated(recurring), 3);
+      expect(
+        (await repository.selectById(recurring.id!)).lastInsertion,
+        DateTime(now.year, now.month, 1),
+      );
+    },
+  );
 }

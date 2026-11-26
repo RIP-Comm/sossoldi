@@ -267,6 +267,10 @@ class RecurringTransactionRepository {
       }
     }
 
+    if (transactions2Add.isEmpty) {
+      return;
+    }
+
     for (var tr in transactions2Add) {
       // insert a new transaction
       Transaction addTr = Transaction(
@@ -285,6 +289,6 @@ class RecurringTransactionRepository {
     }
 
     // update the last insertion date
-    await updateItem(transaction.copy(lastInsertion: now));
+    await updateItem(transaction.copy(lastInsertion: transactions2Add.last));
   }
 }
