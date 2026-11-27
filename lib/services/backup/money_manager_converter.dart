@@ -138,14 +138,54 @@ class MoneyManagerConverter {
   const MoneyManagerConverter._();
 
   /// Money Manager's built-in balance adjustment category.
-  static const balanceAdjustmentName = 'Modified Bal.';
+  static const balanceAdjustmentNames = {
+    'Modified Bal.',
+    'Modifica Saldo',
+    'Modificar saldo',
+    'Modificar Saldo',
+    'Changement de restant',
+    'Изменение остатка',
+    'Bestand ändern',
+  };
   static const balanceAdjustmentLabel = 'Balance adjustment';
 
   static const accountSymbol = 'account_balance';
   static const categorySymbol = 'question_mark';
 
   /// Notes Money Manager writes on its own for balance adjustments.
-  static const _generatedNotes = {'difference', 'differenza'};
+  static const _generatedNotes = {
+    'difference',
+    'differenza',
+    'diferencia',
+    'diferença',
+    'différence',
+    'разница',
+  };
+
+  static const _types = {
+    'income': _Kind.income,
+    'expense': _Kind.expense,
+    'transfer-out': _Kind.transferOut,
+    'transfer-in': _Kind.transferIn,
+    'guadagno': _Kind.income,
+    'spesa': _Kind.expense,
+    'trasferimento uscita': _Kind.transferOut,
+    'ingreso': _Kind.income,
+    'gasto': _Kind.expense,
+    'dinero gastado': _Kind.transferOut,
+    'revenu': _Kind.income,
+    'dépense': _Kind.expense,
+    'sorties': _Kind.transferOut,
+    'receita': _Kind.income,
+    'despesa': _Kind.expense,
+    'transferência para fora': _Kind.transferOut,
+    'доход': _Kind.income,
+    'расход': _Kind.expense,
+    'снятие': _Kind.transferOut,
+    'einkommen': _Kind.income,
+    'ausgabe': _Kind.expense,
+    'ausgehender transfer': _Kind.transferOut,
+  };
 
   static const _required = [
     'Date',
@@ -158,9 +198,9 @@ class MoneyManagerConverter {
     'Amount',
   ];
 
-  // The analyzer does not know Unicode property escapes; the VM does.
-  // ignore: valid_regexps
   static final _emoji = RegExp(
+    // The analyzer does not know Unicode property escapes; the VM does.
+    // ignore: valid_regexps
     r'[\p{Extended_Pictographic}\p{Emoji_Modifier}\u{FE0F}\u{200D}]',
     unicode: true,
   );
@@ -181,44 +221,32 @@ class MoneyManagerConverter {
     if (rows.isEmpty) {
       throw const MoneyManagerFormatException('The file is empty');
     }
-    final header = [for (final h in rows.first) h.trim()];
-    for (final name in _required) {
-      if (!header.contains(name)) {
-        throw MoneyManagerFormatException(
-          'Column "$name" not found: is this a Money Manager export in English?',
-        );
-      }
-    }
-    int col(String name) => header.indexOf(name);
-    final dateCol = col('Date');
-    final accountCol = col('Account');
-    final categoryCol = col('Category');
-    final subcategoryCol = col('Subcategory');
-    final noteCol = col('Note');
-    final typeCol = col('Income/Expense');
-    final descriptionCol = col('Description');
-    // The column named after the main currency (e.g. "EUR") holds the amount
-    // converted to it; "Amount" is in the transaction's own currency.
-    final mainAmountCol = header.indexWhere(_currencyCode.hasMatch);
-    final amountCol = mainAmountCol != -1 ? mainAmountCol : col('Amount');
+    final columns = _Columns.find([for (final h in rows.first) h.trim()]);
 
     final parsed = <_Row>[];
+    final unknownTypes = <String>{};
     var skipped = 0;
     for (var i = 1; i < rows.length; i++) {
       final row = rows[i];
       String cell(int index) => index < row.length ? row[index].trim() : '';
       if (row.every((c) => c.trim().isEmpty)) continue;
 
-      final type = switch (cell(typeCol)) {
-        'Income' => TransactionType.income,
-        'Expense' => TransactionType.expense,
-        'Transfer-Out' => TransactionType.transfer,
-        _ => null, // Transfer-In mirrors a Transfer-Out row
+      final typeLabel = cell(columns.type);
+      final kind = _kind(typeLabel);
+      if (kind == null) {
+        unknownTypes.add(typeLabel);
+        continue;
+      }
+      final type = switch (kind) {
+        _Kind.income => TransactionType.income,
+        _Kind.expense => TransactionType.expense,
+        _Kind.transferOut => TransactionType.transfer,
+        _Kind.transferIn => null, // Transfer-In mirrors a Transfer-Out row
       };
-      final date = _parseDate(cell(dateCol));
-      final amount = _parseAmount(cell(amountCol));
-      final account = _cleanName(cell(accountCol));
-      final category = _cleanName(cell(categoryCol));
+      final date = _parseDate(cell(columns.date));
+      final amount = _parseAmount(cell(columns.amount));
+      final account = _cleanName(cell(columns.account));
+      final category = _cleanName(cell(columns.category));
       if (type == null ||
           date == null ||
           amount == null ||
@@ -234,10 +262,21 @@ class MoneyManagerConverter {
           type: type,
           amount: amount.abs(),
           account: account,
-          category: category,
-          subcategory: _cleanName(cell(subcategoryCol)),
-          note: _note(cell(noteCol), cell(descriptionCol)),
+          category:
+              type != TransactionType.transfer &&
+                  balanceAdjustmentNames.contains(category)
+              ? balanceAdjustmentLabel
+              : category,
+          subcategory: _cleanName(cell(columns.subcategory)),
+          note: _note(cell(columns.note), cell(columns.description)),
         ),
+      );
+    }
+    if (unknownTypes.isNotEmpty) {
+      throw MoneyManagerFormatException(
+        'Transaction types not recognised: '
+        '${unknownTypes.map((t) => '"$t"').join(', ')}. '
+        'Export again from Money Manager with the app in English.',
       );
     }
     parsed.sort((a, b) {
@@ -300,9 +339,7 @@ class MoneyManagerConverter {
       category.id = categories.length + 1;
       return {
         CategoryTransactionFields.id: category.id,
-        CategoryTransactionFields.name: name == balanceAdjustmentName
-            ? balanceAdjustmentLabel
-            : name,
+        CategoryTransactionFields.name: name,
         CategoryTransactionFields.type: category.typeCode,
         CategoryTransactionFields.symbol: categorySymbol,
         CategoryTransactionFields.color: color,
@@ -371,9 +408,13 @@ class MoneyManagerConverter {
   static String _cleanName(String name) =>
       name.replaceAll(_emoji, '').replaceAll(_spaces, ' ').trim();
 
+  static String _normalize(String text) => text.toLowerCase().trim();
+
+  static _Kind? _kind(String label) => _types[_normalize(label)];
+
   static String? _note(String note, String description) {
     final parts = [
-      if (!_generatedNotes.contains(note.toLowerCase())) note,
+      if (!_generatedNotes.contains(_normalize(note))) note,
       description,
     ].where((p) => p.isNotEmpty);
     return parts.isEmpty ? null : parts.join(' - ');
@@ -409,6 +450,66 @@ class MoneyManagerConverter {
       }
     }
     return DateTime.tryParse(text);
+  }
+}
+
+enum _Kind { income, expense, transferOut, transferIn }
+
+class _Columns {
+  const _Columns({
+    required this.date,
+    required this.account,
+    required this.category,
+    required this.subcategory,
+    required this.note,
+    required this.type,
+    required this.description,
+    required this.amount,
+  });
+
+  final int date;
+  final int account;
+  final int category;
+  final int subcategory;
+  final int note;
+  final int type;
+  final int description;
+  final int amount;
+
+  factory _Columns.find(List<String> header) {
+    // The column named after the main currency (e.g. "EUR") holds the amount
+    // converted to it; "Amount" is in the transaction's own currency.
+    final mainAmount = header.indexWhere(
+      MoneyManagerConverter._currencyCode.hasMatch,
+    );
+    if (MoneyManagerConverter._required.every(header.contains)) {
+      int col(String name) => header.indexOf(name);
+      return _Columns(
+        date: col('Date'),
+        account: col('Account'),
+        category: col('Category'),
+        subcategory: col('Subcategory'),
+        note: col('Note'),
+        type: col('Income/Expense'),
+        description: col('Description'),
+        amount: mainAmount != -1 ? mainAmount : col('Amount'),
+      );
+    }
+    if (mainAmount != 5 || header.length < 11) {
+      throw const MoneyManagerFormatException(
+        'This file does not look like a Money Manager export',
+      );
+    }
+    return _Columns(
+      date: 0,
+      account: 1,
+      category: 2,
+      subcategory: 3,
+      note: 4,
+      amount: 5,
+      type: 6,
+      description: header.length >= 12 ? 8 : 7,
+    );
   }
 }
 
