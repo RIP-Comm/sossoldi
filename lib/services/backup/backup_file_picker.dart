@@ -1,14 +1,14 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
 import '../../ui/snack_bars/snack_bar.dart';
 import '../../ui/device.dart';
 
-class CSVFilePicker {
+class BackupFilePicker {
   // Request storage permission based on Android version
   static Future<bool> _requestStoragePermission() async {
     if (Platform.isAndroid) {
@@ -23,8 +23,13 @@ class CSVFilePicker {
     return true;
   }
 
-  // Pick CSV file for import
-  static Future<File?> pickCSVFile(BuildContext context) async {
+  /// Lets the user pick a file. With [extensions] the picker only shows
+  /// those types; without, any file can be chosen (needed for `.db`, which
+  /// mobile pickers do not recognise as a type).
+  static Future<File?> pickFile(
+    BuildContext context, {
+    List<String>? extensions,
+  }) async {
     bool permissionGranted = await _requestStoragePermission();
     if (!permissionGranted) {
       if (context.mounted) {
@@ -35,8 +40,8 @@ class CSVFilePicker {
 
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['csv'],
+        type: extensions == null ? FileType.any : FileType.custom,
+        allowedExtensions: extensions,
         allowMultiple: false,
       );
 
@@ -51,36 +56,37 @@ class CSVFilePicker {
     return null;
   }
 
-  // Share exported CSV file
-  static Future<void> saveCSVFile(String csv, BuildContext context) async {
-    String? selectedDirectory;
+  /// Opens the system "save as" dialog to save [bytes] as
+  /// `sossoldi_export_<timestamp>.<extension>`.
+  static Future<void> saveFile(
+    List<int> bytes,
+    String extension,
+    BuildContext context,
+  ) async {
+    final String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+    final String fileName = 'sossoldi_export_$timestamp.$extension';
+    final data = Uint8List.fromList(bytes);
     try {
-      // Prompt the user to select a directory
-      selectedDirectory = await FilePicker.platform.getDirectoryPath();
-      if (selectedDirectory == null) {
-        // User canceled the picker
-        return;
+      // On Android and iOS the plugin writes the bytes itself (through the
+      // system document picker, which works in any folder); on desktop it
+      // only returns the chosen path.
+      final String? path = await FilePicker.platform.saveFile(
+        dialogTitle: 'Save export',
+        fileName: fileName,
+        bytes: data,
+      );
+      if (path == null) return; // User canceled the picker
+
+      if (!Platform.isAndroid && !Platform.isIOS) {
+        await File(path).writeAsBytes(data, flush: true);
       }
 
-      final String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
-      final String filePath = join(
-        selectedDirectory,
-        'sossoldi_export_$timestamp.csv',
-      );
-
-      // Write the CSV content directly to the file
-      final file = await File(filePath).writeAsString(csv);
-
-      // Show success message
       if (context.mounted) {
-        showSnackBar(context, message: 'File saved to: ${file.path}');
+        showSnackBar(context, message: 'File saved: $fileName');
       }
     } catch (e) {
       if (context.mounted) {
-        String errorMessage =
-            'Cannot save the file here, please create or select a folder in Downloads or Documents. Error: ${e.toString()}';
-
-        showSnackBar(context, message: errorMessage);
+        showSnackBar(context, message: 'Cannot save the file: $e');
       }
     }
   }

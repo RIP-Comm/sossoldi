@@ -139,7 +139,7 @@ class MoneyManagerConverter {
 
   /// Money Manager's built-in balance adjustment category.
   static const balanceAdjustmentName = 'Modified Bal.';
-  static const balanceAdjustmentLabel = 'Rettifica saldo';
+  static const balanceAdjustmentLabel = 'Balance adjustment';
 
   static const accountSymbol = 'account_balance';
   static const categorySymbol = 'question_mark';
