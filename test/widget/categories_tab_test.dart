@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sossoldi/l10n/app_localizations.dart';
 import 'package:sossoldi/model/category_transaction.dart';
 import 'package:sossoldi/model/currency.dart';
 import 'package:sossoldi/model/transaction.dart';
@@ -126,7 +127,11 @@ void main() {
         await tester.pumpWidget(
           UncontrolledProviderScope(
             container: container,
-            child: const MaterialApp(home: Scaffold(body: CategoriesTab())),
+            child: const MaterialApp(
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: Scaffold(body: CategoriesTab()),
+            ),
           ),
         );
         await tester.pumpAndSettle();

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../../constants/constants.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../model/currency.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/transactions_provider.dart';
@@ -37,6 +38,7 @@ class PanelListTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedIndex = ref.watch(selectedListIndexProvider);
     final currency = ref.watch(currencyStateProvider);
+    var l10n = AppLocalizations.of(context)!;
     return ClipRRect(
       borderRadius: BorderRadius.circular(Sizes.borderRadius),
       child: ExpansionPanelList(
@@ -90,7 +92,7 @@ class PanelListTile extends ConsumerWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "${transactions.length} transactions",
+                                l10n.transactionCount(transactions.length),
                                 style: Theme.of(context).textTheme.labelLarge,
                               ),
                               Text(
@@ -126,6 +128,7 @@ class PanelListTile extends ConsumerWidget {
     List<Transaction> txs,
     Currency currency,
   ) {
+    var l10n = AppLocalizations.of(context)!;
     final Map<int?, List<Transaction>> grouped = {};
     final List<Widget> children = [];
 
@@ -145,7 +148,7 @@ class PanelListTile extends ConsumerWidget {
             : -t.amount.toDouble();
       }
 
-      final headerName = list.first.categoryName ?? 'Uncategorized';
+      final headerName = list.first.categoryName ?? l10n.uncategorized;
       final percent = list.length * 100 / txs.length;
 
       children.add(
@@ -200,7 +203,7 @@ class PanelListTile extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "${list.length} transactions",
+                          l10n.transactionCount(list.length),
                           style: Theme.of(context).textTheme.labelLarge,
                         ),
                         Text(
@@ -236,6 +239,7 @@ class TransactionsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = AppLocalizations.of(context)!;
     return ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -281,7 +285,7 @@ class TransactionsList extends StatelessWidget {
                       children: [
                         Text(
                           transaction.categoryName?.toUpperCase() ??
-                              "Uncategorized",
+                              l10n.uncategorized,
                           style: Theme.of(context).textTheme.labelLarge,
                         ),
                         Text(

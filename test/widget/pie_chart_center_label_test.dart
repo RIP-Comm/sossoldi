@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sossoldi/l10n/app_localizations.dart';
 import 'package:sossoldi/model/category_transaction.dart';
 import 'package:sossoldi/model/currency.dart';
 import 'package:sossoldi/pages/transactions/widgets/categories_pie_chart.dart';
@@ -36,6 +37,9 @@ void main() {
       ProviderScope(
         overrides: [currencyStateProvider.overrideWith(_EuroCurrencyState.new)],
         child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+
           home: Material(
             child: CategoriesPieChart(
               categories: [category],

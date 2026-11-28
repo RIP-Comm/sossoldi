@@ -2,7 +2,9 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../ui/extensions.dart';
+import '../../../ui/localized_labels.dart';
 import '../../../ui/widgets/rounded_icon.dart';
 import '../../../model/recurring_transaction.dart';
 import '../../../providers/theme_provider.dart';
@@ -32,6 +34,7 @@ class RecurringPaymentCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    var l10n = AppLocalizations.of(context)!;
     final categories = ref.watch(categoriesProvider).value;
     final accounts = ref.watch(accountsProvider).value;
     final isDarkMode = ref.watch(appThemeStateProvider).isDarkModeEnabled;
@@ -78,7 +81,9 @@ class RecurringPaymentCard extends ConsumerWidget {
                           spacing: Sizes.sm,
                           children: [
                             Text(
-                              transaction.recurrency.label.toUpperCase(),
+                              transaction.recurrency
+                                  .localizedLabel(l10n)
+                                  .toUpperCase(),
                               style: Theme.of(context).textTheme.labelLarge,
                             ),
                             Text(
@@ -100,7 +105,7 @@ class RecurringPaymentCard extends ConsumerWidget {
                           spacing: Sizes.sm,
                           children: [
                             Text(
-                              "IN ${getNextText()} DAYS".toUpperCase(),
+                              l10n.inTheNextDays(getNextText()).toUpperCase(),
                               style: Theme.of(context).textTheme.labelLarge,
                             ),
                             Builder(
@@ -183,9 +188,9 @@ class RecurringPaymentCard extends ConsumerWidget {
                               ),
                             ),
                             icon: const Icon(Icons.checklist_rtl_outlined),
-                            label: const Text(
-                              "See older payments",
-                              style: TextStyle(fontSize: 14),
+                            label: Text(
+                              l10n.seeOlderPayments,
+                              style: const TextStyle(fontSize: 14),
                             ),
                           ),
                         ),
@@ -196,7 +201,9 @@ class RecurringPaymentCard extends ConsumerWidget {
                           child: Container(
                             alignment: Alignment.centerRight,
                             child: Text(
-                              "Until ${transaction.toDate?.formatEDMY()}",
+                              l10n.untilDate(
+                                transaction.toDate?.formatEDMY() ?? '',
+                              ),
                               style: const TextStyle(fontSize: 8),
                             ),
                           ),

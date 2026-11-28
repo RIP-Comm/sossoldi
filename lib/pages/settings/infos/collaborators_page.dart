@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../constants/constants.dart';
 import '../../../constants/style.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../ui/device.dart';
 import '../../../ui/widgets/default_card.dart';
 
@@ -48,13 +49,14 @@ class CollaboratorsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    var l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text('Collaborators'),
+        title: Text(l10n.collaboratorsTitle),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(top: Sizes.xl, bottom: Sizes.xxl),
@@ -68,14 +70,14 @@ class CollaboratorsPage extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Meet the team',
+                    l10n.meetTheTeam,
                     style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                   const SizedBox(height: Sizes.sm),
                   Text(
-                    'sossoldi is built and maintained by a passionate open source community. Every feature, fix and idea comes from people like you.',
+                    l10n.teamDescription,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       color: Theme.of(context).colorScheme.outline,
                     ),
@@ -119,14 +121,14 @@ class CollaboratorsPage extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Want to contribute?',
+                          l10n.wantToContribute,
                           style: Theme.of(context).textTheme.titleLarge!
                               .copyWith(
                                 color: Theme.of(context).colorScheme.primary,
                               ),
                         ),
                         Text(
-                          'Open an issue, submit a PR or just say hi on GitHub',
+                          l10n.contributeDescription,
                           style: Theme.of(context).textTheme.bodySmall!
                               .copyWith(
                                 color: Theme.of(context).colorScheme.outline,

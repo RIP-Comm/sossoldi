@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../../ui/device.dart';
 import '../../../ui/widgets/native_alert_dialog.dart';
 import '../../../model/bank_account.dart';
@@ -16,32 +17,29 @@ class ConfirmAccountDeletionDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return AdaptiveDialog(
-      title: const Text('Delete account'),
+      title: Text(l10n.deleteAccount),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: Sizes.md,
         children: [
-          Text(
-            'Are you sure you want to delete the account named "${account.name}"?',
-          ),
-          const Text(
-            'All recurring transactions linked to this account will be deleted.',
-          ),
+          Text(l10n.deleteAccountConfirm(account.name)),
+          Text(l10n.deleteAccountRecurringWarning),
           const SizedBox(height: Sizes.md),
-          const Text('This action cannot be undone.'),
+          Text(l10n.actionCannotBeUndone),
         ],
       ),
       actions: [
         AdaptiveDialogAction(
-          child: const Text('Cancel'),
+          child: Text(l10n.cancel),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         AdaptiveDialogAction(
-          child: const Text('Delete'),
+          child: Text(l10n.delete),
           isDestructiveAction: true,
           onPressed: onPressed,
         ),

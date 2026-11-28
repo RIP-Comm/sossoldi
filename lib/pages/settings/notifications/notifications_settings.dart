@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/style.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../providers/settings_provider.dart';
 import '../../../ui/device.dart';
 import '../../../services/notifications/notifications_service.dart';
@@ -18,6 +19,7 @@ class NotificationsSettings extends ConsumerWidget {
     final isTrscAddedReminderEnabled = ref.watch(
       transactionRecAddedSwitchProvider,
     );
+    var l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
@@ -25,7 +27,7 @@ class NotificationsSettings extends ConsumerWidget {
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text('Notifications'),
+        title: Text(l10n.notifications),
       ),
       body: ListView(
         padding: const EdgeInsets.only(top: Sizes.xl),
@@ -48,7 +50,7 @@ class NotificationsSettings extends ConsumerWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        "Add transactions reminder",
+                        l10n.addTransactionReminder,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ),
@@ -98,7 +100,7 @@ class NotificationsSettings extends ConsumerWidget {
               bottom: Sizes.sm,
             ),
             child: Text(
-              "RECURRING TRANSACTIONS",
+              l10n.recurringTransactions.toUpperCase(),
               style: Theme.of(
                 context,
               ).textTheme.labelLarge!.copyWith(color: grey1),
@@ -123,7 +125,7 @@ class NotificationsSettings extends ConsumerWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        "Recurring transaction added",
+                        l10n.recurringTransactionAdded,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ),

@@ -85,6 +85,7 @@ Also, you can refer to internal docs:
 
 -   [Setup Guide](https://rip-comm.github.io/sossoldi/setup/setup.html)
 -   [PR Guide](https://rip-comm.github.io/sossoldi/contributing/PR-guide.html)
+-   [Translations](https://rip-comm.github.io/sossoldi/contributing/translations.html)
 
 ### Useful links to get started
 -   [Github Repo](https://github.com/RIP-Comm/sossoldi)

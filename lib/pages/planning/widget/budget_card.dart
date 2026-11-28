@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/style.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../model/category_transaction.dart';
 import '../../../model/transaction.dart';
 import '../../../providers/categories_provider.dart';
@@ -26,6 +27,7 @@ class BudgetCard extends ConsumerWidget {
     final transactionsAsync = ref.watch(monthlyTransactionsProvider);
     final categoriesAsync = ref.watch(allParentCategoriesProvider);
     final currencyState = ref.watch(currencyStateProvider);
+    var l10n = AppLocalizations.of(context)!;
 
     return DefaultContainer(
       margin: EdgeInsets.zero,
@@ -40,7 +42,7 @@ class BudgetCard extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Composition",
+                              l10n.composition,
                               style: Theme.of(context).textTheme.titleLarge,
                             ),
                             BudgetPieChart(
@@ -48,7 +50,7 @@ class BudgetCard extends ConsumerWidget {
                               categories: categories,
                             ),
                             Text(
-                              "Progress",
+                              l10n.progress,
                               style: Theme.of(context).textTheme.titleLarge,
                             ),
                             const SizedBox(height: Sizes.sm),
@@ -126,24 +128,24 @@ class BudgetCard extends ConsumerWidget {
                       loading: () =>
                           const Center(child: CircularProgressIndicator()),
                       error: (err, stack) {
-                        return Text('Error: $err');
+                        return Text(l10n.errorOccurred(err));
                       },
                     );
                   },
                   loading: () =>
                       const Center(child: CircularProgressIndicator()),
-                  error: (err, stack) => Text('Error: $err'),
+                  error: (err, stack) => Text(l10n.errorOccurred(err)),
                 )
               : Column(
                   children: [
                     Text(
-                      "There are no budget set",
+                      l10n.noBudgetSet,
                       style: Theme.of(context).textTheme.bodySmall,
                       textAlign: TextAlign.center,
                     ),
                     Image.asset(SossoldiAssets.wallet, width: 240, height: 240),
                     Text(
-                      "A monthly budget can help you keep track of your expenses and stay within the limits",
+                      l10n.budgetHelpText,
                       style: Theme.of(context).textTheme.bodySmall,
                       textAlign: TextAlign.center,
                     ),
@@ -163,7 +165,7 @@ class BudgetCard extends ConsumerWidget {
                           size: Sizes.xl,
                         ),
                         label: Text(
-                          "Create budget",
+                          l10n.createBudget,
                           style: Theme.of(context).textTheme.titleLarge!.apply(
                             color: Theme.of(
                               context,
@@ -208,7 +210,7 @@ class BudgetCard extends ConsumerWidget {
                 );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, stack) => Text('Error: $err'),
+        error: (err, stack) => Text(l10n.errorOccurred(err)),
       ),
     );
   }

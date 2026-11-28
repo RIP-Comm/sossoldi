@@ -8,6 +8,8 @@ import '../../../model/transaction.dart';
 import '../../../providers/categories_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../ui/device.dart';
+import '../../l10n/app_localizations.dart';
+import '../../ui/localized_labels.dart';
 import 'widgets/category_icon_color_selector.dart';
 import 'widgets/confirm_category_deletion_dialog.dart';
 import 'widgets/subcategories_list.dart';
@@ -53,10 +55,13 @@ class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = AppLocalizations.of(context)!;
     final selectedCategory = ref.watch(selectedCategoryProvider);
     return Scaffold(
       appBar: AppBar(
-        title: Text("${selectedCategory == null ? "New" : "Edit"} Category"),
+        title: Text(
+          selectedCategory == null ? l10n.newCategory : l10n.editCategory,
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
           // Result from the .pop is used in lib\pages\planning_page\manage_budget_page.dart.
@@ -120,7 +125,9 @@ class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {
                 }
               },
               child: Text(
-                "${selectedCategory == null ? "CREATE" : "UPDATE"} CATEGORY",
+                selectedCategory == null
+                    ? l10n.createCategory.toUpperCase()
+                    : l10n.updateCategory.toUpperCase(),
               ),
             ),
           ),
@@ -149,16 +156,14 @@ class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "NAME",
+                    l10n.type.toUpperCase(),
                     style: Theme.of(context).textTheme.labelLarge!.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                   TextField(
                     controller: nameController,
-                    decoration: const InputDecoration(
-                      hintText: "Category name",
-                    ),
+                    decoration: InputDecoration(hintText: l10n.categoryName),
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ],
@@ -181,7 +186,7 @@ class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "TYPE",
+                    l10n.type.toUpperCase(),
                     style: Theme.of(context).textTheme.labelLarge!.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                     ),
@@ -200,7 +205,7 @@ class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {
                           return DropdownMenuItem<CategoryTransactionType>(
                             value: type,
                             child: Text(
-                              type.label,
+                              type.localizedLabel(l10n),
                               style: Theme.of(context).textTheme.titleLarge,
                             ),
                           );
@@ -230,7 +235,7 @@ class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {
                   bottom: Sizes.sm,
                 ),
                 child: Text(
-                  "SUBCATEGORY",
+                  l10n.subcategory,
                   style: Theme.of(context).textTheme.labelLarge!.copyWith(
                     color: Theme.of(context).colorScheme.primary,
                   ),
@@ -269,7 +274,7 @@ class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {
                   ),
                   icon: const Icon(Icons.delete_outlined, color: red),
                   label: Text(
-                    "Delete category",
+                    l10n.deleteCategory,
                     style: Theme.of(
                       context,
                     ).textTheme.bodyLarge!.copyWith(color: red),

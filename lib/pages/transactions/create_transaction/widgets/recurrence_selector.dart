@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../model/recurring_transaction.dart';
 import '../../../../providers/transactions_provider.dart';
 import '../../../../ui/device.dart';
+import '../../../../ui/localized_labels.dart';
 
 class RecurrenceSelector extends ConsumerStatefulWidget {
   const RecurrenceSelector({super.key});
@@ -36,7 +38,7 @@ class _RecurrenceSelectorState extends ConsumerState<RecurrenceSelector> {
                     Sizes.lg,
                   ),
                   title: Text(
-                    recurrence.label,
+                    recurrence.localizedLabel(AppLocalizations.of(context)!),
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                     ),

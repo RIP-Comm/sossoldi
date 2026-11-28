@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 import '../../../constants/style.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../model/budget.dart';
 import '../../../ui/device.dart';
 
@@ -20,6 +21,7 @@ class CategoryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = AppLocalizations.of(context)!;
     if (budget != null && budget!.active && budget!.amountLimit > 0) {
       return Container(
         decoration: BoxDecoration(
@@ -51,7 +53,7 @@ class CategoryButton extends StatelessWidget {
                   ).textTheme.bodyLarge?.copyWith(color: white),
                 ),
                 Text(
-                  "BUDGET: ${budget?.amountLimit}€",
+                  l10n.budgetAmount(budget!.amountLimit).toUpperCase(),
                   style: Theme.of(
                     context,
                   ).textTheme.bodyLarge?.copyWith(fontSize: 10, color: white),
@@ -96,7 +98,7 @@ class CategoryButton extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
-                      "ADD BUDGET",
+                      l10n.addBudget.toUpperCase(),
                       style: Theme.of(context).textTheme.labelMedium,
                     ),
                   ],

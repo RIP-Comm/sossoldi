@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../model/budget.dart';
 import '../../../model/category_transaction.dart';
 import '../../../providers/currency_provider.dart';
@@ -47,6 +48,7 @@ class BudgetPieChart extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    var l10n = AppLocalizations.of(context)!;
     final currencyState = ref.watch(currencyStateProvider);
     double totalBudget = 0;
     for (Budget budget in budgets) {
@@ -72,9 +74,9 @@ class BudgetPieChart extends ConsumerWidget {
               "${totalBudget.toCurrency()}${currencyState.symbol}",
               style: const TextStyle(fontSize: 25),
             ),
-            const Text(
-              "PLANNED",
-              style: TextStyle(fontWeight: FontWeight.normal),
+            Text(
+              l10n.planned.toUpperCase(),
+              style: const TextStyle(fontWeight: FontWeight.normal),
             ),
           ],
         ),

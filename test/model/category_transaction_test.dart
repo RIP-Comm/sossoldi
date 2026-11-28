@@ -1,8 +1,12 @@
+import 'dart:ui' show Locale;
+
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:sossoldi/l10n/app_localizations.dart';
 import 'package:sossoldi/model/base_entity.dart';
 import 'package:sossoldi/model/category_transaction.dart';
 import 'package:sossoldi/model/transaction.dart';
+import 'package:sossoldi/ui/localized_labels.dart';
 
 void main() {
   test('Test Copy Category Transaction', () {
@@ -91,7 +95,14 @@ void main() {
 
     expect(type, CategoryTransactionType.incomeAndExpense);
     expect(type.code, "BOTH");
-    expect(type.label, "Income & Expense");
+    expect(
+      type.localizedLabel(lookupAppLocalizations(const Locale('en'))),
+      "Income & Expense",
+    );
+    expect(
+      type.localizedLabel(lookupAppLocalizations(const Locale('it'))),
+      "Entrata e spesa",
+    );
     expect(type.supports(TransactionType.income), isTrue);
     expect(type.supports(TransactionType.expense), isTrue);
     expect(type.supports(TransactionType.transfer), isFalse);

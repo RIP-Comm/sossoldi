@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../l10n/app_localizations.dart';
 import 'widgets/account_section.dart';
 import 'widgets/budgets_section.dart';
 import '../../constants/style.dart';
@@ -32,6 +33,7 @@ class _HomePageState extends ConsumerState<DashboardPage> {
     final expense = ref.watch(expenseProvider);
     final currentMonthList = ref.watch(currentMonthListProvider);
     final lastMonthList = ref.watch(lastMonthListProvider);
+    var l10n = AppLocalizations.of(context)!;
 
     ref.listen(
       duplicatedTransactionProvider,
@@ -60,7 +62,7 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "MONTHLY BALANCE",
+                                l10n.monthlyBalance.toUpperCase(),
                                 style: Theme.of(context).textTheme.labelMedium
                                     ?.copyWith(
                                       color: Theme.of(
@@ -105,7 +107,7 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "INCOME",
+                                l10n.income.toUpperCase(),
                                 style: Theme.of(context).textTheme.labelMedium,
                               ),
                               BlurWidget(
@@ -137,7 +139,7 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "EXPENSES",
+                                l10n.expense.toUpperCase(),
                                 style: Theme.of(context).textTheme.labelMedium,
                               ),
                               BlurWidget(
@@ -185,7 +187,7 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                           ),
                           const SizedBox(width: Sizes.xs),
                           Text(
-                            "Current month",
+                            l10n.currentMonth,
                             style: Theme.of(context).textTheme.labelMedium
                                 ?.copyWith(
                                   color: Theme.of(context).colorScheme.primary,
@@ -202,7 +204,7 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                           ),
                           const SizedBox(width: Sizes.xs),
                           Text(
-                            "Last month",
+                            l10n.lastMonth,
                             style: Theme.of(context).textTheme.labelMedium
                                 ?.copyWith(
                                   color: Theme.of(context).colorScheme.primary,
@@ -215,7 +217,7 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                   );
                 },
                 loading: () => const SizedBox(height: 330),
-                error: (err, stack) => Text('Error: $err'),
+                error: (err, stack) => Text(l10n.errorOccurred(err)),
               ),
           Container(
             decoration: BoxDecoration(
@@ -238,7 +240,7 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                     Sizes.sm,
                   ),
                   child: Text(
-                    "Your accounts",
+                    l10n.yourAccounts,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ),
@@ -253,7 +255,7 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                       Sizes.sm,
                     ),
                     child: Text(
-                      "Last transactions",
+                      l10n.lastTransactions,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ),
@@ -264,7 +266,7 @@ class _HomePageState extends ConsumerState<DashboardPage> {
                     transactions: transactions,
                   ),
                   loading: () => const SizedBox(),
-                  error: (err, stack) => Text('Error: $err'),
+                  error: (err, stack) => Text(l10n.errorOccurred(err)),
                 ),
                 const SizedBox(height: Sizes.xxl),
                 const BudgetsSection(),

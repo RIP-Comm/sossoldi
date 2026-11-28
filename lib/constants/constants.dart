@@ -302,6 +302,7 @@ const String githubUrl = 'https://github.com/RIP-Comm/sossoldi';
 const String linkedinUrl = 'https://www.linkedin.com/company/sossoldi';
 const String youtubeUrl = 'https://www.youtube.com/@Sossoldi-app';
 const String discordUrl = 'https://discord.sossoldi.com';
+const String sossoldiEmail = 'help.sossoldi@gmail.com';
 
 void updateColorsBasedOnTheme(bool isDarkModeEnabled) {
   if (isDarkModeEnabled) {

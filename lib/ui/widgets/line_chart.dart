@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../providers/currency_provider.dart';
 import '../device.dart';
 import '../extensions.dart';
@@ -102,7 +103,7 @@ class _LineChartSample2State extends ConsumerState<LineChartWidget> {
                         widget.line2Data.length < 2) {
                       return Center(
                         child: Text(
-                          "We are sorry but there is not\nenough data to make the graph...",
+                          AppLocalizations.of(context)!.notEnoughDataForGraph,
                           style: TextStyle(color: Theme.of(context).hintColor),
                         ),
                       );

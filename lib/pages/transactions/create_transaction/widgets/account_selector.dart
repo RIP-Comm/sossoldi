@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../constants/constants.dart';
 import '../../../../constants/style.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../ui/widgets/rounded_icon.dart';
 import '../../../../model/bank_account.dart';
 import '../../../../providers/accounts_provider.dart';
@@ -33,14 +34,14 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> {
     final frequentAccounts = ref.watch(frequentAccountsProvider);
     final fromAccount = ref.watch(selectedBankAccountProvider);
     final toAccount = ref.watch(bankAccountTransferProvider);
-
+    var l10n = AppLocalizations.of(context)!;
     return Container(
       color: Theme.of(context).colorScheme.primaryContainer,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           AppBar(
-            title: const Text("Account"),
+            title: Text(l10n.account),
             actions: [
               IconButton(
                 onPressed: () {
@@ -66,7 +67,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> {
                       bottom: Sizes.sm,
                     ),
                     child: Text(
-                      "MORE FREQUENT",
+                      l10n.moreFrequent.toUpperCase(),
                       style: Theme.of(context).textTheme.labelLarge!.copyWith(
                         color: Theme.of(context).colorScheme.primary,
                       ),
@@ -131,7 +132,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> {
                       ),
                       loading: () =>
                           const Center(child: CircularProgressIndicator()),
-                      error: (err, stack) => Text('Error: $err'),
+                      error: (err, stack) => Text(l10n.errorOccurred(err)),
                     ),
                   ),
                   Container(
@@ -142,7 +143,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> {
                       bottom: Sizes.sm,
                     ),
                     child: Text(
-                      "ALL ACCOUNTS",
+                      l10n.allAccounts,
                       style: Theme.of(context).textTheme.labelLarge!.copyWith(
                         color: Theme.of(context).colorScheme.primary,
                       ),
@@ -196,7 +197,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> {
                     ),
                     loading: () =>
                         const Center(child: CircularProgressIndicator()),
-                    error: (err, stack) => Text('Error: $err'),
+                    error: (err, stack) => Text(l10n.errorOccurred(err)),
                   ),
                 ],
               ),

@@ -1,6 +1,10 @@
+import 'dart:ui' show Locale;
+
+import 'package:intl/intl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../l10n/app_localizations.dart';
 import '../services/notifications/notifications_service.dart';
 
 part 'settings_provider.g.dart';
@@ -114,10 +118,10 @@ class Notifications extends _$Notifications {
         ref.read(transactionReminderCadenceProvider.notifier).setValue(type);
         await prefs.setBool('transaction-reminder', true);
         await prefs.setString('transaction-reminder-cadence', type.name);
+        final l10n = _currentLocalizations();
         await NotificationService.scheduleNotification(
-          title: "Remember to log new expenses!",
-          body:
-              "Sossoldi is waiting for your latest transactions. Don't lose sight of your financial movements, and input your most recent expenses.",
+          title: l10n.reminderNotificationTitle,
+          body: l10n.reminderNotificationBody,
           recurrence: type,
         );
       } else {
@@ -145,4 +149,13 @@ class Notifications extends _$Notifications {
       return _getSettings();
     });
   }
+}
+
+/// Localizations for the language the app is currently shown in, for texts
+/// built outside the widget tree.
+AppLocalizations _currentLocalizations() {
+  final locale = Locale(Intl.shortLocale(Intl.getCurrentLocale()));
+  return lookupAppLocalizations(
+    AppLocalizations.delegate.isSupported(locale) ? locale : const Locale('en'),
+  );
 }

@@ -42,12 +42,6 @@ enum CategoryTransactionType {
     CategoryTransactionType.incomeAndExpense => "BOTH",
   };
 
-  String get label => switch (this) {
-    CategoryTransactionType.income => "Income",
-    CategoryTransactionType.expense => "Expense",
-    CategoryTransactionType.incomeAndExpense => "Income & Expense",
-  };
-
   List<TransactionType> get transactionTypes => switch (this) {
     CategoryTransactionType.income => [TransactionType.income],
     CategoryTransactionType.expense => [TransactionType.expense],

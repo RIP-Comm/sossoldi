@@ -1,4 +1,3 @@
-import '../ui/extensions.dart';
 import 'transaction.dart';
 import 'base_entity.dart';
 
@@ -42,8 +41,6 @@ enum Recurrence {
   quarterly,
   semester,
   annual;
-
-  String get label => name.capitalize();
 
   int get days {
     switch (this) {

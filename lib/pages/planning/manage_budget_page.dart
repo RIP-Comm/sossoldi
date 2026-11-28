@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../model/budget.dart';
 import '../../model/category_transaction.dart';
 import '../../model/transaction.dart';
@@ -62,8 +63,8 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
   void handleEmptyCategories() {
     showSnackBar(
       context,
-      message: "Add a category first to set a budget",
-      actionLabel: "ADD",
+      message: AppLocalizations.of(context)!.categoryFirstThenBudget,
+      actionLabel: AppLocalizations.of(context)!.add.toUpperCase(),
       onAction: () async {
         final categoryAdded =
             await Navigator.pushNamed(
@@ -86,6 +87,7 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = AppLocalizations.of(context)!;
     final availableCategories = categories
         .where((c) => !usedCategoryIds.contains(c.id))
         .toList();
@@ -98,7 +100,7 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
         Column(
           children: [
             Text(
-              "Swipe left to delete",
+              l10n.swipeLeftToDelete,
               style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(height: Sizes.md),
@@ -108,7 +110,7 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Your monthly budget will be: ",
+                    l10n.yourMonthlyBudgetWillBe,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   Text.rich(
@@ -148,7 +150,7 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
                     Navigator.of(context).pop();
                   }
                 },
-                child: const Text("SAVE BUDGET"),
+                child: Text(l10n.saveBudget),
               ),
             ),
           ],
@@ -161,20 +163,20 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
             Padding(
               padding: const EdgeInsets.all(Sizes.lg),
               child: Text(
-                "Select the categories to create your budget",
+                l10n.selectCategoriesToCreateBudget,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(
+            Padding(
+              padding: const EdgeInsets.symmetric(
                 horizontal: Sizes.lg,
                 vertical: Sizes.sm,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('CATEGORY', textAlign: TextAlign.left),
-                  Text('AMOUNT', textAlign: TextAlign.right),
+                  Text(l10n.category.toUpperCase(), textAlign: TextAlign.left),
+                  Text(l10n.amount.toUpperCase(), textAlign: TextAlign.right),
                 ],
               ),
             ),
@@ -202,16 +204,16 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
                                     name: availableCategories[0].name,
                                   ),
                                 ),
-                                label: const Text("Add category budget"),
+                                label: Text(l10n.addCategoryBudget),
                               ),
                             );
                           } else {
-                            return const Padding(
-                              padding: EdgeInsets.only(top: 8.0),
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
                               child: Center(
                                 child: Text(
-                                  "You have already added all available categories.",
-                                  style: TextStyle(color: Colors.grey),
+                                  l10n.allCategoriesAdded,
+                                  style: const TextStyle(color: Colors.grey),
                                 ),
                               ),
                             );
@@ -231,10 +233,10 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
                             padding: const EdgeInsets.only(right: Sizes.lg),
                             alignment: Alignment.centerRight,
                             color: Colors.red,
-                            child: const Text(
-                              'Delete',
+                            child: Text(
+                              l10n.delete,
                               textAlign: TextAlign.right,
-                              style: TextStyle(color: Colors.white),
+                              style: const TextStyle(color: Colors.white),
                             ),
                           ),
                           onDismissed: (_) => _deleteBudget(index),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../constants/style.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../ui/assets.dart';
 import '../../../ui/device.dart';
 import '../../../ui/widgets/default_container.dart';
@@ -10,6 +11,7 @@ class AddTransactionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = AppLocalizations.of(context)!;
     return Align(
       alignment: Alignment.topCenter,
       child: DefaultContainer(
@@ -22,13 +24,13 @@ class AddTransactionCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "There are no transactions added yet",
+              l10n.noTransactionsAdded,
               style: Theme.of(context).textTheme.bodySmall,
               textAlign: TextAlign.center,
             ),
             Image.asset(SossoldiAssets.calculator, width: 240, height: 240),
             Text(
-              "Add a transaction to make this section more appealing",
+              l10n.addTransactionCallToAction,
               style: Theme.of(context).textTheme.bodySmall,
               textAlign: TextAlign.center,
             ),
@@ -45,7 +47,7 @@ class AddTransactionCard extends StatelessWidget {
                   size: Sizes.xl,
                 ),
                 label: Text(
-                  "Add transaction",
+                  l10n.addTransaction,
                   style: Theme.of(context).textTheme.titleLarge!.apply(
                     color: Theme.of(context).colorScheme.onPrimaryContainer,
                   ),
