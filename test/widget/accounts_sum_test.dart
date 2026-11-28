@@ -1,89 +1,61 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sossoldi/services/database/sossoldi_database.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:flutter/material.dart';
-import "dart:math";
-
 import 'package:sossoldi/model/bank_account.dart';
-import 'package:sossoldi/services/database/repositories/account_repository.dart';
+import 'package:sossoldi/model/currency.dart';
 import 'package:sossoldi/pages/dashboard/widgets/accounts_sum.dart';
+import 'package:sossoldi/providers/currency_provider.dart';
 import 'package:sossoldi/providers/settings_provider.dart';
 
+class _TestCurrencyState extends CurrencyState {
+  @override
+  Currency build() => const Currency(
+    id: 1,
+    symbol: '€',
+    code: 'EUR',
+    name: 'Euro',
+    mainCurrency: true,
+  );
+}
+
 void main() {
-  // Initialize the database factory with sqflite_common_ffi
-  databaseFactory = databaseFactoryFfi;
+  testWidgets(
+    'Account summary renders its supplied total and selected currency',
+    (WidgetTester tester) async {
+      SharedPreferences.setMockInitialValues({'visibility_amount': true});
+      final preferences = await SharedPreferences.getInstance();
+      const account = BankAccount(
+        id: 99,
+        name: 'Synthetic account',
+        symbol: 'account_balance',
+        color: 0,
+        startingValue: 305.89,
+        total: 232.75,
+        active: true,
+        countNetWorth: true,
+        mainAccount: false,
+        order: 2,
+      );
 
-  late SossoldiDatabase sossoldiDatabase;
-  late SharedPreferences sharedPreferences;
-
-  setUpAll(() async {
-    sossoldiDatabase = SossoldiDatabase(dbName: 'accounts_sum_test.db');
-    await sossoldiDatabase.clearDatabase();
-    SharedPreferences.setMockInitialValues({'visibility_amount': false});
-    sharedPreferences = await SharedPreferences.getInstance();
-  });
-
-  tearDown(() async => await sossoldiDatabase.clearDatabase());
-
-  tearDownAll(() async => await sossoldiDatabase.close());
-
-  testWidgets('Properly Render Accounts Widget', (WidgetTester tester) async {
-    var accountsList = ['N26', 'Fineco', 'Crypto.com', 'Mediolanum'];
-    var amountsList = [3823.56, 0.07, 574.22, 14549.01];
-
-    final random = Random();
-
-    var randomAccount = accountsList[random.nextInt(accountsList.length)];
-    var randomValue = amountsList[random.nextInt(amountsList.length)];
-
-    BankAccount randomBankAccount = BankAccount(
-      id: 99,
-      name: randomAccount,
-      symbol: "account_balance",
-      color: 0,
-      startingValue: randomValue,
-      active: true,
-      countNetWorth: true,
-      mainAccount: false,
-      order: 2,
-    );
-
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: ProviderScope(
-            overrides: [
-              sharedPrefProvider.overrideWithValue(sharedPreferences),
-            ],
-            child: AccountsSum(account: randomBankAccount),
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: ProviderScope(
+              overrides: [
+                sharedPrefProvider.overrideWithValue(preferences),
+                currencyStateProvider.overrideWith(_TestCurrencyState.new),
+              ],
+              child: const AccountsSum(account: account),
+            ),
           ),
         ),
-      ),
-    );
+      );
 
-    FutureBuilder<num?>(
-      future: AccountRepository(database: sossoldiDatabase).getAccountSum(99),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          // Show an error message if the future encounters an error
-          return Text('Error: ${snapshot.error}');
-        } else {
-          final accountSum = snapshot.data ?? 0;
-          // TODO need to test total amount with some transactions too
-          expect(
-            find.text(
-              accountSum.toStringAsFixed(2).replaceAll('.', ','),
-              findRichText: true,
-            ),
-            findsOneWidget,
-          );
-          return const Text('Ok!');
-        }
-      },
-    );
-
-    expect(find.text(randomAccount), findsOneWidget);
-  });
+      expect(find.text('Synthetic account'), findsOneWidget);
+      expect(find.text('232.75€', findRichText: true), findsOneWidget);
+      expect(find.text('305.89€', findRichText: true), findsNothing);
+      expect(tester.takeException(), isNull);
+    },
+  );
 }

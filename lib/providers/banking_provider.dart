@@ -8,6 +8,7 @@ import '../services/banking/bank_consent_service.dart' as domain;
 import '../services/banking/bank_institution_directory.dart' as domain;
 import '../services/banking/banking_provider.dart';
 import '../services/banking/enable_banking/enable_banking_config.dart';
+import '../services/banking/enable_banking/enable_banking_key_generator.dart';
 import '../services/banking/enable_banking/enable_banking_dependencies.dart';
 import '../services/banking/enable_banking/enable_banking_errors.dart';
 import '../services/banking/enable_banking/enable_banking_provider.dart';
@@ -17,6 +18,13 @@ import '../services/banking/lifecycle/bank_deeplink_service.dart';
 import '../services/banking/lifecycle/banking_platform_support.dart';
 import '../services/banking/lifecycle/pending_bank_authorization_store.dart';
 import '../services/database/repositories/bank_connection_repository.dart';
+
+export '../services/banking/enable_banking/enable_banking_dependencies.dart';
+export '../services/banking/enable_banking/enable_banking_auth.dart';
+export '../services/banking/enable_banking/enable_banking_config.dart';
+export '../services/banking/enable_banking/enable_banking_setup_draft.dart';
+export '../services/banking/enable_banking/enable_banking_exception.dart';
+export '../services/banking/enable_banking/enable_banking_key_generator.dart';
 
 part 'banking_provider.g.dart';
 
@@ -84,7 +92,7 @@ class BankCallbackResult extends _$BankCallbackResult {
     BankAuthorizationCallback callback,
   ) async {
     state = const BankCallbackResultState(processing: true);
-    return ref
+    final disposition = await ref
         .read(bankConsentLifecycleServiceProvider)
         .handleCallback(
           callback,
@@ -93,7 +101,11 @@ class BankCallbackResult extends _$BankCallbackResult {
           },
           onError: reportError,
         );
+    if (state.processing) state = const BankCallbackResultState();
+    return disposition;
   }
+
+  void reset() => state = const BankCallbackResultState();
 
   Future<void> reportError(Object error) async {
     state = BankCallbackResultState(error: error);
@@ -116,6 +128,7 @@ Future<void> bankingCallbackBootstrap(Ref ref) async {
 
 @Riverpod(keepAlive: true)
 class EnableBankingSettings extends _$EnableBankingSettings {
+  int _operation = 0;
   @override
   Future<EnableBankingConfig?> build() async {
     final store = ref.watch(enableBankingCredentialsStoreProvider);
@@ -132,9 +145,12 @@ class EnableBankingSettings extends _$EnableBankingSettings {
     required String privateKeyPem,
     required EnableBankingConfig config,
   }) async {
+    final store = ref.read(enableBankingCredentialsStoreProvider);
+    final operation = ++_operation;
+    final invalidation = store.setupInvalidation;
+    final revision = store.setupRevision;
     state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
-      final store = ref.read(enableBankingCredentialsStoreProvider);
+    final result = await AsyncValue.guard(() async {
       final previous = await store.readCredentials();
       final saved = await ref
           .read(enableBankingCredentialsServiceProvider)
@@ -143,6 +159,7 @@ class EnableBankingSettings extends _$EnableBankingSettings {
             privateKeyPem: privateKeyPem,
             redirectUri: config.redirectUri,
             defaultCountry: config.defaultCountry,
+            expectedSetupRevision: revision,
           );
       try {
         await ref
@@ -152,24 +169,29 @@ class EnableBankingSettings extends _$EnableBankingSettings {
               providerId: enableBankingId,
             );
       } catch (_) {
+        if (store.setupInvalidation != invalidation) rethrow;
         if (previous == null) {
-          await store.clear();
+          await store.clearCredentialsIfCurrent(revision);
         } else {
           await store.saveCredentials(
             appId: previous.config.appId,
             privateKeyPem: previous.privateKeyPem,
             config: previous.config,
+            expectedSetupRevision: revision,
           );
         }
         rethrow;
       }
+      await store.clearVerifiedSetupDraft();
       return saved;
     });
+    if (operation == _operation) state = result;
   }
 
   Future<void> clear() async {
+    final operation = ++_operation;
     state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
+    final result = await AsyncValue.guard(() async {
       final store = ref.read(enableBankingCredentialsStoreProvider);
       await ref
           .read(bankConnectionRepositoryProvider)
@@ -177,5 +199,10 @@ class EnableBankingSettings extends _$EnableBankingSettings {
       await store.clear();
       return null;
     });
+    if (operation == _operation) state = result;
   }
 }
+
+@Riverpod(keepAlive: true)
+EnableBankingKeyGenerator enableBankingKeyGenerator(Ref ref) =>
+    const EnableBankingKeyGenerator();

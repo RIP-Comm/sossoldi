@@ -1,7 +1,6 @@
 /// Sandbox metadata attached to an [Aspsp] in the `/aspsps` response.
 ///
-/// Only present for sandbox ASPSPs; captured defensively as the shape of the
-/// nested `users` entries is not stable across banks.
+/// Only present for sandbox ASPSPs; captured defensively as the shape of the nested `users` entries is not stable across banks.
 class SandboxInfo {
   final List<Map<String, dynamic>> users;
 
@@ -23,6 +22,7 @@ class Aspsp {
   final int? maximumConsentValidity;
   final bool beta;
   final SandboxInfo? sandbox;
+  final List<String> requiredPsuHeaders;
 
   const Aspsp({
     required this.name,
@@ -32,6 +32,7 @@ class Aspsp {
     this.maximumConsentValidity,
     this.beta = false,
     this.sandbox,
+    this.requiredPsuHeaders = const [],
   });
 
   static Aspsp fromJson(Map<String, dynamic> json) => Aspsp(
@@ -43,6 +44,8 @@ class Aspsp {
         .toList(),
     maximumConsentValidity: json['maximum_consent_validity'] as int?,
     beta: (json['beta'] as bool?) ?? false,
+    requiredPsuHeaders: ((json['required_psu_headers'] as List?) ?? const [])
+        .cast<String>(),
     sandbox: json['sandbox'] == null
         ? null
         : SandboxInfo.fromJson(json['sandbox'] as Map<String, dynamic>),

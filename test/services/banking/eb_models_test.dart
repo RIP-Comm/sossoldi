@@ -125,13 +125,12 @@ void main() {
       expect(credit.bookingDate, DateTime.parse('2025-01-15'));
     });
 
-    test('debit transaction: negative signedAmount, fallback stableId', () {
+    test('debit transaction: negative amount and no stable ID fallback', () {
       final debit = page.transactions[1];
 
       expect(debit.signedAmount, -25.00);
       expect(debit.creditDebitIndicator, 'DBIT');
-      // entry_reference is null → stableId falls back to transaction_id.
-      expect(debit.stableId, 'tx-002');
+      expect(debit.stableId, isNull);
       expect(debit.isBooked, isFalse);
       expect(debit.bookingDate, isNull);
       expect(debit.note, 'supermarket');

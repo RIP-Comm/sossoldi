@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sossoldi/services/banking/enable_banking/enable_banking_api.dart';
@@ -18,6 +19,7 @@ class _FakeApplicationApi extends EnableBankingApi {
   final EbApplication application;
   final Object? failure;
   int calls = 0;
+  Completer<void>? gate;
 
   @override
   Future<EbApplication> verifyApplicationCredentials({
@@ -25,6 +27,7 @@ class _FakeApplicationApi extends EnableBankingApi {
     required String privateKeyPem,
   }) async {
     calls++;
+    await gate?.future;
     if (failure case final failure?) throw failure;
     return application;
   }
@@ -44,6 +47,28 @@ void main() {
   setUp(() {
     FlutterSecureStorage.setMockInitialValues({});
   });
+
+  test(
+    'clear during remote verification prevents late credentials from returning',
+    () async {
+      const store = EnableBankingCredentialsStore();
+      final api = _FakeApplicationApi(_productionApplication)
+        ..gate = Completer<void>();
+      final service = EnableBankingCredentialsService(api: api, store: store);
+      final verification = service.saveVerifiedCredentials(
+        appId: 'app-123',
+        privateKeyPem: 'synthetic-key',
+      );
+      final failure = expectLater(
+        verification,
+        throwsA(isA<EnableBankingException>()),
+      );
+      await store.clear();
+      api.gate!.complete();
+      await failure;
+      expect(await store.readCredentials(), isNull);
+    },
+  );
 
   test(
     'persists server-derived environment and countries after verification',

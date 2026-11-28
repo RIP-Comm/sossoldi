@@ -25,7 +25,9 @@ class EnableBankingCredentialsService {
     required String privateKeyPem,
     String redirectUri = kEbRedirectUri,
     String? defaultCountry,
+    int? expectedSetupRevision,
   }) async {
+    final revision = expectedSetupRevision ?? _store.setupRevision;
     validateEnableBankingRedirect(redirectUri);
     final application = await _api.verifyApplicationCredentials(
       appId: appId,
@@ -73,6 +75,7 @@ class EnableBankingCredentialsService {
       appId: appId,
       privateKeyPem: privateKeyPem,
       config: config,
+      expectedSetupRevision: revision,
     );
     return config;
   }

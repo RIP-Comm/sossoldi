@@ -8,6 +8,63 @@ void main() {
     FlutterSecureStorage.setMockInitialValues({});
   });
 
+  test(
+    'setup draft is atomic, reopenable and separate from verified credentials',
+    () async {
+      const store = EnableBankingCredentialsStore();
+      await store.saveCredentials(
+        appId: 'verified',
+        privateKeyPem: 'verified-key',
+        config: const EnableBankingConfig(appId: 'verified'),
+      );
+      await store.saveSetupDraft(
+        const EnableBankingSetupDraft(
+          step: 2,
+          appId: 'draft',
+          privateKeyPem: 'draft-key',
+          certificatePem: 'public-certificate',
+        ),
+      );
+      final draft = await const EnableBankingCredentialsStore()
+          .readSetupDraft();
+      expect(draft!.step, 2);
+      expect(draft.privateKeyPem, 'draft-key');
+      expect(draft.certificatePem, 'public-certificate');
+      expect((await store.readCredentials())!.config.appId, 'verified');
+      await store.clearDraftPrivateKey();
+      expect(await store.readSetupDraft(), isNull);
+      expect(await store.readPrivateKey(), 'verified-key');
+    },
+  );
+  test(
+    'legacy pending private key resumes through existing-credentials path',
+    () async {
+      FlutterSecureStorage.setMockInitialValues({
+        'eb_draft_private_key': 'legacy-key',
+      });
+      final draft = await const EnableBankingCredentialsStore()
+          .readSetupDraft();
+      expect(draft!.step, 3);
+      expect(draft.existingCredentials, isTrue);
+      expect(draft.privateKeyPem, 'legacy-key');
+      expect(draft.certificatePem, isNull);
+    },
+  );
+  test('malformed draft is observable without revealing its content', () async {
+    FlutterSecureStorage.setMockInitialValues({
+      'eb_setup_draft_v1': 'private-corrupt-payload',
+    });
+    await expectLater(
+      const EnableBankingCredentialsStore().readSetupDraft(),
+      throwsA(
+        isA<FormatException>().having(
+          (e) => e.message,
+          'message',
+          isNot(contains('private-corrupt-payload')),
+        ),
+      ),
+    );
+  });
   group('EnableBankingCredentialsStore', () {
     test('hasCredentials is false before anything is saved', () async {
       final store = const EnableBankingCredentialsStore();

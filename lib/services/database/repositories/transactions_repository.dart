@@ -30,7 +30,7 @@ class TransactionsRepository {
 
     final maps = await db.rawQuery(
       '''
-      SELECT t.*,
+      SELECT t.*, EXISTS(SELECT 1 FROM bankRemoteTransaction br WHERE br.localTransactionId = t.id) AS bankImported,
         c.${CategoryTransactionFields.name} as ${TransactionFields.categoryName},
         c.${CategoryTransactionFields.color} as ${TransactionFields.categoryColor},
         c.${CategoryTransactionFields.symbol} as ${TransactionFields.categorySymbol},
@@ -105,7 +105,7 @@ class TransactionsRepository {
     final orderByDESC = '${TransactionFields.date} DESC';
 
     final result = await db.rawQuery(
-      'SELECT t.*, c.${CategoryTransactionFields.name} as ${TransactionFields.categoryName}, c.${CategoryTransactionFields.color} as ${TransactionFields.categoryColor}, c.${CategoryTransactionFields.symbol} as ${TransactionFields.categorySymbol}, c.${CategoryTransactionFields.parent} as ${TransactionFields.categoryParent}, b1.${BankAccountFields.name} as ${TransactionFields.bankAccountName}, b2.${BankAccountFields.name} as ${TransactionFields.bankAccountTransferName} FROM "$transactionTable" as t LEFT JOIN $categoryTransactionTable as c ON t.${TransactionFields.idCategory} = c.${CategoryTransactionFields.id} LEFT JOIN $bankAccountTable as b1 ON t.${TransactionFields.idBankAccount} = b1.${BankAccountFields.id} LEFT JOIN $bankAccountTable as b2 ON t.${TransactionFields.idBankAccountTransfer} = b2.${BankAccountFields.id} ${where != null ? "WHERE $where" : ""} ORDER BY $orderByDESC ${limit != null ? "LIMIT $limit" : ""}',
+      'SELECT t.*, EXISTS(SELECT 1 FROM bankRemoteTransaction br WHERE br.localTransactionId = t.id) AS bankImported, c.${CategoryTransactionFields.name} as ${TransactionFields.categoryName}, c.${CategoryTransactionFields.color} as ${TransactionFields.categoryColor}, c.${CategoryTransactionFields.symbol} as ${TransactionFields.categorySymbol}, c.${CategoryTransactionFields.parent} as ${TransactionFields.categoryParent}, b1.${BankAccountFields.name} as ${TransactionFields.bankAccountName}, b2.${BankAccountFields.name} as ${TransactionFields.bankAccountTransferName} FROM "$transactionTable" as t LEFT JOIN $categoryTransactionTable as c ON t.${TransactionFields.idCategory} = c.${CategoryTransactionFields.id} LEFT JOIN $bankAccountTable as b1 ON t.${TransactionFields.idBankAccount} = b1.${BankAccountFields.id} LEFT JOIN $bankAccountTable as b2 ON t.${TransactionFields.idBankAccountTransfer} = b2.${BankAccountFields.id} ${where != null ? "WHERE $where" : ""} ORDER BY $orderByDESC ${limit != null ? "LIMIT $limit" : ""}',
       whereArgs,
     );
 
@@ -258,7 +258,7 @@ class TransactionsRepository {
     final accountFilter = accountId != null
         ? "${TransactionFields.idBankAccount} = $accountId"
         : "";
-    //var periodDateFormatter = "";
+    // var periodDateFormatter = "";
     final periodFilterStart = dateRangeStart != null
         ? "strftime('%Y-%m-%d', ${TransactionFields.date}) >= '${dateRangeStart.toString().substring(0, 10)}'"
         : "";

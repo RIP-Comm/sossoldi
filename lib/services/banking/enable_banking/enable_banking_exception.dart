@@ -18,12 +18,14 @@ class EnableBankingException implements Exception {
   final String? error;
   final String? message;
   final EnableBankingFailureKind kind;
+  final Duration? retryAfter;
 
   const EnableBankingException({
     this.statusCode,
     this.error,
     this.message,
     this.kind = EnableBankingFailureKind.unknown,
+    this.retryAfter,
   });
 
   bool get isRetryable => switch (kind) {

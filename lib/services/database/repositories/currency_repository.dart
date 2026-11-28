@@ -29,7 +29,7 @@ class CurrencyRepository {
     if (maps.isNotEmpty) {
       return Currency.fromJson(maps.first);
     } else {
-      //fallback
+      // fallback
       return const Currency(
         id: 2,
         symbol: '\$',
@@ -104,7 +104,17 @@ class CurrencyRepository {
   Future<void> changeMainCurrency(int id) async {
     final db = await _sossoldiDB.database;
 
-    await db.rawUpdate("UPDATE currency SET mainCurrency = 0");
-    await db.rawUpdate("UPDATE currency SET mainCurrency = 1 WHERE id = $id");
+    await db.transaction((txn) async {
+      final selected = await txn.query(
+        currencyTable,
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+      if (selected.isEmpty) throw StateError('Currency does not exist');
+      await txn.rawUpdate('UPDATE currency SET mainCurrency = 0');
+      await txn.rawUpdate('UPDATE currency SET mainCurrency = 1 WHERE id = ?', [
+        id,
+      ]);
+    });
   }
 }

@@ -270,6 +270,7 @@ class BankConnectionRepository {
             identificationHashes: hashes,
             iban: link.iban,
             newAccount: link.newAccount,
+            currency: link.currency,
           ),
         );
       }
@@ -287,6 +288,18 @@ class BankConnectionRepository {
       final selectedAccountIds = <int>{};
 
       for (final link in normalized) {
+        if (link.currency != null) {
+          final currencies = await txn.query(
+            'currency',
+            where: 'mainCurrency = 1',
+          );
+          if (currencies.length != 1 ||
+              currencies.single['code'] != link.currency) {
+            throw const FormatException(
+              'Linked account must use the global currency',
+            );
+          }
+        }
         final matchingIds = link.identificationHashes
             .map((hash) => identityOwners[hash])
             .whereType<int>()
@@ -350,6 +363,8 @@ class BankConnectionRepository {
             BankAccountFields.identificationHash: sortedHashes.first,
             BankAccountFields.identificationHashes: jsonEncode(sortedHashes),
             BankAccountFields.iban: link.iban,
+            if (link.currency != null)
+              BankAccountFields.currencyCode: link.currency,
             BankAccountFields.active: 1,
             BankAccountFields.updatedAt: DateTime.now()
                 .toUtc()
@@ -556,6 +571,15 @@ class BankConnectionRepository {
     int connectionId,
     int accountId,
   ) async {
+    // Retained transaction projections become ordinary editable manual data.
+    for (final table in [
+      'bankRemoteTransaction',
+      'bankSyncState',
+      'bankSyncAudit',
+    ]) {
+      await txn.delete(table, where: 'accountId = ?', whereArgs: [accountId]);
+    }
+
     await txn.delete(
       bankAccountIdentityTable,
       where:
@@ -572,6 +596,7 @@ class BankConnectionRepository {
         BankAccountFields.identificationHashes: null,
         BankAccountFields.iban: null,
         BankAccountFields.lastSyncAt: null,
+        BankAccountFields.currencyCode: null,
       },
       where: '${BankAccountFields.id} = ?',
       whereArgs: [accountId],

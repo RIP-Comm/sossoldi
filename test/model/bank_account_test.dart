@@ -99,6 +99,7 @@ void main() {
   });
 
   group("Bank Account Methods", () {
+    late String testDatabaseName;
     late SossoldiDatabase sossoldiDatabase;
     late sqflite.Database db;
 
@@ -106,15 +107,20 @@ void main() {
       sqflite_ffi.sqfliteFfiInit();
       sqflite_ffi.databaseFactory = sqflite_ffi.databaseFactoryFfi;
 
-      sossoldiDatabase = SossoldiDatabase(dbName: 'bank_account_test.db');
+      testDatabaseName =
+          'bank_account_test_${DateTime.now().microsecondsSinceEpoch}.db';
+      sossoldiDatabase = SossoldiDatabase(dbName: testDatabaseName);
       db = await sossoldiDatabase.database;
       await sossoldiDatabase.resetDatabase();
     });
 
     tearDown(() async => {await sossoldiDatabase.clearDatabase()});
 
-    tearDownAll(() {
-      sossoldiDatabase.close();
+    tearDownAll(() async {
+      await sossoldiDatabase.close();
+      await sqflite.deleteDatabase(
+        '${await sqflite.getDatabasesPath()}/$testDatabaseName',
+      );
     });
 
     test("selectAll", () async {
@@ -161,8 +167,7 @@ void main() {
         ),
       );
 
-      // Add transactions of current month
-      // 1
+      // Add transactions of current month 1
       demoTransactions.add(
         createInsertSqlTransaction(date: fistOfCurrentMonth),
       );

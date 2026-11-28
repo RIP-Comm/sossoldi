@@ -23,6 +23,7 @@ class BankAccountFields extends BaseEntityFields {
   static String identificationHashes = 'identificationHashes';
   static String iban = 'iban';
   static String lastSyncAt = 'lastSyncAt';
+  static String currencyCode = 'currencyCode';
 
   static final List<String> allFields = [
     BaseEntityFields.id,
@@ -43,6 +44,7 @@ class BankAccountFields extends BaseEntityFields {
     identificationHashes,
     iban,
     lastSyncAt,
+    currencyCode,
   ];
 }
 
@@ -64,6 +66,7 @@ class BankAccount extends BaseEntity {
   final String? identificationHashes;
   final String? iban;
   final DateTime? lastSyncAt;
+  final String? currencyCode;
 
   const BankAccount({
     super.id,
@@ -82,6 +85,7 @@ class BankAccount extends BaseEntity {
     this.identificationHashes,
     this.iban,
     this.lastSyncAt,
+    this.currencyCode,
     super.createdAt,
     super.updatedAt,
     super.deletedAt,
@@ -106,6 +110,7 @@ class BankAccount extends BaseEntity {
     Object? identificationHashes = _unset,
     Object? iban = _unset,
     Object? lastSyncAt = _unset,
+    Object? currencyCode = _unset,
   }) => BankAccount(
     id: id ?? this.id,
     name: name ?? this.name,
@@ -136,6 +141,9 @@ class BankAccount extends BaseEntity {
     lastSyncAt: lastSyncAt == _unset
         ? this.lastSyncAt
         : lastSyncAt as DateTime?,
+    currencyCode: currencyCode == _unset
+        ? this.currencyCode
+        : currencyCode as String?,
   );
 
   static BankAccount fromJson(Map<String, Object?> json) => BankAccount(
@@ -163,6 +171,7 @@ class BankAccount extends BaseEntity {
     lastSyncAt: json[BankAccountFields.lastSyncAt] == null
         ? null
         : DateTime.parse(json[BankAccountFields.lastSyncAt] as String).toUtc(),
+    currencyCode: json[BankAccountFields.currencyCode] as String?,
   );
 
   Map<String, Object?> toJson({bool update = false, bool delete = false}) => {
@@ -186,5 +195,6 @@ class BankAccount extends BaseEntity {
     BankAccountFields.identificationHashes: identificationHashes,
     BankAccountFields.iban: iban,
     BankAccountFields.lastSyncAt: lastSyncAt?.toUtc().toIso8601String(),
+    BankAccountFields.currencyCode: currencyCode,
   };
 }

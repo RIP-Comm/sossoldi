@@ -12,9 +12,20 @@ import 'account_selector.dart';
 import 'type_tab.dart';
 
 class AmountSection extends ConsumerStatefulWidget {
-  const AmountSection(this.amountController, {super.key});
+  const AmountSection(
+    this.amountController, {
+    this.typeEditingPermitted = true,
+    this.amountEditingPermitted = true,
+    super.key,
+  });
 
   final TextEditingController amountController;
+
+  /// Whether the income/expense/transfer toggle responds to taps. Locked for reconciliation adjustments and bank-imported transactions, whose type is fixed by how they were created.
+  final bool typeEditingPermitted;
+
+  /// Whether the amount field can be edited. Locked for reconciliation adjustments, whose amount is fixed by the balance difference at the moment it was created.
+  final bool amountEditingPermitted;
 
   @override
   ConsumerState<AmountSection> createState() => _AmountSectionState();
@@ -57,21 +68,23 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
             padding: const EdgeInsets.symmetric(horizontal: Sizes.xxs * 0.5),
             child: ToggleButtons(
               direction: Axis.horizontal,
-              onPressed: (int index) {
-                List<bool> newSelection = [];
-                for (TransactionType type in trsncTypeList) {
-                  if (type == trsncTypeList[index]) {
-                    newSelection.add(true);
-                    ref
-                        .read(selectedTransactionTypeProvider.notifier)
-                        .setType(type);
-                  } else {
-                    newSelection.add(false);
-                  }
-                }
-                ref.invalidate(bankAccountTransferProvider);
-                setState(() => _typeToggleState = newSelection);
-              },
+              onPressed: widget.typeEditingPermitted
+                  ? (int index) {
+                      List<bool> newSelection = [];
+                      for (TransactionType type in trsncTypeList) {
+                        if (type == trsncTypeList[index]) {
+                          newSelection.add(true);
+                          ref
+                              .read(selectedTransactionTypeProvider.notifier)
+                              .setType(type);
+                        } else {
+                          newSelection.add(false);
+                        }
+                      }
+                      ref.invalidate(bankAccountTransferProvider);
+                      setState(() => _typeToggleState = newSelection);
+                    }
+                  : null,
               borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
               renderBorder: false,
               selectedColor: Colors.transparent,
@@ -370,7 +383,10 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
                 ),
               ),
             ),
-          AmountWidget(widget.amountController),
+          AmountWidget(
+            widget.amountController,
+            readOnly: !widget.amountEditingPermitted,
+          ),
         ],
       ),
     );

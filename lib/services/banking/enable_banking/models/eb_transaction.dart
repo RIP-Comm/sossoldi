@@ -63,15 +63,23 @@ class EbTransaction {
     note: json['note'] as String?,
   );
 
-  /// Signed amount: positive for credits (`CRDT`), negative otherwise.
-  ///
-  /// Anything that is not `CRDT` (e.g. `DBIT`/`DBDT`) is treated as an outflow.
-  num get signedAmount => creditDebitIndicator == 'CRDT'
-      ? transactionAmount.amount
-      : -transactionAmount.amount;
+  /// Signed amount, rejecting unknown indicators and invalid magnitudes.
+  num get signedAmount {
+    if (!transactionAmount.amount.isFinite || transactionAmount.amount < 0) {
+      throw const FormatException('Invalid transaction magnitude');
+    }
+    return switch (creditDebitIndicator) {
+      'CRDT' => transactionAmount.amount,
+      'DBIT' => -transactionAmount.amount,
+      _ => throw const FormatException('Unknown credit/debit indicator'),
+    };
+  }
 
-  /// Stable dedup key: `entry_reference` when present, else `transaction_id`.
-  String? get stableId => entryReference ?? transactionId;
+  /// Only an entry reference can identify a transaction across retrievals.
+  String? get stableId {
+    final reference = entryReference?.trim();
+    return reference == null || reference.isEmpty ? null : reference;
+  }
 
   bool get isBooked => status == 'BOOK';
 }

@@ -13,7 +13,6 @@ import 'package:sossoldi/services/banking/bank_institution_directory.dart'
 import 'package:sossoldi/services/banking/banking_exception.dart';
 import 'package:sossoldi/services/banking/banking_provider.dart';
 import 'package:sossoldi/services/banking/enable_banking/enable_banking_api.dart';
-import 'package:sossoldi/services/banking/enable_banking/enable_banking_auth.dart';
 import 'package:sossoldi/services/banking/enable_banking/enable_banking_credentials_store.dart';
 import 'package:sossoldi/services/banking/enable_banking/enable_banking_provider.dart';
 

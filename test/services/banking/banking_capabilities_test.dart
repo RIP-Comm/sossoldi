@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sossoldi/services/banking/banking_request_context.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:sossoldi/providers/banking_provider.dart' as providers;
@@ -78,16 +79,19 @@ class _Directory implements BankInstitutionDirectory {
 
 class _Data implements BankAccountDataSource {
   @override
-  Future<BankingAccount> getAccount(BankingAccountReference reference) async =>
-      BankingAccount(
-        reference: reference,
-        name: 'Alternative account',
-        currency: 'EUR',
-      );
+  Future<BankingAccount> getAccount(
+    BankingAccountReference reference, {
+    BankingRequestContext context = const BankingRequestContext(),
+  }) async => BankingAccount(
+    reference: reference,
+    name: 'Alternative account',
+    currency: 'EUR',
+  );
   @override
   Future<List<BankingBalance>> getBalances(
-    BankingAccountReference reference,
-  ) async => [
+    BankingAccountReference reference, {
+    BankingRequestContext context = const BankingRequestContext(),
+  }) async => [
     BankingBalance(
       name: 'Booked',
       amount: BankingMoney(decimalAmount: '232.75', currency: 'EUR'),
@@ -151,6 +155,75 @@ class _Alternative implements BankingProvider {
 }
 
 void main() {
+  test(
+    'sync diagnostics and server time survive the provider boundary without relaxing ordinary reads',
+    () async {
+      final body = {
+        'transactions': [
+          {
+            'entry_reference': 'valid',
+            'status': 'BOOK',
+            'credit_debit_indicator': 'DBIT',
+            'booking_date': '2026-09-06',
+            'transaction_amount': {'amount': '73.14', 'currency': 'EUR'},
+          },
+          {'status': 'BOOK'},
+          {
+            'entry_reference': 'bad-money',
+            'status': 'BOOK',
+            'credit_debit_indicator': 'DBIT',
+            'transaction_amount': {'amount': '-1', 'currency': 'EUR'},
+          },
+        ],
+        'continuation_key': 'next',
+      };
+      final service = _provider(
+        (_) async => http.Response(
+          jsonEncode(body),
+          200,
+          headers: {'date': 'Mon, 07 Sep 2026 12:00:00 GMT'},
+        ),
+      ).accountData;
+      await expectLater(
+        service.getTransactions(_account),
+        throwsA(_failure(BankingFailure.invalidResponse)),
+      );
+      final page = await service.getTransactions(
+        _account,
+        query: const BankingTransactionQuery(collectRejectedRecords: true),
+      );
+      expect(page.transactions.single.amount.decimalAmount, '73.14');
+      expect(page.rejectedRecords, 2);
+      expect(page.serverTime, DateTime.utc(2026, 9, 7, 12));
+      expect(page.nextCursor, 'next');
+    },
+  );
+
+  test(
+    'nonbooked states keep their reconciliation meaning across the data adapter',
+    () async {
+      final service = _provider(
+        (_) async => _json({
+          'transactions': [
+            for (final status in ['CNCL', 'RJCT', 'HOLD', 'SCHD'])
+              {
+                'status': status,
+                'credit_debit_indicator': 'DBIT',
+                'transaction_amount': {'amount': '1', 'currency': 'EUR'},
+              },
+          ],
+        }),
+      ).accountData;
+      final page = await service.getTransactions(_account);
+      expect(page.transactions.map((item) => item.status), [
+        BankingTransactionStatus.cancelled,
+        BankingTransactionStatus.rejected,
+        BankingTransactionStatus.held,
+        BankingTransactionStatus.scheduled,
+      ]);
+    },
+  );
+
   test(
     'composition exposes three replaceable capabilities without EB credentials',
     () async {
